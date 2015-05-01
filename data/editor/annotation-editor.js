@@ -9,6 +9,6 @@ textArea.onkeyup = function(event) {
 
 self.on('message', function() {
   var textArea = document.getElementById('annotation-box');
-  textArea.value = 'Talas';
+  textArea.value = '';
   textArea.focus();
 });
