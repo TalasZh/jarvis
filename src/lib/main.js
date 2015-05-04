@@ -34,6 +34,16 @@ function handleNewAnnotation (annotationText, anchor) {
   updateMatchers();
 }
 
+function onAttachWorker(annotationEditor, data) {
+  annotationEditor.annotationAnchor = data;
+  annotationEditor.show();
+  console.log('On attach worker event...');
+
+  // var { jquery } = require('./jquery-2.1.3.js');
+  // var { annotator } = require('./annotator-full.min.js');
+  // var app = new annotator.App();
+}
+
 function detachWorker(worker, workerArray) {
   var index = workerArray.indexOf(worker);
   if(index != -1) {
@@ -93,14 +103,17 @@ exports.main = function() {
   contentStyleFile: [data.url('annotator_lib/annotator.min.css')],
 
   onAttach: function(worker) {
+    // console.log(jira);
     worker.postMessage(annotatorIsOn);
     selectors.push(worker);
     worker.port.on('show', function(data) {
-      //console.log(data);
-      annotationEditor.annotationAnchor = data;
-      annotationEditor.show();
-      // console.log(annotationEditor.annotationAnchor);
+      onAttachWorker(annotationEditor, data);
     });
+    worker.port.on('initAnnotator', function(annotator) {
+      // var app = annotator.App();
+      console.log( annotator );
+    });
+
     worker.on('detach', function () {
       detachWorker(this, selectors);
     });
@@ -175,6 +188,8 @@ exports.main = function() {
       this.postMessage(this.content);
     }
   });
+
+  // var { jira } = require('./node-jira/index.js');
 
   // var { annotator } = [require('./annotator-full.min.js'), require('sdk/self')];
 
