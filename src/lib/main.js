@@ -172,7 +172,11 @@ exports.main = function() {
     contentScriptFile: [data.url('jquery-2.1.3.min.js'),
                         data.url('annotation/annotation.js')],
     onShow: function() {
-      this.portMessage(this.content);
+      this.postMessage(this.content);
     }
   });
+
+  // var { annotator } = [require('./annotator-full.min.js'), require('sdk/self')];
+
+  // var app = new annotator.App();
 }
