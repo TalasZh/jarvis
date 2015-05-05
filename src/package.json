@@ -1,9 +1,16 @@
 {
-  "name": "annotator",
-  "title": "annotator",
-  "id": "jid1-cFJ6YUMU9x0eBw",
-  "description": "a basic add-on",
+  "title": "Jarvis Annotator",
+  "name": "jarvis-annotator",
+  "version": "0.0.1",
+  "description": "A basic jarvis annotator",
+  "main": "index.js",
   "author": "",
-  "license": "MPL 2.0",
-  "version": "0.1"
+  "engines": {
+    "firefox": ">=38.0a1",
+    "fennec": ">=38.0a1"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "jira": "^0.9.2"
+  }
 }
