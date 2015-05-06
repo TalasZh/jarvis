@@ -1,3 +1,2 @@
 #Jarvis Firefox plugin
-Simple annotation collecting firefox plugin for
-easy to track educational process for research session.
+Simple annotation collecting firefox plugin to simplify research session track.
