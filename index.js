@@ -8,11 +8,6 @@ var notifications = require('sdk/notifications');
 
 var annotatorIsOn = false;
 var matchers = [];
-JiraApi = require('jira').JiraApi;
-
-//var url = require('url');
-
-var jira = new JiraApi('https', 'jira.safehaus.org', '443', 'tjoldoshbekov', 'Falcon2014', '2.0.alpha1', true);
 
 if (!simpleStorage.storage.annotations)
   simpleStorage.storage.annotations = [];
