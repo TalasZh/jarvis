@@ -9,6 +9,28 @@ var notifications = require('sdk/notifications');
 var annotatorIsOn = false;
 var matchers = [];
 
+const jira_init = () => {
+	JiraApi = require('jira-module').JiraApi;
+	const jira = new JiraApi('http', 
+							 'localhost', 
+							 '2990', 
+							 'admin', 
+							 'admin', 
+							 '2', 
+							 true);
+	jira.findIssue("JAP-1", function(error, json){
+		if(error !== null) {
+			console.log(error);
+		}
+		else if(json !== undefined) {
+			console.log(json);
+		}
+	});
+	console.log(jira.makeUri('/issues/'));
+}
+
+jira_init();
+
 if (!simpleStorage.storage.annotations)
   simpleStorage.storage.annotations = [];
 
