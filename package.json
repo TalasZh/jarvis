@@ -10,5 +10,11 @@
     "fennec": ">=38.0a1"
   },
   "license": "MIT",
-  "dependencies": {}
+  "dependencies": {
+    "jira-module": "file:node_modules/jira-module"
+  },
+  "repository": {
+	  "type": "git",
+	  "url": "http://tjoldoshbekov@stash.safehaus.org/scm/jar/main.git"
+  }
 }
