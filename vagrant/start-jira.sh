@@ -1,8 +1,4 @@
-
-pushd ~
+#!/bin/bash
 atlas="atlastutorial";
-if [! -d $atlas]; then
-	mkdir -p $atlas
-cd $atlas
+cd /home/vagrant/$atlas
 atlas-run-standalone --product jira
-popd
