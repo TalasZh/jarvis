@@ -5,21 +5,26 @@ if ( loginButton !== null ){
 		var username = document.getElementById("username");
 		var password = document.getElementById("password");
 		self.port.emit("handle-login", username.value, password.value );
-		username.value = '';
-		password.value = '';
+		// username.value = '';
+		// password.value = '';
 	};	
 }
 
 var startStop = document.getElementById("startStop");
 if ( startStop !== null ){
 	startStop.addEventListener("click", function() {
+
+			var x = document.getElementById("issueCombobox"); 
+			var selectIndex=x.selectedIndex;
+			var selectValue=x.options[selectIndex].text;
+
 	    if ( startStop.value === "Start" ){
 	      startStop.value = "Stop";
-	      console.log( "Session started : " + getDateTime() )
+	      console.log( "Session started for " + selectValue + " at time : " + getDateTime() )
 	    }
 	    else {
 	      startStop.value = "Start";
-	      console.log( "Session stopped : " + getDateTime() );
+	      console.log( "Session stopped for " + selectValue + " at time : " + getDateTime() )
 	    }
 	}, false);
 }
@@ -78,6 +83,30 @@ function getDateTime() {
   var dateTime = year+'/'+month+'/'+day+' '+hour+':'+minute+':'+second;   
    return dateTime;
 }
+
+
+// fill out combo box options
+function fillComboBox(json) {
+		var x = document.getElementById("issueCombobox"); 
+		x.onchange = function(event) {
+				var selectIndex=x.selectedIndex;
+				var selectValue=x.options[selectIndex].text;
+				console.log( selectValue );
+			};
+
+		for (var i = 0; i < json.issues.length; i++) {
+		    var issue = json.issues[i];
+
+		    var option = document.createElement("option");	
+	    	option.text = issue.key;
+	    	x.add(option);
+		}
+}
+
+self.port.on("fill-combo-box", function(json) {
+	fillComboBox(json);
+});
+
 
 // var textArea = document.getElementById("edit-box");
 // textArea.addEventListener('keyup', function onkeyup(event) {

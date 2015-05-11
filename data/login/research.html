@@ -8,10 +8,17 @@
 <body>
   <section class="container">
     <div class="login">
-      <h1>Select the issue you want to search : </h1>
+      <h4>Select the issue you want to search : </h4>
+
+       <select name="issueCombobox" id="issueCombobox" onchange="issueChanged(this);"></select> 
+
       <p><input type="button" name="startStop" value="Start" id="startStop"></p>
       <p><input type="button" name="pauseResume" value="Pause" id="pauseResume"></p>
       <p><input type="button" name="backButton" value="Back" id="backButton"></p>
+
+
+      you selected: <span id="output">1</span>
+
     </div>
   </section>
 </body>

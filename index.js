@@ -274,9 +274,8 @@ exports.main = function() {
 	panel.port.on("handle-login", function (username, password) {
 	  console.log(username + " " + password );
 
-	  const jira_init = () => {
-			JiraApi = require('jira-module').JiraApi;
-		  jira = new JiraApi('http', 
+		JiraApi = require('jira-module').JiraApi;
+			jira = new JiraApi('http', 
 				'localhost', 
 				'2990', 
 				username, 
@@ -284,28 +283,38 @@ exports.main = function() {
 				'2', 
 				true);
 
-			jira.findIssue("JAP-1", function(error, response, json){
+
+			// jira find issue
+			// jira.findIssue("JAP-1", function(error, response, json){
+			// 	if ( response === 200 ) {
+			// 		console.log( "adfadfadfadfadfadfa");
+			// 		panel.contentURL = data.url("login/research.html");
+			// 		// panel.contentScriptFile = data.url('login/test.js');
+			// 	}
+			// 	else {
+			// 		console.log( "unsuccessfful" );
+			// 	}
+
+
+			// 	if(error !== null) {
+			// 		console.log(error);
+			// 	}
+			// 	else if(json !== undefined) {
+			// 		console.log(json);
+			// 	}
+			// });
+
+
+			// list jira issues 
+			jira.getUsersIssues(username, true, function(error, response, json){
 				if ( response === 200 ) {
-					console.log( "adfadfadfadfadfadfa");
 					panel.contentURL = data.url("login/research.html");
-					// panel.contentScriptFile = data.url('login/test.js');
+					panel.contentScriptFile = data.url('login/handleLogin.js');
+					panel.port.emit("fill-combo-box", json);
 				}
 				else {
 					console.log( "unsuccessfful" );
 				}
-
-
-				if(error !== null) {
-					console.log(error);
-				}
-				else if(json !== undefined) {
-					console.log(json);
-				}
 			});
-			console.log(jira.makeUri('/issues/'));
-			console.log("hello")
-
-		}
-		jira_init();
 	});
 }
