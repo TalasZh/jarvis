@@ -294,8 +294,6 @@ exports.main = function() {
 			// 	else {
 			// 		console.log( "unsuccessfful" );
 			// 	}
-
-
 			// 	if(error !== null) {
 			// 		console.log(error);
 			// 	}

@@ -29,7 +29,6 @@ if ( startStop !== null ){
 	}, false);
 }
   
-
 var pauseResume = document.getElementById("pauseResume");
 if ( pauseResume !== null ){
 	pauseResume.addEventListener("click", function() {
@@ -46,8 +45,6 @@ if ( pauseResume !== null ){
 	}, false);	
 }
   
-
-
 var backButton = document.getElementById("backButton");
 if ( backButton !== null ){
 	backButton.onclick = function(event) {
@@ -55,7 +52,6 @@ if ( backButton !== null ){
 		self.port.emit("back-button-pressed" );
 	};	
 }
-
 
 function getDateTime() {
   var now     = new Date(); 
@@ -98,7 +94,7 @@ function fillComboBox(json) {
 		    var issue = json.issues[i];
 
 		    var option = document.createElement("option");	
-	    	option.text = issue.key;
+	    	option.text = issue.key + " - " + issue.fields.summary;
 	    	x.add(option);
 		}
 }
