@@ -13,42 +13,41 @@ if ( loginButton !== null ){
 var startStop = document.getElementById("startStop");
 if ( startStop !== null ){
 	startStop.addEventListener("click", function() {
+		var x = document.getElementById("issueCombobox"); 
+		var selectIndex=x.selectedIndex;
+		var selectValue=x.options[selectIndex].text;
 
-			var x = document.getElementById("issueCombobox"); 
-			var selectIndex=x.selectedIndex;
-			var selectValue=x.options[selectIndex].text;
-
-	    if ( startStop.value === "Start" ){
-	      startStop.value = "Stop";
-	      console.log( "Session started for " + selectValue + " at time : " + getDateTime() )
-	    }
-	    else {
-	      startStop.value = "Start";
-	      console.log( "Session stopped for " + selectValue + " at time : " + getDateTime() )
-	    }
+    if ( startStop.value === "Start" ){
+      startStop.value = "Stop";
+      console.log( "Session started for " + selectValue + " at time : " + getDateTime() )
+    }
+    else {
+      startStop.value = "Start";
+      console.log( "Session stopped for " + selectValue + " at time : " + getDateTime() )
+    }
 	}, false);
 }
   
 var pauseResume = document.getElementById("pauseResume");
 if ( pauseResume !== null ){
 	pauseResume.addEventListener("click", function() {
-	    if ( pauseResume.value === "Pause" ){
-	      pauseResume.value = "Resume";
-	      startStop.disabled = true;
-	      console.log( getDateTime() );
-	    }
-	    else {
-	      pauseResume.value = "Pause";
-	      startStop.disabled = false;
-	      console.log( getDateTime() );
-	    }
+		if ( pauseResume.value === "Pause" ){
+		  pauseResume.value = "Resume";
+		  startStop.disabled = true;
+		  console.log( getDateTime() );
+		}
+		else {
+		  pauseResume.value = "Pause";
+		  startStop.disabled = false;
+		  console.log( getDateTime() );
+		}
 	}, false);	
 }
   
 var backButton = document.getElementById("backButton");
 if ( backButton !== null ){
 	backButton.onclick = function(event) {
-  		console.log("back button");
+		console.log("back button");
 		self.port.emit("back-button-pressed" );
 	};	
 }
@@ -83,20 +82,19 @@ function getDateTime() {
 
 // fill out combo box options
 function fillComboBox(json) {
-		var x = document.getElementById("issueCombobox"); 
-		x.onchange = function(event) {
-				var selectIndex=x.selectedIndex;
-				var selectValue=x.options[selectIndex].text;
-				console.log( selectValue );
-			};
+	var x = document.getElementById("issueCombobox"); 
+	x.onchange = function(event) {
+		var selectIndex=x.selectedIndex;
+		var selectValue=x.options[selectIndex].text;
+		console.log( selectValue );
+	};
 
-		for (var i = 0; i < json.issues.length; i++) {
-		    var issue = json.issues[i];
-
-		    var option = document.createElement("option");	
-	    	option.text = issue.key + " - " + issue.fields.summary;
-	    	x.add(option);
-		}
+	for (var i = 0; i < json.issues.length; i++) {
+    var issue = json.issues[i];
+    var option = document.createElement("option");	
+  	option.text = issue.key + " - " + issue.fields.summary;
+  	x.add(option);
+	}
 }
 
 self.port.on("fill-combo-box", function(json) {
