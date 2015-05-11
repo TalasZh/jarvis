@@ -3,17 +3,23 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Login Form</title>
+  <link rel="stylesheet" href="../bootstrap-3.3.4/css/bootstrap.min.css">
+  <script src="../jquery-2.1.3.min.js"></script>
+  <script src="../bootstrap-3.3.4/js/bootstrap.min.js"></script>
 </head>
 <body>
-  <section class="container">
-    <div class="login">
-      <h4>Select the issue you want to search : </h4>
-      <select name="issueCombobox" id="issueCombobox"></select> 
-      <p><input type="button" name="startStop" value="Start" id="startStop"></p>
-      <p><input type="button" name="pauseResume" value="Pause" id="pauseResume"></p>
-      <p><input type="button" name="backButton" value="Back" id="backButton"></p>
+  <div class="col-lg-2 col-centered">
+    <div class="form-group">
+        <br/>
+        <label for="combobox">Select the issue you want to search :</label>
+        <select class="form-control" name="issueCombobox" id="issueCombobox"></select>
+        <br/>
+        <div>
+          <input type="button" class="btn btn-primary btn-sm" id="startStop" value="Start">
+          <input type="button" class="btn btn-primary btn-sm" id="pauseResume" value="Pause">
+          <input type="button" class="btn btn-primary btn-sm" id="backButton" value="Back">
+        </div>
     </div>
-  </section>
+  </div>
 </body>
 </html>
