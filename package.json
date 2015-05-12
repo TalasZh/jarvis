@@ -4,10 +4,10 @@
   "version": "0.0.1",
   "description": "A basic jarvis annotator",
   "main": "index.js",
-  "author": "",
+  "author": "safehaus",
   "engines": {
-    "firefox": ">=38.0a1",
-    "fennec": ">=38.0a1"
+    "firefox": ">=37.0.2",
+    "fennec": ">=37.0.2"
   },
   "license": "MIT",
   "dependencies": {

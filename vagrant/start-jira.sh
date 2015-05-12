@@ -1,4 +1,3 @@
-
 pushd ~
 atlas="atlastutorial";
 if [! -d $atlas]; then
