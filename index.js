@@ -1,4 +1,4 @@
-var widgets = require('sdk/widget');
+// var widgets = require('sdk/widget');
 var data = require('sdk/self').data;
 var pageMod = require('sdk/page-mod');
 var selectors = [];
@@ -110,25 +110,25 @@ function updateMatchers() {
 
 exports.main = function() {
 
-	var widget = widgets.Widget({
-		id: 'toggle-switch',
-		label: 'Annotator',
-		contentURL: data.url('widget/icon-64-off.png'),
-		contentScriptWhen: 'ready',
-		contentScriptFile: data.url('widget/widget.js')
-	});
+	// var widget = widgets.Widget({
+	// 	id: 'toggle-switch',
+	// 	label: 'Annotator',
+	// 	contentURL: data.url('widget/icon-64-off.png'),
+	// 	contentScriptWhen: 'ready',
+	// 	contentScriptFile: data.url('widget/widget.js')
+	// });
 
-	widget.port.on('left-click', function() {
-		console.log('activate/deactivate');
-		widget.contentURL = toggleActivation() ?
-		data.url('widget/icon-64.png') :
-		data.url('widget/icon-64-off.png');
-	});
+	// widget.port.on('left-click', function() {
+	// 	console.log('activate/deactivate');
+	// 	widget.contentURL = toggleActivation() ?
+	// 	data.url('widget/icon-64.png') :
+	// 	data.url('widget/icon-64-off.png');
+	// });
 
-	widget.port.on('right-click', function() {
-		console.log('show annotation list');
-		annotationList.show();
-	});
+	// widget.port.on('right-click', function() {
+	// 	console.log('show annotation list');
+	// 	annotationList.show();
+	// });
 
 	var selector = pageMod.PageMod({
 		include: ['*'],
@@ -231,7 +231,7 @@ exports.main = function() {
 		id: "my-button",
 		label: "Jarvis",
 		icon: {
-			"16": "./icon-16.png",
+			"16": data.url('icon-16.png'),
 			"32": "./icon-32.png",
 			"64": "./icon-64.png"
 		},
@@ -266,6 +266,56 @@ exports.main = function() {
 		panel.contentURL = data.url("login/panel.html");
 	});
 
+
+	panel.port.on("stop-progress", function(issueId){
+		console.log("Stop progress.");
+		jira.transitionIssue(issueId, '{"transition":{"id":31}}', function(error, message){
+
+			if(error !== null) {
+				console.log(error);
+			}
+
+			if ( message === "Success" ) {
+				console.log( "issue transition state is changed successfully." );
+			}
+			else {
+				console.log( "unsuccessfful" );
+			}
+		});		
+	});
+
+
+	panel.port.on("start-progress", function(issueId) {
+		console.log("Start progress.");
+		jira.transitionIssue(issueId, '{"transition":{"id":11}}', function(error, message){
+
+			if(error !== null) {
+				console.log(error);
+			}
+
+			if ( message === "Success" ) {
+				console.log( "issue transition state is changed successfully." );
+			}
+			else {
+				console.log( "unsuccessfful" );
+			}
+		});
+
+	});
+
+
+	panel.port.on('left-click', function() {
+		console.log('activate/deactivate');
+		toggleActivation();
+		// widget.contentURL = toggleActivation() ?
+		// data.url('widget/icon-64.png') :
+		// data.url('widget/icon-64-off.png');
+	});
+
+	panel.port.on('right-click', function() {
+		console.log('show annotation list');
+		annotationList.show();
+	});
 
 	// Listen for messages called "text-entered" coming from
 	// the content script. The message payload is the text the user
@@ -314,5 +364,34 @@ exports.main = function() {
 					console.log( "unsuccessfful" );
 				}
 			});
+
+
+			// list transitions
+			// jira.listTransitions('JAP-1',function(error, response, json){
+			// 	if ( response === 200 ) {
+			// 		console.log( "success" );
+			// 		console.log( json );
+			// 	}
+			// 	else {
+			// 		console.log( "unsuccessfful" );
+			// 	}
+			// });
+			
+
+
+			// issue transition
+			// jira.transitionIssue('JAP-2', '{"transition":{"id":31}}', function(error, message){
+
+			// 	if(error !== null) {
+			// 		console.log(error);
+			// 	}
+			// 	if ( message === "Success" ) {
+			// 		console.log( "issue transition state is changed successfully." );
+			// 	}
+			// 	else {
+			// 		console.log( "unsuccessfful" );
+			// 	}
+			// });
+
 	});
 }

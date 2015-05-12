@@ -10,6 +10,30 @@ if ( loginButton !== null ){
 	};	
 }
 
+
+var annotator = document.getElementById("annotator");
+if ( annotator !== null ){
+	annotator.addEventListener("click", function(event) {
+		if(event.button == 0 && event.shiftKey == false){
+			self.port.emit('left-click');
+			console.log("adfadsfasdfasdfad");
+			if ( annotator.value == "Enable Annotator" ){
+		      annotator.value = "Disable Annotator";
+		    }
+		    else {
+		      annotator.value = "Enable Annotator";
+			}	
+		}
+
+		if(event.button == 2 || (event.button == 0 && event.shiftKey == true)){
+			self.port.emit('right-click');
+			console.log("eadfadf");
+			event.preventDefault();
+		}
+	}, true);
+}
+
+
 var startStop = document.getElementById("startStop");
 if ( startStop !== null ){
 	startStop.addEventListener("click", function() {
@@ -17,17 +41,20 @@ if ( startStop !== null ){
 		var selectIndex=x.selectedIndex;
 		var selectValue=x.options[selectIndex].text;
 
-    if ( startStop.value === "Start" ){
-      startStop.value = "Stop";
-      console.log( "Session started for " + selectValue + " at time : " + getDateTime() )
-    }
-    else {
-      startStop.value = "Start";
-      console.log( "Session stopped for " + selectValue + " at time : " + getDateTime() )
-    }
+	    if ( startStop.value === "Start" ){
+	      startStop.value = "Stop";
+	      console.log( "Session started for " + selectValue + " at time : " + getDateTime() );
+	      self.port.emit("start-progress", selectValue);
+	    }
+	    else {
+	      startStop.value = "Start";
+	      console.log( "Session stopped for " + selectValue + " at time : " + getDateTime() );
+	      self.port.emit("stop-progress", selectValue);
+	    }
 	}, false);
 }
   
+
 var pauseResume = document.getElementById("pauseResume");
 if ( pauseResume !== null ){
 	pauseResume.addEventListener("click", function() {
@@ -44,6 +71,7 @@ if ( pauseResume !== null ){
 	}, false);	
 }
   
+
 var backButton = document.getElementById("backButton");
 if ( backButton !== null ){
 	backButton.onclick = function(event) {
@@ -51,6 +79,7 @@ if ( backButton !== null ){
 		self.port.emit("back-button-pressed" );
 	};	
 }
+
 
 function getDateTime() {
   var now     = new Date(); 
@@ -92,10 +121,11 @@ function fillComboBox(json) {
 	for (var i = 0; i < json.issues.length; i++) {
     var issue = json.issues[i];
     var option = document.createElement("option");	
-  	option.text = issue.key + " - " + issue.fields.summary;
+  	option.text = issue.key;
   	x.add(option);
 	}
 }
+
 
 self.port.on("fill-combo-box", function(json) {
 	fillComboBox(json);
