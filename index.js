@@ -78,10 +78,6 @@ function onAttachWorker(annotationEditor, data) {
 	annotationEditor.annotationAnchor = data;
 	annotationEditor.show();
 	console.log('On attach worker event...');
-
-  // var { jquery } = require('./jquery-2.1.3.js');
-  // var { annotator } = require('./annotator-full.min.js');
-  // var app = new annotator.App();
 }
 
 function detachWorker(worker, workerArray) {
@@ -113,13 +109,6 @@ function updateMatchers() {
 
 exports.main = function() {
 
-	//var widget = widgets.Widget({
-	//	id: 'toggle-switch',
-	//	label: 'Annotator',
-	//	contentURL: data.url('widget/icon-64-off.png'),
-	//	contentScriptWhen: 'ready',
-	//	contentScriptFile: data.url('widget/widget.js')
-	//});
 	var widget = ToggleButton({
 		id: "toggle-switch",
 		label: "Jarvis",
@@ -132,13 +121,6 @@ exports.main = function() {
 		widget.icon = toggleActivation() ? data.url('widget/icon-64.png') : 
 			data.url('widget/icon-64-off.png');
 	}
-
-	//widget.port.on('left-click', function() {
-	//	console.log('activate/deactivate');
-	//	widget.contentURL = toggleActivation() ?
-	//	data.url('widget/icon-64.png') :
-	//	data.url('widget/icon-64-off.png');
-	//});
 
 	//widget.port.on('right-click', function() {
 	//	console.log('show annotation list');
@@ -156,13 +138,12 @@ exports.main = function() {
 
 		onAttach: function(worker) {
 	    // console.log(jira);
-	    worker.postMessage(annotatorIsOn);
-	    selectors.push(worker);
-	    worker.port.on('show', function(data) {
+		    worker.postMessage(annotatorIsOn);
+		    selectors.push(worker);
+			worker.port.on('show', function(data) {
 	    	onAttachWorker(annotationEditor, data);
 	    });
 	    worker.port.on('initAnnotator', function(annotator) {
-	      // var app = annotator.App();
 	      console.log( annotator );
 	    });
 
@@ -178,7 +159,6 @@ exports.main = function() {
 		contentURL: data.url('editor/annotation-editor.html'),
 		contentScriptFile: data.url('editor/annotation-editor.js'),
 		onMessage: function(annotationText) {
-			console.log("******************Triggered log");
 			if (annotationText) {
 				console.log(this.annotationAnchor);
 				console.log(annotationText);
@@ -297,7 +277,6 @@ exports.main = function() {
 				password, 
 				'2', 
 				true);
-
 
 			// jira find issue
 			// jira.findIssue("JAP-1", function(error, response, json){
