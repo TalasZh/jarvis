@@ -263,6 +263,7 @@ exports.main = function() {
 
 
 	panel.port.on("back-button-pressed", function() {
+		// jira.destroySession(function(error, response){});
 		panel.contentURL = data.url("login/panel.html");
 	});
 
@@ -316,13 +317,14 @@ exports.main = function() {
 		console.log('show annotation list');
 		annotationList.show();
 	});
+	
 
 	// Listen for messages called "text-entered" coming from
 	// the content script. The message payload is the text the user
 	// entered.
 	// In this implementation we'll just log the text to the console.
 	panel.port.on("handle-login", function (username, password) {
-	  console.log(username + " " + password );
+	  	console.log(username + " " + password );
 
 		JiraApi = require('jira-module').JiraApi;
 			jira = new JiraApi('http', 
@@ -352,19 +354,33 @@ exports.main = function() {
 			// 	}
 			// });
 
-
 			// list jira issues 
-			jira.getUsersIssues(username, true, function(error, response, json){
-				if ( response === 200 ) {
-					panel.contentURL = data.url("login/research.html");
-					panel.contentScriptFile = data.url('login/handleLogin.js');
-					panel.port.emit("fill-combo-box", json);
+			jira.getUsersIssues(username, true, function(error, json){
+				if ( error != null ){
+					// console.log( error );
+					console.log( "Could not retrieve " + username + "'s issues." );
+					return;
 				}
-				else {
-					console.log( "unsuccessfful" );
-				}
+				panel.contentURL = data.url("login/research.html");
+				panel.contentScriptFile = data.url('login/handleLogin.js');
+				panel.port.emit("fill-combo-box", json);
 			});
 
+			// start session 
+			// jira.startSession('{"username": "admin","password": "admin"}', function(error, response, json){
+			// 	console.log(response);
+			// 	if ( response === 200 ) {
+			// 		panel.contentURL = data.url("login/research.html");
+			// 		panel.contentScriptFile = data.url('login/handleLogin.js');
+			// 		panel.port.emit("fill-combo-box", json);
+			// 	}
+			// 	else {
+			// 		console.log( "unsuccessfful" );
+			// 	}
+			// });
+
+
+			
 
 			// list transitions
 			// jira.listTransitions('JAP-1',function(error, response, json){

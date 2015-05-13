@@ -16,7 +16,6 @@ if ( annotator !== null ){
 	annotator.addEventListener("click", function(event) {
 		if(event.button == 0 && event.shiftKey == false){
 			self.port.emit('left-click');
-			console.log("adfadsfasdfasdfad");
 			if ( annotator.value == "Enable Annotator" ){
 		      annotator.value = "Disable Annotator";
 		    }
@@ -75,7 +74,6 @@ if ( pauseResume !== null ){
 var backButton = document.getElementById("backButton");
 if ( backButton !== null ){
 	backButton.onclick = function(event) {
-		console.log("back button");
 		self.port.emit("back-button-pressed" );
 	};	
 }
