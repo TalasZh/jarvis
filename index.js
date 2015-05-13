@@ -1,4 +1,4 @@
-var widgets = require('sdk/widget');
+//var widgets = require('sdk/widget');
 var data = require('sdk/self').data;
 var pageMod = require('sdk/page-mod');
 var selectors = [];
@@ -31,7 +31,11 @@ const jira_init = () => {
 		'admin', 
 		'2', 
 		true);
-	jira.findIssue("JAP-1", function(error, json){
+	var credentials = {
+		username: "admin",
+		password: "admin"
+	};
+	jira.startSession(credentials, function(error, json){
 		if(error !== null) {
 			console.log(error);
 		}
@@ -39,11 +43,10 @@ const jira_init = () => {
 			console.log(json);
 		}
 	});
-	console.log(jira.makeUri('/issues/'));
 	console.log("hello")
 }
 
-// jira_init();
+//jira_init();
 
 
 if (!simpleStorage.storage.annotations)
@@ -75,10 +78,6 @@ function onAttachWorker(annotationEditor, data) {
 	annotationEditor.annotationAnchor = data;
 	annotationEditor.show();
 	console.log('On attach worker event...');
-
-  // var { jquery } = require('./jquery-2.1.3.js');
-  // var { annotator } = require('./annotator-full.min.js');
-  // var app = new annotator.App();
 }
 
 function detachWorker(worker, workerArray) {
@@ -110,25 +109,23 @@ function updateMatchers() {
 
 exports.main = function() {
 
-	var widget = widgets.Widget({
-		id: 'toggle-switch',
-		label: 'Annotator',
-		contentURL: data.url('widget/icon-64-off.png'),
-		contentScriptWhen: 'ready',
-		contentScriptFile: data.url('widget/widget.js')
+	var widget = ToggleButton({
+		id: "toggle-switch",
+		label: "Jarvis",
+		icon: data.url('widget/icon-64-off.png'),
+		onClick: handleToogleSwitchClick
 	});
 
-	widget.port.on('left-click', function() {
-		console.log('activate/deactivate');
-		widget.contentURL = toggleActivation() ?
-		data.url('widget/icon-64.png') :
-		data.url('widget/icon-64-off.png');
-	});
+	function handleToogleSwitchClick(state) {
+		console.log('activate/deactive');
+		widget.icon = toggleActivation() ? data.url('widget/icon-64.png') : 
+			data.url('widget/icon-64-off.png');
+	}
 
-	widget.port.on('right-click', function() {
-		console.log('show annotation list');
-		annotationList.show();
-	});
+	//widget.port.on('right-click', function() {
+	//	console.log('show annotation list');
+	//	annotationList.show();
+	//});
 
 	var selector = pageMod.PageMod({
 		include: ['*'],
@@ -141,13 +138,12 @@ exports.main = function() {
 
 		onAttach: function(worker) {
 	    // console.log(jira);
-	    worker.postMessage(annotatorIsOn);
-	    selectors.push(worker);
-	    worker.port.on('show', function(data) {
+		    worker.postMessage(annotatorIsOn);
+		    selectors.push(worker);
+			worker.port.on('show', function(data) {
 	    	onAttachWorker(annotationEditor, data);
 	    });
 	    worker.port.on('initAnnotator', function(annotator) {
-	      // var app = annotator.App();
 	      console.log( annotator );
 	    });
 
@@ -163,7 +159,6 @@ exports.main = function() {
 		contentURL: data.url('editor/annotation-editor.html'),
 		contentScriptFile: data.url('editor/annotation-editor.js'),
 		onMessage: function(annotationText) {
-			console.log("******************Triggered log");
 			if (annotationText) {
 				console.log(this.annotationAnchor);
 				console.log(annotationText);
@@ -283,7 +278,6 @@ exports.main = function() {
 				'2', 
 				true);
 
-
 			// jira find issue
 			// jira.findIssue("JAP-1", function(error, response, json){
 			// 	if ( response === 200 ) {
@@ -304,14 +298,14 @@ exports.main = function() {
 
 
 			// list jira issues 
-			jira.getUsersIssues(username, true, function(error, response, json){
-				if ( response === 200 ) {
+			jira.getUsersIssues(username, true, function(error, json){
+				if ( error ) {
+					console.log( "unsuccessfful " + error );
+				}
+				else {
 					panel.contentURL = data.url("login/research.html");
 					panel.contentScriptFile = data.url('login/handleLogin.js');
 					panel.port.emit("fill-combo-box", json);
-				}
-				else {
-					console.log( "unsuccessfful" );
 				}
 			});
 	});
