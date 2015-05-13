@@ -16,6 +16,7 @@ sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys B07804338C015B73
 sudo apt-get update
 sudo apt-get install --force-yes --yes atlassian-plugin-sdk
 
+cp start-jira.sh ~
 #cd ~
 #mkdir atlastutorial
 #cd atlastutorial
