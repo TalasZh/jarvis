@@ -17,6 +17,7 @@ To start adding new features to plugin first arrange your environment.
 	sudo apt-get install firefox-trunk
 
 That's it, now go to project root directory and run you plugin
+	
 	jpm run -b firefox-trunk
 
 Plugin works directly with atlassian product JIRA REST service,
@@ -24,6 +25,7 @@ to test full feature look at ./vagrant directory.
 There you will find testing environment with atlassian sdk for plugin development purposes.
 To run testing environment you will need to have vagrant (https://www.vagrantup.com/) 
 already installed. And execute following commands inside of ./vagrant folder:
+	
 	vagrant up
 	vagrant ssh
 	cd /vagrant
