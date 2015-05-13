@@ -304,14 +304,14 @@ exports.main = function() {
 
 
 			// list jira issues 
-			jira.getUsersIssues(username, true, function(error, response, json){
-				if ( response === 200 ) {
+			jira.getUsersIssues(username, true, function(error, json){
+				if ( error ) {
+					console.log( "unsuccessfful " + error );
+				}
+				else {
 					panel.contentURL = data.url("login/research.html");
 					panel.contentScriptFile = data.url('login/handleLogin.js');
 					panel.port.emit("fill-combo-box", json);
-				}
-				else {
-					console.log( "unsuccessfful" );
 				}
 			});
 	});
