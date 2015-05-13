@@ -1,4 +1,4 @@
-var widgets = require('sdk/widget');
+//var widgets = require('sdk/widget');
 var data = require('sdk/self').data;
 var pageMod = require('sdk/page-mod');
 var selectors = [];
@@ -31,7 +31,11 @@ const jira_init = () => {
 		'admin', 
 		'2', 
 		true);
-	jira.findIssue("JAP-1", function(error, json){
+	var credentials = {
+		username: "admin",
+		password: "admin"
+	};
+	jira.startSession(credentials, function(error, json){
 		if(error !== null) {
 			console.log(error);
 		}
@@ -39,11 +43,10 @@ const jira_init = () => {
 			console.log(json);
 		}
 	});
-	console.log(jira.makeUri('/issues/'));
 	console.log("hello")
 }
 
-// jira_init();
+jira_init();
 
 
 if (!simpleStorage.storage.annotations)
@@ -110,25 +113,37 @@ function updateMatchers() {
 
 exports.main = function() {
 
-	var widget = widgets.Widget({
-		id: 'toggle-switch',
-		label: 'Annotator',
-		contentURL: data.url('widget/icon-64-off.png'),
-		contentScriptWhen: 'ready',
-		contentScriptFile: data.url('widget/widget.js')
+	//var widget = widgets.Widget({
+	//	id: 'toggle-switch',
+	//	label: 'Annotator',
+	//	contentURL: data.url('widget/icon-64-off.png'),
+	//	contentScriptWhen: 'ready',
+	//	contentScriptFile: data.url('widget/widget.js')
+	//});
+	var widget = ToggleButton({
+		id: "toggle-switch",
+		label: "Jarvis",
+		icon: data.url('widget/icon-64-off.png'),
+		onClick: handleToogleSwitchClick
 	});
 
-	widget.port.on('left-click', function() {
-		console.log('activate/deactivate');
-		widget.contentURL = toggleActivation() ?
-		data.url('widget/icon-64.png') :
-		data.url('widget/icon-64-off.png');
-	});
+	function handleToogleSwitchClick(state) {
+		console.log('activate/deactive');
+		widget.icon = toggleActivation() ? data.url('widget/icon-64.png') : 
+			data.url('widget/icon-64-off.png');
+	}
 
-	widget.port.on('right-click', function() {
-		console.log('show annotation list');
-		annotationList.show();
-	});
+	//widget.port.on('left-click', function() {
+	//	console.log('activate/deactivate');
+	//	widget.contentURL = toggleActivation() ?
+	//	data.url('widget/icon-64.png') :
+	//	data.url('widget/icon-64-off.png');
+	//});
+
+	//widget.port.on('right-click', function() {
+	//	console.log('show annotation list');
+	//	annotationList.show();
+	//});
 
 	var selector = pageMod.PageMod({
 		include: ['*'],
