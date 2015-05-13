@@ -46,7 +46,7 @@ const jira_init = () => {
 	console.log("hello")
 }
 
-jira_init();
+//jira_init();
 
 
 if (!simpleStorage.storage.annotations)
