@@ -266,7 +266,12 @@ exports.main = function() {
 
 	panel.port.on("stop-progress", function(issueId){
 		console.log("Stop progress.");
-		jira.transitionIssue(issueId, '{"transition":{"id":31}}', function(error, message){
+		var transitionJson = {
+			transition: {
+				id: 31
+			}
+		};
+		jira.transitionIssue(issueId, transitionJson, function(error, message){
 
 			if(error !== null) {
 				console.log(error);
@@ -284,7 +289,12 @@ exports.main = function() {
 
 	panel.port.on("start-progress", function(issueId) {
 		console.log("Start progress.");
-		jira.transitionIssue(issueId, '{"transition":{"id":11}}', function(error, message){
+		var transitionJson = {
+			transition: {
+				id: 11
+			}
+		};
+		jira.transitionIssue(issueId, transitionJson, function(error, message){
 
 			if(error !== null) {
 				console.log(error);

@@ -14,6 +14,15 @@ if ( loginButton !== null ){
 var annotator = document.getElementById("annotator");
 if ( annotator !== null ){
 	annotator.addEventListener("click", function(event) {
+
+		console.log( annotator.className );
+		if ( annotator.className == "btn btn-primary btn-sm" ) {
+			annotator.className = "btn btn-default btn-sm";
+		}
+		else{
+			annotator.className = "btn btn-primary btn-sm";
+		}
+ 
 		if(event.button == 0 && event.shiftKey == false){
 			self.port.emit('left-click');
 			if ( annotator.value == "Enable Annotator" ){
@@ -29,6 +38,7 @@ if ( annotator !== null ){
 			console.log("eadfadf");
 			event.preventDefault();
 		}
+
 	}, true);
 }
 

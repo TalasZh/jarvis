@@ -1,0 +1,17 @@
+input {
+	border: 0;
+}
+
+select{
+  color: transparent;
+  text-shadow: 0 0 0 #000;
+}
+
+
+a, a:active, a:focus {
+	outline: none;
+}
+
+input::-moz-focus-inner { 
+  border: 0; 
+}
