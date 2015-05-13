@@ -1,7 +1,7 @@
 #!/usr/bin/env bash 
 
 pushd ~
-atlas="~/atlastutorial";
+atlas="atlastutorial";
 if [ ! -d $atlas ]; then
 	mkdir -p $atlas
 fi
