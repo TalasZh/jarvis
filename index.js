@@ -317,7 +317,7 @@ exports.main = function() {
 		console.log('show annotation list');
 		annotationList.show();
 	});
-	
+
 
 	// Listen for messages called "text-entered" coming from
 	// the content script. The message payload is the text the user
