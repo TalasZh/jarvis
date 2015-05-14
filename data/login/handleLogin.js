@@ -46,10 +46,9 @@ if ( annotator !== null ){
 var startStop = document.getElementById("startStop");
 if ( startStop !== null ){
 	startStop.addEventListener("click", function() {
-		var x = document.getElementById("issueCombobox"); 
-		var selectIndex=x.selectedIndex;
-		var selectValue=x.options[selectIndex].text;
-
+		var x = document.getElementById("issueNumber"); 
+		var selectValue=x.innerHTML;
+		console.log( selectValue );
 	    if ( startStop.value === "Start" ){
 	      startStop.value = "Stop";
 	      console.log( "Session started for " + selectValue + " at time : " + getDateTime() );
@@ -62,7 +61,18 @@ if ( startStop !== null ){
 	    }
 	}, false);
 }
-  
+
+
+var selectIssue = document.getElementById("selectIssue");
+if ( selectIssue !== null ){
+	selectIssue.addEventListener("click", function() {
+		var x = document.getElementById("issueCombobox"); 
+		var selectIndex=x.selectedIndex;
+		var selectValue=x.options[selectIndex].text;
+		self.port.emit("issue-selected", selectValue);
+	}, false);
+}
+
 
 var pauseResume = document.getElementById("pauseResume");
 if ( pauseResume !== null ){
@@ -123,20 +133,54 @@ function fillComboBox(json) {
 	x.onchange = function(event) {
 		var selectIndex=x.selectedIndex;
 		var selectValue=x.options[selectIndex].text;
-		console.log( selectValue );
+		if ( getIssueState(json, selectValue ) == "To Do" ){
+			startStop.value = "Start";
+		}
+		else{
+			startStop.value = "Stop";
+		}
+		console.log( selectValue + " : " + getIssueState(json, selectValue ));
 	};
 
 	for (var i = 0; i < json.issues.length; i++) {
-    var issue = json.issues[i];
-    var option = document.createElement("option");	
-  	option.text = issue.key;
-  	x.add(option);
+	    var issue = json.issues[i];
+	    var option = document.createElement("option");	
+	  	option.text = issue.key;
+	  	x.add(option);
 	}
+}
+
+
+function getIssueState(json, issueId){
+	for( var i=0; i<json.issues.length; i++ ){
+		var issue = json.issues[i];
+		if ( issue.key == issueId ){
+			return issue.fields.status.name;
+		}
+	}
+	return null;
 }
 
 
 self.port.on("fill-combo-box", function(json) {
 	fillComboBox(json);
+});
+
+self.port.on("issueKey", function( issue ){
+	if ( issue.fields.status.name == "To Do" ){
+		startStop.value = "Start";
+	}
+	else{
+		startStop.value = "Stop";
+	}
+	var x = document.getElementById("issueNumber"); 
+	x.innerHTML = issue.key;
+
+	document.getElementById("summary").innerHTML = issue.fields.summary;
+	document.getElementById("issueLink").innerHTML = issue.fields.issuetype.name;
+	document.getElementById("status").innerHTML = issue.fields.status.name;
+	document.getElementById("type").innerHTML = issue.fields.issuetype.name;
+	document.getElementById("priority").innerHTML = issue.fields.priority.name;
 });
 
 

@@ -258,10 +258,7 @@ exports.main = function() {
 	});
 
 
-	panel.port.on("back-button-pressed", function() {
-		// jira.destroySession(function(error, response){});
-		panel.contentURL = data.url("login/panel.html");
-	});
+
 
 
 	panel.port.on("stop-progress", function(issueId){
@@ -325,6 +322,7 @@ exports.main = function() {
 	});
 
 
+
 	// Listen for messages called "text-entered" coming from
 	// the content script. The message payload is the text the user
 	// entered.
@@ -369,6 +367,23 @@ exports.main = function() {
 				panel.contentURL = data.url("login/research.html");
 				panel.contentScriptFile = data.url('login/handleLogin.js');
 				panel.port.emit("fill-combo-box", json);
+
+				panel.port.on("back-button-pressed", function() {
+					panel.contentURL = data.url("login/research.html");
+					panel.port.emit("fill-combo-box", json);
+				});
+
+				panel.port.on("issue-selected", function(selectedIssueKey){
+					panel.contentURL = data.url("login/issueSelected.html");
+					for( var i=0; i<json.issues.length; i++ ){
+						var issue = json.issues[i];
+						if ( issue.key == selectedIssueKey ){
+							panel.port.emit("issueKey", issue);
+							break;
+						}
+					}
+				});
+
 			});
 
 			// start session 
