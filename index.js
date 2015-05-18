@@ -6,6 +6,9 @@ var panels = require('sdk/panel');
 var simpleStorage = require('sdk/simple-storage');
 var notifications = require('sdk/notifications');
 
+var tabs = require("sdk/tabs");
+
+
 var { ToggleButton } = require('sdk/ui/button/toggle');
 // var panels = require("sdk/panel");
 var self = require("sdk/self");
@@ -16,6 +19,11 @@ let { search } = require("sdk/places/history");
 const { pathFor } = require('sdk/system');
 const path = require('sdk/fs/path');
 const file = require('sdk/io/file');
+JiraApi = require('jira-module').JiraApi;
+
+
+var jira;
+var global_username;
 
 
 
@@ -47,6 +55,7 @@ const jira_init = () => {
 }
 
 //jira_init();
+
 
 
 if (!simpleStorage.storage.annotations)
@@ -103,6 +112,18 @@ function toggleActivation() {
 function updateMatchers() {
 	matchers.forEach(function(matcher){
 		matcher.postMessage(simpleStorage.storage.annotations);
+	});
+}
+
+
+function getUserIssues( jira, username ){
+	jira.getUsersIssues(username, true, function(error, json){
+		if ( error != null ){
+			// console.log( error );
+			console.log( "Could not retrieve " + username + "'s issues." );
+			return;
+		}
+		return json;
 	});
 }
 
@@ -322,6 +343,56 @@ exports.main = function() {
 	});
 
 
+	panel.port.on("back-button-pressed", function() {
+		panel.contentURL = data.url("login/research.html");
+		jira.getUsersIssues( global_username, true, function( error, json ){
+			if ( error != null ){
+				// console.log( error );
+				console.log( "Could not retrieve " + username + "'s issues." );
+				return;
+			}
+			panel.port.emit("fill-combo-box", json);
+		});			
+	});
+
+	var selection = require("sdk/selection");
+	console.log("helladf");
+	if (selection.text){
+	  console.log(selection.text);
+	  console.log("adfasdf");
+	}
+
+
+
+	panel.port.on("issue-selected", function(selectedIssueKey){
+		panel.contentURL = data.url("login/issueSelected.html");
+		jira.getUsersIssues( global_username, true, function( error, json ){
+			if ( error != null ){
+				// console.log( error );
+				console.log( "Could not retrieve " + username + "'s issues." );
+				return;
+			}
+			for( var i=0; i<json.issues.length; i++ ){
+				var issue = json.issues[i];
+				if ( issue.key == selectedIssueKey ){
+					panel.port.emit("issueKey", issue);
+					break;
+				}
+			}
+			
+		});	
+	});
+
+
+	panel.port.on("link-clicked", function(issueId){
+		tabs.open("http://localhost:2990/jira/browse/" + issueId);
+	});
+
+
+
+
+
+
 
 	// Listen for messages called "text-entered" coming from
 	// the content script. The message payload is the text the user
@@ -330,14 +401,14 @@ exports.main = function() {
 	panel.port.on("handle-login", function (username, password) {
 	  	console.log(username + " " + password );
 
-		JiraApi = require('jira-module').JiraApi;
-			jira = new JiraApi('http', 
-				'localhost', 
-				'2990', 
-				username, 
-				password, 
-				'2', 
-				true);
+	  	global_username = username;
+		jira = new JiraApi('http', 
+			'localhost', 
+			'2990', 
+			username, 
+			password, 
+			'2', 
+			true);
 
 			// jira find issue
 			// jira.findIssue("JAP-1", function(error, response, json){
@@ -367,23 +438,6 @@ exports.main = function() {
 				panel.contentURL = data.url("login/research.html");
 				panel.contentScriptFile = data.url('login/handleLogin.js');
 				panel.port.emit("fill-combo-box", json);
-
-				panel.port.on("back-button-pressed", function() {
-					panel.contentURL = data.url("login/research.html");
-					panel.port.emit("fill-combo-box", json);
-				});
-
-				panel.port.on("issue-selected", function(selectedIssueKey){
-					panel.contentURL = data.url("login/issueSelected.html");
-					for( var i=0; i<json.issues.length; i++ ){
-						var issue = json.issues[i];
-						if ( issue.key == selectedIssueKey ){
-							panel.port.emit("issueKey", issue);
-							break;
-						}
-					}
-				});
-
 			});
 
 			// start session 

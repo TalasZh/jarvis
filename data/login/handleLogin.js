@@ -25,12 +25,12 @@ if ( annotator !== null ){
  
 		if(event.button == 0 && event.shiftKey == false){
 			self.port.emit('left-click');
-			if ( annotator.value == "Enable Annotator" ){
-		      annotator.value = "Disable Annotator";
-		    }
-		    else {
-		      annotator.value = "Enable Annotator";
-			}	
+			// if ( annotator.value == "Enable Annotator" ){
+		 //      annotator.value = "Disable Annotator";
+		 //    }
+		 //    else {
+		 //      annotator.value = "Enable Annotator";
+			// }	
 		}
 
 		if(event.button == 2 || (event.button == 0 && event.shiftKey == true)){
@@ -151,20 +151,10 @@ function fillComboBox(json) {
 }
 
 
-function getIssueState(json, issueId){
-	for( var i=0; i<json.issues.length; i++ ){
-		var issue = json.issues[i];
-		if ( issue.key == issueId ){
-			return issue.fields.status.name;
-		}
-	}
-	return null;
-}
-
-
 self.port.on("fill-combo-box", function(json) {
 	fillComboBox(json);
 });
+
 
 self.port.on("issueKey", function( issue ){
 	if ( issue.fields.status.name == "To Do" ){
@@ -177,11 +167,20 @@ self.port.on("issueKey", function( issue ){
 	x.innerHTML = issue.key;
 
 	document.getElementById("summary").innerHTML = issue.fields.summary;
-	document.getElementById("issueLink").innerHTML = issue.fields.issuetype.name;
+	document.getElementById("issueLink").innerHTML = x.innerHTML;
 	document.getElementById("status").innerHTML = issue.fields.status.name;
 	document.getElementById("type").innerHTML = issue.fields.issuetype.name;
 	document.getElementById("priority").innerHTML = issue.fields.priority.name;
 });
+
+
+var issueLink = document.getElementById("issueLink");
+if ( issueLink !== null ){
+	issueLink.onclick = function(event) {
+		self.port.emit("link-clicked", issueLink.innerHTML );
+	};	
+}
+
 
 
 // var textArea = document.getElementById("edit-box");
