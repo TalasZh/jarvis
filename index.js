@@ -1,10 +1,13 @@
-//var widgets = require('sdk/widget');
+// var widgets = require('sdk/widget');
 var data = require('sdk/self').data;
 var pageMod = require('sdk/page-mod');
 var selectors = [];
 var panels = require('sdk/panel');
 var simpleStorage = require('sdk/simple-storage');
 var notifications = require('sdk/notifications');
+
+var tabs = require("sdk/tabs");
+
 
 var { ToggleButton } = require('sdk/ui/button/toggle');
 // var panels = require("sdk/panel");
@@ -16,6 +19,11 @@ let { search } = require("sdk/places/history");
 const { pathFor } = require('sdk/system');
 const path = require('sdk/fs/path');
 const file = require('sdk/io/file');
+JiraApi = require('jira-module').JiraApi;
+
+
+var jira;
+var global_username;
 
 
 
@@ -47,6 +55,7 @@ const jira_init = () => {
 }
 
 //jira_init();
+
 
 
 if (!simpleStorage.storage.annotations)
@@ -107,25 +116,38 @@ function updateMatchers() {
 }
 
 
-exports.main = function() {
-
-	var widget = ToggleButton({
-		id: "toggle-switch",
-		label: "Jarvis",
-		icon: data.url('widget/icon-64-off.png'),
-		onClick: handleToogleSwitchClick
+function getUserIssues( jira, username ){
+	jira.getUsersIssues(username, true, function(error, json){
+		if ( error != null ){
+			// console.log( error );
+			console.log( "Could not retrieve " + username + "'s issues." );
+			return;
+		}
+		return json;
 	});
+}
 
-	function handleToogleSwitchClick(state) {
-		console.log('activate/deactive');
-		widget.icon = toggleActivation() ? data.url('widget/icon-64.png') : 
-			data.url('widget/icon-64-off.png');
-	}
 
-	//widget.port.on('right-click', function() {
-	//	console.log('show annotation list');
-	//	annotationList.show();
-	//});
+exports.main = function() {
+	// var widget = widgets.Widget({
+	// 	id: 'toggle-switch',
+	// 	label: 'Annotator',
+	// 	contentURL: data.url('widget/icon-64-off.png'),
+	// 	contentScriptWhen: 'ready',
+	// 	contentScriptFile: data.url('widget/widget.js')
+	// });
+
+	// widget.port.on('left-click', function() {
+	// 	console.log('activate/deactivate');
+	// 	widget.contentURL = toggleActivation() ?
+	// 	data.url('widget/icon-64.png') :
+	// 	data.url('widget/icon-64-off.png');
+	// });
+
+	// widget.port.on('right-click', function() {
+	// 	console.log('show annotation list');
+	// 	annotationList.show();
+	// });
 
 	var selector = pageMod.PageMod({
 		include: ['*'],
@@ -226,7 +248,7 @@ exports.main = function() {
 		id: "my-button",
 		label: "Jarvis",
 		icon: {
-			"16": "./icon-16.png",
+			"16": data.url('icon-16.png'),
 			"32": "./icon-32.png",
 			"64": "./icon-64.png"
 		},
@@ -257,9 +279,119 @@ exports.main = function() {
 	});
 
 
-	panel.port.on("back-button-pressed", function() {
-		panel.contentURL = data.url("login/panel.html");
+
+
+
+	panel.port.on("stop-progress", function(issueId){
+		console.log("Stop progress.");
+		var transitionJson = {
+			transition: {
+				id: 31
+			}
+		};
+		jira.transitionIssue(issueId, transitionJson, function(error, message){
+
+			if(error !== null) {
+				console.log(error);
+			}
+
+			if ( message === "Success" ) {
+				console.log( "issue transition state is changed successfully." );
+			}
+			else {
+				console.log( "unsuccessfful" );
+			}
+		});		
 	});
+
+
+	panel.port.on("start-progress", function(issueId) {
+		console.log("Start progress.");
+		var transitionJson = {
+			transition: {
+				id: 11
+			}
+		};
+		jira.transitionIssue(issueId, transitionJson, function(error, message){
+
+			if(error !== null) {
+				console.log(error);
+			}
+
+			if ( message === "Success" ) {
+				console.log( "issue transition state is changed successfully." );
+			}
+			else {
+				console.log( "unsuccessfful" );
+			}
+		});
+
+	});
+
+
+	panel.port.on('left-click', function() {
+		console.log('activate/deactivate');
+		toggleActivation();
+		// widget.contentURL = toggleActivation() ?
+		// data.url('widget/icon-64.png') :
+		// data.url('widget/icon-64-off.png');
+	});
+
+	panel.port.on('right-click', function() {
+		console.log('show annotation list');
+		annotationList.show();
+	});
+
+
+	panel.port.on("back-button-pressed", function() {
+		panel.contentURL = data.url("login/research.html");
+		jira.getUsersIssues( global_username, true, function( error, json ){
+			if ( error != null ){
+				// console.log( error );
+				console.log( "Could not retrieve " + username + "'s issues." );
+				return;
+			}
+			panel.port.emit("fill-combo-box", json);
+		});			
+	});
+
+	var selection = require("sdk/selection");
+	console.log("helladf");
+	if (selection.text){
+	  console.log(selection.text);
+	  console.log("adfasdf");
+	}
+
+
+
+	panel.port.on("issue-selected", function(selectedIssueKey){
+		panel.contentURL = data.url("login/issueSelected.html");
+		jira.getUsersIssues( global_username, true, function( error, json ){
+			if ( error != null ){
+				// console.log( error );
+				console.log( "Could not retrieve " + username + "'s issues." );
+				return;
+			}
+			for( var i=0; i<json.issues.length; i++ ){
+				var issue = json.issues[i];
+				if ( issue.key == selectedIssueKey ){
+					panel.port.emit("issueKey", issue);
+					break;
+				}
+			}
+			
+		});	
+	});
+
+
+	panel.port.on("link-clicked", function(issueId){
+		tabs.open("http://localhost:2990/jira/browse/" + issueId);
+	});
+
+
+
+
+
 
 
 	// Listen for messages called "text-entered" coming from
@@ -267,16 +399,16 @@ exports.main = function() {
 	// entered.
 	// In this implementation we'll just log the text to the console.
 	panel.port.on("handle-login", function (username, password) {
-	  console.log(username + " " + password );
+	  	console.log(username + " " + password );
 
-		JiraApi = require('jira-module').JiraApi;
-			jira = new JiraApi('http', 
-				'localhost', 
-				'2990', 
-				username, 
-				password, 
-				'2', 
-				true);
+	  	global_username = username;
+		jira = new JiraApi('http', 
+			'localhost', 
+			'2990', 
+			username, 
+			password, 
+			'2', 
+			true);
 
 			// jira find issue
 			// jira.findIssue("JAP-1", function(error, response, json){
@@ -296,17 +428,60 @@ exports.main = function() {
 			// 	}
 			// });
 
-
 			// list jira issues 
 			jira.getUsersIssues(username, true, function(error, json){
-				if ( error ) {
-					console.log( "unsuccessfful " + error );
+				if ( error != null ){
+					// console.log( error );
+					console.log( "Could not retrieve " + username + "'s issues." );
+					return;
 				}
-				else {
-					panel.contentURL = data.url("login/research.html");
-					panel.contentScriptFile = data.url('login/handleLogin.js');
-					panel.port.emit("fill-combo-box", json);
-				}
+				panel.contentURL = data.url("login/research.html");
+				panel.contentScriptFile = data.url('login/handleLogin.js');
+				panel.port.emit("fill-combo-box", json);
 			});
+
+			// start session 
+			// jira.startSession('{"username": "admin","password": "admin"}', function(error, response, json){
+			// 	console.log(response);
+			// 	if ( response === 200 ) {
+			// 		panel.contentURL = data.url("login/research.html");
+			// 		panel.contentScriptFile = data.url('login/handleLogin.js');
+			// 		panel.port.emit("fill-combo-box", json);
+			// 	}
+			// 	else {
+			// 		console.log( "unsuccessfful" );
+			// 	}
+			// });
+
+
+			
+
+			// list transitions
+			// jira.listTransitions('JAP-1',function(error, response, json){
+			// 	if ( response === 200 ) {
+			// 		console.log( "success" );
+			// 		console.log( json );
+			// 	}
+			// 	else {
+			// 		console.log( "unsuccessfful" );
+			// 	}
+			// });
+			
+
+
+			// issue transition
+			// jira.transitionIssue('JAP-2', '{"transition":{"id":31}}', function(error, message){
+
+			// 	if(error !== null) {
+			// 		console.log(error);
+			// 	}
+			// 	if ( message === "Success" ) {
+			// 		console.log( "issue transition state is changed successfully." );
+			// 	}
+			// 	else {
+			// 		console.log( "unsuccessfful" );
+			// 	}
+			// });
+
 	});
 }

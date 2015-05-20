@@ -10,24 +10,70 @@ if ( loginButton !== null ){
 	};	
 }
 
+
+var annotator = document.getElementById("annotator");
+if ( annotator !== null ){
+	annotator.addEventListener("click", function(event) {
+
+		console.log( annotator.className );
+		if ( annotator.className == "btn btn-primary btn-sm" ) {
+			annotator.className = "btn btn-default btn-sm";
+		}
+		else{
+			annotator.className = "btn btn-primary btn-sm";
+		}
+ 
+		if(event.button == 0 && event.shiftKey == false){
+			self.port.emit('left-click');
+			// if ( annotator.value == "Enable Annotator" ){
+		 //      annotator.value = "Disable Annotator";
+		 //    }
+		 //    else {
+		 //      annotator.value = "Enable Annotator";
+			// }	
+		}
+
+		if(event.button == 2 || (event.button == 0 && event.shiftKey == true)){
+			self.port.emit('right-click');
+			console.log("eadfadf");
+			event.preventDefault();
+		}
+
+	}, true);
+}
+
+
 var startStop = document.getElementById("startStop");
 if ( startStop !== null ){
 	startStop.addEventListener("click", function() {
+		var x = document.getElementById("issueNumber"); 
+		var selectValue=x.innerHTML;
+		console.log( selectValue );
+	    if ( startStop.value === "Start" ){
+	      startStop.value = "Stop";
+	      console.log( "Session started for " + selectValue + " at time : " + getDateTime() );
+	      self.port.emit("start-progress", selectValue);
+	    }
+	    else {
+	      startStop.value = "Start";
+	      console.log( "Session stopped for " + selectValue + " at time : " + getDateTime() );
+	      self.port.emit("stop-progress", selectValue);
+	    }
+	}, false);
+}
+
+
+var selectIssue = document.getElementById("selectIssue");
+if ( selectIssue !== null ){
+	selectIssue.addEventListener("click", function() {
 		var x = document.getElementById("issueCombobox"); 
 		var selectIndex=x.selectedIndex;
 		var selectValue=x.options[selectIndex].text;
-
-    if ( startStop.value === "Start" ){
-      startStop.value = "Stop";
-      console.log( "Session started for " + selectValue + " at time : " + getDateTime() )
-    }
-    else {
-      startStop.value = "Start";
-      console.log( "Session stopped for " + selectValue + " at time : " + getDateTime() )
-    }
+		self.port.emit("issue-selected", selectValue);
 	}, false);
 }
-  
+
+
 var pauseResume = document.getElementById("pauseResume");
 if ( pauseResume !== null ){
 	pauseResume.addEventListener("click", function() {
@@ -44,13 +90,14 @@ if ( pauseResume !== null ){
 	}, false);	
 }
   
+
 var backButton = document.getElementById("backButton");
 if ( backButton !== null ){
 	backButton.onclick = function(event) {
-		console.log("back button");
 		self.port.emit("back-button-pressed" );
 	};	
 }
+
 
 function getDateTime() {
   var now     = new Date(); 
@@ -86,20 +133,54 @@ function fillComboBox(json) {
 	x.onchange = function(event) {
 		var selectIndex=x.selectedIndex;
 		var selectValue=x.options[selectIndex].text;
-		console.log( selectValue );
+		if ( getIssueState(json, selectValue ) == "To Do" ){
+			startStop.value = "Start";
+		}
+		else{
+			startStop.value = "Stop";
+		}
+		console.log( selectValue + " : " + getIssueState(json, selectValue ));
 	};
 
 	for (var i = 0; i < json.issues.length; i++) {
-    var issue = json.issues[i];
-    var option = document.createElement("option");	
-  	option.text = issue.key + " - " + issue.fields.summary;
-  	x.add(option);
+	    var issue = json.issues[i];
+	    var option = document.createElement("option");	
+	  	option.text = issue.key;
+	  	x.add(option);
 	}
 }
+
 
 self.port.on("fill-combo-box", function(json) {
 	fillComboBox(json);
 });
+
+
+self.port.on("issueKey", function( issue ){
+	if ( issue.fields.status.name == "To Do" ){
+		startStop.value = "Start";
+	}
+	else{
+		startStop.value = "Stop";
+	}
+	var x = document.getElementById("issueNumber"); 
+	x.innerHTML = issue.key;
+
+	document.getElementById("summary").innerHTML = issue.fields.summary;
+	document.getElementById("issueLink").innerHTML = x.innerHTML;
+	document.getElementById("status").innerHTML = issue.fields.status.name;
+	document.getElementById("type").innerHTML = issue.fields.issuetype.name;
+	document.getElementById("priority").innerHTML = issue.fields.priority.name;
+});
+
+
+var issueLink = document.getElementById("issueLink");
+if ( issueLink !== null ){
+	issueLink.onclick = function(event) {
+		self.port.emit("link-clicked", issueLink.innerHTML );
+	};	
+}
+
 
 
 // var textArea = document.getElementById("edit-box");

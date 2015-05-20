@@ -1,0 +1,8 @@
+a, a:active, a:focus {
+	outline: none;
+}
+
+
+span {
+	outline: none;
+}
