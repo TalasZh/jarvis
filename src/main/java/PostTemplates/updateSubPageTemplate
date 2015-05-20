@@ -1,0 +1,19 @@
+{
+    "id": [PAGE_ID],
+    "ancestors":[{"type":"page","id":[ANCESTOR_ID]}],
+    "type": "page",
+    "title": "[PAGE_TITLE]",
+    "space": {
+        "key": "[SPACE_KEY]"
+    },
+    "version": {
+        "number": [VERSION],
+        "minorEdit": [IS_MINOR]
+    },
+    "body": {
+        "storage": {
+            "value": "[BODY_STORAGE_VALUE]",
+            "representation": "storage"
+        }
+    }
+}

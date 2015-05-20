@@ -4,10 +4,10 @@ package Helpers;
  * Created by won on 4/29/15.
  */
 public class Session {
-    public static final String serverName = "http://confluence.critical-factor.com";
+    public static final String serverName = "http://kazim-ubuntu:1990/confluence";
     public static final String limit = "?limit=10";
-    public static final String username = "username";
-    public static final String password = "password";
+    public static final String username = "admin";
+    public static final String password = "admin";
     public static final String credentials = String.format("%s:%s", username, password);
     public static final String currentDir = System.getProperty("user.dir");
 

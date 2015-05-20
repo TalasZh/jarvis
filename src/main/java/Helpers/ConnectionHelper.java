@@ -41,6 +41,26 @@ public class ConnectionHelper {
         return connection;
     }
 
+    public static HttpURLConnection buildPutRequest(String urlString, String credentials, String content /*List<NameValuePair> params*/) throws IOException {
+        HttpURLConnection connection = connectBasicAuth(urlString, credentials);
+        connection.setRequestMethod("PUT");
+        connection.setRequestProperty("Content-type", "application/json");
+        connection.setDoInput(true);
+        connection.setDoOutput(true);
+
+        OutputStream os = connection.getOutputStream();
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+        //writer.write(getQuery(params));
+        writer.write(content);
+        writer.flush();
+        writer.close();
+        os.close();
+        connection.connect();
+        return connection;
+    }
+
+
+
     private static HttpURLConnection connectBasicAuth(String urlString, String credentials) throws IOException {
         URL url = new URL(urlString);
         String encoding = new String(Base64.encodeBase64(credentials.getBytes()));

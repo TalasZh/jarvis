@@ -16,13 +16,14 @@ public class Main {
     public static void main(String[] args) throws IOException {
         System.out.println("Let's see some examples");
 
-        //To create new page
-        String res = ApiHelper.postContent(TemplatesHelper.pageHelper(
-                "TESTPAGE",
-                "~bnuriddin",
-                "Some test text right here"
-        ));
-        System.out.print(res);
+        //String res = ApiHelper.updatePage(1376259, "5th updated title", "TES", 5, false, "<p>Updated via API</p>");
+        //String res = ApiHelper.createSubPage("Sub Title", "TES", "<p>Test new sub</p>", "1376259");
+        //(int pageID, String pageTitle, String spaceKey, int version, boolean isMinor, String content, String ancestorID)
+        //String res = ApiHelper.updateSubPage(1376262, "3rd time updated Sub page", "TES", 3, true, "<p>3 Updated space via API</p>", 1376259);
+
+        String res = ApiHelper.addCommentToPage(1146882,"BLa bla bla");
+
+        System.out.println(res);
 
         //To query spaces
         String spacesResponseJson = ApiHelper.querySpaces();
@@ -34,7 +35,7 @@ public class Main {
             System.out.println(space.fields.getName());
             System.out.println();
         }
-
+/*
         //To query pages
         String contentsResponseJson = ApiHelper.queryContent();
         Results contentResults = JsonHelper.parseResults(contentsResponseJson);
@@ -43,6 +44,6 @@ public class Main {
         for(Iterator<Content> i = contents.iterator(); i.hasNext();){
             System.out.println(i.next().fields.getBody());
         }
-
+*/
     }
 }
