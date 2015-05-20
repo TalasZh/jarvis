@@ -19,7 +19,7 @@ let { search } = require("sdk/places/history");
 const { pathFor } = require('sdk/system');
 const path = require('sdk/fs/path');
 const file = require('sdk/io/file');
-JiraApi = require('jira-module').JiraApi;
+const JiraApi = require('jira-module').JiraApi;
 
 
 var jira;
@@ -31,7 +31,7 @@ var annotatorIsOn = false;
 var matchers = [];
 
 const jira_init = () => {
-	JiraApi = require('jira-module').JiraApi;
+	//JiraApi = require('jira-module').JiraApi;
 	const jira = new JiraApi('http', 
 		'localhost', 
 		'2990', 
@@ -52,7 +52,7 @@ const jira_init = () => {
 		}
 	});
 	console.log("hello")
-}
+};
 
 //jira_init();
 
@@ -153,10 +153,7 @@ exports.main = function() {
 		include: ['*'],
 		contentScriptWhen: 'ready',
 		contentScriptFile: [data.url('jquery-2.1.3.min.js'),
-		data.url('selector.js'),
-		data.url('annotator_lib/annotator-full.min.js')],
-
-		contentStyleFile: [data.url('annotator_lib/annotator.min.css')],
+								data.url('selector.js')],
 
 		onAttach: function(worker) {
 	    // console.log(jira);
@@ -240,6 +237,35 @@ exports.main = function() {
 		data.url('annotation/annotation.js')],
 		onShow: function() {
 			this.postMessage(this.content);
+		}
+	});
+
+	var showIssue = ToggleButton({
+		id: "show-issue",
+		label: "Show Issue",
+		icon: {
+			"16": data.url('widget/icon-16.png'),
+			"32": data.url('widget/icon-32.png'),
+			"64": data.url('widget/icon-64.png')
+		},
+		onClick: function (state) {
+			if (state.checked) {
+				issueView.show({
+					position: showIssue
+				});
+			}
+		}
+	});
+
+	var issueView = panels.Panel({
+		height: 600,
+		width: 450,
+		contentURL: data.url("issue-view/issue-view.html"),
+		onShow: function(){
+			issueView.port.emit('getWidth');
+		},
+		onHide: function(state) {
+			showIssue.state('window', {checked: false});
 		}
 	});
 
@@ -484,4 +510,4 @@ exports.main = function() {
 			// });
 
 	});
-}
+};
