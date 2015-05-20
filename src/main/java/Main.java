@@ -21,10 +21,10 @@ public class Main {
         //(int pageID, String pageTitle, String spaceKey, int version, boolean isMinor, String content, String ancestorID)
         //String res = ApiHelper.updateSubPage(1376262, "3rd time updated Sub page", "TES", 3, true, "<p>3 Updated space via API</p>", 1376259);
 
-        String res = ApiHelper.addCommentToPage(1146882,"BLa bla bla");
+        String res = ApiHelper.queryPageContent(1376259);
 
         System.out.println(res);
-
+/*
         //To query spaces
         String spacesResponseJson = ApiHelper.querySpaces();
         Results results = JsonHelper.parseResults(spacesResponseJson);
@@ -35,15 +35,16 @@ public class Main {
             System.out.println(space.fields.getName());
             System.out.println();
         }
-/*
+*/
         //To query pages
         String contentsResponseJson = ApiHelper.queryContent();
+        System.out.println(contentsResponseJson);
         Results contentResults = JsonHelper.parseResults(contentsResponseJson);
         List<Content> contents = contentResults.fields.getArrayAsContents();
         System.out.println(contentResults.fields.getNextUrl());
         for(Iterator<Content> i = contents.iterator(); i.hasNext();){
             System.out.println(i.next().fields.getBody());
         }
-*/
+
     }
 }

@@ -54,6 +54,10 @@ public class ApiHelper {
         return getJson(Session.RestApiUrl.contentUrl() + "?expand=space,body.storage,version,container");
     }
 
+    public static String queryPageContent(int pageID) throws IOException {
+        return getJson(Session.RestApiUrl.contentUrl() + "/" + pageID);
+    }
+
     public static String queryByCustomUrl(String url) throws IOException {
         return getJson(url);
     }
