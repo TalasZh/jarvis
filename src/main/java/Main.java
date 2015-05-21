@@ -18,11 +18,11 @@ public class Main {
 
         //String res = ApiHelper.updatePage(1376259, "5th updated title", "TES", 5, false, "<p>Updated via API</p>");
         //String res = ApiHelper.createSubPage("Sub Title", "TES", "<p>Test new sub</p>", "1376259");
-        //(int pageID, String pageTitle, String spaceKey, int version, boolean isMinor, String content, String ancestorID)
         //String res = ApiHelper.updateSubPage(1376262, "3rd time updated Sub page", "TES", 3, true, "<p>3 Updated space via API</p>", 1376259);
 
-        String res = ApiHelper.queryPageContent(1376259);
+        //String res = ApiHelper.queryPageContent(1376259);
 
+        String res = ApiHelper.addCommentToPage(1376259, "<p>New comment by API</p>");
         System.out.println(res);
 /*
         //To query spaces

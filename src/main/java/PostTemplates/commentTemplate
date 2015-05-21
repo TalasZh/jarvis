@@ -1,1 +1,1 @@
-{'type':'comment', 'container':[PARENT_ID],'body':{'storage':{'value':"[COMMENT_BODY]",'representation':'storage'}}}
+{"type":"comment","container":{"id":"[PARENT_ID]","type":"page","status":"current"},"body":{"storage":{"value":"[COMMENT_BODY]","representation":"storage"}}}
