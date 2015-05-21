@@ -263,7 +263,7 @@ exports.main = function () {
     var order = 1;
     var issueView = panels.Panel({
         height: 600,
-        width: 450,
+        width: 350,
         contentURL: views[order % views.length],
         onShow: function () {
             order++;
