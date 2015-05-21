@@ -1,0 +1,22 @@
+{
+  "title": "Jarvis Mediator Api",
+  "name": "mediator-api",
+  "version": "0.0.1",
+  "description": "Mediator REST wrapper",
+  "main": "index.js",
+  "author": {
+    "name": "Jarvis Team"
+  },
+  "engines": {
+    "firefox": ">=38.0a1",
+    "fennec": ">=38.0a1"
+  },
+  "license": "MIT",
+  "readme": "#Jarvis Mediator Api\nMediator REST wrapper",
+  "readmeFilename": "README.md",
+  "_id": "mediator-api@0.0.1",
+  "scripts": {},
+  "_shasum": "88e56154f53db5db487c7eb3e1a0d4030afa742a",
+  "_from": "node_modules/mediator-api",
+  "_resolved": "file:node_modules/mediator-api"
+}
