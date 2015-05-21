@@ -256,6 +256,7 @@ exports.main = function () {
     });
 
     var views = [data.url("issue-view/annotation-view.html"),
+        data.url("issue-view/session-view.html"),
         data.url("issue-view/phase-view.html"),
         data.url("issue-view/issue-view.html")];
     var order = 1;
