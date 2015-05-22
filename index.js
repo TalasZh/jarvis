@@ -256,15 +256,63 @@ exports.main = function () {
         }
     });
 
-    var views = [data.url("issue-view/annotation-view.html"),
-        data.url("issue-view/task-view.html"),
-        data.url("issue-view/session-view.html"),
-        data.url("issue-view/phase-view.html"),
+    var views = [
+        //data.url("issue-view/annotation-view.html"),
+        //data.url("issue-view/task-view.html"),
+        //data.url("issue-view/session-view.html"),
+        //data.url("issue-view/phase-view.html"),
         data.url("issue-view/issue-view.html")];
+
     var order = 1;
 
     var sampleIssue = {
-        type: "Epic"
+        key: "Issue-1",
+        summary: "some summary",
+        self: "https://api.jquery.com/empty/",
+        type: "Epic",//Task, Session, Phase, Epic, Story etc...
+        issueDescription: "some description",
+        timeRemaining: "2h",
+        assignee: "Jarvis",
+        reporter: "Jarvis",
+        sprint: "NA",
+        components: "UI addon firefox",
+        labels: "anyLabel someLabel thatLabel",
+        status: "In Progress",
+        resolution: "Open",
+        fixVersion: "3.0.0",
+        dateCreated: "01.02.2015",
+        links: [
+            {
+                key: "Issue-2",
+                summary: "another summary",
+                type: "Task",
+                linkType: "is blocked by"
+            },
+            {
+                key: "Issue-3",
+                summary: "another summary",
+                type: "Phase",
+                linkType: "is blocked by"
+            },
+            {
+                key: "Issue-4",
+                summary: "another summary",
+                type: "Session",
+                linkType: "is blocked by"
+            },
+            {
+                key: "Issue-5",
+                summary: "another summary",
+                type: "Story",
+                linkType: "is blocked by"
+            },
+            {
+                key: "Issue-6",
+                summary: "another summary",
+                type: "Bug",
+                linkType: "is blocked by"
+            }
+        ]
     };
 
     var issueView = panels.Panel({
