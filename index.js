@@ -248,6 +248,7 @@ exports.main = function () {
         },
         onClick: function (state) {
             if (state.checked) {
+                issueView.port.emit('set-issue', sampleIssue);
                 issueView.show({
                     position: showIssue
                 });
@@ -261,9 +262,16 @@ exports.main = function () {
         data.url("issue-view/phase-view.html"),
         data.url("issue-view/issue-view.html")];
     var order = 1;
+
+    var sampleIssue = {
+        type: "Epic"
+    };
+
     var issueView = panels.Panel({
         height: 600,
         width: 350,
+        contentScriptFile: [data.url('issue-view/issue-view.js'),
+            data.url('jquery-2.1.3.min.js')],
         contentURL: views[order % views.length],
         onShow: function () {
             order++;

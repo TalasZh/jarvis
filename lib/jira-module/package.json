@@ -16,11 +16,11 @@
   "readmeFilename": "README.md",
   "_id": "jira-module@0.0.1",
   "scripts": {},
-  "_shasum": "6da8fc663f8aed336b895b79924cfd79ea98ff33",
-  "_from": "lib/jira-module",
-  "_resolved": "file:lib/jira-module",
+  "_shasum": "abd173c7558ce5c2adc301bf35ec2ccb27c2c4e1",
+  "_from": "node_modules/jira-module",
+  "_resolved": "file:node_modules/jira-module",
   "repository": {
-    "type": "git",
-    "url": "http://tjoldoshbekov@stash.safehaus.org/scm/jar/main.git"
+	  "type": "git",
+	  "url": "http://tjoldoshbekov@stash.safehaus.org/scm/jar/main.git"
   }
 }
