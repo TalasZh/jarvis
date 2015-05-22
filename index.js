@@ -1,4 +1,3 @@
-// var widgets = require('sdk/widget');
 var data = require('sdk/self').data;
 var pageMod = require('sdk/page-mod');
 var selectors = [];
@@ -127,25 +126,6 @@ function getUserIssues(jira, username) {
 
 
 exports.main = function () {
-    // var widget = widgets.Widget({
-    // 	id: 'toggle-switch',
-    // 	label: 'Annotator',
-    // 	contentURL: data.url('widget/icon-64-off.png'),
-    // 	contentScriptWhen: 'ready',
-    // 	contentScriptFile: data.url('widget/widget.js')
-    // });
-
-    // widget.port.on('left-click', function() {
-    // 	console.log('activate/deactivate');
-    // 	widget.contentURL = toggleActivation() ?
-    // 	data.url('widget/icon-64.png') :
-    // 	data.url('widget/icon-64-off.png');
-    // });
-
-    // widget.port.on('right-click', function() {
-    // 	console.log('show annotation list');
-    // 	annotationList.show();
-    // });
 
     var selector = pageMod.PageMod({
         include: ['*'],
@@ -242,9 +222,9 @@ exports.main = function () {
         id: "show-issue",
         label: "Show Issue",
         icon: {
-            "16": data.url('widget/icon-16.png'),
-            "32": data.url('widget/icon-32.png'),
-            "64": data.url('widget/icon-64.png')
+            "16": data.url('icon-16.png'),
+            "32": data.url('icon-32.png'),
+            "64": data.url('icon-64.png')
         },
         onClick: function (state) {
             if (state.checked) {
@@ -329,6 +309,25 @@ exports.main = function () {
             showIssue.state('window', {checked: false});
             this.contentURL = views[order % views.length];
         }
+    });
+
+    issueView.port.on('select-issue', function(){
+        sampleIssue.type = "Session";
+        issueView.port.emit('set-issue', sampleIssue);
+    });
+
+    issueView.port.on('get-annotations', function(issueKey){
+        let annotations = [
+            {
+                id: 1,
+                issueId: issueKey,
+                url: "http://getbootstrap.com/components/#glyphicons",
+                comment: "This is awesome resource",
+                ancestorId: "",
+                anchorText: "sdfgsewrysdfbsdf sdrtyse"
+            }
+        ];
+        issueView.port.emit('set-annotations', annotations);
     });
 
 

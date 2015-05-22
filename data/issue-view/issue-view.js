@@ -9,6 +9,7 @@ var issueItemTemplate = "<li class=\"list-group-item\">\
     </a>\
     </li>";
 
+//handles new issue and substitutes all required fields
 self.port.on('set-issue', function (issue) {
     console.log("Sample issue: " + JSON.stringify(issue));
     switch (issue.type) {
@@ -16,38 +17,58 @@ self.port.on('set-issue', function (issue) {
         case "Phase":
         case "Epic":
         case "Story":
-            activateIssueControls(issue);
+            prepareViewForIssue(issue);
             break;
         case "Session":
+            prepareViewForSession(issue);
             break;
         default:
-            activateIssueControls(issue);
+            prepareViewForIssue(issue);
             break;
     }
     setGeneralFields(issue);
 });
 
-function activateIssueControls(issue) {
-    console.log("trying to hide some controls");
-    $("#annotations").remove();
-    $("#phases").remove();
+function prepareViewForIssue(issue) {
+    $("#annotations").hide();
+    $("#phases").hide();
 
-    let issueList = $("#list-issues");
-    issueList.empty();
-    for (let item of issue.links) {
-        issueList.append(buildLinkItemTemplate(item));
-    }
+    pushLinkedIssues(issue.links);
 }
 
-function buildLinkItemTemplate(linkItem) {
+function prepareViewForSession(issue) {
+    $("#annotations").show();
+    $("#phases").show();
+    pushLinkedIssues(issue.links);
+    pushAnnotations(issue.key);
+}
 
-//<span class="label label-default">Default</span> ==> Task
-//<span class="label label-primary">Primary</span> ==> Epic
-//<span class="label label-success">Success</span> ==> Phase
-//<span class="label label-info">Info</span> ==> Session
-//<span class="label label-warning">Warning</span> ==> Story
-//<span class="label label-danger">Danger</span> ==> Bug
+function pushAnnotations(key) {
+    self.port.emit('get-annotations', key);
+    self.port.on('set-annotations', function (annotations) {
+        let annotationList = $("#list-annotations");
+        annotationList.empty();
+        for (let annotation of annotations) {
+            annotationList.append(buildAnnotationElement(annotation));
+        }
+    });
+}
 
+function pushLinkedIssues(links) {
+    let issueList = $("#list-issues");
+    issueList.empty();
+    for (let item of links) {
+        issueList.append(buildIssueLinkElement(item));
+    }
+    //notifies controller to select another issue
+    $("a.issue-link").click(function () {
+        $("#list-issues").empty();
+        $("#list-annotations").empty();
+        self.port.emit('select-issue');
+    });
+}
+
+function buildIssueLinkElement(linkItem) {
     let linkTypeSpan = "";
     switch (linkItem.type) {
         case "Epic":
@@ -71,14 +92,34 @@ function buildLinkItemTemplate(linkItem) {
     }
 
     return "<li class=\"list-group-item\">" +
-        "<a href=\"#\">" + linkItem.key + linkTypeSpan + "</a>" +
+        "<a class= \"issue-link\" href=\"#\">" + linkItem.key + linkTypeSpan + "</a>" +
         "</li>";
+}
+
+/**
+ * {
+ *  id: string,
+ *  issueId: string,
+ *  url: uri
+ *  comment: string,
+ *  ancestorId: string,
+ *  anchorText: string
+ * }
+ * @param annotation
+ */
+function buildAnnotationElement(annotation) {
+    return "<a class=\"list-group-item\">" +
+        "<p class=\"list-group-item-heading\">" + annotation.comment + "</p>" +
+        "    <blockquote class=\"list-group-item-text\">" +
+        annotation.anchorText +
+        "</blockquote>" +
+        "</a>";
 }
 
 function setGeneralFields(issue) {
     $("a#issueLink").attr("href", issue.self);
     $("#status").text(issue.status);
-    $("#type").text(issue.status);
+    $("#type").text(issue.type);
     $("#summary").text(issue.summary);
 }
 
