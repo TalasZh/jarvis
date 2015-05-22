@@ -11,10 +11,12 @@
   },
   "license": "MIT",
   "dependencies": {
-    "jira-module": "file:node_modules/jira-module"
+    "cookie-manager": "file:lib/cookie-manager",
+    "jira-module": "file:lib/jira-module",
+    "mediator-api": "file:lib/mediator-api"
   },
   "repository": {
-	  "type": "git",
-	  "url": "http://tjoldoshbekov@stash.safehaus.org/scm/jar/main.git"
+    "type": "git",
+    "url": "http://tjoldoshbekov@stash.safehaus.org/scm/jar/main.git"
   }
 }
