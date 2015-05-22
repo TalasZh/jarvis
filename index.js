@@ -19,6 +19,7 @@ const { pathFor } = require('sdk/system');
 const path = require('sdk/fs/path');
 const file = require('sdk/io/file');
 const JiraApi = require('jira-module').JiraApi;
+const MediatorApi = require('mediator-api').MediatorApi;
 
 
 var jira;
@@ -28,31 +29,23 @@ var global_username;
 var annotatorIsOn = false;
 var matchers = [];
 
-const jira_init = () => {
-    //JiraApi = require('jira-module').JiraApi;
-    const jira = new JiraApi('http',
-        'localhost',
-        '2990',
-        'admin',
-        'admin',
-        '2',
+const init = () => {
+    const mediator = new MediatorApi('http',
+        'jarvis-test.critical-factor.com',
+        '8080',
+        null,
+        null,
         true);
-    var credentials = {
-        username: "admin",
-        password: "admin"
-    };
-    jira.startSession(credentials, function (error, json) {
+    mediator.listProjects(function (error, json) {
         if (error !== null) {
-            console.log(error);
+            console.log("Error: " + error);
         }
         else if (json !== undefined) {
-            console.log(json);
+            console.log("Response: " + json);
         }
     });
     console.log("hello")
 };
-
-//jira_init();
 
 
 if (!simpleStorage.storage.annotations)
@@ -228,6 +221,7 @@ exports.main = function () {
         },
         onClick: function (state) {
             if (state.checked) {
+                init();
                 issueView.port.emit('set-issue', sampleIssue);
                 issueView.show({
                     position: showIssue
@@ -236,12 +230,7 @@ exports.main = function () {
         }
     });
 
-    var views = [
-        //data.url("issue-view/annotation-view.html"),
-        //data.url("issue-view/task-view.html"),
-        //data.url("issue-view/session-view.html"),
-        //data.url("issue-view/phase-view.html"),
-        data.url("issue-view/issue-view.html")];
+    var views = [data.url("issue-view/issue-view.html")];
 
     var order = 1;
 
@@ -311,12 +300,12 @@ exports.main = function () {
         }
     });
 
-    issueView.port.on('select-issue', function(){
+    issueView.port.on('select-issue', function () {
         sampleIssue.type = "Session";
         issueView.port.emit('set-issue', sampleIssue);
     });
 
-    issueView.port.on('get-annotations', function(issueKey){
+    issueView.port.on('get-annotations', function (issueKey) {
         let annotations = [
             {
                 id: 1,
@@ -416,9 +405,6 @@ exports.main = function () {
     panel.port.on('left-click', function () {
         console.log('activate/deactivate');
         toggleActivation();
-        // widget.contentURL = toggleActivation() ?
-        // data.url('widget/icon-64.png') :
-        // data.url('widget/icon-64-off.png');
     });
 
     panel.port.on('right-click', function () {
@@ -431,7 +417,6 @@ exports.main = function () {
         panel.contentURL = data.url("login/research.html");
         jira.getUsersIssues(global_username, true, function (error, json) {
             if (error != null) {
-                // console.log( error );
                 console.log("Could not retrieve " + username + "'s issues.");
                 return;
             }
@@ -451,7 +436,6 @@ exports.main = function () {
         panel.contentURL = data.url("login/issueSelected.html");
         jira.getUsersIssues(global_username, true, function (error, json) {
             if (error != null) {
-                // console.log( error );
                 console.log("Could not retrieve " + username + "'s issues.");
                 return;
             }

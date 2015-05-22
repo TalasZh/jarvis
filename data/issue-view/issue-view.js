@@ -11,7 +11,7 @@ var issueItemTemplate = "<li class=\"list-group-item\">\
 
 //handles new issue and substitutes all required fields
 self.port.on('set-issue', function (issue) {
-    console.log("Sample issue: " + JSON.stringify(issue));
+    //console.log("Sample issue: " + JSON.stringify(issue));
     switch (issue.type) {
         case "Task":
         case "Phase":
