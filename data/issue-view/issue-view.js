@@ -1,17 +1,7 @@
-var annotationItemTemplate = "<a class=\"list-group-item\">\
-<p class=\"list-group-item-heading\">Annotation1</p>\
-    <blockquote class=\"list-group-item-text\">Some comment or annotated text</blockquote>\
-</a>";
-
-var issueItemTemplate = "<li class=\"list-group-item\">\
-<a href=\"issue-view.html\">\
-    Cras justo odio <span class=\"label label-success\">Epic</span>\
-    </a>\
-    </li>";
-
-//handles new issue and substitutes all required fields
+/**
+ * handles new issue and substitutes all required fields
+ */
 self.port.on('set-issue', function (issue) {
-    //console.log("Sample issue: " + JSON.stringify(issue));
     switch (issue.type) {
         case "Task":
         case "Phase":

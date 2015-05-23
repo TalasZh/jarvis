@@ -36,12 +36,12 @@ const init = () => {
         null,
         null,
         true);
-    mediator.listProjects(function (error, json) {
+    mediator.listProjectIssues("10501", function (error, json) {
         if (error !== null) {
             console.log("Error: " + error);
         }
         else if (json !== undefined) {
-            console.log("Response: " + json);
+            console.log("Response: " + JSON.stringify(json));
         }
     });
     console.log("hello")
