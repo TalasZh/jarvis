@@ -2,9 +2,10 @@
 Simple annotation collecting firefox plugin to simplify research session track.
 
 To start adding new features to plugin first arrange your environment.
+
 1. verify that you have jpm (Jetpack package manager) installed.
-	so to get jpm you need to have npm installed, if you haven't already. 
-	npm is included in Node.js, so to install npm, visit nodejs.org 
+	so to get jpm you need to have npm (>=2.7.4) installed, if you haven't already. 
+	npm is included in Node.js (>=v0.12.2), so to install npm, visit nodejs.org 
 	and click the Install button.
 
 	npm install jpm -g
@@ -23,7 +24,7 @@ That's it, now go to project root directory and run you plugin
 Plugin works directly with atlassian product JIRA REST service,
 to test full feature look at ./vagrant directory.
 There you will find testing environment with atlassian sdk for plugin development purposes.
-To run testing environment you will need to have vagrant (https://www.vagrantup.com/) 
+To run testing environment you will need to have vagrant (>=1.7.2) (https://www.vagrantup.com/) 
 already installed. And execute following commands inside of ./vagrant folder:
 	
 	vagrant up
