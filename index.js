@@ -222,7 +222,6 @@ exports.main = function () {
         },
         onClick: function (state) {
             if (state.checked) {
-                console.log( "|adfadfaf");
                 init();
                 issueView.port.emit('set-issue', sampleIssue);
                 issueView.show({
@@ -522,91 +521,8 @@ exports.main = function () {
                 console.log("Error: " + error);
                 return
             }
-
-            console.log( json );
-
             panel.contentURL = data.url("login/selectProject.html");
             panel.port.emit("fill-project-combobox", json);
         });
-
-
-        // jira = new JiraApi('http',
-        //     'localhost',
-        //     '2990',
-        //     username,
-        //     password,
-        //     '2',
-        //     true);
-
-        // jira find issue
-        // jira.findIssue("JAP-1", function(error, response, json){
-        // 	if ( response === 200 ) {
-        // 		console.log( "adfadfadfadfadfadfa");
-        // 		panel.contentURL = data.url("login/research.html");
-        // 		// panel.contentScriptFile = data.url('login/test.js');
-        // 	}
-        // 	else {
-        // 		console.log( "unsuccessfful" );
-        // 	}
-        // 	if(error !== null) {
-        // 		console.log(error);
-        // 	}
-        // 	else if(json !== undefined) {
-        // 		console.log(json);
-        // 	}
-        // });
-
-        // list jira issues
-        // jira.getUsersIssues(username, true, function (error, json) {
-        //     if (error != null) {
-        //         // console.log( error );
-        //         console.log("Could not retrieve " + username + "'s issues.");
-        //         return;
-        //     }
-        //     panel.contentURL = data.url("login/research.html");
-        //     panel.contentScriptFile = data.url('login/handleLogin.js');
-        //     panel.port.emit("fill-combo-box", json);
-        // });
-
-        // start session
-        // jira.startSession('{"username": "admin","password": "admin"}', function(error, response, json){
-        // 	console.log(response);
-        // 	if ( response === 200 ) {
-        // 		panel.contentURL = data.url("login/research.html");
-        // 		panel.contentScriptFile = data.url('login/handleLogin.js');
-        // 		panel.port.emit("fill-combo-box", json);
-        // 	}
-        // 	else {
-        // 		console.log( "unsuccessfful" );
-        // 	}
-        // });
-
-
-        // list transitions
-        // jira.listTransitions('JAP-1',function(error, response, json){
-        // 	if ( response === 200 ) {
-        // 		console.log( "success" );
-        // 		console.log( json );
-        // 	}
-        // 	else {
-        // 		console.log( "unsuccessfful" );
-        // 	}
-        // });
-
-
-        // issue transition
-        // jira.transitionIssue('JAP-2', '{"transition":{"id":31}}', function(error, message){
-
-        // 	if(error !== null) {
-        // 		console.log(error);
-        // 	}
-        // 	if ( message === "Success" ) {
-        // 		console.log( "issue transition state is changed successfully." );
-        // 	}
-        // 	else {
-        // 		console.log( "unsuccessfful" );
-        // 	}
-        // });
-
     });
 };
