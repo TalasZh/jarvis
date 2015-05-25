@@ -111,6 +111,46 @@ function setGeneralFields(issue) {
     $("#status").text(issue.status);
     $("#type").text(issue.type);
     $("#summary").text(issue.summary);
+    $("#issueNumber").text(issue.key);
+    buildCrumbs(issue);
+}
+
+function buildCrumbs(issue) {
+    let issuePath = $("#issue-path");
+    issuePath.empty();
+    let parentCrumbTemplate = "";
+    if (issue.projectKey && issuePath.projectKey !== issue.key) {
+        issuePath.append(breadcrumbItemBuilder(issue.projectKey, false));
+    }
+    if (issue.epic && issue.epic !== issue.key) {
+        issuePath.append(breadcrumbItemBuilder(issue.projectKey, false));
+    }
+    for (let link of issue.links) {
+        if (link.type === "Story" && link.key !== issue.key) {
+            issuePath.append(breadcrumbItemBuilder(link.key, false));
+        }
+    }
+    for (let link of issue.links) {
+        if (link.type === "Phase" && link.key !== issue.key) {
+            issuePath.append(breadcrumbItemBuilder(link.key, false));
+        }
+    }
+    issuePath.append(breadcrumbItemBuilder(issue.key, true));
+}
+
+function breadcrumbItemBuilder(key, active) {
+    if (active) {
+        return "<li class=\"active\">" +
+                //"<span class=\"label label-primary\">" +
+            key +
+                //"</span>" +
+            "</li>";
+    }
+    else {
+        return "<li><a href=\"#\">" +
+            key +
+            "</a></li>";
+    }
 }
 
 console.log("Script is loaded");

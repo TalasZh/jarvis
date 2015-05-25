@@ -238,6 +238,8 @@ exports.main = function () {
         key: "Issue-1",
         summary: "some summary",
         self: "https://api.jquery.com/empty/",
+        projectKey: "JARVIS",
+        epic: "JAR-1",
         type: "Epic",//Task, Session, Phase, Epic, Story etc...
         issueDescription: "some description",
         timeRemaining: "2h",
