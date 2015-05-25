@@ -1,0 +1,50 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jaxws="http://cxf.apache.org/jaxws"
+       xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+       xmlns:cxf="http://cxf.apache.org/core"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd
+            http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+            http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd">
+
+  <import resource="classpath:META-INF/cxf/cxf.xml" />
+  <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+
+  <bean id="jacksonMapper" class="com.fasterxml.jackson.databind.ObjectMapper">
+    <property name="dateFormat">
+      <bean class="java.text.SimpleDateFormat">
+        <constructor-arg type="java.lang.String" value="yyyy-MM-dd'T'HH:mm:ss.SSSZ" />
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="jsonProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider">
+    <property name="mapper" ref="jacksonMapper" />
+  </bean>
+
+  <jaxws:endpoint id="userService" implementor="#userManager" address="/UserService" />
+  <jaxws:endpoint id="projectService" implementor="#projectManager" address="/ProjectService" />
+  <!--<jaxws:endpoint id="issueService" implementor="#issueManager" address="/IssueService"/>-->
+  <!-- Add new endpoints for additional services you'd like to expose -->
+
+  <jaxrs:server address="/api">
+    <jaxrs:features>
+      <cxf:logging />
+    </jaxrs:features>
+    <jaxrs:serviceBeans>
+      <ref bean="userManager" />
+      <ref bean="projectManager" />
+      <!--<ref bean="issueManager"/>-->
+    </jaxrs:serviceBeans>
+    <jaxrs:providers>
+      <ref bean="jsonProvider" />
+    </jaxrs:providers>
+    <jaxrs:extensionMappings>
+      <entry key="json" value="application/json" />
+      <entry key="xml" value="application/xml" />
+      <entry key="feed" value="application/atom+xml" />
+    </jaxrs:extensionMappings>
+  </jaxrs:server>
+
+</beans>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:security="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans" xmlns:p="http://www.springframework.org/schema/p"
+             xmlns:util="http://www.springframework.org/schema/util"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+              http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+  <http pattern="/images" security="none" />
+  <http pattern="/styles" security="none" />
+  <http pattern="/scripts" security="none" />
+  <http pattern="/assets/**" security="none" />
+
+  <!--auto-config="true"-->
+  <http auto-config="false" entry-point-ref="crowdAuthenticationProcessingFilterEntryPoint">
+    <intercept-url pattern="/admin/**" access="ROLE_ADMIN" />
+    <intercept-url pattern="/services/**" access="ROLE_USER" />
+    <intercept-url pattern="/passwordHint*" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER" />
+    <intercept-url pattern="/signup*" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER" />
+    <intercept-url pattern="/saveSignup*" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER" />
+    <intercept-url pattern="/**/*.action*" access="ROLE_ADMIN,ROLE_USER" />
+    <!--<form-login login-page="/login" authentication-failure-url="/login?error=true"-->
+    <!--login-processing-url="/j_security_check" />-->
+    <remember-me user-service-ref="userDao" key="e37f4b31-0c45-11dd-bd0b-0800200c9a66" />
+    <custom-filter position="LOGOUT_FILTER" ref="logoutFilter" />
+    <custom-filter position="FORM_LOGIN_FILTER" ref="authenticationProcessingFilter" />
+  </http>
+
+  <authentication-manager alias="authenticationManager">
+    <!--  <authentication-provider user-service-ref="userDao">
+          <password-encoder ref="passwordEncoder"/>
+      </authentication-provider>-->
+
+    <authentication-provider ref="crowdAuthenticationProvider" />
+  </authentication-manager>
+
+  <beans:bean id="crowdAuthenticationProcessingFilterEntryPoint"
+              class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+    <beans:constructor-arg value="/login.jsp" />
+  </beans:bean>
+
+  <beans:bean id="authenticationProcessingFilter"
+              class="com.atlassian.crowd.integration.springsecurity.CrowdSSOAuthenticationProcessingFilter">
+    <beans:property name="httpAuthenticator" ref="httpAuthenticator" />
+    <beans:property name="authenticationManager" ref="authenticationManager" />
+    <beans:property name="filterProcessesUrl" value="/j_security_check" />
+    <beans:property name="authenticationFailureHandler">
+      <beans:bean class="com.atlassian.crowd.integration.springsecurity.UsernameStoringAuthenticationFailureHandler">
+        <beans:property name="defaultFailureUrl" value="/login.jsp?error=true" />
+      </beans:bean>
+    </beans:property>
+
+    <beans:property name="authenticationSuccessHandler">
+      <beans:bean class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
+        <beans:property name="defaultTargetUrl" value="/" />
+      </beans:bean>
+    </beans:property>
+  </beans:bean>
+
+  <beans:bean id="crowdLogoutHandler" class="com.atlassian.crowd.integration.springsecurity.CrowdLogoutHandler">
+    <beans:property name="httpAuthenticator" ref="httpAuthenticator" />
+  </beans:bean>
+
+  <beans:bean id="logoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter">
+    <beans:constructor-arg value="/index.jsp" />
+    <beans:constructor-arg>
+      <beans:list>
+        <beans:ref bean="crowdLogoutHandler" />
+        <beans:bean class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler" />
+      </beans:list>
+    </beans:constructor-arg>
+    <beans:property name="filterProcessesUrl" value="/logout.jsp" />
+  </beans:bean>
+
+  <!-- Override the default password-encoder (BCrypt) by uncommenting the following and changing the class -->
+  <!-- <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/> -->
+
+  <global-method-security>
+    <protect-pointcut expression="execution(* *..service.UserManager.getUsers(..))" access="ROLE_ADMIN" />
+    <protect-pointcut expression="execution(* *..service.UserManager.removeUser(..))" access="ROLE_ADMIN" />
+  </global-method-security>
+
+
+  <util:map id="groupToAuthorityMappings">
+    <beans:entry key="jira-users" value="ROLE_USER" />
+  </util:map>
+
+  <beans:bean id="crowdUserDetailsService"
+              class="com.atlassian.crowd.integration.springsecurity.user.CrowdUserDetailsServiceImpl">
+    <beans:property name="groupToAuthorityMappings">
+      <beans:bean factory-bean="groupToAuthorityMappings" factory-method="entrySet" />
+    </beans:property>
+    <beans:property name="groupMembershipManager" ref="crowdGroupMembershipManager" />
+    <beans:property name="userManager" ref="crowdUserManager" />
+    <beans:property name="authorityPrefix" value="ROLE_" />
+  </beans:bean>
+
+  <beans:bean id="crowdAuthenticationProvider"
+              class="com.atlassian.crowd.integration.springsecurity.RemoteCrowdAuthenticationProvider">
+    <beans:constructor-arg ref="crowdAuthenticationManager" />
+    <beans:constructor-arg ref="httpAuthenticator" />
+    <beans:constructor-arg ref="crowdUserDetailsService" />
+  </beans:bean>
+</beans:beans>
