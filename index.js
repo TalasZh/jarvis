@@ -24,26 +24,29 @@ const MediatorApi = require('mediator-api').MediatorApi;
 
 var jira;
 var global_username;
+let mediator;
 
 
 var annotatorIsOn = false;
 var matchers = [];
 
 const init = () => {
-    const mediator = new MediatorApi('http',
-        'jarvis-test.critical-factor.com',
-        '8080',
-        null,
-        null,
-        true);
-    mediator.listProjectIssues("10501", function (error, json) {
-        if (error !== null) {
-            console.log("Error: " + error);
-        }
-        else if (json !== undefined) {
-            console.log("Response: " + JSON.stringify(json));
-        }
-    });
+    if (!mediator) {
+        mediator = new MediatorApi('http',
+            'jarvis-test.critical-factor.com',
+            '8080',
+            null,
+            null,
+            true);
+    }
+    //mediator.getProject("JAR", function (error, json) {
+    //    if (error !== null) {
+    //        console.log("Error: " + error);
+    //    }
+    //    else if (json !== undefined) {
+    //        console.log("Response: " + JSON.stringify(json));
+    //    }
+    //});
     console.log("hello")
 };
 
@@ -222,7 +225,15 @@ exports.main = function () {
         onClick: function (state) {
             if (state.checked) {
                 init();
-                issueView.port.emit('set-issue', sampleIssue);
+                mediator.getIssue("JAR-2", function (error, json) {
+                    if (error !== null) {
+                        console.log("Error: " + error);
+                    }
+                    else if (json !== undefined) {
+                        console.log("Response: " + JSON.stringify(json));
+                        issueView.port.emit('set-issue', JSON.parse(JSON.stringify(json)));
+                    }
+                });
                 issueView.show({
                     position: showIssue
                 });
@@ -235,53 +246,36 @@ exports.main = function () {
     var order = 1;
 
     var sampleIssue = {
-        key: "Issue-1",
-        summary: "some summary",
-        self: "https://api.jquery.com/empty/",
-        projectKey: "JARVIS",
-        epic: "JAR-1",
-        type: "Epic",//Task, Session, Phase, Epic, Story etc...
-        issueDescription: "some description",
-        timeRemaining: "2h",
-        assignee: "Jarvis",
-        reporter: "Jarvis",
-        sprint: "NA",
-        components: "UI addon firefox",
-        labels: "anyLabel someLabel thatLabel",
-        status: "In Progress",
-        resolution: "Open",
-        fixVersion: "3.0.0",
-        dateCreated: "01.02.2015",
-        links: [
+        "id": 14300,
+        "key": "JAR-2",
+        "projectKey": "JAR",
+        "summary": "First Story",
+        "type": "Story",
+        "issueDescription": null,
+        "timeRemaining": "2400",
+        "assignee": null,
+        "reporter": "tjoldoshbekov",
+        "components": "[]",
+        "labels": "[]",
+        "status": "Open",
+        "resolution": null,
+        "fixVersion": "[]",
+        "dateCreated": "2015-05-14T18:30:50.887+06:00",
+        "links": [
             {
-                key: "Issue-2",
-                summary: "another summary",
-                type: "Task",
-                linkType: "is blocked by"
+                "key": "JAR-5",
+                "linkType": "Blocks",
+                "type": "Task"
             },
             {
-                key: "Issue-3",
-                summary: "another summary",
-                type: "Phase",
-                linkType: "is blocked by"
+                "key": "JAR-6",
+                "linkType": "Blocks",
+                "type": "Task"
             },
             {
-                key: "Issue-4",
-                summary: "another summary",
-                type: "Session",
-                linkType: "is blocked by"
-            },
-            {
-                key: "Issue-5",
-                summary: "another summary",
-                type: "Story",
-                linkType: "is blocked by"
-            },
-            {
-                key: "Issue-6",
-                summary: "another summary",
-                type: "Bug",
-                linkType: "is blocked by"
+                "key": "JAR-4",
+                "linkType": "Blocks",
+                "type": "Research"
             }
         ]
     };
@@ -293,6 +287,7 @@ exports.main = function () {
             data.url('jquery-2.1.3.min.js')],
         contentURL: views[order % views.length],
         onShow: function () {
+            sampleIssue.type = "Epic";
             order++;
             console.log(order);
         },
@@ -302,9 +297,19 @@ exports.main = function () {
         }
     });
 
-    issueView.port.on('select-issue', function () {
-        sampleIssue.type = "Session";
-        issueView.port.emit('set-issue', sampleIssue);
+    issueView.port.on('select-issue', function (issueKey) {
+        console.log("SelectedIssueKey: " + issueKey);
+        mediator.getIssue(issueKey, function (error, json) {
+            if (error !== null) {
+                console.log("Error: " + error);
+            }
+            else if (json !== undefined) {
+                console.log("Response: " + JSON.stringify(json));
+                issueView.port.emit('set-issue', JSON.parse(JSON.stringify(json)));
+            }
+        });
+        //sampleIssue.type = "Session";
+        //issueView.port.emit('set-issue', sampleIssue);
     });
 
     issueView.port.on('get-annotations', function (issueKey) {

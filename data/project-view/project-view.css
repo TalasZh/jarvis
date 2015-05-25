@@ -1,9 +1,0 @@
-.fixed-panel {
-    min-height: 150px;
-    max-height: 150px;
-    overflow-y: scroll;
-}
-
-.voffset2 {
-    margin-bottom: 10px;
-}

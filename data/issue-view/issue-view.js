@@ -2,6 +2,9 @@
  * handles new issue and substitutes all required fields
  */
 self.port.on('set-issue', function (issue) {
+    if (!issue) {
+        return;
+    }
     switch (issue.type) {
         case "Task":
         case "Phase":
@@ -54,7 +57,10 @@ function pushLinkedIssues(links) {
     $("a.issue-link").click(function () {
         $("#list-issues").empty();
         $("#list-annotations").empty();
-        self.port.emit('select-issue');
+        $(this).find('span').remove();
+        self.port.emit('select-issue',
+            $(this).text().trim()
+        );
     });
 }
 
@@ -118,27 +124,42 @@ function setGeneralFields(issue) {
 function buildCrumbs(issue) {
     let issuePath = $("#issue-path");
     issuePath.empty();
-    let parentCrumbTemplate = "";
+
+    //add click event to navigate to project view
     if (issue.projectKey && issuePath.projectKey !== issue.key) {
-        issuePath.append(breadcrumbItemBuilder(issue.projectKey, false));
+        issuePath.append(breadcrumbItemBuilder(issue.projectKey, false, "project"));
     }
+
+    //specify class so that it calls/notifies controller event
+    let navigateToIssue = (issueKey) => {
+        self.port.emit('select-issue', issueKey);
+    };
+
     if (issue.epic && issue.epic !== issue.key) {
-        issuePath.append(breadcrumbItemBuilder(issue.projectKey, false));
+        issuePath.append(breadcrumbItemBuilder(issue.epic, false, "issue"));
     }
+
     for (let link of issue.links) {
         if (link.type === "Story" && link.key !== issue.key) {
-            issuePath.append(breadcrumbItemBuilder(link.key, false));
+            issuePath.append(breadcrumbItemBuilder(link.key, false, "issue"));
+            break;
         }
     }
     for (let link of issue.links) {
         if (link.type === "Phase" && link.key !== issue.key) {
-            issuePath.append(breadcrumbItemBuilder(link.key, false));
+            issuePath.append(breadcrumbItemBuilder(link.key, false, "issue"));
+            break;
         }
     }
     issuePath.append(breadcrumbItemBuilder(issue.key, true));
+    issuePath.find("a").click(function () {
+        self.port.emit('select-issue',
+            $(this).text().trim()
+        );
+    });
 }
 
-function breadcrumbItemBuilder(key, active) {
+function breadcrumbItemBuilder(key, active, clazz) {
     if (active) {
         return "<li class=\"active\">" +
                 //"<span class=\"label label-primary\">" +
@@ -147,7 +168,8 @@ function breadcrumbItemBuilder(key, active) {
             "</li>";
     }
     else {
-        return "<li><a href=\"#\">" +
+        return "<li><a class=\"" + clazz +
+            "\" href=\"#\">" +
             key +
             "</a></li>";
     }
