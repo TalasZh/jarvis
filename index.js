@@ -31,20 +31,14 @@ var annotatorIsOn = false;
 var matchers = [];
 
 const init = () => {
-    const mediator = new MediatorApi('http',
-        'jarvis-test.critical-factor.com',
-        '8080',
-        null,
-        null,
-        true);
-    mediator.listProjects(function (error, json) {
-        if (error !== null) {
-            console.log("Error: " + error);
-        }
-        else if (json !== undefined) {
-            console.log("Response: " + json);
-        }
-    });
+    if (!mediator) {
+        mediator = new MediatorApi('http',
+            'jarvis-test.critical-factor.com',
+            '8080',
+            null,
+            null,
+            true);
+    }
     console.log("hello")
 };
 
@@ -223,7 +217,15 @@ exports.main = function () {
         onClick: function (state) {
             if (state.checked) {
                 init();
-                issueView.port.emit('set-issue', sampleIssue);
+                mediator.getIssue("JAR-2", function (error, json) {
+                    if (error !== null) {
+                        console.log("Error: " + error);
+                    }
+                    else if (json !== undefined) {
+                        console.log("Response: " + JSON.stringify(json));
+                        issueView.port.emit('set-issue', json);
+                    }
+                });
                 issueView.show({
                     position: showIssue
                 });
@@ -231,79 +233,34 @@ exports.main = function () {
         }
     });
 
-    var views = [data.url("issue-view/issue-view.html")];
-
-    var order = 1;
-
-    var sampleIssue = {
-        key: "Issue-1",
-        summary: "some summary",
-        self: "https://api.jquery.com/empty/",
-        type: "Epic",//Task, Session, Phase, Epic, Story etc...
-        issueDescription: "some description",
-        timeRemaining: "2h",
-        assignee: "Jarvis",
-        reporter: "Jarvis",
-        sprint: "NA",
-        components: "UI addon firefox",
-        labels: "anyLabel someLabel thatLabel",
-        status: "In Progress",
-        resolution: "Open",
-        fixVersion: "3.0.0",
-        dateCreated: "01.02.2015",
-        links: [
-            {
-                key: "Issue-2",
-                summary: "another summary",
-                type: "Task",
-                linkType: "is blocked by"
-            },
-            {
-                key: "Issue-3",
-                summary: "another summary",
-                type: "Phase",
-                linkType: "is blocked by"
-            },
-            {
-                key: "Issue-4",
-                summary: "another summary",
-                type: "Session",
-                linkType: "is blocked by"
-            },
-            {
-                key: "Issue-5",
-                summary: "another summary",
-                type: "Story",
-                linkType: "is blocked by"
-            },
-            {
-                key: "Issue-6",
-                summary: "another summary",
-                type: "Bug",
-                linkType: "is blocked by"
-            }
-        ]
-    };
-
     var issueView = panels.Panel({
         height: 600,
         width: 350,
         contentScriptFile: [data.url('issue-view/issue-view.js'),
             data.url('jquery-2.1.3.min.js')],
-        contentURL: views[order % views.length],
+        contentScriptWhen: "start",
+        contentURL: data.url("issue-view/issue-view.html"),
         onShow: function () {
-            order++;
-            console.log(order);
         },
         onHide: function (state) {
             showIssue.state('window', {checked: false});
-            this.contentURL = views[order % views.length];
         }
     });
 
-    issueView.port.on('select-issue', function () {
-        sampleIssue.type = "Session";
-        issueView.port.emit('set-issue', sampleIssue);
+    issueView.port.on('select-issue', function (issueKey) {
+        issueView.contentURL = data.url("issue-view/issue-view.html");
+        issueView.contentScriptFile = [data.url('issue-view/issue-view.js'),
+            data.url('jquery-2.1.3.min.js')];
+        console.log("SelectedIssueKey: " + issueKey);
+        mediator.getIssue(issueKey, function (error, json) {
+            if (error !== null) {
+                console.log("Error: " + error);
+            }
+            else if (json !== undefined) {
+                console.log("Response: " + JSON.stringify(json));
+                issueView.port.emit('set-issue', json);
+            }
+        });
     });
 
     issueView.port.on('get-annotations', function (issueKey) {
@@ -340,10 +297,12 @@ exports.main = function () {
 
 
     var panel = panels.Panel({
-        width: 500,
-        height: 300,
+        width: 350,
+        height: 500,
         contentURL: data.url("login/panel.html"),
-        contentScriptFile: data.url('login/handleLogin.js'),
+        contentScriptFile: [data.url('jquery-2.1.3.min.js'),
+            data.url('issue-view/issue-view.js'),
+            data.url('login/handleLogin.js')],
         onHide: function (state) {
             button.state('window', {checked: false});
         }
@@ -417,15 +376,15 @@ exports.main = function () {
 
 
     panel.port.on("back-button-pressed", function (projectName) {
-        mediator.listProjectIssues( projectName, function(error, json){
-            if ( error != null ){
+        mediator.listProjectIssues(projectName, function (error, json) {
+            if (error != null) {
                 // console.log( error );
-                console.log( "Could not retrieve " + global_username + "'s issues." );
+                console.log("Could not retrieve " + global_username + "'s issues.");
                 return;
             }
             panel.contentURL = data.url("login/research.html");
             panel.port.emit("fill-combo-box", json);
-        });    
+        });
     });
 
 
@@ -439,7 +398,6 @@ exports.main = function () {
             panel.contentURL = data.url("login/selectProject.html");
             panel.port.emit("fill-project-combobox", json);
         });
-        
     });
 
 
@@ -448,38 +406,79 @@ exports.main = function () {
     });
 
 
+    //panel.port.on("issue-selected", function (selectedIssueKey) {
+    //
+    //    mediator.getIssue(selectedIssueKey, function(error, json){
+    //        if (error != null) {
+    //            console.log("Could not retrieve " + username + "'s issues.");
+    //            return;
+    //        }
+    //        panel.contentURL = data.url("login/issueSelected.html");
+    //        panel.port.emit("issueKey", json);
+    //    });
+    //});
 
-    var selection = require("sdk/selection");
-    console.log("helladf");
-    if (selection.text) {
-        console.log(selection.text);
-        console.log("adfasdf");
-    }
-
-
+    /**
+     * Event triggered when issues was selected from combo box
+     */
     panel.port.on("issue-selected", function (selectedIssueKey) {
-        
-        mediator.getIssue(selectedIssueKey, function(error, json){
-            if (error != null) {
-                console.log("Could not retrieve " + username + "'s issues.");
+        mediator.getIssue(selectedIssueKey, function (error, json) {
+            if (error !== null) {
+                console.log(error + ": Could not retrieve " + "'s issues.");
                 return;
             }
-            panel.contentURL = data.url("login/issueSelected.html");
-            panel.port.emit("issueKey", json);
+            panel.contentURL = data.url("issue-view/issue-view.html");
+            panel.port.emit("set-issue", json);
         });
+    });
+
+    /**
+     * Methods for navigating through issues and project
+     */
+    panel.port.on('select-issue', function (issueKey) {
+        console.log("SelectedIssueKey: " + issueKey);
+
+        mediator.getIssue(issueKey, function (error, json) {
+            if (error !== null) {
+                console.log("Error: " + error);
+            }
+            else if (json !== undefined) {
+
+                console.log("Response: " + JSON.stringify(json));
+                panel.port.emit('set-issue', json);
+            }
+        });
+    });
+
+    /**
+     * Function for retrieving sessions annotations
+     */
+    panel.port.on('get-annotations', function (issueKey) {
+
+        let annotations = [
+            {
+                id: 1,
+                issueId: issueKey,
+                url: "http://getbootstrap.com/components/#glyphicons",
+                comment: "This is awesome resource",
+                ancestorId: "",
+                anchorText: "sdfgsewrysdfbsdf sdrtyse"
+            }
+        ];
+        panel.port.emit('set-annotations', annotations);
     });
 
 
     panel.port.on("link-clicked", function (issueId) {
-        tabs.open("http://localhost:2990/jira/browse/" + issueId);
+        tabs.open("http://test-jira.critical-factor.com/browse/" + issueId);
     });
 
 
-    panel.port.on("project-changed", function(projectKey){
-        mediator.getProject( projectKey, function(error, json ){
-            if ( error != null ){
-                console.log( error );
-                console.log( "Could not retrieve projects from JIRA." );
+    panel.port.on("project-changed", function (projectKey) {
+        mediator.getProject(projectKey, function (error, json) {
+            if (error != null) {
+                console.log(error);
+                console.log("Could not retrieve projects from JIRA.");
                 return;
             }
             panel.port.emit("update-project-information", json);
@@ -487,16 +486,16 @@ exports.main = function () {
     });
 
 
-    panel.port.on("project-selected", function(projectName){
-        mediator.listProjectIssues( projectName, function(error, json){
-            if ( error != null ){
+    panel.port.on("project-selected", function (projectName) {
+        mediator.listProjectIssues(projectName, function (error, json) {
+            if (error != null) {
                 // console.log( error );
-                console.log( "Could not retrieve " + global_username + "'s issues." );
+                console.log("Could not retrieve " + global_username + "'s issues.");
                 return;
             }
             panel.contentURL = data.url("login/research.html");
             panel.port.emit("fill-combo-box", json);
-        });     
+        });
     });
 
 
@@ -525,4 +524,11 @@ exports.main = function () {
             panel.port.emit("fill-project-combobox", json);
         });
     });
+
+    var selection = require("sdk/selection");
+    console.log("helladf");
+    if (selection.text) {
+        console.log(selection.text);
+        console.log("adfasdf");
+    }
 };

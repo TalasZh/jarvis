@@ -1,24 +1,18 @@
-var annotationItemTemplate = "<a class=\"list-group-item\">\
-<p class=\"list-group-item-heading\">Annotation1</p>\
-    <blockquote class=\"list-group-item-text\">Some comment or annotated text</blockquote>\
-</a>";
-
-var issueItemTemplate = "<li class=\"list-group-item\">\
-<a href=\"issue-view.html\">\
-    Cras justo odio <span class=\"label label-success\">Epic</span>\
-    </a>\
-    </li>";
-
-//handles new issue and substitutes all required fields
+/**
+ * handles new issue and substitutes all required fields
+ */
 self.port.on('set-issue', function (issue) {
-    //console.log("Sample issue: " + JSON.stringify(issue));
-    switch (issue.type) {
-        case "Task":
-        case "Phase":
-        case "Epic":
-        case "Story":
-            prepareViewForIssue(issue);
-            break;
+    console.log("Setting issue: " + JSON.stringify(issue.type));
+    if (!issue) {
+        return;
+    }
+    switch (issue.type.name) {
+        //case "Task":
+        //case "Phase":
+        //case "Epic":
+        //case "Story":
+        //    prepareViewForIssue(issue);
+        //    break;
         case "Session":
             prepareViewForSession(issue);
             break;
@@ -62,9 +56,9 @@ function pushLinkedIssues(links) {
     }
     //notifies controller to select another issue
     $("a.issue-link").click(function () {
-        $("#list-issues").empty();
-        $("#list-annotations").empty();
-        self.port.emit('select-issue');
+        self.port.emit('select-issue',
+            $(this).text().trim()
+        );
     });
 }
 
@@ -92,7 +86,7 @@ function buildIssueLinkElement(linkItem) {
     }
 
     return "<li class=\"list-group-item\">" +
-        "<a class= \"issue-link\" href=\"#\">" + linkItem.key + linkTypeSpan + "</a>" +
+        "<a class= \"issue-link\" href=\"#\">" + linkItem.key + "</a>" + linkTypeSpan  +
         "</li>";
 }
 
@@ -117,10 +111,70 @@ function buildAnnotationElement(annotation) {
 }
 
 function setGeneralFields(issue) {
-    $("a#issueLink").attr("href", issue.self);
+    $("a#issueLink").text(issue.key);
     $("#status").text(issue.status);
     $("#type").text(issue.type);
     $("#summary").text(issue.summary);
+    $("#issueNumber").text(issue.key);
+    buildCrumbs(issue);
+}
+
+function buildCrumbs(issue) {
+    let issuePath = $("#issue-path");
+    issuePath.empty();
+
+    //add click event to navigate to project view
+    if (issue.projectKey && issuePath.projectKey !== issue.key) {
+        issuePath.append(breadcrumbItemBuilder(issue.projectKey, false, "project"));
+    }
+
+    //specify class so that it calls/notifies controller event
+    let navigateToIssue = (issueKey) => {
+        self.port.emit('select-issue', issueKey);
+    };
+
+    if (issue.epic && issue.epic !== issue.key) {
+        issuePath.append(breadcrumbItemBuilder(issue.epic, false, "issue"));
+    }
+
+    for (let link of issue.links) {
+        if (link.type === "Story" && link.key !== issue.key) {
+            issuePath.append(breadcrumbItemBuilder(link.key, false, "issue"));
+            break;
+        }
+    }
+    for (let link of issue.links) {
+        if (link.type === "Phase" && link.key !== issue.key) {
+            issuePath.append(breadcrumbItemBuilder(link.key, false, "issue"));
+            break;
+        }
+    }
+    issuePath.append(breadcrumbItemBuilder(issue.key, true));
+    issuePath.find("a.issue").click(function () {
+        self.port.emit('select-issue',
+            $(this).text().trim()
+        );
+    });
+
+    issuePath.find("a.project").click(function () {
+        self.port.emit('back-button-pressed-on-researchpage');
+    });
+}
+
+function breadcrumbItemBuilder(key, active, clazz) {
+    if (active) {
+        return "<li class=\"active\">" +
+                //"<span class=\"label label-primary\">" +
+            key +
+                //"</span>" +
+            "</li>";
+    }
+    else {
+        return "<li><a class=\"" + clazz +
+            "\" href=\"#\">" +
+            key +
+            "</a></li>";
+    }
 }
 
 console.log("Script is loaded");

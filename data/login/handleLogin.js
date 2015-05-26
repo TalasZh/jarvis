@@ -170,7 +170,7 @@ function fillComboBox(json) {
 		console.log( selectValue + " : " + getIssueState(json, selectValue ));
 	};
 
-	console.log( json.size )
+	console.log( json.size );
 	for (var i = 0; i < json.length; i++) {
 	    var issue = json[i];
 	    var option = document.createElement("option");	
@@ -196,7 +196,7 @@ function fillProjectCombobox(json) {
 	    var option = document.createElement("option");	
   		option.text = project.key;
   		x.add(option);
-  		console.log( project.key )
+  		console.log( project.key );
   		// self.port.emit("project-changed", project.key);
 	}
 	
