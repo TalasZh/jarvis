@@ -63,6 +63,18 @@ if ( startStop !== null ){
 }
 
 
+var selectProject = document.getElementById("selectProject");
+if ( selectProject !== null ){
+	selectProject.addEventListener("click", function() {
+		var x = document.getElementById("selectProjectCombobox"); 
+		var selectIndex=x.selectedIndex;
+		var selectValue=x.options[selectIndex].text;
+		self.port.emit("project-selected", selectValue);
+
+	}, false);
+}
+
+
 var selectIssue = document.getElementById("selectIssue");
 if ( selectIssue !== null ){
 	selectIssue.addEventListener("click", function() {
@@ -94,7 +106,23 @@ if ( pauseResume !== null ){
 var backButton = document.getElementById("backButton");
 if ( backButton !== null ){
 	backButton.onclick = function(event) {
-		self.port.emit("back-button-pressed" );
+		var x = document.getElementById("issueNumber").innerHTML; 
+		var y = x.substr(0, x.indexOf('-'));
+		self.port.emit("back-button-pressed", y );
+	};	
+}
+
+var backButtonOnResearchPage = document.getElementById("backButtonOnResearchPage");
+if ( backButtonOnResearchPage !== null ){
+	backButtonOnResearchPage.onclick = function(event) {
+		self.port.emit("back-button-pressed-on-researchpage" );
+	};	
+}
+
+var backButtonOnProjectSelectionPage = document.getElementById("backButtonOnProjectSelectionPage");
+if ( backButtonOnProjectSelectionPage !== null ){
+	backButtonOnProjectSelectionPage.onclick = function(event) {
+		self.port.emit("back-button-pressed-on-project-selection-page" );
 	};	
 }
 
@@ -142,22 +170,64 @@ function fillComboBox(json) {
 		console.log( selectValue + " : " + getIssueState(json, selectValue ));
 	};
 
-	for (var i = 0; i < json.issues.length; i++) {
-	    var issue = json.issues[i];
+	console.log( json.size )
+	for (var i = 0; i < json.length; i++) {
+	    var issue = json[i];
 	    var option = document.createElement("option");	
 	  	option.text = issue.key;
 	  	x.add(option);
 	}
 }
 
+// fill out projects combo box options
+function fillProjectCombobox(json) {
+
+	var x = document.getElementById("selectProjectCombobox"); 
+	x.onchange = function(event) {
+		var selectIndex=x.selectedIndex;
+		var selectValue=x.options[selectIndex].text;
+
+		console.log( selectValue );
+		self.port.emit("project-changed", selectValue);
+	};
+
+	for (var i = 0; i < json.length; i++) {
+	    var project = json[i];
+	    var option = document.createElement("option");	
+  		option.text = project.key;
+  		x.add(option);
+  		console.log( project.key )
+  		// self.port.emit("project-changed", project.key);
+	}
+	
+}
+
+function updateProjectInfo(json) {
+	document.getElementById("name").innerHTML = json.name;
+	document.getElementById("key").innerHTML = json.key;
+	document.getElementById("description").innerHTML = json.description;
+	// if (json.lead !== "undefined"){
+	// 	document.getElementById("lead").innerHTML = json.lead.name;
+	// }
+	document.getElementById("versions").innerHTML = json.versions;
+}
 
 self.port.on("fill-combo-box", function(json) {
 	fillComboBox(json);
 });
 
 
+self.port.on("fill-project-combobox", function(json){
+	fillProjectCombobox(json);
+});
+
+
+self.port.on("update-project-information", function(json){
+	updateProjectInfo(json);
+});
+
 self.port.on("issueKey", function( issue ){
-	if ( issue.fields.status.name == "To Do" ){
+	if ( issue.status == "To Do" ){
 		startStop.value = "Start";
 	}
 	else{
@@ -166,11 +236,11 @@ self.port.on("issueKey", function( issue ){
 	var x = document.getElementById("issueNumber"); 
 	x.innerHTML = issue.key;
 
-	document.getElementById("summary").innerHTML = issue.fields.summary;
+	document.getElementById("summary").innerHTML = issue.summary;
 	document.getElementById("issueLink").innerHTML = x.innerHTML;
-	document.getElementById("status").innerHTML = issue.fields.status.name;
-	document.getElementById("type").innerHTML = issue.fields.issuetype.name;
-	document.getElementById("priority").innerHTML = issue.fields.priority.name;
+	document.getElementById("status").innerHTML = issue.status;
+	document.getElementById("type").innerHTML = issue.type;
+	// document.getElementById("priority").innerHTML = issue.fields.priority.name;
 });
 
 
