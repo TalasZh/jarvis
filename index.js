@@ -25,7 +25,6 @@ const MediatorApi = require('mediator-api').MediatorApi;
 var jira;
 var mediator;
 var global_username;
-let mediator;
 
 
 var annotatorIsOn = false;
@@ -40,14 +39,6 @@ const init = () => {
             null,
             true);
     }
-    //mediator.getProject("JAR", function (error, json) {
-    //    if (error !== null) {
-    //        console.log("Error: " + error);
-    //    }
-    //    else if (json !== undefined) {
-    //        console.log("Response: " + JSON.stringify(json));
-    //    }
-    //});
     console.log("hello")
 };
 
@@ -232,7 +223,7 @@ exports.main = function () {
                     }
                     else if (json !== undefined) {
                         console.log("Response: " + JSON.stringify(json));
-                        issueView.port.emit('set-issue', JSON.parse(JSON.stringify(json)));
+                        issueView.port.emit('set-issue', json);
                     }
                 });
                 issueView.show({
@@ -242,63 +233,24 @@ exports.main = function () {
         }
     });
 
-    var views = [data.url("issue-view/issue-view.html")];
-
-    var order = 1;
-
-    var sampleIssue = {
-        "id": 14300,
-        "key": "JAR-2",
-        "projectKey": "JAR",
-        "summary": "First Story",
-        "type": "Story",
-        "issueDescription": null,
-        "timeRemaining": "2400",
-        "assignee": null,
-        "reporter": "tjoldoshbekov",
-        "components": "[]",
-        "labels": "[]",
-        "status": "Open",
-        "resolution": null,
-        "fixVersion": "[]",
-        "dateCreated": "2015-05-14T18:30:50.887+06:00",
-        "links": [
-            {
-                "key": "JAR-5",
-                "linkType": "Blocks",
-                "type": "Task"
-            },
-            {
-                "key": "JAR-6",
-                "linkType": "Blocks",
-                "type": "Task"
-            },
-            {
-                "key": "JAR-4",
-                "linkType": "Blocks",
-                "type": "Research"
-            }
-        ]
-    };
-
     var issueView = panels.Panel({
         height: 600,
         width: 350,
         contentScriptFile: [data.url('issue-view/issue-view.js'),
             data.url('jquery-2.1.3.min.js')],
-        contentURL: views[order % views.length],
+        contentScriptWhen: "start",
+        contentURL: data.url("issue-view/issue-view.html"),
         onShow: function () {
-            sampleIssue.type = "Epic";
-            order++;
-            console.log(order);
         },
         onHide: function (state) {
             showIssue.state('window', {checked: false});
-            this.contentURL = views[order % views.length];
         }
     });
 
     issueView.port.on('select-issue', function (issueKey) {
+        issueView.contentURL = data.url("issue-view/issue-view.html");
+        issueView.contentScriptFile = [data.url('issue-view/issue-view.js'),
+            data.url('jquery-2.1.3.min.js')];
         console.log("SelectedIssueKey: " + issueKey);
         mediator.getIssue(issueKey, function (error, json) {
             if (error !== null) {
@@ -306,11 +258,9 @@ exports.main = function () {
             }
             else if (json !== undefined) {
                 console.log("Response: " + JSON.stringify(json));
-                issueView.port.emit('set-issue', JSON.parse(JSON.stringify(json)));
+                issueView.port.emit('set-issue', json);
             }
         });
-        //sampleIssue.type = "Session";
-        //issueView.port.emit('set-issue', sampleIssue);
     });
 
     issueView.port.on('get-annotations', function (issueKey) {
@@ -347,10 +297,12 @@ exports.main = function () {
 
 
     var panel = panels.Panel({
-        width: 500,
-        height: 300,
+        width: 350,
+        height: 500,
         contentURL: data.url("login/panel.html"),
-        contentScriptFile: data.url('login/handleLogin.js'),
+        contentScriptFile: [data.url('jquery-2.1.3.min.js'),
+            data.url('issue-view/issue-view.js'),
+            data.url('login/handleLogin.js')],
         onHide: function (state) {
             button.state('window', {checked: false});
         }
@@ -424,15 +376,15 @@ exports.main = function () {
 
 
     panel.port.on("back-button-pressed", function (projectName) {
-        mediator.listProjectIssues( projectName, function(error, json){
-            if ( error != null ){
+        mediator.listProjectIssues(projectName, function (error, json) {
+            if (error != null) {
                 // console.log( error );
-                console.log( "Could not retrieve " + global_username + "'s issues." );
+                console.log("Could not retrieve " + global_username + "'s issues.");
                 return;
             }
             panel.contentURL = data.url("login/research.html");
             panel.port.emit("fill-combo-box", json);
-        });    
+        });
     });
 
 
@@ -446,7 +398,6 @@ exports.main = function () {
             panel.contentURL = data.url("login/selectProject.html");
             panel.port.emit("fill-project-combobox", json);
         });
-        
     });
 
 
@@ -455,38 +406,79 @@ exports.main = function () {
     });
 
 
+    //panel.port.on("issue-selected", function (selectedIssueKey) {
+    //
+    //    mediator.getIssue(selectedIssueKey, function(error, json){
+    //        if (error != null) {
+    //            console.log("Could not retrieve " + username + "'s issues.");
+    //            return;
+    //        }
+    //        panel.contentURL = data.url("login/issueSelected.html");
+    //        panel.port.emit("issueKey", json);
+    //    });
+    //});
 
-    var selection = require("sdk/selection");
-    console.log("helladf");
-    if (selection.text) {
-        console.log(selection.text);
-        console.log("adfasdf");
-    }
-
-
+    /**
+     * Event triggered when issues was selected from combo box
+     */
     panel.port.on("issue-selected", function (selectedIssueKey) {
-        
-        mediator.getIssue(selectedIssueKey, function(error, json){
-            if (error != null) {
-                console.log("Could not retrieve " + username + "'s issues.");
+        mediator.getIssue(selectedIssueKey, function (error, json) {
+            if (error !== null) {
+                console.log(error + ": Could not retrieve " + "'s issues.");
                 return;
             }
-            panel.contentURL = data.url("login/issueSelected.html");
-            panel.port.emit("issueKey", json);
+            panel.contentURL = data.url("issue-view/issue-view.html");
+            panel.port.emit("set-issue", json);
         });
+    });
+
+    /**
+     * Methods for navigating through issues and project
+     */
+    panel.port.on('select-issue', function (issueKey) {
+        console.log("SelectedIssueKey: " + issueKey);
+
+        mediator.getIssue(issueKey, function (error, json) {
+            if (error !== null) {
+                console.log("Error: " + error);
+            }
+            else if (json !== undefined) {
+
+                console.log("Response: " + JSON.stringify(json));
+                panel.port.emit('set-issue', json);
+            }
+        });
+    });
+
+    /**
+     * Function for retrieving sessions annotations
+     */
+    panel.port.on('get-annotations', function (issueKey) {
+
+        let annotations = [
+            {
+                id: 1,
+                issueId: issueKey,
+                url: "http://getbootstrap.com/components/#glyphicons",
+                comment: "This is awesome resource",
+                ancestorId: "",
+                anchorText: "sdfgsewrysdfbsdf sdrtyse"
+            }
+        ];
+        panel.port.emit('set-annotations', annotations);
     });
 
 
     panel.port.on("link-clicked", function (issueId) {
-        tabs.open("http://localhost:2990/jira/browse/" + issueId);
+        tabs.open("http://test-jira.critical-factor.com/browse/" + issueId);
     });
 
 
-    panel.port.on("project-changed", function(projectKey){
-        mediator.getProject( projectKey, function(error, json ){
-            if ( error != null ){
-                console.log( error );
-                console.log( "Could not retrieve projects from JIRA." );
+    panel.port.on("project-changed", function (projectKey) {
+        mediator.getProject(projectKey, function (error, json) {
+            if (error != null) {
+                console.log(error);
+                console.log("Could not retrieve projects from JIRA.");
                 return;
             }
             panel.port.emit("update-project-information", json);
@@ -494,16 +486,16 @@ exports.main = function () {
     });
 
 
-    panel.port.on("project-selected", function(projectName){
-        mediator.listProjectIssues( projectName, function(error, json){
-            if ( error != null ){
+    panel.port.on("project-selected", function (projectName) {
+        mediator.listProjectIssues(projectName, function (error, json) {
+            if (error != null) {
                 // console.log( error );
-                console.log( "Could not retrieve " + global_username + "'s issues." );
+                console.log("Could not retrieve " + global_username + "'s issues.");
                 return;
             }
             panel.contentURL = data.url("login/research.html");
             panel.port.emit("fill-combo-box", json);
-        });     
+        });
     });
 
 
@@ -532,4 +524,11 @@ exports.main = function () {
             panel.port.emit("fill-project-combobox", json);
         });
     });
+
+    var selection = require("sdk/selection");
+    console.log("helladf");
+    if (selection.text) {
+        console.log(selection.text);
+        console.log("adfasdf");
+    }
 };

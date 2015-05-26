@@ -2,16 +2,17 @@
  * handles new issue and substitutes all required fields
  */
 self.port.on('set-issue', function (issue) {
+    console.log("Setting issue: " + JSON.stringify(issue.type));
     if (!issue) {
         return;
     }
-    switch (issue.type) {
-        case "Task":
-        case "Phase":
-        case "Epic":
-        case "Story":
-            prepareViewForIssue(issue);
-            break;
+    switch (issue.type.name) {
+        //case "Task":
+        //case "Phase":
+        //case "Epic":
+        //case "Story":
+        //    prepareViewForIssue(issue);
+        //    break;
         case "Session":
             prepareViewForSession(issue);
             break;
@@ -55,9 +56,6 @@ function pushLinkedIssues(links) {
     }
     //notifies controller to select another issue
     $("a.issue-link").click(function () {
-        $("#list-issues").empty();
-        $("#list-annotations").empty();
-        $(this).find('span').remove();
         self.port.emit('select-issue',
             $(this).text().trim()
         );
@@ -88,7 +86,7 @@ function buildIssueLinkElement(linkItem) {
     }
 
     return "<li class=\"list-group-item\">" +
-        "<a class= \"issue-link\" href=\"#\">" + linkItem.key + linkTypeSpan + "</a>" +
+        "<a class= \"issue-link\" href=\"#\">" + linkItem.key + "</a>" + linkTypeSpan  +
         "</li>";
 }
 
@@ -113,7 +111,7 @@ function buildAnnotationElement(annotation) {
 }
 
 function setGeneralFields(issue) {
-    $("a#issueLink").attr("href", issue.self);
+    $("a#issueLink").text(issue.key);
     $("#status").text(issue.status);
     $("#type").text(issue.type);
     $("#summary").text(issue.summary);
@@ -152,10 +150,14 @@ function buildCrumbs(issue) {
         }
     }
     issuePath.append(breadcrumbItemBuilder(issue.key, true));
-    issuePath.find("a").click(function () {
+    issuePath.find("a.issue").click(function () {
         self.port.emit('select-issue',
             $(this).text().trim()
         );
+    });
+
+    issuePath.find("a.project").click(function () {
+        self.port.emit('back-button-pressed-on-researchpage');
     });
 }
 
