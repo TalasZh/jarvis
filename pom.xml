@@ -7,7 +7,7 @@
   <artifactId>jarvis</artifactId>
   <packaging>war</packaging>
   <version>1.0-SNAPSHOT</version>
-  <name>AppFuse Struts 2 Application</name>
+  <name>Jarvis Application</name>
 
   <parent>
     <groupId>org.appfuse</groupId>
@@ -25,6 +25,10 @@
       <snapshots>
         <enabled>true</enabled>
       </snapshots>
+    </repository>
+    <repository>
+      <id>spring-milestones</id>
+      <url>http://repo.spring.io/libs-milestone/</url>
     </repository>
   </repositories>
 
@@ -80,13 +84,13 @@
     <dependency>
       <groupId>com.atlassian.jira</groupId>
       <artifactId>jira-rest-java-client-api</artifactId>
-      <version>2.0.0</version>
+      <version>3.0.0</version>
     </dependency>
 
     <dependency>
       <groupId>com.atlassian.jira</groupId>
       <artifactId>jira-rest-java-client-core</artifactId>
-      <version>2.0.0</version>
+      <version>3.0.0</version>
       <exclusions>
         <exclusion>
           <groupId>com.sun.jersey</groupId>
@@ -105,36 +109,13 @@
       <version>1.3.7</version>
     </dependency>
 
- <!--   <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-aop</artifactId>
-      <version>${spring.version}</version>
-    </dependency>-->
-
-<!--    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-aspects</artifactId>
-      <version>${spring.version}</version>
-    </dependency>
-
+<!--
     <dependency>
-      <groupId>org.aspectj</groupId>
-      <artifactId>aspectjrt</artifactId>
-      <version>1.8.5</version>
+      <groupId>net.rcarz</groupId>
+      <artifactId>jira-client</artifactId>
+      <version>0.5</version>
     </dependency>
-
-    <dependency>
-      <groupId>org.aspectj</groupId>
-      <artifactId>aspectjweaver</artifactId>
-      <version>1.8.5</version>
-    </dependency>
-
-    <dependency>
-    	<groupId>org.hibernate</groupId>
-    	<artifactId>hibernate-entitymanager</artifactId>
-    	<version>${hibernate-entitymanager.version}</version>
-    </dependency>-->
-
+-->
 
   </dependencies>
 

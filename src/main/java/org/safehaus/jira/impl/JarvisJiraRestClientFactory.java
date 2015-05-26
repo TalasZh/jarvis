@@ -5,6 +5,8 @@ import java.net.URI;
 
 import org.safehaus.jira.api.JarvisJiraRestClient;
 
+import org.apache.http.cookie.Cookie;
+
 import com.atlassian.httpclient.api.HttpClient;
 import com.atlassian.jira.rest.client.api.AuthenticationHandler;
 import com.atlassian.jira.rest.client.api.JiraRestClient;
@@ -21,4 +23,6 @@ public interface JarvisJiraRestClientFactory extends JiraRestClientFactory
     JarvisJiraRestClient createWithBasicHttpAuthentication(URI var1, String var2, String var3);
 
     JarvisJiraRestClient create(URI var1, HttpClient var2);
+
+//    JarvisJiraRestClient create(URI uri, Cookie cookie);
 }

@@ -5,19 +5,27 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
+import org.codehaus.jettison.json.JSONException;
+import org.joda.time.DateTime;
 import org.safehaus.jira.api.GroupRestClient;
 import org.safehaus.jira.api.JarvisJiraRestClient;
 import org.safehaus.jira.api.JiraClient;
 import org.safehaus.jira.api.JiraClientException;
 import org.safehaus.model.JarvisIssue;
+import org.safehaus.model.JarvisIssueType;
 import org.safehaus.model.JarvisMember;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.atlassian.httpclient.api.HttpStatus;
 import com.atlassian.jira.rest.client.api.RestClientException;
 import com.atlassian.jira.rest.client.api.domain.BasicComponent;
+import com.atlassian.jira.rest.client.api.domain.BasicIssue;
 import com.atlassian.jira.rest.client.api.domain.BasicProject;
 import com.atlassian.jira.rest.client.api.domain.BasicProjectRole;
 import com.atlassian.jira.rest.client.api.domain.Component;
@@ -27,6 +35,11 @@ import com.atlassian.jira.rest.client.api.domain.ProjectRole;
 import com.atlassian.jira.rest.client.api.domain.RoleActor;
 import com.atlassian.jira.rest.client.api.domain.SearchResult;
 import com.atlassian.jira.rest.client.api.domain.User;
+import com.atlassian.jira.rest.client.api.domain.input.ComplexIssueInputFieldValue;
+import com.atlassian.jira.rest.client.api.domain.input.FieldInput;
+import com.atlassian.jira.rest.client.api.domain.input.IssueInput;
+import com.atlassian.jira.rest.client.api.domain.input.IssueInputBuilder;
+import com.atlassian.jira.rest.client.internal.json.gen.IssueInputJsonGenerator;
 import com.atlassian.util.concurrent.Promise;
 import com.google.common.collect.ImmutableList;
 
@@ -38,6 +51,8 @@ import static java.util.Arrays.asList;
  */
 public class JiraClientImpl implements JiraClient
 {
+    private static Logger logger = LoggerFactory.getLogger( JiraClientImpl.class );
+
     private static final String JIRA_URL = "http://test-jira.critical-factor.com";
 
     private JarvisJiraRestClient restClient;
@@ -180,7 +195,8 @@ public class JiraClientImpl implements JiraClient
 
         for ( Issue issue : searchResult.getIssues() )
         {
-            JarvisIssue jarvisIssue = new JarvisIssue( issue.getId(), issue.getKey(), issue.getSummary(), projectId, issue.getIssueType().getName() );
+            JarvisIssue jarvisIssue = new JarvisIssue( issue.getId(), issue.getKey(), issue.getSummary(), projectId,
+                    new JarvisIssueType( issue.getIssueType().getId(), issue.getIssueType().getName() ) );
             result.add( jarvisIssue );
         }
         return result;
@@ -211,6 +227,62 @@ public class JiraClientImpl implements JiraClient
 
 
     @Override
+    public Issue createIssue( JarvisIssue jarvisIssue, String token )
+    {
+        logger.debug( String.format( "=================> %s %s", jarvisIssue, token ) );
+        JarvisJiraRestClientFactory factory = new AsynchronousJarvisJiraRestClientFactory();
+
+        JarvisJiraRestClient client = null;
+        try
+        {
+            client = factory.create( new URI( "http://test-jira.critical-factor.com" ),
+                    new CrowdAuthenticationHandler( token ) );
+            logger.debug( client.getMetadataClient().getServerInfo().claim().toString() );
+        }
+        catch ( Exception e )
+        {
+            logger.debug( e.getMessage() );
+            e.printStackTrace();
+        }
+
+        //        User assignee = restClient.getUserClient().getUser( jarvisIssue.getAssignee() ).claim();
+        IssueInputBuilder issueInputBuilder =
+                new IssueInputBuilder( jarvisIssue.getProjectKey(), jarvisIssue.getType().getId(),
+                        jarvisIssue.getSummary() );
+
+        issueInputBuilder.setDescription( jarvisIssue.getIssueDescription() );
+        issueInputBuilder.setReporterName( jarvisIssue.getReporter() );
+        issueInputBuilder.setDueDate( new DateTime().plusDays( 5 ) );
+        issueInputBuilder.setAssigneeName( jarvisIssue.getAssignee() );
+
+        //        issueInputBuilder.setFieldValue( "assignee", assignee );
+        IssueInput issueInput = issueInputBuilder.build();
+        BasicIssue createdIssue = client.getIssueClient().createIssue( issueInput ).claim();
+        logger.debug( "Created issue: " + createdIssue );
+
+        Issue i = client.getIssueClient().getIssue( createdIssue.getKey() ).claim();
+//        issueInputBuilder = new IssueInputBuilder( /*jarvisIssue.getProjectKey(), jarvisIssue.getType().getId() */ );
+//        issueInputBuilder.setAssigneeName( jarvisIssue.getAssignee() );
+
+        //        issueInputBuilder.set setFieldValue( "assignee",  new FieldInput( "name", jarvisIssue.getAssignee()
+        // ) );
+//        issueInput = issueInputBuilder.build();
+//
+//        IssueInputJsonGenerator gen = new IssueInputJsonGenerator();
+//        try
+//        {
+//            logger.debug( gen.generate( issueInput ).toString() );
+//        }
+//        catch ( JSONException e )
+//        {
+//            e.printStackTrace();
+//        }
+//        client.getIssueClient().updateIssue( i.getKey(), issueInput ).claim();
+        return i;
+    }
+
+
+    @Override
     public List<JarvisMember> getProjectMemebers( final String projectId ) throws JiraClientException
     {
         List<JarvisMember> result = new ArrayList<>();
@@ -237,31 +309,6 @@ public class JiraClientImpl implements JiraClient
                 }
             }
         }
-        return result;
-    }
-
-
-    public List<JarvisMember> getProjectMemebersOld( final String projectId ) throws JiraClientException
-    {
-        List<JarvisMember> result = new ArrayList<>();
-
-        Project project = getProject( projectId );
-
-        for ( Iterator<BasicProjectRole> rolesIterator = project.getProjectRoles().iterator();
-              rolesIterator.hasNext(); )
-        {
-
-            BasicProjectRole role = rolesIterator.next();
-            ProjectRole projectRole = restClient.getProjectRolesRestClient().getRole( role.getSelf() ).claim();
-            for ( Iterator<RoleActor> actorIterator = projectRole.getActors().iterator(); actorIterator.hasNext(); )
-            {
-                RoleActor actor = actorIterator.next();
-
-                result.add(
-                        new JarvisMember( actor.getName(), actor.getDisplayName(), actor.getAvatarUri().toString() ) );
-            }
-        }
-        //        result.add( new JarvisMember( "", "timur", "test-uri", "test-avatar" ) );
         return result;
     }
 

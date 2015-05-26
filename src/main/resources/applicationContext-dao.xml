@@ -9,14 +9,16 @@
   <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
 
   <!--  Entity Interceptor bean - sets audit fields for each persistent object -->
- <!-- <bean id="entityInterceptor" class="org.safehaus.dao.hibernate.JarvisEntityInterceptor">
-    <property name="jiraManager" ref="jiraManager" />
-  </bean>-->
+  <!-- <bean id="entityInterceptor" class="org.safehaus.dao.hibernate.JarvisEntityInterceptor">
+     <property name="jiraManager" ref="jiraManager" />
+   </bean>-->
 
   <bean id="jiraClient" class="org.safehaus.jira.impl.JiraClientImpl" destroy-method="close">
     <constructor-arg value="http://test-jira.critical-factor.com" />
     <constructor-arg value="jirabot" />
     <constructor-arg value="jira135pwd" />
+    <!--<constructor-arg value="tjamakeev" />-->
+    <!--<constructor-arg value="u4UJASj" />-->
     <!--<property name="mapper" ref="jacksonMapper"/>-->
   </bean>
 
@@ -26,7 +28,7 @@
 
   <!-- Hibernate SessionFactory -->
   <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean" destroy-method="destroy">
- <!--   <property name="entityInterceptor" ref="entityInterceptor" />-->
+    <!--   <property name="entityInterceptor" ref="entityInterceptor" />-->
 
     <property name="dataSource" ref="dataSource" />
     <property name="configLocation" value="classpath:hibernate.cfg.xml" />

@@ -5,7 +5,11 @@ import java.net.URI;
 
 import org.safehaus.jira.api.JarvisJiraRestClient;
 
+import org.apache.http.cookie.Cookie;
+
+import com.atlassian.httpclient.apache.httpcomponents.DefaultHttpClient;
 import com.atlassian.httpclient.api.HttpClient;
+import com.atlassian.httpclient.spi.ThreadLocalContextManagers;
 import com.atlassian.jira.rest.client.api.AuthenticationHandler;
 import com.atlassian.jira.rest.client.api.JiraRestClient;
 import com.atlassian.jira.rest.client.auth.BasicHttpAuthenticationHandler;
@@ -32,7 +36,7 @@ public class AsynchronousJarvisJiraRestClientFactory implements JarvisJiraRestCl
 
     @Override
     public JarvisJiraRestClient createWithBasicHttpAuthentication( final URI serverUri, final String username,
-                                                             final String password )
+                                                                   final String password )
     {
         return create( serverUri, new BasicHttpAuthenticationHandler( username, password ) );
     }
@@ -45,4 +49,18 @@ public class AsynchronousJarvisJiraRestClientFactory implements JarvisJiraRestCl
                 new AsynchronousHttpClientFactory().createClient( httpClient );
         return new AsynchronousJarvisJiraRestClient( serverUri, disposableHttpClient );
     }
+
+
+//    @Override
+//    public JarvisJiraRestClient create( final URI uri, final Cookie cookie )
+//    {
+//
+//        final DefaultHttpClient defaultHttpClient =
+//                new DefaultHttpClient( new NoOpEventPublisher(), new RestClientApplicationProperties( serverUri ),
+//                        ThreadLocalContextManagers.noop(), options );
+//        final DisposableHttpClient disposableHttpClient =
+//                new AsynchronousHttpClientFactory().createClient( httpClient );
+//
+//        return null;
+//    }
 }

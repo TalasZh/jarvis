@@ -9,12 +9,16 @@ import java.util.List;
 import org.safehaus.jira.api.JiraClient;
 import org.safehaus.jira.api.JiraClientException;
 import org.safehaus.model.JarvisIssue;
+import org.safehaus.model.JarvisIssueType;
 import org.safehaus.model.JarvisLink;
 import org.safehaus.model.JarvisMember;
 import org.safehaus.model.JarvisProject;
 import org.safehaus.service.JiraManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.atlassian.jira.rest.client.api.domain.BasicIssue;
 import com.atlassian.jira.rest.client.api.domain.Issue;
 import com.atlassian.jira.rest.client.api.domain.IssueLink;
 import com.atlassian.jira.rest.client.api.domain.IssueType;
@@ -23,7 +27,7 @@ import com.atlassian.jira.rest.client.api.domain.Project;
 
 public class JiraManagerImpl implements JiraManager
 {
-
+    private static Logger logger = LoggerFactory.getLogger( JiraManagerImpl.class );
     JiraClient jiraClient;
 
 
@@ -91,6 +95,42 @@ public class JiraManagerImpl implements JiraManager
     {
         Issue issue = jiraClient.getIssue( issueId );
 
+        //        List<JarvisLink> links = new ArrayList<>();
+        //        for ( Iterator<IssueLink> iterator = issue.getIssueLinks().iterator(); iterator.hasNext(); )
+        //        {
+        //            IssueLink link = iterator.next();
+        //
+        //            Issue i = jiraClient.getIssue( link.getTargetIssueKey() );
+        //            links.add( new JarvisLink( link.getTargetIssueKey(), link.getIssueLinkType().getName(),
+        //                    i.getIssueType().getName() ) );
+        //        }
+
+        JarvisIssue result = buildJarvisIssue( issue );
+        return result;
+    }
+
+
+    @Override
+    public JarvisIssue createIssue( final JarvisIssue issue, String token )
+    {
+        logger.debug( "JarvisIssue: " + issue );
+        Issue jiraIssue = jiraClient.createIssue( issue, token );
+        return buildJarvisIssue( jiraIssue );
+    }
+
+
+    public void destroy() throws IOException
+    {
+        jiraClient.close();
+    }
+
+
+    private JarvisIssue buildJarvisIssue( Issue issue )
+    {
+        if ( issue == null )
+        {
+            return new JarvisIssue();
+        }
         List<JarvisLink> links = new ArrayList<>();
         for ( Iterator<IssueLink> iterator = issue.getIssueLinks().iterator(); iterator.hasNext(); )
         {
@@ -100,25 +140,20 @@ public class JiraManagerImpl implements JiraManager
             links.add( new JarvisLink( link.getTargetIssueKey(), link.getIssueLinkType().getName(),
                     i.getIssueType().getName() ) );
         }
-
-        JarvisIssue result =
-                new JarvisIssue( issue.getId(), issue.getKey(), issue.getSummary(), issue.getIssueType().getName(),
-                        issue.getDescription(), issue.getTimeTracking() != null ? ( issue.getTimeTracking() != null ?
-                                                                                    issue.getTimeTracking()
-                                                                                         .getRemainingEstimateMinutes()
-                                                                                         .toString() : null ) : null,
-                        issue.getAssignee() != null ? issue.getAssignee().getName() : null,
-                        issue.getReporter() != null ? issue.getReporter().getName() : null,
-                        issue.getComponents().toString(), issue.getLabels().toString(), issue.getStatus().getName(),
-                        issue.getResolution() != null ? issue.getResolution().getName() : null,
-                        issue.getFixVersions() != null ? issue.getFixVersions().toString() : null,
-                        issue.getCreationDate().toString(), links, issue.getProject().getKey() );
-        return result;
-    }
-
-
-    public void destroy() throws IOException
-    {
-        jiraClient.close();
+        return new JarvisIssue( issue.getId(), issue.getKey(), issue.getSummary(),
+                new JarvisIssueType( issue.getIssueType().getId(), issue.getIssueType().getName() ),
+                issue.getDescription(), issue.getTimeTracking() != null ? ( issue.getTimeTracking() != null ?
+                                                                            issue.getTimeTracking()
+                                                                                 .getRemainingEstimateMinutes()
+                                                                                    != null ? issue.getTimeTracking()
+                                                                                                   .getRemainingEstimateMinutes()
+                                                                                                   .toString() : null :
+                                                                            null ) : null,
+                issue.getAssignee() != null ? issue.getAssignee().getName() : null,
+                issue.getReporter() != null ? issue.getReporter().getName() : null, issue.getComponents().toString(),
+                issue.getLabels().toString(), issue.getStatus().getName(),
+                issue.getResolution() != null ? issue.getResolution().getName() : null,
+                issue.getFixVersions() != null ? issue.getFixVersions().toString() : null,
+                issue.getCreationDate().toString(), links, issue.getProject().getKey() );
     }
 }
