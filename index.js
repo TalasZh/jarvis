@@ -23,6 +23,7 @@ const MediatorApi = require('mediator-api').MediatorApi;
 
 
 var jira;
+var mediator;
 var global_username;
 let mediator;
 
@@ -346,6 +347,8 @@ exports.main = function () {
 
 
     var panel = panels.Panel({
+        width: 500,
+        height: 300,
         contentURL: data.url("login/panel.html"),
         contentScriptFile: data.url('login/handleLogin.js'),
         onHide: function (state) {
@@ -420,16 +423,38 @@ exports.main = function () {
     });
 
 
-    panel.port.on("back-button-pressed", function () {
-        panel.contentURL = data.url("login/research.html");
-        jira.getUsersIssues(global_username, true, function (error, json) {
-            if (error != null) {
-                console.log("Could not retrieve " + username + "'s issues.");
+    panel.port.on("back-button-pressed", function (projectName) {
+        mediator.listProjectIssues( projectName, function(error, json){
+            if ( error != null ){
+                // console.log( error );
+                console.log( "Could not retrieve " + global_username + "'s issues." );
                 return;
             }
+            panel.contentURL = data.url("login/research.html");
             panel.port.emit("fill-combo-box", json);
-        });
+        });    
     });
+
+
+    panel.port.on("back-button-pressed-on-researchpage", function () {
+        mediator.listProjects(function (error, json) {
+            if (error !== null) {
+                console.log("Error: " + error);
+                return
+            }
+
+            panel.contentURL = data.url("login/selectProject.html");
+            panel.port.emit("fill-project-combobox", json);
+        });
+        
+    });
+
+
+    panel.port.on("back-button-pressed-on-project-selection-page", function () {
+        panel.contentURL = data.url("login/panel.html");
+    });
+
+
 
     var selection = require("sdk/selection");
     console.log("helladf");
@@ -440,26 +465,45 @@ exports.main = function () {
 
 
     panel.port.on("issue-selected", function (selectedIssueKey) {
-        panel.contentURL = data.url("login/issueSelected.html");
-        jira.getUsersIssues(global_username, true, function (error, json) {
+        
+        mediator.getIssue(selectedIssueKey, function(error, json){
             if (error != null) {
                 console.log("Could not retrieve " + username + "'s issues.");
                 return;
             }
-            for (var i = 0; i < json.issues.length; i++) {
-                var issue = json.issues[i];
-                if (issue.key == selectedIssueKey) {
-                    panel.port.emit("issueKey", issue);
-                    break;
-                }
-            }
-
+            panel.contentURL = data.url("login/issueSelected.html");
+            panel.port.emit("issueKey", json);
         });
     });
 
 
     panel.port.on("link-clicked", function (issueId) {
         tabs.open("http://localhost:2990/jira/browse/" + issueId);
+    });
+
+
+    panel.port.on("project-changed", function(projectKey){
+        mediator.getProject( projectKey, function(error, json ){
+            if ( error != null ){
+                console.log( error );
+                console.log( "Could not retrieve projects from JIRA." );
+                return;
+            }
+            panel.port.emit("update-project-information", json);
+        });
+    });
+
+
+    panel.port.on("project-selected", function(projectName){
+        mediator.listProjectIssues( projectName, function(error, json){
+            if ( error != null ){
+                // console.log( error );
+                console.log( "Could not retrieve " + global_username + "'s issues." );
+                return;
+            }
+            panel.contentURL = data.url("login/research.html");
+            panel.port.emit("fill-combo-box", json);
+        });     
     });
 
 
@@ -471,83 +515,21 @@ exports.main = function () {
         console.log(username + " " + password);
 
         global_username = username;
-        jira = new JiraApi('http',
-            'localhost',
-            '2990',
-            username,
-            password,
-            '2',
+
+        mediator = new MediatorApi('http',
+            'jarvis-test.critical-factor.com',
+            '8080',
+            null,
+            null,
             true);
 
-        // jira find issue
-        // jira.findIssue("JAP-1", function(error, response, json){
-        // 	if ( response === 200 ) {
-        // 		console.log( "adfadfadfadfadfadfa");
-        // 		panel.contentURL = data.url("login/research.html");
-        // 		// panel.contentScriptFile = data.url('login/test.js');
-        // 	}
-        // 	else {
-        // 		console.log( "unsuccessfful" );
-        // 	}
-        // 	if(error !== null) {
-        // 		console.log(error);
-        // 	}
-        // 	else if(json !== undefined) {
-        // 		console.log(json);
-        // 	}
-        // });
-
-        // list jira issues
-        jira.getUsersIssues(username, true, function (error, json) {
-            if (error != null) {
-                // console.log( error );
-                console.log("Could not retrieve " + username + "'s issues.");
-                return;
+        mediator.listProjects(function (error, json) {
+            if (error !== null) {
+                console.log("Error: " + error);
+                return
             }
-            panel.contentURL = data.url("login/research.html");
-            panel.contentScriptFile = data.url('login/handleLogin.js');
-            panel.port.emit("fill-combo-box", json);
+            panel.contentURL = data.url("login/selectProject.html");
+            panel.port.emit("fill-project-combobox", json);
         });
-
-        // start session
-        // jira.startSession('{"username": "admin","password": "admin"}', function(error, response, json){
-        // 	console.log(response);
-        // 	if ( response === 200 ) {
-        // 		panel.contentURL = data.url("login/research.html");
-        // 		panel.contentScriptFile = data.url('login/handleLogin.js');
-        // 		panel.port.emit("fill-combo-box", json);
-        // 	}
-        // 	else {
-        // 		console.log( "unsuccessfful" );
-        // 	}
-        // });
-
-
-        // list transitions
-        // jira.listTransitions('JAP-1',function(error, response, json){
-        // 	if ( response === 200 ) {
-        // 		console.log( "success" );
-        // 		console.log( json );
-        // 	}
-        // 	else {
-        // 		console.log( "unsuccessfful" );
-        // 	}
-        // });
-
-
-        // issue transition
-        // jira.transitionIssue('JAP-2', '{"transition":{"id":31}}', function(error, message){
-
-        // 	if(error !== null) {
-        // 		console.log(error);
-        // 	}
-        // 	if ( message === "Success" ) {
-        // 		console.log( "issue transition state is changed successfully." );
-        // 	}
-        // 	else {
-        // 		console.log( "unsuccessfful" );
-        // 	}
-        // });
-
     });
 };
