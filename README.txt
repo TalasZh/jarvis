@@ -18,3 +18,6 @@ To get started, please complete the following steps:
 
    http://appfuse.org/display/APF/AppFuse+QuickStart
 
+4. Download and install Cassandra from
+   http://cassandra.apache.org/download/
+
