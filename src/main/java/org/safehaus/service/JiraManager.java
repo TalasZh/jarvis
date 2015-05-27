@@ -26,5 +26,5 @@ public interface JiraManager
 
     JarvisIssue getIssue( String issueId );
 
-    JarvisIssue createIssue( JarvisIssue issue, String token );
+    JarvisIssue createIssue( JarvisIssue issue, String token ) throws JiraClientException;
 }

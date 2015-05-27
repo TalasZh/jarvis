@@ -28,10 +28,6 @@
   </http>
 
   <authentication-manager alias="authenticationManager">
-    <!--  <authentication-provider user-service-ref="userDao">
-          <password-encoder ref="passwordEncoder"/>
-      </authentication-provider>-->
-
     <authentication-provider ref="crowdAuthenticationProvider" />
   </authentication-manager>
 

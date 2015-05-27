@@ -95,25 +95,14 @@ public class JiraManagerImpl implements JiraManager
     {
         Issue issue = jiraClient.getIssue( issueId );
 
-        //        List<JarvisLink> links = new ArrayList<>();
-        //        for ( Iterator<IssueLink> iterator = issue.getIssueLinks().iterator(); iterator.hasNext(); )
-        //        {
-        //            IssueLink link = iterator.next();
-        //
-        //            Issue i = jiraClient.getIssue( link.getTargetIssueKey() );
-        //            links.add( new JarvisLink( link.getTargetIssueKey(), link.getIssueLinkType().getName(),
-        //                    i.getIssueType().getName() ) );
-        //        }
-
         JarvisIssue result = buildJarvisIssue( issue );
         return result;
     }
 
 
     @Override
-    public JarvisIssue createIssue( final JarvisIssue issue, String token )
+    public JarvisIssue createIssue( final JarvisIssue issue, String token ) throws JiraClientException
     {
-        logger.debug( "JarvisIssue: " + issue );
         Issue jiraIssue = jiraClient.createIssue( issue, token );
         return buildJarvisIssue( jiraIssue );
     }

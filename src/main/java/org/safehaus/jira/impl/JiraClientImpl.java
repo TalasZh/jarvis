@@ -54,6 +54,7 @@ public class JiraClientImpl implements JiraClient
     private static Logger logger = LoggerFactory.getLogger( JiraClientImpl.class );
 
     private static final String JIRA_URL = "http://test-jira.critical-factor.com";
+    private String uri;
 
     private JarvisJiraRestClient restClient;
 
@@ -71,7 +72,8 @@ public class JiraClientImpl implements JiraClient
     public JiraClientImpl( String uri, final String username, final String password )
             throws JiraClientException, URISyntaxException
     {
-        System.out.println( String.format( "Logging in to %s with username '%s'", uri, username ) );
+        logger.debug( String.format( "Logging in to %s with username '%s'", uri, username ) );
+        this.uri = uri;
         JarvisJiraRestClientFactory factory = new AsynchronousJarvisJiraRestClientFactory();
 
         restClient = factory.createWithBasicHttpAuthentication( new URI( uri ), username, password );
@@ -227,22 +229,19 @@ public class JiraClientImpl implements JiraClient
 
 
     @Override
-    public Issue createIssue( JarvisIssue jarvisIssue, String token )
+    public Issue createIssue( JarvisIssue jarvisIssue, String token ) throws JiraClientException
     {
-        logger.debug( String.format( "=================> %s %s", jarvisIssue, token ) );
         JarvisJiraRestClientFactory factory = new AsynchronousJarvisJiraRestClientFactory();
 
         JarvisJiraRestClient client = null;
         try
         {
-            client = factory.create( new URI( "http://test-jira.critical-factor.com" ),
-                    new CrowdAuthenticationHandler( token ) );
-            logger.debug( client.getMetadataClient().getServerInfo().claim().toString() );
+            client = factory.create( new URI( uri ), new CrowdAuthenticationHandler( token ) );
         }
         catch ( Exception e )
         {
             logger.debug( e.getMessage() );
-            e.printStackTrace();
+            throw new JiraClientException( e.getMessage(), e );
         }
 
         //        User assignee = restClient.getUserClient().getUser( jarvisIssue.getAssignee() ).claim();
@@ -258,26 +257,27 @@ public class JiraClientImpl implements JiraClient
         //        issueInputBuilder.setFieldValue( "assignee", assignee );
         IssueInput issueInput = issueInputBuilder.build();
         BasicIssue createdIssue = client.getIssueClient().createIssue( issueInput ).claim();
-        logger.debug( "Created issue: " + createdIssue );
 
+        logger.debug( "Created new issue: " + createdIssue.getKey() );
         Issue i = client.getIssueClient().getIssue( createdIssue.getKey() ).claim();
-//        issueInputBuilder = new IssueInputBuilder( /*jarvisIssue.getProjectKey(), jarvisIssue.getType().getId() */ );
-//        issueInputBuilder.setAssigneeName( jarvisIssue.getAssignee() );
+        //        issueInputBuilder = new IssueInputBuilder( /*jarvisIssue.getProjectKey(), jarvisIssue.getType()
+        // .getId() */ );
+        //        issueInputBuilder.setAssigneeName( jarvisIssue.getAssignee() );
 
         //        issueInputBuilder.set setFieldValue( "assignee",  new FieldInput( "name", jarvisIssue.getAssignee()
         // ) );
-//        issueInput = issueInputBuilder.build();
-//
-//        IssueInputJsonGenerator gen = new IssueInputJsonGenerator();
-//        try
-//        {
-//            logger.debug( gen.generate( issueInput ).toString() );
-//        }
-//        catch ( JSONException e )
-//        {
-//            e.printStackTrace();
-//        }
-//        client.getIssueClient().updateIssue( i.getKey(), issueInput ).claim();
+        //        issueInput = issueInputBuilder.build();
+        //
+        //        IssueInputJsonGenerator gen = new IssueInputJsonGenerator();
+        //        try
+        //        {
+        //            logger.debug( gen.generate( issueInput ).toString() );
+        //        }
+        //        catch ( JSONException e )
+        //        {
+        //            e.printStackTrace();
+        //        }
+        //        client.getIssueClient().updateIssue( i.getKey(), issueInput ).claim();
         return i;
     }
 

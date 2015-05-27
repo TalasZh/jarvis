@@ -15,8 +15,8 @@ public class JarvisIssue
 {
     private static final long serialVersionUID = 3832626162173359411L;
 
-    @JsonView( Views.JarvisIssueLong.class )
-    private String token="unknown";
+//    @JsonView( Views.JarvisIssueLong.class )
+//    private String token="unknown";
     @JsonView( Views.JarvisIssueShort.class )
     private Long id;
     @JsonView( Views.JarvisIssueShort.class )
@@ -287,18 +287,18 @@ public class JarvisIssue
         this.links = links;
     }
 
-
-    public String getToken()
-    {
-        return token;
-    }
-
-
-    public void setToken( final String token )
-    {
-        this.token = token;
-    }
-
+    //
+    //    public String getToken()
+    //    {
+    //        return token;
+    //    }
+    //
+    //
+    //    public void setToken( final String token )
+    //    {
+    //        this.token = token;
+    //    }
+    //
 
     /**
      * {@inheritDoc}

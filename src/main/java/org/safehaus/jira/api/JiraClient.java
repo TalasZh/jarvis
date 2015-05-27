@@ -38,5 +38,5 @@ public interface JiraClient
 
     List<JarvisIssue> getIssues( String projectId );
 
-    Issue createIssue( JarvisIssue issue, String token );
+    Issue createIssue( JarvisIssue issue, String token ) throws JiraClientException;
 }

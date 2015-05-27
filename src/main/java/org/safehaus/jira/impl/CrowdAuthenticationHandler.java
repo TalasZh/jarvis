@@ -31,6 +31,5 @@ public class CrowdAuthenticationHandler implements AuthenticationHandler
     {
         logger.debug( "Configuring CrowdAuthenticationHandler with token: " + crowdToken );
         request.setHeader( "Cookie", String.format( "crowd.token_key=%s", crowdToken ) );
-//        request.setAttribute( "Cookie", String.format( "crowd.token_key=%s", crowdToken ) );
     }
 }
