@@ -12,7 +12,10 @@
     <t:assets type="css"/>
     <decorator:head/>
 </head>
-<body<decorator:getProperty property="body.id" writeEntireProperty="true"/><decorator:getProperty property="body.class" writeEntireProperty="true"/>>
+<body
+    <decorator:getProperty property="body.id" writeEntireProperty="true"/>
+        <decorator:getProperty property="body.class" writeEntireProperty="true"/>
+    >
     <c:set var="currentMenu" scope="request"><decorator:getProperty property="meta.menu"/></c:set>
 
     <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -22,7 +25,12 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="<c:url value='/'/>"><fmt:message key="webapp.name"/></a>
+            <div>
+                <a href="<c:url value='/'/>">
+                <%--<fmt:message key="webapp.name"/>--%>
+                <img src="images/jarvis50.png" alt="Jarvis Logo"/>
+                </a>
+            </div>
         </div>
 
         <%@ include file="/common/menu.jsp" %>

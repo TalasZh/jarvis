@@ -8,9 +8,7 @@
   <session-factory>
     <mapping class="org.safehaus.model.User" />
     <mapping class="org.safehaus.model.Role" />
-    <!--<mapping class="org.safehaus.model.JarvisProject" />-->
-    <!--<mapping class="org.safehaus.model.Phase" />-->
-    <!--<mapping class="org.safehaus.model.JarvisIssue" />-->
+    <mapping class="org.safehaus.model.Session" />
     <mapping class="org.safehaus.model.Capture" />
   </session-factory>
 </hibernate-configuration>

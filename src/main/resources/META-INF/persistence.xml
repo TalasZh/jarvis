@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence xmlns="http://java.sun.com/xml/ns/persistence" version="1.0">
 
-    <persistence-unit name="ApplicationEntityManager" transaction-type="RESOURCE_LOCAL">
-        <provider>org.hibernate.ejb.HibernatePersistence</provider>
-        <class>org.safehaus.model.User</class>
-        <class>org.safehaus.model.Role</class>
-        <!--<class>org.safehaus.model.JarvisProject</class>-->
-        <!--<class>org.safehaus.model.Phase</class>-->
-        <!--<class>org.safehaus.model.JarvisIssue</class>-->
-        <class>org.safehaus.model.Capture</class>
-    </persistence-unit>
+  <persistence-unit name="ApplicationEntityManager" transaction-type="RESOURCE_LOCAL">
+    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <class>org.safehaus.model.User</class>
+    <class>org.safehaus.model.Role</class>
+    <class>org.safehaus.model.Session</class>
+    <class>org.safehaus.model.Capture</class>
+  </persistence-unit>
 
-    <!-- WARNING: This file's file original source is at web/common/src/main/resources/META-INF. The
-        META-INF directory is included in the jsf, spring, struts and tapestry projects using svn:externals.
-        If you need to modify this file, please do so in web/common/src/main/resources/META-INF, check it
-        in, and then "svn up" for the other modules. -->
+  <!-- WARNING: This file's file original source is at web/common/src/main/resources/META-INF. The
+      META-INF directory is included in the jsf, spring, struts and tapestry projects using svn:externals.
+      If you need to modify this file, please do so in web/common/src/main/resources/META-INF, check it
+      in, and then "svn up" for the other modules. -->
 </persistence>

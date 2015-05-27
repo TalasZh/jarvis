@@ -8,10 +8,18 @@ public class Views
 {
     public interface JarvisIssueShort {}
 
+
     public interface JarvisIssueLong extends JarvisIssueShort {}
+
 
     public interface JarvisProjectShort {}
 
+
     public interface JarvisProjectLong extends JarvisProjectShort {}
 
+
+    public interface JarvisSessionShort {}
+
+
+    public interface JarvisSessionLong extends JarvisSessionShort {}
 }
