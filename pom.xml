@@ -120,6 +120,7 @@
   </dependencies>
 
   <properties>
+    <copyright.year>2015</copyright.year>
     <amp.genericCore>true</amp.genericCore>
     <amp.fullSource>false</amp.fullSource>
     <dao.framework>hibernate</dao.framework>

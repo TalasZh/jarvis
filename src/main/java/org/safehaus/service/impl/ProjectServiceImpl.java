@@ -96,12 +96,6 @@ public class ProjectServiceImpl implements ProjectService
     {
         try
         {
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            if ( !( auth instanceof AnonymousAuthenticationToken ) )
-            {
-                UserDetails userDetails = ( UserDetails ) auth.getPrincipal();
-                logger.debug( userDetails.getUsername() );
-            }
             String token = getCookie( CROWD_TOKEN_NAME );
             return jiraManager.createIssue( issue, token );
         }

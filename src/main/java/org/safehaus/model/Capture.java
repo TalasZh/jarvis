@@ -14,16 +14,20 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.hibernate.search.annotations.DocumentId;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
@@ -34,13 +38,13 @@ public class Capture extends BaseObject implements Serializable
     private static final long serialVersionUID = 3832626162173359411L;
 
     private Long id;
-    private Long issueId;
+    private Session session;
     private Date created = new Date();
-    private Date updated = new Date();
     private String annotationText;
     private String url;
     private String ancestorId;
     private String anchorText;
+    private String comment;
 
 
     /**
@@ -65,15 +69,19 @@ public class Capture extends BaseObject implements Serializable
     }
 
 
-    public Long getIssueId()
+    @ManyToOne()
+    @JoinColumn( name = "session_id" )
+    @JsonIgnore
+    @XmlTransient
+    public Session getSession()
     {
-        return issueId;
+        return session;
     }
 
 
-    public void setIssueId( final Long issueId )
+    public void setSession( final Session session )
     {
-        this.issueId = issueId;
+        this.session = session;
     }
 
 
@@ -125,6 +133,18 @@ public class Capture extends BaseObject implements Serializable
     }
 
 
+    public String getComment()
+    {
+        return comment;
+    }
+
+
+    public void setComment( final String comment )
+    {
+        this.comment = comment;
+    }
+
+
     /**
      * {@inheritDoc}
      */
@@ -167,23 +187,10 @@ public class Capture extends BaseObject implements Serializable
     }
 
 
-    @Column( name = "updated" )
-    public Date getUpdated()
-    {
-        return updated;
-    }
-
-
-    public void setUpdated( final Date updated )
-    {
-        this.updated = updated;
-    }
-
-
     @Override
     public String toString()
     {
         return new ToStringBuilder( this ).append( "id", id ).append( "url", url ).append( "created", created )
-                                          .append( "updated", updated ).toString();
+                                          .append( "sessionId", session != null ? session.getId() : null ).toString();
     }
 }

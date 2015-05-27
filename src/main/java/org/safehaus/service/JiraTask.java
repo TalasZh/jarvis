@@ -1,25 +1,6 @@
 package org.safehaus.service;
 
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-
-import org.safehaus.jira.api.JiraClient;
-import org.safehaus.jira.api.JiraClientException;
-import org.safehaus.jira.impl.JiraClientImpl;
-import org.safehaus.model.JarvisIssue;
-import org.safehaus.model.Phase;
-import org.safehaus.model.JarvisProject;
-import org.safehaus.model.ProjectStatus;
-
-import com.atlassian.jira.rest.client.api.domain.Issue;
-import com.atlassian.jira.rest.client.api.domain.IssueLink;
-import com.atlassian.sal.api.project.ProjectManager;
-
-
 /**
  * Created by tzhamakeev on 5/14/15.
  */
