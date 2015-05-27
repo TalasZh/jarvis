@@ -103,11 +103,21 @@ public class CassandraConnector {
         StringBuilder sb = new StringBuilder();
         switch(action){
             case ADD:
-                sb.append("ALTER TABLE " + keyspace + "." + tableName + " ADD " + columnDetails);
+                sb.append("ALTER TABLE ");
+                sb.append(keyspace);
+                sb.append(".");
+                sb.append(tableName);
+                sb.append(" ADD ");
+                sb.append(columnDetails);
                 session.execute(sb.toString());
                 break;
             case DROP:
-                sb.append("ALTER TABLE " + keyspace + "." + tableName +" DROP " + columnDetails);
+                sb.append("ALTER TABLE ");
+                sb.append(keyspace);
+                sb.append(".");
+                sb.append(tableName);
+                sb.append(" DROP ");
+                sb.append(columnDetails);
                 session.execute(sb.toString());
                 break;
         }
