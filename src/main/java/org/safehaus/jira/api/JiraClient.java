@@ -3,11 +3,11 @@ package org.safehaus.jira.api;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Set;
 
 import org.safehaus.model.JarvisIssue;
 import org.safehaus.model.JarvisMember;
 
+import com.atlassian.jira.rest.client.api.domain.BasicIssue;
 import com.atlassian.jira.rest.client.api.domain.Component;
 import com.atlassian.jira.rest.client.api.domain.Issue;
 import com.atlassian.jira.rest.client.api.domain.Project;
@@ -34,7 +34,9 @@ public interface JiraClient
 
     public void close() throws IOException;
 
-    public List<JarvisMember> getProjectMemebers(String projectId) throws JiraClientException;
+    public List<JarvisMember> getProjectMemebers( String projectId ) throws JiraClientException;
 
     List<JarvisIssue> getIssues( String projectId );
+
+    Issue createIssue( JarvisIssue issue, String token ) throws JiraClientException;
 }

@@ -4,10 +4,14 @@ package org.safehaus.service;
 import java.util.List;
 
 import javax.jws.WebService;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriInfo;
 
 import org.safehaus.jira.api.JiraClientException;
 import org.safehaus.model.JarvisIssue;
@@ -40,6 +44,11 @@ public interface ProjectService
     @Path( "issues/{issueId}" )
     @JsonView( Views.JarvisIssueLong.class )
     JarvisIssue getIssue( @PathParam( "issueId" ) String issueId );
+
+    @POST
+    @Path( "issues" )
+    @Consumes( MediaType.APPLICATION_JSON )
+    JarvisIssue createIssue( JarvisIssue issue );
 
     //    @GET
     //    @Path( "status/{projectId}" )

@@ -15,6 +15,11 @@ public class JarvisLink
     private String type;
 
 
+    public JarvisLink()
+    {
+    }
+
+
     public JarvisLink( final String key, final String linkType, final String type )
     {
         this.key = key;
