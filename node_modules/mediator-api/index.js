@@ -94,7 +94,7 @@ MediatorApi.prototype.listProjects = function (callback) {
             return;
         }
         if (response.status !== 200) {
-            callback(response.statusText + ": something is definetly wrong " + response.text);
+            callback(response.statusText + ": something is definitely wrong " + response.text);
             return;
         }
         callback(null, response.json);
@@ -113,7 +113,7 @@ MediatorApi.prototype.getProject = function (projectKey, callback) {
             return;
         }
         if (response.status !== 200) {
-            callback(response.statusText + ": something is definetly wrong");
+            callback(response.statusText + ": something is definitely wrong " + response.text);
             return;
         }
         callback(null, response.json);
@@ -132,7 +132,7 @@ MediatorApi.prototype.listProjectIssues = function (projectKey, callback) {
             return;
         }
         if (response.status !== 200) {
-            callback(response.statusText + ": something is definetly wrong");
+            callback(response.statusText + ": something is definitely wrong " + response.text);
             return;
         }
         callback(null, response.json);
@@ -152,7 +152,7 @@ MediatorApi.prototype.getIssue = function (issueKey, callback) {
             return;
         }
         if (response.status !== 200) {
-            callback(response.statusText + ": something is definetly wrong");
+            callback(response.statusText + ": something is definitely wrong " + response.text);
             return;
         }
         callback(null, response.json);
@@ -172,7 +172,7 @@ MediatorApi.prototype.createIssue = function (issue, callback) {
             return;
         }
         if (response.status !== 201) {
-            callback(response.statusText + ": something is definetly wrong");
+            callback(response.statusText + ": something is definitely wrong " + response.text);
             return;
         }
         callback(null, response.json);
@@ -191,7 +191,7 @@ MediatorApi.prototype.listSessions = function (callback) {
             return;
         }
         else if (response.status !== 200) {
-            callback("Something definitely is wrong(");
+            callback(response.statusText + ": something definitely is wrong( " + response.text);
             return;
         }
         callback(null, response.json);
@@ -209,17 +209,21 @@ MediatorApi.prototype.getSession = function (sessionsKey, callback) {
             callback(response.statusText + " : doesn't exist");
             return;
         }
+        if (response.status === 404){
+            callback(null, null);
+            return;
+        }
         else if (response.status !== 200) {
-            callback("Something definitely is wrong(");
+            callback(response.statusText + ": something definitely is wrong( " + response.text);
             return;
         }
         callback(null, response.json);
     }, "GET");
 };
 
-MediatorApi.prototype.listSessionCapture = function (sessionKey, callback) {
+MediatorApi.prototype.listSessionCaptures = function (sessionKey, callback) {
     var options = {
-        url: this.makeUri("/sessions/" + sessionKey + "/captures"),
+        url: this.makeUri("/sessions/" + sessionKey + "/capture"),
         anonymous: this.strictSSL
     };
 
@@ -229,7 +233,7 @@ MediatorApi.prototype.listSessionCapture = function (sessionKey, callback) {
             return;
         }
         else if (response.status !== 200) {
-            callback("Something definitely is wrong(");
+            callback(response.statusText + ": something definitely is wrong( " + response.text);
             return;
         }
         callback(null, response.json);
@@ -238,7 +242,7 @@ MediatorApi.prototype.listSessionCapture = function (sessionKey, callback) {
 
 MediatorApi.prototype.saveCapture = function (sessionKey, capture, callback) {
     var options = {
-        url: this.makeUri("/sessions/" + sessionKey + "/captures"),
+        url: this.makeUri("/sessions/" + sessionKey + "/capture"),
         content: JSON.stringify(capture),
         anonymous: this.strictSSL
     };
@@ -249,7 +253,7 @@ MediatorApi.prototype.saveCapture = function (sessionKey, capture, callback) {
             return;
         }
         else if (response.status !== 200) {
-            callback("Something definitely is wrong(");
+            callback(response.statusText + ": something definitely is wrong( " + response.text);
             return;
         }
         callback(null, response.json);
@@ -258,7 +262,7 @@ MediatorApi.prototype.saveCapture = function (sessionKey, capture, callback) {
 
 MediatorApi.prototype.updateCapture = function (sessionKey, capture, callback) {
     var options = {
-        url: this.makeUri("/sessions/" + sessionKey + "/captures/" + capture.id),
+        url: this.makeUri("/sessions/" + sessionKey + "/capture/" + capture.id),
         content: JSON.stringify(capture),
         anonymous: this.strictSSL
     };
@@ -269,7 +273,7 @@ MediatorApi.prototype.updateCapture = function (sessionKey, capture, callback) {
             return;
         }
         else if (response.status !== 200) {
-            callback("Something definitely is wrong(");
+            callback(response.statusText + ": something definitely is wrong( " + response.text);
             return;
         }
         callback(null, "Success");
@@ -278,7 +282,7 @@ MediatorApi.prototype.updateCapture = function (sessionKey, capture, callback) {
 
 MediatorApi.prototype.deleteCapture = function (sessionKey, capture, callback) {
     var options = {
-        url: this.makeUri("/sessions/" + sessionKey + "/captures/" + capture.id),
+        url: this.makeUri("/sessions/" + sessionKey + "/capture/" + capture.id),
         anonymous: this.strictSSL
     };
 
@@ -288,7 +292,7 @@ MediatorApi.prototype.deleteCapture = function (sessionKey, capture, callback) {
             return;
         }
         else if (response.status !== 200) {
-            callback("Something definitely is wrong(");
+            callback(response.statusText + ": something definitely is wrong( " + response.text);
             return;
         }
         callback(null, "Success");
@@ -307,7 +311,7 @@ MediatorApi.prototype.startSession = function (sessionKey, callback) {
             return;
         }
         else if (response.status !== 200) {
-            callback("Something definitely is wrong(");
+            callback(response.statusText + ": something definitely is wrong( " + response.text);
             return;
         }
         callback(null, response.json);
@@ -326,7 +330,7 @@ MediatorApi.prototype.stopSession = function (sessionKey, callback) {
             return;
         }
         else if (response.status !== 200) {
-            callback("Something definitely is wrong(");
+            callback(response.statusText + ": something definitely is wrong( " + response.text);
             return;
         }
         callback(null, response.json);
@@ -345,7 +349,7 @@ MediatorApi.prototype.pauseSession = function (sessionKey, callback) {
             return;
         }
         else if (response.status !== 200) {
-            callback("Something definitely is wrong(");
+            callback(response.statusText + ": something definitely is wrong( " + response.text);
             return;
         }
         callback(null, response.json);

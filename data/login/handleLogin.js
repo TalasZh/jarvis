@@ -7,7 +7,7 @@ if ( loginButton !== null ){
 		self.port.emit("handle-login", username.value, password.value );
 		// username.value = '';
 		// password.value = '';
-	};	
+	};
 }
 
 
@@ -22,7 +22,7 @@ if ( annotator !== null ){
 		else{
 			annotator.className = "btn btn-primary btn-sm";
 		}
- 
+
 		if(event.button == 0 && event.shiftKey == false){
 			self.port.emit('left-click');
 			// if ( annotator.value == "Enable Annotator" ){
@@ -30,7 +30,7 @@ if ( annotator !== null ){
 		 //    }
 		 //    else {
 		 //      annotator.value = "Enable Annotator";
-			// }	
+			// }
 		}
 
 		if(event.button == 2 || (event.button == 0 && event.shiftKey == true)){
@@ -43,30 +43,10 @@ if ( annotator !== null ){
 }
 
 
-var startStop = document.getElementById("startStop");
-if ( startStop !== null ){
-	startStop.addEventListener("click", function() {
-		var x = document.getElementById("issueNumber"); 
-		var selectValue=x.innerHTML;
-		console.log( selectValue );
-	    if ( startStop.value === "Start" ){
-	      startStop.value = "Stop";
-	      console.log( "Session started for " + selectValue + " at time : " + getDateTime() );
-	      self.port.emit("start-progress", selectValue);
-	    }
-	    else {
-	      startStop.value = "Start";
-	      console.log( "Session stopped for " + selectValue + " at time : " + getDateTime() );
-	      self.port.emit("stop-progress", selectValue);
-	    }
-	}, false);
-}
-
-
 var selectProject = document.getElementById("selectProject");
 if ( selectProject !== null ){
 	selectProject.addEventListener("click", function() {
-		var x = document.getElementById("selectProjectCombobox"); 
+		var x = document.getElementById("selectProjectCombobox");
 		var selectIndex=x.selectedIndex;
 		var selectValue=x.options[selectIndex].text;
 		self.port.emit("project-selected", selectValue);
@@ -78,7 +58,7 @@ if ( selectProject !== null ){
 var selectIssue = document.getElementById("selectIssue");
 if ( selectIssue !== null ){
 	selectIssue.addEventListener("click", function() {
-		var x = document.getElementById("issueCombobox"); 
+		var x = document.getElementById("issueCombobox");
 		var selectIndex=x.selectedIndex;
 		var selectValue=x.options[selectIndex].text;
 		self.port.emit("issue-selected", selectValue);
@@ -86,61 +66,44 @@ if ( selectIssue !== null ){
 }
 
 
-var pauseResume = document.getElementById("pauseResume");
-if ( pauseResume !== null ){
-	pauseResume.addEventListener("click", function() {
-		if ( pauseResume.value === "Pause" ){
-		  pauseResume.value = "Resume";
-		  startStop.disabled = true;
-		  console.log( getDateTime() );
-		}
-		else {
-		  pauseResume.value = "Pause";
-		  startStop.disabled = false;
-		  console.log( getDateTime() );
-		}
-	}, false);	
-}
-  
-
 var backButton = document.getElementById("backButton");
 if ( backButton !== null ){
 	backButton.onclick = function(event) {
-		var x = document.getElementById("issueNumber").innerHTML; 
+		var x = document.getElementById("issueNumber").innerHTML;
 		var y = x.substr(0, x.indexOf('-'));
 		self.port.emit("back-button-pressed", y );
-	};	
+	};
 }
 
 var backButtonOnResearchPage = document.getElementById("backButtonOnResearchPage");
 if ( backButtonOnResearchPage !== null ){
 	backButtonOnResearchPage.onclick = function(event) {
 		self.port.emit("back-button-pressed-on-researchpage" );
-	};	
+	};
 }
 
 var backButtonOnProjectSelectionPage = document.getElementById("backButtonOnProjectSelectionPage");
 if ( backButtonOnProjectSelectionPage !== null ){
 	backButtonOnProjectSelectionPage.onclick = function(event) {
 		self.port.emit("back-button-pressed-on-project-selection-page" );
-	};	
+	};
 }
 
 
 function getDateTime() {
-  var now     = new Date(); 
+  var now     = new Date();
   var year    = now.getFullYear();
-  var month   = now.getMonth()+1; 
+  var month   = now.getMonth()+1;
   var day     = now.getDate();
   var hour    = now.getHours();
   var minute  = now.getMinutes();
-  var second  = now.getSeconds(); 
+  var second  = now.getSeconds();
   if(month.toString().length == 1) {
       var month = '0'+month;
   }
   if(day.toString().length == 1) {
       var day = '0'+day;
-  }   
+  }
   if(hour.toString().length == 1) {
       var hour = '0'+hour;
   }
@@ -149,31 +112,25 @@ function getDateTime() {
   }
   if(second.toString().length == 1) {
       var second = '0'+second;
-  }   
-  var dateTime = year+'/'+month+'/'+day+' '+hour+':'+minute+':'+second;   
+  }
+  var dateTime = year+'/'+month+'/'+day+' '+hour+':'+minute+':'+second;
    return dateTime;
 }
 
 
 // fill out combo box options
 function fillComboBox(json) {
-	var x = document.getElementById("issueCombobox"); 
+	var x = document.getElementById("issueCombobox");
 	x.onchange = function(event) {
 		var selectIndex=x.selectedIndex;
 		var selectValue=x.options[selectIndex].text;
-		if ( getIssueState(json, selectValue ) == "To Do" ){
-			startStop.value = "Start";
-		}
-		else{
-			startStop.value = "Stop";
-		}
-		console.log( selectValue + " : " + getIssueState(json, selectValue ));
+		console.log( selectValue + " : " + JSON.stringify(json));
 	};
 
 	console.log( json.size );
 	for (var i = 0; i < json.length; i++) {
 	    var issue = json[i];
-	    var option = document.createElement("option");	
+	    var option = document.createElement("option");
 	  	option.text = issue.key;
 	  	x.add(option);
 	}
@@ -181,8 +138,8 @@ function fillComboBox(json) {
 
 // fill out projects combo box options
 function fillProjectCombobox(json) {
-
-	var x = document.getElementById("selectProjectCombobox"); 
+	console.log("Fill Project Combobox");
+	var x = document.getElementById("selectProjectCombobox");
 	x.onchange = function(event) {
 		var selectIndex=x.selectedIndex;
 		var selectValue=x.options[selectIndex].text;
@@ -193,13 +150,13 @@ function fillProjectCombobox(json) {
 
 	for (var i = 0; i < json.length; i++) {
 	    var project = json[i];
-	    var option = document.createElement("option");	
+	    var option = document.createElement("option");
   		option.text = project.key;
   		x.add(option);
   		console.log( project.key );
   		// self.port.emit("project-changed", project.key);
 	}
-	
+
 }
 
 function updateProjectInfo(json) {
@@ -226,29 +183,12 @@ self.port.on("update-project-information", function(json){
 	updateProjectInfo(json);
 });
 
-self.port.on("issueKey", function( issue ){
-	if ( issue.status == "To Do" ){
-		startStop.value = "Start";
-	}
-	else{
-		startStop.value = "Stop";
-	}
-	var x = document.getElementById("issueNumber"); 
-	x.innerHTML = issue.key;
-
-	document.getElementById("summary").innerHTML = issue.summary;
-	document.getElementById("issueLink").innerHTML = x.innerHTML;
-	document.getElementById("status").innerHTML = issue.status;
-	document.getElementById("type").innerHTML = issue.type;
-	// document.getElementById("priority").innerHTML = issue.fields.priority.name;
-});
-
 
 var issueLink = document.getElementById("issueLink");
 if ( issueLink !== null ){
 	issueLink.onclick = function(event) {
 		self.port.emit("link-clicked", issueLink.innerHTML );
-	};	
+	};
 }
 
 
