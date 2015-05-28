@@ -101,9 +101,9 @@ MediatorApi.prototype.listProjects = function (callback) {
     }, "GET");
 };
 
-MediatorApi.prototype.getProject = function (projectId, callback) {
+MediatorApi.prototype.getProject = function (projectKey, callback) {
     var options = {
-        url: this.makeUri("/projects/" + projectId),
+        url: this.makeUri("/projects/" + projectKey),
         anonymous: this.strictSSL
     };
 
@@ -120,9 +120,9 @@ MediatorApi.prototype.getProject = function (projectId, callback) {
     }, "GET");
 };
 
-MediatorApi.prototype.listProjectIssues = function (projectId, callback) {
+MediatorApi.prototype.listProjectIssues = function (projectKey, callback) {
     var options = {
-        url: this.makeUri("/projects/" + projectId + "/issues"),
+        url: this.makeUri("/projects/" + projectKey + "/issues"),
         anonymous: this.strictSSL
     };
 
@@ -140,9 +140,9 @@ MediatorApi.prototype.listProjectIssues = function (projectId, callback) {
 };
 
 
-MediatorApi.prototype.getIssue = function (issueId, callback) {
+MediatorApi.prototype.getIssue = function (issueKey, callback) {
     var options = {
-        url: this.makeUri("/issues/" + issueId),
+        url: this.makeUri("/issues/" + issueKey),
         anonymous: this.strictSSL
     };
 
@@ -176,122 +176,176 @@ MediatorApi.prototype.createIssue = function (issue, callback) {
             return;
         }
         callback(null, response.json);
-    }, "GET");
+    }, "POST");
 };
 
-MediatorApi.prototype.listIssueCaptures = function (issueId, callback) {
+MediatorApi.prototype.listSessions = function (callback) {
     var options = {
-        url: this.makeUri("/issues/" + issueId + "/capture"),
+        url: this.makeUri("/sessions"),
         anonymous: this.strictSSL
     };
 
     this.doRequest(options, function (response) {
         if (response.status === 400) {
-            callback(response.statusText + ": doesn't exist");
+            callback(response.statusText + " : doesn't exist");
             return;
         }
-        if (response.status !== 200) {
-            callback(response.statusText + ": something is definetly wrong");
+        else if (response.status !== 200) {
+            callback("Something definitely is wrong(");
             return;
         }
         callback(null, response.json);
     }, "GET");
 };
 
-
-MediatorApi.prototype.saveCapture = function (issueId, capture, callback) {
+MediatorApi.prototype.getSession = function (sessionsKey, callback) {
     var options = {
-        url: this.makeUri("/issues/" + issueId + "/capture"),
-        anonymous: this.strictSSL,
-        content: JSON.stringify(capture)
+        url: this.makeUri("/sessions/" + sessionsKey),
+        anonymous: this.strictSSL
     };
 
     this.doRequest(options, function (response) {
         if (response.status === 400) {
-            callback(response.statusText + ": doesn't exist");
+            callback(response.statusText + " : doesn't exist");
             return;
         }
-        if (response.status !== 201) {
-            callback(response.statusText + ": something is definetly wrong");
+        else if (response.status !== 200) {
+            callback("Something definitely is wrong(");
+            return;
+        }
+        callback(null, response.json);
+    }, "GET");
+};
+
+MediatorApi.prototype.listSessionCapture = function (sessionKey, callback) {
+    var options = {
+        url: this.makeUri("/sessions/" + sessionKey + "/captures"),
+        anonymous: this.strictSSL
+    };
+
+    this.doRequest(options, function (response) {
+        if (response.status === 400) {
+            callback(response.statusText + " : doesn't exist");
+            return;
+        }
+        else if (response.status !== 200) {
+            callback("Something definitely is wrong(");
+            return;
+        }
+        callback(null, response.json);
+    }, "GET");
+};
+
+MediatorApi.prototype.saveCapture = function (sessionKey, capture, callback) {
+    var options = {
+        url: this.makeUri("/sessions/" + sessionKey + "/captures"),
+        content: JSON.stringify(capture),
+        anonymous: this.strictSSL
+    };
+
+    this.doRequest(options, function (response) {
+        if (response.status === 400) {
+            callback(response.statusText + " : doesn't exist");
+            return;
+        }
+        else if (response.status !== 200) {
+            callback("Something definitely is wrong(");
             return;
         }
         callback(null, response.json);
     }, "POST");
 };
 
-
-MediatorApi.prototype.startSession = function (issueId, callback) {
+MediatorApi.prototype.updateCapture = function (sessionKey, capture, callback) {
     var options = {
-        url: this.makeUri("/issues/" + issueId + "/capture/start"),
+        url: this.makeUri("/sessions/" + sessionKey + "/captures/" + capture.id),
+        content: JSON.stringify(capture),
         anonymous: this.strictSSL
     };
 
     this.doRequest(options, function (response) {
         if (response.status === 400) {
-            callback(response.statusText + ": doesn't exist");
+            callback(response.statusText + " : doesn't exist");
             return;
         }
-        if (response.status !== 200) {
-            callback(response.statusText + ": something is definetly wrong");
+        else if (response.status !== 200) {
+            callback("Something definitely is wrong(");
+            return;
+        }
+        callback(null, "Success");
+    }, "PUT");
+};
+
+MediatorApi.prototype.deleteCapture = function (sessionKey, capture, callback) {
+    var options = {
+        url: this.makeUri("/sessions/" + sessionKey + "/captures/" + capture.id),
+        anonymous: this.strictSSL
+    };
+
+    this.doRequest(options, function (response) {
+        if (response.status === 400) {
+            callback(response.statusText + " : doesn't exist");
+            return;
+        }
+        else if (response.status !== 200) {
+            callback("Something definitely is wrong(");
+            return;
+        }
+        callback(null, "Success");
+    }, "DELETE");
+};
+
+MediatorApi.prototype.startSession = function (sessionKey, callback) {
+    var options = {
+        url: this.makeUri("/sessions/" + sessionKey + "/start"),
+        anonymous: this.strictSSL
+    };
+
+    this.doRequest(options, function (response) {
+        if (response.status === 400) {
+            callback(response.statusText + " : doesn't exist");
+            return;
+        }
+        else if (response.status !== 200) {
+            callback("Something definitely is wrong(");
             return;
         }
         callback(null, response.json);
     }, "PUT");
 };
 
-MediatorApi.prototype.stopSession = function (issueId, callback) {
+MediatorApi.prototype.stopSession = function (sessionKey, callback) {
     var options = {
-        url: this.makeUri("/issues/" + issueId + "/capture/stop"),
+        url: this.makeUri("/sessions/" + sessionKey + "/stop"),
         anonymous: this.strictSSL
     };
 
     this.doRequest(options, function (response) {
         if (response.status === 400) {
-            callback(response.statusText + ": doesn't exist");
+            callback(response.statusText + " : doesn't exist");
             return;
         }
-        if (response.status !== 200) {
-            callback(response.statusText + ": something is definetly wrong");
+        else if (response.status !== 200) {
+            callback("Something definitely is wrong(");
             return;
         }
         callback(null, response.json);
     }, "PUT");
 };
 
-
-MediatorApi.prototype.pauseSession = function (issueId, callback) {
+MediatorApi.prototype.pauseSession = function (sessionKey, callback) {
     var options = {
-        url: this.makeUri("/issues/" + issueId + "/capture/pause"),
+        url: this.makeUri("/sessions/" + sessionKey + "/pause"),
         anonymous: this.strictSSL
     };
 
     this.doRequest(options, function (response) {
         if (response.status === 400) {
-            callback(response.statusText + ": doesn't exist");
+            callback(response.statusText + " : doesn't exist");
             return;
         }
-        if (response.status !== 200) {
-            callback(response.statusText + ": something is definetly wrong");
-            return;
-        }
-        callback(null, response.json);
-    }, "PUT");
-};
-
-
-MediatorApi.prototype.getSessionStatus = function (issueId, callback) {
-    var options = {
-        url: this.makeUri("/issues/" + issueId + "/capture/status"),
-        anonymous: this.strictSSL
-    };
-
-    this.doRequest(options, function (response) {
-        if (response.status === 400) {
-            callback(response.statusText + ": doesn't exist");
-            return;
-        }
-        if (response.status !== 200) {
-            callback(response.statusText + ": something is definetly wrong");
+        else if (response.status !== 200) {
+            callback("Something definitely is wrong(");
             return;
         }
         callback(null, response.json);

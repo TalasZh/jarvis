@@ -1,4 +1,4 @@
-*.xpi
+#*.xpi
 vagrant/.vagrant
 .idea
 
@@ -29,4 +29,6 @@ build/Release
 
 # Dependency directory
 # https://docs.npmjs.com/misc/faq#should-i-check-my-node-modules-folder-into-git
-node_modules
+
+# Temporarily need to comment this out
+#node_modules
