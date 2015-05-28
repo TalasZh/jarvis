@@ -13,6 +13,8 @@ var { ToggleButton } = require('sdk/ui/button/toggle');
 var self = require("sdk/self");
 var {Cc, Ci, Cu} = require("chrome");
 var system = require("sdk/system");
+var  cm = require("sdk/context-menu");
+
 let { search } = require("sdk/places/history");
 
 const { pathFor } = require('sdk/system');
@@ -20,6 +22,10 @@ const path = require('sdk/fs/path');
 const file = require('sdk/io/file');
 const JiraApi = require('jira-module').JiraApi;
 const MediatorApi = require('mediator-api').MediatorApi;
+
+const urls = require("sdk/url");
+const clipboard = require("sdk/clipboard");
+
 
 
 var jira;
@@ -113,13 +119,23 @@ function getUserIssues(jira, username) {
 }
 
 
+function selectionChanged(event){
+    //todo: check for selection.isContiguous
+    selectedText = selection.text;
+}
+
+
 exports.main = function () {
+
+    tabs.open("https://wiki.ubuntu.com/");
+
+
 
     var selector = pageMod.PageMod({
         include: ['*'],
         contentScriptWhen: 'ready',
         contentScriptFile: [data.url('jquery-2.1.3.min.js'),
-            data.url('selector.js')],
+                            data.url('selector.js')],
 
         onAttach: function (worker) {
             // console.log(jira);
@@ -137,6 +153,7 @@ exports.main = function () {
             });
         }
     });
+
 
     var annotationEditor = panels.Panel({
         width: 220,
@@ -156,12 +173,29 @@ exports.main = function () {
         }
     });
 
+
+    cm.Item({
+        label: "Annotate",
+        image: self.data.url("icon-16.png"),
+        context: [cm.SelectionContext()],
+        contentScriptFile: [data.url('jquery-2.1.3.min.js'),
+                            data.url('login/jontext.js')],
+        onMessage: function (data) {
+            console.log( "Selected text : "  +  data );
+            if ( annotatorIsOn ){
+                onAttachWorker(annotationEditor, data);
+                annotationEditor.show();
+            }
+        }
+    });
+
+
     var annotationList = panels.Panel({
         width: 420,
         height: 200,
         contentURL: data.url('list/annotation-list.html'),
         contentScriptFile: [data.url('jquery-2.1.3.min.js'),
-            data.url('list/annotation-list.js')],
+                            data.url('list/annotation-list.js')],
         contentScriptWhen: 'ready',
         onShow: function () {
             this.postMessage(simpleStorage.storage.annotations);
@@ -171,11 +205,12 @@ exports.main = function () {
         }
     });
 
+
     var matcher = pageMod.PageMod({
         include: ['*'],
         contentScriptWhen: 'ready',
         contentScriptFile: [data.url('jquery-2.1.3.min.js'),
-            data.url('matcher.js')],
+                            data.url('matcher.js')],
         onAttach: function (worker) {
             if (simpleStorage.storage.annotations) {
                 worker.postMessage(simpleStorage.storage.annotations);
@@ -524,11 +559,4 @@ exports.main = function () {
             panel.port.emit("fill-project-combobox", json);
         });
     });
-
-    var selection = require("sdk/selection");
-    console.log("helladf");
-    if (selection.text) {
-        console.log(selection.text);
-        console.log("adfasdf");
-    }
 };
