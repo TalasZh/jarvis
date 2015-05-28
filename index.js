@@ -50,7 +50,7 @@ const init = () => {
 
 
 if (!simpleStorage.storage.annotations)
-    simpleStorage.storage.annotations = [];
+    simpleStorage.storage.annotations = {};
 
 simpleStorage.on("OverQuota", function () {
     notifications.notify({
@@ -62,15 +62,25 @@ simpleStorage.on("OverQuota", function () {
 });
 
 function Annotation(annotationText, anchor) {
-    this.annotationText = annotationText;
+    this.comment = annotationText;
     this.url = anchor[0];
     this.ancestorId = anchor[1];
     this.anchorText = anchor[2];
 }
 
-function handleNewAnnotation(annotationText, anchor) {
+function handleNewAnnotation(annotationText, anchor, sessionKey) {
     var newAnnotation = new Annotation(annotationText, anchor);
-    simpleStorage.storage.annotations.push(newAnnotation);
+
+    mediator.saveCapture(sessionKey, newAnnotation, function (error, json) {
+        if (error) {
+            console.error("Error : " + error);
+        }
+        else {
+            console.log(JSON.stringify(json));
+            let captureId = json.id;
+            simpleStorage.storage.annotations.captureId = json;
+        }
+    });
     updateMatchers();
 }
 
@@ -111,7 +121,7 @@ function getUserIssues(jira, username) {
     jira.getUsersIssues(username, true, function (error, json) {
         if (error != null) {
             // console.log( error );
-            console.log("Could not retrieve " + username + "'s issues.");
+            console.error("Could not retrieve " + username + "'s issues.");
             return;
         }
         return json;
@@ -126,11 +136,9 @@ function selectionChanged(event){
 
 
 exports.main = function () {
-
     tabs.open("https://wiki.ubuntu.com/");
 
-
-
+    var currentIssueKey = "";
     var selector = pageMod.PageMod({
         include: ['*'],
         contentScriptWhen: 'ready',
@@ -164,7 +172,8 @@ exports.main = function () {
             if (annotationText) {
                 console.log(this.annotationAnchor);
                 console.log(annotationText);
-                handleNewAnnotation(annotationText, this.annotationAnchor);
+                console.log(currentIssueKey);
+                handleNewAnnotation(annotationText, this.annotationAnchor, currentIssueKey);
             }
             annotationEditor.hide();
         },
@@ -254,11 +263,12 @@ exports.main = function () {
                 init();
                 mediator.getIssue("JAR-2", function (error, json) {
                     if (error !== null) {
-                        console.log("Error: " + error);
+                        console.error("Error: " + error);
                     }
                     else if (json !== undefined) {
                         console.log("Response: " + JSON.stringify(json));
                         issueView.port.emit('set-issue', json);
+                        currentIssueKey = json.key;
                     }
                 });
                 issueView.show({
@@ -289,11 +299,12 @@ exports.main = function () {
         console.log("SelectedIssueKey: " + issueKey);
         mediator.getIssue(issueKey, function (error, json) {
             if (error !== null) {
-                console.log("Error: " + error);
+                console.error("Error: " + error);
             }
             else if (json !== undefined) {
                 console.log("Response: " + JSON.stringify(json));
                 issueView.port.emit('set-issue', json);
+                currentIssueKey = json.key;
             }
         });
     });
@@ -354,22 +365,13 @@ exports.main = function () {
 
     panel.port.on("stop-progress", function (issueId) {
         console.log("Stop progress.");
-        var transitionJson = {
-            transition: {
-                id: 31
-            }
-        };
-        jira.transitionIssue(issueId, transitionJson, function (error, message) {
-
-            if (error !== null) {
-                console.log(error);
-            }
-
-            if (message === "Success") {
-                console.log("issue transition state is changed successfully.");
+        mediator.stopSession(issueId, function(error, json){
+            if (error) {
+                console.error("Error: " + error);
             }
             else {
-                console.log("unsuccessfful");
+                console.log("Session stopped for Research: " + issueId);
+                panel.port.emit('set-session', json);
             }
         });
     });
@@ -377,25 +379,29 @@ exports.main = function () {
 
     panel.port.on("start-progress", function (issueId) {
         console.log("Start progress.");
-        var transitionJson = {
-            transition: {
-                id: 11
-            }
-        };
-        jira.transitionIssue(issueId, transitionJson, function (error, message) {
-
-            if (error !== null) {
-                console.log(error);
-            }
-
-            if (message === "Success") {
-                console.log("issue transition state is changed successfully.");
+        mediator.startSession(issueId, function (error, json) {
+            if (error) {
+                console.error("Error: " + error);
             }
             else {
-                console.log("unsuccessfful");
+                console.log("Session started for Research: " + issueId);
+                panel.port.emit('set-session', json);
             }
         });
 
+    });
+
+    panel.port.on('pause-session', function(sessionKey){
+        console.log("Pause session.");
+        mediator.pauseSession(sessionKey, function(error, json){
+            if (error) {
+                console.error("Error: " + error);
+            }
+            else {
+                console.log("Session paused for Research: " + sessionKey);
+                panel.port.emit("set-session", json);
+            }
+        });
     });
 
 
@@ -414,7 +420,7 @@ exports.main = function () {
         mediator.listProjectIssues(projectName, function (error, json) {
             if (error != null) {
                 // console.log( error );
-                console.log("Could not retrieve " + global_username + "'s issues.");
+                console.error("Could not retrieve " + global_username + "'s issues.");
                 return;
             }
             panel.contentURL = data.url("login/research.html");
@@ -426,7 +432,7 @@ exports.main = function () {
     panel.port.on("back-button-pressed-on-researchpage", function () {
         mediator.listProjects(function (error, json) {
             if (error !== null) {
-                console.log("Error: " + error);
+                console.error("Error: " + error);
                 return
             }
 
@@ -441,29 +447,18 @@ exports.main = function () {
     });
 
 
-    //panel.port.on("issue-selected", function (selectedIssueKey) {
-    //
-    //    mediator.getIssue(selectedIssueKey, function(error, json){
-    //        if (error != null) {
-    //            console.log("Could not retrieve " + username + "'s issues.");
-    //            return;
-    //        }
-    //        panel.contentURL = data.url("login/issueSelected.html");
-    //        panel.port.emit("issueKey", json);
-    //    });
-    //});
-
     /**
      * Event triggered when issues was selected from combo box
      */
     panel.port.on("issue-selected", function (selectedIssueKey) {
         mediator.getIssue(selectedIssueKey, function (error, json) {
             if (error !== null) {
-                console.log(error + ": Could not retrieve " + "'s issues.");
+                console.error(error + ": Could not retrieve " + "'s issues.");
                 return;
             }
             panel.contentURL = data.url("issue-view/issue-view.html");
             panel.port.emit("set-issue", json);
+            currentIssueKey = json.key;
         });
     });
 
@@ -475,32 +470,49 @@ exports.main = function () {
 
         mediator.getIssue(issueKey, function (error, json) {
             if (error !== null) {
-                console.log("Error: " + error);
+                console.error("Error: " + error);
             }
             else if (json !== undefined) {
 
                 console.log("Response: " + JSON.stringify(json));
                 panel.port.emit('set-issue', json);
+                currentIssueKey = json.key;
             }
         });
     });
 
     /**
-     * Function for retrieving sessions annotations
+     * Get session full information, returns null if session wasn't started yet
      */
-    panel.port.on('get-annotations', function (issueKey) {
-
-        let annotations = [
-            {
-                id: 1,
-                issueId: issueKey,
-                url: "http://getbootstrap.com/components/#glyphicons",
-                comment: "This is awesome resource",
-                ancestorId: "",
-                anchorText: "sdfgsewrysdfbsdf sdrtyse"
+    panel.port.on('get-session', function (sessionKey) {
+        mediator.getSession(sessionKey, function (error, json) {
+            if (error) {
+                console.error("Error: " + error);
             }
-        ];
-        panel.port.emit('set-annotations', annotations);
+            else if (json) {
+                console.log(JSON.stringify(json));
+                panel.port.emit('set-session', json);
+            }
+            else {
+                console.warn("Session doesn't exist for sessionKey: " + sessionKey);
+                panel.port.emit("set-session", null);
+            }
+        });
+    });
+
+    /**
+     * Function for retrieving session annotations
+     */
+    panel.port.on('get-annotations', function (sessionKey) {
+
+        mediator.listSessionCaptures(sessionKey, function (error, json) {
+            if (error) {
+                console.error("Error: " + error);
+            }
+            else {
+                panel.port.emit('set-annotations', json);
+            }
+        });
     });
 
 
@@ -512,8 +524,8 @@ exports.main = function () {
     panel.port.on("project-changed", function (projectKey) {
         mediator.getProject(projectKey, function (error, json) {
             if (error != null) {
-                console.log(error);
-                console.log("Could not retrieve projects from JIRA.");
+                console.error(error);
+                console.error("Could not retrieve projects from JIRA.");
                 return;
             }
             panel.port.emit("update-project-information", json);
@@ -525,7 +537,7 @@ exports.main = function () {
         mediator.listProjectIssues(projectName, function (error, json) {
             if (error != null) {
                 // console.log( error );
-                console.log("Could not retrieve " + global_username + "'s issues.");
+                console.error("Could not retrieve " + global_username + "'s issues.");
                 return;
             }
             panel.contentURL = data.url("login/research.html");
@@ -552,7 +564,7 @@ exports.main = function () {
 
         mediator.listProjects(function (error, json) {
             if (error !== null) {
-                console.log("Error: " + error);
+                console.error("Error: " + error);
                 return
             }
             panel.contentURL = data.url("login/selectProject.html");

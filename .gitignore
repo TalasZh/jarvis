@@ -1,4 +1,4 @@
-*.xpi
+#*.xpi
 vagrant/.vagrant
 .idea
 
