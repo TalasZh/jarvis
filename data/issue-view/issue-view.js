@@ -1,3 +1,63 @@
+const START = "Start";
+const STOP = "Stop";
+const PAUSE = "Pause";
+const RESUME = "Resume";
+
+const SESSION_STATUS = {
+    IN_PROGRESS: "INPROGRESS",
+    CLOSED: "CLOSED",
+    PAUSED: "PAUSED"
+};
+
+const ISSUE_TYPE = {
+    RESEARCH: "Research",
+    EPIC: "Epic",
+    TASK: "Task",
+    BUG: "Bug",
+    STORY: "Story",
+    IMPROVEMENT: "Improvement",
+    PHASE: "Phase"
+};
+
+var startStop = document.getElementById("startStop");
+if ( startStop !== null ){
+    startStop.addEventListener("click", function() {
+        var x = document.getElementById("issueNumber");
+        var selectValue=x.innerHTML;
+        console.log( selectValue );
+        if ( startStop.value === "Start" ){
+            startStop.value = "Stop";
+            console.log( "Session started for " + selectValue + " at time : " + getDateTime() );
+            self.port.emit("start-progress", selectValue);
+        }
+        else {
+            startStop.value = "Start";
+            console.log( "Session stopped for " + selectValue + " at time : " + getDateTime() );
+            self.port.emit("stop-progress", selectValue);
+        }
+    }, false);
+}
+
+var pauseResume = document.getElementById("pauseResume");
+if ( pauseResume !== null ){
+    pauseResume.addEventListener("click", function() {
+        var x = document.getElementById("issueNumber");
+        var selectValue=x.innerHTML;
+        if ( pauseResume.value === "Pause" ){
+            pauseResume.value = "Resume";
+            startStop.disabled = true;
+            console.log( "Session paused for " + selectValue + " at time : " + getDateTime() );
+            self.port.emit("pause-session", selectValue);
+        }
+        else {
+            pauseResume.value = "Pause";
+            startStop.disabled = false;
+            console.log( "Session resumed for " + selectValue + " at time : " + getDateTime() );
+            self.port.emit("start-session", selectValue);
+        }
+    }, false);
+}
+
 /**
  * handles new issue and substitutes all required fields
  */
@@ -7,14 +67,8 @@ self.port.on('set-issue', function (issue) {
         return;
     }
     switch (issue.type.name) {
-        //case "Task":
-        //case "Phase":
-        //case "Epic":
-        //case "Story":
-        //    prepareViewForIssue(issue);
-        //    break;
-        case "Session":
-            prepareViewForSession(issue);
+        case ISSUE_TYPE.RESEARCH:
+            prepareViewForResearch(issue);
             break;
         default:
             prepareViewForIssue(issue);
@@ -23,6 +77,8 @@ self.port.on('set-issue', function (issue) {
     setGeneralFields(issue);
 });
 
+
+
 function prepareViewForIssue(issue) {
     $("#annotations").hide();
     $("#phases").hide();
@@ -30,22 +86,66 @@ function prepareViewForIssue(issue) {
     pushLinkedIssues(issue.links);
 }
 
-function prepareViewForSession(issue) {
+function prepareViewForResearch(issue) {
     $("#annotations").show();
     $("#phases").show();
     pushLinkedIssues(issue.links);
-    pushAnnotations(issue.key);
+    setSession(issue.key);
 }
 
-function pushAnnotations(key) {
-    self.port.emit('get-annotations', key);
-    self.port.on('set-annotations', function (annotations) {
-        let annotationList = $("#list-annotations");
-        annotationList.empty();
-        for (let annotation of annotations) {
-            annotationList.append(buildAnnotationElement(annotation));
+function setSession(key) {
+    self.port.emit('get-session', key);
+    self.port.on('set-session', function (session) {
+        console.log("Setting session");
+        let startStopBtn = $("#startStop");
+        let pauseResumeBtn = $("#pauseResume");
+
+        if (session) {
+            startStopBtn.prop("value", STOP);
+            pauseResumeBtn.show();
+
+            switch (session.status) {
+                case SESSION_STATUS.IN_PROGRESS:
+                    console.error(session.status);
+                    pauseResumeBtn.prop("value", PAUSE);
+                    break;
+                case SESSION_STATUS.CLOSED:
+                    console.error(session.status);
+                    pauseResumeBtn.prop("disabled", true);
+                    startStopBtn.prop("disabled", true);
+                    $("#annotator").prop("disabled", true);
+                    break;
+                case SESSION_STATUS.PAUSED:
+                    console.error(session.status);
+                    pauseResumeBtn.prop("value", RESUME);
+                    break;
+            }
+            let captures = session.captures;
+            if (captures) {
+                pushAnnotations(captures);
+            }
+            else {
+                self.port.emit('get-annotations', session.key);
+            }
+        }
+        else {
+            startStopBtn.show();
+            startStopBtn.prop("value", START);
+            pauseResumeBtn.hide();
+            $("#annotator").hide();
         }
     });
+    self.port.on('set-annotations', function(captures){
+        pushAnnotations(captures);
+    });
+}
+
+function pushAnnotations(captures) {
+    let annotationList = $("#list-annotations");
+    annotationList.empty();
+    for (let annotation of captures) {
+        annotationList.append(buildAnnotationElement(annotation));
+    }
 }
 
 function pushLinkedIssues(links) {
@@ -65,19 +165,19 @@ function pushLinkedIssues(links) {
 function buildIssueLinkElement(linkItem) {
     let linkTypeSpan = "";
     switch (linkItem.type) {
-        case "Epic":
+        case ISSUE_TYPE.EPIC:
             linkTypeSpan = "  <span class=\"label label-primary pull-right\">Epic</span>";
             break;
-        case "Phase":
+        case ISSUE_TYPE.PHASE:
             linkTypeSpan = "  <span class=\"label label-success\">Phase</span>";
             break;
-        case "Session":
-            linkTypeSpan = "  <span class=\"label label-info\">Phase</span>";
+        case ISSUE_TYPE.RESEARCH:
+            linkTypeSpan = "  <span class=\"label label-info\">Research</span>";
             break;
-        case "Story":
+        case ISSUE_TYPE.STORY:
             linkTypeSpan = "  <span class=\"label label-warning\">Story</span>";
             break;
-        case "Bug":
+        case ISSUE_TYPE.BUG:
             linkTypeSpan = "  <span class=\"label label-danger\">Bug</span>";
             break;
         default :
@@ -86,7 +186,7 @@ function buildIssueLinkElement(linkItem) {
     }
 
     return "<li class=\"list-group-item\">" +
-        "<a class= \"issue-link\" href=\"#\">" + linkItem.key + "</a>" + linkTypeSpan  +
+        "<a class= \"issue-link\" href=\"#\">" + linkItem.key + "</a>" + linkTypeSpan +
         "</li>";
 }
 
