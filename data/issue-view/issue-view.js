@@ -19,43 +19,45 @@ const ISSUE_TYPE = {
     PHASE: "Phase"
 };
 
-var startStop = document.getElementById("startStop");
-if ( startStop !== null ){
-    startStop.addEventListener("click", function() {
-        var x = document.getElementById("issueNumber");
-        var selectValue=x.innerHTML;
-        console.log( selectValue );
-        if ( startStop.value === "Start" ){
-            startStop.value = "Stop";
-            console.log( "Session started for " + selectValue + " at time : " + getDateTime() );
+var startStop = $("#startStop");
+if (startStop !== null) {
+    startStop.click(function () {
+        var x = $("#issueNumber");
+        var selectValue = x.text();
+        console.log(selectValue);
+        if (startStop.prop("value") === START) {
+            startStop.prop("value", STOP);
+            console.log("Session started for " + selectValue + " at time : " + getDateTime());
             self.port.emit("start-progress", selectValue);
         }
         else {
-            startStop.value = "Start";
-            console.log( "Session stopped for " + selectValue + " at time : " + getDateTime() );
+            startStop.prop("value", START);
+            console.log("Session stopped for " + selectValue + " at time : " + getDateTime());
             self.port.emit("stop-progress", selectValue);
         }
-    }, false);
+    });
 }
 
-var pauseResume = document.getElementById("pauseResume");
-if ( pauseResume !== null ){
-    pauseResume.addEventListener("click", function() {
-        var x = document.getElementById("issueNumber");
-        var selectValue=x.innerHTML;
-        if ( pauseResume.value === "Pause" ){
-            pauseResume.value = "Resume";
-            startStop.disabled = true;
-            console.log( "Session paused for " + selectValue + " at time : " + getDateTime() );
+var pauseResume = $("#pauseResume");
+if (pauseResume !== null) {
+    pauseResume.click(function () {
+        var x = $("#issueNumber");
+        var selectValue = x.text();
+        if (pauseResume.prop("value") === "Pause") {
+            pauseResume.prop("value", RESUME);
+            startStop.prop("disabled", true);
+            $("#annotator").prop("disabled", true);
+            console.log("Session paused for " + selectValue + " at time : " + getDateTime());
             self.port.emit("pause-session", selectValue);
         }
         else {
-            pauseResume.value = "Pause";
-            startStop.disabled = false;
-            console.log( "Session resumed for " + selectValue + " at time : " + getDateTime() );
+            pauseResume.prop("value", PAUSE);
+            startStop.prop("disabled", false);
+            $("#annotator").prop("disabled", false);
+            console.log("Session resumed for " + selectValue + " at time : " + getDateTime());
             self.port.emit("start-session", selectValue);
         }
-    }, false);
+    });
 }
 
 /**
@@ -78,7 +80,6 @@ self.port.on('set-issue', function (issue) {
 });
 
 
-
 function prepareViewForIssue(issue) {
     $("#annotations").hide();
     $("#phases").hide();
@@ -99,6 +100,11 @@ function setSession(key) {
         console.log("Setting session");
         let startStopBtn = $("#startStop");
         let pauseResumeBtn = $("#pauseResume");
+        let annotator = $("#annotator");
+
+        pauseResumeBtn.prop("disabled", false);
+        startStopBtn.prop("disabled", false);
+        annotator.prop("disabled", false);
 
         if (session) {
             startStopBtn.prop("value", STOP);
@@ -113,11 +119,13 @@ function setSession(key) {
                     console.error(session.status);
                     pauseResumeBtn.prop("disabled", true);
                     startStopBtn.prop("disabled", true);
-                    $("#annotator").prop("disabled", true);
+                    annotator.prop("disabled", true);
                     break;
                 case SESSION_STATUS.PAUSED:
                     console.error(session.status);
                     pauseResumeBtn.prop("value", RESUME);
+                    annotator.prop("disabled", true);
+                    startStopBtn.prop("disabled", true);
                     break;
             }
             let captures = session.captures;
@@ -132,10 +140,10 @@ function setSession(key) {
             startStopBtn.show();
             startStopBtn.prop("value", START);
             pauseResumeBtn.hide();
-            $("#annotator").hide();
+            annotator.hide();
         }
     });
-    self.port.on('set-annotations', function(captures){
+    self.port.on('set-annotations', function (captures) {
         pushAnnotations(captures);
     });
 }

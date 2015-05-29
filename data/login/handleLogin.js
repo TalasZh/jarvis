@@ -75,11 +75,11 @@ if ( backButton !== null ){
 	};
 }
 
-var backButtonOnResearchPage = document.getElementById("backButtonOnResearchPage");
+var backButtonOnResearchPage = $("#backButtonOnResearchPage");
 if ( backButtonOnResearchPage !== null ){
-	backButtonOnResearchPage.onclick = function(event) {
+	backButtonOnResearchPage.click(function(event) {
 		self.port.emit("back-button-pressed-on-researchpage" );
-	};
+	});
 }
 
 var backButtonOnProjectSelectionPage = document.getElementById("backButtonOnProjectSelectionPage");
