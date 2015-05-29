@@ -7,9 +7,7 @@ var notifications = require('sdk/notifications');
 
 var tabs = require("sdk/tabs");
 
-
 var { ToggleButton } = require('sdk/ui/button/toggle');
-// var panels = require("sdk/panel");
 var self = require("sdk/self");
 var {Cc, Ci, Cu} = require("chrome");
 var system = require("sdk/system");
@@ -74,7 +72,6 @@ const init = () => {
 
 init();
 
-
 function Annotation(annotationText, anchor) {
     this.comment = annotationText;
     this.url = anchor[0];
@@ -133,7 +130,6 @@ function updateMatchers() {
         matcher.postMessage(simpleStorage.storage.annotations);
     });
 }
-
 
 function getUserIssues(jira, username) {
     jira.getUsersIssues(username, true, function (error, json) {
@@ -242,80 +238,6 @@ exports.main = function () {
         }
     });
 
-    var showIssue = ToggleButton({
-        id: "show-issue",
-        label: "Show Issue",
-        icon: {
-            "16": data.url('icon-16.png'),
-            "32": data.url('icon-32.png'),
-            "64": data.url('icon-64.png')
-        },
-        onClick: function (state) {
-            if (state.checked) {
-                init();
-                mediator.getIssue("JAR-2", function (error, json) {
-                    if (error !== null) {
-                        console.error("Error: " + error);
-                    }
-                    else if (json !== undefined) {
-                        console.log("Response: " + JSON.stringify(json));
-                        issueView.port.emit('set-issue', json);
-                        currentIssueKey = json.key;
-                    }
-                });
-                issueView.show({
-                    position: showIssue
-                });
-            }
-        }
-    });
-
-    var issueView = panels.Panel({
-        height: 600,
-        width: 350,
-        contentScriptFile: [data.url('issue-view/issue-view.js'),
-            data.url('jquery-2.1.3.min.js')],
-        contentScriptWhen: "start",
-        contentURL: data.url("issue-view/issue-view.html"),
-        onShow: function () {
-        },
-        onHide: function (state) {
-            showIssue.state('window', {checked: false});
-        }
-    });
-
-    issueView.port.on('select-issue', function (issueKey) {
-        issueView.contentURL = data.url("issue-view/issue-view.html");
-        issueView.contentScriptFile = [data.url('issue-view/issue-view.js'),
-            data.url('jquery-2.1.3.min.js')];
-        console.log("SelectedIssueKey: " + issueKey);
-        mediator.getIssue(issueKey, function (error, json) {
-            if (error !== null) {
-                console.error("Error: " + error);
-            }
-            else if (json !== undefined) {
-                console.log("Response: " + JSON.stringify(json));
-                issueView.port.emit('set-issue', json);
-                currentIssueKey = json.key;
-            }
-        });
-    });
-
-    issueView.port.on('get-annotations', function (issueKey) {
-        let annotations = [
-            {
-                id: 1,
-                issueId: issueKey,
-                url: "http://getbootstrap.com/components/#glyphicons",
-                comment: "This is awesome resource",
-                ancestorId: "",
-                anchorText: "sdfgsewrysdfbsdf sdrtyse"
-            }
-        ];
-        issueView.port.emit('set-annotations', annotations);
-    });
-
-
     var button = ToggleButton({
         id: "my-button",
         label: "Jarvis",
@@ -332,7 +254,6 @@ exports.main = function () {
             }
         }
     });
-
 
     var panel = panels.Panel({
         width: 350,
@@ -354,7 +275,6 @@ exports.main = function () {
         panel.port.emit("show");
     });
 
-
     panel.port.on("stop-progress", function (issueId) {
         console.log("Stop progress.");
         mediator.stopSession(issueId, function (error, json) {
@@ -367,7 +287,6 @@ exports.main = function () {
             }
         });
     });
-
 
     panel.port.on("start-progress", function (issueId) {
         console.log("Start progress.");
@@ -396,7 +315,6 @@ exports.main = function () {
         });
     });
 
-
     panel.port.on('left-click', function () {
         console.log('activate/deactivate');
         toggleActivation();
@@ -407,7 +325,6 @@ exports.main = function () {
         annotationList.show();
     });
 
-
     panel.port.on("back-button-pressed", function (projectName) {
         mediator.listProjectIssues(projectName, function (error, json) {
             if (error != null) {
@@ -416,12 +333,11 @@ exports.main = function () {
                 return;
             }
             panel.contentURL = data.url("login/research.html");
-            panel.port.emit("fill-combo-box", json);
+            panel.port.emit("fill-combo-box", json, projectName);
         });
     });
 
-
-    panel.port.on("back-button-pressed-on-researchpage", function () {
+    panel.port.on("back-button-pressed-on-researchpage", function (projectKey) {
         mediator.listProjects(function (error, json) {
             if (error !== null) {
                 console.error("Error: " + error);
@@ -429,15 +345,13 @@ exports.main = function () {
             }
 
             panel.contentURL = data.url("login/selectProject.html");
-            panel.port.emit("fill-project-combobox", json);
+            panel.port.emit("fill-project-combobox", json, projectKey);
         });
     });
-
 
     panel.port.on("back-button-pressed-on-project-selection-page", function () {
         panel.contentURL = data.url("login/panel.html");
     });
-
 
     /**
      * Event triggered when issues was selected from combo box
@@ -526,11 +440,9 @@ exports.main = function () {
         });
     });
 
-
     panel.port.on("link-clicked", function (issueId) {
         tabs.open("http://test-jira.critical-factor.com/browse/" + issueId);
     });
-
 
     panel.port.on("project-changed", function (projectKey) {
         mediator.getProject(projectKey, function (error, json) {
@@ -543,7 +455,6 @@ exports.main = function () {
         });
     });
 
-
     panel.port.on("project-selected", function (projectName) {
         mediator.listProjectIssues(projectName, function (error, json) {
             if (error != null) {
@@ -552,10 +463,9 @@ exports.main = function () {
                 return;
             }
             panel.contentURL = data.url("login/research.html");
-            panel.port.emit("fill-combo-box", json);
+            panel.port.emit("fill-combo-box", json, projectName);
         });
     });
-
 
     // Listen for messages called "text-entered" coming from
     // the content script. The message payload is the text the user
@@ -577,7 +487,6 @@ exports.main = function () {
     });
 
     var selection = require("sdk/selection");
-    console.log("helladf");
     if (selection.text) {
         console.log(selection.text);
         console.log("adfasdf");

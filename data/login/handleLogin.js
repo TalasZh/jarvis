@@ -28,22 +28,25 @@ if (annotator !== null) {
 
         if (event.button == 2 || (event.button == 0 && event.shiftKey == true)) {
             self.port.emit('right-click');
-            console.log("eadfadf");
+            console.log("right-click");
             event.preventDefault();
         }
     });
 }
 
-var selectProject = $("#selectProject");
-if (selectProject !== null) {
-    selectProject.click(function () {
+$("a.projects").click(function () {
+    self.port.emit('handle-login');
+});
+
+var selectProjectBtn = $("#selectProject");
+if (selectProjectBtn !== null) {
+    selectProjectBtn.click(function () {
         var x = $("#selectProjectCombobox[name='selectProjectCombobox']");
         var selectValue = x.find("option:selected").text();
         self.port.emit("project-selected", selectValue);
 
     });
 }
-
 
 var selectIssue = $("#selectIssue");
 if (selectIssue !== null) {
@@ -53,7 +56,6 @@ if (selectIssue !== null) {
         self.port.emit("issue-selected", selectValue);
     });
 }
-
 
 var backButton = $("#backButton");
 if (backButton !== null) {
@@ -77,7 +79,6 @@ if (backButtonOnProjectSelectionPage !== null) {
         self.port.emit("back-button-pressed-on-project-selection-page");
     });
 }
-
 
 function getDateTime() {
     var now = new Date();
@@ -106,7 +107,6 @@ function getDateTime() {
     return dateTime;
 }
 
-
 // fill out combo box options
 function fillComboBox(json) {
     var x = $("#issueCombobox");
@@ -125,7 +125,7 @@ function fillComboBox(json) {
 }
 
 // fill out projects combo box options
-function fillProjectCombobox(json) {
+function fillProjectCombobox(json, projectKey) {
     console.log("Fill Project Combobox");
     var x = $("#selectProjectCombobox");
     x.change(function (event) {
@@ -138,9 +138,14 @@ function fillProjectCombobox(json) {
     for (var i = 0; i < json.length; i++) {
         var project = json[i];
         x.append($("<option></option>").text(project.key));
-        console.log(project.key);
     }
-    x.find('option:eq(0)').attr('selected', true);
+    if (projectKey) {
+        x.find('option:contains(' + projectKey + ')').attr('selected', true);
+    }
+    else {
+        x.find('option:eq(0)').attr('selected', true);
+    }
+
     x.trigger("change");
 }
 
@@ -151,21 +156,21 @@ function updateProjectInfo(json) {
     $("#versions").html(json.versions);
 }
 
-self.port.on("fill-combo-box", function (json) {
-    fillComboBox(json);
-    pushLinkedIssues(json);
+self.port.on("fill-combo-box", function (json, projectKey) {
+    console.log("Fill combo box");
+    console.log(projectKey);
+    //fillComboBox(json);
+    pushProjectIssues(json);
+    $("#project-link").text(projectKey);
 });
 
-
-self.port.on("fill-project-combobox", function (json) {
-    fillProjectCombobox(json);
+self.port.on("fill-project-combobox", function (json, projectKey) {
+    fillProjectCombobox(json, projectKey);
 });
-
 
 self.port.on("update-project-information", function (json) {
     updateProjectInfo(json);
 });
-
 
 var issueLink = $("#issueLink");
 if (issueLink !== null) {
@@ -174,8 +179,8 @@ if (issueLink !== null) {
     });
 }
 
-function pushLinkedIssues(links) {
-    let issueList = $("#list-issues");
+function pushProjectIssues(links) {
+    let issueList = $("#project-list-issues");
     issueList.empty();
     for (let item of links) {
         issueList.append(buildIssueLinkElement(item));
@@ -186,32 +191,4 @@ function pushLinkedIssues(links) {
             $(this).text().trim()
         );
     });
-}
-
-function buildIssueLinkElement(linkItem) {
-    let linkTypeSpan = "";
-    switch (linkItem.type.name) {
-        case ISSUE_TYPE.EPIC:
-            linkTypeSpan = "  <span class=\"label label-primary pull-right\">Epic</span>";
-            break;
-        case ISSUE_TYPE.PHASE:
-            linkTypeSpan = "  <span class=\"label label-success\">Phase</span>";
-            break;
-        case ISSUE_TYPE.RESEARCH:
-            linkTypeSpan = "  <span class=\"label label-info\">Research</span>";
-            break;
-        case ISSUE_TYPE.STORY:
-            linkTypeSpan = "  <span class=\"label label-warning\">Story</span>";
-            break;
-        case ISSUE_TYPE.BUG:
-            linkTypeSpan = "  <span class=\"label label-danger\">Bug</span>";
-            break;
-        default :
-            linkTypeSpan = "  <span class=\"label label-default\">Task</span>";
-            break;
-    }
-
-    return "<li class=\"list-group-item\">" +
-        "<a class= \"issue-link\" href=\"#\">" + linkItem.key + "</a>" + linkTypeSpan +
-        "</li>";
 }

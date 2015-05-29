@@ -83,12 +83,13 @@ self.port.on('set-issue', function (issue) {
 function prepareViewForIssue(issue) {
     $("#annotations").hide();
     $("#phases").hide();
-
+    $("#session-controls").hide();
     pushLinkedIssues(issue.links);
 }
 
 function prepareViewForResearch(issue) {
     $("#annotations").show();
+    $("#session-controls").show();
     $("#phases").show();
     pushLinkedIssues(issue.links);
     setSession(issue.key);
@@ -211,7 +212,9 @@ function buildIssueLinkElement(linkItem) {
  */
 function buildAnnotationElement(annotation) {
     return "<a class=\"list-group-item\">" +
+        "<div class=\"annotation-comment\">" +
         "<p class=\"list-group-item-heading\">" + annotation.comment + "</p>" +
+        "</div>" +
         "    <blockquote class=\"list-group-item-text\">" +
         annotation.anchorText +
         "</blockquote>" +
@@ -221,7 +224,7 @@ function buildAnnotationElement(annotation) {
 function setGeneralFields(issue) {
     $("a#issueLink").text(issue.key);
     $("#status").text(issue.status);
-    $("#type").text(issue.type);
+    $("#type").text(issue.type.name);
     $("#summary").text(issue.summary);
     $("#issueNumber").text(issue.key);
     buildCrumbs(issue);
@@ -230,6 +233,10 @@ function setGeneralFields(issue) {
 function buildCrumbs(issue) {
     let issuePath = $("#issue-path");
     issuePath.empty();
+
+    //add click event to navigate to projects view
+    issuePath.append(breadcrumbItemBuilder("Projects", false, "projects"));
+
 
     //add click event to navigate to project view
     if (issue.projectKey && issuePath.projectKey !== issue.key) {
@@ -246,13 +253,13 @@ function buildCrumbs(issue) {
     }
 
     for (let link of issue.links) {
-        if (link.type === "Story" && link.key !== issue.key) {
+        if (link.type.name === "Story" && link.key !== issue.key) {
             issuePath.append(breadcrumbItemBuilder(link.key, false, "issue"));
             break;
         }
     }
     for (let link of issue.links) {
-        if (link.type === "Phase" && link.key !== issue.key) {
+        if (link.type.name === "Phase" && link.key !== issue.key) {
             issuePath.append(breadcrumbItemBuilder(link.key, false, "issue"));
             break;
         }
@@ -265,7 +272,11 @@ function buildCrumbs(issue) {
     });
 
     issuePath.find("a.project").click(function () {
-        self.port.emit('back-button-pressed-on-researchpage');
+        self.port.emit('back-button-pressed', issue.projectKey);
+    });
+
+    issuePath.find("a.projects").click(function () {
+        self.port.emit('handle-login');
     });
 }
 

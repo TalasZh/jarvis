@@ -9,26 +9,14 @@
     <script src="../bootstrap-3.3.4/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div class="col-lg-2 col-centered">
-    <div class="form-group">
-        <br/>
-        <label for="combobox">Select the issue you want to search :</label>
-        <select class="form-control" name="issueCombobox" id="issueCombobox"></select>
-        <br/>
-
-        <div>
-            <input type="button" class="btn btn-primary btn-sm" id="selectIssue" value="Choose">
-            <input type="button" class="btn btn-primary btn-sm" id="backButtonOnResearchPage" value="Back">
-        </div>
-    </div>
-</div>
 
 <div class="container">
     <!--Breadcrumbs as a navigation in issue tree-->
     <div class="row">
         <div class="col-md-12">
-            <ul class="breadcrumb" id="issue-path">
-                <li><a href="#">ProjectName</a></li>
+            <ul class="breadcrumb" id="project-issue-path">
+                <li><a class="projects" href="#">Projects</a></li>
+                <li><a id="project-link" href="#">ProjectName</a></li>
                 <li class="active">Issues</li>
             </ul>
         </div>
@@ -36,40 +24,15 @@
 
     <!--Package controls-->
     <div class="container well panel panel-primary">
-        <div class="panel-heading" id="projectIssues">
+        <div class="panel-heading">
             Issues
         </div>
 
         <!--Issues panel-->
-        <div class="panel panel-primary" id="issues">
+        <div class="panel panel-primary" id="project-issues">
             <div class="panel-body fixed-panel">
                 <!--Only used for Story issue types-->
-                <ul class="list-group" id="list-issues">
-                    <li class="list-group-item">
-                        <a href="issue-view.html">
-                            Cras justo odio <span class="label label-success">Epic</span>
-                        </a>
-                    </li>
-                    <li class="list-group-item">
-                        <a href="issue-view.html">
-                            Dapibus ac facilisis in <span class="label label-primary">Story</span>
-                        </a>
-                    </li>
-                    <li class="list-group-item">
-                        <a href="issue-view.html">
-                            Morbi leo risus <span class="label label-default">Phase</span>
-                        </a>
-                    </li>
-                    <li class="list-group-item">
-                        <a href="issue-view.html">
-                            Porta ac consectetur ac <span class="label label-info">Session</span>
-                        </a>
-                    </li>
-                    <li class="list-group-item">
-                        <a href="issue-view.html">
-                            Vestibulum at eros <span class="label label-danger">Bug</span>
-                        </a>
-                    </li>
+                <ul class="list-group" id="project-list-issues">
                 </ul>
             </div>
         </div>
