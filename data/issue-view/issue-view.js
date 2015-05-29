@@ -19,43 +19,45 @@ const ISSUE_TYPE = {
     PHASE: "Phase"
 };
 
-var startStop = document.getElementById("startStop");
-if ( startStop !== null ){
-    startStop.addEventListener("click", function() {
-        var x = document.getElementById("issueNumber");
-        var selectValue=x.innerHTML;
-        console.log( selectValue );
-        if ( startStop.value === "Start" ){
-            startStop.value = "Stop";
-            console.log( "Session started for " + selectValue + " at time : " + getDateTime() );
+var startStop = $("#startStop");
+if (startStop !== null) {
+    startStop.click(function () {
+        var x = $("#issueNumber");
+        var selectValue = x.text();
+        console.log(selectValue);
+        if (startStop.prop("value") === START) {
+            startStop.prop("value", STOP);
+            console.log("Session started for " + selectValue + " at time : " + getDateTime());
             self.port.emit("start-progress", selectValue);
         }
         else {
-            startStop.value = "Start";
-            console.log( "Session stopped for " + selectValue + " at time : " + getDateTime() );
+            startStop.prop("value", START);
+            console.log("Session stopped for " + selectValue + " at time : " + getDateTime());
             self.port.emit("stop-progress", selectValue);
         }
-    }, false);
+    });
 }
 
-var pauseResume = document.getElementById("pauseResume");
-if ( pauseResume !== null ){
-    pauseResume.addEventListener("click", function() {
-        var x = document.getElementById("issueNumber");
-        var selectValue=x.innerHTML;
-        if ( pauseResume.value === "Pause" ){
-            pauseResume.value = "Resume";
-            startStop.disabled = true;
-            console.log( "Session paused for " + selectValue + " at time : " + getDateTime() );
-            self.port.emit("pause-session", selectValue);
+var pauseResume = $("#pauseResume");
+if (pauseResume !== null) {
+    pauseResume.click(function () {
+        var x = $("#issueNumber");
+        var selectValue = x.text();
+        if (pauseResume.prop("value") === "Pause") {
+            pauseResume.prop("value", RESUME);
+            startStop.prop("disabled", true);
+            $("#annotator").prop("disabled", true);
+            console.log("Session paused for " + selectValue + " at time : " + getDateTime());
+            self.port.emit("pause-progress", selectValue);
         }
         else {
-            pauseResume.value = "Pause";
-            startStop.disabled = false;
-            console.log( "Session resumed for " + selectValue + " at time : " + getDateTime() );
-            self.port.emit("start-session", selectValue);
+            pauseResume.prop("value", PAUSE);
+            startStop.prop("disabled", false);
+            $("#annotator").prop("disabled", false);
+            console.log("Session resumed for " + selectValue + " at time : " + getDateTime());
+            self.port.emit("start-progress", selectValue);
         }
-    }, false);
+    });
 }
 
 /**
@@ -77,17 +79,82 @@ self.port.on('set-issue', function (issue) {
     setGeneralFields(issue);
 });
 
+self.port.on('set-session', function (session) {
+    console.log("Setting session");
+    let startStopBtn = $("#startStop");
+    let pauseResumeBtn = $("#pauseResume");
+    let annotator = $("#annotator");
+
+    pauseResumeBtn.prop("disabled", false);
+    startStopBtn.prop("disabled", false);
+    annotator.prop("disabled", false);
+
+    if (session) {
+        startStopBtn.prop("value", STOP);
+        pauseResumeBtn.show();
+        annotator.show();
+
+        switch (session.status) {
+            case SESSION_STATUS.IN_PROGRESS:
+                console.error(session.status);
+                pauseResumeBtn.prop("value", PAUSE);
+                break;
+            case SESSION_STATUS.CLOSED:
+                console.error(session.status);
+                pauseResumeBtn.prop("disabled", true);
+                startStopBtn.prop("disabled", true);
+                annotator.prop("disabled", true);
+                break;
+            case SESSION_STATUS.PAUSED:
+                console.error(session.status);
+                pauseResumeBtn.prop("value", RESUME);
+                annotator.prop("disabled", true);
+                startStopBtn.prop("disabled", true);
+                break;
+        }
+        let captures = session.captures;
+        if (captures) {
+            pushAnnotations(captures);
+        }
+        else {
+            self.port.emit('get-annotations', session.key);
+        }
+    }
+    else {
+        startStopBtn.show();
+        startStopBtn.prop("value", START);
+        pauseResumeBtn.hide();
+        annotator.hide();
+    }
+});
+self.port.on('set-annotations', function (captures) {
+    pushAnnotations(captures);
+});
+
+self.port.on('add-annotation', function (capture) {
+    console.log("Adding annotation");
+    let annotationList = $("#list-annotations");
+    console.log(annotationList);
+    let elem = annotationList.find("#" + capture.id);
+    if (elem) {
+        elem.replaceWith(buildAnnotationElement(capture));
+    }
+    else {
+        annotationList.append(buildAnnotationElement(capture));
+    }
+});
 
 
 function prepareViewForIssue(issue) {
     $("#annotations").hide();
     $("#phases").hide();
-
+    $("#session-controls").hide();
     pushLinkedIssues(issue.links);
 }
 
 function prepareViewForResearch(issue) {
     $("#annotations").show();
+    $("#session-controls").show();
     $("#phases").show();
     pushLinkedIssues(issue.links);
     setSession(issue.key);
@@ -95,49 +162,6 @@ function prepareViewForResearch(issue) {
 
 function setSession(key) {
     self.port.emit('get-session', key);
-    self.port.on('set-session', function (session) {
-        console.log("Setting session");
-        let startStopBtn = $("#startStop");
-        let pauseResumeBtn = $("#pauseResume");
-
-        if (session) {
-            startStopBtn.prop("value", STOP);
-            pauseResumeBtn.show();
-
-            switch (session.status) {
-                case SESSION_STATUS.IN_PROGRESS:
-                    console.error(session.status);
-                    pauseResumeBtn.prop("value", PAUSE);
-                    break;
-                case SESSION_STATUS.CLOSED:
-                    console.error(session.status);
-                    pauseResumeBtn.prop("disabled", true);
-                    startStopBtn.prop("disabled", true);
-                    $("#annotator").prop("disabled", true);
-                    break;
-                case SESSION_STATUS.PAUSED:
-                    console.error(session.status);
-                    pauseResumeBtn.prop("value", RESUME);
-                    break;
-            }
-            let captures = session.captures;
-            if (captures) {
-                pushAnnotations(captures);
-            }
-            else {
-                self.port.emit('get-annotations', session.key);
-            }
-        }
-        else {
-            startStopBtn.show();
-            startStopBtn.prop("value", START);
-            pauseResumeBtn.hide();
-            $("#annotator").hide();
-        }
-    });
-    self.port.on('set-annotations', function(captures){
-        pushAnnotations(captures);
-    });
 }
 
 function pushAnnotations(captures) {
@@ -164,7 +188,7 @@ function pushLinkedIssues(links) {
 
 function buildIssueLinkElement(linkItem) {
     let linkTypeSpan = "";
-    switch (linkItem.type) {
+    switch (linkItem.type.name) {
         case ISSUE_TYPE.EPIC:
             linkTypeSpan = "  <span class=\"label label-primary pull-right\">Epic</span>";
             break;
@@ -202,8 +226,10 @@ function buildIssueLinkElement(linkItem) {
  * @param annotation
  */
 function buildAnnotationElement(annotation) {
-    return "<a class=\"list-group-item\">" +
+    return "<a class=\"list-group-item\" id=" + annotation.id + ">" +
+        "<div class=\"annotation-comment\">" +
         "<p class=\"list-group-item-heading\">" + annotation.comment + "</p>" +
+        "</div>" +
         "    <blockquote class=\"list-group-item-text\">" +
         annotation.anchorText +
         "</blockquote>" +
@@ -213,7 +239,7 @@ function buildAnnotationElement(annotation) {
 function setGeneralFields(issue) {
     $("a#issueLink").text(issue.key);
     $("#status").text(issue.status);
-    $("#type").text(issue.type);
+    $("#type").text(issue.type.name);
     $("#summary").text(issue.summary);
     $("#issueNumber").text(issue.key);
     buildCrumbs(issue);
@@ -222,6 +248,10 @@ function setGeneralFields(issue) {
 function buildCrumbs(issue) {
     let issuePath = $("#issue-path");
     issuePath.empty();
+
+    //add click event to navigate to projects view
+    issuePath.append(breadcrumbItemBuilder("Projects", false, "projects"));
+
 
     //add click event to navigate to project view
     if (issue.projectKey && issuePath.projectKey !== issue.key) {
@@ -238,13 +268,13 @@ function buildCrumbs(issue) {
     }
 
     for (let link of issue.links) {
-        if (link.type === "Story" && link.key !== issue.key) {
+        if (link.type.name === "Story" && link.key !== issue.key) {
             issuePath.append(breadcrumbItemBuilder(link.key, false, "issue"));
             break;
         }
     }
     for (let link of issue.links) {
-        if (link.type === "Phase" && link.key !== issue.key) {
+        if (link.type.name === "Phase" && link.key !== issue.key) {
             issuePath.append(breadcrumbItemBuilder(link.key, false, "issue"));
             break;
         }
@@ -257,7 +287,11 @@ function buildCrumbs(issue) {
     });
 
     issuePath.find("a.project").click(function () {
-        self.port.emit('back-button-pressed-on-researchpage');
+        self.port.emit('back-button-pressed', issue.projectKey);
+    });
+
+    issuePath.find("a.projects").click(function () {
+        self.port.emit('handle-login');
     });
 }
 

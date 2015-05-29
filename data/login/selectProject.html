@@ -1,44 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <link rel="stylesheet" href="../bootstrap-3.3.4/css/bootstrap.min.css">
-  <link rel="stylesheet" type="text/css" href="login.css">
-  <script src="../jquery-2.1.3.min.js"></script>
-  <script src="../bootstrap-3.3.4/js/bootstrap.min.js"></script>
-  <style type="text/css">
-
-    .panel {
-      width: 500px;  
-    }
-
-  </style>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="stylesheet" href="../bootstrap-3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="login.css">
+    <script src="../jquery-2.1.3.min.js"></script>
+    <script src="../bootstrap-3.3.4/js/bootstrap.min.js"></script>
 </head>
 <body>
-  <div class="col-lg-2 col-centered">
-    <div class="form-group">
+<div class="container">
 
-      <label for="combobox">Select project :</label>
-      <div class="tab-pane fade active in" id="task">
-        <select class="form-control" name="selectProjectCombobox" id="selectProjectCombobox"></select>
-        <br/>
-        <div class="centered">
-          <p><b> Name     : </b> <span class="pull-right" id="name"></span></p>
-          <p><b> Key      : </b> <span class="pull-right" id="key"></span></p>
-          <p><b> Description      : </b> <span class="pull-right" id="description"></span></p>
-          <p><b> Lead     : </b> <span class="pull-right" id="lead"></span></p>
-          <p><b> Versions : </b> <span class="pull-right" id="versions"></span></p>
-         
+    <!--Package controls-->
+    <div class="container well panel panel-primary">
+        <div class="panel-heading">
+            Projects
         </div>
 
-        <div>
-          <input type="button" class="btn btn-primary btn-sm" id="selectProject" value="Next">
-          <input type="button" class="btn btn-primary btn-sm" id="backButtonOnProjectSelectionPage" value="Back">
-        </div>
-        <br/>
+        <!--Grid div, issue brief info-->
+        <div class="row voffset2">
 
-      </div>
+            <label for="combobox">Select project :</label>
+
+            <select class="form-control" name="selectProjectCombobox" id="selectProjectCombobox"></select>
+            <br/>
+
+            <div class="col-xs-12">
+                <p>
+                    <b> Name : </b>
+                    <span class="pull-right" id="name"></span>
+                </p>
+
+                <p>
+                    <b> Key : </b>
+                    <span class="pull-right" id="key"></span>
+                </p>
+            </div>
+        </div>
+        <div class="row voffset2">
+            <div class="col-xs-12">
+                <p>
+                    <b> Description : </b>
+                </p>
+
+                <p>
+                    <span class="pull-right" id="description"></span>
+                </p>
+
+                <p>
+                    <b> Lead : </b>
+                    <span class="pull-right" id="lead"></span>
+                </p>
+            </div>
+        </div>
+
+        <div class="row voffset2">
+            <div class="col-md-9">
+                <p>
+                    <b> Versions : </b>
+                    <span class="pull-right" id="versions"></span>
+                </p>
+
+                <div>
+                    <input type="button" class="btn btn-primary btn-sm" id="selectProject" value="Next">
+                    <input type="button" class="btn btn-primary btn-sm" id="backButtonOnProjectSelectionPage"
+                           value="Back">
+                </div>
+            </div>
+        </div>
     </div>
-  </body>
-  </html>
+</div>
+</body>
+</html>
