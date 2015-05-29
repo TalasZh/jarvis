@@ -1,10 +1,12 @@
 self.on('message', function onMessage(annotations) {
-    annotations.forEach(
-        function (annotation) {
+    for (var key in annotations) {
+        if (annotations.hasOwnProperty(key)) {
+            let annotation = annotations[key];
             if (annotation.url == document.location.toString()) {
                 createAnchor(annotation);
             }
-        });
+        }
+    }
 
     let annotated = $('.annotated');
     annotated.css('border', 'solid 3px yellow');
@@ -25,5 +27,5 @@ function createAnchor(annotation) {
     annotationAnchor = $(annotationAnchorAncestor).parent().find(
         ':contains(' + annotation.anchorText + ')').last();
     $(annotationAnchor).addClass('annotated');
-    $(annotationAnchor).attr('annotation', annotation.annotationText);
+    $(annotationAnchor).attr('annotation', annotation.comment);
 }

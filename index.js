@@ -31,6 +31,7 @@ var annotatorIsOn = false;
 var matchers = [];
 
 const init = () => {
+    console.log("Initializing jarvis plugin...");
     if (!mediator) {
         mediator = new MediatorApi('http',
             'jarvis-test.critical-factor.com',
@@ -39,21 +40,40 @@ const init = () => {
             null,
             true);
     }
-    console.log("hello")
+    console.log("hello");
+    simpleStorage.storage.annotations = {};
+    simpleStorage.on("OverQuota", function () {
+        notifications.notify({
+            title: 'Storage space exceeded',
+            text: 'Removing recent annotations'
+        });
+        while (simpleStorage.quotaUsage > 1)
+            simpleStorage.storage.annotaions.pop();
+    });
+
+    mediator.listSessions(function (error, json) {
+        console.log("All sessions response...");
+        if (error) {
+            console.error("Error: " + error);
+        }
+        else {
+            json.forEach(function (session) {
+                var captures = session.captures;
+                captures.forEach(function(annotation){
+                    var captureId = annotation.id;
+                    if (!simpleStorage.storage.annotations[captureId]) {
+                        simpleStorage.storage.annotations[captureId] = {};
+                    }
+                    simpleStorage.storage.annotations[captureId] = annotation;
+                });
+            });
+            updateMatchers();
+        }
+    });
 };
 
+init();
 
-if (!simpleStorage.storage.annotations)
-    simpleStorage.storage.annotations = {};
-
-simpleStorage.on("OverQuota", function () {
-    notifications.notify({
-        title: 'Storage space exceeded',
-        text: 'Removing recent annotations'
-    });
-    while (simpleStorage.quotaUsage > 1)
-        simpleStorage.storage.annotaions.pop();
-});
 
 function Annotation(annotationText, anchor) {
     this.comment = annotationText;
@@ -72,10 +92,13 @@ function handleNewAnnotation(annotationText, anchor, sessionKey) {
         else {
             console.log(JSON.stringify(json));
             let captureId = json.id;
-            simpleStorage.storage.annotations.captureId = json;
+            if (!simpleStorage.storage.annotations[captureId]) {
+                simpleStorage.storage.annotations[captureId] = {};
+            }
+            simpleStorage.storage.annotations[captureId] = json;
+            updateMatchers();
         }
     });
-    updateMatchers();
 }
 
 function onAttachWorker(annotationEditor, data) {
@@ -105,6 +128,7 @@ function toggleActivation() {
 }
 
 function updateMatchers() {
+    console.log("Updating matchers...");
     matchers.forEach(function (matcher) {
         matcher.postMessage(simpleStorage.storage.annotations);
     });
@@ -333,7 +357,7 @@ exports.main = function () {
 
     panel.port.on("stop-progress", function (issueId) {
         console.log("Stop progress.");
-        mediator.stopSession(issueId, function(error, json){
+        mediator.stopSession(issueId, function (error, json) {
             if (error) {
                 console.error("Error: " + error);
             }
@@ -359,9 +383,9 @@ exports.main = function () {
 
     });
 
-    panel.port.on('pause-session', function(sessionKey){
+    panel.port.on('pause-progress', function (sessionKey) {
         console.log("Pause session.");
-        mediator.pauseSession(sessionKey, function(error, json){
+        mediator.pauseSession(sessionKey, function (error, json) {
             if (error) {
                 console.error("Error: " + error);
             }
@@ -460,6 +484,17 @@ exports.main = function () {
             else if (json) {
                 console.log(JSON.stringify(json));
                 panel.port.emit('set-session', json);
+                if (json.captures) {
+                    var annotations = json.captures;
+                    annotations.forEach(function (annotation) {
+                        let captureId = annotation.id;
+                        if (!simpleStorage.storage.annotations[captureId]) {
+                            simpleStorage.storage.annotations[captureId] = {};
+                        }
+                        simpleStorage.storage.annotations[captureId] = annotation;
+                    });
+                    updateMatchers();
+                }
             }
             else {
                 console.warn("Session doesn't exist for sessionKey: " + sessionKey);
@@ -479,6 +514,14 @@ exports.main = function () {
             }
             else {
                 panel.port.emit('set-annotations', json);
+                json.forEach(function (annotation) {
+                    let captureId = annotation.id;
+                    if (!simpleStorage.storage.annotations[captureId]) {
+                        simpleStorage.storage.annotations[captureId] = {};
+                    }
+                    simpleStorage.storage.annotations[captureId] = annotation;
+                });
+                updateMatchers();
             }
         });
     });
@@ -522,13 +565,6 @@ exports.main = function () {
         console.log(username + " " + password);
 
         global_username = username;
-
-        mediator = new MediatorApi('http',
-            'jarvis-test.critical-factor.com',
-            '8080',
-            null,
-            null,
-            true);
 
         mediator.listProjects(function (error, json) {
             if (error !== null) {

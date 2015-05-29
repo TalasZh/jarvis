@@ -48,14 +48,14 @@ if (pauseResume !== null) {
             startStop.prop("disabled", true);
             $("#annotator").prop("disabled", true);
             console.log("Session paused for " + selectValue + " at time : " + getDateTime());
-            self.port.emit("pause-session", selectValue);
+            self.port.emit("pause-progress", selectValue);
         }
         else {
             pauseResume.prop("value", PAUSE);
             startStop.prop("disabled", false);
             $("#annotator").prop("disabled", false);
             console.log("Session resumed for " + selectValue + " at time : " + getDateTime());
-            self.port.emit("start-session", selectValue);
+            self.port.emit("start-progress", selectValue);
         }
     });
 }
@@ -172,7 +172,7 @@ function pushLinkedIssues(links) {
 
 function buildIssueLinkElement(linkItem) {
     let linkTypeSpan = "";
-    switch (linkItem.type) {
+    switch (linkItem.type.name) {
         case ISSUE_TYPE.EPIC:
             linkTypeSpan = "  <span class=\"label label-primary pull-right\">Epic</span>";
             break;

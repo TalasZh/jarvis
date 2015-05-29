@@ -1,36 +1,29 @@
-var loginButton = document.getElementById("loginButton");
+var loginButton = $("#loginButton");
 if ( loginButton !== null ){
-	loginButton.onclick = function(event) {
-		// console.log("Hello " + document.getElementById("username").value);
-		var username = document.getElementById("username");
-		var password = document.getElementById("password");
+	loginButton.click(function(event) {
+		var username = $("#username");
+		var password = $("#password");
+		 console.log("Hello " + username.text());
 		self.port.emit("handle-login", username.value, password.value );
-		// username.value = '';
-		// password.value = '';
-	};
+		 username.text('');
+		 password.text('');
+	});
 }
 
-
-var annotator = document.getElementById("annotator");
+var annotator = $("#annotator");
 if ( annotator !== null ){
-	annotator.addEventListener("click", function(event) {
+	annotator.click(function(event) {
 
 		console.log( annotator.className );
-		if ( annotator.className == "btn btn-primary btn-sm" ) {
-			annotator.className = "btn btn-default btn-sm";
+		if ( annotator.prop("class") == "btn btn-primary btn-sm" ) {
+			annotator.prop("class", "btn btn-default btn-sm");
 		}
 		else{
-			annotator.className = "btn btn-primary btn-sm";
+			annotator.prop("class", "btn btn-primary btn-sm");
 		}
 
 		if(event.button == 0 && event.shiftKey == false){
 			self.port.emit('left-click');
-			// if ( annotator.value == "Enable Annotator" ){
-		 //      annotator.value = "Disable Annotator";
-		 //    }
-		 //    else {
-		 //      annotator.value = "Enable Annotator";
-			// }
 		}
 
 		if(event.button == 2 || (event.button == 0 && event.shiftKey == true)){
@@ -38,41 +31,37 @@ if ( annotator !== null ){
 			console.log("eadfadf");
 			event.preventDefault();
 		}
-
-	}, true);
+	});
 }
 
-
-var selectProject = document.getElementById("selectProject");
+var selectProject = $("#selectProject");
 if ( selectProject !== null ){
-	selectProject.addEventListener("click", function() {
-		var x = document.getElementById("selectProjectCombobox");
-		var selectIndex=x.selectedIndex;
-		var selectValue=x.options[selectIndex].text;
+	selectProject.click(function() {
+		var x = $("#selectProjectCombobox[name='selectProjectCombobox']");
+		var selectValue=x.find("option:selected").text();
 		self.port.emit("project-selected", selectValue);
 
-	}, false);
+	});
 }
 
 
-var selectIssue = document.getElementById("selectIssue");
+var selectIssue = $("#selectIssue");
 if ( selectIssue !== null ){
-	selectIssue.addEventListener("click", function() {
-		var x = document.getElementById("issueCombobox");
-		var selectIndex=x.selectedIndex;
-		var selectValue=x.options[selectIndex].text;
+	selectIssue.click( function() {
+		var x = $("#issueCombobox");
+		var selectValue=x.find("option:selected").text();
 		self.port.emit("issue-selected", selectValue);
-	}, false);
+	});
 }
 
 
-var backButton = document.getElementById("backButton");
+var backButton = $("#backButton");
 if ( backButton !== null ){
-	backButton.onclick = function(event) {
-		var x = document.getElementById("issueNumber").innerHTML;
+	backButton.click(function(event) {
+		var x = $("#issueNumber").html();
 		var y = x.substr(0, x.indexOf('-'));
 		self.port.emit("back-button-pressed", y );
-	};
+	});
 }
 
 var backButtonOnResearchPage = $("#backButtonOnResearchPage");
@@ -82,11 +71,11 @@ if ( backButtonOnResearchPage !== null ){
 	});
 }
 
-var backButtonOnProjectSelectionPage = document.getElementById("backButtonOnProjectSelectionPage");
+var backButtonOnProjectSelectionPage = $("#backButtonOnProjectSelectionPage");
 if ( backButtonOnProjectSelectionPage !== null ){
-	backButtonOnProjectSelectionPage.onclick = function(event) {
+	backButtonOnProjectSelectionPage.click(function(event) {
 		self.port.emit("back-button-pressed-on-project-selection-page" );
-	};
+	});
 }
 
 
@@ -120,57 +109,51 @@ function getDateTime() {
 
 // fill out combo box options
 function fillComboBox(json) {
-	var x = document.getElementById("issueCombobox");
-	x.onchange = function(event) {
-		var selectIndex=x.selectedIndex;
-		var selectValue=x.options[selectIndex].text;
+	var x = $("#issueCombobox");
+	x.change(function(event) {
+		var selectValue=x.find("option:selected").text();
 		console.log( selectValue + " : " + JSON.stringify(json));
-	};
+	});
 
 	console.log( json.size );
 	for (var i = 0; i < json.length; i++) {
 	    var issue = json[i];
-	    var option = document.createElement("option");
-	  	option.text = issue.key;
-	  	x.add(option);
-	}
+        x.append($("<option></option>").text(issue.key));
+    }
+    x.find('option:eq(0)').attr('selected', true);
+    x.trigger("change");
 }
 
 // fill out projects combo box options
 function fillProjectCombobox(json) {
 	console.log("Fill Project Combobox");
-	var x = document.getElementById("selectProjectCombobox");
-	x.onchange = function(event) {
-		var selectIndex=x.selectedIndex;
-		var selectValue=x.options[selectIndex].text;
+	var x = $("#selectProjectCombobox");
+	x.change( function(event) {
+		var selectValue=x.find("option:selected").text();
 
 		console.log( selectValue );
 		self.port.emit("project-changed", selectValue);
-	};
+	});
 
 	for (var i = 0; i < json.length; i++) {
 	    var project = json[i];
-	    var option = document.createElement("option");
-  		option.text = project.key;
-  		x.add(option);
+        x.append($("<option></option>").text(project.key));
   		console.log( project.key );
-  		// self.port.emit("project-changed", project.key);
 	}
-
+    x.find('option:eq(0)').attr('selected', true);
+    x.trigger("change");
 }
 
 function updateProjectInfo(json) {
-	document.getElementById("name").innerHTML = json.name;
-	document.getElementById("key").innerHTML = json.key;
-	document.getElementById("description").innerHTML = json.description;
-	// if (json.lead !== "undefined"){
-	// 	document.getElementById("lead").innerHTML = json.lead.name;
-	// }
-	document.getElementById("versions").innerHTML = json.versions;
+	$("#name").html(json.name);
+	$("#key").html(json.key);
+	$("#description").html(json.description);
+	$("#versions").html(json.versions);
 }
 
 self.port.on("fill-combo-box", function(json) {
 	fillComboBox(json);
+    pushLinkedIssues(json);
 });
 
 
@@ -184,33 +167,51 @@ self.port.on("update-project-information", function(json){
 });
 
 
-var issueLink = document.getElementById("issueLink");
+var issueLink = $("#issueLink");
 if ( issueLink !== null ){
-	issueLink.onclick = function(event) {
+	issueLink.click(function(event) {
 		self.port.emit("link-clicked", issueLink.innerHTML );
-	};
+	});
 }
 
+function pushLinkedIssues(links) {
+    let issueList = $("#list-issues");
+    issueList.empty();
+    for (let item of links) {
+        issueList.append(buildIssueLinkElement(item));
+    }
+    //notifies controller to select another issue
+    $("a.issue-link").click(function () {
+        self.port.emit('issue-selected',
+            $(this).text().trim()
+        );
+    });
+}
 
+function buildIssueLinkElement(linkItem) {
+    let linkTypeSpan = "";
+    switch (linkItem.type.name) {
+        case ISSUE_TYPE.EPIC:
+            linkTypeSpan = "  <span class=\"label label-primary pull-right\">Epic</span>";
+            break;
+        case ISSUE_TYPE.PHASE:
+            linkTypeSpan = "  <span class=\"label label-success\">Phase</span>";
+            break;
+        case ISSUE_TYPE.RESEARCH:
+            linkTypeSpan = "  <span class=\"label label-info\">Research</span>";
+            break;
+        case ISSUE_TYPE.STORY:
+            linkTypeSpan = "  <span class=\"label label-warning\">Story</span>";
+            break;
+        case ISSUE_TYPE.BUG:
+            linkTypeSpan = "  <span class=\"label label-danger\">Bug</span>";
+            break;
+        default :
+            linkTypeSpan = "  <span class=\"label label-default\">Task</span>";
+            break;
+    }
 
-// var textArea = document.getElementById("edit-box");
-// textArea.addEventListener('keyup', function onkeyup(event) {
-//   if (event.keyCode == 13) {
-//     // Remove the newline.
-//     text = textArea.value.replace(/(\r\n|\n|\r)/gm,"");
-//     self.port.emit("text-entered", text);
-//     textArea.value = '';
-//   }
-// }, false);
-
-
-// Listen for the "show" event being sent from the
-// main add-on code. It means that the panel's about
-// to be shown.
-//
-// Set the focus to the text area so the user can
-// just start typing.
-
-// self.port.on("show", function onShow() {
-//   textArea.focus();
-// });
+    return "<li class=\"list-group-item\">" +
+        "<a class= \"issue-link\" href=\"#\">" + linkItem.key + "</a>" + linkTypeSpan +
+        "</li>";
+}
