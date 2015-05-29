@@ -187,8 +187,9 @@ exports.main = function () {
         label: "Annotate",
         image: self.data.url("icon-16.png"),
         context: [cm.SelectionContext()],
-        contentScriptFile: [data.url('jquery-2.1.3.min.js'),
-                            data.url('login/jontext.js')],
+        contentScriptFile: [data.url('login/context-menu.js'),
+                            data.url('jquery-2.1.4.js'),
+                            data.url('jquery.highlight.js')],
         onMessage: function (data) {
             console.log( "Selected text : "  +  data );
             if ( annotatorIsOn ){
@@ -219,7 +220,8 @@ exports.main = function () {
         include: ['*'],
         contentScriptWhen: 'ready',
         contentScriptFile: [data.url('jquery-2.1.3.min.js'),
-                            data.url('matcher.js')],
+                            data.url('matcher.js'),
+                            data.url('jquery.highlight.js')],
         onAttach: function (worker) {
             if (simpleStorage.storage.annotations) {
                 worker.postMessage(simpleStorage.storage.annotations);
@@ -244,7 +246,7 @@ exports.main = function () {
         height: 180,
         contentURL: data.url('annotation/annotation.html'),
         contentScriptFile: [data.url('jquery-2.1.3.min.js'),
-            data.url('annotation/annotation.js')],
+                            data.url('annotation/annotation.js')],
         onShow: function () {
             this.postMessage(this.content);
         }
