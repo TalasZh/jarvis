@@ -1,123 +1,123 @@
 var loginButton = $("#loginButton");
-if ( loginButton !== null ){
-	loginButton.click(function(event) {
-		var username = $("#username");
-		var password = $("#password");
-		 console.log("Hello " + username.text());
-		self.port.emit("handle-login", username.value, password.value );
-		 username.text('');
-		 password.text('');
-	});
+if (loginButton !== null) {
+    loginButton.click(function (event) {
+        var username = $("#username");
+        var password = $("#password");
+        console.log("Hello " + username.text());
+        self.port.emit("handle-login", username.value, password.value);
+        username.text('');
+        password.text('');
+    });
 }
 
 var annotator = $("#annotator");
-if ( annotator !== null ){
-	annotator.click(function(event) {
+if (annotator !== null) {
+    annotator.click(function (event) {
 
-		console.log( annotator.className );
-		if ( annotator.prop("class") == "btn btn-primary btn-sm" ) {
-			annotator.prop("class", "btn btn-default btn-sm");
-		}
-		else{
-			annotator.prop("class", "btn btn-primary btn-sm");
-		}
+        console.log(annotator.className);
+        if (annotator.prop("class") == "btn btn-primary btn-sm") {
+            annotator.prop("class", "btn btn-default btn-sm");
+        }
+        else {
+            annotator.prop("class", "btn btn-primary btn-sm");
+        }
 
-		if(event.button == 0 && event.shiftKey == false){
-			self.port.emit('left-click');
-		}
+        if (event.button == 0 && event.shiftKey == false) {
+            self.port.emit('left-click');
+        }
 
-		if(event.button == 2 || (event.button == 0 && event.shiftKey == true)){
-			self.port.emit('right-click');
-			console.log("eadfadf");
-			event.preventDefault();
-		}
-	});
+        if (event.button == 2 || (event.button == 0 && event.shiftKey == true)) {
+            self.port.emit('right-click');
+            console.log("eadfadf");
+            event.preventDefault();
+        }
+    });
 }
 
 var selectProject = $("#selectProject");
-if ( selectProject !== null ){
-	selectProject.click(function() {
-		var x = $("#selectProjectCombobox[name='selectProjectCombobox']");
-		var selectValue=x.find("option:selected").text();
-		self.port.emit("project-selected", selectValue);
+if (selectProject !== null) {
+    selectProject.click(function () {
+        var x = $("#selectProjectCombobox[name='selectProjectCombobox']");
+        var selectValue = x.find("option:selected").text();
+        self.port.emit("project-selected", selectValue);
 
-	});
+    });
 }
 
 
 var selectIssue = $("#selectIssue");
-if ( selectIssue !== null ){
-	selectIssue.click( function() {
-		var x = $("#issueCombobox");
-		var selectValue=x.find("option:selected").text();
-		self.port.emit("issue-selected", selectValue);
-	});
+if (selectIssue !== null) {
+    selectIssue.click(function () {
+        var x = $("#issueCombobox");
+        var selectValue = x.find("option:selected").text();
+        self.port.emit("issue-selected", selectValue);
+    });
 }
 
 
 var backButton = $("#backButton");
-if ( backButton !== null ){
-	backButton.click(function(event) {
-		var x = $("#issueNumber").html();
-		var y = x.substr(0, x.indexOf('-'));
-		self.port.emit("back-button-pressed", y );
-	});
+if (backButton !== null) {
+    backButton.click(function (event) {
+        var x = $("#issueNumber").html();
+        var y = x.substr(0, x.indexOf('-'));
+        self.port.emit("back-button-pressed", y);
+    });
 }
 
 var backButtonOnResearchPage = $("#backButtonOnResearchPage");
-if ( backButtonOnResearchPage !== null ){
-	backButtonOnResearchPage.click(function(event) {
-		self.port.emit("back-button-pressed-on-researchpage" );
-	});
+if (backButtonOnResearchPage !== null) {
+    backButtonOnResearchPage.click(function (event) {
+        self.port.emit("back-button-pressed-on-researchpage");
+    });
 }
 
 var backButtonOnProjectSelectionPage = $("#backButtonOnProjectSelectionPage");
-if ( backButtonOnProjectSelectionPage !== null ){
-	backButtonOnProjectSelectionPage.click(function(event) {
-		self.port.emit("back-button-pressed-on-project-selection-page" );
-	});
+if (backButtonOnProjectSelectionPage !== null) {
+    backButtonOnProjectSelectionPage.click(function (event) {
+        self.port.emit("back-button-pressed-on-project-selection-page");
+    });
 }
 
 
 function getDateTime() {
-  var now     = new Date();
-  var year    = now.getFullYear();
-  var month   = now.getMonth()+1;
-  var day     = now.getDate();
-  var hour    = now.getHours();
-  var minute  = now.getMinutes();
-  var second  = now.getSeconds();
-  if(month.toString().length == 1) {
-      var month = '0'+month;
-  }
-  if(day.toString().length == 1) {
-      var day = '0'+day;
-  }
-  if(hour.toString().length == 1) {
-      var hour = '0'+hour;
-  }
-  if(minute.toString().length == 1) {
-      var minute = '0'+minute;
-  }
-  if(second.toString().length == 1) {
-      var second = '0'+second;
-  }
-  var dateTime = year+'/'+month+'/'+day+' '+hour+':'+minute+':'+second;
-   return dateTime;
+    var now = new Date();
+    var year = now.getFullYear();
+    var month = now.getMonth() + 1;
+    var day = now.getDate();
+    var hour = now.getHours();
+    var minute = now.getMinutes();
+    var second = now.getSeconds();
+    if (month.toString().length == 1) {
+        var month = '0' + month;
+    }
+    if (day.toString().length == 1) {
+        var day = '0' + day;
+    }
+    if (hour.toString().length == 1) {
+        var hour = '0' + hour;
+    }
+    if (minute.toString().length == 1) {
+        var minute = '0' + minute;
+    }
+    if (second.toString().length == 1) {
+        var second = '0' + second;
+    }
+    var dateTime = year + '/' + month + '/' + day + ' ' + hour + ':' + minute + ':' + second;
+    return dateTime;
 }
 
 
 // fill out combo box options
 function fillComboBox(json) {
-	var x = $("#issueCombobox");
-	x.change(function(event) {
-		var selectValue=x.find("option:selected").text();
-		console.log( selectValue + " : " + JSON.stringify(json));
-	});
+    var x = $("#issueCombobox");
+    x.change(function (event) {
+        var selectValue = x.find("option:selected").text();
+        console.log(selectValue + " : " + JSON.stringify(json));
+    });
 
-	console.log( json.size );
-	for (var i = 0; i < json.length; i++) {
-	    var issue = json[i];
+    console.log(json.size);
+    for (var i = 0; i < json.length; i++) {
+        var issue = json[i];
         x.append($("<option></option>").text(issue.key));
     }
     x.find('option:eq(0)').attr('selected', true);
@@ -126,52 +126,52 @@ function fillComboBox(json) {
 
 // fill out projects combo box options
 function fillProjectCombobox(json) {
-	console.log("Fill Project Combobox");
-	var x = $("#selectProjectCombobox");
-	x.change( function(event) {
-		var selectValue=x.find("option:selected").text();
+    console.log("Fill Project Combobox");
+    var x = $("#selectProjectCombobox");
+    x.change(function (event) {
+        var selectValue = x.find("option:selected").text();
 
-		console.log( selectValue );
-		self.port.emit("project-changed", selectValue);
-	});
+        console.log(selectValue);
+        self.port.emit("project-changed", selectValue);
+    });
 
-	for (var i = 0; i < json.length; i++) {
-	    var project = json[i];
+    for (var i = 0; i < json.length; i++) {
+        var project = json[i];
         x.append($("<option></option>").text(project.key));
-  		console.log( project.key );
-	}
+        console.log(project.key);
+    }
     x.find('option:eq(0)').attr('selected', true);
     x.trigger("change");
 }
 
 function updateProjectInfo(json) {
-	$("#name").html(json.name);
-	$("#key").html(json.key);
-	$("#description").html(json.description);
-	$("#versions").html(json.versions);
+    $("#name").html(json.name);
+    $("#key").html(json.key);
+    $("#description").html(json.description);
+    $("#versions").html(json.versions);
 }
 
-self.port.on("fill-combo-box", function(json) {
-	fillComboBox(json);
+self.port.on("fill-combo-box", function (json) {
+    fillComboBox(json);
     pushLinkedIssues(json);
 });
 
 
-self.port.on("fill-project-combobox", function(json){
-	fillProjectCombobox(json);
+self.port.on("fill-project-combobox", function (json) {
+    fillProjectCombobox(json);
 });
 
 
-self.port.on("update-project-information", function(json){
-	updateProjectInfo(json);
+self.port.on("update-project-information", function (json) {
+    updateProjectInfo(json);
 });
 
 
 var issueLink = $("#issueLink");
-if ( issueLink !== null ){
-	issueLink.click(function(event) {
-		self.port.emit("link-clicked", issueLink.innerHTML );
-	});
+if (issueLink !== null) {
+    issueLink.click(function (event) {
+        self.port.emit("link-clicked", issueLink.innerHTML);
+    });
 }
 
 function pushLinkedIssues(links) {

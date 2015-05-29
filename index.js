@@ -59,7 +59,7 @@ const init = () => {
         else {
             json.forEach(function (session) {
                 var captures = session.captures;
-                captures.forEach(function(annotation){
+                captures.forEach(function (annotation) {
                     var captureId = annotation.id;
                     if (!simpleStorage.storage.annotations[captureId]) {
                         simpleStorage.storage.annotations[captureId] = {};
