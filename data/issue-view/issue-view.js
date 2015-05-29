@@ -79,6 +79,71 @@ self.port.on('set-issue', function (issue) {
     setGeneralFields(issue);
 });
 
+self.port.on('set-session', function (session) {
+    console.log("Setting session");
+    let startStopBtn = $("#startStop");
+    let pauseResumeBtn = $("#pauseResume");
+    let annotator = $("#annotator");
+
+    pauseResumeBtn.prop("disabled", false);
+    startStopBtn.prop("disabled", false);
+    annotator.prop("disabled", false);
+
+    if (session) {
+        startStopBtn.prop("value", STOP);
+        pauseResumeBtn.show();
+        annotator.show();
+
+        switch (session.status) {
+            case SESSION_STATUS.IN_PROGRESS:
+                console.error(session.status);
+                pauseResumeBtn.prop("value", PAUSE);
+                break;
+            case SESSION_STATUS.CLOSED:
+                console.error(session.status);
+                pauseResumeBtn.prop("disabled", true);
+                startStopBtn.prop("disabled", true);
+                annotator.prop("disabled", true);
+                break;
+            case SESSION_STATUS.PAUSED:
+                console.error(session.status);
+                pauseResumeBtn.prop("value", RESUME);
+                annotator.prop("disabled", true);
+                startStopBtn.prop("disabled", true);
+                break;
+        }
+        let captures = session.captures;
+        if (captures) {
+            pushAnnotations(captures);
+        }
+        else {
+            self.port.emit('get-annotations', session.key);
+        }
+    }
+    else {
+        startStopBtn.show();
+        startStopBtn.prop("value", START);
+        pauseResumeBtn.hide();
+        annotator.hide();
+    }
+});
+self.port.on('set-annotations', function (captures) {
+    pushAnnotations(captures);
+});
+
+self.port.on('add-annotation', function (capture) {
+    console.log("Adding annotation");
+    let annotationList = $("#list-annotations");
+    console.log(annotationList);
+    let elem = annotationList.find("#" + capture.id);
+    if (elem) {
+        elem.replaceWith(buildAnnotationElement(capture));
+    }
+    else {
+        annotationList.append(buildAnnotationElement(capture));
+    }
+});
+
 
 function prepareViewForIssue(issue) {
     $("#annotations").hide();
@@ -97,56 +162,6 @@ function prepareViewForResearch(issue) {
 
 function setSession(key) {
     self.port.emit('get-session', key);
-    self.port.on('set-session', function (session) {
-        console.log("Setting session");
-        let startStopBtn = $("#startStop");
-        let pauseResumeBtn = $("#pauseResume");
-        let annotator = $("#annotator");
-
-        pauseResumeBtn.prop("disabled", false);
-        startStopBtn.prop("disabled", false);
-        annotator.prop("disabled", false);
-
-        if (session) {
-            startStopBtn.prop("value", STOP);
-            pauseResumeBtn.show();
-
-            switch (session.status) {
-                case SESSION_STATUS.IN_PROGRESS:
-                    console.error(session.status);
-                    pauseResumeBtn.prop("value", PAUSE);
-                    break;
-                case SESSION_STATUS.CLOSED:
-                    console.error(session.status);
-                    pauseResumeBtn.prop("disabled", true);
-                    startStopBtn.prop("disabled", true);
-                    annotator.prop("disabled", true);
-                    break;
-                case SESSION_STATUS.PAUSED:
-                    console.error(session.status);
-                    pauseResumeBtn.prop("value", RESUME);
-                    annotator.prop("disabled", true);
-                    startStopBtn.prop("disabled", true);
-                    break;
-            }
-            let captures = session.captures;
-            if (captures) {
-                pushAnnotations(captures);
-            }
-            else {
-                self.port.emit('get-annotations', session.key);
-            }
-        }
-        else {
-            startStopBtn.show();
-            startStopBtn.prop("value", START);
-            pauseResumeBtn.hide();
-            annotator.hide();
-        }
-    });
-    self.port.on('set-annotations', function (captures) {
-        pushAnnotations(captures);
-    });
 }
 
 function pushAnnotations(captures) {
@@ -211,7 +226,7 @@ function buildIssueLinkElement(linkItem) {
  * @param annotation
  */
 function buildAnnotationElement(annotation) {
-    return "<a class=\"list-group-item\">" +
+    return "<a class=\"list-group-item\" id=" + annotation.id + ">" +
         "<div class=\"annotation-comment\">" +
         "<p class=\"list-group-item-heading\">" + annotation.comment + "</p>" +
         "</div>" +

@@ -80,6 +80,23 @@ if (backButtonOnProjectSelectionPage !== null) {
     });
 }
 
+
+self.port.on("fill-combo-box", function (json, projectKey) {
+    console.log("Fill combo box");
+    console.log(projectKey);
+    //fillComboBox(json);
+    pushProjectIssues(json);
+    $("#project-link").text(projectKey);
+});
+
+self.port.on("fill-project-combobox", function (json, projectKey) {
+    fillProjectCombobox(json, projectKey);
+});
+
+self.port.on("update-project-information", function (json) {
+    updateProjectInfo(json);
+});
+
 function getDateTime() {
     var now = new Date();
     var year = now.getFullYear();
@@ -156,21 +173,6 @@ function updateProjectInfo(json) {
     $("#versions").html(json.versions);
 }
 
-self.port.on("fill-combo-box", function (json, projectKey) {
-    console.log("Fill combo box");
-    console.log(projectKey);
-    //fillComboBox(json);
-    pushProjectIssues(json);
-    $("#project-link").text(projectKey);
-});
-
-self.port.on("fill-project-combobox", function (json, projectKey) {
-    fillProjectCombobox(json, projectKey);
-});
-
-self.port.on("update-project-information", function (json) {
-    updateProjectInfo(json);
-});
 
 var issueLink = $("#issueLink");
 if (issueLink !== null) {

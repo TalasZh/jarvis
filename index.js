@@ -272,6 +272,7 @@ exports.main = function () {
     // send our own "show" event to the panel's script, so the
     // script can prepare the panel for display.
     panel.on("show", function () {
+        console.log("Panel is shown...");
         panel.port.emit("show");
     });
 
