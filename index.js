@@ -181,6 +181,7 @@ function getUserIssues(jira, username) {
 
 exports.main = function () {
     //tabs.open("https://wiki.ubuntu.com/");
+    listProjects();
 
     var currentIssueKey = "";
     var selector = pageMod.PageMod({
@@ -308,6 +309,7 @@ exports.main = function () {
         },
         onChange: function (state) {
             if (state.checked) {
+                //listProjects();
                 panel.show({
                     position: button
                 });
@@ -318,7 +320,6 @@ exports.main = function () {
     var panel = panels.Panel({
         width: 350,
         height: 500,
-        contentURL: data.url("login/panel.html"),
         contentScriptFile: [data.url('jquery-2.1.3.min.js'),
             data.url('issue-view/issue-view.js'),
             data.url('login/handleLogin.js')],
@@ -544,8 +545,11 @@ exports.main = function () {
     // In this implementation we'll just log the text to the console.
     panel.port.on("handle-login", function (username, password) {
         console.log(username + " " + password);
-
         global_username = username;
+        listProjects();
+    });
+
+    function listProjects(){
         init();
 
         mediator.listProjects(function (error, json) {
@@ -556,7 +560,7 @@ exports.main = function () {
             panel.contentURL = data.url("login/selectProject.html");
             panel.port.emit("fill-project-combobox", json);
         });
-    });
+    }
 
     panel.port.on("build-hierarchy", function (storyKey) {
         console.log(storyKey);
