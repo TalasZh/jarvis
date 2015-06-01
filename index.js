@@ -198,7 +198,7 @@ exports.main = function () {
         image: self.data.url("icon-16.png"),
         context: [cm.SelectionContext()],
         contentScriptFile: [data.url('login/context-menu.js'),
-                            data.url('jquery-2.1.4.js'),
+                            data.url('jquery-2.1.3.min.js'),
                             data.url('jquery.highlight.js')],
         onMessage: function (data) {
             console.log( "Selected text : "  +  data );
