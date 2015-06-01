@@ -79,7 +79,7 @@ function Annotation(annotationText, anchor) {
     this.anchorText = anchor[2];
 }
 
-function handleNewAnnotation(annotationText, anchor, sessionKey) {
+function handleNewAnnotation(annotationText, anchor, sessionKey, callback) {
     var newAnnotation = new Annotation(annotationText, anchor);
 
     mediator.saveCapture(sessionKey, newAnnotation, function (error, json) {
@@ -94,6 +94,7 @@ function handleNewAnnotation(annotationText, anchor, sessionKey) {
             }
             simpleStorage.storage.annotations[captureId] = json;
             updateMatchers();
+            callback(json);
         }
     });
 }
@@ -179,7 +180,10 @@ exports.main = function () {
                 console.log(this.annotationAnchor);
                 console.log(annotationText);
                 console.log(currentIssueKey);
-                handleNewAnnotation(annotationText, this.annotationAnchor, currentIssueKey);
+                handleNewAnnotation(annotationText, this.annotationAnchor, currentIssueKey, function (capture) {
+                    console.log("Handle new annotation callback");
+                    panel.port.emit("call-select-issue", currentIssueKey);
+                });
             }
             annotationEditor.hide();
         },
@@ -327,6 +331,7 @@ exports.main = function () {
     });
 
     panel.port.on("back-button-pressed", function (projectName) {
+        console.log("back-button-pressed");
         mediator.listProjectIssues(projectName, function (error, json) {
             if (error != null) {
                 // console.log( error );
@@ -339,6 +344,7 @@ exports.main = function () {
     });
 
     panel.port.on("back-button-pressed-on-researchpage", function (projectKey) {
+        console.log("back-button-pressed-on-researchpage");
         mediator.listProjects(function (error, json) {
             if (error !== null) {
                 console.error("Error: " + error);
@@ -351,6 +357,7 @@ exports.main = function () {
     });
 
     panel.port.on("back-button-pressed-on-project-selection-page", function () {
+        console.log("back-button-pressed-on-project-selection-page");
         panel.contentURL = data.url("login/panel.html");
     });
 
@@ -358,6 +365,7 @@ exports.main = function () {
      * Event triggered when issues was selected from combo box
      */
     panel.port.on("issue-selected", function (selectedIssueKey) {
+        console.log("issue-selected");
         mediator.getIssue(selectedIssueKey, function (error, json) {
             if (error !== null) {
                 console.error(error + ": Could not retrieve " + "'s issues.");
@@ -392,6 +400,7 @@ exports.main = function () {
      * Get session full information, returns null if session wasn't started yet
      */
     panel.port.on('get-session', function (sessionKey) {
+        console.log("get-session");
         mediator.getSession(sessionKey, function (error, json) {
             if (error) {
                 console.error("Error: " + error);
@@ -422,7 +431,7 @@ exports.main = function () {
      * Function for retrieving session annotations
      */
     panel.port.on('get-annotations', function (sessionKey) {
-
+        console.log("get-annotations");
         mediator.listSessionCaptures(sessionKey, function (error, json) {
             if (error) {
                 console.error("Error: " + error);

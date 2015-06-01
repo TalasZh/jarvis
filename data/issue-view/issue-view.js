@@ -144,6 +144,11 @@ self.port.on('add-annotation', function (capture) {
     }
 });
 
+self.port.on("call-select-issue", function(issueKey){
+    console.log("call-back-button-pressed");
+    self.port.emit('select-issue', issueKey);
+});
+
 
 function prepareViewForIssue(issue) {
     $("#annotations").hide();
