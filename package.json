@@ -1,4 +1,33 @@
 {
+  "preferences": [
+    {
+      "description": "Your service address",
+      "type": "string",
+      "name": "mediatorHost",
+      "value": "jarvis-test.critical-factor.com",
+      "title": "Service address"
+    },
+    {
+      "description": "Service working port",
+      "type": "string",
+      "name": "mediatorPort",
+      "value": "8080",
+      "title": "Service port"
+    },
+    {
+      "description": "Service protocol",
+      "type": "string",
+      "name": "mediatorProtocol",
+      "value": "http",
+      "title": "Service protocol"
+    },
+    {
+      "label": "Apply",
+      "type": "control",
+      "name": "applyChanges",
+      "title": "Apply changes"
+    }
+  ],
   "title": "Jarvis Annotator",
   "name": "jarvis-annotator",
   "version": "0.0.1",

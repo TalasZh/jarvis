@@ -5,13 +5,15 @@ var panels = require('sdk/panel');
 var simpleStorage = require('sdk/simple-storage');
 var notifications = require('sdk/notifications');
 
+var simplePrefs = require("sdk/simple-prefs");
+
 var tabs = require("sdk/tabs");
 
 var { ToggleButton } = require('sdk/ui/button/toggle');
 var self = require("sdk/self");
 var {Cc, Ci, Cu} = require("chrome");
 var system = require("sdk/system");
-var  cm = require("sdk/context-menu");
+var cm = require("sdk/context-menu");
 
 let { search } = require("sdk/places/history");
 
@@ -28,18 +30,50 @@ var global_username;
 
 
 var annotatorIsOn = false;
+var authenticated = false;
 var matchers = [];
+
+simplePrefs.on("applyChanges", onPrefChange);
+
+function onPrefChange(prefName) {
+    console.log("Applied last changes");
+    mediator = new MediatorApi(simplePrefs.prefs.mediatorProtocol,
+        simplePrefs.prefs.mediatorHost,
+        simplePrefs.prefs.mediatorPort,
+        null,
+        null,
+        true);
+}
 
 const init = () => {
     console.log("Initializing jarvis plugin...");
+
+    //check if cookies are exist if not redirect to auth page
+    var cookieManager = Cc["@mozilla.org/cookiemanager;1"].getService(Ci.nsICookieManager2);
+    var count = cookieManager.getCookiesFromHost(simplePrefs.prefs.mediatorHost);
+
+    while (count.hasMoreElements()) {
+        var cookie = count.getNext().QueryInterface(Ci.nsICookie2);
+        if (cookie.name === "crowd.token_key") {
+            authenticated = true;
+        }
+        console.log(cookie.host + ";" + cookie.name + "=" + cookie.value + "\n");
+    }
+
+    if(!authenticated) {
+        tabs.open(simplePrefs.prefs.mediatorProtocol + "://" + simplePrefs.prefs.mediatorHost + ":" + simplePrefs.prefs.mediatorPort);
+        return;
+    }
+
     if (!mediator) {
-        mediator = new MediatorApi('http',
-            'jarvis-test.critical-factor.com',
-            '8080',
+        mediator = new MediatorApi(simplePrefs.prefs.mediatorProtocol,
+            simplePrefs.prefs.mediatorHost,
+            simplePrefs.prefs.mediatorPort,
             null,
             null,
             true);
     }
+
     console.log("hello");
     simpleStorage.storage.annotations = {};
     simpleStorage.on("OverQuota", function () {
@@ -146,14 +180,14 @@ function getUserIssues(jira, username) {
 
 
 exports.main = function () {
-    tabs.open("https://wiki.ubuntu.com/");
+    //tabs.open("https://wiki.ubuntu.com/");
 
     var currentIssueKey = "";
     var selector = pageMod.PageMod({
         include: ['*'],
         contentScriptWhen: 'ready',
         contentScriptFile: [data.url('jquery-2.1.3.min.js'),
-                            data.url('selector.js')],
+            data.url('selector.js')],
 
         onAttach: function (worker) {
             worker.postMessage(annotatorIsOn);
@@ -200,11 +234,11 @@ exports.main = function () {
         image: self.data.url("icon-16.png"),
         context: [cm.SelectionContext()],
         contentScriptFile: [data.url('login/context-menu.js'),
-                            data.url('jquery-2.1.3.min.js'),
-                            data.url('jquery.highlight.js')],
+            data.url('jquery-2.1.3.min.js'),
+            data.url('jquery.highlight.js')],
         onMessage: function (data) {
-            console.log( "Selected text : "  +  data );
-            if ( annotatorIsOn ){
+            console.log("Selected text : " + data);
+            if (annotatorIsOn) {
                 onAttachWorker(annotationEditor, data);
                 annotationEditor.show();
             }
@@ -217,7 +251,7 @@ exports.main = function () {
         height: 200,
         contentURL: data.url('list/annotation-list.html'),
         contentScriptFile: [data.url('jquery-2.1.3.min.js'),
-                            data.url('list/annotation-list.js')],
+            data.url('list/annotation-list.js')],
         contentScriptWhen: 'ready',
         onShow: function () {
             this.postMessage(simpleStorage.storage.annotations);
@@ -232,8 +266,8 @@ exports.main = function () {
         include: ['*'],
         contentScriptWhen: 'ready',
         contentScriptFile: [data.url('jquery-2.1.3.min.js'),
-                            data.url('matcher.js'),
-                            data.url('jquery.highlight.js')],
+            data.url('matcher.js'),
+            data.url('jquery.highlight.js')],
         onAttach: function (worker) {
             if (simpleStorage.storage.annotations) {
                 worker.postMessage(simpleStorage.storage.annotations);
@@ -258,7 +292,7 @@ exports.main = function () {
         height: 180,
         contentURL: data.url('annotation/annotation.html'),
         contentScriptFile: [data.url('jquery-2.1.3.min.js'),
-                            data.url('annotation/annotation.js')],
+            data.url('annotation/annotation.js')],
         onShow: function () {
             this.postMessage(this.content);
         }
@@ -342,9 +376,12 @@ exports.main = function () {
         });
     });
 
-    panel.port.on('left-click', function () {
-        console.log('activate/deactivate');
-        toggleActivation();
+    panel.port.on('left-click', function (activate) {
+        console.log('activate/deactivate annotator: ' + activate);
+        if(activate !== undefined) {
+            annotatorIsOn = !activate;
+        }
+        console.log("Now annotator is: " + toggleActivation());
     });
 
     panel.port.on('right-click', function () {
@@ -473,6 +510,10 @@ exports.main = function () {
 
     panel.port.on("link-clicked", function (issueId) {
         tabs.open("http://test-jira.critical-factor.com/browse/" + issueId);
+    });
+
+    panel.port.on("navigate-to", function (url) {
+        tabs.open(url);
     });
 
     panel.port.on("project-changed", function (projectKey) {

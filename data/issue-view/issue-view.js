@@ -20,9 +20,9 @@ const ISSUE_TYPE = {
 };
 
 var buildHierarchyBtn = $("#buildHierarchy");
-if (buildHierarchyBtn !==null ) {
+if (buildHierarchyBtn !== null) {
     buildHierarchyBtn.hide();
-    buildHierarchyBtn.click(function(){
+    buildHierarchyBtn.click(function () {
         var x = $("#issueNumber");
         var selectValue = x.text();
         console.log(selectValue);
@@ -101,6 +101,7 @@ self.port.on('set-session', function (session) {
     let pauseResumeBtn = $("#pauseResume");
     let annotator = $("#annotator");
 
+    pushAnnotations(null);
     pauseResumeBtn.prop("disabled", false);
     startStopBtn.prop("disabled", false);
     annotator.prop("disabled", false);
@@ -114,18 +115,27 @@ self.port.on('set-session', function (session) {
             case SESSION_STATUS.IN_PROGRESS:
                 console.error(session.status);
                 pauseResumeBtn.prop("value", PAUSE);
+
+                self.port.emit("left-click", true);
+                annotator.prop("class", "btn btn-primary btn-sm");
                 break;
             case SESSION_STATUS.CLOSED:
                 console.error(session.status);
                 pauseResumeBtn.prop("disabled", true);
                 startStopBtn.prop("disabled", true);
                 annotator.prop("disabled", true);
+
+                self.port.emit("left-click", false);
+                annotator.prop("class", "btn btn-default btn-sm");
                 break;
             case SESSION_STATUS.PAUSED:
                 console.error(session.status);
                 pauseResumeBtn.prop("value", RESUME);
                 annotator.prop("disabled", true);
                 startStopBtn.prop("disabled", true);
+
+                self.port.emit("left-click", false);
+                annotator.prop("class", "btn btn-default btn-sm");
                 break;
         }
         let captures = session.captures;
@@ -137,6 +147,8 @@ self.port.on('set-session', function (session) {
         }
     }
     else {
+        self.port.emit("left-click", false);
+        annotator.prop("class", "btn btn-primary btn-sm");
         startStopBtn.show();
         startStopBtn.prop("value", START);
         pauseResumeBtn.hide();
@@ -160,7 +172,7 @@ self.port.on('add-annotation', function (capture) {
     }
 });
 
-self.port.on("call-select-issue", function(issueKey){
+self.port.on("call-select-issue", function (issueKey) {
     console.log("call-back-button-pressed");
     self.port.emit('select-issue', issueKey);
 });
@@ -189,8 +201,16 @@ function setSession(key) {
 function pushAnnotations(captures) {
     let annotationList = $("#list-annotations");
     annotationList.empty();
+    if (!captures) {
+        return;
+    }
     for (let annotation of captures) {
-        annotationList.append(buildAnnotationElement(annotation));
+        let elem = buildAnnotationElement(annotation);
+        annotationList.append(elem);
+        $(elem).attr("capture-url", annotation.url);
+        $(elem).click(function () {
+            self.port.emit("navigate-to", $(this).attr('capture-url'));
+        });
     }
 }
 
@@ -212,7 +232,7 @@ function buildIssueLinkElement(linkItem) {
     let linkTypeSpan = "";
     switch (linkItem.type.name) {
         case ISSUE_TYPE.EPIC:
-            linkTypeSpan = "  <span class=\"label label-primary pull-right\">Epic</span>";
+            linkTypeSpan = "  <span class=\"label label-primary\">Epic</span>";
             break;
         case ISSUE_TYPE.PHASE:
             linkTypeSpan = "  <span class=\"label label-success\">Phase</span>";
@@ -248,14 +268,14 @@ function buildIssueLinkElement(linkItem) {
  * @param annotation
  */
 function buildAnnotationElement(annotation) {
-    return "<a class=\"list-group-item\" id=" + annotation.id + ">" +
+    return $.parseHTML("<a class=\"list-group-item\" id=" + annotation.id + ">" +
         "<div class=\"annotation-comment\">" +
         "<p class=\"list-group-item-heading\">" + annotation.comment + "</p>" +
         "</div>" +
         "    <blockquote class=\"list-group-item-text\">" +
         annotation.anchorText +
         "</blockquote>" +
-        "</a>";
+        "</a>");
 }
 
 function setGeneralFields(issue) {
