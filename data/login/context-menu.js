@@ -27,26 +27,6 @@ function getSelectionText() {
 }
 
 
-function getMethods(obj) {
-  var result = [];
-  for (var id in obj) {
-    try {
-      if (typeof(obj[id]) == "function") {
-        result.push(id + ": " + obj[id].toString());
-      }
-    } catch (err) {
-      result.push(id + ": inaccessible");
-    }
-  }
-  return result;
-}
-
-
-function high(){
-    console.log("hahdf");
-    $("body p").highlight('to');
-}
-
 function highlightSelection()  {
     var selection;
 
@@ -84,5 +64,5 @@ function highlightSelection()  {
 
 let selection;
 
-self.on("click", high);
+self.on("click", highlightSelection);
 

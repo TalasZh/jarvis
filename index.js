@@ -7,9 +7,7 @@ var notifications = require('sdk/notifications');
 
 var tabs = require("sdk/tabs");
 
-
 var { ToggleButton } = require('sdk/ui/button/toggle');
-// var panels = require("sdk/panel");
 var self = require("sdk/self");
 var {Cc, Ci, Cu} = require("chrome");
 var system = require("sdk/system");
@@ -37,6 +35,7 @@ var annotatorIsOn = false;
 var matchers = [];
 
 const init = () => {
+    console.log("Initializing jarvis plugin...");
     if (!mediator) {
         mediator = new MediatorApi('http',
             'jarvis-test.critical-factor.com',
@@ -45,21 +44,39 @@ const init = () => {
             null,
             true);
     }
-    console.log("hello")
+    console.log("hello");
+    simpleStorage.storage.annotations = {};
+    simpleStorage.on("OverQuota", function () {
+        notifications.notify({
+            title: 'Storage space exceeded',
+            text: 'Removing recent annotations'
+        });
+        while (simpleStorage.quotaUsage > 1)
+            simpleStorage.storage.annotaions.pop();
+    });
+
+    mediator.listSessions(function (error, json) {
+        console.log("All sessions response...");
+        if (error) {
+            console.error("Error: " + error);
+        }
+        else {
+            json.forEach(function (session) {
+                var captures = session.captures;
+                captures.forEach(function (annotation) {
+                    var captureId = annotation.id;
+                    if (!simpleStorage.storage.annotations[captureId]) {
+                        simpleStorage.storage.annotations[captureId] = {};
+                    }
+                    simpleStorage.storage.annotations[captureId] = annotation;
+                });
+            });
+            updateMatchers();
+        }
+    });
 };
 
-
-if (!simpleStorage.storage.annotations)
-    simpleStorage.storage.annotations = {};
-
-simpleStorage.on("OverQuota", function () {
-    notifications.notify({
-        title: 'Storage space exceeded',
-        text: 'Removing recent annotations'
-    });
-    while (simpleStorage.quotaUsage > 1)
-        simpleStorage.storage.annotaions.pop();
-});
+init();
 
 function Annotation(annotationText, anchor) {
     this.comment = annotationText;
@@ -78,10 +95,13 @@ function handleNewAnnotation(annotationText, anchor, sessionKey) {
         else {
             console.log(JSON.stringify(json));
             let captureId = json.id;
-            simpleStorage.storage.annotations.captureId = json;
+            if (!simpleStorage.storage.annotations[captureId]) {
+                simpleStorage.storage.annotations[captureId] = {};
+            }
+            simpleStorage.storage.annotations[captureId] = json;
+            updateMatchers();
         }
     });
-    updateMatchers();
 }
 
 function onAttachWorker(annotationEditor, data) {
@@ -111,11 +131,11 @@ function toggleActivation() {
 }
 
 function updateMatchers() {
+    console.log("Updating matchers...");
     matchers.forEach(function (matcher) {
         matcher.postMessage(simpleStorage.storage.annotations);
     });
 }
-
 
 function getUserIssues(jira, username) {
     jira.getUsersIssues(username, true, function (error, json) {
@@ -252,80 +272,6 @@ exports.main = function () {
         }
     });
 
-    var showIssue = ToggleButton({
-        id: "show-issue",
-        label: "Show Issue",
-        icon: {
-            "16": data.url('icon-16.png'),
-            "32": data.url('icon-32.png'),
-            "64": data.url('icon-64.png')
-        },
-        onClick: function (state) {
-            if (state.checked) {
-                init();
-                mediator.getIssue("JAR-2", function (error, json) {
-                    if (error !== null) {
-                        console.error("Error: " + error);
-                    }
-                    else if (json !== undefined) {
-                        console.log("Response: " + JSON.stringify(json));
-                        issueView.port.emit('set-issue', json);
-                        currentIssueKey = json.key;
-                    }
-                });
-                issueView.show({
-                    position: showIssue
-                });
-            }
-        }
-    });
-
-    var issueView = panels.Panel({
-        height: 600,
-        width: 350,
-        contentScriptFile: [data.url('issue-view/issue-view.js'),
-            data.url('jquery-2.1.3.min.js')],
-        contentScriptWhen: "start",
-        contentURL: data.url("issue-view/issue-view.html"),
-        onShow: function () {
-        },
-        onHide: function (state) {
-            showIssue.state('window', {checked: false});
-        }
-    });
-
-    issueView.port.on('select-issue', function (issueKey) {
-        issueView.contentURL = data.url("issue-view/issue-view.html");
-        issueView.contentScriptFile = [data.url('issue-view/issue-view.js'),
-            data.url('jquery-2.1.3.min.js')];
-        console.log("SelectedIssueKey: " + issueKey);
-        mediator.getIssue(issueKey, function (error, json) {
-            if (error !== null) {
-                console.error("Error: " + error);
-            }
-            else if (json !== undefined) {
-                console.log("Response: " + JSON.stringify(json));
-                issueView.port.emit('set-issue', json);
-                currentIssueKey = json.key;
-            }
-        });
-    });
-
-    issueView.port.on('get-annotations', function (issueKey) {
-        let annotations = [
-            {
-                id: 1,
-                issueId: issueKey,
-                url: "http://getbootstrap.com/components/#glyphicons",
-                comment: "This is awesome resource",
-                ancestorId: "",
-                anchorText: "sdfgsewrysdfbsdf sdrtyse"
-            }
-        ];
-        issueView.port.emit('set-annotations', annotations);
-    });
-
-
     var button = ToggleButton({
         id: "my-button",
         label: "Jarvis",
@@ -342,7 +288,6 @@ exports.main = function () {
             }
         }
     });
-
 
     var panel = panels.Panel({
         width: 350,
@@ -361,13 +306,13 @@ exports.main = function () {
     // send our own "show" event to the panel's script, so the
     // script can prepare the panel for display.
     panel.on("show", function () {
+        console.log("Panel is shown...");
         panel.port.emit("show");
     });
 
-
     panel.port.on("stop-progress", function (issueId) {
         console.log("Stop progress.");
-        mediator.stopSession(issueId, function(error, json){
+        mediator.stopSession(issueId, function (error, json) {
             if (error) {
                 console.error("Error: " + error);
             }
@@ -377,7 +322,6 @@ exports.main = function () {
             }
         });
     });
-
 
     panel.port.on("start-progress", function (issueId) {
         console.log("Start progress.");
@@ -393,9 +337,9 @@ exports.main = function () {
 
     });
 
-    panel.port.on('pause-session', function(sessionKey){
+    panel.port.on('pause-progress', function (sessionKey) {
         console.log("Pause session.");
-        mediator.pauseSession(sessionKey, function(error, json){
+        mediator.pauseSession(sessionKey, function (error, json) {
             if (error) {
                 console.error("Error: " + error);
             }
@@ -405,7 +349,6 @@ exports.main = function () {
             }
         });
     });
-
 
     panel.port.on('left-click', function () {
         console.log('activate/deactivate');
@@ -417,7 +360,6 @@ exports.main = function () {
         annotationList.show();
     });
 
-
     panel.port.on("back-button-pressed", function (projectName) {
         mediator.listProjectIssues(projectName, function (error, json) {
             if (error != null) {
@@ -426,12 +368,11 @@ exports.main = function () {
                 return;
             }
             panel.contentURL = data.url("login/research.html");
-            panel.port.emit("fill-combo-box", json);
+            panel.port.emit("fill-combo-box", json, projectName);
         });
     });
 
-
-    panel.port.on("back-button-pressed-on-researchpage", function () {
+    panel.port.on("back-button-pressed-on-researchpage", function (projectKey) {
         mediator.listProjects(function (error, json) {
             if (error !== null) {
                 console.error("Error: " + error);
@@ -439,15 +380,13 @@ exports.main = function () {
             }
 
             panel.contentURL = data.url("login/selectProject.html");
-            panel.port.emit("fill-project-combobox", json);
+            panel.port.emit("fill-project-combobox", json, projectKey);
         });
     });
-
 
     panel.port.on("back-button-pressed-on-project-selection-page", function () {
         panel.contentURL = data.url("login/panel.html");
     });
-
 
     /**
      * Event triggered when issues was selected from combo box
@@ -494,6 +433,17 @@ exports.main = function () {
             else if (json) {
                 console.log(JSON.stringify(json));
                 panel.port.emit('set-session', json);
+                if (json.captures) {
+                    var annotations = json.captures;
+                    annotations.forEach(function (annotation) {
+                        let captureId = annotation.id;
+                        if (!simpleStorage.storage.annotations[captureId]) {
+                            simpleStorage.storage.annotations[captureId] = {};
+                        }
+                        simpleStorage.storage.annotations[captureId] = annotation;
+                    });
+                    updateMatchers();
+                }
             }
             else {
                 console.warn("Session doesn't exist for sessionKey: " + sessionKey);
@@ -513,15 +463,21 @@ exports.main = function () {
             }
             else {
                 panel.port.emit('set-annotations', json);
+                json.forEach(function (annotation) {
+                    let captureId = annotation.id;
+                    if (!simpleStorage.storage.annotations[captureId]) {
+                        simpleStorage.storage.annotations[captureId] = {};
+                    }
+                    simpleStorage.storage.annotations[captureId] = annotation;
+                });
+                updateMatchers();
             }
         });
     });
 
-
     panel.port.on("link-clicked", function (issueId) {
         tabs.open("http://test-jira.critical-factor.com/browse/" + issueId);
     });
-
 
     panel.port.on("project-changed", function (projectKey) {
         mediator.getProject(projectKey, function (error, json) {
@@ -534,7 +490,6 @@ exports.main = function () {
         });
     });
 
-
     panel.port.on("project-selected", function (projectName) {
         mediator.listProjectIssues(projectName, function (error, json) {
             if (error != null) {
@@ -543,10 +498,9 @@ exports.main = function () {
                 return;
             }
             panel.contentURL = data.url("login/research.html");
-            panel.port.emit("fill-combo-box", json);
+            panel.port.emit("fill-combo-box", json, projectName);
         });
     });
-
 
     // Listen for messages called "text-entered" coming from
     // the content script. The message payload is the text the user
@@ -556,13 +510,6 @@ exports.main = function () {
         console.log(username + " " + password);
 
         global_username = username;
-
-        mediator = new MediatorApi('http',
-            'jarvis-test.critical-factor.com',
-            '8080',
-            null,
-            null,
-            true);
 
         mediator.listProjects(function (error, json) {
             if (error !== null) {
