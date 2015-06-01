@@ -356,5 +356,24 @@ MediatorApi.prototype.pauseSession = function (sessionKey, callback) {
     }, "PUT");
 };
 
+MediatorApi.prototype.buildHierarchy = function (storyKey, callback) {
+    var options = {
+        url: this.makeUri("/sessions/" + storyKey + "/generate"),
+        anonymous: this.strictSSL
+    };
+
+    this.doRequest(options, function (response) {
+        if (response.status === 400) {
+            callback(response.statusText + " : doesn't exist");
+            return;
+        }
+        else if (response.status !== 200) {
+            callback(response.statusText + ": something definitely is wrong( " + response.text);
+            return;
+        }
+        callback(null, response.text);
+    }, "POST");
+};
+
 
 exports.MediatorApi = MediatorApi;

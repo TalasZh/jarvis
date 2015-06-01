@@ -177,7 +177,7 @@ function updateProjectInfo(json) {
 var issueLink = $("#issueLink");
 if (issueLink !== null) {
     issueLink.click(function (event) {
-        self.port.emit("link-clicked", issueLink.innerHTML);
+        self.port.emit("link-clicked", issueLink.text());
     });
 }
 

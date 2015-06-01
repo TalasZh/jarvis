@@ -137,7 +137,6 @@ function updateMatchers() {
 function getUserIssues(jira, username) {
     jira.getUsersIssues(username, true, function (error, json) {
         if (error != null) {
-            // console.log( error );
             console.error("Could not retrieve " + username + "'s issues.");
             return;
         }
@@ -157,7 +156,6 @@ exports.main = function () {
                             data.url('selector.js')],
 
         onAttach: function (worker) {
-            // console.log(jira);
             worker.postMessage(annotatorIsOn);
             selectors.push(worker);
             worker.port.on('show', function (data) {
@@ -358,7 +356,6 @@ exports.main = function () {
         console.log("back-button-pressed");
         mediator.listProjectIssues(projectName, function (error, json) {
             if (error != null) {
-                // console.log( error );
                 console.error("Could not retrieve " + global_username + "'s issues.");
                 return;
             }
@@ -492,7 +489,6 @@ exports.main = function () {
     panel.port.on("project-selected", function (projectName) {
         mediator.listProjectIssues(projectName, function (error, json) {
             if (error != null) {
-                // console.log( error );
                 console.error("Could not retrieve " + global_username + "'s issues.");
                 return;
             }
@@ -509,6 +505,7 @@ exports.main = function () {
         console.log(username + " " + password);
 
         global_username = username;
+        init();
 
         mediator.listProjects(function (error, json) {
             if (error !== null) {
@@ -517,6 +514,17 @@ exports.main = function () {
             }
             panel.contentURL = data.url("login/selectProject.html");
             panel.port.emit("fill-project-combobox", json);
+        });
+    });
+
+    panel.port.on("build-hierarchy", function (storyKey) {
+        console.log(storyKey);
+        mediator.buildHierarchy(storyKey, function (error, json) {
+            if (error !== null) {
+                console.error("Error: " + error);
+                return;
+            }
+            console.log("Success");
         });
     });
 };

@@ -19,6 +19,18 @@ const ISSUE_TYPE = {
     PHASE: "Phase"
 };
 
+var buildHierarchyBtn = $("#buildHierarchy");
+if (buildHierarchyBtn !==null ) {
+    buildHierarchyBtn.hide();
+    buildHierarchyBtn.click(function(){
+        var x = $("#issueNumber");
+        var selectValue = x.text();
+        console.log(selectValue);
+
+        self.port.emit("build-hierarchy", selectValue);
+    });
+}
+
 var startStop = $("#startStop");
 if (startStop !== null) {
     startStop.click(function () {
@@ -71,6 +83,10 @@ self.port.on('set-issue', function (issue) {
     switch (issue.type.name) {
         case ISSUE_TYPE.RESEARCH:
             prepareViewForResearch(issue);
+            break;
+        case ISSUE_TYPE.STORY:
+            prepareViewForIssue(issue);
+            $("#buildHierarchy").show();
             break;
         default:
             prepareViewForIssue(issue);
@@ -154,6 +170,7 @@ function prepareViewForIssue(issue) {
     $("#annotations").hide();
     $("#phases").hide();
     $("#session-controls").hide();
+    $("#buildHierarchy").hide();
     pushLinkedIssues(issue.links);
 }
 
