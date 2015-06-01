@@ -21,10 +21,6 @@ const file = require('sdk/io/file');
 const JiraApi = require('jira-module').JiraApi;
 const MediatorApi = require('mediator-api').MediatorApi;
 
-const urls = require("sdk/url");
-const clipboard = require("sdk/clipboard");
-
-
 
 var jira;
 var mediator;
@@ -146,12 +142,6 @@ function getUserIssues(jira, username) {
         }
         return json;
     });
-}
-
-
-function selectionChanged(event){
-    //todo: check for selection.isContiguous
-    selectedText = selection.text;
 }
 
 
