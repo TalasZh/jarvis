@@ -5,13 +5,15 @@ var panels = require('sdk/panel');
 var simpleStorage = require('sdk/simple-storage');
 var notifications = require('sdk/notifications');
 
+var simplePrefs = require("sdk/simple-prefs");
+
 var tabs = require("sdk/tabs");
 
 var { ToggleButton } = require('sdk/ui/button/toggle');
 var self = require("sdk/self");
 var {Cc, Ci, Cu} = require("chrome");
 var system = require("sdk/system");
-var  cm = require("sdk/context-menu");
+var cm = require("sdk/context-menu");
 
 let { search } = require("sdk/places/history");
 
@@ -28,18 +30,54 @@ var global_username;
 
 
 var annotatorIsOn = false;
+var firstClick = true;
 var matchers = [];
+
+simplePrefs.on("applyChanges", onPrefChange);
+
+function onPrefChange(prefName) {
+    console.log("Applied last changes");
+    mediator = new MediatorApi(simplePrefs.prefs.mediatorProtocol,
+        simplePrefs.prefs.mediatorHost,
+        simplePrefs.prefs.mediatorPort,
+        null,
+        null,
+        true);
+}
+
+function isAuthenticated() {
+    //check if cookies are exist if not redirect to auth page
+    var cookieManager = Cc["@mozilla.org/cookiemanager;1"].getService(Ci.nsICookieManager2);
+    var count = cookieManager.getCookiesFromHost(simplePrefs.prefs.mediatorHost);
+
+    while (count.hasMoreElements()) {
+        var cookie = count.getNext().QueryInterface(Ci.nsICookie2);
+        if (cookie.name === "crowd.token_key") {
+            return true;
+        }
+        console.log(cookie.host + ";" + cookie.name + "=" + cookie.value + "\n");
+    }
+    firstClick = true;
+    return false;
+}
 
 const init = () => {
     console.log("Initializing jarvis plugin...");
+
+    if (!isAuthenticated()) {
+        tabs.open(simplePrefs.prefs.mediatorProtocol + "://" + simplePrefs.prefs.mediatorHost + ":" + simplePrefs.prefs.mediatorPort);
+        return false;
+    }
+
     if (!mediator) {
-        mediator = new MediatorApi('http',
-            'jarvis-test.critical-factor.com',
-            '8080',
+        mediator = new MediatorApi(simplePrefs.prefs.mediatorProtocol,
+            simplePrefs.prefs.mediatorHost,
+            simplePrefs.prefs.mediatorPort,
             null,
             null,
             true);
     }
+
     console.log("hello");
     simpleStorage.storage.annotations = {};
     simpleStorage.on("OverQuota", function () {
@@ -70,6 +108,7 @@ const init = () => {
             updateMatchers();
         }
     });
+    return true;
 };
 
 init();
@@ -81,7 +120,7 @@ function Annotation(annotationText, anchor) {
     this.anchorText = anchor[2];
 }
 
-function handleNewAnnotation(annotationText, anchor, sessionKey) {
+function handleNewAnnotation(annotationText, anchor, sessionKey, callback) {
     var newAnnotation = new Annotation(annotationText, anchor);
 
     mediator.saveCapture(sessionKey, newAnnotation, function (error, json) {
@@ -96,6 +135,7 @@ function handleNewAnnotation(annotationText, anchor, sessionKey) {
             }
             simpleStorage.storage.annotations[captureId] = json;
             updateMatchers();
+            callback(json);
         }
     });
 }
@@ -136,7 +176,6 @@ function updateMatchers() {
 function getUserIssues(jira, username) {
     jira.getUsersIssues(username, true, function (error, json) {
         if (error != null) {
-            // console.log( error );
             console.error("Could not retrieve " + username + "'s issues.");
             return;
         }
@@ -146,17 +185,17 @@ function getUserIssues(jira, username) {
 
 
 exports.main = function () {
-    tabs.open("https://wiki.ubuntu.com/");
+    //tabs.open("https://wiki.ubuntu.com/");
+    //listProjects();
 
     var currentIssueKey = "";
     var selector = pageMod.PageMod({
         include: ['*'],
         contentScriptWhen: 'ready',
         contentScriptFile: [data.url('jquery-2.1.3.min.js'),
-                            data.url('selector.js')],
+            data.url('selector.js')],
 
         onAttach: function (worker) {
-            // console.log(jira);
             worker.postMessage(annotatorIsOn);
             selectors.push(worker);
             worker.port.on('show', function (data) {
@@ -183,7 +222,10 @@ exports.main = function () {
                 console.log(this.annotationAnchor);
                 console.log(annotationText);
                 console.log(currentIssueKey);
-                handleNewAnnotation(annotationText, this.annotationAnchor, currentIssueKey);
+                handleNewAnnotation(annotationText, this.annotationAnchor, currentIssueKey, function (capture) {
+                    console.log("Handle new annotation callback");
+                    panel.port.emit("call-select-issue", currentIssueKey);
+                });
             }
             annotationEditor.hide();
         },
@@ -198,11 +240,11 @@ exports.main = function () {
         image: self.data.url("icon-16.png"),
         context: [cm.SelectionContext()],
         contentScriptFile: [data.url('login/context-menu.js'),
-                            data.url('jquery-2.1.3.min.js'),
-                            data.url('jquery.highlight.js')],
+            data.url('jquery-2.1.3.min.js'),
+            data.url('jquery.highlight.js')],
         onMessage: function (data) {
-            console.log( "Selected text : "  +  data );
-            if ( annotatorIsOn ){
+            console.log("Selected text : " + data);
+            if (annotatorIsOn) {
                 onAttachWorker(annotationEditor, data);
                 annotationEditor.show();
             }
@@ -215,7 +257,7 @@ exports.main = function () {
         height: 200,
         contentURL: data.url('list/annotation-list.html'),
         contentScriptFile: [data.url('jquery-2.1.3.min.js'),
-                            data.url('list/annotation-list.js')],
+            data.url('list/annotation-list.js')],
         contentScriptWhen: 'ready',
         onShow: function () {
             this.postMessage(simpleStorage.storage.annotations);
@@ -230,8 +272,8 @@ exports.main = function () {
         include: ['*'],
         contentScriptWhen: 'ready',
         contentScriptFile: [data.url('jquery-2.1.3.min.js'),
-                            data.url('matcher.js'),
-                            data.url('jquery.highlight.js')],
+            data.url('matcher.js'),
+            data.url('jquery.highlight.js')],
         onAttach: function (worker) {
             if (simpleStorage.storage.annotations) {
                 worker.postMessage(simpleStorage.storage.annotations);
@@ -256,7 +298,7 @@ exports.main = function () {
         height: 180,
         contentURL: data.url('annotation/annotation.html'),
         contentScriptFile: [data.url('jquery-2.1.3.min.js'),
-                            data.url('annotation/annotation.js')],
+            data.url('annotation/annotation.js')],
         onShow: function () {
             this.postMessage(this.content);
         }
@@ -272,9 +314,19 @@ exports.main = function () {
         },
         onChange: function (state) {
             if (state.checked) {
-                panel.show({
-                    position: button
-                });
+                if (!isAuthenticated()) {
+                    button.state('window', {checked: false});
+                    tabs.open(simplePrefs.prefs.mediatorProtocol + "://" + simplePrefs.prefs.mediatorHost + ":" + simplePrefs.prefs.mediatorPort);
+                }
+                else {
+                    panel.show({
+                        position: button
+                    });
+                    if (firstClick) {
+                        firstClick = false;
+                        listProjects();
+                    }
+                }
             }
         }
     });
@@ -282,7 +334,6 @@ exports.main = function () {
     var panel = panels.Panel({
         width: 350,
         height: 500,
-        contentURL: data.url("login/panel.html"),
         contentScriptFile: [data.url('jquery-2.1.3.min.js'),
             data.url('issue-view/issue-view.js'),
             data.url('login/handleLogin.js')],
@@ -340,9 +391,12 @@ exports.main = function () {
         });
     });
 
-    panel.port.on('left-click', function () {
-        console.log('activate/deactivate');
-        toggleActivation();
+    panel.port.on('left-click', function (activate) {
+        console.log('activate/deactivate annotator: ' + activate);
+        if (activate !== undefined) {
+            annotatorIsOn = !activate;
+        }
+        console.log("Now annotator is: " + toggleActivation());
     });
 
     panel.port.on('right-click', function () {
@@ -351,9 +405,9 @@ exports.main = function () {
     });
 
     panel.port.on("back-button-pressed", function (projectName) {
+        console.log("back-button-pressed");
         mediator.listProjectIssues(projectName, function (error, json) {
             if (error != null) {
-                // console.log( error );
                 console.error("Could not retrieve " + global_username + "'s issues.");
                 return;
             }
@@ -363,6 +417,7 @@ exports.main = function () {
     });
 
     panel.port.on("back-button-pressed-on-researchpage", function (projectKey) {
+        console.log("back-button-pressed-on-researchpage");
         mediator.listProjects(function (error, json) {
             if (error !== null) {
                 console.error("Error: " + error);
@@ -375,6 +430,7 @@ exports.main = function () {
     });
 
     panel.port.on("back-button-pressed-on-project-selection-page", function () {
+        console.log("back-button-pressed-on-project-selection-page");
         panel.contentURL = data.url("login/panel.html");
     });
 
@@ -382,6 +438,7 @@ exports.main = function () {
      * Event triggered when issues was selected from combo box
      */
     panel.port.on("issue-selected", function (selectedIssueKey) {
+        console.log("issue-selected");
         mediator.getIssue(selectedIssueKey, function (error, json) {
             if (error !== null) {
                 console.error(error + ": Could not retrieve " + "'s issues.");
@@ -416,6 +473,7 @@ exports.main = function () {
      * Get session full information, returns null if session wasn't started yet
      */
     panel.port.on('get-session', function (sessionKey) {
+        console.log("get-session");
         mediator.getSession(sessionKey, function (error, json) {
             if (error) {
                 console.error("Error: " + error);
@@ -446,7 +504,7 @@ exports.main = function () {
      * Function for retrieving session annotations
      */
     panel.port.on('get-annotations', function (sessionKey) {
-
+        console.log("get-annotations");
         mediator.listSessionCaptures(sessionKey, function (error, json) {
             if (error) {
                 console.error("Error: " + error);
@@ -469,6 +527,10 @@ exports.main = function () {
         tabs.open("http://test-jira.critical-factor.com/browse/" + issueId);
     });
 
+    panel.port.on("navigate-to", function (url) {
+        tabs.open(url);
+    });
+
     panel.port.on("project-changed", function (projectKey) {
         mediator.getProject(projectKey, function (error, json) {
             if (error != null) {
@@ -483,7 +545,6 @@ exports.main = function () {
     panel.port.on("project-selected", function (projectName) {
         mediator.listProjectIssues(projectName, function (error, json) {
             if (error != null) {
-                // console.log( error );
                 console.error("Could not retrieve " + global_username + "'s issues.");
                 return;
             }
@@ -498,16 +559,31 @@ exports.main = function () {
     // In this implementation we'll just log the text to the console.
     panel.port.on("handle-login", function (username, password) {
         console.log(username + " " + password);
-
         global_username = username;
+        listProjects();
+    });
 
-        mediator.listProjects(function (error, json) {
+    function listProjects() {
+        if (init()) {
+            mediator.listProjects(function (error, json) {
+                if (error !== null) {
+                    console.error("Error: " + error);
+                    return
+                }
+                panel.contentURL = data.url("login/selectProject.html");
+                panel.port.emit("fill-project-combobox", json);
+            });
+        }
+    }
+
+    panel.port.on("build-hierarchy", function (storyKey) {
+        console.log(storyKey);
+        mediator.buildHierarchy(storyKey, function (error, json) {
             if (error !== null) {
                 console.error("Error: " + error);
-                return
+                return;
             }
-            panel.contentURL = data.url("login/selectProject.html");
-            panel.port.emit("fill-project-combobox", json);
+            console.log("Success");
         });
     });
 };
