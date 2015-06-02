@@ -30,7 +30,7 @@ var global_username;
 
 
 var annotatorIsOn = false;
-var authenticated = false;
+var firstClick = true;
 var matchers = [];
 
 simplePrefs.on("applyChanges", onPrefChange);
@@ -45,9 +45,7 @@ function onPrefChange(prefName) {
         true);
 }
 
-const init = () => {
-    console.log("Initializing jarvis plugin...");
-
+function isAuthenticated() {
     //check if cookies are exist if not redirect to auth page
     var cookieManager = Cc["@mozilla.org/cookiemanager;1"].getService(Ci.nsICookieManager2);
     var count = cookieManager.getCookiesFromHost(simplePrefs.prefs.mediatorHost);
@@ -55,14 +53,20 @@ const init = () => {
     while (count.hasMoreElements()) {
         var cookie = count.getNext().QueryInterface(Ci.nsICookie2);
         if (cookie.name === "crowd.token_key") {
-            authenticated = true;
+            return true;
         }
         console.log(cookie.host + ";" + cookie.name + "=" + cookie.value + "\n");
     }
+    firstClick = true;
+    return false;
+}
 
-    if(!authenticated) {
+const init = () => {
+    console.log("Initializing jarvis plugin...");
+
+    if (!isAuthenticated()) {
         tabs.open(simplePrefs.prefs.mediatorProtocol + "://" + simplePrefs.prefs.mediatorHost + ":" + simplePrefs.prefs.mediatorPort);
-        return;
+        return false;
     }
 
     if (!mediator) {
@@ -104,6 +108,7 @@ const init = () => {
             updateMatchers();
         }
     });
+    return true;
 };
 
 init();
@@ -181,7 +186,7 @@ function getUserIssues(jira, username) {
 
 exports.main = function () {
     //tabs.open("https://wiki.ubuntu.com/");
-    listProjects();
+    //listProjects();
 
     var currentIssueKey = "";
     var selector = pageMod.PageMod({
@@ -309,10 +314,19 @@ exports.main = function () {
         },
         onChange: function (state) {
             if (state.checked) {
-                //listProjects();
-                panel.show({
-                    position: button
-                });
+                if (!isAuthenticated()) {
+                    button.state('window', {checked: false});
+                    tabs.open(simplePrefs.prefs.mediatorProtocol + "://" + simplePrefs.prefs.mediatorHost + ":" + simplePrefs.prefs.mediatorPort);
+                }
+                else {
+                    panel.show({
+                        position: button
+                    });
+                    if (firstClick) {
+                        firstClick = false;
+                        listProjects();
+                    }
+                }
             }
         }
     });
@@ -379,7 +393,7 @@ exports.main = function () {
 
     panel.port.on('left-click', function (activate) {
         console.log('activate/deactivate annotator: ' + activate);
-        if(activate !== undefined) {
+        if (activate !== undefined) {
             annotatorIsOn = !activate;
         }
         console.log("Now annotator is: " + toggleActivation());
@@ -549,17 +563,17 @@ exports.main = function () {
         listProjects();
     });
 
-    function listProjects(){
-        init();
-
-        mediator.listProjects(function (error, json) {
-            if (error !== null) {
-                console.error("Error: " + error);
-                return
-            }
-            panel.contentURL = data.url("login/selectProject.html");
-            panel.port.emit("fill-project-combobox", json);
-        });
+    function listProjects() {
+        if (init()) {
+            mediator.listProjects(function (error, json) {
+                if (error !== null) {
+                    console.error("Error: " + error);
+                    return
+                }
+                panel.contentURL = data.url("login/selectProject.html");
+                panel.port.emit("fill-project-combobox", json);
+            });
+        }
     }
 
     panel.port.on("build-hierarchy", function (storyKey) {
