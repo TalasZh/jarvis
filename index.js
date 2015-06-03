@@ -65,7 +65,7 @@ const init = () => {
     console.log("Initializing jarvis plugin...");
 
     if (!isAuthenticated()) {
-        tabs.open(simplePrefs.prefs.mediatorProtocol + "://" + simplePrefs.prefs.mediatorHost + ":" + simplePrefs.prefs.mediatorPort);
+        // tabs.open(simplePrefs.prefs.mediatorProtocol + "://" + simplePrefs.prefs.mediatorHost + ":" + simplePrefs.prefs.mediatorPort);
         return false;
     }
 
@@ -185,7 +185,7 @@ function getUserIssues(jira, username) {
 
 
 exports.main = function () {
-    //tabs.open("https://wiki.ubuntu.com/");
+    tabs.open("https://wiki.ubuntu.com/");
     //listProjects();
 
     var currentIssueKey = "";
@@ -193,7 +193,8 @@ exports.main = function () {
         include: ['*'],
         contentScriptWhen: 'ready',
         contentScriptFile: [data.url('jquery-2.1.3.min.js'),
-            data.url('selector.js')],
+                            data.url('selector.js'),
+                            data.url('login/context1.js')],
 
         onAttach: function (worker) {
             worker.postMessage(annotatorIsOn);
@@ -205,9 +206,34 @@ exports.main = function () {
                 console.log(annotator);
             });
 
+            worker.port.on('show-popup', function ( X, Y ) {
+                console.log("showing up popupwindow");
+                popup.position.top = Y;
+                popup.position.left = X;
+                popup.show();
+            });
+
             worker.on('detach', function () {
                 detachWorker(this, selectors);
             });
+        }
+    });
+
+
+    var popup = panels.Panel({
+        width: 85,
+        height: 34,
+        contentURL: data.url('popup/popup.html'),
+        contentScriptFile: [data.url('jquery-2.1.3.min.js'),
+                            data.url('popup/popup.js')]
+    });
+
+
+    popup.port.on('annotate-button-pressed', function () {
+        console.log("adsfadfa");
+        if (annotatorIsOn) {
+            onAttachWorker(annotationEditor, data);
+            annotationEditor.show();
         }
     });
 
@@ -240,8 +266,8 @@ exports.main = function () {
         image: self.data.url("icon-16.png"),
         context: [cm.SelectionContext()],
         contentScriptFile: [data.url('login/context-menu.js'),
-            data.url('jquery-2.1.3.min.js'),
-            data.url('jquery.highlight.js')],
+                            data.url('jquery-2.1.3.min.js'),
+                            data.url('jquery.highlight.js')],
         onMessage: function (data) {
             console.log("Selected text : " + data);
             if (annotatorIsOn) {

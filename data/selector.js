@@ -17,6 +17,8 @@ self.on('message', function onMessage(activation) {
 });
 
 let all = $('*');
+let body = $('body');
+
 
 function getSelectionText() {
     var text = "";
@@ -27,6 +29,22 @@ function getSelectionText() {
     }
     return text;
 }
+
+
+
+body.mouseup(function (e){
+    var parentOffset = $(this).parent().offset(); 
+    var relX = e.pageX - parentOffset.left;
+    var relY = e.pageY - parentOffset.top;
+    if ( getSelectionText().length > 0 ){
+        console.log(getSelectionText());
+        self.port.emit("show-popup", relX, relY );
+    } 
+});
+
+
+
+
 
 // all.mouseenter(function () {
 //     if (!active || $(this).hasClass('annotated')) {
