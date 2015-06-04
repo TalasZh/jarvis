@@ -30,11 +30,17 @@ function getSelectionText() {
     return text;
 }
 
+$(window).scroll(function() {
+    if($(window).scrollTop() > 0 ) {
+       self.port.emit("page-scrooled");
+    } 
+});
 
 body.mouseup(function (e){
-    var parentOffset = $(this).parent().offset(); 
-    var relX = e.pageX - parentOffset.left;
-    var relY = e.pageY - parentOffset.top;
+    var scroolSize = 0;
+    if($(window).scrollTop() > 0 ) {
+       scroolSize = $(window).scrollTop();
+    }
     if ( getSelectionText().length > 0 ){
         console.log(getSelectionText());
 
@@ -46,7 +52,8 @@ body.mouseup(function (e){
                 getSelectionText()
             ],
             e.pageX,
-            e.pageY
+            (e.pageY - scroolSize)
         );
+        scrollSize = 0;
     }
 });

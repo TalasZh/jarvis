@@ -13,7 +13,6 @@ var { ToggleButton } = require('sdk/ui/button/toggle');
 var self = require("sdk/self");
 var {Cc, Ci, Cu} = require("chrome");
 var system = require("sdk/system");
-var cm = require("sdk/context-menu");
 
 let { search } = require("sdk/places/history");
 
@@ -65,7 +64,7 @@ const init = () => {
     console.log("Initializing jarvis plugin...");
 
     if (!isAuthenticated()) {
-        // tabs.open(simplePrefs.prefs.mediatorProtocol + "://" + simplePrefs.prefs.mediatorHost + ":" + simplePrefs.prefs.mediatorPort);
+        tabs.open(simplePrefs.prefs.mediatorProtocol + "://" + simplePrefs.prefs.mediatorHost + ":" + simplePrefs.prefs.mediatorPort);
         return false;
     }
 
@@ -215,9 +214,15 @@ exports.main = function () {
                 onShowPopup(popup, data, X, Y);
             });
 
+            worker.port.on('page-scrooled', function ( data, X, Y ) {
+                popup.hide();
+            });
+
             worker.on('detach', function () {
                 detachWorker(this, selectors);
             });
+
+
         }
     });
 
@@ -272,23 +277,6 @@ exports.main = function () {
         },
         onShow: function () {
             this.postMessage('focus');
-        }
-    });
-
-
-    cm.Item({
-        label: "Annotate",
-        image: self.data.url("icon-16.png"),
-        context: [cm.SelectionContext()],
-        contentScriptFile: [data.url('login/context-menu.js'),
-                            data.url('jquery-2.1.3.min.js'),
-                            data.url('jquery.highlight.js')],
-        onMessage: function (data) {
-            console.log("Selected text : " + data);
-            if (annotatorIsOn) {
-                onAttachWorker(annotationEditor, data);
-                annotationEditor.show();
-            }
         }
     });
 
