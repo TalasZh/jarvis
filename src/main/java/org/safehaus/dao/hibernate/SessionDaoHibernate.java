@@ -3,26 +3,22 @@ package org.safehaus.dao.hibernate;
 
 import java.util.List;
 
-import javax.persistence.Table;
-
-import org.hibernate.Query;
 import org.hibernate.criterion.Restrictions;
 import org.safehaus.dao.SessionDao;
-import org.safehaus.dao.UserDao;
 import org.safehaus.model.Session;
-import org.safehaus.model.User;
-import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.orm.hibernate4.SessionFactoryUtils;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.safehaus.model.SessionNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
+
+import org.apache.commons.validator.GenericValidator;
 
 
 @Repository( "sessionDao" )
 public class SessionDaoHibernate extends GenericDaoHibernate<Session, Long> implements SessionDao
 {
+    private static Logger logger = LoggerFactory.getLogger( SessionDaoHibernate.class );
+
 
     /**
      * Constructor that sets the entity to Session.class.
@@ -71,5 +67,45 @@ public class SessionDaoHibernate extends GenericDaoHibernate<Session, Long> impl
     public List<Session> getSessionsByUsername( String username )
     {
         return getSession().createCriteria( Session.class ).add( Restrictions.eq( "username", username ) ).list();
+    }
+
+
+    @Override
+    public List<Session> getSessionsByParentId( final Long parentId )
+    {
+        return getSession().createCriteria( Session.class ).add( Restrictions.eq( "parentId", parentId ) ).list();
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Session getSession( String id ) throws SessionNotFoundException
+    {
+        if ( GenericValidator.isLong( id ) )
+        {
+            try
+            {
+                return get( new Long( id ) );
+            }
+            catch ( Exception e )
+            {
+                throw new SessionNotFoundException();
+            }
+        }
+
+        List<Session> sessions =
+                getSession().createCriteria( Session.class ).add( Restrictions.eq( "issueKey", id ) ).list();
+
+        if ( !sessions.isEmpty() )
+        {
+            return sessions.get( 0 );
+        }
+        else
+        {
+            logger.debug( "Session lookup by issue key failed." );
+            throw new SessionNotFoundException();
+        }
     }
 }

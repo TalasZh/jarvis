@@ -3,6 +3,7 @@ package org.safehaus.model;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -10,14 +11,15 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
@@ -34,14 +36,25 @@ public class Session extends BaseObject
 {
     @JsonView( Views.JarvisSessionShort.class )
     private Long id;
+
     @JsonView( Views.JarvisSessionShort.class )
     private String username;
+
     @JsonView( Views.JarvisSessionShort.class )
     private Long issueId;
+
+    @JsonView( Views.JarvisSessionShort.class )
+    private String issueKey;
+
     @JsonView( Views.JarvisSessionShort.class )
     private SessionStatus status = SessionStatus.OPEN;
+
     @JsonView( Views.JarvisSessionShort.class )
     private Date created = new Date();
+
+    @JsonView( Views.JarvisSessionShort.class )
+    private Long parentId;
+
     @JsonView( Views.JarvisSessionLong.class )
     private Set<Capture> captures = new HashSet<>();
 
@@ -104,6 +117,7 @@ public class Session extends BaseObject
 
 
     @OneToMany( mappedBy = "session", fetch = FetchType.EAGER, cascade = CascadeType.ALL )
+    @Fetch( FetchMode.SUBSELECT )
     public Set<Capture> getCaptures()
     {
         return captures;
@@ -128,6 +142,30 @@ public class Session extends BaseObject
     }
 
 
+    public String getIssueKey()
+    {
+        return issueKey;
+    }
+
+
+    public void setIssueKey( final String issueKey )
+    {
+        this.issueKey = issueKey;
+    }
+
+
+    public Long getParentId()
+    {
+        return parentId;
+    }
+
+
+    public void setParentId( final Long parentId )
+    {
+        this.parentId = parentId;
+    }
+
+
     public void addCapture( Capture capture )
     {
         if ( capture == null )
@@ -137,6 +175,33 @@ public class Session extends BaseObject
 
         capture.setSession( this );
         captures.add( capture );
+    }
+
+
+    public Capture updateCapture( final Long captureId, final Capture capture )
+    {
+        Capture result = null;
+
+        for ( Iterator<Capture> captureIterator = captures.iterator(); captureIterator.hasNext(); )
+        {
+            Capture c = captureIterator.next();
+            if ( captureId.equals( c.getId() ) )
+            {
+                result = c;
+                break;
+            }
+        }
+        if ( result == null )
+        {
+            throw new IllegalArgumentException( "Capture not found." );
+        }
+
+        result.setAncestorId( capture.getAncestorId() );
+        result.setAnnotationText( capture.getAnnotationText() );
+        result.setComment( capture.getComment() );
+        result.setAnchorText( capture.getAnchorText() );
+        result.setUrl( capture.getUrl() );
+        return result;
     }
 
 

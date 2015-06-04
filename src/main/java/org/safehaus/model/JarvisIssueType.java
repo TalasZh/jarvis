@@ -3,6 +3,8 @@ package org.safehaus.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 
 /**
  * Created by tzhamakeev on 5/25/15.
@@ -47,5 +49,12 @@ public class JarvisIssueType
     public void setName( final String name )
     {
         this.name = name;
+    }
+
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder( this ).append( "id", id ).append( "name", name ).toString();
     }
 }

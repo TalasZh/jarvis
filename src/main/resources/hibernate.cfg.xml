@@ -10,5 +10,7 @@
     <mapping class="org.safehaus.model.Role" />
     <mapping class="org.safehaus.model.Session" />
     <mapping class="org.safehaus.model.Capture" />
+<!--    <mapping class="org.safehaus.model.Story" />
+    <mapping class="org.safehaus.model.Phase" />-->
   </session-factory>
 </hibernate-configuration>

@@ -18,6 +18,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -27,7 +29,9 @@ import org.hibernate.search.annotations.Indexed;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 @Entity
@@ -76,6 +80,22 @@ public class Capture extends BaseObject implements Serializable
     public Session getSession()
     {
         return session;
+    }
+
+
+    @JsonProperty
+    @XmlElement
+    @Transient
+    public String getJiraKey()
+    {
+        if ( session != null )
+        {
+            return session.getIssueKey();
+        }
+        else
+        {
+            return null;
+        }
     }
 
 

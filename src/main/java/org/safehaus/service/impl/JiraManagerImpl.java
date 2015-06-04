@@ -6,19 +6,18 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.safehaus.jira.api.JiraClient;
-import org.safehaus.jira.api.JiraClientException;
+import org.safehaus.service.JiraClient;
+import org.safehaus.exceptions.JiraClientException;
 import org.safehaus.model.JarvisIssue;
 import org.safehaus.model.JarvisIssueType;
 import org.safehaus.model.JarvisLink;
 import org.safehaus.model.JarvisMember;
 import org.safehaus.model.JarvisProject;
 import org.safehaus.service.JiraManager;
+import org.safehaus.util.JarvisContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import com.atlassian.jira.rest.client.api.domain.BasicIssue;
 import com.atlassian.jira.rest.client.api.domain.Issue;
 import com.atlassian.jira.rest.client.api.domain.IssueLink;
 import com.atlassian.jira.rest.client.api.domain.IssueType;
@@ -28,34 +27,28 @@ import com.atlassian.jira.rest.client.api.domain.Project;
 public class JiraManagerImpl implements JiraManager
 {
     private static Logger logger = LoggerFactory.getLogger( JiraManagerImpl.class );
-    JiraClient jiraClient;
-
-
-    @Autowired
-    public void setJiraClient( final JiraClient jiraClient )
-    {
-        this.jiraClient = jiraClient;
-    }
 
 
     @Override
     public List<JarvisMember> getProjectMemebers( final String projectId ) throws JiraClientException
     {
-        return jiraClient == null ? null : jiraClient.getProjectMemebers( projectId.toString() );
+        return getJiraClient() == null ? null : getJiraClient().getProjectMemebers( projectId.toString() );
     }
 
 
     @Override
-    public List<JarvisIssue> getIssues( final String projectId )
+    public List<JarvisIssue> getIssues( final String projectId ) throws JiraClientException
     {
-        return jiraClient.getIssues( projectId );
+        return getJiraClient().getIssues( projectId );
     }
 
 
     @Override
     public JarvisProject getProject( final String projectId ) throws JiraClientException
+
+
     {
-        Project project = jiraClient.getProject( projectId );
+        Project project = getJiraClient().getProject( projectId );
         List<String> types = new ArrayList<>();
 
         for ( Iterator<IssueType> iterator = project.getIssueTypes().iterator(); iterator.hasNext(); )
@@ -68,9 +61,9 @@ public class JiraManagerImpl implements JiraManager
 
 
     @Override
-    public List<JarvisProject> getProjects()
+    public List<JarvisProject> getProjects() throws JiraClientException
     {
-        List<Project> projects = jiraClient.getAllProjects();
+        List<Project> projects = getJiraClient().getAllProjects();
         List<JarvisProject> result = new ArrayList<>();
 
         for ( Project project : projects )
@@ -91,9 +84,9 @@ public class JiraManagerImpl implements JiraManager
 
 
     @Override
-    public JarvisIssue getIssue( final String issueId )
+    public JarvisIssue getIssue( final String issueId ) throws JiraClientException
     {
-        Issue issue = jiraClient.getIssue( issueId );
+        Issue issue = getJiraClient().getIssue( issueId );
 
         JarvisIssue result = buildJarvisIssue( issue );
         return result;
@@ -101,20 +94,55 @@ public class JiraManagerImpl implements JiraManager
 
 
     @Override
-    public JarvisIssue createIssue( final JarvisIssue issue, String token ) throws JiraClientException
+    public JarvisIssue createIssue( final JarvisIssue issue ) throws JiraClientException
+
+
     {
-        Issue jiraIssue = jiraClient.createIssue( issue, token );
+        Issue jiraIssue = getJiraClient().createIssue( issue );
         return buildJarvisIssue( jiraIssue );
     }
 
 
-    public void destroy() throws IOException
+    @Override
+    public void buildBlocksChain( final String issueId, List<JarvisIssue> chain ) throws JiraClientException
     {
-        jiraClient.close();
+
+        JarvisIssue issue = getIssue( issueId );
+
+        JarvisLink blockedIssueLink = issue.getLink( JiraClient.BLOCKS_LINK_NAME, JiraClient.OUTBOUND );
+        //        logger.debug( String.format( "%s %s", issue.getKey(),
+        //                blockedIssueLink != null ? blockedIssueLink.getKey() + ":" + blockedIssueLink.getLinkType()
+        // + blockedIssueLink.getLinkDirection() : null ) );
+        if ( blockedIssueLink != null )
+        {
+            buildBlocksChain( blockedIssueLink.getKey(), chain );
+        }
+
+        chain.add( issue );
     }
 
 
-    private JarvisIssue buildJarvisIssue( Issue issue )
+    @Override
+    public void startIssue( String issueKeyOrId ) throws JiraClientException
+    {
+        getJiraClient().startIssue( issueKeyOrId );
+    }
+
+
+    @Override
+    public void resolveIssue( String issueKeyOrId ) throws JiraClientException
+    {
+        getJiraClient().resolveIssue( issueKeyOrId );
+    }
+
+
+    public void destroy() throws IOException, JiraClientException
+    {
+        getJiraClient().close();
+    }
+
+
+    private JarvisIssue buildJarvisIssue( Issue issue ) throws JiraClientException
     {
         if ( issue == null )
         {
@@ -125,9 +153,10 @@ public class JiraManagerImpl implements JiraManager
         {
             IssueLink link = iterator.next();
 
-            Issue i = jiraClient.getIssue( link.getTargetIssueKey() );
-            links.add( new JarvisLink( link.getTargetIssueKey(), link.getIssueLinkType().getName(),
-                    i.getIssueType().getName() ) );
+            Issue i = getJiraClient().getIssue( link.getTargetIssueKey() );
+            links.add( new JarvisLink( i.getId(), link.getTargetIssueKey(), link.getIssueLinkType().getName(),
+                    link.getIssueLinkType().getDirection().name(),
+                    new JarvisIssueType( i.getIssueType().getId(), i.getIssueType().getName() ) ) );
         }
         return new JarvisIssue( issue.getId(), issue.getKey(), issue.getSummary(),
                 new JarvisIssueType( issue.getIssueType().getId(), issue.getIssueType().getName() ),
@@ -144,5 +173,11 @@ public class JiraManagerImpl implements JiraManager
                 issue.getResolution() != null ? issue.getResolution().getName() : null,
                 issue.getFixVersions() != null ? issue.getFixVersions().toString() : null,
                 issue.getCreationDate().toString(), links, issue.getProject().getKey() );
+    }
+
+
+    private JiraClient getJiraClient() throws JiraClientException
+    {
+        return JarvisContextHolder.getContext().getJiraClient();
     }
 }

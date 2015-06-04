@@ -4,7 +4,12 @@ package org.safehaus.service;
 import java.util.List;
 
 import org.safehaus.dao.SessionDao;
+import org.safehaus.exceptions.JiraClientException;
+import org.safehaus.model.Capture;
+import org.safehaus.model.JarvisSessionException;
+import org.safehaus.model.PhaseNotFoundException;
 import org.safehaus.model.Session;
+import org.safehaus.model.SessionNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
@@ -27,7 +32,7 @@ public interface SessionManager extends GenericManager<Session, Long>
      *
      * @return Session
      */
-    Session getSession( String sessionId );
+    Session getSession( String sessionId ) throws SessionNotFoundException;
 
 
     /**
@@ -67,5 +72,16 @@ public interface SessionManager extends GenericManager<Session, Long>
      */
     void removeSession( String sessionId );
 
-    Session startSession( String sessionId, String username );
+    Session startSession( String sessionId, String username )
+            throws JarvisSessionException, PhaseNotFoundException, JiraClientException;
+
+    Session pauseSession( String sessionId ) throws SessionNotFoundException;
+
+    Session closeSession( String sessionId ) throws SessionNotFoundException;
+
+    Capture updateCapture( String sessionId, String captureId, Capture capture ) throws SessionNotFoundException;
+
+    Capture addCapture( String sessionId, Capture capture ) throws SessionNotFoundException;
+
+    List<Session> getSessionsByParentId( Long parentId );
 }

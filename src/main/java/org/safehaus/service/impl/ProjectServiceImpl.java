@@ -8,9 +8,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 
-import org.safehaus.jira.api.JiraClientException;
+import org.safehaus.exceptions.JiraClientException;
 import org.safehaus.model.JarvisIssue;
 import org.safehaus.model.JarvisProject;
 import org.safehaus.model.Views;
@@ -19,10 +18,6 @@ import org.safehaus.service.ProjectService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import org.apache.cxf.jaxrs.impl.ResponseBuilderImpl;
@@ -38,7 +33,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 public class ProjectServiceImpl implements ProjectService
 {
     private static Logger logger = LoggerFactory.getLogger( ProjectServiceImpl.class );
-    private static String CROWD_TOKEN_NAME = "crowd.token_key";
+//    private static String CROWD_TOKEN_NAME = "crowd.token_key";
 
 
     private JiraManager jiraManager;
@@ -62,6 +57,7 @@ public class ProjectServiceImpl implements ProjectService
     @Override
     public JarvisProject getProject( final String projectId ) throws JiraClientException
     {
+//        setContext();
         JarvisProject result = jiraManager.getProject( projectId );
         result.setTeamMembers( jiraManager.getProjectMemebers( projectId ) );
         return result;
@@ -71,7 +67,20 @@ public class ProjectServiceImpl implements ProjectService
     @Override
     public List<JarvisProject> getProjects()
     {
-        return jiraManager.getProjects();
+//        setContext();
+        try
+        {
+            return jiraManager.getProjects();
+        }
+        catch ( JiraClientException e )
+        {
+            logger.error( e.getMessage(), e );
+            ResponseBuilderImpl builder = new ResponseBuilderImpl();
+            builder.status( Response.Status.CONFLICT );
+            builder.entity( e.getMessage() );
+            Response response = builder.build();
+            throw new WebApplicationException( response );
+        }
     }
 
 
@@ -79,7 +88,20 @@ public class ProjectServiceImpl implements ProjectService
     @Override
     public List<JarvisIssue> getIssues( final String projectId )
     {
-        return jiraManager.getIssues( projectId );
+//        setContext();
+        try
+        {
+            return jiraManager.getIssues( projectId );
+        }
+        catch ( JiraClientException e )
+        {
+            logger.error( e.getMessage(), e );
+            ResponseBuilderImpl builder = new ResponseBuilderImpl();
+            builder.status( Response.Status.CONFLICT );
+            builder.entity( e.getMessage() );
+            Response response = builder.build();
+            throw new WebApplicationException( response );
+        }
     }
 
 
@@ -87,17 +109,31 @@ public class ProjectServiceImpl implements ProjectService
     @Override
     public JarvisIssue getIssue( final String issueId )
     {
-        return jiraManager.getIssue( issueId );
+//        setContext();
+        try
+        {
+            return jiraManager.getIssue( issueId );
+        }
+        catch ( JiraClientException e )
+        {
+            logger.error( e.getMessage(), e );
+            ResponseBuilderImpl builder = new ResponseBuilderImpl();
+            builder.status( Response.Status.CONFLICT );
+            builder.entity( e.getMessage() );
+            Response response = builder.build();
+            throw new WebApplicationException( response );
+        }
     }
 
 
     @Override
     public JarvisIssue createIssue( final JarvisIssue issue )
     {
+//        setContext();
         try
         {
-            String token = getCookie( CROWD_TOKEN_NAME );
-            return jiraManager.createIssue( issue, token );
+            //            String token = getCookie( CROWD_TOKEN_NAME );
+            return jiraManager.createIssue( issue );
         }
         catch ( JiraClientException jce )
         {
@@ -132,4 +168,10 @@ public class ProjectServiceImpl implements ProjectService
         }
         return result;
     }
+
+//
+//    private void setContext()
+//    {
+//        //        JiraSecurityContextHolder.setContext( new JiraSecurityContext( getCookie( CROWD_TOKEN_NAME ) ) );
+//    }
 }

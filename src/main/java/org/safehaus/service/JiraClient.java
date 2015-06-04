@@ -1,13 +1,13 @@
-package org.safehaus.jira.api;
+package org.safehaus.service;
 
 
 import java.io.IOException;
 import java.util.List;
 
+import org.safehaus.exceptions.JiraClientException;
 import org.safehaus.model.JarvisIssue;
 import org.safehaus.model.JarvisMember;
 
-import com.atlassian.jira.rest.client.api.domain.BasicIssue;
 import com.atlassian.jira.rest.client.api.domain.Component;
 import com.atlassian.jira.rest.client.api.domain.Issue;
 import com.atlassian.jira.rest.client.api.domain.Project;
@@ -18,6 +18,10 @@ import com.atlassian.jira.rest.client.api.domain.Project;
  */
 public interface JiraClient
 {
+    public static final String BLOCKS_LINK_NAME = "Blocks";
+    public static final String OUTBOUND = "OUTBOUND";
+    public static final String INBOUND = "INBOUND";
+
     public List<Project> getAllProjects();
 
     public Project getProject( String projectId ) throws JiraClientException;
@@ -32,11 +36,19 @@ public interface JiraClient
 
     public Issue getIssue( String issueKey );
 
+    void updateIssueState( String issueKeyOrId, Integer transitionId );
+
+    void startIssue( String issueKeyOrId ) throws JiraClientException;
+
+    void resolveIssue( String issueKeyOrId ) throws JiraClientException;
+
     public void close() throws IOException;
+
+    Issue createIssue( JarvisIssue jarvisIssue ) throws JiraClientException;
 
     public List<JarvisMember> getProjectMemebers( String projectId ) throws JiraClientException;
 
     List<JarvisIssue> getIssues( String projectId );
 
-    Issue createIssue( JarvisIssue issue, String token ) throws JiraClientException;
+    //    Issue createIssue( JarvisIssue issue, String token ) throws JiraClientException;
 }

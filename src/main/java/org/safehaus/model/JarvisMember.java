@@ -61,9 +61,9 @@ public class JarvisMember extends BaseObject implements Serializable
             return false;
         }
 
-        final JarvisMember project = ( JarvisMember ) o;
+        final JarvisMember member = ( JarvisMember ) o;
 
-        return !( name != null ? !name.equals( project.getName() ) : project.getName() != null );
+        return !( name != null ? !name.equals( member.getName() ) : member.getName() != null );
     }
 
 

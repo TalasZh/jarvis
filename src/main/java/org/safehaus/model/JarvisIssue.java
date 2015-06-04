@@ -1,9 +1,14 @@
 package org.safehaus.model;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
@@ -15,43 +20,43 @@ public class JarvisIssue
 {
     private static final long serialVersionUID = 3832626162173359411L;
 
-//    @JsonView( Views.JarvisIssueLong.class )
-//    private String token="unknown";
+    //    @JsonView( Views.JarvisIssueLong.class )
+    //    private String token="unknown";
     @JsonView( Views.JarvisIssueShort.class )
-    private Long id;
+    protected Long id;
     @JsonView( Views.JarvisIssueShort.class )
-    private String key;
+    protected String key;
     @JsonView( Views.JarvisIssueShort.class )
-    private String projectKey;
+    protected String projectKey;
     @JsonView( Views.JarvisIssueLong.class )
-    private String summary;
+    protected String summary;
     //    @JsonView( Views.JarvisIssueLong.class )
     //    private Phase phase;
 
     @JsonView( Views.JarvisIssueShort.class )
-    private JarvisIssueType type; //Task, Session, Phase, Epic, Story etc...
+    protected JarvisIssueType type; //Task, Session, Phase, Epic, Story etc...
     @JsonView( Views.JarvisIssueLong.class )
-    private String issueDescription;
+    protected String issueDescription;
     @JsonView( Views.JarvisIssueLong.class )
-    private String timeRemaining;
+    protected String timeRemaining;
     @JsonView( Views.JarvisIssueLong.class )
-    private String assignee;
+    protected String assignee;
     @JsonView( Views.JarvisIssueLong.class )
-    private String reporter;
+    protected String reporter;
     @JsonView( Views.JarvisIssueLong.class )
-    private String components;
+    protected String components;
     @JsonView( Views.JarvisIssueLong.class )
-    private String labels;
+    protected String labels;
     @JsonView( Views.JarvisIssueLong.class )
-    private String status;
+    protected String status;
     @JsonView( Views.JarvisIssueLong.class )
-    private String resolution;
+    protected String resolution;
     @JsonView( Views.JarvisIssueLong.class )
-    private String fixVersion;
+    protected String fixVersion;
     @JsonView( Views.JarvisIssueLong.class )
-    private String dateCreated;
+    protected String dateCreated;
     @JsonView( Views.JarvisIssueLong.class )
-    private List<JarvisLink> links;
+    protected List<JarvisLink> links = new ArrayList<>();
 
 
     public JarvisIssue()
@@ -96,6 +101,7 @@ public class JarvisIssue
     }
 
 
+    @Id
     public Long getId()
     {
         return id;
@@ -287,6 +293,21 @@ public class JarvisIssue
         this.links = links;
     }
 
+
+    @JsonIgnore
+    public JarvisLink getLink( String linkType, String linkDirection )
+    {
+        JarvisLink result = null;
+        for ( JarvisLink link : links )
+        {
+            if ( linkType.equals( link.getLinkType() ) && linkDirection.equals( link.getLinkDirection() ) )
+            {
+                result = link;
+            }
+        }
+        return result;
+    }
+
     //
     //    public String getToken()
     //    {
@@ -299,6 +320,7 @@ public class JarvisIssue
     //        this.token = token;
     //    }
     //
+
 
     /**
      * {@inheritDoc}

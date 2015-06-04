@@ -1,4 +1,4 @@
-package org.safehaus.jira.api;
+package org.safehaus.exceptions;
 
 
 /**
@@ -6,6 +6,12 @@ package org.safehaus.jira.api;
  */
 public class JiraClientException extends Throwable
 {
+    public JiraClientException( final String message )
+    {
+        super( message );
+    }
+
+
     public JiraClientException( final String s, final Exception e )
     {
         super( s, e );

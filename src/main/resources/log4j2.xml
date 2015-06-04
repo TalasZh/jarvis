@@ -27,6 +27,9 @@
         <Logger name="org.springframework" level="warn"/>
         <Logger name="org.safehaus" level="debug"/>
         <Logger name="com.atlassian.jira" level="warn"/>
+<!--
+        <Logger name="org.apache.struts2" level="debug"/>
+-->
 
         <Root level="warn">
             <AppenderRef ref="Console" />

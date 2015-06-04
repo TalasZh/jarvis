@@ -13,14 +13,17 @@
      <property name="jiraManager" ref="jiraManager" />
    </bean>-->
 
-  <bean id="jiraClient" class="org.safehaus.jira.impl.JiraClientImpl" destroy-method="close">
+<!--  <bean id="jiraClient" class="org.safehaus.service.impl.JiraClientImpl" destroy-method="close">
     <constructor-arg value="http://test-jira.critical-factor.com" />
     <constructor-arg value="jirabot" />
     <constructor-arg value="jira135pwd" />
-  </bean>
+  </bean>-->
 
   <bean id="jiraManager" class="org.safehaus.service.impl.JiraManagerImpl">
-    <property name="jiraClient" ref="jiraClient" />
+<!--    <property name="jiraClient" ref="jiraClient" />-->
+    <!--<property name="url" value="http://test-jira.critical-factor.com"/>-->
+    <!--    <property name="transitionResolvedId" value="${transition.resolved}" />
+        <property name="transitionInprogressId" value="${transition.inprogress}" />-->
   </bean>
 
   <!-- Hibernate SessionFactory -->

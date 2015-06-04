@@ -3,38 +3,59 @@
        xmlns:jaxws="http://cxf.apache.org/jaxws"
        xmlns:jaxrs="http://cxf.apache.org/jaxrs"
        xmlns:cxf="http://cxf.apache.org/core"
+       xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
             http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd
             http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
-            http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd">
+            http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd
+            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
   <import resource="classpath:META-INF/cxf/cxf.xml" />
   <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
 
+
+
+  <!-- For mail settings and future properties files -->
+  <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+      <property name="ignoreUnresolvablePlaceholders" value="true"/>
+      <property name="locations">
+          <list>
+              <value>classpath:jdbc.properties</value>
+              <value>classpath:mail.properties</value>
+              <value>classpath:hibernate.properties</value>
+              <value>classpath:jarvis.properties</value>
+          </list>
+      </property>
+      <property name="systemPropertiesMode">
+          <util:constant static-field="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_OVERRIDE"/>
+      </property>
+  </bean>
+
   <bean id="abstractLoggingInterceptor" abstract="true">
-       <property name="prettyLogging" value="true"/>
-   </bean>
-   <bean id="loggingInInterceptor" class="org.apache.cxf.interceptor.LoggingInInterceptor" parent="abstractLoggingInterceptor"/>
-   <bean id="loggingOutInterceptor" class="org.apache.cxf.interceptor.LoggingOutInterceptor" parent="abstractLoggingInterceptor"/>
+    <property name="prettyLogging" value="true" />
+  </bean>
+  <bean id="loggingInInterceptor" class="org.apache.cxf.interceptor.LoggingInInterceptor"
+        parent="abstractLoggingInterceptor" />
+  <bean id="loggingOutInterceptor" class="org.apache.cxf.interceptor.LoggingOutInterceptor"
+        parent="abstractLoggingInterceptor" />
 
-   <cxf:bus>
-     <cxf:inInterceptors>
-       <ref bean="loggingInInterceptor" />
-     </cxf:inInterceptors>
-     <cxf:outInterceptors>
-       <ref bean="loggingOutInterceptor" />
-     </cxf:outInterceptors>
-     <cxf:outFaultInterceptors>
-       <ref bean="loggingOutInterceptor" />
-     </cxf:outFaultInterceptors>
-     <cxf:inFaultInterceptors>
-       <ref bean="loggingInInterceptor" />
-     </cxf:inFaultInterceptors>
-     <cxf:features>
-       <cxf:logging />
-     </cxf:features>
-   </cxf:bus>
-
+  <cxf:bus>
+    <cxf:inInterceptors>
+      <ref bean="loggingInInterceptor" />
+    </cxf:inInterceptors>
+    <cxf:outInterceptors>
+      <ref bean="loggingOutInterceptor" />
+    </cxf:outInterceptors>
+    <cxf:outFaultInterceptors>
+      <ref bean="loggingOutInterceptor" />
+    </cxf:outFaultInterceptors>
+    <cxf:inFaultInterceptors>
+      <ref bean="loggingInInterceptor" />
+    </cxf:inFaultInterceptors>
+    <cxf:features>
+      <cxf:logging />
+    </cxf:features>
+  </cxf:bus>
 
   <bean id="jacksonMapper" class="com.fasterxml.jackson.databind.ObjectMapper">
     <property name="dateFormat">
@@ -47,6 +68,13 @@
   <bean id="jsonProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider">
     <property name="mapper" ref="jacksonMapper" />
   </bean>
+
+  <bean id="requestFilter" class="org.safehaus.util.JarvisRequestFilter">
+    <property name="cookieName" value="${security.cookieName}" />
+    <property name="jiraUrl" value="${jira.url}" />
+  </bean>
+
+  <bean id="responseFilter" class="org.safehaus.util.JarvisResponseFilter" />
 
   <jaxws:endpoint id="userService" implementor="#userManager" address="/UserService" />
   <jaxws:endpoint id="sessionService" implementor="#sessionServiceImpl" address="/SessionService" />
@@ -66,6 +94,8 @@
     </jaxrs:serviceBeans>
     <jaxrs:providers>
       <ref bean="jsonProvider" />
+      <ref bean="requestFilter" />
+      <ref bean="responseFilter" />
     </jaxrs:providers>
     <jaxrs:extensionMappings>
       <entry key="json" value="application/json" />

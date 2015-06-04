@@ -7,6 +7,8 @@
     <class>org.safehaus.model.Role</class>
     <class>org.safehaus.model.Session</class>
     <class>org.safehaus.model.Capture</class>
+<!--    <class>org.safehaus.model.Story</class>
+    <class>org.safehaus.model.Phase</class>-->
   </persistence-unit>
 
   <!-- WARNING: This file's file original source is at web/common/src/main/resources/META-INF. The
