@@ -146,6 +146,12 @@ function onAttachWorker(annotationEditor, data) {
     console.log('On attach worker event...');
 }
 
+function onShowPopup(popup, data, X, Y) {
+    popup.data = data;
+    popup.show({ position: { top: Y, left: X } });
+    console.log('Show popup event...');
+}
+
 function detachWorker(worker, workerArray) {
     var index = workerArray.indexOf(worker);
     if (index != -1) {
@@ -193,8 +199,7 @@ exports.main = function () {
         include: ['*'],
         contentScriptWhen: 'ready',
         contentScriptFile: [data.url('jquery-2.1.3.min.js'),
-                            data.url('selector.js'),
-                            data.url('login/context1.js')],
+                            data.url('selector.js')],
 
         onAttach: function (worker) {
             worker.postMessage(annotatorIsOn);
@@ -206,11 +211,8 @@ exports.main = function () {
                 console.log(annotator);
             });
 
-            worker.port.on('show-popup', function ( X, Y ) {
-                console.log("showing up popupwindow");
-                popup.position.top = Y;
-                popup.position.left = X;
-                popup.show();
+            worker.port.on('show-popup', function ( data, X, Y ) {
+                onShowPopup(popup, data, X, Y);
             });
 
             worker.on('detach', function () {
@@ -221,20 +223,33 @@ exports.main = function () {
 
 
     var popup = panels.Panel({
-        width: 85,
-        height: 34,
+        width: 25,
+        height: 25,
         contentURL: data.url('popup/popup.html'),
         contentScriptFile: [data.url('jquery-2.1.3.min.js'),
-                            data.url('popup/popup.js')]
+                            data.url('popup/popup.js'),
+                            data.url('jquery.highlight.js')]
     });
 
 
     popup.port.on('annotate-button-pressed', function () {
-        console.log("adsfadfa");
         if (annotatorIsOn) {
-            onAttachWorker(annotationEditor, data);
+            onAttachWorker(annotationEditor, popup.data);
             annotationEditor.show();
         }
+        else{
+            notifications.notify({
+                title: 'Warning',
+                text: 'Annotator is not activated !'
+            });
+        }
+        popup.hide();
+    });
+
+    popup.port.on('highlight-button-pressed', function () {
+        console.log( "high is pressed");
+        popup.port.emit("highlight", popup.data);
+        // popup.hide();
     });
 
 

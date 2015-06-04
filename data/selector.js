@@ -31,43 +31,22 @@ function getSelectionText() {
 }
 
 
-
 body.mouseup(function (e){
     var parentOffset = $(this).parent().offset(); 
     var relX = e.pageX - parentOffset.left;
     var relY = e.pageY - parentOffset.top;
     if ( getSelectionText().length > 0 ){
         console.log(getSelectionText());
-        self.port.emit("show-popup", relX, relY );
-    } 
+
+        self.port.emit(
+            "show-popup",
+            [
+                document.location.toString(),
+                "content",
+                getSelectionText()
+            ],
+            e.pageX,
+            e.pageY
+        );
+    }
 });
-
-
-
-
-
-// all.mouseenter(function () {
-//     if (!active || $(this).hasClass('annotated')) {
-//         return;
-//     }
-//     resetMatchedElement();
-//     ancestor = $(this).closest("[id]");
-//     matchedElement = $(this).first();
-//     originalBgColor = $(matchedElement).css('background-color');
-//     $(matchedElement).css('background-color', 'yellow');
-//     $(matchedElement).bind('click.annotator', function (event) {
-//         event.stopPropagation();
-//         event.preventDefault();
-//         self.port.emit('show',
-//             [
-//                 document.location.toString(),
-//                 $(ancestor).attr("id"),
-//                 $(matchedElement).text()
-//             ]
-//         );
-//     });
-// });
-
-// all.mouseout(function () {
-//     resetMatchedElement();
-// });
