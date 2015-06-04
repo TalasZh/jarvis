@@ -31,6 +31,10 @@
     <property name="securityCookieName" value="${security.cookieName}" />
   </bean>
 
+  <bean id="sessionAction" class="org.safehaus.webapp.action.SessionAction" scope="prototype">
+    <property name="sessionManager" ref="sessionManager" />
+  </bean>
+
   <bean id="passwordHintAction" class="org.safehaus.webapp.action.PasswordHintAction" scope="prototype">
     <property name="userManager" ref="userManager" />
     <property name="mailEngine" ref="mailEngine" />

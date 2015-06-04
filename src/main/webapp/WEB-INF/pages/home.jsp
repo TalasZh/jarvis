@@ -11,10 +11,16 @@
 
 <ul class="glassList">
     <li>
-        <a href="<c:url value='/editProfile'/>"><fmt:message key="menu.user"/></a>
+        <a href="<c:url value='/jira'/>"><fmt:message key="menu.jira"/></a>
     </li>
+
+    <li>
+        <a href="<c:url value='/sessions'/>"><fmt:message key="menu.session"/></a>
+    </li>
+    <!--
     <li>
         <a href="<c:url value='/selectFile'/>"><fmt:message key="menu.selectFile"/></a>
     </li>
+    -->
 </ul>
 </body>

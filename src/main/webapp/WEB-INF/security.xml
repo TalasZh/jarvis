@@ -77,9 +77,12 @@
     <protect-pointcut expression="execution(* *..service.UserManager.removeUser(..))" access="ROLE_ADMIN" />
   </global-method-security>
 
-
   <util:map id="groupToAuthorityMappings">
     <beans:entry key="jira-users" value="ROLE_USER" />
+    <beans:entry key="jira-developers" value="ROLE_USER" />
+    <beans:entry key="jira-administrators" value="ROLE_ADMIN" />
+    <beans:entry key="confluence-administrators" value="ROLE_ADMIN" />
+    <beans:entry key="confluence-users" value="ROLE_USER" />
   </util:map>
 
   <beans:bean id="crowdUserDetailsService"

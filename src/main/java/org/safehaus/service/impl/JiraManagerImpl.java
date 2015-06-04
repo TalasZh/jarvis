@@ -1,22 +1,21 @@
 package org.safehaus.service.impl;
 
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import org.safehaus.service.JiraClient;
 import org.safehaus.exceptions.JiraClientException;
 import org.safehaus.model.JarvisIssue;
 import org.safehaus.model.JarvisIssueType;
 import org.safehaus.model.JarvisLink;
 import org.safehaus.model.JarvisMember;
 import org.safehaus.model.JarvisProject;
+import org.safehaus.service.JiraClient;
 import org.safehaus.service.JiraManager;
 import org.safehaus.util.JarvisContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import com.atlassian.jira.rest.client.api.domain.Issue;
 import com.atlassian.jira.rest.client.api.domain.IssueLink;
@@ -24,6 +23,7 @@ import com.atlassian.jira.rest.client.api.domain.IssueType;
 import com.atlassian.jira.rest.client.api.domain.Project;
 
 
+@Service( "jiraManager" )
 public class JiraManagerImpl implements JiraManager
 {
     private static Logger logger = LoggerFactory.getLogger( JiraManagerImpl.class );
@@ -32,7 +32,7 @@ public class JiraManagerImpl implements JiraManager
     @Override
     public List<JarvisMember> getProjectMemebers( final String projectId ) throws JiraClientException
     {
-        return getJiraClient() == null ? null : getJiraClient().getProjectMemebers( projectId.toString() );
+        return getJiraClient() == null ? null : getJiraClient().getProjectMemebers( projectId );
     }
 
 
@@ -51,9 +51,9 @@ public class JiraManagerImpl implements JiraManager
         Project project = getJiraClient().getProject( projectId );
         List<String> types = new ArrayList<>();
 
-        for ( Iterator<IssueType> iterator = project.getIssueTypes().iterator(); iterator.hasNext(); )
+        for ( final IssueType issueType : project.getIssueTypes() )
         {
-            types.add( iterator.next().getName() );
+            types.add( issueType.getName() );
         }
         return new JarvisProject( project.getId(), project.getKey(), project.getName(), project.getDescription(),
                 types );
@@ -71,9 +71,9 @@ public class JiraManagerImpl implements JiraManager
 
             List<String> types = new ArrayList<>();
 
-            for ( Iterator<IssueType> iterator = project.getIssueTypes().iterator(); iterator.hasNext(); )
+            for ( final IssueType issueType : project.getIssueTypes() )
             {
-                types.add( iterator.next().getName() );
+                types.add( issueType.getName() );
             }
             result.add(
                     new JarvisProject( project.getId(), project.getKey(), project.getName(), project.getDescription(),
@@ -87,16 +87,12 @@ public class JiraManagerImpl implements JiraManager
     public JarvisIssue getIssue( final String issueId ) throws JiraClientException
     {
         Issue issue = getJiraClient().getIssue( issueId );
-
-        JarvisIssue result = buildJarvisIssue( issue );
-        return result;
+        return buildJarvisIssue( issue );
     }
 
 
     @Override
     public JarvisIssue createIssue( final JarvisIssue issue ) throws JiraClientException
-
-
     {
         Issue jiraIssue = getJiraClient().createIssue( issue );
         return buildJarvisIssue( jiraIssue );
@@ -110,9 +106,6 @@ public class JiraManagerImpl implements JiraManager
         JarvisIssue issue = getIssue( issueId );
 
         JarvisLink blockedIssueLink = issue.getLink( JiraClient.BLOCKS_LINK_NAME, JiraClient.OUTBOUND );
-        //        logger.debug( String.format( "%s %s", issue.getKey(),
-        //                blockedIssueLink != null ? blockedIssueLink.getKey() + ":" + blockedIssueLink.getLinkType()
-        // + blockedIssueLink.getLinkDirection() : null ) );
         if ( blockedIssueLink != null )
         {
             buildBlocksChain( blockedIssueLink.getKey(), chain );
@@ -136,12 +129,6 @@ public class JiraManagerImpl implements JiraManager
     }
 
 
-    public void destroy() throws IOException, JiraClientException
-    {
-        getJiraClient().close();
-    }
-
-
     private JarvisIssue buildJarvisIssue( Issue issue ) throws JiraClientException
     {
         if ( issue == null )
@@ -149,10 +136,8 @@ public class JiraManagerImpl implements JiraManager
             return new JarvisIssue();
         }
         List<JarvisLink> links = new ArrayList<>();
-        for ( Iterator<IssueLink> iterator = issue.getIssueLinks().iterator(); iterator.hasNext(); )
+        for ( IssueLink link : issue.getIssueLinks() )
         {
-            IssueLink link = iterator.next();
-
             Issue i = getJiraClient().getIssue( link.getTargetIssueKey() );
             links.add( new JarvisLink( i.getId(), link.getTargetIssueKey(), link.getIssueLinkType().getName(),
                     link.getIssueLinkType().getDirection().name(),
@@ -160,14 +145,10 @@ public class JiraManagerImpl implements JiraManager
         }
         return new JarvisIssue( issue.getId(), issue.getKey(), issue.getSummary(),
                 new JarvisIssueType( issue.getIssueType().getId(), issue.getIssueType().getName() ),
-                issue.getDescription(), issue.getTimeTracking() != null ? ( issue.getTimeTracking() != null ?
-                                                                            issue.getTimeTracking()
-                                                                                 .getRemainingEstimateMinutes()
-                                                                                    != null ? issue.getTimeTracking()
-                                                                                                   .getRemainingEstimateMinutes()
-                                                                                                   .toString() : null :
-                                                                            null ) : null,
-                issue.getAssignee() != null ? issue.getAssignee().getName() : null,
+                issue.getDescription(), issue.getTimeTracking() != null ?
+                                        ( issue.getTimeTracking().getRemainingEstimateMinutes() != null ?
+                                          issue.getTimeTracking().getRemainingEstimateMinutes().toString() : null ) :
+                                        null, issue.getAssignee() != null ? issue.getAssignee().getName() : null,
                 issue.getReporter() != null ? issue.getReporter().getName() : null, issue.getComponents().toString(),
                 issue.getLabels().toString(), issue.getStatus().getName(),
                 issue.getResolution() != null ? issue.getResolution().getName() : null,
