@@ -10,7 +10,7 @@ self.on('message', function onMessage(annotations) {
         }
     }
     let annotated = $('.highlight');
-    annotated.css('border', 'solid 3px yellow');
+    // annotated.css('border', 'solid 3px yellow');
 
     annotated.bind('mouseenter', function (event) {
         self.port.emit('show', $(this).attr('annotation'));
