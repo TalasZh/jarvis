@@ -62,6 +62,7 @@ function isAuthenticated() {
 
 const init = () => {
     console.log("Initializing jarvis plugin...");
+    simpleStorage.storage.annotations = {};
 
     if (!isAuthenticated()) {
         tabs.open(simplePrefs.prefs.mediatorProtocol + "://" + simplePrefs.prefs.mediatorHost + ":" + simplePrefs.prefs.mediatorPort);
@@ -78,7 +79,7 @@ const init = () => {
     }
 
     console.log("hello");
-    simpleStorage.storage.annotations = {};
+
     simpleStorage.on("OverQuota", function () {
         notifications.notify({
             title: 'Storage space exceeded',
@@ -360,79 +361,6 @@ exports.main = function () {
         }
     });
 
-    var odd = 0;
-
-    var testBtn = ToggleButton({
-        id: "testBtn",
-        label: "TestButton",
-        icon: {
-            "16": "./icon-16.png"
-        },
-        onChange: function (state) {
-            odd++;
-            if (odd % 2 === 0) {
-                testBtn.icon = {
-                    "16": "./icon-16.png"
-                };
-            }
-            else {
-                testBtn.icon = {
-                    "16": "./icon-16-off.png"
-                };
-            }
-            if (state.checked) {
-                test.contentURL = data.url("login/research.html");
-                test.port.emit("fill-combo-box", projectIssues, "JAR");
-                test.show({
-                    position: testBtn
-                });
-            }
-        }
-    });
-
-    var projectIssues = [
-        {
-            id: 1,
-            key: "JAR-1",
-            projectKey: "KAR",
-            type: {
-                id: 1,
-                name: "Task"
-            }
-        },
-        {
-            id: 2,
-            key: "JAR-2",
-            projectKey: "KAR",
-            type: {
-                id: 1,
-                name: "Task"
-            }
-        },
-        {
-            id: 3,
-            key: "JAR-3",
-            projectKey: "KAR",
-            type: {
-                id: 1,
-                name: "Epic"
-            }
-        }
-    ];
-
-
-    var test = panels.Panel({
-        width: 350,
-        height: 500,
-        contentScriptFile: [data.url('jquery-2.1.3.min.js'),
-            data.url('issue-view/issue-view.js'),
-            data.url('login/handleLogin.js'),
-            data.url('list.min.js')],
-        onHide: function (state) {
-            testBtn.state('window', {checked: false});
-        }
-    });
-
     var panel = panels.Panel({
         width: 350,
         height: 500,
@@ -496,27 +424,7 @@ exports.main = function () {
     });
 
     panel.port.on('left-click', function (activate) {
-        console.log('activate/deactivate annotator: ' + activate);
-        if (activate !== undefined) {
-            annotatorIsOn = !activate;
-        }
-        var captureEnabled = toggleActivation();
-        console.log("Now annotator is: " + captureEnabled);
-        //to indicate that capture session is enabled or disabled
-        if (captureEnabled) {
-            button.icon = {
-                "16": data.url('icon-16.png'),
-                "32": "./icon-32.png",
-                "64": "./icon-64.png"
-            };
-        }
-        else {
-            button.icon = {
-                "16": data.url('icon-16-off.png'),
-                "32": "./icon-32.png",
-                "64": "./icon-64.png"
-            };
-        }
+        disableEnableAnnotator(activate);
     });
 
     panel.port.on('right-click', function () {
@@ -526,6 +434,7 @@ exports.main = function () {
 
     panel.port.on("back-button-pressed", function (projectName) {
         console.log("back-button-pressed");
+        disableEnableAnnotator(false);
         mediator.listProjectIssues(projectName, function (error, json) {
             if (error != null) {
                 console.error("Could not retrieve " + global_username + "'s issues.");
@@ -672,6 +581,17 @@ exports.main = function () {
         listProjects();
     });
 
+    panel.port.on("build-hierarchy", function (storyKey) {
+        console.log(storyKey);
+        mediator.buildHierarchy(storyKey, function (error, json) {
+            if (error !== null) {
+                console.error("Error: " + error);
+                return;
+            }
+            console.log("Success");
+        });
+    });
+
     function getIssue(issueKey) {
         console.log("Query for issue: " + issueKey);
         mediator.getIssue(issueKey, function (error, json) {
@@ -703,14 +623,27 @@ exports.main = function () {
         }
     }
 
-    panel.port.on("build-hierarchy", function (storyKey) {
-        console.log(storyKey);
-        mediator.buildHierarchy(storyKey, function (error, json) {
-            if (error !== null) {
-                console.error("Error: " + error);
-                return;
-            }
-            console.log("Success");
-        });
-    });
+    function disableEnableAnnotator(activate){
+        console.log('activate/deactivate annotator: ' + activate);
+        if (activate !== undefined) {
+            annotatorIsOn = !activate;
+        }
+        var captureEnabled = toggleActivation();
+        console.log("Now annotator is: " + captureEnabled);
+        //to indicate that capture session is enabled or disabled
+        if (captureEnabled) {
+            button.icon = {
+                "16": data.url('icon-16.png'),
+                "32": "./icon-32.png",
+                "64": "./icon-64.png"
+            };
+        }
+        else {
+            button.icon = {
+                "16": data.url('icon-16-off.png'),
+                "32": "./icon-32.png",
+                "64": "./icon-64.png"
+            };
+        }
+    }
 };

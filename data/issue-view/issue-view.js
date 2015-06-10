@@ -97,6 +97,9 @@ self.port.on('set-issue', function (issue) {
 
 self.port.on('set-session', function (session) {
     console.log("Setting session");
+    //Disable annotator for newly selected issue
+    self.port.emit("left-click", false);
+
     let startStopBtn = $("#startStop");
     let pauseResumeBtn = $("#pauseResume");
     let annotator = $("#annotator");

@@ -17,10 +17,11 @@ if (annotator !== null) {
     annotator.click(function (event) {
 
         console.log(annotator.className);
-        if (annotator.prop("class") == "btn btn-primary btn-sm") {
+        if (annotator.prop("class") === "btn btn-primary btn-sm") {
             annotator.prop("class", "btn btn-default btn-sm");
         }
         else {
+            //Enable annotator
             annotator.prop("class", "btn btn-primary btn-sm");
         }
 
