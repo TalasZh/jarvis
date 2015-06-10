@@ -29,25 +29,6 @@ public class Project
     private Map<String, Set<Map<String, String>>> links;
 
 
-    public static class Link
-    {
-        private String url;
-        private String rel;
-
-
-        public String getUrl()
-        {
-            return url;
-        }
-
-
-        public String getRel()
-        {
-            return rel;
-        }
-    }
-
-
     public String getKey()
     {
         return key;
