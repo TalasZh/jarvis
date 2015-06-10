@@ -113,14 +113,14 @@ self.port.on('set-session', function (session) {
 
         switch (session.status) {
             case SESSION_STATUS.IN_PROGRESS:
-                console.error(session.status);
+                console.log(session.status);
                 pauseResumeBtn.prop("value", PAUSE);
 
                 self.port.emit("left-click", true);
                 annotator.prop("class", "btn btn-primary btn-sm");
                 break;
             case SESSION_STATUS.CLOSED:
-                console.error(session.status);
+                console.log(session.status);
                 pauseResumeBtn.prop("disabled", true);
                 startStopBtn.prop("disabled", true);
                 annotator.prop("disabled", true);
@@ -129,7 +129,7 @@ self.port.on('set-session', function (session) {
                 annotator.prop("class", "btn btn-default btn-sm");
                 break;
             case SESSION_STATUS.PAUSED:
-                console.error(session.status);
+                console.log(session.status);
                 pauseResumeBtn.prop("value", RESUME);
                 annotator.prop("disabled", true);
                 startStopBtn.prop("disabled", true);
