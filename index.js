@@ -360,12 +360,75 @@ exports.main = function () {
         }
     });
 
+    var testBtn = ToggleButton({
+        id: "testBtn",
+        label: "TestButton",
+        icon: {
+            "16": "./icon-32.png"
+        },
+        onChange: function(state) {
+            if (state.checked) {
+                test.contentURL= data.url("login/research.html");
+                test.port.emit("fill-combo-box", projectIssues, "JAR");
+                test.show({
+                    position: testBtn
+                });
+            }
+        }
+    });
+
+    var projectIssues = [
+        {
+            id: 1,
+            key: "JAR-1",
+            projectKey: "KAR",
+            type: {
+                id: 1,
+                name: "Task"
+            }
+        },
+        {
+            id: 2,
+            key: "JAR-2",
+            projectKey: "KAR",
+            type: {
+                id: 1,
+                name: "Task"
+            }
+        },
+        {
+            id: 3,
+            key: "JAR-3",
+            projectKey: "KAR",
+            type: {
+                id: 1,
+                name: "Epic"
+            }
+        }
+    ];
+
+
+
+    var test = panels.Panel({
+        width: 350,
+        height: 500,
+        contentScriptFile: [data.url('jquery-2.1.3.min.js'),
+            data.url('issue-view/issue-view.js'),
+            data.url('login/handleLogin.js'),
+            data.url('list.min.js')],
+        onHide: function (state) {
+            testBtn.state('window', {checked: false});
+        }
+    });
+
     var panel = panels.Panel({
         width: 350,
         height: 500,
         contentScriptFile: [data.url('jquery-2.1.3.min.js'),
             data.url('issue-view/issue-view.js'),
-            data.url('login/handleLogin.js')],
+            data.url('login/handleLogin.js'),
+            data.url('list.min.js')
+        ],
         onHide: function (state) {
             button.state('window', {checked: false});
         }

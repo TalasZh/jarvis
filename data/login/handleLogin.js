@@ -1,4 +1,6 @@
 var loginButton = $("#loginButton");
+var issueLinks;
+
 if (loginButton !== null) {
     loginButton.click(function (event) {
         var username = $("#username");
@@ -189,8 +191,50 @@ function pushProjectIssues(links) {
     }
     //notifies controller to select another issue
     $("a.issue-link").click(function () {
+        console.log("Issue Clicked: " + $(this).text().trim());
         self.port.emit('issue-selected',
             $(this).text().trim()
         );
+    });
+
+    var options = {valueNames: ["key", "issueType", "projectKey"]};
+    issueLinks = new List("project-issues", options);
+    issueLinks.sort("issueType", {order: "asc"});
+
+    $("#sortByKey").click(function () {
+        var span = $(this).find("span");
+        if (span.prop("class") ===
+            "glyphicon glyphicon-sort-by-alphabet") {
+            issueLinks.sort("key", {order: "asc"});
+            span.prop("class", "glyphicon glyphicon-sort-by-alphabet-alt");
+        }
+        else {
+            issueLinks.sort("key", {order: "desc"});
+            span.prop("class", "glyphicon glyphicon-sort-by-alphabet");
+        }
+    });
+
+    $("#sortByType").click(function () {
+        var span = $(this).find("span");
+        if (span.prop("class") ===
+            "glyphicon glyphicon-sort-by-alphabet") {
+            issueLinks.sort("issueType", {order: "asc"});
+            span.prop("class", "glyphicon glyphicon-sort-by-alphabet-alt");
+        }
+        else {
+            issueLinks.sort("issueType", {order: "desc"});
+            span.prop("class", "glyphicon glyphicon-sort-by-alphabet");
+        }
+    });
+
+    $("#searchProjectIssues").keyup(function () {
+        var criteria = $(this).val();
+        console.log("Searching for criteria: " + criteria);
+        if (criteria) {
+            issueLinks.search(criteria);
+        }
+        else {
+            issueLinks.search();
+        }
     });
 }
