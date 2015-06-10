@@ -360,15 +360,28 @@ exports.main = function () {
         }
     });
 
+    var odd = 0;
+
     var testBtn = ToggleButton({
         id: "testBtn",
         label: "TestButton",
         icon: {
-            "16": "./icon-32.png"
+            "16": "./icon-16.png"
         },
-        onChange: function(state) {
+        onChange: function (state) {
+            odd++;
+            if (odd % 2 === 0) {
+                testBtn.icon = {
+                    "16": "./icon-16.png"
+                };
+            }
+            else {
+                testBtn.icon = {
+                    "16": "./icon-16-off.png"
+                };
+            }
             if (state.checked) {
-                test.contentURL= data.url("login/research.html");
+                test.contentURL = data.url("login/research.html");
                 test.port.emit("fill-combo-box", projectIssues, "JAR");
                 test.show({
                     position: testBtn
@@ -406,7 +419,6 @@ exports.main = function () {
             }
         }
     ];
-
 
 
     var test = panels.Panel({
@@ -488,7 +500,23 @@ exports.main = function () {
         if (activate !== undefined) {
             annotatorIsOn = !activate;
         }
-        console.log("Now annotator is: " + toggleActivation());
+        var captureEnabled = toggleActivation();
+        console.log("Now annotator is: " + captureEnabled);
+        //to indicate that capture session is enabled or disabled
+        if (captureEnabled) {
+            button.icon = {
+                "16": data.url('icon-16.png'),
+                "32": "./icon-32.png",
+                "64": "./icon-64.png"
+            };
+        }
+        else {
+            button.icon = {
+                "16": data.url('icon-16-off.png'),
+                "32": "./icon-32.png",
+                "64": "./icon-64.png"
+            };
+        }
     });
 
     panel.port.on('right-click', function () {

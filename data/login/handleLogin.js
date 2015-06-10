@@ -197,6 +197,7 @@ function pushProjectIssues(links) {
         );
     });
 
+    //for sorting and searching features
     var options = {valueNames: ["key", "issueType", "projectKey"]};
     issueLinks = new List("project-issues", options);
     issueLinks.sort("issueType", {order: "asc"});
