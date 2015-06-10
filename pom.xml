@@ -30,6 +30,14 @@
       <id>spring-milestones</id>
       <url>http://repo.spring.io/libs-milestone/</url>
     </repository>
+
+    <!-- Restlet Framework Repository-->
+    <repository>
+      <id>maven-restlet</id>
+      <name>Restlet repository</name>
+      <url>http://maven.restlet.com</url>
+    </repository>
+
   </repositories>
 
   <build>
@@ -143,6 +151,19 @@
               <artifactId>confluence-rest-client</artifactId>
               <version>5.7.4</version>
             </dependency>-->
+
+    <!-- Restlet Framework dependencies -->
+
+    <dependency>
+      <groupId>org.restlet.jse</groupId>
+      <artifactId>org.restlet</artifactId>
+      <version>${restlet-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.restlet.jse</groupId>
+      <artifactId>org.restlet.ext.jackson</artifactId>
+      <version>${restlet-version}</version>
+    </dependency>
   </dependencies>
 
   <properties>
@@ -171,6 +192,9 @@
 
     <httpasyncclient.version>4.0-beta3-atlassian-1</httpasyncclient.version>
     <httpclient.version>4.2.1-atlassian-2</httpclient.version>
+
+    <!-- Restlet Framework version -->
+    <restlet-version>2.3.2</restlet-version>
   </properties>
 
   <profiles>

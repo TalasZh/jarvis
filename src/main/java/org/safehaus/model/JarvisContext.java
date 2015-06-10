@@ -5,10 +5,10 @@ import java.io.IOException;
 
 import javax.ws.rs.core.Cookie;
 
-import org.safehaus.service.JiraClient;
 import org.safehaus.exceptions.JiraClientException;
-import org.safehaus.util.CrowdAuthenticationHandler;
+import org.safehaus.service.JiraClient;
 import org.safehaus.service.impl.JiraClientImpl;
+import org.safehaus.util.CrowdAuthenticationHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -27,6 +27,7 @@ import com.atlassian.jira.rest.client.auth.BasicHttpAuthenticationHandler;
 public class JarvisContext
 {
     private static Logger logger = LoggerFactory.getLogger( JarvisContext.class );
+    private Cookie cookie;
     private AuthenticationHandler authenticationHandler;
     private String jiraUrl;
     private JiraClient jiraClient;
@@ -49,6 +50,7 @@ public class JarvisContext
     public JarvisContext( final String jiraUrl, final Cookie cookie )
     {
         this.jiraUrl = jiraUrl;
+        this.cookie = cookie;
         authenticationHandler = new CrowdAuthenticationHandler( cookie );
     }
 
@@ -104,5 +106,11 @@ public class JarvisContext
         {
             return null;
         }
+    }
+
+
+    public Cookie getCookie()
+    {
+        return cookie;
     }
 }
