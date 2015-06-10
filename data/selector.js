@@ -17,6 +17,8 @@ self.on('message', function onMessage(activation) {
 });
 
 let all = $('*');
+let body = $('body');
+
 
 function getSelectionText() {
     var text = "";
@@ -28,28 +30,30 @@ function getSelectionText() {
     return text;
 }
 
-// all.mouseenter(function () {
-//     if (!active || $(this).hasClass('annotated')) {
-//         return;
-//     }
-//     resetMatchedElement();
-//     ancestor = $(this).closest("[id]");
-//     matchedElement = $(this).first();
-//     originalBgColor = $(matchedElement).css('background-color');
-//     $(matchedElement).css('background-color', 'yellow');
-//     $(matchedElement).bind('click.annotator', function (event) {
-//         event.stopPropagation();
-//         event.preventDefault();
-//         self.port.emit('show',
-//             [
-//                 document.location.toString(),
-//                 $(ancestor).attr("id"),
-//                 $(matchedElement).text()
-//             ]
-//         );
-//     });
-// });
+$(window).scroll(function() {
+    if($(window).scrollTop() > 0 ) {
+       self.port.emit("page-scrooled");
+    } 
+});
 
-// all.mouseout(function () {
-//     resetMatchedElement();
-// });
+body.mouseup(function (e){
+    var scroolSize = 0;
+    if($(window).scrollTop() > 0 ) {
+       scroolSize = $(window).scrollTop();
+    }
+    if ( getSelectionText().length > 0 ){
+        console.log(getSelectionText());
+
+        self.port.emit(
+            "show-popup",
+            [
+                document.location.toString(),
+                "content",
+                getSelectionText()
+            ],
+            e.pageX,
+            (e.pageY - scroolSize)
+        );
+        scrollSize = 0;
+    }
+});

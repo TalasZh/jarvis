@@ -13,7 +13,6 @@ var { ToggleButton } = require('sdk/ui/button/toggle');
 var self = require("sdk/self");
 var {Cc, Ci, Cu} = require("chrome");
 var system = require("sdk/system");
-var cm = require("sdk/context-menu");
 
 let { search } = require("sdk/places/history");
 
@@ -146,6 +145,12 @@ function onAttachWorker(annotationEditor, data) {
     console.log('On attach worker event...');
 }
 
+function onShowPopup(popup, data, X, Y) {
+    popup.data = data;
+    popup.show({ position: { top: Y, left: X } });
+    console.log('Show popup event...');
+}
+
 function detachWorker(worker, workerArray) {
     var index = workerArray.indexOf(worker);
     if (index != -1) {
@@ -185,7 +190,7 @@ function getUserIssues(jira, username) {
 
 
 exports.main = function () {
-    //tabs.open("https://wiki.ubuntu.com/");
+    tabs.open("https://wiki.ubuntu.com/");
     //listProjects();
 
     var currentIssueKey = "";
@@ -193,7 +198,7 @@ exports.main = function () {
         include: ['*'],
         contentScriptWhen: 'ready',
         contentScriptFile: [data.url('jquery-2.1.3.min.js'),
-            data.url('selector.js')],
+                            data.url('selector.js')],
 
         onAttach: function (worker) {
             worker.postMessage(annotatorIsOn);
@@ -205,10 +210,51 @@ exports.main = function () {
                 console.log(annotator);
             });
 
+            worker.port.on('show-popup', function ( data, X, Y ) {
+                onShowPopup(popup, data, X, Y);
+            });
+
+            worker.port.on('page-scrooled', function ( data, X, Y ) {
+                popup.hide();
+            });
+
             worker.on('detach', function () {
                 detachWorker(this, selectors);
             });
+
+
         }
+    });
+
+
+    var popup = panels.Panel({
+        width: 25,
+        height: 25,
+        contentURL: data.url('popup/popup.html'),
+        contentScriptFile: [data.url('jquery-2.1.3.min.js'),
+                            data.url('popup/popup.js'),
+                            data.url('jquery.highlight.js')]
+    });
+
+
+    popup.port.on('annotate-button-pressed', function () {
+        if (annotatorIsOn) {
+            onAttachWorker(annotationEditor, popup.data);
+            annotationEditor.show();
+        }
+        else{
+            notifications.notify({
+                title: 'Warning',
+                text: 'Annotator is not activated !'
+            });
+        }
+        popup.hide();
+    });
+
+    popup.port.on('highlight-button-pressed', function () {
+        console.log( "high is pressed");
+        popup.port.emit("highlight", popup.data);
+        // popup.hide();
     });
 
 
@@ -231,23 +277,6 @@ exports.main = function () {
         },
         onShow: function () {
             this.postMessage('focus');
-        }
-    });
-
-
-    cm.Item({
-        label: "Annotate",
-        image: self.data.url("icon-16.png"),
-        context: [cm.SelectionContext()],
-        contentScriptFile: [data.url('login/context-menu.js'),
-            data.url('jquery-2.1.3.min.js'),
-            data.url('jquery.highlight.js')],
-        onMessage: function (data) {
-            console.log("Selected text : " + data);
-            if (annotatorIsOn) {
-                onAttachWorker(annotationEditor, data);
-                annotationEditor.show();
-            }
         }
     });
 
