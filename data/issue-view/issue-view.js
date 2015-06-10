@@ -97,6 +97,9 @@ self.port.on('set-issue', function (issue) {
 
 self.port.on('set-session', function (session) {
     console.log("Setting session");
+    //Disable annotator for newly selected issue
+    self.port.emit("left-click", false);
+
     let startStopBtn = $("#startStop");
     let pauseResumeBtn = $("#pauseResume");
     let annotator = $("#annotator");
@@ -227,27 +230,29 @@ function buildIssueLinkElement(linkItem) {
     let linkTypeSpan = "";
     switch (linkItem.type.name) {
         case ISSUE_TYPE.EPIC:
-            linkTypeSpan = "  <span class=\"label label-primary\">Epic</span>";
+            linkTypeSpan = "  <span class=\"issueType label label-primary\">Epic</span>";
             break;
         case ISSUE_TYPE.PHASE:
-            linkTypeSpan = "  <span class=\"label label-success\">Phase</span>";
+            linkTypeSpan = "  <span class=\"issueType label label-success\">Phase</span>";
             break;
         case ISSUE_TYPE.RESEARCH:
-            linkTypeSpan = "  <span class=\"label label-info\">Research</span>";
+            linkTypeSpan = "  <span class=\"issueType label label-info\">Research</span>";
             break;
         case ISSUE_TYPE.STORY:
-            linkTypeSpan = "  <span class=\"label label-warning\">Story</span>";
+            linkTypeSpan = "  <span class=\"issueType label label-warning\">Story</span>";
             break;
         case ISSUE_TYPE.BUG:
-            linkTypeSpan = "  <span class=\"label label-danger\">Bug</span>";
+            linkTypeSpan = "  <span class=\"issueType label label-danger\">Bug</span>";
             break;
         default :
-            linkTypeSpan = "  <span class=\"label label-default\">Task</span>";
+            linkTypeSpan = "  <span class=\"issueType label label-default\">Task</span>";
             break;
     }
 
     return "<li class=\"list-group-item\">" +
-        "<a class= \"issue-link\" href=\"#\">" + linkItem.key + "</a>" + linkTypeSpan +
+        "<a class= \"issue-link key\" href=\"#\">" + linkItem.key + "</a>" +
+        linkTypeSpan +
+        "<span class='projectKey' hidden>" + linkItem.projectKey + "</span>" +
         "</li>";
 }
 
