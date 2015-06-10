@@ -15,6 +15,7 @@ import org.safehaus.model.SessionNotFoundException;
 import org.safehaus.model.SessionStatus;
 import org.safehaus.service.JiraManager;
 import org.safehaus.service.SessionManager;
+import org.safehaus.util.SecurityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +71,18 @@ public class SessionManagerImpl extends GenericManagerImpl<Session, Long> implem
     @Override
     public List<Session> getSessions()
     {
-        return sessionDao.getAllDistinct();
+        if ( SecurityUtil.hasRole( SecurityUtil.ROLE_ADMIN ) )
+        {
+            return sessionDao.getAllDistinct();
+        }
+        else
+        {
+            if ( SecurityUtil.hasRole( SecurityUtil.ROLE_USER ) )
+            {
+                return sessionDao.getSessionsByUsername( SecurityUtil.getUserDetails().getUsername() );
+            }
+        }
+        return null;
     }
 
 

@@ -1,8 +1,11 @@
 package org.safehaus.util;
 
 
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 
 /**
@@ -24,5 +27,20 @@ public class SecurityUtil
             }
         }
         return false;
+    }
+
+
+    public static UserDetails getUserDetails()
+    {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if ( !( auth instanceof AnonymousAuthenticationToken ) )
+        {
+            UserDetails userDetails = ( UserDetails ) auth.getPrincipal();
+            return userDetails;
+        }
+        else
+        {
+            return null;
+        }
     }
 }

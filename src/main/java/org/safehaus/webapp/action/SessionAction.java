@@ -45,7 +45,6 @@ public class SessionAction extends BaseAction
             log.debug( authority.getAuthority() );
         }
 
-        log.debug( SecurityUtil.hasRole( SecurityUtil.ROLE_ADMIN ) );
         sessions = sessionManager.getSessions();
         return SUCCESS;
     }
