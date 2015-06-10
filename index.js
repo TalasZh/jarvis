@@ -35,7 +35,7 @@ var matchers = [];
 
 simplePrefs.on("applyChanges", onPrefChange);
 
-function onPrefChange(prefName) {
+function onPrefChange() {
     console.log("Applied last changes");
     mediator = new MediatorApi(simplePrefs.prefs.mediatorProtocol,
         simplePrefs.prefs.mediatorHost,
@@ -224,7 +224,7 @@ exports.main = function () {
                 console.log(currentIssueKey);
                 handleNewAnnotation(annotationText, this.annotationAnchor, currentIssueKey, function (capture) {
                     console.log("Handle new annotation callback");
-                    panel.port.emit("call-select-issue", currentIssueKey);
+                    selectIssue(capture);
                 });
             }
             annotationEditor.hide();
@@ -445,8 +445,7 @@ exports.main = function () {
                 return;
             }
             panel.contentURL = data.url("issue-view/issue-view.html");
-            panel.port.emit("set-issue", json);
-            currentIssueKey = json.key;
+            selectIssue(json);
         });
     });
 
@@ -463,8 +462,7 @@ exports.main = function () {
             else if (json !== undefined) {
 
                 console.log("Response: " + JSON.stringify(json));
-                panel.port.emit('set-issue', json);
-                currentIssueKey = json.key;
+                selectIssue(json);
             }
         });
     });
@@ -562,6 +560,11 @@ exports.main = function () {
         global_username = username;
         listProjects();
     });
+
+    function selectIssue(issue) {
+        panel.port.emit('set-issue', issue);
+        currentIssueKey = issue.key;
+    }
 
     function listProjects() {
         if (init()) {
