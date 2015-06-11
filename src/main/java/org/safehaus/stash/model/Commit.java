@@ -10,7 +10,7 @@ public class Commit
 {
     private String id;
     private String displayId;
-    private Author author;
+    private User author;
     private long authorTimestamp;
     private String message;
     private Set<Commit> parents;
@@ -28,7 +28,7 @@ public class Commit
     }
 
 
-    public Author getAuthor()
+    public User getAuthor()
     {
         return author;
     }

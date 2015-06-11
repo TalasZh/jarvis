@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.safehaus.stash.model.Activity;
 import org.safehaus.stash.model.Branch;
+import org.safehaus.stash.model.Change;
 import org.safehaus.stash.model.Commit;
 import org.safehaus.stash.model.Group;
 import org.safehaus.stash.model.Project;
@@ -175,6 +176,21 @@ public class StashManagerImpl implements StashManager
 
 
     @Override
+    public Set<Change> getPullRequestChanges( final String projectKey, final String repoSlug, final long prId,
+                                              final int limit ) throws RestUtil.RestException
+    {
+        String response = restUtil.get(
+                formUrl( "rest/api/1.0/projects/%s/repos/%s/pull-requests/%d/changes?limit=%d", projectKey, repoSlug,
+                        prId, limit ), Maps.<String, String>newHashMap() );
+
+        Page<Change> commitPage = jsonUtil.from( response, new TypeToken<Page<Change>>()
+        {}.getType() );
+
+        return commitPage.getValues();
+    }
+
+
+    @Override
     public Set<Branch> getBranches( final String projectKey, final String repoSlug, final int limit )
             throws RestUtil.RestException
     {
@@ -197,5 +213,36 @@ public class StashManagerImpl implements StashManager
                         Maps.<String, String>newHashMap() );
 
         return jsonUtil.from( response, Branch.class );
+    }
+
+
+    @Override
+    public Set<Change> getChangesBetweenCommits( final String projectKey, final String repoSlug,
+                                                 final String fromCommitId, final String toCommitId, final int limit )
+            throws RestUtil.RestException
+    {
+        String response = restUtil.get(
+                formUrl( "rest/api/1.0/projects/%s/repos/%s/changes?since=%s&until=%s&limit=%d", projectKey, repoSlug,
+                        fromCommitId, toCommitId, limit ), Maps.<String, String>newHashMap() );
+
+        Page<Change> commitPage = jsonUtil.from( response, new TypeToken<Page<Change>>()
+        {}.getType() );
+
+        return commitPage.getValues();
+    }
+
+
+    @Override
+    public Set<Commit> getCommits( final String projectKey, final String repoSlug, final int limit )
+            throws RestUtil.RestException
+    {
+        String response = restUtil.get(
+                formUrl( "rest/api/1.0/projects/%s/repos/%s/commits?limit=%d", projectKey, repoSlug, limit ),
+                Maps.<String, String>newHashMap() );
+
+        Page<Commit> commitPage = jsonUtil.from( response, new TypeToken<Page<Commit>>()
+        {}.getType() );
+
+        return commitPage.getValues();
     }
 }

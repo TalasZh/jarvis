@@ -14,6 +14,7 @@ import org.safehaus.model.JarvisContext;
 import org.safehaus.stash.TestUtil;
 import org.safehaus.stash.model.Activity;
 import org.safehaus.stash.model.Branch;
+import org.safehaus.stash.model.Change;
 import org.safehaus.stash.model.Commit;
 import org.safehaus.stash.model.Group;
 import org.safehaus.stash.model.Project;
@@ -139,10 +140,8 @@ public class StashManagerImplTest
     {
         setRestResponse( TestUtil.STASH_PULL_REQUEST_ACTIVITY_JSON );
 
-
         Set<Activity> activities =
                 stashManager.getPullRequestActivities( TestUtil.PROJECT_KEY, TestUtil.REPO_SLUG, 1, 1 );
-
 
         assertFalse( activities.isEmpty() );
     }
@@ -178,5 +177,41 @@ public class StashManagerImplTest
         Branch defaultBranch = stashManager.getDefaultBranch( TestUtil.PROJECT_KEY, TestUtil.REPO_SLUG );
 
         assertNotNull( defaultBranch );
+    }
+
+
+    @Test
+    public void testGetPRChanges() throws Exception
+    {
+        setRestResponse( TestUtil.STASH_PULL_REQUEST_CHANGES_JSON );
+
+        Set<Change> changes = stashManager.getPullRequestChanges( TestUtil.PROJECT_KEY, TestUtil.REPO_SLUG, 21, 10 );
+
+        assertFalse( changes.isEmpty() );
+    }
+
+
+    @Test
+    public void testGetChangesBetweenCommits() throws Exception
+    {
+        setRestResponse( TestUtil.STASH_PULL_REQUEST_CHANGES_JSON );
+
+        Set<Change> changes = stashManager
+                .getChangesBetweenCommits( TestUtil.PROJECT_KEY, TestUtil.REPO_SLUG, "683ade1", "3353762", 10 );
+
+        assertFalse( changes.isEmpty() );
+    }
+
+
+    @Test
+    public void testGetCommits() throws Exception
+    {
+
+        setRestResponse( TestUtil.STASH_COMMITS_JSON );
+
+
+        Set<Commit> commits = stashManager.getCommits( TestUtil.PROJECT_KEY, TestUtil.REPO_SLUG, 10 );
+
+        assertFalse( commits.isEmpty() );
     }
 }
