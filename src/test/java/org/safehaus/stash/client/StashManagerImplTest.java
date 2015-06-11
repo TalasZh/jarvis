@@ -66,9 +66,9 @@ public class StashManagerImplTest
     {
         setRestResponse( TestUtil.STASH_PROJECTS_JSON );
 
-        Set<Project> projects = stashManager.getProjects( 4 );
+        Page<Project> projects = stashManager.getProjects( 4, 0 );
 
-        assertTrue( projects.size() == 4 );
+        assertTrue( projects.getSize() == 4 );
     }
 
 
@@ -88,9 +88,9 @@ public class StashManagerImplTest
     {
         setRestResponse( TestUtil.STASH_GROUP_JSON );
 
-        Set<Group> groups = stashManager.getPermittedGroups( TestUtil.PROJECT_KEY, 2 );
+        Page<Group> groups = stashManager.getPermittedGroups( TestUtil.PROJECT_KEY, 2, 0 );
 
-        assertTrue( groups.size() == 2 );
+        assertTrue( groups.getSize() == 2 );
     }
 
 
@@ -99,9 +99,9 @@ public class StashManagerImplTest
     {
         setRestResponse( TestUtil.STASH_REPOS_JSON );
 
-        Set<Repo> repos = stashManager.getRepos( TestUtil.PROJECT_KEY, 1 );
+        Page<Repo> repos = stashManager.getRepos( TestUtil.PROJECT_KEY, 1, 0 );
 
-        assertFalse( repos.isEmpty() );
+        assertTrue( repos.getSize() > 0 );
     }
 
 
@@ -121,11 +121,11 @@ public class StashManagerImplTest
     {
         setRestResponse( TestUtil.STASH_PULL_REQUESTS_JSON );
 
-        Set<PullRequest> pullRequests = stashManager
+        Page<PullRequest> pullRequests = stashManager
                 .getPullRequests( TestUtil.PROJECT_KEY, TestUtil.REPO_SLUG, TestUtil.MASTER_BRANCH,
-                        PullRequest.State.DECLINED, 3 );
+                        PullRequest.State.DECLINED, 3, 0 );
 
-        assertFalse( pullRequests.isEmpty() );
+        assertTrue( pullRequests.getSize() > 0 );
     }
 
 
@@ -145,10 +145,10 @@ public class StashManagerImplTest
     {
         setRestResponse( TestUtil.STASH_PULL_REQUEST_ACTIVITY_JSON );
 
-        Set<Activity> activities =
-                stashManager.getPullRequestActivities( TestUtil.PROJECT_KEY, TestUtil.REPO_SLUG, 1, 1 );
+        Page<Activity> activities =
+                stashManager.getPullRequestActivities( TestUtil.PROJECT_KEY, TestUtil.REPO_SLUG, 1, 1, 0 );
 
-        assertFalse( activities.isEmpty() );
+        assertTrue( activities.getSize() > 0 );
     }
 
 
@@ -157,9 +157,9 @@ public class StashManagerImplTest
     {
         setRestResponse( TestUtil.STASH_PULL_REQUEST_COMMITS_JSON );
 
-        Set<Commit> commits = stashManager.getPullRequestCommits( TestUtil.PROJECT_KEY, TestUtil.REPO_SLUG, 1, 1 );
+        Page<Commit> commits = stashManager.getPullRequestCommits( TestUtil.PROJECT_KEY, TestUtil.REPO_SLUG, 1, 1, 0 );
 
-        assertFalse( commits.isEmpty() );
+        assertTrue( commits.getSize() > 0 );
     }
 
 
@@ -168,9 +168,9 @@ public class StashManagerImplTest
     {
         setRestResponse( TestUtil.STASH_BRANCHES_JSON );
 
-        Set<Branch> branches = stashManager.getBranches( TestUtil.PROJECT_KEY, TestUtil.REPO_SLUG, 1 );
+        Page<Branch> branches = stashManager.getBranches( TestUtil.PROJECT_KEY, TestUtil.REPO_SLUG, 1, 0 );
 
-        assertFalse( branches.isEmpty() );
+        assertTrue( branches.getSize() > 0 );
     }
 
 
@@ -190,9 +190,10 @@ public class StashManagerImplTest
     {
         setRestResponse( TestUtil.STASH_PULL_REQUEST_CHANGES_JSON );
 
-        Set<Change> changes = stashManager.getPullRequestChanges( TestUtil.PROJECT_KEY, TestUtil.REPO_SLUG, 21, 10 );
+        Page<Change> changes =
+                stashManager.getPullRequestChanges( TestUtil.PROJECT_KEY, TestUtil.REPO_SLUG, 21, 10, 0 );
 
-        assertFalse( changes.isEmpty() );
+        assertTrue( changes.getSize() > 0 );
     }
 
 
@@ -201,23 +202,21 @@ public class StashManagerImplTest
     {
         setRestResponse( TestUtil.STASH_PULL_REQUEST_CHANGES_JSON );
 
-        Set<Change> changes = stashManager
-                .getChangesBetweenCommits( TestUtil.PROJECT_KEY, TestUtil.REPO_SLUG, "683ade1", "3353762", 10 );
+        Page<Change> changes = stashManager
+                .getChangesBetweenCommits( TestUtil.PROJECT_KEY, TestUtil.REPO_SLUG, "683ade1", "3353762", 10, 0 );
 
-        assertFalse( changes.isEmpty() );
+        assertTrue( changes.getSize() > 0 );
     }
 
 
     @Test
     public void testGetCommits() throws Exception
     {
-
         setRestResponse( TestUtil.STASH_COMMITS_JSON );
 
+        Page<Commit> commits = stashManager.getCommits( TestUtil.PROJECT_KEY, TestUtil.REPO_SLUG, 10, 0 );
 
-        Set<Commit> commits = stashManager.getCommits( TestUtil.PROJECT_KEY, TestUtil.REPO_SLUG, 10 );
-
-        assertFalse( commits.isEmpty() );
+        assertFalse( commits.getValues().isEmpty() );
     }
 
 
@@ -229,8 +228,6 @@ public class StashManagerImplTest
         Commit commit = stashManager.getCommit( TestUtil.PROJECT_KEY, TestUtil.REPO_SLUG, "ad31de9" );
 
         assertNotNull( commit );
-
-        System.out.println( commit );
     }
 
 
@@ -239,9 +236,10 @@ public class StashManagerImplTest
     {
         setRestResponse( TestUtil.STASH_COMMIT_CHANGES_JSON );
 
-        Set<Change> changes = stashManager.getCommitChanges( TestUtil.PROJECT_KEY, TestUtil.REPO_SLUG, "2fda08f", 10 );
+        Page<Change> changes =
+                stashManager.getCommitChanges( TestUtil.PROJECT_KEY, TestUtil.REPO_SLUG, "2fda08f", 10, 0 );
 
-        assertFalse( changes.isEmpty() );
+        assertFalse( changes.getValues().isEmpty() );
     }
 
 
@@ -250,9 +248,9 @@ public class StashManagerImplTest
     {
         setRestResponse( TestUtil.STASH_EVENTS_JSON );
 
-        Set<Event> events = stashManager.getProjectEvents( TestUtil.PROJECT_KEY, 10 );
+        Page<Event> events = stashManager.getProjectEvents( TestUtil.PROJECT_KEY, 10, 0 );
 
-        assertFalse( events.isEmpty() );
+        assertFalse( events.getValues().isEmpty() );
     }
 
 
@@ -261,10 +259,9 @@ public class StashManagerImplTest
     {
         setRestResponse( TestUtil.STASH_EVENTS_JSON );
 
+        Page<Event> events = stashManager.getRepoEvents( TestUtil.PROJECT_KEY, TestUtil.REPO_SLUG, 10, 0 );
 
-        Set<Event> events = stashManager.getRepoEvents( TestUtil.PROJECT_KEY, TestUtil.REPO_SLUG, 10 );
-
-        assertFalse( events.isEmpty() );
+        assertFalse( events.getValues().isEmpty() );
     }
 
 
@@ -284,9 +281,9 @@ public class StashManagerImplTest
     {
         setRestResponse( TestUtil.STASH_BUILD_STATUSES_JSON );
 
-        Set<BuildStatus> buildStatuses = stashManager.getCommitBuildStatuses( "2fda08f", 10 );
+        Page<BuildStatus> buildStatuses = stashManager.getCommitBuildStatuses( "2fda08f", 10, 0 );
 
-        assertFalse( buildStatuses.isEmpty() );
+        assertFalse( buildStatuses.getValues().isEmpty() );
     }
 
 

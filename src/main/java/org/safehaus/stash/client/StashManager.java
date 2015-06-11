@@ -20,52 +20,58 @@ import org.safehaus.stash.model.Repo;
 
 public interface StashManager
 {
-    public Set<Project> getProjects( int limit ) throws StashManagerException;
+    public Page<Project> getProjects( int limit, int start ) throws StashManagerException;
 
     public Project getProject( String projectKey ) throws StashManagerException;
 
-    public Set<Group> getPermittedGroups( String projectKey, int limit ) throws StashManagerException;
+    public Page<Group> getPermittedGroups( String projectKey, int limit, int start ) throws StashManagerException;
 
-    public Set<Repo> getRepos( String projectKey, int limit ) throws StashManagerException;
+    public Page<Repo> getRepos( String projectKey, int limit, int start ) throws StashManagerException;
 
     public Repo getRepo( String projectKey, String repoSlug ) throws StashManagerException;
 
-    public Set<PullRequest> getPullRequests( String projectKey, String repoSlug, String branchName,
-                                             PullRequest.State state, int limit ) throws StashManagerException;
+    public Page<PullRequest> getPullRequests( String projectKey, String repoSlug, String branchName,
+                                              PullRequest.State state, int limit, int start )
+            throws StashManagerException;
 
     public PullRequest getPullRequest( String projectKey, String repoSlug, long prId ) throws StashManagerException;
 
-    public Set<Activity> getPullRequestActivities( String projectKey, String repoSlug, long prId, int limit )
+    public Page<Activity> getPullRequestActivities( String projectKey, String repoSlug, long prId, int limit,
+                                                    int start ) throws StashManagerException;
+
+    public Page<Commit> getPullRequestCommits( String projectKey, String repoSlug, long prId, int limit, int start )
             throws StashManagerException;
 
-    public Set<Commit> getPullRequestCommits( String projectKey, String repoSlug, long prId, int limit )
-            throws StashManagerException;
-
-    public Set<Change> getPullRequestChanges( String projectKey, String repoSlug, long prId, int limit )
+    public Page<Change> getPullRequestChanges( String projectKey, String repoSlug, long prId, int limit, int start )
             throws StashManagerException;
 
 
-    public Set<Branch> getBranches( String projectKey, String repoSlug, int limit ) throws StashManagerException;
+    public Page<Branch> getBranches( String projectKey, String repoSlug, int limit, int start )
+            throws StashManagerException;
 
     public Branch getDefaultBranch( String projectKey, String repoSlug ) throws StashManagerException;
 
-    public Set<Change> getChangesBetweenCommits( String projectKey, String repoSlug, String fromCommitId,
-                                                 String toCommitId, int limit ) throws StashManagerException;
+    public Page<Change> getChangesBetweenCommits( String projectKey, String repoSlug, String fromCommitId,
+                                                  String toCommitId, int limit, int start )
+            throws StashManagerException;
 
-    public Set<Commit> getCommits( String projectKey, String repoSlug, int limit ) throws StashManagerException;
+    public Page<Commit> getCommits( String projectKey, String repoSlug, int limit, int start )
+            throws StashManagerException;
 
     public Commit getCommit( String projectKey, String repoSlug, String commitId ) throws StashManagerException;
 
-    public Set<Change> getCommitChanges( String projectKey, String repoSlug, String commitId, int limit )
+    public Page<Change> getCommitChanges( String projectKey, String repoSlug, String commitId, int limit, int start )
             throws StashManagerException;
 
-    public Set<Event> getRepoEvents( String projectKey, String repoSlug, int limit ) throws StashManagerException;
+    public Page<Event> getRepoEvents( String projectKey, String repoSlug, int limit, int start )
+            throws StashManagerException;
 
-    public Set<Event> getProjectEvents( String projectKey, int limit ) throws StashManagerException;
+    public Page<Event> getProjectEvents( String projectKey, int limit, int start ) throws StashManagerException;
 
     public BuildStatistics getCommitBuildStatistics( String commitId ) throws StashManagerException;
 
-    public Set<BuildStatus> getCommitBuildStatuses( String commitId, int limit ) throws StashManagerException;
+    public Page<BuildStatus> getCommitBuildStatuses( String commitId, int limit, int start )
+            throws StashManagerException;
 
     public Set<JiraIssue> getJiraIssuesByPullRequest( String projectKey, String repoSlug, long prId )
             throws StashManagerException;
