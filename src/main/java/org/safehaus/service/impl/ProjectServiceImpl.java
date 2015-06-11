@@ -25,7 +25,9 @@ import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.PhaseInterceptorChain;
 import org.apache.cxf.transport.http.AbstractHTTPDestination;
 
+import com.atlassian.jira.rest.client.api.domain.Transition;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.google.common.collect.Lists;
 
 
 @Service( "projectManager" )
@@ -33,7 +35,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 public class ProjectServiceImpl implements ProjectService
 {
     private static Logger logger = LoggerFactory.getLogger( ProjectServiceImpl.class );
-//    private static String CROWD_TOKEN_NAME = "crowd.token_key";
+    //    private static String CROWD_TOKEN_NAME = "crowd.token_key";
 
 
     private JiraManager jiraManager;
@@ -57,7 +59,7 @@ public class ProjectServiceImpl implements ProjectService
     @Override
     public JarvisProject getProject( final String projectId ) throws JiraClientException
     {
-//        setContext();
+        //        setContext();
         JarvisProject result = jiraManager.getProject( projectId );
         result.setTeamMembers( jiraManager.getProjectMemebers( projectId ) );
         return result;
@@ -67,7 +69,7 @@ public class ProjectServiceImpl implements ProjectService
     @Override
     public List<JarvisProject> getProjects()
     {
-//        setContext();
+        //        setContext();
         try
         {
             return jiraManager.getProjects();
@@ -88,7 +90,7 @@ public class ProjectServiceImpl implements ProjectService
     @Override
     public List<JarvisIssue> getIssues( final String projectId )
     {
-//        setContext();
+        //        setContext();
         try
         {
             return jiraManager.getIssues( projectId );
@@ -109,7 +111,7 @@ public class ProjectServiceImpl implements ProjectService
     @Override
     public JarvisIssue getIssue( final String issueId )
     {
-//        setContext();
+        //        setContext();
         try
         {
             return jiraManager.getIssue( issueId );
@@ -129,7 +131,7 @@ public class ProjectServiceImpl implements ProjectService
     @Override
     public JarvisIssue createIssue( final JarvisIssue issue )
     {
-//        setContext();
+        //        setContext();
         try
         {
             //            String token = getCookie( CROWD_TOKEN_NAME );
@@ -169,9 +171,16 @@ public class ProjectServiceImpl implements ProjectService
         return result;
     }
 
-//
-//    private void setContext()
-//    {
-//        //        JiraSecurityContextHolder.setContext( new JiraSecurityContext( getCookie( CROWD_TOKEN_NAME ) ) );
-//    }
+
+    @Override
+    public List<Transition> getTransition( final String issueIdOrKey ) throws JiraClientException
+    {
+        return Lists.newArrayList( jiraManager.getTransitions( issueIdOrKey ) );
+    }
+
+    //
+    //    private void setContext()
+    //    {
+    //        //        JiraSecurityContextHolder.setContext( new JiraSecurityContext( getCookie( CROWD_TOKEN_NAME ) ) );
+    //    }
 }

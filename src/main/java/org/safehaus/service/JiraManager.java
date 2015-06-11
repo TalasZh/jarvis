@@ -8,6 +8,8 @@ import org.safehaus.model.JarvisIssue;
 import org.safehaus.model.JarvisMember;
 import org.safehaus.model.JarvisProject;
 
+import com.atlassian.jira.rest.client.api.domain.Transition;
+
 
 /**
  * Created by tzhamakeev on 5/19/15.
@@ -33,6 +35,8 @@ public interface JiraManager
     void startIssue( String issueKeyOrId ) throws JiraClientException;
 
     void resolveIssue( String issueKeyOrId ) throws JiraClientException;
+
+    Iterable<Transition> getTransitions( String issueIdOrKey ) throws JiraClientException;
 
     //    void buildBlocksTree( String issueId, List<JarvisIssue> chain );
 }

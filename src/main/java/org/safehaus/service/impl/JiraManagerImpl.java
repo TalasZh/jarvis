@@ -21,6 +21,7 @@ import com.atlassian.jira.rest.client.api.domain.Issue;
 import com.atlassian.jira.rest.client.api.domain.IssueLink;
 import com.atlassian.jira.rest.client.api.domain.IssueType;
 import com.atlassian.jira.rest.client.api.domain.Project;
+import com.atlassian.jira.rest.client.api.domain.Transition;
 
 
 @Service( "jiraManager" )
@@ -156,6 +157,11 @@ public class JiraManagerImpl implements JiraManager
                 issue.getCreationDate().toString(), links, issue.getProject().getKey() );
     }
 
+    @Override
+    public Iterable<Transition> getTransitions(String issueIdOrKey) throws JiraClientException
+    {
+        return getJiraClient().getTransitions( issueIdOrKey );
+    }
 
     private JiraClient getJiraClient() throws JiraClientException
     {

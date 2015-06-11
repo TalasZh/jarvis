@@ -11,6 +11,7 @@ import org.safehaus.model.JarvisMember;
 import com.atlassian.jira.rest.client.api.domain.Component;
 import com.atlassian.jira.rest.client.api.domain.Issue;
 import com.atlassian.jira.rest.client.api.domain.Project;
+import com.atlassian.jira.rest.client.api.domain.Transition;
 
 
 /**
@@ -36,11 +37,13 @@ public interface JiraClient
 
     public Issue getIssue( String issueKey );
 
-    void updateIssueState( String issueKeyOrId, Integer transitionId );
+//    void updateIssueState( String issueKeyOrId, Integer transitionId );
 
     void startIssue( String issueKeyOrId ) throws JiraClientException;
 
     void resolveIssue( String issueKeyOrId ) throws JiraClientException;
+
+    Iterable<Transition> getTransitions( String issueKeyOrId ) throws JiraClientException;
 
     public void close() throws IOException;
 
