@@ -3,8 +3,12 @@ package org.safehaus.stash.client;
 
 import java.util.Set;
 
+import org.safehaus.stash.model.Activity;
+import org.safehaus.stash.model.Branch;
+import org.safehaus.stash.model.Commit;
 import org.safehaus.stash.model.Group;
 import org.safehaus.stash.model.Project;
+import org.safehaus.stash.model.PullRequest;
 import org.safehaus.stash.model.Repo;
 import org.safehaus.stash.util.JsonUtil;
 import org.safehaus.stash.util.RestUtil;
@@ -22,7 +26,9 @@ public class StashManagerImpl implements StashManager
     protected RestUtil restUtil = new RestUtil();
     protected JsonUtil jsonUtil = new JsonUtil();
 
-    //TODO wrap json cast into try-catch and throw StashmanagerException
+    //TODO wrap json cast into try-catch and throw StashManagerException
+    //TODO remove limit and set by default limit= Integer.MAX_VALUE
+
 
     public StashManagerImpl( final String baseUrl )
     {
@@ -44,16 +50,17 @@ public class StashManagerImpl implements StashManager
     }
 
 
-    protected String formUrl( String apiPath, String... args )
+    protected String formUrl( String apiPath, Object... args )
     {
         return String.format( "%s/%s", baseUrl, String.format( apiPath, args ) );
     }
 
 
     @Override
-    public Set<Project> getProjects() throws RestUtil.RestException
+    public Set<Project> getProjects( int limit ) throws RestUtil.RestException
     {
-        String response = restUtil.get( formUrl( "rest/api/1.0/projects/" ), Maps.<String, String>newHashMap() );
+        String response =
+                restUtil.get( formUrl( "rest/api/1.0/projects?limit=%d", limit ), Maps.<String, String>newHashMap() );
 
 
         Page<Project> projectPage = jsonUtil.from( response, new TypeToken<Page<Project>>()
@@ -74,10 +81,11 @@ public class StashManagerImpl implements StashManager
 
 
     @Override
-    public Set<Group> getPermittedGroups( final String projectKey ) throws RestUtil.RestException
+    public Set<Group> getPermittedGroups( final String projectKey, int limit ) throws RestUtil.RestException
     {
-        String response = restUtil.get( formUrl( "rest/api/1.0/projects/%s/permissions/groups", projectKey ),
-                Maps.<String, String>newHashMap() );
+        String response =
+                restUtil.get( formUrl( "rest/api/1.0/projects/%s/permissions/groups?limit=%d", projectKey, limit ),
+                        Maps.<String, String>newHashMap() );
 
         Page<Group> groupPage = jsonUtil.from( response, new TypeToken<Page<Group>>()
         {}.getType() );
@@ -87,9 +95,9 @@ public class StashManagerImpl implements StashManager
 
 
     @Override
-    public Set<Repo> getRepos( final String projectKey ) throws RestUtil.RestException
+    public Set<Repo> getRepos( final String projectKey, int limit ) throws RestUtil.RestException
     {
-        String response = restUtil.get( formUrl( "rest/api/1.0/projects/%s/repos", projectKey ),
+        String response = restUtil.get( formUrl( "rest/api/1.0/projects/%s/repos?limit=%d", projectKey, limit ),
                 Maps.<String, String>newHashMap() );
 
         Page<Repo> repoPage = jsonUtil.from( response, new TypeToken<Page<Repo>>()
@@ -106,5 +114,88 @@ public class StashManagerImpl implements StashManager
                 Maps.<String, String>newHashMap() );
 
         return jsonUtil.from( response, Repo.class );
+    }
+
+
+    @Override
+    public Set<PullRequest> getPullRequests( final String projectKey, final String repoSlug, final String branchName,
+                                             final PullRequest.State state, int limit ) throws RestUtil.RestException
+    {
+        String response = restUtil.get(
+                formUrl( "rest/api/1.0/projects/%s/repos/%s/pull-requests?state=%s&at=refs/heads/%s&limit=%d",
+                        projectKey, repoSlug, state.name(), branchName, limit ), Maps.<String, String>newHashMap() );
+
+        Page<PullRequest> pullRequestPage = jsonUtil.from( response, new TypeToken<Page<PullRequest>>()
+        {}.getType() );
+
+        return pullRequestPage.getValues();
+    }
+
+
+    @Override
+    public PullRequest getPullRequest( final String projectKey, final String repoSlug, final long prId )
+            throws RestUtil.RestException
+    {
+        String response = restUtil.get(
+                formUrl( "rest/api/1.0/projects/%s/repos/%s/pull-requests/%d", projectKey, repoSlug, prId ),
+                Maps.<String, String>newHashMap() );
+
+        return jsonUtil.from( response, PullRequest.class );
+    }
+
+
+    @Override
+    public Set<Activity> getPullRequestActivities( final String projectKey, final String repoSlug, final long prId,
+                                                   int limit ) throws RestUtil.RestException
+    {
+        String response = restUtil.get(
+                formUrl( "rest/api/1.0/projects/%s/repos/%s/pull-requests/%d/activities?limit=%d", projectKey, repoSlug,
+                        prId, limit ), Maps.<String, String>newHashMap() );
+
+        Page<Activity> activityPage = jsonUtil.from( response, new TypeToken<Page<Activity>>()
+        {}.getType() );
+
+        return activityPage.getValues();
+    }
+
+
+    @Override
+    public Set<Commit> getPullRequestCommits( final String projectKey, final String repoSlug, final long prId,
+                                              final int limit ) throws RestUtil.RestException
+    {
+        String response = restUtil.get(
+                formUrl( "rest/api/1.0/projects/%s/repos/%s/pull-requests/%d/commits?limit=%d", projectKey, repoSlug,
+                        prId, limit ), Maps.<String, String>newHashMap() );
+
+        Page<Commit> commitPage = jsonUtil.from( response, new TypeToken<Page<Commit>>()
+        {}.getType() );
+
+        return commitPage.getValues();
+    }
+
+
+    @Override
+    public Set<Branch> getBranches( final String projectKey, final String repoSlug, final int limit )
+            throws RestUtil.RestException
+    {
+        String response = restUtil.get(
+                formUrl( "rest/api/1.0/projects/%s/repos/%s/branches?limit=%d", projectKey, repoSlug, limit ),
+                Maps.<String, String>newHashMap() );
+
+        Page<Branch> branchPage = jsonUtil.from( response, new TypeToken<Page<Branch>>()
+        {}.getType() );
+
+        return branchPage.getValues();
+    }
+
+
+    @Override
+    public Branch getDefaultBranch( final String projectKey, final String repoSlug ) throws RestUtil.RestException
+    {
+        String response =
+                restUtil.get( formUrl( "rest/api/1.0/projects/%s/repos/%s/branches/default", projectKey, repoSlug ),
+                        Maps.<String, String>newHashMap() );
+
+        return jsonUtil.from( response, Branch.class );
     }
 }

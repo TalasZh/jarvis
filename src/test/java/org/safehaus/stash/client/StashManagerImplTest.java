@@ -12,8 +12,12 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.safehaus.model.JarvisContext;
 import org.safehaus.stash.TestUtil;
+import org.safehaus.stash.model.Activity;
+import org.safehaus.stash.model.Branch;
+import org.safehaus.stash.model.Commit;
 import org.safehaus.stash.model.Group;
 import org.safehaus.stash.model.Project;
+import org.safehaus.stash.model.PullRequest;
 import org.safehaus.stash.model.Repo;
 import org.safehaus.stash.util.RestUtil;
 import org.safehaus.util.JarvisContextHolder;
@@ -56,7 +60,7 @@ public class StashManagerImplTest
     {
         setRestResponse( TestUtil.STASH_PROJECTS_JSON );
 
-        Set<Project> projects = stashManager.getProjects();
+        Set<Project> projects = stashManager.getProjects( 4 );
 
         assertTrue( projects.size() == 4 );
     }
@@ -78,7 +82,7 @@ public class StashManagerImplTest
     {
         setRestResponse( TestUtil.STASH_GROUP_JSON );
 
-        Set<Group> groups = stashManager.getPermittedGroups( TestUtil.PROJECT_KEY );
+        Set<Group> groups = stashManager.getPermittedGroups( TestUtil.PROJECT_KEY, 2 );
 
         assertTrue( groups.size() == 2 );
     }
@@ -89,7 +93,7 @@ public class StashManagerImplTest
     {
         setRestResponse( TestUtil.STASH_REPOS_JSON );
 
-        Set<Repo> repos = stashManager.getRepos( TestUtil.PROJECT_KEY );
+        Set<Repo> repos = stashManager.getRepos( TestUtil.PROJECT_KEY, 1 );
 
         assertFalse( repos.isEmpty() );
     }
@@ -103,5 +107,76 @@ public class StashManagerImplTest
         Repo repo = stashManager.getRepo( TestUtil.PROJECT_KEY, TestUtil.REPO_SLUG );
 
         assertNotNull( repo );
+    }
+
+
+    @Test
+    public void testGetPullRequests() throws Exception
+    {
+        setRestResponse( TestUtil.STASH_PULL_REQUESTS_JSON );
+
+        Set<PullRequest> pullRequests = stashManager
+                .getPullRequests( TestUtil.PROJECT_KEY, TestUtil.REPO_SLUG, TestUtil.MASTER_BRANCH,
+                        PullRequest.State.DECLINED, 3 );
+
+        assertFalse( pullRequests.isEmpty() );
+    }
+
+
+    @Test
+    public void testGetPullRequest() throws Exception
+    {
+        setRestResponse( TestUtil.STASH_PULL_REQUEST_JSON );
+
+        PullRequest pullRequest = stashManager.getPullRequest( TestUtil.PROJECT_KEY, TestUtil.REPO_SLUG, 1 );
+
+        assertNotNull( pullRequest );
+    }
+
+
+    @Test
+    public void testGetPRActivities() throws Exception
+    {
+        setRestResponse( TestUtil.STASH_PULL_REQUEST_ACTIVITY_JSON );
+
+
+        Set<Activity> activities =
+                stashManager.getPullRequestActivities( TestUtil.PROJECT_KEY, TestUtil.REPO_SLUG, 1, 1 );
+
+
+        assertFalse( activities.isEmpty() );
+    }
+
+
+    @Test
+    public void testGetPrCommits() throws Exception
+    {
+        setRestResponse( TestUtil.STASH_PULL_REQUEST_COMMITS_JSON );
+
+        Set<Commit> commits = stashManager.getPullRequestCommits( TestUtil.PROJECT_KEY, TestUtil.REPO_SLUG, 1, 1 );
+
+        assertFalse( commits.isEmpty() );
+    }
+
+
+    @Test
+    public void testBranches() throws Exception
+    {
+        setRestResponse( TestUtil.STASH_BRANCHES_JSON );
+
+        Set<Branch> branches = stashManager.getBranches( TestUtil.PROJECT_KEY, TestUtil.REPO_SLUG, 1 );
+
+        assertFalse( branches.isEmpty() );
+    }
+
+
+    @Test
+    public void testGetDefaultBranch() throws Exception
+    {
+        setRestResponse( TestUtil.STASH_BRANCH_JSON );
+
+        Branch defaultBranch = stashManager.getDefaultBranch( TestUtil.PROJECT_KEY, TestUtil.REPO_SLUG );
+
+        assertNotNull( defaultBranch );
     }
 }

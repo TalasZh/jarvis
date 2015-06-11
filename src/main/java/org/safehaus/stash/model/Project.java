@@ -25,6 +25,7 @@ public class Project
     private String description;
     @SerializedName( "public" )
     private boolean isPublic;
+    private String type;
     private Link link;
     private Map<String, Set<Map<String, String>>> links;
 
@@ -59,11 +60,29 @@ public class Project
     }
 
 
+    public String getType()
+    {
+        return type;
+    }
+
+
+    public Link getLink()
+    {
+        return link;
+    }
+
+
+    public Map<String, Set<Map<String, String>>> getLinks()
+    {
+        return links;
+    }
+
+
     @Override
     public String toString()
     {
         return Objects.toStringHelper( this ).add( "key", key ).add( "id", id ).add( "name", name )
-                      .add( "description", description ).add( "public", isPublic ).add( "url", link.getUrl() )
-                      .add( "links", links ).toString();
+                      .add( "description", description ).add( "isPublic", isPublic ).add( "type", type )
+                      .add( "link", link ).add( "links", links ).toString();
     }
 }
