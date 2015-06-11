@@ -6,7 +6,7 @@ import java.util.Set;
 import com.google.common.base.Objects;
 
 
-public class Changes
+public class ActivityChanges
 {
     private Set<Commit> changesets;
     private Set<Commit> commits;

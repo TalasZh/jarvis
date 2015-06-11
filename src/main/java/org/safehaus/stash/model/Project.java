@@ -13,12 +13,6 @@ import com.google.gson.annotations.SerializedName;
  */
 public class Project
 {
-    /**
-     * "key": "AUTO", "id": 62, "name": "Automation System", "description": "This is the Tulpar and Subutai Automation
-     * System", "public": false, "type": "NORMAL", "link": { "url": "/projects/AUTO", "rel": "self" }, "links": {
-     * "self": [ { "href": "http://test-stash.critical-factor.com/projects/AUTO" } ] }
-     */
-
     private String key;
     private long id;
     private String name;

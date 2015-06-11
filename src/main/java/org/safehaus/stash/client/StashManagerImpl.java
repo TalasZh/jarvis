@@ -12,6 +12,7 @@ import org.safehaus.stash.model.Commit;
 import org.safehaus.stash.model.Event;
 import org.safehaus.stash.model.Group;
 import org.safehaus.stash.model.JiraIssue;
+import org.safehaus.stash.model.JiraIssueChange;
 import org.safehaus.stash.model.Project;
 import org.safehaus.stash.model.PullRequest;
 import org.safehaus.stash.model.Repo;
@@ -40,18 +41,6 @@ public class StashManagerImpl implements StashManager
         Preconditions.checkArgument( !Strings.isNullOrEmpty( baseUrl ) );
 
         this.baseUrl = baseUrl;
-    }
-
-
-    protected static class Page<T>
-    {
-        Set<T> values;
-
-
-        public Set<T> getValues()
-        {
-            return values;
-        }
     }
 
 
@@ -339,6 +328,19 @@ public class StashManagerImpl implements StashManager
                 Maps.<String, String>newHashMap() );
 
         return jsonUtil.from( response, new TypeToken<Set<JiraIssue>>()
+        {}.getType() );
+    }
+
+
+    @Override
+    public Page<JiraIssueChange> getChangesByJiraIssue( final String issueKey, final int limit, final int start,
+                                                        final int maxChanges ) throws RestUtil.RestException
+    {
+        String response = restUtil.get(
+                formUrl( "rest/jira/1.0/issues/%s/commits?limit=%d&start=%d&maxChanges=%d", issueKey, limit, start,
+                        maxChanges ), Maps.<String, String>newHashMap() );
+
+        return jsonUtil.from( response, new TypeToken<Page<JiraIssueChange>>()
         {}.getType() );
     }
 }

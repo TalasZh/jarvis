@@ -20,8 +20,8 @@ public class Activity
     private String previousFromHash;
     private String previousToHash;
     private String toHash;
-    private Changes added;
-    private Changes removed;
+    private ActivityChanges added;
+    private ActivityChanges removed;
     private Comment comment;
 
 

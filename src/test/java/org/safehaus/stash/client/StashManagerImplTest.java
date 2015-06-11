@@ -21,11 +21,14 @@ import org.safehaus.stash.model.Commit;
 import org.safehaus.stash.model.Event;
 import org.safehaus.stash.model.Group;
 import org.safehaus.stash.model.JiraIssue;
+import org.safehaus.stash.model.JiraIssueChange;
 import org.safehaus.stash.model.Project;
 import org.safehaus.stash.model.PullRequest;
 import org.safehaus.stash.model.Repo;
 import org.safehaus.stash.util.RestUtil;
 import org.safehaus.util.JarvisContextHolder;
+
+import junit.framework.TestCase;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
@@ -49,7 +52,7 @@ public class StashManagerImplTest
     {
         //for integration test set the context to valid crowd.token_key
         JarvisContextHolder
-                .setContext( new JarvisContext( "", new Cookie( "crowd.token_key", "xY33X50y7qPE5O6DqzsMNg00" ) ) );
+                .setContext( new JarvisContext( "", new Cookie( "crowd.token_key", "9IyAH4dQK9Vf0QTbpG0E4g00" ) ) );
     }
 
 
@@ -299,5 +302,18 @@ public class StashManagerImplTest
                 stashManager.getJiraIssuesByPullRequest( TestUtil.PROJECT_KEY, TestUtil.REPO_SLUG, 1 );
 
         assertFalse( jiraIssues.isEmpty() );
+    }
+
+
+    @Test
+    public void testGetChangesByJiraIssue() throws Exception
+    {
+
+        Page<JiraIssueChange> jiraIssueChangePage = stashManager.getChangesByJiraIssue( "HUB-100", 1, 0, 10 );
+
+        assertNotNull( jiraIssueChangePage );
+
+        System.out.println(jiraIssueChangePage);
+
     }
 }
