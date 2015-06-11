@@ -5,8 +5,11 @@ import java.util.Set;
 
 import org.safehaus.stash.model.Activity;
 import org.safehaus.stash.model.Branch;
+import org.safehaus.stash.model.BuildStatistics;
+import org.safehaus.stash.model.BuildStatus;
 import org.safehaus.stash.model.Change;
 import org.safehaus.stash.model.Commit;
+import org.safehaus.stash.model.Event;
 import org.safehaus.stash.model.Group;
 import org.safehaus.stash.model.Project;
 import org.safehaus.stash.model.PullRequest;
@@ -28,7 +31,7 @@ public class StashManagerImpl implements StashManager
     protected JsonUtil jsonUtil = new JsonUtil();
 
     //TODO wrap json cast into try-catch and throw StashManagerException
-    //TODO remove limit and set by default limit= Integer.MAX_VALUE
+    //TODO use paging mechanism of Atlassian
 
 
     public StashManagerImpl( final String baseUrl )
@@ -244,5 +247,85 @@ public class StashManagerImpl implements StashManager
         {}.getType() );
 
         return commitPage.getValues();
+    }
+
+
+    @Override
+    public Commit getCommit( final String projectKey, final String repoSlug, final String commitId )
+            throws RestUtil.RestException
+    {
+        String response =
+                restUtil.get( formUrl( "rest/api/1.0/projects/%s/repos/%s/commits/%s", projectKey, repoSlug, commitId ),
+                        Maps.<String, String>newHashMap() );
+
+        return jsonUtil.from( response, Commit.class );
+    }
+
+
+    @Override
+    public Set<Change> getCommitChanges( final String projectKey, final String repoSlug, final String commitId,
+                                         final int limit ) throws RestUtil.RestException
+    {
+        String response = restUtil.get(
+                formUrl( "rest/api/1.0/projects/%s/repos/%s/commits/%s/changes?limit=%d", projectKey, repoSlug,
+                        commitId, limit ), Maps.<String, String>newHashMap() );
+
+        Page<Change> changePage = jsonUtil.from( response, new TypeToken<Page<Change>>()
+        {}.getType() );
+
+        return changePage.getValues();
+    }
+
+
+    @Override
+    public Set<Event> getProjectEvents( final String projectKey, final int limit ) throws RestUtil.RestException
+    {
+        String response = restUtil.get( formUrl( "rest/audit/1.0/projects/%s/events?limit=%d", projectKey, limit ),
+                Maps.<String, String>newHashMap() );
+
+        Page<Event> eventPage = jsonUtil.from( response, new TypeToken<Page<Event>>()
+        {}.getType() );
+
+        return eventPage.getValues();
+    }
+
+
+    @Override
+    public Set<Event> getRepoEvents( final String projectKey, final String repoSlug, final int limit )
+            throws RestUtil.RestException
+    {
+        String response = restUtil.get(
+                formUrl( "rest/audit/1.0/projects/%s/repos/%s/events?limit=%d", projectKey, repoSlug, limit ),
+                Maps.<String, String>newHashMap() );
+
+        Page<Event> eventPage = jsonUtil.from( response, new TypeToken<Page<Event>>()
+        {}.getType() );
+
+        return eventPage.getValues();
+    }
+
+
+    @Override
+    public BuildStatistics getCommitBuildStatistics( final String commitId ) throws RestUtil.RestException
+    {
+        String response =
+                restUtil.get( formUrl( "rest/build-status/1.0/commits/stats/%s",  commitId ),
+                        Maps.<String, String>newHashMap() );
+
+        return jsonUtil.from( response, BuildStatistics.class );
+    }
+
+
+    @Override
+    public Set<BuildStatus> getCommitBuildStatuses( final String commitId, final int limit ) throws RestUtil.RestException
+    {
+        String response = restUtil.get(
+                formUrl( "rest/build-status/1.0/commits/%s?limit=%d",commitId, limit ),
+                Maps.<String, String>newHashMap() );
+
+        Page<BuildStatus> buildStatusPage = jsonUtil.from( response, new TypeToken<Page<BuildStatus>>()
+        {}.getType() );
+
+        return buildStatusPage.getValues();
     }
 }

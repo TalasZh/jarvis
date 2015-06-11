@@ -400,15 +400,75 @@ public class TestUtil
                     + "                ]\n" + "            }\n" + "        }\n" + "    ],\n" + "    \"start\": 0\n"
                     + "}";
 
-    public static  final String STASH_COMMITS_JSON = "{\n" + "    \"size\": 1,\n" + "    \"limit\": 25,\n"
-            + "    \"isLastPage\": true,\n" + "    \"values\": [\n" + "        {\n"
-            + "            \"id\": \"def0123abcdef4567abcdef8987abcdef6543abc\",\n"
-            + "            \"displayId\": \"def0123abcd\",\n" + "            \"author\": {\n"
-            + "                \"name\": \"charlie\",\n" + "                \"emailAddress\": \"charlie@example.com\"\n"
-            + "            },\n" + "            \"authorTimestamp\": 1433803137864,\n"
-            + "            \"message\": \"More work on feature 1\",\n" + "            \"parents\": [\n"
-            + "                {\n" + "                    \"id\": \"abcdef0123abcdef4567abcdef8987abcdef6543\",\n"
-            + "                    \"displayId\": \"abcdef0\"\n" + "                }\n" + "            ]\n"
-            + "        }\n" + "    ],\n" + "    \"start\": 0,\n" + "    \"authorCount\": 1,\n"
-            + "    \"totalCount\": 1\n" + "}";
+    public static final String STASH_COMMITS_JSON =
+            "{\n" + "    \"size\": 1,\n" + "    \"limit\": 25,\n" + "    \"isLastPage\": true,\n"
+                    + "    \"values\": [\n" + "        {\n"
+                    + "            \"id\": \"def0123abcdef4567abcdef8987abcdef6543abc\",\n"
+                    + "            \"displayId\": \"def0123abcd\",\n" + "            \"author\": {\n"
+                    + "                \"name\": \"charlie\",\n"
+                    + "                \"emailAddress\": \"charlie@example.com\"\n" + "            },\n"
+                    + "            \"authorTimestamp\": 1433803137864,\n"
+                    + "            \"message\": \"More work on feature 1\",\n" + "            \"parents\": [\n"
+                    + "                {\n"
+                    + "                    \"id\": \"abcdef0123abcdef4567abcdef8987abcdef6543\",\n"
+                    + "                    \"displayId\": \"abcdef0\"\n" + "                }\n" + "            ]\n"
+                    + "        }\n" + "    ],\n" + "    \"start\": 0,\n" + "    \"authorCount\": 1,\n"
+                    + "    \"totalCount\": 1\n" + "}";
+
+    public static final String STASH_COMMIT_JSON = "{\n" + "    \"id\": \"abcdef0123abcdef4567abcdef8987abcdef6543\",\n"
+            + "    \"displayId\": \"abcdef0123a\",\n" + "    \"author\": {\n" + "        \"name\": \"charlie\",\n"
+            + "        \"emailAddress\": \"charlie@example.com\"\n" + "    },\n"
+            + "    \"authorTimestamp\": 1433803137863,\n" + "    \"message\": \"WIP on feature 1\",\n"
+            + "    \"parents\": [\n" + "        {\n"
+            + "            \"id\": \"abcdef0123abcdef4567abcdef8987abcdef6543\",\n"
+            + "            \"displayId\": \"abcdef0\"\n" + "        }\n" + "    ]\n" + "}";
+
+    public static final String STASH_COMMIT_CHANGES_JSON =
+            "{\n" + "    \"size\": 1,\n" + "    \"limit\": 25,\n" + "    \"isLastPage\": true,\n"
+                    + "    \"values\": [\n" + "        {\n"
+                    + "            \"contentId\": \"abcdef0123abcdef4567abcdef8987abcdef6543\",\n"
+                    + "            \"fromContentId\": \"bcdef0123abcdef4567abcdef8987abcdef6543a\",\n"
+                    + "            \"path\": {\n" + "                \"components\": [\n"
+                    + "                    \"new\",\n" + "                    \"path\",\n"
+                    + "                    \"to\",\n" + "                    \"file.txt\"\n" + "                ],\n"
+                    + "                \"parent\": \"new/path/to\",\n" + "                \"name\": \"file.txt\",\n"
+                    + "                \"extension\": \"txt\",\n"
+                    + "                \"toString\": \"new/path/to/file.txt\"\n" + "            },\n"
+                    + "            \"executable\": false,\n" + "            \"percentUnchanged\": 98,\n"
+                    + "            \"type\": \"MOVE\",\n" + "            \"nodeType\": \"FILE\",\n"
+                    + "            \"srcPath\": {\n" + "                \"components\": [\n"
+                    + "                    \"path\",\n" + "                    \"to\",\n"
+                    + "                    \"file.txt\"\n" + "                ],\n"
+                    + "                \"parent\": \"path/to\",\n" + "                \"name\": \"file.txt\",\n"
+                    + "                \"extension\": \"txt\",\n"
+                    + "                \"toString\": \"path/to/file.txt\"\n" + "            },\n"
+                    + "            \"srcExecutable\": false,\n" + "            \"link\": {\n"
+                    + "                \"url\": \"http://link/to/restchange\",\n"
+                    + "                \"rel\": \"self\"\n" + "            },\n" + "            \"links\": {\n"
+                    + "                \"self\": [\n" + "                    {\n"
+                    + "                        \"href\": \"http://link/to/restchange\"\n" + "                    }\n"
+                    + "                ]\n" + "            }\n" + "        }\n" + "    ],\n" + "    \"start\": 0\n"
+                    + "}";
+
+    public static final String STASH_EVENTS_JSON =
+            "{\n" + "    \"size\": 1,\n" + "    \"limit\": 25,\n" + "    \"isLastPage\": true,\n"
+                    + "    \"values\": [\n" + "        {\n" + "            \"user\": {\n"
+                    + "                \"name\": \"jcitizen\",\n"
+                    + "                \"emailAddress\": \"jane@example.com\",\n" + "                \"id\": 101,\n"
+                    + "                \"displayName\": \"Jane Citizen\",\n" + "                \"active\": true,\n"
+                    + "                \"slug\": \"jcitizen\",\n" + "                \"type\": \"NORMAL\"\n"
+                    + "            },\n" + "            \"action\": \"RepositoryPush\",\n"
+                    + "            \"timestamp\": 1433802955040,\n" + "            \"details\": \"Details\"\n"
+                    + "        }\n" + "    ],\n" + "    \"start\": 0\n" + "}";
+    public static final String STASH_BUILD_STATISTICS_JSON =
+            "{\n" + "    \"successful\": 3,\n" + "    \"inProgress\": 0,\n" + "    \"failed\": 1\n" + "}";
+
+    public static final String STASH_BUILD_STATUSES_JSON =
+            "{\n" + "    \"size\": 1,\n" + "    \"limit\": 25,\n" + "    \"isLastPage\": true,\n"
+                    + "    \"values\": [\n" + "        {\n" + "            \"state\": \"SUCCESSFUL\",\n"
+                    + "            \"key\": \"REPO-MASTER\",\n" + "            \"name\": \"REPO-MASTER-42\",\n"
+                    + "            \"url\": \"https://bamboo.example.com/browse/REPO-MASTER-42\",\n"
+                    + "            \"description\": \"Changes by John Doe\",\n"
+                    + "            \"dateAdded\": 1433804276157\n" + "        }\n" + "    ],\n" + "    \"start\": 0\n"
+                    + "}";
 }

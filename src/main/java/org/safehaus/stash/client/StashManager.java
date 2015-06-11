@@ -5,8 +5,11 @@ import java.util.Set;
 
 import org.safehaus.stash.model.Activity;
 import org.safehaus.stash.model.Branch;
+import org.safehaus.stash.model.BuildStatistics;
+import org.safehaus.stash.model.BuildStatus;
 import org.safehaus.stash.model.Change;
 import org.safehaus.stash.model.Commit;
+import org.safehaus.stash.model.Event;
 import org.safehaus.stash.model.Group;
 import org.safehaus.stash.model.Project;
 import org.safehaus.stash.model.PullRequest;
@@ -49,4 +52,17 @@ public interface StashManager
                                                  String toCommitId, int limit ) throws RestUtil.RestException;
 
     public Set<Commit> getCommits( String projectKey, String repoSlug, int limit ) throws RestUtil.RestException;
+
+    public Commit getCommit( String projectKey, String repoSlug, String commitId ) throws RestUtil.RestException;
+
+    public Set<Change> getCommitChanges( String projectKey, String repoSlug, String commitId, int limit )
+            throws RestUtil.RestException;
+
+    public Set<Event> getRepoEvents( String projectKey, String repoSlug, int limit ) throws RestUtil.RestException;
+
+    public Set<Event> getProjectEvents( String projectKey, int limit ) throws RestUtil.RestException;
+
+    public BuildStatistics getCommitBuildStatistics( String commitId ) throws RestUtil.RestException;
+
+    public Set<BuildStatus> getCommitBuildStatuses( String commitId, int limit ) throws RestUtil.RestException;
 }

@@ -14,8 +14,11 @@ import org.safehaus.model.JarvisContext;
 import org.safehaus.stash.TestUtil;
 import org.safehaus.stash.model.Activity;
 import org.safehaus.stash.model.Branch;
+import org.safehaus.stash.model.BuildStatistics;
+import org.safehaus.stash.model.BuildStatus;
 import org.safehaus.stash.model.Change;
 import org.safehaus.stash.model.Commit;
+import org.safehaus.stash.model.Event;
 import org.safehaus.stash.model.Group;
 import org.safehaus.stash.model.Project;
 import org.safehaus.stash.model.PullRequest;
@@ -213,5 +216,75 @@ public class StashManagerImplTest
         Set<Commit> commits = stashManager.getCommits( TestUtil.PROJECT_KEY, TestUtil.REPO_SLUG, 10 );
 
         assertFalse( commits.isEmpty() );
+    }
+
+
+    @Test
+    public void testGetCommit() throws Exception
+    {
+        setRestResponse( TestUtil.STASH_COMMIT_JSON );
+
+        Commit commit = stashManager.getCommit( TestUtil.PROJECT_KEY, TestUtil.REPO_SLUG, "ad31de9" );
+
+        assertNotNull( commit );
+
+        System.out.println( commit );
+    }
+
+
+    @Test
+    public void testGetCommitChanges() throws Exception
+    {
+        setRestResponse( TestUtil.STASH_COMMIT_CHANGES_JSON );
+
+        Set<Change> changes = stashManager.getCommitChanges( TestUtil.PROJECT_KEY, TestUtil.REPO_SLUG, "2fda08f", 10 );
+
+        assertFalse( changes.isEmpty() );
+    }
+
+
+    @Test
+    public void testGetProjectEvents() throws Exception
+    {
+        setRestResponse( TestUtil.STASH_EVENTS_JSON );
+
+        Set<Event> events = stashManager.getProjectEvents( TestUtil.PROJECT_KEY, 10 );
+
+        assertFalse( events.isEmpty() );
+    }
+
+
+    @Test
+    public void testGetRepoEvents() throws Exception
+    {
+        setRestResponse( TestUtil.STASH_EVENTS_JSON );
+
+
+        Set<Event> events = stashManager.getRepoEvents( TestUtil.PROJECT_KEY, TestUtil.REPO_SLUG, 10 );
+
+        assertFalse( events.isEmpty() );
+    }
+
+
+    @Test
+    public void testGetCommitBuildStatistics() throws Exception
+    {
+        setRestResponse( TestUtil.STASH_BUILD_STATISTICS_JSON );
+
+        BuildStatistics buildStats = stashManager.getCommitBuildStatistics( "2fda08f" );
+
+        assertNotNull( buildStats );
+    }
+
+
+    @Test
+    public void testGetCommitBuildStatuses() throws Exception
+    {
+
+        setRestResponse( TestUtil.STASH_BUILD_STATUSES_JSON );
+
+        Set<BuildStatus> buildStatuses = stashManager.getCommitBuildStatuses( "2fda08f", 10 );
+
+        assertFalse( buildStatuses.isEmpty() );
     }
 }
