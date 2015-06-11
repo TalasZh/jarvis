@@ -1,0 +1,22 @@
+<tr bgcolor="ffffff">
+  <td align="right" valign="top" bgcolor="fffff0">
+    <span class="label">groups:</span>
+  </td>
+  <td bgcolor="ffffff" nowrap>
+    <table cellpadding="2" cellspacing="2">
+        #foreach ($group in $groups)
+          <tr>
+            <td><input type="checkbox" name="$group.getName()"
+                #if (${selectedGroups})
+                    #if (${selectedGroups.contains($group.getName())})
+                       CHECKED
+                    #end
+                #end
+                ></td>
+            <td>#displayConstantIcon ($group)&nbsp;$group.getName()</td>
+          </tr>
+        #end
+    </table>
+    <br><font size="1">Randomly selected user from selected group(s) will be assigned with Issue for Approval Process.</font>
+  </td>
+</tr>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<atlassian-plugin key="${project.groupId}.${project.artifactId}" name="${project.name}" plugins-version="2">
+  <component-import key="pluginSettingsFactory"
+                    interface="com.atlassian.sal.api.pluginsettings.PluginSettingsFactory" />
+  <plugin-info>
+    <description>${project.description}</description>
+    <version>${project.version}</version>
+    <vendor name="${project.organization.name}" url="${project.organization.url}" />
+    <param name="plugin-icon">images/pluginIcon.png</param>
+    <param name="plugin-logo">images/pluginLogo.png</param>
+  </plugin-info>
+  <!-- add our i18n resource -->
+  <resource type="i18n" name="i18n" location="jarvis-worklflow-condition-plugin" />
+  <!-- add our web resources -->
+  <web-resource key="jarvis-worklflow-condition-plugin-resources"
+                name="jarvis-worklflow-condition-plugin Web Resources">
+    <dependency>com.atlassian.auiplugin:ajs</dependency>
+    <resource type="download" name="jarvis-worklflow-condition-plugin.css"
+              location="/css/jarvis-worklflow-condition-plugin.css" />
+    <resource type="download" name="jarvis-worklflow-condition-plugin.js"
+              location="/js/jarvis-worklflow-condition-plugin.js" />
+    <resource type="download" name="images/" location="/images" />
+    <context>jarvis-worklflow-condition-plugin</context>
+  </web-resource>
+  <workflow-validator key="jarvis-workflow-validator" name="Jarvis Workflow Validator"
+                      i18n-name-key="jarvis-workflow-validator.name"
+                      class="jarvis.workflow.plugin.validator.JarvisWorkflowValidatorFactory">
+    <description key="jarvis-workflow-validator.description">The Jarvis Workflow Validator Plugin</description>
+    <validator-class>jarvis.workflow.plugin.validator.JarvisWorkflowValidator</validator-class>
+    <resource type="velocity" name="view" location="templates/validators/jarvis-workflow-validator.vm" />
+    <resource type="velocity" name="input-parameters"
+              location="templates/validators/jarvis-workflow-validator-input.vm" />
+    <resource type="velocity" name="edit-parameters"
+              location="templates/validators/jarvis-workflow-validator-input.vm" />
+  </workflow-validator>
+  <workflow-condition key="jarvis-workflow-condition" name="Jarvis Workflow Condition"
+                      i18n-name-key="jarvis-workflow-condition.name"
+                      class="jarvis.workflow.plugin.condition.JarvisWorkflowConditionFactory">
+    <description key="jarvis-workflow-condition.description">The Jarvis Workflow Condition Plugin - Only users from allowed group can change status</description>
+    <condition-class>jarvis.workflow.plugin.condition.JarvisWorkflowCondition</condition-class>
+    <resource type="velocity" name="view" location="templates/conditions/jarvis-workflow-condition.vm" />
+    <resource type="velocity" name="input-parameters"
+              location="templates/conditions/jarvis-workflow-condition-input.vm" />
+    <resource type="velocity" name="edit-parameters"
+              location="templates/conditions/jarvis-workflow-condition-input.vm" />
+  </workflow-condition>
+  <workflow-function key="jarvis-post-function" name="Jarvis Post Function" i18n-name-key="jarvis-post-function.name"
+                     class="jarvis.workflow.plugin.postfunction.JarvisPostFunctionFactory">
+    <description key="jarvis-post-function.description">The Jarvis Post Function to reassign users</description>
+    <function-class>jarvis.workflow.plugin.postfunction.JarvisPostFunction</function-class>
+    <resource type="velocity" name="view" location="templates/postfunctions/jarvis-post-function.vm" />
+    <resource type="velocity" name="input-parameters"
+              location="templates/postfunctions/jarvis-post-function-input.vm" />
+    <resource type="velocity" name="edit-parameters" location="templates/postfunctions/jarvis-post-function-input.vm" />
+  </workflow-function>
+</atlassian-plugin>

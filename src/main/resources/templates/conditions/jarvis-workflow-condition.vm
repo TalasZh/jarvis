@@ -1,0 +1,2 @@
+Users from this groups will be randomly assigned Issue for Approval Process
+#foreach ($group in $groups)<b>$group.getName()</b>#if($velocityCount != $groups.size())#if($velocityCount == ($groups.size() - 1))&nbsp;or&nbsp;#else,&nbsp;#end#else.#end#end
