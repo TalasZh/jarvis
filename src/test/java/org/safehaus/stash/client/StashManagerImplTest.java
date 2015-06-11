@@ -20,6 +20,7 @@ import org.safehaus.stash.model.Change;
 import org.safehaus.stash.model.Commit;
 import org.safehaus.stash.model.Event;
 import org.safehaus.stash.model.Group;
+import org.safehaus.stash.model.JiraIssue;
 import org.safehaus.stash.model.Project;
 import org.safehaus.stash.model.PullRequest;
 import org.safehaus.stash.model.Repo;
@@ -286,5 +287,17 @@ public class StashManagerImplTest
         Set<BuildStatus> buildStatuses = stashManager.getCommitBuildStatuses( "2fda08f", 10 );
 
         assertFalse( buildStatuses.isEmpty() );
+    }
+
+
+    @Test
+    public void testGetJiraIssuesByPullRequest() throws Exception
+    {
+        setRestResponse( TestUtil.STASH_JIRA_ISSUES_BY_PULL_REQUEST_JSON );
+
+        Set<JiraIssue> jiraIssues =
+                stashManager.getJiraIssuesByPullRequest( TestUtil.PROJECT_KEY, TestUtil.REPO_SLUG, 1 );
+
+        assertFalse( jiraIssues.isEmpty() );
     }
 }

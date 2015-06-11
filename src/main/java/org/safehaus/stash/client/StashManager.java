@@ -11,6 +11,7 @@ import org.safehaus.stash.model.Change;
 import org.safehaus.stash.model.Commit;
 import org.safehaus.stash.model.Event;
 import org.safehaus.stash.model.Group;
+import org.safehaus.stash.model.JiraIssue;
 import org.safehaus.stash.model.Project;
 import org.safehaus.stash.model.PullRequest;
 import org.safehaus.stash.model.Repo;
@@ -65,4 +66,7 @@ public interface StashManager
     public BuildStatistics getCommitBuildStatistics( String commitId ) throws RestUtil.RestException;
 
     public Set<BuildStatus> getCommitBuildStatuses( String commitId, int limit ) throws RestUtil.RestException;
+
+    public Set<JiraIssue> getJiraIssuesByPullRequest( String projectKey, String repoSlug, long prId )
+            throws RestUtil.RestException;
 }

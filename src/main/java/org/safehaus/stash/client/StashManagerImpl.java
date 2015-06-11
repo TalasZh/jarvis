@@ -11,6 +11,7 @@ import org.safehaus.stash.model.Change;
 import org.safehaus.stash.model.Commit;
 import org.safehaus.stash.model.Event;
 import org.safehaus.stash.model.Group;
+import org.safehaus.stash.model.JiraIssue;
 import org.safehaus.stash.model.Project;
 import org.safehaus.stash.model.PullRequest;
 import org.safehaus.stash.model.Repo;
@@ -308,24 +309,36 @@ public class StashManagerImpl implements StashManager
     @Override
     public BuildStatistics getCommitBuildStatistics( final String commitId ) throws RestUtil.RestException
     {
-        String response =
-                restUtil.get( formUrl( "rest/build-status/1.0/commits/stats/%s",  commitId ),
-                        Maps.<String, String>newHashMap() );
+        String response = restUtil.get( formUrl( "rest/build-status/1.0/commits/stats/%s", commitId ),
+                Maps.<String, String>newHashMap() );
 
         return jsonUtil.from( response, BuildStatistics.class );
     }
 
 
     @Override
-    public Set<BuildStatus> getCommitBuildStatuses( final String commitId, final int limit ) throws RestUtil.RestException
+    public Set<BuildStatus> getCommitBuildStatuses( final String commitId, final int limit )
+            throws RestUtil.RestException
     {
-        String response = restUtil.get(
-                formUrl( "rest/build-status/1.0/commits/%s?limit=%d",commitId, limit ),
+        String response = restUtil.get( formUrl( "rest/build-status/1.0/commits/%s?limit=%d", commitId, limit ),
                 Maps.<String, String>newHashMap() );
 
         Page<BuildStatus> buildStatusPage = jsonUtil.from( response, new TypeToken<Page<BuildStatus>>()
         {}.getType() );
 
         return buildStatusPage.getValues();
+    }
+
+
+    @Override
+    public Set<JiraIssue> getJiraIssuesByPullRequest( final String projectKey, final String repoSlug, final long prId )
+            throws RestUtil.RestException
+    {
+        String response = restUtil.get(
+                formUrl( "rest/jira/1.0/projects/%s/repos/%s/pull-requests/%d/issues", projectKey, repoSlug, prId ),
+                Maps.<String, String>newHashMap() );
+
+        return jsonUtil.from( response, new TypeToken<Set<JiraIssue>>()
+        {}.getType() );
     }
 }

@@ -471,4 +471,9 @@ public class TestUtil
                     + "            \"description\": \"Changes by John Doe\",\n"
                     + "            \"dateAdded\": 1433804276157\n" + "        }\n" + "    ],\n" + "    \"start\": 0\n"
                     + "}";
+    public static final String STASH_JIRA_ISSUES_BY_PULL_REQUEST_JSON =
+            "[\n" + "    {\n" + "        \"key\": \"JRA-11\",\n"
+                    + "        \"url\": \"https://jira.atlassian.com/browse/JRA-11\"\n" + "    },\n" + "    {\n"
+                    + "        \"key\": \"JRA-9\",\n" + "        \"url\": \"https://jira.atlassian.com/browse/JRA-9\"\n"
+                    + "    }\n" + "]";
 }
