@@ -318,7 +318,8 @@ public class JiraClientImpl implements JiraClient
         return ImmutableList.copyOf( result );
     }
 
-    private static Transition getTransitionByName( Iterable<Transition> transitions, String transitionName )
+
+    private Transition getTransitionByName( Iterable<Transition> transitions, String transitionName )
     {
         for ( Transition transition : transitions )
         {
@@ -331,7 +332,6 @@ public class JiraClientImpl implements JiraClient
     }
 
 
-    @Override
     public void updateIssueState( String issueKeyOrId, Integer transitionId )
     {
         Issue issue = getIssue( issueKeyOrId );
@@ -354,74 +354,12 @@ public class JiraClientImpl implements JiraClient
 
         logger.debug( issue.getTransitionsUri().toString() );
 
-
-        //        Operations ops = issue.getOperations();
-        //        ops.getLinkGroups().forEach( new Consumer<OperationGroup>()
-        //        {
-        //            @Override
-        //            public void accept( final OperationGroup operationGroup )
-        //            {
-        //                logger.debug( String.format( "Operation group: %s", operationGroup.toString() ) );
-        //            }
-        //        } );
-
-        Iterator<Transition> i =
-                restClient.getIssueClient().getTransitions( issue.getTransitionsUri() ).claim().iterator();
-
-
-        logger.debug( i.hasNext() ? "Transitions exist." : "No transitions." );
-        while ( i.hasNext() )
-        {
-            logger.debug( String.format( "Transition: %s", i.next().toString() ) );
-        }
-
-
-        //        {
-        //          "update": {
-        //            "comment": [
-        //              {
-        //                "add": {
-        //                  "body": "Bug has been fixed. test"
-        //                }
-        //              }
-        //            ]
-        //          },
-        //          "fields": {
-        //            "assignee": {
-        //              "name": "tjamakeev"
-        //            },
-        //            "resolution": {
-        //              "name": "Fixed"
-        //            }
-        //          },
-        //          "transition": {
-        //            "id": "5"
-        //          }
-        //        }
-
-        //
-        //        Collection<FieldInput> fieldInputs = new ArrayList<>();
-        //
-        //        fieldInputs.add( new FieldInput( "comment", ComplexIssueInputFieldValue
-        //                .with( "add", ComplexIssueInputFieldValue.with( "body", "Jarvis generated" ) ) ) );
-        //
-        //        fieldInputs.add( new FieldInput( "assignee", ComplexIssueInputFieldValue.with( "name", "tjamakeev"
-        // ) ) );
-        //
-        //        fieldInputs.add( new FieldInput( "resolution", ComplexIssueInputFieldValue.with( "name", "Fixed" )
-        // ) );
-        //        TransitionInput transitionInput = new TransitionInput( 5/*, fieldInputs*/ );
-        //
-        //        restClient.getIssueClient().transition( issue, transitionInput ).claim();
-
-
         final int buildNumber = restClient.getMetadataClient().getServerInfo().claim().getBuildNumber();
 
         // now let's start progress on this issue
         final Iterable<Transition> transitions =
                 restClient.getIssueClient().getTransitions( issue.getTransitionsUri() ).claim();
         final Transition startProgressTransition = getTransitionByName( transitions, "Start Progress" );
-        logger.debug( startProgressTransition == null ? "null" : "NOT NULL!!!!" );
 
         if ( startProgressTransition == null )
         {
@@ -495,6 +433,17 @@ public class JiraClientImpl implements JiraClient
         final TransitionInput transitionInput = new TransitionInput( toTransition.getId(),
                 Comment.valueOf( String.format( "Action \"%s\" issued by Jarvis.", toTransition.getName() ) ) );
         restClient.getIssueClient().transition( issue.getTransitionsUri(), transitionInput ).claim();
+    }
+
+
+    @Override
+    public Iterable<Transition> getTransitions( String issueKeyOrId ) throws JiraClientException
+    {
+        Issue issue = getIssue( issueKeyOrId );
+
+        logger.debug( String.format( "Current status of %s: %s", issue.getKey(), issue.getStatus() ) );
+
+        return restClient.getIssueClient().getTransitions( issue ).claim();
     }
 
 

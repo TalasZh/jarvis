@@ -16,6 +16,7 @@ import org.safehaus.model.JarvisIssue;
 import org.safehaus.model.JarvisProject;
 import org.safehaus.model.Views;
 
+import com.atlassian.jira.rest.client.api.domain.Transition;
 import com.fasterxml.jackson.annotation.JsonView;
 
 
@@ -47,15 +48,9 @@ public interface ProjectService
     @Consumes( MediaType.APPLICATION_JSON )
     JarvisIssue createIssue( JarvisIssue issue );
 
-    //    @GET
-    //    @Path( "status/{projectId}" )
-    //    ProjectStatus getProjectStatus( @PathParam( "projectId" ) String sessionId );
-    //
-    //    @GET
-    //    @Path( "status/me/{projectId}" )
-    //    String getSessionUserStage( @PathParam( "projectId" ) String sessionId );
-
-    //    @POST
-    //    @Path( "save/{sessionId}" )
-    //    JarvisProject saveProject( JarvisProject project );
+    @GET
+    @Path( "transitions/{issueIdOrKey}" )
+    @Consumes( MediaType.APPLICATION_JSON )
+    @JsonView( Views.CompleteView.class )
+    List<Transition> getTransition( @PathParam( "issueIdOrKey" ) String issueIdOrKey ) throws JiraClientException;
 }

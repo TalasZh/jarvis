@@ -6,6 +6,10 @@ package org.safehaus.model;
  */
 public class Views
 {
+
+    public interface CompleteView {}
+
+
     public interface JarvisIssueShort {}
 
 
