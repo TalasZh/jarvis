@@ -51,296 +51,452 @@ public class StashManagerImpl implements StashManager
 
 
     @Override
-    public Set<Project> getProjects( int limit ) throws RestUtil.RestException
+    public Set<Project> getProjects( int limit ) throws StashManagerException
     {
-        String response =
-                restUtil.get( formUrl( "rest/api/1.0/projects?limit=%d", limit ), Maps.<String, String>newHashMap() );
+        try
+        {
+            String response = restUtil.get( formUrl( "rest/api/1.0/projects?limit=%d", limit ),
+                    Maps.<String, String>newHashMap() );
 
 
-        Page<Project> projectPage = jsonUtil.from( response, new TypeToken<Page<Project>>()
-        {}.getType() );
+            Page<Project> projectPage = jsonUtil.from( response, new TypeToken<Page<Project>>()
+            {}.getType() );
 
-        return projectPage.getValues();
+            return projectPage.getValues();
+        }
+        catch ( Exception e )
+        {
+            throw new StashManagerException( e );
+        }
     }
 
 
     @Override
-    public Project getProject( final String projectKey ) throws RestUtil.RestException
+    public Project getProject( final String projectKey ) throws StashManagerException
     {
-        String response =
-                restUtil.get( formUrl( "rest/api/1.0/projects/%s", projectKey ), Maps.<String, String>newHashMap() );
+        try
+        {
+            String response = restUtil.get( formUrl( "rest/api/1.0/projects/%s", projectKey ),
+                    Maps.<String, String>newHashMap() );
 
-        return jsonUtil.from( response, Project.class );
+            return jsonUtil.from( response, Project.class );
+        }
+        catch ( Exception e )
+        {
+            throw new StashManagerException( e );
+        }
     }
 
 
     @Override
-    public Set<Group> getPermittedGroups( final String projectKey, int limit ) throws RestUtil.RestException
+    public Set<Group> getPermittedGroups( final String projectKey, int limit ) throws StashManagerException
     {
-        String response =
-                restUtil.get( formUrl( "rest/api/1.0/projects/%s/permissions/groups?limit=%d", projectKey, limit ),
-                        Maps.<String, String>newHashMap() );
+        try
+        {
+            String response =
+                    restUtil.get( formUrl( "rest/api/1.0/projects/%s/permissions/groups?limit=%d", projectKey, limit ),
+                            Maps.<String, String>newHashMap() );
 
-        Page<Group> groupPage = jsonUtil.from( response, new TypeToken<Page<Group>>()
-        {}.getType() );
+            Page<Group> groupPage = jsonUtil.from( response, new TypeToken<Page<Group>>()
+            {}.getType() );
 
-        return groupPage.getValues();
+            return groupPage.getValues();
+        }
+        catch ( Exception e )
+        {
+            throw new StashManagerException( e );
+        }
     }
 
 
     @Override
-    public Set<Repo> getRepos( final String projectKey, int limit ) throws RestUtil.RestException
+    public Set<Repo> getRepos( final String projectKey, int limit ) throws StashManagerException
     {
-        String response = restUtil.get( formUrl( "rest/api/1.0/projects/%s/repos?limit=%d", projectKey, limit ),
-                Maps.<String, String>newHashMap() );
+        try
+        {
+            String response = restUtil.get( formUrl( "rest/api/1.0/projects/%s/repos?limit=%d", projectKey, limit ),
+                    Maps.<String, String>newHashMap() );
 
-        Page<Repo> repoPage = jsonUtil.from( response, new TypeToken<Page<Repo>>()
-        {}.getType() );
+            Page<Repo> repoPage = jsonUtil.from( response, new TypeToken<Page<Repo>>()
+            {}.getType() );
 
-        return repoPage.getValues();
+            return repoPage.getValues();
+        }
+        catch ( Exception e )
+        {
+            throw new StashManagerException( e );
+        }
     }
 
 
     @Override
-    public Repo getRepo( final String projectKey, final String repoSlug ) throws RestUtil.RestException
+    public Repo getRepo( final String projectKey, final String repoSlug ) throws StashManagerException
     {
-        String response = restUtil.get( formUrl( "rest/api/1.0/projects/%s/repos/%s", projectKey, repoSlug ),
-                Maps.<String, String>newHashMap() );
+        try
+        {
 
-        return jsonUtil.from( response, Repo.class );
+            String response = restUtil.get( formUrl( "rest/api/1.0/projects/%s/repos/%s", projectKey, repoSlug ),
+                    Maps.<String, String>newHashMap() );
+
+            return jsonUtil.from( response, Repo.class );
+        }
+        catch ( Exception e )
+        {
+            throw new StashManagerException( e );
+        }
     }
 
 
     @Override
     public Set<PullRequest> getPullRequests( final String projectKey, final String repoSlug, final String branchName,
-                                             final PullRequest.State state, int limit ) throws RestUtil.RestException
+                                             final PullRequest.State state, int limit ) throws StashManagerException
     {
-        String response = restUtil.get(
-                formUrl( "rest/api/1.0/projects/%s/repos/%s/pull-requests?state=%s&at=refs/heads/%s&limit=%d",
-                        projectKey, repoSlug, state.name(), branchName, limit ), Maps.<String, String>newHashMap() );
+        try
+        {
+            String response = restUtil.get(
+                    formUrl( "rest/api/1.0/projects/%s/repos/%s/pull-requests?state=%s&at=refs/heads/%s&limit=%d",
+                            projectKey, repoSlug, state.name(), branchName, limit ),
+                    Maps.<String, String>newHashMap() );
 
-        Page<PullRequest> pullRequestPage = jsonUtil.from( response, new TypeToken<Page<PullRequest>>()
-        {}.getType() );
+            Page<PullRequest> pullRequestPage = jsonUtil.from( response, new TypeToken<Page<PullRequest>>()
+            {}.getType() );
 
-        return pullRequestPage.getValues();
+            return pullRequestPage.getValues();
+        }
+        catch ( Exception e )
+        {
+            throw new StashManagerException( e );
+        }
     }
 
 
     @Override
     public PullRequest getPullRequest( final String projectKey, final String repoSlug, final long prId )
-            throws RestUtil.RestException
+            throws StashManagerException
     {
-        String response = restUtil.get(
-                formUrl( "rest/api/1.0/projects/%s/repos/%s/pull-requests/%d", projectKey, repoSlug, prId ),
-                Maps.<String, String>newHashMap() );
+        try
+        {
+            String response = restUtil.get(
+                    formUrl( "rest/api/1.0/projects/%s/repos/%s/pull-requests/%d", projectKey, repoSlug, prId ),
+                    Maps.<String, String>newHashMap() );
 
-        return jsonUtil.from( response, PullRequest.class );
+            return jsonUtil.from( response, PullRequest.class );
+        }
+        catch ( Exception e )
+        {
+            throw new StashManagerException( e );
+        }
     }
 
 
     @Override
     public Set<Activity> getPullRequestActivities( final String projectKey, final String repoSlug, final long prId,
-                                                   int limit ) throws RestUtil.RestException
+                                                   int limit ) throws StashManagerException
     {
-        String response = restUtil.get(
-                formUrl( "rest/api/1.0/projects/%s/repos/%s/pull-requests/%d/activities?limit=%d", projectKey, repoSlug,
-                        prId, limit ), Maps.<String, String>newHashMap() );
+        try
+        {
+            String response = restUtil.get(
+                    formUrl( "rest/api/1.0/projects/%s/repos/%s/pull-requests/%d/activities?limit=%d", projectKey,
+                            repoSlug, prId, limit ), Maps.<String, String>newHashMap() );
 
-        Page<Activity> activityPage = jsonUtil.from( response, new TypeToken<Page<Activity>>()
-        {}.getType() );
+            Page<Activity> activityPage = jsonUtil.from( response, new TypeToken<Page<Activity>>()
+            {}.getType() );
 
-        return activityPage.getValues();
+            return activityPage.getValues();
+        }
+        catch ( Exception e )
+        {
+            throw new StashManagerException( e );
+        }
     }
 
 
     @Override
     public Set<Commit> getPullRequestCommits( final String projectKey, final String repoSlug, final long prId,
-                                              final int limit ) throws RestUtil.RestException
+                                              final int limit ) throws StashManagerException
     {
-        String response = restUtil.get(
-                formUrl( "rest/api/1.0/projects/%s/repos/%s/pull-requests/%d/commits?limit=%d", projectKey, repoSlug,
-                        prId, limit ), Maps.<String, String>newHashMap() );
+        try
+        {
+            String response = restUtil.get(
+                    formUrl( "rest/api/1.0/projects/%s/repos/%s/pull-requests/%d/commits?limit=%d", projectKey,
+                            repoSlug, prId, limit ), Maps.<String, String>newHashMap() );
 
-        Page<Commit> commitPage = jsonUtil.from( response, new TypeToken<Page<Commit>>()
-        {}.getType() );
+            Page<Commit> commitPage = jsonUtil.from( response, new TypeToken<Page<Commit>>()
+            {}.getType() );
 
-        return commitPage.getValues();
+            return commitPage.getValues();
+        }
+        catch ( Exception e )
+        {
+            throw new StashManagerException( e );
+        }
     }
 
 
     @Override
     public Set<Change> getPullRequestChanges( final String projectKey, final String repoSlug, final long prId,
-                                              final int limit ) throws RestUtil.RestException
+                                              final int limit ) throws StashManagerException
     {
-        String response = restUtil.get(
-                formUrl( "rest/api/1.0/projects/%s/repos/%s/pull-requests/%d/changes?limit=%d", projectKey, repoSlug,
-                        prId, limit ), Maps.<String, String>newHashMap() );
+        try
+        {
+            String response = restUtil.get(
+                    formUrl( "rest/api/1.0/projects/%s/repos/%s/pull-requests/%d/changes?limit=%d", projectKey,
+                            repoSlug, prId, limit ), Maps.<String, String>newHashMap() );
 
-        Page<Change> commitPage = jsonUtil.from( response, new TypeToken<Page<Change>>()
-        {}.getType() );
+            Page<Change> commitPage = jsonUtil.from( response, new TypeToken<Page<Change>>()
+            {}.getType() );
 
-        return commitPage.getValues();
+            return commitPage.getValues();
+        }
+        catch ( Exception e )
+        {
+            throw new StashManagerException( e );
+        }
     }
 
 
     @Override
     public Set<Branch> getBranches( final String projectKey, final String repoSlug, final int limit )
-            throws RestUtil.RestException
+            throws StashManagerException
     {
-        String response = restUtil.get(
-                formUrl( "rest/api/1.0/projects/%s/repos/%s/branches?limit=%d", projectKey, repoSlug, limit ),
-                Maps.<String, String>newHashMap() );
+        try
+        {
+            String response = restUtil.get(
+                    formUrl( "rest/api/1.0/projects/%s/repos/%s/branches?limit=%d", projectKey, repoSlug, limit ),
+                    Maps.<String, String>newHashMap() );
 
-        Page<Branch> branchPage = jsonUtil.from( response, new TypeToken<Page<Branch>>()
-        {}.getType() );
+            Page<Branch> branchPage = jsonUtil.from( response, new TypeToken<Page<Branch>>()
+            {}.getType() );
 
-        return branchPage.getValues();
+            return branchPage.getValues();
+        }
+        catch ( Exception e )
+        {
+            throw new StashManagerException( e );
+        }
     }
 
 
     @Override
-    public Branch getDefaultBranch( final String projectKey, final String repoSlug ) throws RestUtil.RestException
+    public Branch getDefaultBranch( final String projectKey, final String repoSlug ) throws StashManagerException
     {
-        String response =
-                restUtil.get( formUrl( "rest/api/1.0/projects/%s/repos/%s/branches/default", projectKey, repoSlug ),
-                        Maps.<String, String>newHashMap() );
+        try
+        {
+            String response =
+                    restUtil.get( formUrl( "rest/api/1.0/projects/%s/repos/%s/branches/default", projectKey, repoSlug ),
+                            Maps.<String, String>newHashMap() );
 
-        return jsonUtil.from( response, Branch.class );
+            return jsonUtil.from( response, Branch.class );
+        }
+        catch ( Exception e )
+        {
+            throw new StashManagerException( e );
+        }
     }
 
 
     @Override
     public Set<Change> getChangesBetweenCommits( final String projectKey, final String repoSlug,
                                                  final String fromCommitId, final String toCommitId, final int limit )
-            throws RestUtil.RestException
+            throws StashManagerException
     {
-        String response = restUtil.get(
-                formUrl( "rest/api/1.0/projects/%s/repos/%s/changes?since=%s&until=%s&limit=%d", projectKey, repoSlug,
-                        fromCommitId, toCommitId, limit ), Maps.<String, String>newHashMap() );
+        try
+        {
+            String response = restUtil.get(
+                    formUrl( "rest/api/1.0/projects/%s/repos/%s/changes?since=%s&until=%s&limit=%d", projectKey,
+                            repoSlug, fromCommitId, toCommitId, limit ), Maps.<String, String>newHashMap() );
 
-        Page<Change> commitPage = jsonUtil.from( response, new TypeToken<Page<Change>>()
-        {}.getType() );
+            Page<Change> commitPage = jsonUtil.from( response, new TypeToken<Page<Change>>()
+            {}.getType() );
 
-        return commitPage.getValues();
+            return commitPage.getValues();
+        }
+        catch ( Exception e )
+        {
+            throw new StashManagerException( e );
+        }
     }
 
 
     @Override
     public Set<Commit> getCommits( final String projectKey, final String repoSlug, final int limit )
-            throws RestUtil.RestException
+            throws StashManagerException
     {
-        String response = restUtil.get(
-                formUrl( "rest/api/1.0/projects/%s/repos/%s/commits?limit=%d", projectKey, repoSlug, limit ),
-                Maps.<String, String>newHashMap() );
+        try
+        {
+            String response = restUtil.get(
+                    formUrl( "rest/api/1.0/projects/%s/repos/%s/commits?limit=%d", projectKey, repoSlug, limit ),
+                    Maps.<String, String>newHashMap() );
 
-        Page<Commit> commitPage = jsonUtil.from( response, new TypeToken<Page<Commit>>()
-        {}.getType() );
+            Page<Commit> commitPage = jsonUtil.from( response, new TypeToken<Page<Commit>>()
+            {}.getType() );
 
-        return commitPage.getValues();
+            return commitPage.getValues();
+        }
+        catch ( Exception e )
+        {
+            throw new StashManagerException( e );
+        }
     }
 
 
     @Override
     public Commit getCommit( final String projectKey, final String repoSlug, final String commitId )
-            throws RestUtil.RestException
+            throws StashManagerException
     {
-        String response =
-                restUtil.get( formUrl( "rest/api/1.0/projects/%s/repos/%s/commits/%s", projectKey, repoSlug, commitId ),
-                        Maps.<String, String>newHashMap() );
+        try
+        {
+            String response = restUtil.get(
+                    formUrl( "rest/api/1.0/projects/%s/repos/%s/commits/%s", projectKey, repoSlug, commitId ),
+                    Maps.<String, String>newHashMap() );
 
-        return jsonUtil.from( response, Commit.class );
+            return jsonUtil.from( response, Commit.class );
+        }
+        catch ( Exception e )
+        {
+            throw new StashManagerException( e );
+        }
     }
 
 
     @Override
     public Set<Change> getCommitChanges( final String projectKey, final String repoSlug, final String commitId,
-                                         final int limit ) throws RestUtil.RestException
+                                         final int limit ) throws StashManagerException
     {
-        String response = restUtil.get(
-                formUrl( "rest/api/1.0/projects/%s/repos/%s/commits/%s/changes?limit=%d", projectKey, repoSlug,
-                        commitId, limit ), Maps.<String, String>newHashMap() );
+        try
+        {
+            String response = restUtil.get(
+                    formUrl( "rest/api/1.0/projects/%s/repos/%s/commits/%s/changes?limit=%d", projectKey, repoSlug,
+                            commitId, limit ), Maps.<String, String>newHashMap() );
 
-        Page<Change> changePage = jsonUtil.from( response, new TypeToken<Page<Change>>()
-        {}.getType() );
+            Page<Change> changePage = jsonUtil.from( response, new TypeToken<Page<Change>>()
+            {}.getType() );
 
-        return changePage.getValues();
+            return changePage.getValues();
+        }
+        catch ( Exception e )
+        {
+            throw new StashManagerException( e );
+        }
     }
 
 
     @Override
-    public Set<Event> getProjectEvents( final String projectKey, final int limit ) throws RestUtil.RestException
+    public Set<Event> getProjectEvents( final String projectKey, final int limit ) throws StashManagerException
     {
-        String response = restUtil.get( formUrl( "rest/audit/1.0/projects/%s/events?limit=%d", projectKey, limit ),
-                Maps.<String, String>newHashMap() );
+        try
+        {
+            String response = restUtil.get( formUrl( "rest/audit/1.0/projects/%s/events?limit=%d", projectKey, limit ),
+                    Maps.<String, String>newHashMap() );
 
-        Page<Event> eventPage = jsonUtil.from( response, new TypeToken<Page<Event>>()
-        {}.getType() );
+            Page<Event> eventPage = jsonUtil.from( response, new TypeToken<Page<Event>>()
+            {}.getType() );
 
-        return eventPage.getValues();
+            return eventPage.getValues();
+        }
+        catch ( Exception e )
+        {
+            throw new StashManagerException( e );
+        }
     }
 
 
     @Override
     public Set<Event> getRepoEvents( final String projectKey, final String repoSlug, final int limit )
-            throws RestUtil.RestException
+            throws StashManagerException
     {
-        String response = restUtil.get(
-                formUrl( "rest/audit/1.0/projects/%s/repos/%s/events?limit=%d", projectKey, repoSlug, limit ),
-                Maps.<String, String>newHashMap() );
+        try
+        {
+            String response = restUtil.get(
+                    formUrl( "rest/audit/1.0/projects/%s/repos/%s/events?limit=%d", projectKey, repoSlug, limit ),
+                    Maps.<String, String>newHashMap() );
 
-        Page<Event> eventPage = jsonUtil.from( response, new TypeToken<Page<Event>>()
-        {}.getType() );
+            Page<Event> eventPage = jsonUtil.from( response, new TypeToken<Page<Event>>()
+            {}.getType() );
 
-        return eventPage.getValues();
+            return eventPage.getValues();
+        }
+        catch ( Exception e )
+        {
+            throw new StashManagerException( e );
+        }
     }
 
 
     @Override
-    public BuildStatistics getCommitBuildStatistics( final String commitId ) throws RestUtil.RestException
+    public BuildStatistics getCommitBuildStatistics( final String commitId ) throws StashManagerException
     {
-        String response = restUtil.get( formUrl( "rest/build-status/1.0/commits/stats/%s", commitId ),
-                Maps.<String, String>newHashMap() );
+        try
+        {
+            String response = restUtil.get( formUrl( "rest/build-status/1.0/commits/stats/%s", commitId ),
+                    Maps.<String, String>newHashMap() );
 
-        return jsonUtil.from( response, BuildStatistics.class );
+            return jsonUtil.from( response, BuildStatistics.class );
+        }
+        catch ( Exception e )
+        {
+            throw new StashManagerException( e );
+        }
     }
 
 
     @Override
     public Set<BuildStatus> getCommitBuildStatuses( final String commitId, final int limit )
-            throws RestUtil.RestException
+            throws StashManagerException
     {
-        String response = restUtil.get( formUrl( "rest/build-status/1.0/commits/%s?limit=%d", commitId, limit ),
-                Maps.<String, String>newHashMap() );
+        try
+        {
+            String response = restUtil.get( formUrl( "rest/build-status/1.0/commits/%s?limit=%d", commitId, limit ),
+                    Maps.<String, String>newHashMap() );
 
-        Page<BuildStatus> buildStatusPage = jsonUtil.from( response, new TypeToken<Page<BuildStatus>>()
-        {}.getType() );
+            Page<BuildStatus> buildStatusPage = jsonUtil.from( response, new TypeToken<Page<BuildStatus>>()
+            {}.getType() );
 
-        return buildStatusPage.getValues();
+            return buildStatusPage.getValues();
+        }
+        catch ( Exception e )
+        {
+            throw new StashManagerException( e );
+        }
     }
 
 
     @Override
     public Set<JiraIssue> getJiraIssuesByPullRequest( final String projectKey, final String repoSlug, final long prId )
-            throws RestUtil.RestException
+            throws StashManagerException
     {
-        String response = restUtil.get(
-                formUrl( "rest/jira/1.0/projects/%s/repos/%s/pull-requests/%d/issues", projectKey, repoSlug, prId ),
-                Maps.<String, String>newHashMap() );
+        try
+        {
+            String response = restUtil.get(
+                    formUrl( "rest/jira/1.0/projects/%s/repos/%s/pull-requests/%d/issues", projectKey, repoSlug, prId ),
+                    Maps.<String, String>newHashMap() );
 
-        return jsonUtil.from( response, new TypeToken<Set<JiraIssue>>()
-        {}.getType() );
+            return jsonUtil.from( response, new TypeToken<Set<JiraIssue>>()
+            {}.getType() );
+        }
+        catch ( Exception e )
+        {
+            throw new StashManagerException( e );
+        }
     }
 
 
     @Override
     public Page<JiraIssueChange> getChangesByJiraIssue( final String issueKey, final int limit, final int start,
-                                                        final int maxChanges ) throws RestUtil.RestException
+                                                        final int maxChanges ) throws StashManagerException
     {
-        String response = restUtil.get(
-                formUrl( "rest/jira/1.0/issues/%s/commits?limit=%d&start=%d&maxChanges=%d", issueKey, limit, start,
-                        maxChanges ), Maps.<String, String>newHashMap() );
+        try
+        {
+            String response = restUtil.get(
+                    formUrl( "rest/jira/1.0/issues/%s/commits?limit=%d&start=%d&maxChanges=%d", issueKey, limit, start,
+                            maxChanges ), Maps.<String, String>newHashMap() );
 
-        return jsonUtil.from( response, new TypeToken<Page<JiraIssueChange>>()
-        {}.getType() );
+            return jsonUtil.from( response, new TypeToken<Page<JiraIssueChange>>()
+            {}.getType() );
+        }
+        catch ( Exception e )
+        {
+            throw new StashManagerException( e );
+        }
     }
 }

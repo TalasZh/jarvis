@@ -28,8 +28,6 @@ import org.safehaus.stash.model.Repo;
 import org.safehaus.stash.util.RestUtil;
 import org.safehaus.util.JarvisContextHolder;
 
-import junit.framework.TestCase;
-
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.TestCase.assertTrue;
@@ -284,7 +282,6 @@ public class StashManagerImplTest
     @Test
     public void testGetCommitBuildStatuses() throws Exception
     {
-
         setRestResponse( TestUtil.STASH_BUILD_STATUSES_JSON );
 
         Set<BuildStatus> buildStatuses = stashManager.getCommitBuildStatuses( "2fda08f", 10 );
@@ -308,12 +305,10 @@ public class StashManagerImplTest
     @Test
     public void testGetChangesByJiraIssue() throws Exception
     {
+        setRestResponse( TestUtil.STASH_CHANGES_BY_JIRA_ISSUE_JSON );
 
         Page<JiraIssueChange> jiraIssueChangePage = stashManager.getChangesByJiraIssue( "HUB-100", 1, 0, 10 );
 
         assertNotNull( jiraIssueChangePage );
-
-        System.out.println(jiraIssueChangePage);
-
     }
 }
