@@ -22,9 +22,9 @@ public class PullRequest
     private long updatedDate;
     private Ref fromRef;
     private Ref toRef;
-    private Member author;
-    private Set<Member> reviewers;
-    private Set<Member> participants;
+    private PullRequestParticipant author;
+    private Set<PullRequestParticipant> reviewers;
+    private Set<PullRequestParticipant> participants;
     private Link link;
     private Map<String, Set<Map<String, String>>> links;
 
@@ -113,19 +113,19 @@ public class PullRequest
     }
 
 
-    public Member getAuthor()
+    public PullRequestParticipant getAuthor()
     {
         return author;
     }
 
 
-    public Set<Member> getReviewers()
+    public Set<PullRequestParticipant> getReviewers()
     {
         return reviewers;
     }
 
 
-    public Set<Member> getParticipants()
+    public Set<PullRequestParticipant> getParticipants()
     {
         return participants;
     }

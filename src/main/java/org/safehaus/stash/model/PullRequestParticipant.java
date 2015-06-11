@@ -4,7 +4,7 @@ package org.safehaus.stash.model;
 import com.google.common.base.Objects;
 
 
-public class Member
+public class PullRequestParticipant
 {
     private User user;
     private String role;
