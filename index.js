@@ -31,6 +31,7 @@ var global_username;
 var annotatorIsOn = false;
 var firstClick = true;
 var matchers = [];
+var currentIssueKey = "";
 
 simplePrefs.on("applyChanges", onPrefChange);
 
@@ -193,12 +194,77 @@ function getUserIssues(jira, username) {
     });
 }
 
+function getIssue(issueKey, panel) {
+    console.log("Query for issue: " + issueKey);
+    mediator.getIssue(issueKey, function (error, json) {
+        if (error !== null) {
+            console.error("Error: " + error);
+            return;
+        }
+        console.log("Response: " + JSON.stringify(json));
+        setIssue(json, panel);
+    });
+}
+
+function setIssue(issue, panel) {
+    console.log("Selecting issue: " + JSON.stringify(issue));
+    if (issue) {
+        panel.port.emit('set-issue', issue);
+    }
+
+    currentIssueKey = issue.key;
+}
+
+function listProjects(panel) {
+    if (init()) {
+        mediator.listProjects(function (error, json) {
+            if (error !== null) {
+                console.error("Error: " + error);
+                return
+            }
+            panel.contentURL = data.url("login/selectProject.html");
+            panel.port.emit("fill-project-combobox", json);
+        });
+    }
+}
+
+function disableEnableAnnotator(activate, button) {
+    console.log('<<<activate/deactivate annotator: ' + activate + " " + annotatorIsOn);
+    if (activate !== undefined) {
+        annotatorIsOn = !activate;
+    }
+    var captureEnabled = toggleActivation();
+    console.log("Now annotator is: " + captureEnabled);
+    //to indicate that capture session is enabled or disabled
+    if (captureEnabled) {
+        button.icon = {
+            "16": data.url('icon-16.png'),
+            "32": "./icon-32.png",
+            "64": "./icon-64.png"
+        };
+        notifications.notify({
+            title: 'Annotator.',
+            text: 'Capture session active'
+        });
+    }
+    else {
+        button.icon = {
+            "16": data.url('icon-16-off.png'),
+            "32": "./icon-32.png",
+            "64": "./icon-64.png"
+        };
+        notifications.notify({
+            title: 'Annotator.',
+            text: 'Capture session inactive'
+        });
+    }
+}
+
 
 exports.main = function () {
     tabs.open("https://wiki.ubuntu.com/");
     //listProjects();
 
-    var currentIssueKey = "";
     var selector = pageMod.PageMod({
         include: ['*'],
         contentScriptWhen: 'ready',
@@ -275,7 +341,7 @@ exports.main = function () {
                 console.log(currentIssueKey);
                 handleNewAnnotation(annotationText, this.annotationAnchor, currentIssueKey, function (capture) {
                     console.log("Handle new annotation callback");
-                    getIssue(capture.jiraKey);
+                    getIssue(capture.jiraKey, panel);
                 });
             }
             annotationEditor.hide();
@@ -358,7 +424,7 @@ exports.main = function () {
                     });
                     if (firstClick) {
                         firstClick = false;
-                        listProjects();
+                        listProjects(panel);
                     }
                 }
             }
@@ -428,7 +494,7 @@ exports.main = function () {
     });
 
     panel.port.on('left-click', function (activate) {
-        disableEnableAnnotator(activate);
+        disableEnableAnnotator(activate, button);
     });
 
     panel.port.on('right-click', function () {
@@ -438,7 +504,7 @@ exports.main = function () {
 
     panel.port.on("back-button-pressed", function (projectName) {
         console.log("back-button-pressed");
-        disableEnableAnnotator(false);
+        disableEnableAnnotator(false, button);
         mediator.listProjectIssues(projectName, function (error, json) {
             if (error != null) {
                 console.error("Could not retrieve " + global_username + "'s issues.");
@@ -478,7 +544,7 @@ exports.main = function () {
                 return;
             }
             panel.contentURL = data.url("issue-view/issue-view.html");
-            setIssue(json);
+            setIssue(json, panel);
         });
     });
 
@@ -488,7 +554,7 @@ exports.main = function () {
     panel.port.on('select-issue', function (issueKey) {
         console.log("SelectedIssueKey: " + issueKey);
 
-        getIssue(issueKey);
+        getIssue(issueKey, panel);
     });
 
     /**
@@ -582,7 +648,7 @@ exports.main = function () {
     panel.port.on("handle-login", function (username, password) {
         console.log(username + " " + password);
         global_username = username;
-        listProjects();
+        listProjects(panel);
     });
 
     panel.port.on("build-hierarchy", function (storyKey) {
@@ -596,66 +662,60 @@ exports.main = function () {
         });
     });
 
-    function getIssue(issueKey) {
-        console.log("Query for issue: " + issueKey);
-        mediator.getIssue(issueKey, function (error, json) {
-            if (error !== null) {
+
+    panel.port.on("startStory", function (storyKey) {
+        mediator.storyStart(storyKey, function(error, json) {
+            if (error) {
                 console.error("Error: " + error);
                 return;
             }
-            console.log("Response: " + JSON.stringify(json));
-            setIssue(json);
+            console.log("started story: " + storyKey);
+            getIssue(storyKey, panel);
         });
-    }
+    });
 
-    function setIssue(issue) {
-        console.log("Selecting issue: " + JSON.stringify(issue));
-        panel.port.emit('set-issue', issue);
-        currentIssueKey = issue.key;
-    }
+    panel.port.on("storySendApproval", function (storyKey) {
+        mediator.storyApprovalRequest(storyKey, function(error) {
+            if (error) {
+                console.error("Error: " + error);
+                return;
+            }
+            console.log("sent story approval request: " + storyKey);
+            getIssue(storyKey, panel);
+        });
+    });
 
-    function listProjects() {
-        if (init()) {
-            mediator.listProjects(function (error, json) {
-                if (error !== null) {
-                    console.error("Error: " + error);
-                    return
-                }
-                panel.contentURL = data.url("login/selectProject.html");
-                panel.port.emit("fill-project-combobox", json);
-            });
-        }
-    }
+    panel.port.on("storyApprove", function (storyKey) {
+        mediator.storyApprove(storyKey, function (error) {
+            if (error) {
+                console.error("Error: " + error);
+                return;
+            }
+            console.log("approve story: " + storyKey);
+            getIssue(storyKey, panel);
+        });
 
-    function disableEnableAnnotator(activate){
-        console.log('<<<activate/deactivate annotator: ' + activate + " " + annotatorIsOn);
-        if (activate !== undefined) {
-            annotatorIsOn = !activate;
-        }
-        var captureEnabled = toggleActivation();
-        console.log("Now annotator is: " + captureEnabled);
-        //to indicate that capture session is enabled or disabled
-        if (captureEnabled) {
-            button.icon = {
-                "16": data.url('icon-16.png'),
-                "32": "./icon-32.png",
-                "64": "./icon-64.png"
-            };
-            notifications.notify({
-                title: 'Annotator.',
-                text: 'Capture session active'
-            });
-        }
-        else {
-            button.icon = {
-                "16": data.url('icon-16-off.png'),
-                "32": "./icon-32.png",
-                "64": "./icon-64.png"
-            };
-            notifications.notify({
-                title: 'Annotator.',
-                text: 'Capture session inactive'
-            });
-        }
-    }
+    });
+
+    panel.port.on("storyReject", function (storyKey) {
+        mediator.storyReject(storyKey, function (error) {
+            if (error) {
+                console.error("Error: " + error);
+                return;
+            }
+            console.log("reject story approval: " + storyKey);
+            getIssue(storyKey, panel);
+        });
+    });
+
+    panel.port.on("storyResolve", function (storyKey) {
+        mediator.storyResolve(storyKey, function (error) {
+            if (error) {
+                console.error("Error: " + error);
+                return;
+            }
+            console.log("resolve story approval: " + storyKey);
+            getIssue(storyKey, panel);
+        });
+    });
 };

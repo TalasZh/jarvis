@@ -14,7 +14,7 @@
     <!--Breadcrumbs as a navigation in issue tree-->
     <div class="row">
         <div class="col-md-12">
-            <ul class="breadcrumb" id="issue-path">
+            <ul class="breadcrumb" id="story-path">
                 <li><a href="#">ProjectName</a></li>
                 <li><a href="#">EpicName</a></li>
                 <li><a href="#">StoryName</a></li>
@@ -25,7 +25,7 @@
 
     <!--Package controls-->
     <div class="container well panel panel-primary">
-        <div class="panel-heading" id="issueNumber">
+        <div class="panel-heading" id="storyNumber">
             Issue Universal
         </div>
 
@@ -34,77 +34,49 @@
             <div class="col-xs-6">
                 <p>
                     <b> Link : </b>
-                    <a class="pull-right" id="issueLink" href="#">here</a>
+                    <a class="pull-right" id="storyLink" href="#">here</a>
                 </p>
 
                 <p>
                     <b> Status : </b>
-                    <span class="pull-right" id="status"></span>
+                    <span class="pull-right" id="storyStatus"></span>
                 </p>
             </div>
             <div class="col-xs-6">
                 <p>
                     <b> Type : </b>
-                    <span class="pull-right" id="type"></span>
+                    <span class="pull-right" id="storyType"></span>
                 </p>
 
                 <p>
                     <b> Priority : </b>
-                    <span class="pull-right" id="priority"></span>
+                    <span class="pull-right" id="storyPriority"></span>
                 </p>
             </div>
         </div>
         <div class="row voffset2">
-            <div class="col-md-10">
+            <div class="col-md-9">
                 <p>
                     <b> Summary : </b>
-                    <span class="pull-right" id="summary"></span>
+                    <span class="pull-right" id="storySummary"></span>
                 </p>
-
-                <div class="pull-right" id="sessionControls">
-                    <input type="button" class="btn btn-primary btn-sm" id="startStop" value="Start">
-                    <input type="button" class="btn btn-primary btn-sm" id="pauseResume" value="Pause">
-                    <input type="button" class="btn btn-default btn-sm" id="annotator" value="Annotator">
-                </div>
 
                 <div class="pull-right" id="storyControls">
                     <input type="button" class="btn btn-primary btn-sm" id="storyStart" value="Start">
-                    <input type="button" class="btn btn-primary btn-sm" id="storySendApproval"
-                           value="Send for Approval">
+                    <input type="button" class="btn btn-primary btn-sm" id="storySendApproval" value="Send for Approval">
                     <input type="button" class="btn btn-primary btn-sm" id="storyApprove" value="Approve">
                     <input type="button" class="btn btn-default btn-sm" id="storyReject" value="Reject">
-                    <input type="button" class="btn btn-default btn-sm" id="storyResolve" value="Resolve">
-                    <!--<input type="button" class="btn btn-default btn-sm" id="exportToConfluence" value="Export to Confluence">-->
-                    <input type="button" class="btn btn-default btn-sm" id="buildHierarchy"
-                           value="Export to Confluence">
-                </div>
-            </div>
-        </div>
-
-        <div class="row voffset2">
-            <div class="col-md-10">
-                <div class="pull-right">
-                    <input type="button" class="btn btn-primary btn-sm" id="backButton" value="Back">
-                </div>
-            </div>
-        </div>
-
-        <!--Will be required for listing all annotation list for a session-->
-        <div class="panel panel-primary voffset2" id="annotations">
-            <div class="panel-heading">Annotations</div>
-            <div class="panel-body fixed-panel">
-                <div class="list-group" id="list-annotations">
-
+                    <input type="button" class="btn btn-default btn-sm" id="exportToConfluence" value="Export to Confluence">
                 </div>
             </div>
         </div>
 
         <!--Issues panel-->
-        <div class="panel panel-primary voffset2" id="issues">
+        <div class="panel panel-primary voffset2" id="storyIssues">
             <div class="panel-heading">Issues</div>
             <div class="panel-body fixed-panel">
                 <!--Only used for Story issue types-->
-                <ul class="list-group" id="list-issues">
+                <ul class="list-group" id="story-list-issues">
                 </ul>
             </div>
         </div>
