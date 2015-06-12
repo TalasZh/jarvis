@@ -21,6 +21,7 @@ import com.atlassian.jira.rest.client.api.domain.Issue;
 import com.atlassian.jira.rest.client.api.domain.IssueLink;
 import com.atlassian.jira.rest.client.api.domain.IssueType;
 import com.atlassian.jira.rest.client.api.domain.Project;
+import com.atlassian.jira.rest.client.api.domain.Status;
 import com.atlassian.jira.rest.client.api.domain.Transition;
 
 
@@ -130,6 +131,48 @@ public class JiraManagerImpl implements JiraManager
     }
 
 
+    @Override
+    public Status reopenIssue( final String id ) throws JiraClientException
+    {
+        return getJiraClient().changeStatus( id, ISSUE_REOPEN_ACTION_NAME );
+    }
+
+
+    @Override
+    public Status storyStart( final String issueIdOrKey ) throws JiraClientException
+    {
+        return getJiraClient().changeStatus( issueIdOrKey, STORY_START_ACTION_NAME );
+    }
+
+
+    @Override
+    public Status storyRequestApproval( final String issueIdOrKey ) throws JiraClientException
+    {
+        return getJiraClient().changeStatus( issueIdOrKey, STORY_REQUEST_APPROVAL_ACTION_NAME );
+    }
+
+
+    @Override
+    public Status storyResolve( final String issueIdOrKey ) throws JiraClientException
+    {
+        return getJiraClient().changeStatus( issueIdOrKey, STORY_RESOLVE_ACTION_NAME );
+    }
+
+
+    @Override
+    public Status storyApprove( final String issueIdOrKey ) throws JiraClientException
+    {
+        return getJiraClient().changeStatus( issueIdOrKey, STORY_APPROVE_ACTION_NAME );
+    }
+
+
+    @Override
+    public Status storyReject( final String issueIdOrKey ) throws JiraClientException
+    {
+        return getJiraClient().changeStatus( issueIdOrKey, STORY_REJECT_ACTION_NAME );
+    }
+
+
     private JarvisIssue buildJarvisIssue( Issue issue ) throws JiraClientException
     {
         if ( issue == null )
@@ -157,11 +200,13 @@ public class JiraManagerImpl implements JiraManager
                 issue.getCreationDate().toString(), links, issue.getProject().getKey() );
     }
 
+
     @Override
-    public Iterable<Transition> getTransitions(String issueIdOrKey) throws JiraClientException
+    public Iterable<Transition> getTransitions( String issueIdOrKey ) throws JiraClientException
     {
         return getJiraClient().getTransitions( issueIdOrKey );
     }
+
 
     private JiraClient getJiraClient() throws JiraClientException
     {

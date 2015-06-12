@@ -15,16 +15,8 @@ public class JarvisObjectMapper extends ObjectMapper
     {
         super();
         SimpleModule testModule = new SimpleModule( "JarvisModule" );
-        testModule.addSerializer( new JiraTransitionSerializer() ); // assuming serializer declares correct class to bind to
+        testModule.addSerializer(
+                new JiraTransitionSerializer() ); // assuming serializer declares correct class to bind to
         registerModule( testModule );
     }
-
-
-//
-//    public void add()
-//    {
-//        SimpleModule testModule = new SimpleModule( "JarvisModule" );
-//        testModule.addSerializer( new JiraTransitionSerializer() ); // assuming serializer declares correct class to bind to
-//        registerModule( testModule );
-//    }
 }
