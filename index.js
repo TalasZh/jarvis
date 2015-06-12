@@ -57,6 +57,10 @@ function isAuthenticated() {
         console.log(cookie.host + ";" + cookie.name + "=" + cookie.value + "\n");
     }
     firstClick = true;
+    notifications.notify({
+        title: 'Authentication error.',
+        text: 'crowd.token_key not found'
+    });
     return false;
 }
 
@@ -624,7 +628,7 @@ exports.main = function () {
     }
 
     function disableEnableAnnotator(activate){
-        console.log('activate/deactivate annotator: ' + activate);
+        console.log('<<<activate/deactivate annotator: ' + activate + " " + annotatorIsOn);
         if (activate !== undefined) {
             annotatorIsOn = !activate;
         }
@@ -637,6 +641,10 @@ exports.main = function () {
                 "32": "./icon-32.png",
                 "64": "./icon-64.png"
             };
+            notifications.notify({
+                title: 'Annotator.',
+                text: 'Capture session active'
+            });
         }
         else {
             button.icon = {
@@ -644,6 +652,10 @@ exports.main = function () {
                 "32": "./icon-32.png",
                 "64": "./icon-64.png"
             };
+            notifications.notify({
+                title: 'Annotator.',
+                text: 'Capture session inactive'
+            });
         }
     }
 };

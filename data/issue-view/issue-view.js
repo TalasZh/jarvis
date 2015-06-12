@@ -4,9 +4,9 @@ const PAUSE = "Pause";
 const RESUME = "Resume";
 
 const SESSION_STATUS = {
-    IN_PROGRESS: "INPROGRESS",
-    CLOSED: "CLOSED",
-    PAUSED: "PAUSED"
+    IN_PROGRESS: "In Progress",
+    CLOSED: "Closed",
+    PAUSED: "Paused"
 };
 
 const ISSUE_TYPE = {
