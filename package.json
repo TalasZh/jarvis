@@ -47,5 +47,8 @@
   "repository": {
     "type": "git",
     "url": "http://tjoldoshbekov@stash.safehaus.org/scm/jar/main.git"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.0"
   }
 }

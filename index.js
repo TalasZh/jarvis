@@ -34,7 +34,7 @@ var matchers = [];
 
 simplePrefs.on("applyChanges", onPrefChange);
 
-function onPrefChange(prefName) {
+function onPrefChange() {
     console.log("Applied last changes");
     mediator = new MediatorApi(simplePrefs.prefs.mediatorProtocol,
         simplePrefs.prefs.mediatorHost,
@@ -57,11 +57,16 @@ function isAuthenticated() {
         console.log(cookie.host + ";" + cookie.name + "=" + cookie.value + "\n");
     }
     firstClick = true;
+    notifications.notify({
+        title: 'Authentication error.',
+        text: 'crowd.token_key not found'
+    });
     return false;
 }
 
 const init = () => {
     console.log("Initializing jarvis plugin...");
+    simpleStorage.storage.annotations = {};
 
     if (!isAuthenticated()) {
         tabs.open(simplePrefs.prefs.mediatorProtocol + "://" + simplePrefs.prefs.mediatorHost + ":" + simplePrefs.prefs.mediatorPort);
@@ -78,7 +83,7 @@ const init = () => {
     }
 
     console.log("hello");
-    simpleStorage.storage.annotations = {};
+
     simpleStorage.on("OverQuota", function () {
         notifications.notify({
             title: 'Storage space exceeded',
@@ -121,7 +126,7 @@ function Annotation(annotationText, anchor) {
 
 function handleNewAnnotation(annotationText, anchor, sessionKey, callback) {
     var newAnnotation = new Annotation(annotationText, anchor);
-
+    console.log("Saving capture...");
     mediator.saveCapture(sessionKey, newAnnotation, function (error, json) {
         if (error) {
             console.error("Error : " + error);
@@ -147,7 +152,7 @@ function onAttachWorker(annotationEditor, data) {
 
 function onShowPopup(popup, data, X, Y) {
     popup.data = data;
-    popup.show({ position: { top: Y, left: X } });
+    popup.show({position: {top: Y, left: X}});
     console.log('Show popup event...');
 }
 
@@ -205,7 +210,7 @@ exports.main = function () {
         include: ['*'],
         contentScriptWhen: 'ready',
         contentScriptFile: [data.url('jquery-2.1.3.min.js'),
-                            data.url('selector.js')],
+            data.url('selector.js')],
 
         onAttach: function (worker) {
             worker.postMessage(annotatorIsOn);
@@ -217,11 +222,11 @@ exports.main = function () {
                 console.log(annotator);
             });
 
-            worker.port.on('show-popup', function ( data, X, Y ) {
+            worker.port.on('show-popup', function (data, X, Y) {
                 onShowPopup(popup, data, X, Y);
             });
 
-            worker.port.on('page-scrooled', function ( data, X, Y ) {
+            worker.port.on('page-scrooled', function (data, X, Y) {
                 popup.hide();
             });
 
@@ -238,8 +243,8 @@ exports.main = function () {
         height: 25,
         contentURL: data.url('popup/popup.html'),
         contentScriptFile: [data.url('jquery-2.1.3.min.js'),
-                            data.url('popup/popup.js'),
-                            data.url('jquery.highlight.js')]
+            data.url('popup/popup.js'),
+            data.url('jquery.highlight.js')]
     });
 
     var sidebar = sidebars.Sidebar({
@@ -280,7 +285,7 @@ exports.main = function () {
             onAttachWorker(annotationEditor, popup.data);
             annotationEditor.show();
         }
-        else{
+        else {
             notifications.notify({
                 title: 'Warning',
                 text: 'Annotator is not activated !'
@@ -290,7 +295,7 @@ exports.main = function () {
     });
 
     popup.port.on('highlight-button-pressed', function () {
-        console.log( "high is pressed");
+        console.log("high is pressed");
         popup.port.emit("highlight", popup.data);
         // popup.hide();
     });
@@ -308,7 +313,7 @@ exports.main = function () {
                 console.log("currentIssueKey : " + currentIssueKey);
                 handleNewAnnotation(annotationText, this.annotationAnchor, currentIssueKey, function (capture) {
                     console.log("Handle new annotation callback");
-                    panel.port.emit("call-select-issue", currentIssueKey);
+                    getIssue(capture.jiraKey);
                 });
             }
             annotationEditor.hide();
@@ -403,7 +408,9 @@ exports.main = function () {
         height: 500,
         contentScriptFile: [data.url('jquery-2.1.3.min.js'),
             data.url('issue-view/issue-view.js'),
-            data.url('login/handleLogin.js')],
+            data.url('login/handleLogin.js'),
+            data.url('list.min.js')
+        ],
         onHide: function (state) {
             button.state('window', {checked: false});
         }
@@ -459,11 +466,7 @@ exports.main = function () {
     });
 
     panel.port.on('left-click', function (activate) {
-        console.log('activate/deactivate annotator: ' + activate);
-        if (activate !== undefined) {
-            annotatorIsOn = !activate;
-        }
-        console.log("Now annotator is: " + toggleActivation());
+        disableEnableAnnotator(activate);
     });
 
     panel.port.on('right-click', function () {
@@ -473,6 +476,7 @@ exports.main = function () {
 
     panel.port.on("back-button-pressed", function (projectName) {
         console.log("back-button-pressed");
+        disableEnableAnnotator(false);
         mediator.listProjectIssues(projectName, function (error, json) {
             if (error != null) {
                 console.error("Could not retrieve " + global_username + "'s issues.");
@@ -512,8 +516,7 @@ exports.main = function () {
                 return;
             }
             panel.contentURL = data.url("issue-view/issue-view.html");
-            panel.port.emit("set-issue", json);
-            currentIssueKey = json.key;
+            setIssue(json);
         });
     });
 
@@ -523,17 +526,7 @@ exports.main = function () {
     panel.port.on('select-issue', function (issueKey) {
         console.log("SelectedIssueKey: " + issueKey);
 
-        mediator.getIssue(issueKey, function (error, json) {
-            if (error !== null) {
-                console.error("Error: " + error);
-            }
-            else if (json !== undefined) {
-
-                console.log("Response: " + JSON.stringify(json));
-                panel.port.emit('set-issue', json);
-                currentIssueKey = json.key;
-            }
-        });
+        getIssue(issueKey);
     });
 
     /**
@@ -630,6 +623,35 @@ exports.main = function () {
         listProjects();
     });
 
+    panel.port.on("build-hierarchy", function (storyKey) {
+        console.log(storyKey);
+        mediator.buildHierarchy(storyKey, function (error, json) {
+            if (error !== null) {
+                console.error("Error: " + error);
+                return;
+            }
+            console.log("Success");
+        });
+    });
+
+    function getIssue(issueKey) {
+        console.log("Query for issue: " + issueKey);
+        mediator.getIssue(issueKey, function (error, json) {
+            if (error !== null) {
+                console.error("Error: " + error);
+                return;
+            }
+            console.log("Response: " + JSON.stringify(json));
+            setIssue(json);
+        });
+    }
+
+    function setIssue(issue) {
+        console.log("Selecting issue: " + JSON.stringify(issue));
+        panel.port.emit('set-issue', issue);
+        currentIssueKey = issue.key;
+    }
+
     function listProjects() {
         if (init()) {
             mediator.listProjects(function (error, json) {
@@ -643,14 +665,35 @@ exports.main = function () {
         }
     }
 
-    panel.port.on("build-hierarchy", function (storyKey) {
-        console.log(storyKey);
-        mediator.buildHierarchy(storyKey, function (error, json) {
-            if (error !== null) {
-                console.error("Error: " + error);
-                return;
-            }
-            console.log("Success");
-        });
-    });
+    function disableEnableAnnotator(activate){
+        console.log('<<<activate/deactivate annotator: ' + activate + " " + annotatorIsOn);
+        if (activate !== undefined) {
+            annotatorIsOn = !activate;
+        }
+        var captureEnabled = toggleActivation();
+        console.log("Now annotator is: " + captureEnabled);
+        //to indicate that capture session is enabled or disabled
+        if (captureEnabled) {
+            button.icon = {
+                "16": data.url('icon-16.png'),
+                "32": "./icon-32.png",
+                "64": "./icon-64.png"
+            };
+            notifications.notify({
+                title: 'Annotator.',
+                text: 'Capture session active'
+            });
+        }
+        else {
+            button.icon = {
+                "16": data.url('icon-16-off.png'),
+                "32": "./icon-32.png",
+                "64": "./icon-64.png"
+            };
+            notifications.notify({
+                title: 'Annotator.',
+                text: 'Capture session inactive'
+            });
+        }
+    }
 };

@@ -4,9 +4,9 @@ const PAUSE = "Pause";
 const RESUME = "Resume";
 
 const SESSION_STATUS = {
-    IN_PROGRESS: "INPROGRESS",
-    CLOSED: "CLOSED",
-    PAUSED: "PAUSED"
+    IN_PROGRESS: "In Progress",
+    CLOSED: "Closed",
+    PAUSED: "Paused"
 };
 
 const ISSUE_TYPE = {
@@ -97,6 +97,9 @@ self.port.on('set-issue', function (issue) {
 
 self.port.on('set-session', function (session) {
     console.log("Setting session");
+    //Disable annotator for newly selected issue
+    self.port.emit("left-click", false);
+
     let startStopBtn = $("#startStop");
     let pauseResumeBtn = $("#pauseResume");
     let annotator = $("#annotator");
@@ -113,14 +116,14 @@ self.port.on('set-session', function (session) {
 
         switch (session.status) {
             case SESSION_STATUS.IN_PROGRESS:
-                console.error(session.status);
+                console.log(session.status);
                 pauseResumeBtn.prop("value", PAUSE);
 
                 self.port.emit("left-click", true);
                 annotator.prop("class", "btn btn-primary btn-sm");
                 break;
             case SESSION_STATUS.CLOSED:
-                console.error(session.status);
+                console.log(session.status);
                 pauseResumeBtn.prop("disabled", true);
                 startStopBtn.prop("disabled", true);
                 annotator.prop("disabled", true);
@@ -129,7 +132,7 @@ self.port.on('set-session', function (session) {
                 annotator.prop("class", "btn btn-default btn-sm");
                 break;
             case SESSION_STATUS.PAUSED:
-                console.error(session.status);
+                console.log(session.status);
                 pauseResumeBtn.prop("value", RESUME);
                 annotator.prop("disabled", true);
                 startStopBtn.prop("disabled", true);
@@ -170,11 +173,6 @@ self.port.on('add-annotation', function (capture) {
     else {
         annotationList.append(buildAnnotationElement(capture));
     }
-});
-
-self.port.on("call-select-issue", function (issueKey) {
-    console.log("call-back-button-pressed");
-    self.port.emit('select-issue', issueKey);
 });
 
 
@@ -232,27 +230,29 @@ function buildIssueLinkElement(linkItem) {
     let linkTypeSpan = "";
     switch (linkItem.type.name) {
         case ISSUE_TYPE.EPIC:
-            linkTypeSpan = "  <span class=\"label label-primary\">Epic</span>";
+            linkTypeSpan = "  <span class=\"issueType label label-primary\">Epic</span>";
             break;
         case ISSUE_TYPE.PHASE:
-            linkTypeSpan = "  <span class=\"label label-success\">Phase</span>";
+            linkTypeSpan = "  <span class=\"issueType label label-success\">Phase</span>";
             break;
         case ISSUE_TYPE.RESEARCH:
-            linkTypeSpan = "  <span class=\"label label-info\">Research</span>";
+            linkTypeSpan = "  <span class=\"issueType label label-info\">Research</span>";
             break;
         case ISSUE_TYPE.STORY:
-            linkTypeSpan = "  <span class=\"label label-warning\">Story</span>";
+            linkTypeSpan = "  <span class=\"issueType label label-warning\">Story</span>";
             break;
         case ISSUE_TYPE.BUG:
-            linkTypeSpan = "  <span class=\"label label-danger\">Bug</span>";
+            linkTypeSpan = "  <span class=\"issueType label label-danger\">Bug</span>";
             break;
         default :
-            linkTypeSpan = "  <span class=\"label label-default\">Task</span>";
+            linkTypeSpan = "  <span class=\"issueType label label-default\">Task</span>";
             break;
     }
 
     return "<li class=\"list-group-item\">" +
-        "<a class= \"issue-link\" href=\"#\">" + linkItem.key + "</a>" + linkTypeSpan +
+        "<a class= \"issue-link key\" href=\"#\">" + linkItem.key + "</a>" +
+        linkTypeSpan +
+        "<span class='projectKey' hidden>" + linkItem.projectKey + "</span>" +
         "</li>";
 }
 
