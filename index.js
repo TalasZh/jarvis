@@ -13,7 +13,7 @@ var { ToggleButton } = require('sdk/ui/button/toggle');
 var self = require("sdk/self");
 var {Cc, Ci, Cu} = require("chrome");
 var system = require("sdk/system");
-
+var sidebars = require("sdk/ui/sidebar");
 let { search } = require("sdk/places/history");
 
 const { pathFor } = require('sdk/system');
@@ -151,6 +151,13 @@ function onShowPopup(popup, data, X, Y) {
     console.log('Show popup event...');
 }
 
+function onShowSidebar(sidebar, data) {
+    console.log( "on show sidebar...");
+    sidebar.data = data;
+    sidebar.show();
+    console.log('Show sidebar...');
+}
+
 function detachWorker(worker, workerArray) {
     var index = workerArray.indexOf(worker);
     if (index != -1) {
@@ -221,10 +228,9 @@ exports.main = function () {
             worker.on('detach', function () {
                 detachWorker(this, selectors);
             });
-
-
         }
     });
+
 
 
     var popup = panels.Panel({
@@ -235,6 +241,38 @@ exports.main = function () {
                             data.url('popup/popup.js'),
                             data.url('jquery.highlight.js')]
     });
+
+    var sidebar = sidebars.Sidebar({
+        id: 'my-sidebar',
+        title: 'Annotations',
+        width: 400,
+        url: data.url("login/annotationSidebar.html"),
+        onAttach: function (worker) {
+            worker.port.on("ping", function() {
+                console.log("add-on script got the message");
+                worker.port.emit("pong", popup.data);
+            });
+
+            worker.port.on("hellooo", function(data) {
+                console.log( "yuppiii");
+                console.log( data );
+
+                handleNewAnnotation(annotationText, this.annotationAnchor, currentIssueKey, function (capture) {
+                    console.log("Handle new annotation callback");
+                    panel.port.emit("call-select-issue", currentIssueKey);
+                });
+                sidebar.hide();
+
+            }); 
+        }
+
+    });
+
+
+
+    // popup.port.on('annotate-button-pressed', function () {
+    //     onShowSidebar(sidebar, popup.data);
+    // });
 
 
     popup.port.on('annotate-button-pressed', function () {
@@ -265,9 +303,9 @@ exports.main = function () {
         contentScriptFile: data.url('editor/annotation-editor.js'),
         onMessage: function (annotationText) {
             if (annotationText) {
-                console.log(this.annotationAnchor);
-                console.log(annotationText);
-                console.log(currentIssueKey);
+                console.log("annotationAnchor : " + this.annotationAnchor);
+                console.log("annotationText : " + annotationText);
+                console.log("currentIssueKey : " + currentIssueKey);
                 handleNewAnnotation(annotationText, this.annotationAnchor, currentIssueKey, function (capture) {
                     console.log("Handle new annotation callback");
                     panel.port.emit("call-select-issue", currentIssueKey);
