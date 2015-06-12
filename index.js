@@ -262,9 +262,14 @@ exports.main = function () {
                 console.log( "yuppiii");
                 console.log( data );
 
-                handleNewAnnotation(annotationText, this.annotationAnchor, currentIssueKey, function (capture) {
+                handleNewAnnotation(data, popup.data, currentIssueKey, function (capture) {
+
+                    console.log("data  " + data);
+                    console.log("popup.data : " + popup.data);
+                    console.log("currentIssueKey : " + currentIssueKey);
+
                     console.log("Handle new annotation callback");
-                    panel.port.emit("call-select-issue", currentIssueKey);
+                    getIssue(capture.jiraKey);
                 });
                 sidebar.hide();
 
@@ -275,29 +280,28 @@ exports.main = function () {
 
 
 
-    // popup.port.on('annotate-button-pressed', function () {
-    //     onShowSidebar(sidebar, popup.data);
-    // });
-
-
     popup.port.on('annotate-button-pressed', function () {
-        if (annotatorIsOn) {
-            onAttachWorker(annotationEditor, popup.data);
-            annotationEditor.show();
-        }
-        else {
-            notifications.notify({
-                title: 'Warning',
-                text: 'Annotator is not activated !'
-            });
-        }
-        popup.hide();
+        onShowSidebar(sidebar, popup.data);
     });
+
+
+    // popup.port.on('annotate-button-pressed', function () {
+    //     if (annotatorIsOn) {
+    //         onAttachWorker(annotationEditor, popup.data);
+    //         annotationEditor.show();
+    //     }
+    //     else {
+    //         notifications.notify({
+    //             title: 'Warning',
+    //             text: 'Annotator is not activated !'
+    //         });
+    //     }
+    //     popup.hide();
+    // });
 
     popup.port.on('highlight-button-pressed', function () {
         console.log("high is pressed");
         popup.port.emit("highlight", popup.data);
-        // popup.hide();
     });
 
 

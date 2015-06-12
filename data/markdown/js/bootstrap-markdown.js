@@ -1305,11 +1305,7 @@ var annotationData;
     onPreview: function (e) {},
     onSave: function (e) {
       // var quote = $('#myBlockquote');
-      addon.port.emit("hellooo", [
-        annotationData[0],
-        "content",
-        e.getContent()
-      ]);
+      addon.port.emit("hellooo", e.getContent());
     },
     onBlur: function (e) {},
     onFocus: function (e) {},
