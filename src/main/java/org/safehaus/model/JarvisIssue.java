@@ -12,6 +12,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
+import com.atlassian.jira.rest.client.api.domain.Transition;
 import com.fasterxml.jackson.annotation.JsonView;
 
 
@@ -58,6 +59,9 @@ public class JarvisIssue
     @JsonView( Views.JarvisIssueLong.class )
     protected List<JarvisLink> links = new ArrayList<>();
 
+    @JsonView( Views.JarvisIssueLong.class )
+    protected Iterable<Transition> transitions = new ArrayList<>();
+
 
     public JarvisIssue()
     {
@@ -79,7 +83,7 @@ public class JarvisIssue
                         final String issueDescription, final String timeRemaining, final String assignee,
                         final String reporter, final String components, final String labels, final String status,
                         final String resolution, final String fixVersion, final String dateCreated,
-                        final List<JarvisLink> links, final String projectKey )
+                        final List<JarvisLink> links, final String projectKey, Iterable<Transition> transitions )
     {
         this.id = id;
         this.key = key;
@@ -98,6 +102,7 @@ public class JarvisIssue
         this.dateCreated = dateCreated;
         this.links = links;
         this.projectKey = projectKey;
+        this.transitions = transitions;
     }
 
 

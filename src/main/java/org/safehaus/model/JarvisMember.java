@@ -5,8 +5,6 @@ import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.codehaus.jackson.map.annotate.JsonView;
-
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 
