@@ -7,7 +7,7 @@ import com.google.common.base.Objects;
 public class PullRequestParticipant
 {
     private User user;
-    private String role;
+    private PullRequestRole role;
     private boolean approved;
 
 
@@ -17,7 +17,7 @@ public class PullRequestParticipant
     }
 
 
-    public String getRole()
+    public PullRequestRole getRole()
     {
         return role;
     }

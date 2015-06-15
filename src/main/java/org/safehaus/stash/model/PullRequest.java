@@ -1,6 +1,7 @@
 package org.safehaus.stash.model;
 
 
+import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
@@ -14,14 +15,14 @@ public class PullRequest
     private long version;
     private String title;
     private String description;
-    private String state;
+    private PullRequestState state;
     private boolean open;
     private boolean closed;
     private boolean locked;
     private long createdDate;
     private long updatedDate;
-    private Ref fromRef;
-    private Ref toRef;
+    private PullRequestRef fromRef;
+    private PullRequestRef toRef;
     private PullRequestParticipant author;
     private Set<PullRequestParticipant> reviewers;
     private Set<PullRequestParticipant> participants;
@@ -53,7 +54,7 @@ public class PullRequest
     }
 
 
-    public String getState()
+    public PullRequestState getState()
     {
         return state;
     }
@@ -77,25 +78,25 @@ public class PullRequest
     }
 
 
-    public long getCreatedDate()
+    public Date getCreatedDate()
     {
-        return createdDate;
+        return new Date( createdDate );
     }
 
 
-    public long getUpdatedDate()
+    public Date getUpdatedDate()
     {
-        return updatedDate;
+        return new Date( updatedDate );
     }
 
 
-    public Ref getFromRef()
+    public PullRequestRef getFromRef()
     {
         return fromRef;
     }
 
 
-    public Ref getToRef()
+    public PullRequestRef getToRef()
     {
         return toRef;
     }
@@ -131,60 +132,13 @@ public class PullRequest
     }
 
 
-    public enum State
-    {
-        ALL, MERGED, OPEN, DECLINED
-    }
-
-
-    public static class Ref
-    {
-        private String id;
-        private String displayId;
-        private String latestChangeset;
-        private Repo repository;
-
-
-        public String getId()
-        {
-            return id;
-        }
-
-
-        public String getDisplayId()
-        {
-            return displayId;
-        }
-
-
-        public String getLatestChangeset()
-        {
-            return latestChangeset;
-        }
-
-
-        public Repo getRepository()
-        {
-            return repository;
-        }
-
-
-        @Override
-        public String toString()
-        {
-            return Objects.toStringHelper( this ).add( "id", id ).add( "displayId", displayId )
-                          .add( "latestChangeset", latestChangeset ).add( "repository", repository ).toString();
-        }
-    }
-
-
     @Override
     public String toString()
     {
         return Objects.toStringHelper( this ).add( "id", id ).add( "version", version ).add( "title", title )
                       .add( "description", description ).add( "state", state ).add( "open", open )
-                      .add( "closed", closed ).add( "locked", locked ).add( "createdDate", createdDate )
-                      .add( "updatedDate", updatedDate ).add( "fromRef", fromRef ).add( "toRef", toRef )
+                      .add( "closed", closed ).add( "locked", locked ).add( "createdDate", getCreatedDate() )
+                      .add( "updatedDate", getUpdatedDate() ).add( "fromRef", fromRef ).add( "toRef", toRef )
                       .add( "author", author ).add( "reviewers", reviewers ).add( "participants", participants )
                       .add( "link", link ).add( "links", links ).toString();
     }

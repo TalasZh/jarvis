@@ -15,7 +15,7 @@ public class User
     private String emailAddress;
     private boolean active;
     private String slug;
-    private String type;
+    private UserType type;
     private Link link;
     private Map<String, Set<Map<String, String>>> links;
 
@@ -50,7 +50,7 @@ public class User
     }
 
 
-    public String getType()
+    public UserType getType()
     {
         return type;
     }

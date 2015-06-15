@@ -1,6 +1,7 @@
 package org.safehaus.stash.model;
 
 
+import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
@@ -69,15 +70,15 @@ public class Activity
         }
 
 
-        public long getCreatedDate()
+        public Date getCreatedDate()
         {
-            return createdDate;
+            return new Date( createdDate );
         }
 
 
-        public long getUpdatedDate()
+        public Date getUpdatedDate()
         {
-            return updatedDate;
+            return new Date( updatedDate );
         }
 
 
@@ -92,8 +93,8 @@ public class Activity
         {
             return Objects.toStringHelper( this ).add( "properties", properties ).add( "id", id )
                           .add( "version", version ).add( "text", text ).add( "author", author )
-                          .add( "createdDate", createdDate ).add( "updatedDate", updatedDate ).add( "comments", comments )
-                          .toString();
+                          .add( "createdDate", getCreatedDate() ).add( "updatedDate", getUpdatedDate() )
+                          .add( "comments", comments ).toString();
         }
     }
 

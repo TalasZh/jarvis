@@ -14,35 +14,37 @@ import org.safehaus.model.JarvisContext;
 import org.safehaus.stash.TestUtil;
 import org.safehaus.stash.model.Activity;
 import org.safehaus.stash.model.Branch;
-import org.safehaus.stash.model.BuildStatistics;
+import org.safehaus.stash.model.BuildStats;
 import org.safehaus.stash.model.BuildStatus;
 import org.safehaus.stash.model.Change;
+import org.safehaus.stash.model.ChangeSet;
 import org.safehaus.stash.model.Commit;
 import org.safehaus.stash.model.Event;
 import org.safehaus.stash.model.Group;
 import org.safehaus.stash.model.JiraIssue;
-import org.safehaus.stash.model.JiraIssueChange;
 import org.safehaus.stash.model.Project;
 import org.safehaus.stash.model.PullRequest;
-import org.safehaus.stash.model.Repo;
-import org.safehaus.stash.util.RestUtil;
+import org.safehaus.stash.model.PullRequestState;
+import org.safehaus.stash.model.Repository;
+import org.safehaus.stash.util.AtlassianRestUtil;
 import org.safehaus.util.JarvisContextHolder;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.TestCase.assertTrue;
-import static org.mockito.Matchers.anyMap;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.when;
+import static org.mockito.Matchers.anyVararg;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.spy;
 
 
 @RunWith( MockitoJUnitRunner.class )
 public class StashManagerImplTest
 {
     @Mock
-    RestUtil restUtil;
+    AtlassianRestUtil atlassianRestUtil;
 
-    StashManagerImpl stashManager = new StashManagerImpl( TestUtil.STASH_URL );
+    StashManagerImpl stashManager;
 
 
     @Before
@@ -50,14 +52,14 @@ public class StashManagerImplTest
     {
         //for integration test set the context to valid crowd.token_key
         JarvisContextHolder
-                .setContext( new JarvisContext( "", new Cookie( "crowd.token_key", "9IyAH4dQK9Vf0QTbpG0E4g00" ) ) );
+                .setContext( new JarvisContext( "", new Cookie( "crowd.token_key", "c5EKHJvcroxWheWeaA5m9g00" ) ) );
+        stashManager = spy( new StashManagerImpl( TestUtil.STASH_URL ) );
     }
 
 
-    private void setRestResponse( String response ) throws RestUtil.RestException
+    private void setRestResponse( String response ) throws AtlassianRestUtil.RestException, StashManagerException
     {
-        stashManager.restUtil = restUtil;
-        when( restUtil.get( anyString(), anyMap() ) ).thenReturn( response );
+        doReturn( response ).when( stashManager ).get( anyString(), anyVararg() );
     }
 
 
@@ -99,9 +101,11 @@ public class StashManagerImplTest
     {
         setRestResponse( TestUtil.STASH_REPOS_JSON );
 
-        Page<Repo> repos = stashManager.getRepos( TestUtil.PROJECT_KEY, 1, 0 );
+        Page<Repository> repos = stashManager.getRepos( TestUtil.PROJECT_KEY, 1, 0 );
 
         assertTrue( repos.getSize() > 0 );
+
+        System.out.println( repos );
     }
 
 
@@ -110,9 +114,9 @@ public class StashManagerImplTest
     {
         setRestResponse( TestUtil.STASH_REPO_JSON );
 
-        Repo repo = stashManager.getRepo( TestUtil.PROJECT_KEY, TestUtil.REPO_SLUG );
+        Repository repository = stashManager.getRepo( TestUtil.PROJECT_KEY, TestUtil.REPO_SLUG );
 
-        assertNotNull( repo );
+        assertNotNull( repository );
     }
 
 
@@ -123,7 +127,7 @@ public class StashManagerImplTest
 
         Page<PullRequest> pullRequests = stashManager
                 .getPullRequests( TestUtil.PROJECT_KEY, TestUtil.REPO_SLUG, TestUtil.MASTER_BRANCH,
-                        PullRequest.State.DECLINED, 3, 0 );
+                        PullRequestState.DECLINED, 3, 0 );
 
         assertTrue( pullRequests.getSize() > 0 );
     }
@@ -270,7 +274,7 @@ public class StashManagerImplTest
     {
         setRestResponse( TestUtil.STASH_BUILD_STATISTICS_JSON );
 
-        BuildStatistics buildStats = stashManager.getCommitBuildStatistics( "2fda08f" );
+        BuildStats buildStats = stashManager.getCommitBuildStatistics( "2fda08f" );
 
         assertNotNull( buildStats );
     }
@@ -304,7 +308,7 @@ public class StashManagerImplTest
     {
         setRestResponse( TestUtil.STASH_CHANGES_BY_JIRA_ISSUE_JSON );
 
-        Page<JiraIssueChange> jiraIssueChangePage = stashManager.getChangesByJiraIssue( "HUB-100", 1, 0, 10 );
+        Page<ChangeSet> jiraIssueChangePage = stashManager.getChangesByJiraIssue( "HUB-100", 1, 0, 10 );
 
         assertNotNull( jiraIssueChangePage );
     }

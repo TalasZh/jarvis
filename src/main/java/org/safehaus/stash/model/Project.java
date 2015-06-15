@@ -19,7 +19,7 @@ public class Project
     private String description;
     @SerializedName( "public" )
     private boolean isPublic;
-    private String type;
+    private ProjectType type;
     private Link link;
     private Map<String, Set<Map<String, String>>> links;
 
@@ -54,7 +54,7 @@ public class Project
     }
 
 
-    public String getType()
+    public ProjectType getType()
     {
         return type;
     }

@@ -4,7 +4,7 @@ package org.safehaus.stash.model;
 import com.google.common.base.Objects;
 
 
-public class BuildStatistics
+public class BuildStats
 {
     private int successful;
     private int inProgress;

@@ -1,12 +1,14 @@
 package org.safehaus.stash.model;
 
 
+import java.util.Date;
+
 import com.google.common.base.Objects;
 
 
 public class BuildStatus
 {
-    private String state;
+    private State state;
     private String key;
     private String name;
     private String url;
@@ -14,7 +16,13 @@ public class BuildStatus
     private long dateAdded;
 
 
-    public String getState()
+    public enum State
+    {
+        SUCCESSFUL, FAILED, INPROGRESS
+    }
+
+
+    public State getState()
     {
         return state;
     }
@@ -44,9 +52,9 @@ public class BuildStatus
     }
 
 
-    public long getDateAdded()
+    public Date getDateAdded()
     {
-        return dateAdded;
+        return new Date( dateAdded );
     }
 
 
@@ -54,6 +62,7 @@ public class BuildStatus
     public String toString()
     {
         return Objects.toStringHelper( this ).add( "state", state ).add( "key", key ).add( "name", name )
-                      .add( "url", url ).add( "description", description ).add( "dateAdded", dateAdded ).toString();
+                      .add( "url", url ).add( "description", description ).add( "dateAdded", getDateAdded() )
+                      .toString();
     }
 }

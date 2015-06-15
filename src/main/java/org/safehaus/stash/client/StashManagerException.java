@@ -7,4 +7,10 @@ public class StashManagerException extends Exception
     {
         super( cause );
     }
+
+
+    public StashManagerException( final String message )
+    {
+        super( message );
+    }
 }

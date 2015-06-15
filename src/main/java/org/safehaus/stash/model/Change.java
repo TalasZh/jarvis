@@ -10,17 +10,37 @@ import com.google.common.base.Objects;
 
 public class Change
 {
+    private Conflict conflict;
     private String contentId;
     private String fromContentId;
     private Path path;
     private boolean executable;
     private int percentUnchanged;
-    private String type;
-    private String nodeType;
+    private ChangeType type;
+    private NodeType nodeType;
     private Path srcPath;
     private boolean srcExecutable;
     private Link link;
     private Map<String, Set<Map<String, String>>> links;
+
+
+    public enum NodeType
+    {
+
+        DIRECTORY, FILE, SUBMODULE
+    }
+
+
+    public enum ChangeType
+    {
+        ADD, COPY, DELETE, MODIFY, MOVE, UNKNOWN
+    }
+
+
+    public Conflict getConflict()
+    {
+        return conflict;
+    }
 
 
     public String getContentId()
@@ -53,13 +73,13 @@ public class Change
     }
 
 
-    public String getType()
+    public ChangeType getType()
     {
         return type;
     }
 
 
-    public String getNodeType()
+    public NodeType getNodeType()
     {
         return nodeType;
     }
@@ -86,6 +106,39 @@ public class Change
     public Map<String, Set<Map<String, String>>> getLinks()
     {
         return links;
+    }
+
+
+    public static class Conflict
+    {
+        private ConflictChange ourChange;
+        private ConflictChange theirChange;
+    }
+
+
+    public static class ConflictChange
+    {
+        private Path path;
+        private Path scrPath;
+        private ChangeType type;
+
+
+        public Path getPath()
+        {
+            return path;
+        }
+
+
+        public Path getScrPath()
+        {
+            return scrPath;
+        }
+
+
+        public ChangeType getType()
+        {
+            return type;
+        }
     }
 
 
@@ -141,9 +194,10 @@ public class Change
     @Override
     public String toString()
     {
-        return Objects.toStringHelper( this ).add( "contentId", contentId ).add( "fromContentId", fromContentId )
-                      .add( "path", path ).add( "executable", executable ).add( "percentUnchanged", percentUnchanged )
-                      .add( "type", type ).add( "nodeType", nodeType ).add( "srcPath", srcPath )
-                      .add( "srcExecutable", srcExecutable ).add( "link", link ).add( "links", links ).toString();
+        return Objects.toStringHelper( this ).add( "conflict", conflict ).add( "contentId", contentId )
+                      .add( "fromContentId", fromContentId ).add( "path", path ).add( "executable", executable )
+                      .add( "percentUnchanged", percentUnchanged ).add( "type", type ).add( "nodeType", nodeType )
+                      .add( "srcPath", srcPath ).add( "srcExecutable", srcExecutable ).add( "link", link )
+                      .add( "links", links ).toString();
     }
 }

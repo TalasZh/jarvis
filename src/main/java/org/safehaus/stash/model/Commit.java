@@ -13,7 +13,7 @@ public class Commit
     private User author;
     private long authorTimestamp;
     private String message;
-    private Set<Commit> parents;
+    private Set<MinimalCommit> parents;
 
 
     public String getId()
@@ -46,7 +46,7 @@ public class Commit
     }
 
 
-    public Set<Commit> getParents()
+    public Set<MinimalCommit> getParents()
     {
         return parents;
     }

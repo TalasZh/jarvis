@@ -9,17 +9,17 @@ import org.safehaus.stash.client.Page;
 import com.google.common.base.Objects;
 
 
-public class JiraIssueChange
+public class ChangeSet
 {
-    private Commit fromCommit;
+    private MinimalCommit fromCommit;
     private Commit toCommit;
     private Page<Change> changes;
     private Link link;
     private Map<String, Set<Map<String, String>>> links;
-    private Repo repository;
+    private Repository repository;
 
 
-    public Commit getFromCommit()
+    public MinimalCommit getFromCommit()
     {
         return fromCommit;
     }
@@ -49,7 +49,7 @@ public class JiraIssueChange
     }
 
 
-    public Repo getRepository()
+    public Repository getRepository()
     {
         return repository;
     }
