@@ -112,7 +112,6 @@ public class ProjectServiceImpl implements ProjectService
     @Override
     public JarvisIssue getIssue( final String issueId )
     {
-        //        setContext();
         try
         {
             return jiraManager.getIssue( issueId );

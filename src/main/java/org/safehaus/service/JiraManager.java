@@ -21,7 +21,7 @@ public interface JiraManager
 {
     String STORY_START_ACTION_NAME = "Start";
     String STORY_REQUEST_APPROVAL_ACTION_NAME = "Send for Approval";
-    String STORY_RESOLVE_ACTION_NAME = "Close";
+    String STORY_RESOLVE_ACTION_NAME = "Send to Close";
     String STORY_APPROVE_ACTION_NAME = "Approve";
     String STORY_REJECT_ACTION_NAME = "Reject";
     String ISSUE_REOPEN_ACTION_NAME = "Reopen";

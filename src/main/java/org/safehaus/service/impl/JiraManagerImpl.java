@@ -89,7 +89,8 @@ public class JiraManagerImpl implements JiraManager
     public JarvisIssue getIssue( final String issueId ) throws JiraClientException
     {
         Issue issue = getJiraClient().getIssue( issueId );
-        return buildJarvisIssue( issue );
+
+        return buildJarvisIssue( issue, getJiraClient().getTransitions( issueId ) );
     }
 
 
@@ -197,7 +198,35 @@ public class JiraManagerImpl implements JiraManager
                 issue.getLabels().toString(), issue.getStatus().getName(),
                 issue.getResolution() != null ? issue.getResolution().getName() : null,
                 issue.getFixVersions() != null ? issue.getFixVersions().toString() : null,
-                issue.getCreationDate().toString(), links, issue.getProject().getKey() );
+                issue.getCreationDate().toString(), links, issue.getProject().getKey(), null );
+    }
+
+
+    private JarvisIssue buildJarvisIssue( Issue issue, Iterable<Transition> transitions ) throws JiraClientException
+    {
+        if ( issue == null )
+        {
+            return new JarvisIssue();
+        }
+        List<JarvisLink> links = new ArrayList<>();
+        for ( IssueLink link : issue.getIssueLinks() )
+        {
+            Issue i = getJiraClient().getIssue( link.getTargetIssueKey() );
+            links.add( new JarvisLink( i.getId(), link.getTargetIssueKey(), link.getIssueLinkType().getName(),
+                    link.getIssueLinkType().getDirection().name(),
+                    new JarvisIssueType( i.getIssueType().getId(), i.getIssueType().getName() ) ) );
+        }
+        return new JarvisIssue( issue.getId(), issue.getKey(), issue.getSummary(),
+                new JarvisIssueType( issue.getIssueType().getId(), issue.getIssueType().getName() ),
+                issue.getDescription(), issue.getTimeTracking() != null ?
+                                        ( issue.getTimeTracking().getRemainingEstimateMinutes() != null ?
+                                          issue.getTimeTracking().getRemainingEstimateMinutes().toString() : null ) :
+                                        null, issue.getAssignee() != null ? issue.getAssignee().getName() : null,
+                issue.getReporter() != null ? issue.getReporter().getName() : null, issue.getComponents().toString(),
+                issue.getLabels().toString(), issue.getStatus().getName(),
+                issue.getResolution() != null ? issue.getResolution().getName() : null,
+                issue.getFixVersions() != null ? issue.getFixVersions().toString() : null,
+                issue.getCreationDate().toString(), links, issue.getProject().getKey(), transitions );
     }
 
 
