@@ -8,26 +8,22 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.restlet.resource.ClientResource;
 
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.spy;
-
 
 @RunWith( MockitoJUnitRunner.class )
-public class RestUtilTest
+public class AtlassianRestUtilTest
 {
 
     @Mock
     ClientResource clientResource;
 
-    RestUtil restUtil;
+    AtlassianRestUtil atlassianRestUtil;
 
 
     @Before
     public void setUp() throws Exception
     {
-        restUtil = spy( new RestUtil() );
-        doReturn( clientResource ).when( restUtil ).getClientResource( anyString() );
+
+
     }
 
 

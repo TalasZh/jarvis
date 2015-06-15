@@ -8,13 +8,13 @@ import com.google.common.base.Objects;
 import com.google.gson.annotations.SerializedName;
 
 
-public class Repo
+public class Repository
 {
     private String slug;
     private long id;
     private String name;
     private String scmId;
-    private String state;
+    private State state;
     private String statusMessage;
     private boolean forkable;
     private Project project;
@@ -23,6 +23,13 @@ public class Repo
     private Link link;
     private String cloneUrl;
     private Map<String, Set<Map<String, String>>> links;
+
+
+    public enum State
+    {
+
+        AVAILABLE, INITIALISATION_FAILED, INITIALISING
+    }
 
 
     public String getSlug()
@@ -49,7 +56,7 @@ public class Repo
     }
 
 
-    public String getState()
+    public State getState()
     {
         return state;
     }
