@@ -8,11 +8,11 @@ import org.safehaus.stash.model.Branch;
 import org.safehaus.stash.model.BuildStats;
 import org.safehaus.stash.model.BuildStatus;
 import org.safehaus.stash.model.Change;
+import org.safehaus.stash.model.ChangeSet;
 import org.safehaus.stash.model.Commit;
 import org.safehaus.stash.model.Event;
 import org.safehaus.stash.model.Group;
 import org.safehaus.stash.model.JiraIssue;
-import org.safehaus.stash.model.ChangeSet;
 import org.safehaus.stash.model.Project;
 import org.safehaus.stash.model.PullRequest;
 import org.safehaus.stash.model.PullRequestState;
@@ -34,8 +34,6 @@ public class StashManagerImpl implements StashManager
     private String password;
 
     protected JsonUtil jsonUtil = new JsonUtil();
-
-    //TODO try to use Atlassian native objects
 
 
     /**
@@ -480,7 +478,7 @@ public class StashManagerImpl implements StashManager
 
     @Override
     public Page<ChangeSet> getChangesByJiraIssue( final String issueKey, final int limit, final int start,
-                                                        final int maxChanges ) throws StashManagerException
+                                                  final int maxChanges ) throws StashManagerException
     {
         try
         {
