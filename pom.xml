@@ -152,7 +152,7 @@
               <version>5.7.4</version>
             </dependency>-->
 
-    <!-- Restlet Framework dependencies -->
+    <!-- Restlet Framework dependencies Start-->
 
     <dependency>
       <groupId>org.restlet.jse</groupId>
@@ -164,6 +164,23 @@
       <artifactId>org.restlet.ext.jackson</artifactId>
       <version>${restlet-version}</version>
     </dependency>
+
+    <!-- Restlet Framework dependencies End-->
+
+    <!-- Sonar client dependencies Start -->
+
+    <dependency>
+      <groupId>org.codehaus.sonar</groupId>
+      <artifactId>sonar-ws-client</artifactId>
+      <version>${sonar-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-httpclient</groupId>
+      <artifactId>commons-httpclient</artifactId>
+      <version>3.1</version>
+    </dependency>
+
+    <!-- Sonar client dependencies End -->
 
     <dependency>
       <groupId>org.mockito</groupId>
@@ -218,6 +235,8 @@
 
     <!-- Restlet Framework version -->
     <restlet-version>2.3.2</restlet-version>
+    <!-- Sonar server version -->
+    <sonar-version>4.5.4</sonar-version>
   </properties>
 
   <profiles>
