@@ -7,15 +7,18 @@ import javax.jws.WebService;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.safehaus.exceptions.JiraClientException;
 import org.safehaus.model.JarvisIssue;
 import org.safehaus.model.JarvisProject;
 import org.safehaus.model.Views;
 
+import com.atlassian.jira.rest.client.api.domain.Status;
 import com.atlassian.jira.rest.client.api.domain.Transition;
 import com.fasterxml.jackson.annotation.JsonView;
 
@@ -52,5 +55,25 @@ public interface ProjectService
     @Path( "transitions/{issueIdOrKey}" )
     @Consumes( MediaType.APPLICATION_JSON )
     @JsonView( Views.CompleteView.class )
-    List<Transition> getTransition( @PathParam( "issueIdOrKey" ) String issueIdOrKey ) throws JiraClientException;
+    List<Transition> getTransitions( @PathParam( "issueIdOrKey" ) String issueIdOrKey ) throws JiraClientException;
+
+    @PUT
+    @Path( "issue/{issueIdOrKey}/status/start" )
+    Status start( @PathParam( "issueIdOrKey" ) String issueIdOrKey ) throws JiraClientException;
+
+    @PUT
+    @Path( "issue/{issueIdOrKey}/status/resolve" )
+    Status resolve( @PathParam( "issueIdOrKey" ) String issueIdOrKey ) throws JiraClientException;
+
+    @PUT
+    @Path( "issue/{issueIdOrKey}/status/request-approval" )
+    Status requestApproval( @PathParam( "issueIdOrKey" ) String issueIdOrKey ) throws JiraClientException;
+
+    @PUT
+    @Path( "issue/{issueIdOrKey}/status/approve" )
+    Status approve( @PathParam( "issueIdOrKey" ) String issueIdOrKey ) throws JiraClientException;
+
+    @PUT
+    @Path( "issue/{issueIdOrKey}/status/reject" )
+    Status reject( @PathParam( "issueIdOrKey" ) String issueIdOrKey ) throws JiraClientException;
 }

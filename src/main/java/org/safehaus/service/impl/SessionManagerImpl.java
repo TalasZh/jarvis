@@ -137,7 +137,20 @@ public class SessionManagerImpl extends GenericManagerImpl<Session, Long> implem
             throws JarvisSessionException, PhaseNotFoundException, JiraClientException
     {
         JarvisIssue issue = jiraManager.getIssue( id );
-        jiraManager.startIssue( id );
+
+        if ( "Closed".equals( issue.getStatus() ) )
+        {
+            throw new JiraClientException( "Could not start closed issue." );
+        }
+        else if ( "Resolved".equals( issue.getStatus() ) )
+        {
+            jiraManager.reopenIssue( id );
+        }
+
+        if ( "Open".equals( issue.getStatus() ) || "Reopened".equals( issue.getStatus() ) )
+        {
+            jiraManager.startIssue( id );
+        }
 
         Session session;
         try
@@ -146,13 +159,13 @@ public class SessionManagerImpl extends GenericManagerImpl<Session, Long> implem
         }
         catch ( Exception e )
         {
-            JarvisLink parentLink = issue.getLink( "Blocks", "OUTBOUND" );
+            //            JarvisLink parentLink = issue.getLink( "Blocks", "OUTBOUND" );
 
-            if ( parentLink == null )
-            {
-                log.debug( "Could not start session. Parent link not found" );
-                throw new JarvisSessionException( "Could not start session. Parent link not found" );
-            }
+            //            if ( parentLink == null )
+            //            {
+            //                log.debug( "Could not start session. Parent link not found" );
+            //                throw new JarvisSessionException( "Could not start session. Parent link not found" );
+            //            }
 
             //            Phase parent = phaseManager.get( parentLink.getId() );
             session = new Session();
@@ -160,7 +173,7 @@ public class SessionManagerImpl extends GenericManagerImpl<Session, Long> implem
             session.setIssueId( issue.getId() );
             session.setIssueKey( issue.getKey() );
             session.setUsername( username );
-            session.setParentId( jiraManager.getIssue( parentLink.getId().toString() ).getId() );
+            //            session.setParentId( jiraManager.getIssue( parentLink.getId().toString() ).getId() );
         }
         session.setStatus( SessionStatus.INPROGRESS );
         sessionDao.saveSession( session );

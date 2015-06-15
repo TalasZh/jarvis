@@ -4,6 +4,8 @@ package org.safehaus.service;
 import java.io.IOException;
 import java.util.List;
 
+import javax.ws.rs.core.Response;
+
 import org.safehaus.exceptions.JiraClientException;
 import org.safehaus.model.JarvisIssue;
 import org.safehaus.model.JarvisMember;
@@ -11,6 +13,7 @@ import org.safehaus.model.JarvisMember;
 import com.atlassian.jira.rest.client.api.domain.Component;
 import com.atlassian.jira.rest.client.api.domain.Issue;
 import com.atlassian.jira.rest.client.api.domain.Project;
+import com.atlassian.jira.rest.client.api.domain.Status;
 import com.atlassian.jira.rest.client.api.domain.Transition;
 
 
@@ -52,6 +55,10 @@ public interface JiraClient
     public List<JarvisMember> getProjectMemebers( String projectId ) throws JiraClientException;
 
     List<JarvisIssue> getIssues( String projectId );
+
+//    Status storyStart( String issueIdOrKey ) throws JiraClientException;
+
+    Status changeStatus( String issueIdOrKey, String actionName ) throws JiraClientException;
 
     //    Issue createIssue( JarvisIssue issue, String token ) throws JiraClientException;
 }

@@ -25,6 +25,7 @@ import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.PhaseInterceptorChain;
 import org.apache.cxf.transport.http.AbstractHTTPDestination;
 
+import com.atlassian.jira.rest.client.api.domain.Status;
 import com.atlassian.jira.rest.client.api.domain.Transition;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.collect.Lists;
@@ -173,14 +174,43 @@ public class ProjectServiceImpl implements ProjectService
 
 
     @Override
-    public List<Transition> getTransition( final String issueIdOrKey ) throws JiraClientException
+    public List<Transition> getTransitions( final String issueIdOrKey ) throws JiraClientException
     {
         return Lists.newArrayList( jiraManager.getTransitions( issueIdOrKey ) );
     }
 
-    //
-    //    private void setContext()
-    //    {
-    //        //        JiraSecurityContextHolder.setContext( new JiraSecurityContext( getCookie( CROWD_TOKEN_NAME ) ) );
-    //    }
+
+    @Override
+    public Status start( final String issueIdOrKey ) throws JiraClientException
+    {
+        return jiraManager.storyStart( issueIdOrKey );
+    }
+
+
+    @Override
+    public Status resolve( final String issueIdOrKey ) throws JiraClientException
+    {
+        return jiraManager.storyResolve( issueIdOrKey );
+    }
+
+
+    @Override
+    public Status requestApproval( final String issueIdOrKey ) throws JiraClientException
+    {
+        return jiraManager.storyRequestApproval( issueIdOrKey );
+    }
+
+
+    @Override
+    public Status approve( final String issueIdOrKey ) throws JiraClientException
+    {
+        return jiraManager.storyApprove( issueIdOrKey );
+    }
+
+
+    @Override
+    public Status reject( final String issueIdOrKey ) throws JiraClientException
+    {
+        return jiraManager.storyReject( issueIdOrKey );
+    }
 }

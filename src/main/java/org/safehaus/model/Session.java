@@ -24,6 +24,7 @@ import org.hibernate.annotations.FetchMode;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 
 /**

@@ -13,8 +13,16 @@ public class CassandraConnector {
     private Cluster cluster;
     private String  node;
     private Session session;
-    private String keyspaceName = "jarvis";
-    private String captureTableName = "capture";
+    private static String keyspaceName = "jarvis";
+    private static String captureTableName = "capture";
+
+    public static String getKeyspace(){
+        return keyspaceName;
+    }
+
+    public static String getCaptureTable(){
+        return captureTableName;
+    }
 
     public enum ACTION{
         ADD, DROP

@@ -35,6 +35,7 @@ import com.atlassian.jira.rest.client.api.domain.Component;
 import com.atlassian.jira.rest.client.api.domain.Issue;
 import com.atlassian.jira.rest.client.api.domain.Project;
 import com.atlassian.jira.rest.client.api.domain.SearchResult;
+import com.atlassian.jira.rest.client.api.domain.Status;
 import com.atlassian.jira.rest.client.api.domain.Transition;
 import com.atlassian.jira.rest.client.api.domain.User;
 import com.atlassian.jira.rest.client.api.domain.input.ComplexIssueInputFieldValue;
@@ -213,6 +214,39 @@ public class JiraClientImpl implements JiraClient
             result.add( jarvisIssue );
         }
         return result;
+    }
+
+
+    @Override
+    public Status changeStatus( final String issueIdOrKey, final String actionName ) throws JiraClientException
+    {
+        Issue issue = getIssue( issueIdOrKey );
+
+        logger.debug( String.format( "Current status of %s: %s", issue.getKey(), issue.getStatus() ) );
+
+        Iterable<Transition> transitions = restClient.getIssueClient().getTransitions( issue ).claim();
+
+        transitions.forEach( new Consumer<Transition>() {
+            @Override
+            public void accept( final Transition transition )
+            {
+                logger.debug( transition.getName() );
+            }
+        } );
+
+        Transition toTransition = getTransitionByName( transitions, actionName );
+
+        if ( toTransition != null )
+        {
+            final TransitionInput transitionInput = new TransitionInput( toTransition.getId(),
+                    Comment.valueOf( String.format( "Action \"%s\" issued by Jarvis.", toTransition.getName() ) ) );
+            restClient.getIssueClient().transition( issue, transitionInput );
+        }
+        else
+        {
+            throw new JiraClientException( String.format( "It is not possible to execute '%s'.", actionName ) );
+        }
+        return getIssue( issueIdOrKey ).getStatus();
     }
 
 
@@ -398,6 +432,15 @@ public class JiraClientImpl implements JiraClient
         logger.debug( String.format( "Current status of %s: %s", issue.getKey(), issue.getStatus() ) );
 
         Iterable<Transition> transitions = restClient.getIssueClient().getTransitions( issue ).claim();
+
+        transitions.forEach( new Consumer<Transition>()
+        {
+            @Override
+            public void accept( final Transition transition )
+            {
+                logger.debug( transition.toString() );
+            }
+        } );
         Transition toTransition = getTransitionByName( transitions, START_PROGRESS );
         if ( toTransition == null )
         {
