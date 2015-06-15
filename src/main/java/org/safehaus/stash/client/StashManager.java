@@ -8,17 +8,24 @@ import org.safehaus.stash.model.Branch;
 import org.safehaus.stash.model.BuildStats;
 import org.safehaus.stash.model.BuildStatus;
 import org.safehaus.stash.model.Change;
+import org.safehaus.stash.model.ChangeSet;
 import org.safehaus.stash.model.Commit;
 import org.safehaus.stash.model.Event;
 import org.safehaus.stash.model.Group;
 import org.safehaus.stash.model.JiraIssue;
-import org.safehaus.stash.model.ChangeSet;
 import org.safehaus.stash.model.Project;
 import org.safehaus.stash.model.PullRequest;
 import org.safehaus.stash.model.PullRequestState;
 import org.safehaus.stash.model.Repository;
 
 
+/**
+ * This manager provide means to execute a most commonly used subset of Stash API. All methods are read-only, they do
+ * not perform amy mutator operations on Stash
+ *
+ * Im most methods <b>limit</b> and <b>start</b> parameters are passed. They are used for setting paging configuration
+ * of the results returned from Stash REST endpoints. See <a href="https://developer.atlassian.com/static/rest/stash/3.10.0/stash-rest.html#paging-params">Stash Paged Api</a>
+ */
 public interface StashManager
 {
     public Page<Project> getProjects( int limit, int start ) throws StashManagerException;
