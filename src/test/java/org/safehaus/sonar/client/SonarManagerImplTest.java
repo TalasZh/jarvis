@@ -40,7 +40,7 @@ public class SonarManagerImplTest
     @Before
     public void setUp() throws Exception
     {
-        sonarManager = new SonarManagerImpl( "http://sonar.subutai.io", "dilshat.aliev", "sadilya" );
+        sonarManager = new SonarManagerImpl( "http://sonar.subutai.io", "username", "password" );
         doReturn( resource ).when( sonarClient ).find( any( Query.class ) );
         doReturn( measure ).when( resource ).getMeasure( anyString() );
         doReturn( MEASURE_VALUE ).when( measure ).getValue();
