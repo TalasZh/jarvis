@@ -33,14 +33,18 @@ public class SonarManagerImpl implements SonarManager
             Resource resource = sonarClient.find( ResourceQuery
                     .createForMetrics( resourceId, UnitTestStats.SUCCESS_PERCENT_METRIC, UnitTestStats.FAILURES_METRIC,
                             UnitTestStats.ERRORS_METRIC, UnitTestStats.TESTS_COUNT_METRIC,
-                            UnitTestStats.EXEC_TIME_METRIC ) );
+                            UnitTestStats.EXEC_TIME_METRIC, UnitTestStats.COVERAGE_METRIC,
+                            UnitTestStats.LINE_COVERAGE_METRIC, UnitTestStats.BRANCH_COVERAGE_METRIC ) );
 
 
             return new UnitTestStats( resource.getMeasure( UnitTestStats.SUCCESS_PERCENT_METRIC ).getValue(),
                     resource.getMeasure( UnitTestStats.FAILURES_METRIC ).getValue(),
                     resource.getMeasure( UnitTestStats.ERRORS_METRIC ).getValue(),
                     resource.getMeasure( UnitTestStats.TESTS_COUNT_METRIC ).getValue(),
-                    resource.getMeasure( UnitTestStats.EXEC_TIME_METRIC ).getValue() );
+                    resource.getMeasure( UnitTestStats.EXEC_TIME_METRIC ).getValue(),
+                    resource.getMeasure( UnitTestStats.COVERAGE_METRIC ).getValue(),
+                    resource.getMeasure( UnitTestStats.LINE_COVERAGE_METRIC ).getValue(),
+                    resource.getMeasure( UnitTestStats.BRANCH_COVERAGE_METRIC ).getValue() );
         }
         catch ( Exception e )
         {

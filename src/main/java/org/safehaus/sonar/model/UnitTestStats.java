@@ -11,27 +11,33 @@ public class UnitTestStats
     public static final String ERRORS_METRIC = "test_errors";
     public static final String TESTS_COUNT_METRIC = "tests";
     public static final String EXEC_TIME_METRIC = "test_execution_time";
+    public static final String COVERAGE_METRIC = "coverage";
+    public static final String LINE_COVERAGE_METRIC = "line_coverage";
+    public static final String BRANCH_COVERAGE_METRIC = "branch_coverage";
 
 
     private double successPercent;
-
     private double failures;
-
     private double errors;
-
     private double testsCount;
-
     private double executionTimeMs;
+    private double coveragePercent;
+    private double lineCoveragePercent;
+    private double branchCoveragePercent;
 
 
     public UnitTestStats( final double successPercent, final double failures, final double errors,
-                          final double testsCount, final double executionTimeMs )
+                          final double testsCount, final double executionTimeMs, final double coveragePercent,
+                          final double lineCoveragePercent, final double branchCoveragePercent )
     {
         this.successPercent = successPercent;
         this.failures = failures;
         this.errors = errors;
         this.testsCount = testsCount;
         this.executionTimeMs = executionTimeMs;
+        this.coveragePercent = coveragePercent;
+        this.lineCoveragePercent = lineCoveragePercent;
+        this.branchCoveragePercent = branchCoveragePercent;
     }
 
 
@@ -65,11 +71,30 @@ public class UnitTestStats
     }
 
 
+    public double getCoveragePercent()
+    {
+        return coveragePercent;
+    }
+
+
+    public double getLineCoveragePercent()
+    {
+        return lineCoveragePercent;
+    }
+
+
+    public double getBranchCoveragePercent()
+    {
+        return branchCoveragePercent;
+    }
+
+
     @Override
     public String toString()
     {
         return Objects.toStringHelper( this ).add( "successPercent", successPercent ).add( "failures", failures )
                       .add( "errors", errors ).add( "testsCount", testsCount ).add( "executionTimeMs", executionTimeMs )
-                      .toString();
+                      .add( "coveragePercent", coveragePercent ).add( "lineCoveragePercent", lineCoveragePercent )
+                      .add( "branchCoveragePercent", branchCoveragePercent ).toString();
     }
 }
