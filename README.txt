@@ -1,4 +1,4 @@
-AppFuse Basic Struts Archetype
+Jarvis Core
 --------------------------------------------------------------------------------
 If you're reading this then you've created your new project using Maven and
 jarvis.  You have only created the shell of an AppFuse Java EE
@@ -12,12 +12,17 @@ To get started, please complete the following steps:
 1. Download and install a MySQL 5.x database from 
    http://dev.mysql.com/downloads/mysql/5.0.html#downloads.
 
-2. Run "mvn jetty:run" and view the application at http://localhost:8080.
+2. According to jdbc.* properties in the pom.xml, create a database and grant permissions
 
-3. More information can be found at:
+3. Jarvis uses Atlassian Crowd SSO to authenticate users so we also need set up 'jarvis-test.critical-factor.com'
+point to localhost. Usually we can add it to /etc/hosts file.
+
+4. Run "mvn jetty:run" and view the application at http://jarvis-test.critical-factor.com:8080.
+
+5. More information can be found at:
 
    http://appfuse.org/display/APF/AppFuse+QuickStart
 
-4. Download and install Cassandra from
+6. Download and install Cassandra from
    http://cassandra.apache.org/download/
 
