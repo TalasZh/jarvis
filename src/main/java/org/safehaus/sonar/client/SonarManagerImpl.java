@@ -3,6 +3,7 @@ package org.safehaus.sonar.client;
 
 import org.safehaus.sonar.model.ComplexityStats;
 import org.safehaus.sonar.model.DuplicationStats;
+import org.safehaus.sonar.model.QuantitativeStats;
 import org.safehaus.sonar.model.UnitTestStats;
 import org.safehaus.sonar.model.ViolationStats;
 import org.sonar.wsclient.Sonar;
@@ -121,6 +122,34 @@ public class SonarManagerImpl implements SonarManager
                     resource.getMeasure( DuplicationStats.DUPLICATED_LINES_METRIC ).getValue(),
                     resource.getMeasure( DuplicationStats.DUPLICATED_BLOCKS_METRIC ).getValue(),
                     resource.getMeasure( DuplicationStats.DUPLICATED_FILES_METRIC ).getValue() );
+        }
+        catch ( Exception e )
+        {
+            throw new SonarManagerException( e );
+        }
+    }
+
+
+    @Override
+    public QuantitativeStats getQuantitativeStats( final String resourceId ) throws SonarManagerException
+    {
+        try
+        {
+            Resource resource = sonarClient.find( ResourceQuery
+                    .createForMetrics( resourceId, QuantitativeStats.LINES_OF_CODE_METRIC,
+                            QuantitativeStats.LINES_METRIC, QuantitativeStats.FILES_METRIC,
+                            QuantitativeStats.DIRECTORIES_METRIC, QuantitativeStats.FUNCTIONS_METRIC,
+                            QuantitativeStats.CLASSES_METRIC, QuantitativeStats.STATEMENTS_METRIC,
+                            QuantitativeStats.ACCESSORS_METRIC ) );
+
+            return new QuantitativeStats( resource.getMeasure( QuantitativeStats.LINES_OF_CODE_METRIC ).getValue(),
+                    resource.getMeasure( QuantitativeStats.LINES_METRIC ).getValue(),
+                    resource.getMeasure( QuantitativeStats.FILES_METRIC ).getValue(),
+                    resource.getMeasure( QuantitativeStats.DIRECTORIES_METRIC ).getValue(),
+                    resource.getMeasure( QuantitativeStats.FUNCTIONS_METRIC ).getValue(),
+                    resource.getMeasure( QuantitativeStats.CLASSES_METRIC ).getValue(),
+                    resource.getMeasure( QuantitativeStats.STATEMENTS_METRIC ).getValue(),
+                    resource.getMeasure( QuantitativeStats.ACCESSORS_METRIC ).getValue() );
         }
         catch ( Exception e )
         {

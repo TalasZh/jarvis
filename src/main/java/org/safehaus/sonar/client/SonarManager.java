@@ -3,6 +3,7 @@ package org.safehaus.sonar.client;
 
 import org.safehaus.sonar.model.ComplexityStats;
 import org.safehaus.sonar.model.DuplicationStats;
+import org.safehaus.sonar.model.QuantitativeStats;
 import org.safehaus.sonar.model.UnitTestStats;
 import org.safehaus.sonar.model.ViolationStats;
 
@@ -26,4 +27,6 @@ public interface SonarManager
     public ComplexityStats getComplexityStats( String resourceId ) throws SonarManagerException;
 
     public DuplicationStats getDuplicationStats( String resourceId ) throws SonarManagerException;
+
+    public QuantitativeStats getQuantitativeStats( String resourceId ) throws SonarManagerException;
 }

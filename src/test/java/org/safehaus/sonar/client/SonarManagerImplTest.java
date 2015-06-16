@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.safehaus.sonar.model.ComplexityStats;
 import org.safehaus.sonar.model.DuplicationStats;
+import org.safehaus.sonar.model.QuantitativeStats;
 import org.safehaus.sonar.model.UnitTestStats;
 import org.safehaus.sonar.model.ViolationStats;
 import org.sonar.wsclient.Sonar;
@@ -44,7 +45,7 @@ public class SonarManagerImplTest
         doReturn( measure ).when( resource ).getMeasure( anyString() );
         doReturn( MEASURE_VALUE ).when( measure ).getValue();
 
-        //                                sonarManager.sonarClient = sonarClient;
+        sonarManager.sonarClient = sonarClient;
     }
 
 
@@ -81,7 +82,14 @@ public class SonarManagerImplTest
         DuplicationStats duplicationStats = sonarManager.getDuplicationStats( RESOURCE_ID );
 
         assertNotNull( duplicationStats );
+    }
 
-        System.out.println(duplicationStats);
+
+    @Test
+    public void testGetQuantitativeStats() throws Exception
+    {
+        QuantitativeStats quantitativeStats = sonarManager.getQuantitativeStats( RESOURCE_ID );
+
+        assertNotNull( quantitativeStats );
     }
 }
