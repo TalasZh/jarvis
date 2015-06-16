@@ -21,7 +21,7 @@ import org.safehaus.stash.model.Repository;
 
 /**
  * This manager provide means to execute a most commonly used subset of Stash API. All methods are read-only, they do
- * not perform amy mutator operations on Stash
+ * not perform amy mutator operations on Stash. See <a href="https://developer.atlassian.com/stash/docs/latest/reference/rest-api.html">Stash Core Api</a>
  *
  * Im most methods <b>limit</b> and <b>start</b> parameters are passed. They are used for setting paging configuration
  * of the results returned from Stash REST endpoints. See <a href="https://developer.atlassian.com/static/rest/stash/3.10.0/stash-rest.html#paging-params">Stash Paged Api</a>
