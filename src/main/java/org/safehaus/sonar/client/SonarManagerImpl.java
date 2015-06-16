@@ -2,6 +2,7 @@ package org.safehaus.sonar.client;
 
 
 import org.safehaus.sonar.model.UnitTestStats;
+import org.safehaus.sonar.model.ViolationStats;
 import org.sonar.wsclient.Sonar;
 import org.sonar.wsclient.services.Resource;
 import org.sonar.wsclient.services.ResourceQuery;
@@ -45,6 +46,35 @@ public class SonarManagerImpl implements SonarManager
                     resource.getMeasure( UnitTestStats.COVERAGE_METRIC ).getValue(),
                     resource.getMeasure( UnitTestStats.LINE_COVERAGE_METRIC ).getValue(),
                     resource.getMeasure( UnitTestStats.BRANCH_COVERAGE_METRIC ).getValue() );
+        }
+        catch ( Exception e )
+        {
+            throw new SonarManagerException( e );
+        }
+    }
+
+
+    @Override
+    public ViolationStats getViolationStats( final String resourceId ) throws SonarManagerException
+    {
+        try
+        {
+            Resource resource = sonarClient.find( ResourceQuery
+                    .createForMetrics( resourceId, ViolationStats.TECHNICAL_DEBT_METRIC,
+                            ViolationStats.OPEN_ISSUES_METRIC, ViolationStats.REOPENED_ISSUES_METRIC,
+                            ViolationStats.ALL_ISSUES_METRIC, ViolationStats.BLOCKER_ISSUES_METRIC,
+                            ViolationStats.CRITICAL_ISSUES_METRIC, ViolationStats.MAJOR_ISSUES_METRIC,
+                            ViolationStats.MINOR_ISSUES_METRIC, ViolationStats.INFO_ISSUES_METRIC ) );
+
+            return new ViolationStats( resource.getMeasure( ViolationStats.TECHNICAL_DEBT_METRIC ).getValue(),
+                    resource.getMeasure( ViolationStats.OPEN_ISSUES_METRIC ).getValue(),
+                    resource.getMeasure( ViolationStats.REOPENED_ISSUES_METRIC ).getValue(),
+                    resource.getMeasure( ViolationStats.ALL_ISSUES_METRIC ).getValue(),
+                    resource.getMeasure( ViolationStats.BLOCKER_ISSUES_METRIC ).getValue(),
+                    resource.getMeasure( ViolationStats.CRITICAL_ISSUES_METRIC ).getValue(),
+                    resource.getMeasure( ViolationStats.MAJOR_ISSUES_METRIC ).getValue(),
+                    resource.getMeasure( ViolationStats.MINOR_ISSUES_METRIC ).getValue(),
+                    resource.getMeasure( ViolationStats.INFO_ISSUES_METRIC ).getValue() );
         }
         catch ( Exception e )
         {

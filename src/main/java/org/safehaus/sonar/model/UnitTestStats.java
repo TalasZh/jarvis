@@ -65,9 +65,14 @@ public class UnitTestStats
     }
 
 
-    public double getExecutionTimeMs()
+    /**
+     * Returns unit test execution time in seconds
+     *
+     * @return execution time in seconds
+     */
+    public double getExecutionTime()
     {
-        return executionTimeMs;
+        return executionTimeMs / 1000;
     }
 
 
@@ -93,8 +98,9 @@ public class UnitTestStats
     public String toString()
     {
         return Objects.toStringHelper( this ).add( "successPercent", successPercent ).add( "failures", failures )
-                      .add( "errors", errors ).add( "testsCount", testsCount ).add( "executionTimeMs", executionTimeMs )
-                      .add( "coveragePercent", coveragePercent ).add( "lineCoveragePercent", lineCoveragePercent )
+                      .add( "errors", errors ).add( "testsCount", testsCount )
+                      .add( "executionTime(sec)", getExecutionTime() ).add( "coveragePercent", coveragePercent )
+                      .add( "lineCoveragePercent", lineCoveragePercent )
                       .add( "branchCoveragePercent", branchCoveragePercent ).toString();
     }
 }

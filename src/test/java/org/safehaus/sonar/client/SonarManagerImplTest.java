@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.safehaus.sonar.model.UnitTestStats;
+import org.safehaus.sonar.model.ViolationStats;
 import org.sonar.wsclient.Sonar;
 import org.sonar.wsclient.services.Measure;
 import org.sonar.wsclient.services.Query;
@@ -41,7 +42,7 @@ public class SonarManagerImplTest
         doReturn( measure ).when( resource ).getMeasure( anyString() );
         doReturn( MEASURE_VALUE ).when( measure ).getValue();
 
-        //                sonarManager.sonarClient = sonarClient;
+        //                        sonarManager.sonarClient = sonarClient;
     }
 
 
@@ -51,5 +52,16 @@ public class SonarManagerImplTest
         UnitTestStats unitTestStats = sonarManager.getUnitTestStats( RESOURCE_ID );
 
         assertNotNull( unitTestStats );
+    }
+
+
+    @Test
+    public void testGetViolationStats() throws Exception
+    {
+        ViolationStats violationStats = sonarManager.getViolationStats( RESOURCE_ID );
+
+        assertNotNull( violationStats );
+
+        System.out.println( violationStats );
     }
 }
