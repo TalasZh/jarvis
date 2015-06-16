@@ -2,6 +2,7 @@ package org.safehaus.sonar.client;
 
 
 import org.safehaus.sonar.model.ComplexityStats;
+import org.safehaus.sonar.model.DuplicationStats;
 import org.safehaus.sonar.model.UnitTestStats;
 import org.safehaus.sonar.model.ViolationStats;
 import org.sonar.wsclient.Sonar;
@@ -89,7 +90,6 @@ public class SonarManagerImpl implements SonarManager
     {
         try
         {
-
             Resource resource = sonarClient.find( ResourceQuery
                     .createForMetrics( resourceId, ComplexityStats.COMPLEXITY_METRIC,
                             ComplexityStats.FILE_COMPLEXITY_METRIC, ComplexityStats.CLASS_COMPLEXITY_METRIC,
@@ -99,6 +99,28 @@ public class SonarManagerImpl implements SonarManager
                     resource.getMeasure( ComplexityStats.FILE_COMPLEXITY_METRIC ).getValue(),
                     resource.getMeasure( ComplexityStats.CLASS_COMPLEXITY_METRIC ).getValue(),
                     resource.getMeasure( ComplexityStats.FUNCTION_COMPLEXITY_METRIC ).getValue() );
+        }
+        catch ( Exception e )
+        {
+            throw new SonarManagerException( e );
+        }
+    }
+
+
+    @Override
+    public DuplicationStats getDuplicationStats( final String resourceId ) throws SonarManagerException
+    {
+        try
+        {
+            Resource resource = sonarClient.find( ResourceQuery
+                    .createForMetrics( resourceId, DuplicationStats.DUPLICATION_PERCENT_METRIC,
+                            DuplicationStats.DUPLICATED_LINES_METRIC, DuplicationStats.DUPLICATED_BLOCKS_METRIC,
+                            DuplicationStats.DUPLICATED_FILES_METRIC ) );
+
+            return new DuplicationStats( resource.getMeasure( DuplicationStats.DUPLICATION_PERCENT_METRIC ).getValue(),
+                    resource.getMeasure( DuplicationStats.DUPLICATED_LINES_METRIC ).getValue(),
+                    resource.getMeasure( DuplicationStats.DUPLICATED_BLOCKS_METRIC ).getValue(),
+                    resource.getMeasure( DuplicationStats.DUPLICATED_FILES_METRIC ).getValue() );
         }
         catch ( Exception e )
         {

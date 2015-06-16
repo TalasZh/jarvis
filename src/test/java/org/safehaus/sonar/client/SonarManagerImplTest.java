@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.safehaus.sonar.model.ComplexityStats;
+import org.safehaus.sonar.model.DuplicationStats;
 import org.safehaus.sonar.model.UnitTestStats;
 import org.safehaus.sonar.model.ViolationStats;
 import org.sonar.wsclient.Sonar;
@@ -71,5 +72,16 @@ public class SonarManagerImplTest
         ComplexityStats complexityStats = sonarManager.getComplexityStats( RESOURCE_ID );
 
         assertNotNull( complexityStats );
+    }
+
+
+    @Test
+    public void testGetDuplicationStats() throws Exception
+    {
+        DuplicationStats duplicationStats = sonarManager.getDuplicationStats( RESOURCE_ID );
+
+        assertNotNull( duplicationStats );
+
+        System.out.println(duplicationStats);
     }
 }
