@@ -37,7 +37,7 @@ public class StashManagerImpl implements StashManager
 
 
     /**
-     * This constructor is used when Stash is to be accessed in the context of a user's web session based on SSO cookie.
+     * This constructor is used when Stash is to be accessed in the context of a user's web session based on Crowd SSO cookie.
      * SSO cookie is retrieved from JarvisContext
      *
      * @param baseUrl - base url of Stash e.g. stash.my-company.com

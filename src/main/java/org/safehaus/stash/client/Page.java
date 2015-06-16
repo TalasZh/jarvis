@@ -6,6 +6,9 @@ import java.util.Set;
 import com.google.common.base.Objects;
 
 
+/**
+ * This class is used to obtain paging settings of results returned by Stash REST API. See <a href="https://developer.atlassian.com/static/rest/stash/3.10.0/stash-rest.html#paging-params">Stash Paged Api</a>
+ */
 public class Page<T>
 {
     private int size;
