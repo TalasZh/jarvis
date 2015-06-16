@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.safehaus.sonar.model.ComplexityStats;
 import org.safehaus.sonar.model.UnitTestStats;
 import org.safehaus.sonar.model.ViolationStats;
 import org.sonar.wsclient.Sonar;
@@ -42,7 +43,7 @@ public class SonarManagerImplTest
         doReturn( measure ).when( resource ).getMeasure( anyString() );
         doReturn( MEASURE_VALUE ).when( measure ).getValue();
 
-        //                        sonarManager.sonarClient = sonarClient;
+        //                                sonarManager.sonarClient = sonarClient;
     }
 
 
@@ -61,7 +62,14 @@ public class SonarManagerImplTest
         ViolationStats violationStats = sonarManager.getViolationStats( RESOURCE_ID );
 
         assertNotNull( violationStats );
+    }
 
-        System.out.println( violationStats );
+
+    @Test
+    public void testGetComplexityStats() throws Exception
+    {
+        ComplexityStats complexityStats = sonarManager.getComplexityStats( RESOURCE_ID );
+
+        assertNotNull( complexityStats );
     }
 }

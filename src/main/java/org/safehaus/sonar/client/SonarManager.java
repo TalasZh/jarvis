@@ -1,6 +1,7 @@
 package org.safehaus.sonar.client;
 
 
+import org.safehaus.sonar.model.ComplexityStats;
 import org.safehaus.sonar.model.UnitTestStats;
 import org.safehaus.sonar.model.ViolationStats;
 
@@ -20,4 +21,6 @@ public interface SonarManager
     public UnitTestStats getUnitTestStats( String resourceId ) throws SonarManagerException;
 
     public ViolationStats getViolationStats( String resourceId ) throws SonarManagerException;
+
+    public ComplexityStats getComplexityStats( String resourceId ) throws SonarManagerException;
 }

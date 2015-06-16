@@ -1,6 +1,7 @@
 package org.safehaus.sonar.client;
 
 
+import org.safehaus.sonar.model.ComplexityStats;
 import org.safehaus.sonar.model.UnitTestStats;
 import org.safehaus.sonar.model.ViolationStats;
 import org.sonar.wsclient.Sonar;
@@ -75,6 +76,29 @@ public class SonarManagerImpl implements SonarManager
                     resource.getMeasure( ViolationStats.MAJOR_ISSUES_METRIC ).getValue(),
                     resource.getMeasure( ViolationStats.MINOR_ISSUES_METRIC ).getValue(),
                     resource.getMeasure( ViolationStats.INFO_ISSUES_METRIC ).getValue() );
+        }
+        catch ( Exception e )
+        {
+            throw new SonarManagerException( e );
+        }
+    }
+
+
+    @Override
+    public ComplexityStats getComplexityStats( final String resourceId ) throws SonarManagerException
+    {
+        try
+        {
+
+            Resource resource = sonarClient.find( ResourceQuery
+                    .createForMetrics( resourceId, ComplexityStats.COMPLEXITY_METRIC,
+                            ComplexityStats.FILE_COMPLEXITY_METRIC, ComplexityStats.CLASS_COMPLEXITY_METRIC,
+                            ComplexityStats.FUNCTION_COMPLEXITY_METRIC ) );
+
+            return new ComplexityStats( resource.getMeasure( ComplexityStats.COMPLEXITY_METRIC ).getValue(),
+                    resource.getMeasure( ComplexityStats.FILE_COMPLEXITY_METRIC ).getValue(),
+                    resource.getMeasure( ComplexityStats.CLASS_COMPLEXITY_METRIC ).getValue(),
+                    resource.getMeasure( ComplexityStats.FUNCTION_COMPLEXITY_METRIC ).getValue() );
         }
         catch ( Exception e )
         {
