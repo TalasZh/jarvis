@@ -8,7 +8,7 @@ import com.atlassian.crowd.embedded.api.Group;
 import jarvis.workflow.plugin.domain.IssueWrapper;
 
 
-public interface IPluginSettingsService
+public interface PluginSettingsService
 {
     //@formatter:off
     String PLUGIN_NAMESPACE     = "JARVIS_PLUGIN.";

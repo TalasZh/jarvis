@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import com.atlassian.crowd.embedded.api.CrowdService;
 import com.atlassian.crowd.embedded.api.Group;
 import com.atlassian.crowd.embedded.api.User;
-import com.atlassian.jira.event.type.EventDispatchOption;
 import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.IssueManager;
 import com.atlassian.jira.issue.MutableIssue;
@@ -31,7 +30,7 @@ import jarvis.workflow.plugin.domain.IssueWrapper;
 import jarvis.workflow.plugin.service.impl.PluginSettingsService;
 
 
-public class JarvisPostFunction extends AbstractJiraFunctionProvider
+public class JarvisAssigneeChangePostFunction extends AbstractJiraFunctionProvider
 {
     //@formatter:off
     private PluginSettingsService service;
@@ -40,13 +39,13 @@ public class JarvisPostFunction extends AbstractJiraFunctionProvider
     private final GroupManager     groupManager;
     private final IssueManager issueService;
     //@formatter:on
-    private static final Logger log = LoggerFactory.getLogger( JarvisPostFunction.class );
+    private static final Logger log = LoggerFactory.getLogger( JarvisAssigneeChangePostFunction.class );
     private Gson gson = new Gson();
 
 
-    public JarvisPostFunction( PluginSettingsFactory factory, final UserManager userManager,
-                               final CrowdService crowdService, final GroupManager groupManager,
-                               final IssueManager issueService )
+    public JarvisAssigneeChangePostFunction( PluginSettingsFactory factory, final UserManager userManager,
+                                             final CrowdService crowdService, final GroupManager groupManager,
+                                             final IssueManager issueService )
     {
         this.userManager = userManager;
         this.crowdService = crowdService;
@@ -62,9 +61,9 @@ public class JarvisPostFunction extends AbstractJiraFunctionProvider
         //if issue already exists, retrieve and reassign
         //get mutable issue - strangely you don't have any getters in mutable issue object
         MutableIssue mutableIssue = getIssue( transientVars );
-        //get immutable issue
-        Issue issue = getIssue( transientVars );
-        IssueWrapper wrapper = getIssue( issue );
+
+        //Issue issue = getIssue( transientVars );
+        IssueWrapper wrapper = getIssue( mutableIssue );
 
         //issue exists in persistence
         if ( wrapper != null )
@@ -102,16 +101,16 @@ public class JarvisPostFunction extends AbstractJiraFunctionProvider
     public void firstTimeAssignment( Map transientVars )
     {
         log.warn( "First time reassignment..." );
-        //get mutable issue - strangely you don't have any getters in mutable issue object
+        //get mutable issue
         MutableIssue mutableIssue = getIssue( transientVars );
         //get immutable issue
-        Issue issue = getIssue( transientVars );
+        //Issue issue = getIssue( transientVars );
         //get assigned user
-        User user = issue.getAssigneeUser();
+        User user = mutableIssue.getAssigneeUser();
         //get random user from approving group(s)
         User approvingUser = getUserFromApprovingGroup();
         //save current assigned person
-        saveIssue( issue, user, approvingUser, 1 );
+        saveIssue( mutableIssue, user, approvingUser, 1 );
         //set new assignee from approving group
         mutableIssue.setAssignee( approvingUser );
         //persist changes

@@ -11,19 +11,18 @@ import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.google.gson.Gson;
 
 import jarvis.workflow.plugin.domain.IssueWrapper;
-import jarvis.workflow.plugin.service.IPluginSettingsService;
 
 
-public class PluginSettingsService implements IPluginSettingsService
+public class PluginSettingsServiceImpl implements jarvis.workflow.plugin.service.PluginSettingsService
 {
     //@formatter:off
     final PluginSettingsFactory pluginSettingsFactory;
     //@formatter:on
     private Gson gson = new Gson();
-    private static final Logger log = LoggerFactory.getLogger( PluginSettingsService.class );
+    private static final Logger log = LoggerFactory.getLogger( PluginSettingsServiceImpl.class );
 
 
-    public PluginSettingsService( final PluginSettingsFactory pluginSettingsFactory )
+    public PluginSettingsServiceImpl( final PluginSettingsFactory pluginSettingsFactory )
     {
         this.pluginSettingsFactory = pluginSettingsFactory;
     }

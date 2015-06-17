@@ -9,7 +9,7 @@ import com.atlassian.jira.plugin.workflow.WorkflowPluginFunctionFactory;
 import com.opensymphony.workflow.loader.AbstractDescriptor;
 
 
-public class JarvisPostFunctionFactory extends AbstractWorkflowPluginFactory implements WorkflowPluginFunctionFactory
+public class JarvisAssigneeChangePostFunctionFactory extends AbstractWorkflowPluginFactory implements WorkflowPluginFunctionFactory
 {
 
     @Override
