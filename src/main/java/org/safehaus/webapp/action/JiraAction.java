@@ -8,7 +8,7 @@ import javax.ws.rs.core.Cookie;
 import org.safehaus.exceptions.JiraClientException;
 import org.safehaus.model.JarvisContext;
 import org.safehaus.model.JarvisProject;
-import org.safehaus.service.JiraManager;
+import org.safehaus.jira.JiraManager;
 import org.safehaus.util.JarvisContextHolder;
 
 import com.opensymphony.xwork2.Preparable;

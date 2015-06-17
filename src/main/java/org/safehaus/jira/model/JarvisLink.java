@@ -1,4 +1,4 @@
-package org.safehaus.model;
+package org.safehaus.jira.model;
 
 
 import javax.xml.bind.annotation.XmlRootElement;

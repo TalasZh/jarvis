@@ -1,14 +1,12 @@
-package org.safehaus.service;
+package org.safehaus.jira;
 
 
 import java.io.IOException;
 import java.util.List;
 
-import javax.ws.rs.core.Response;
-
 import org.safehaus.exceptions.JiraClientException;
-import org.safehaus.model.JarvisIssue;
-import org.safehaus.model.JarvisMember;
+import org.safehaus.jira.model.JarvisIssue;
+import org.safehaus.jira.model.JarvisMember;
 
 import com.atlassian.jira.rest.client.api.domain.Component;
 import com.atlassian.jira.rest.client.api.domain.Issue;

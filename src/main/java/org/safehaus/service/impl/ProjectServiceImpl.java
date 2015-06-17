@@ -10,10 +10,10 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
 import org.safehaus.exceptions.JiraClientException;
-import org.safehaus.model.JarvisIssue;
+import org.safehaus.jira.model.JarvisIssue;
 import org.safehaus.model.JarvisProject;
 import org.safehaus.model.Views;
-import org.safehaus.service.JiraManager;
+import org.safehaus.jira.JiraManager;
 import org.safehaus.service.ProjectService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

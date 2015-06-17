@@ -1,4 +1,4 @@
-package org.safehaus.service.impl;
+package org.safehaus.jira;
 
 
 import java.io.IOException;
@@ -15,10 +15,9 @@ import java.util.function.Consumer;
 
 import org.joda.time.DateTime;
 import org.safehaus.exceptions.JiraClientException;
-import org.safehaus.model.JarvisIssue;
-import org.safehaus.model.JarvisIssueType;
-import org.safehaus.model.JarvisMember;
-import org.safehaus.service.JiraClient;
+import org.safehaus.jira.model.JarvisIssue;
+import org.safehaus.jira.model.JarvisIssueType;
+import org.safehaus.jira.model.JarvisMember;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
