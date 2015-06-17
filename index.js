@@ -70,7 +70,7 @@ const init = () => {
     simpleStorage.storage.annotations = {};
 
     if (!isAuthenticated()) {
-        tabs.open(simplePrefs.prefs.mediatorProtocol + "://" + simplePrefs.prefs.mediatorHost + ":" + simplePrefs.prefs.mediatorPort);
+        tabs.open(simplePrefs.prefs.mediatorProtocol + "://" + simplePrefs.prefs.mediatorHost);
         return false;
     }
 
@@ -242,10 +242,6 @@ function disableEnableAnnotator(activate, button) {
             "32": "./icon-32.png",
             "64": "./icon-64.png"
         };
-        notifications.notify({
-            title: 'Annotator.',
-            text: 'Capture session active'
-        });
     }
     else {
         button.icon = {
@@ -253,10 +249,6 @@ function disableEnableAnnotator(activate, button) {
             "32": "./icon-32.png",
             "64": "./icon-64.png"
         };
-        notifications.notify({
-            title: 'Annotator.',
-            text: 'Capture session inactive'
-        });
     }
 }
 
@@ -664,7 +656,7 @@ exports.main = function () {
 
 
     panel.port.on("startStory", function (storyKey) {
-        mediator.storyStart(storyKey, function(error, json) {
+        mediator.storyStart(storyKey, function (error, json) {
             if (error) {
                 console.error("Error: " + error);
                 return;
@@ -675,7 +667,7 @@ exports.main = function () {
     });
 
     panel.port.on("storySendApproval", function (storyKey) {
-        mediator.storyApprovalRequest(storyKey, function(error) {
+        mediator.storyApprovalRequest(storyKey, function (error) {
             if (error) {
                 console.error("Error: " + error);
                 return;
@@ -716,6 +708,17 @@ exports.main = function () {
             }
             console.log("resolve story approval: " + storyKey);
             getIssue(storyKey, panel);
+        });
+    });
+
+    panel.port.on("transition-issue", function (transitionId) {
+        mediator.transitionIssue(currentIssueKey, transitionId, function (error, json) {
+            if (error) {
+                console.log("Error couldn't transition issue: " + error);
+                return;
+            }
+            console.log("transited issue");
+            getIssue(currentIssueKey, panel);
         });
     });
 };

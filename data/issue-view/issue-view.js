@@ -431,6 +431,20 @@ function setGeneralFields(issue) {
     $("#type").text(issue.type.name);
     $("#summary").text(issue.summary);
     $("#issueNumber").text(issue.key);
+    var issueTransitions = $("#issueTransitions");
+    issueTransitions.show();
+    issueTransitions.empty();
+
+    var transitions = issue.transitions;
+    transitions.forEach(function(entry) {
+        var transitionTemplate = '<input type="button" class="btn btn-primary btn-sm" id="'+entry.id + '" value="'+entry.name+'">';
+        issueTransitions.append(transitionTemplate);
+    });
+
+    issueTransitions.find("input").click(function() {
+        console.log("Applying issue transition with id " + $(this).attr("id"));
+        self.port.emit("transition-issue", $(this).attr("id"));
+    });
     buildCrumbs(issue);
 }
 
