@@ -48,6 +48,8 @@ public interface JiraManager
 
     Iterable<Transition> getTransitions( String issueIdOrKey ) throws JiraClientException;
 
+    Status toTransition( String issueIdOrKey, String id ) throws JiraClientException;
+
     Status storyStart( String issueIdOrKey ) throws JiraClientException;
 
     Status storyRequestApproval( String issueIdOrKey ) throws JiraClientException;

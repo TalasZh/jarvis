@@ -37,7 +37,7 @@ public class JarvisRequestFilter implements ContainerRequestFilter
     @Override
     public void filter( final ContainerRequestContext requestContext ) throws IOException
     {
-        logger.debug( "%s", requestContext.toString() );
+        logger.debug( String.format( "%s", requestContext.toString() ) );
         Cookie cookie = requestContext.getCookies().get( cookieName );
 
         if ( cookie != null )

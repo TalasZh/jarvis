@@ -58,6 +58,11 @@ public interface ProjectService
     List<Transition> getTransitions( @PathParam( "issueIdOrKey" ) String issueIdOrKey ) throws JiraClientException;
 
     @PUT
+    @Path( "transitions/{issueIdOrKey}/{transitionId}" )
+    Status toTransition( @PathParam( "issueIdOrKey" ) String issueIdOrKey,
+                         @PathParam( "transitionId" ) String transitionId ) throws JiraClientException;
+
+    @PUT
     @Path( "issue/{issueIdOrKey}/status/start" )
     Status start( @PathParam( "issueIdOrKey" ) String issueIdOrKey ) throws JiraClientException;
 

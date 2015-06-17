@@ -237,6 +237,13 @@ public class JiraManagerImpl implements JiraManager
     }
 
 
+    @Override
+    public Status toTransition( final String issueIdOrKey, final String id ) throws JiraClientException
+    {
+        return getJiraClient().changeStatus( issueIdOrKey, Integer.parseInt( id ) );
+    }
+
+
     private JiraClient getJiraClient() throws JiraClientException
     {
         return JarvisContextHolder.getContext().getJiraClient();

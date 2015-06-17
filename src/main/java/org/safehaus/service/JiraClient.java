@@ -36,6 +36,8 @@ public interface JiraClient
     public List<Issue> getIssues( String projectId, int maxResult, int startIndex, final String issueType )
             throws JiraClientException;
 
+    Status changeStatus( String issueIdOrKey, int transitonId ) throws JiraClientException;
+
     public List<Component> getAllComponents( String projectId ) throws JiraClientException;
 
     public Issue getIssue( String issueKey );

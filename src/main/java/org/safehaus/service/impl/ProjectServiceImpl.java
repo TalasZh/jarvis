@@ -180,6 +180,13 @@ public class ProjectServiceImpl implements ProjectService
 
 
     @Override
+    public Status toTransition( final String issueIdOrKey, final String transitionId ) throws JiraClientException
+    {
+        return jiraManager.toTransition( issueIdOrKey, transitionId );
+    }
+
+
+    @Override
     public Status start( final String issueIdOrKey ) throws JiraClientException
     {
         return jiraManager.storyStart( issueIdOrKey );

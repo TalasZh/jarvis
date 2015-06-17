@@ -226,14 +226,6 @@ public class JiraClientImpl implements JiraClient
 
         Iterable<Transition> transitions = restClient.getIssueClient().getTransitions( issue ).claim();
 
-        transitions.forEach( new Consumer<Transition>() {
-            @Override
-            public void accept( final Transition transition )
-            {
-                logger.debug( transition.getName() );
-            }
-        } );
-
         Transition toTransition = getTransitionByName( transitions, actionName );
 
         if ( toTransition != null )
@@ -245,6 +237,32 @@ public class JiraClientImpl implements JiraClient
         else
         {
             throw new JiraClientException( String.format( "It is not possible to execute '%s'.", actionName ) );
+        }
+        return getIssue( issueIdOrKey ).getStatus();
+    }
+
+
+    @Override
+    public Status changeStatus( final String issueIdOrKey, final int transitonId ) throws JiraClientException
+    {
+        Issue issue = getIssue( issueIdOrKey );
+
+        logger.debug( String.format( "Current status of %s: %s", issue.getKey(), issue.getStatus() ) );
+
+        Iterable<Transition> transitions = restClient.getIssueClient().getTransitions( issue ).claim();
+
+        Transition toTransition = getTransitionById( transitions, transitonId );
+
+        if ( toTransition != null )
+        {
+            final TransitionInput transitionInput = new TransitionInput( toTransition.getId(),
+                    Comment.valueOf( String.format( "Action \"%s\" issued by Jarvis.", toTransition.getName() ) ) );
+            restClient.getIssueClient().transition( issue, transitionInput );
+        }
+        else
+        {
+            throw new JiraClientException(
+                    String.format( "It is not possible to change state '%d'.", transitonId ) );
         }
         return getIssue( issueIdOrKey ).getStatus();
     }
@@ -278,18 +296,6 @@ public class JiraClientImpl implements JiraClient
     {
         JiraRestClientFactory factory = new AsynchronousJiraRestClientFactory();
 
-        //        JarvisJiraRestClient client = null;
-        //        try
-        //        {
-        //            client = factory.create( new URI( uri ), new CrowdAuthenticationHandler( token ) );
-        //        }
-        //        catch ( Exception e )
-        //        {
-        //            logger.debug( e.getMessage() );
-        //            throw new JiraClientException( e.getMessage(), e );
-        //        }
-
-        //        User assignee = restClient.getUserClient().getUser( jarvisIssue.getAssignee() ).claim();
         IssueInputBuilder issueInputBuilder =
                 new IssueInputBuilder( jarvisIssue.getProjectKey(), jarvisIssue.getType().getId(),
                         jarvisIssue.getSummary() );
@@ -304,26 +310,7 @@ public class JiraClientImpl implements JiraClient
         BasicIssue createdIssue = restClient.getIssueClient().createIssue( issueInput ).claim();
 
         logger.debug( "Created new issue: " + createdIssue.getKey() );
-        Issue i = restClient.getIssueClient().getIssue( createdIssue.getKey() ).claim();
-        //        issueInputBuilder = new IssueInputBuilder( /*jarvisIssue.getProjectKey(), jarvisIssue.getType()
-        // .getId() */ );
-        //        issueInputBuilder.setAssigneeName( jarvisIssue.getAssignee() );
-
-        //        issueInputBuilder.set setFieldValue( "assignee",  new FieldInput( "name", jarvisIssue.getAssignee()
-        // ) );
-        //        issueInput = issueInputBuilder.build();
-        //
-        //        IssueInputJsonGenerator gen = new IssueInputJsonGenerator();
-        //        try
-        //        {
-        //            logger.debug( gen.generate( issueInput ).toString() );
-        //        }
-        //        catch ( JSONException e )
-        //        {
-        //            e.printStackTrace();
-        //        }
-        //        client.getIssueClient().updateIssue( i.getKey(), issueInput ).claim();
-        return i;
+        return restClient.getIssueClient().getIssue( createdIssue.getKey() ).claim();
     }
 
 
@@ -366,13 +353,25 @@ public class JiraClientImpl implements JiraClient
     }
 
 
+    private Transition getTransitionById( Iterable<Transition> transitions, int transitionId )
+    {
+        for ( Transition transition : transitions )
+        {
+            if ( transition.getId() == transitionId )
+            {
+                return transition;
+            }
+        }
+        return null;
+    }
+
+
     public void updateIssueState( String issueKeyOrId, Integer transitionId )
     {
         Issue issue = getIssue( issueKeyOrId );
 
         logger.debug( "Current status: " + issue.getStatus() );
         logger.debug( String.format( "Issue key or ID=%s. transition ID:%d", issueKeyOrId, transitionId ) );
-
 
         final Transition[] lastTransition = new Transition[1];
         restClient.getIssueClient().getTransitions( issue ).claim().forEach( new Consumer<Transition>()
@@ -385,8 +384,6 @@ public class JiraClientImpl implements JiraClient
             }
         } );
 
-
-        logger.debug( issue.getTransitionsUri().toString() );
 
         final int buildNumber = restClient.getMetadataClient().getServerInfo().claim().getBuildNumber();
 
