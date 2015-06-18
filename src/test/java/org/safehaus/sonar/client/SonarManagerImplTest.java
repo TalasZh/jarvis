@@ -15,6 +15,7 @@ import org.safehaus.sonar.model.ComplexityStats;
 import org.safehaus.sonar.model.DuplicationStats;
 import org.safehaus.sonar.model.QuantitativeStats;
 import org.safehaus.sonar.model.TimeUnitTestStats;
+import org.safehaus.sonar.model.TimeViolationStats;
 import org.safehaus.sonar.model.UnitTestStats;
 import org.safehaus.sonar.model.ViolationStats;
 import org.sonar.wsclient.Sonar;
@@ -115,6 +116,12 @@ public class SonarManagerImplTest
     }
 
 
+    private static Date date( String date ) throws ParseException
+    {
+        return new SimpleDateFormat( "yyyy-MM-dd" ).parse( date );
+    }
+
+
     @Test
     public void testGetTimeUnitTestStats() throws Exception
     {
@@ -125,8 +132,12 @@ public class SonarManagerImplTest
     }
 
 
-    private static Date date( String date ) throws ParseException
+    @Test
+    public void testGetTimeViolationStats() throws Exception
     {
-        return new SimpleDateFormat( "yyyy-MM-dd" ).parse( date );
+        Set<TimeViolationStats> timeViolationStats =
+                sonarManager.getTimeViolationStats( RESOURCE_ID, date( "2015-01-01" ), new Date() );
+
+        assertFalse( timeViolationStats.isEmpty() );
     }
 }

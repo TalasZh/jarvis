@@ -8,6 +8,7 @@ import org.safehaus.sonar.model.ComplexityStats;
 import org.safehaus.sonar.model.DuplicationStats;
 import org.safehaus.sonar.model.QuantitativeStats;
 import org.safehaus.sonar.model.TimeUnitTestStats;
+import org.safehaus.sonar.model.TimeViolationStats;
 import org.safehaus.sonar.model.UnitTestStats;
 import org.safehaus.sonar.model.ViolationStats;
 import org.sonar.wsclient.Sonar;
@@ -217,5 +218,46 @@ public class SonarManagerImpl implements SonarManager
         {
             throw new SonarManagerException( e );
         }
+    }
+
+
+    @Override
+    public Set<TimeViolationStats> getTimeViolationStats( final String resourceId, final Date fromDate,
+                                                          final Date toDate ) throws SonarManagerException
+    {
+        Set<TimeViolationStats> stats = Sets.newHashSet();
+
+        try
+        {
+            TimeMachine timeMachine = sonarClient.find( TimeMachineQuery
+                    .createForMetrics( resourceId, ViolationStats.TECHNICAL_DEBT_METRIC,
+                            ViolationStats.OPEN_ISSUES_METRIC, ViolationStats.REOPENED_ISSUES_METRIC,
+                            ViolationStats.ALL_ISSUES_METRIC, ViolationStats.BLOCKER_ISSUES_METRIC,
+                            ViolationStats.CRITICAL_ISSUES_METRIC, ViolationStats.MAJOR_ISSUES_METRIC,
+                            ViolationStats.MINOR_ISSUES_METRIC, ViolationStats.INFO_ISSUES_METRIC ).setFrom( fromDate )
+                    .setTo( toDate ) );
+
+
+            for ( TimeMachineCell cell : timeMachine.getCells() )
+            {
+                stats.add(
+                        new TimeViolationStats( getTimeValue( ViolationStats.TECHNICAL_DEBT_METRIC, timeMachine, cell ),
+                                getTimeValue( ViolationStats.OPEN_ISSUES_METRIC, timeMachine, cell ),
+                                getTimeValue( ViolationStats.REOPENED_ISSUES_METRIC, timeMachine, cell ),
+                                getTimeValue( ViolationStats.ALL_ISSUES_METRIC, timeMachine, cell ),
+                                getTimeValue( ViolationStats.BLOCKER_ISSUES_METRIC, timeMachine, cell ),
+                                getTimeValue( ViolationStats.CRITICAL_ISSUES_METRIC, timeMachine, cell ),
+                                getTimeValue( ViolationStats.MAJOR_ISSUES_METRIC, timeMachine, cell ),
+                                getTimeValue( ViolationStats.MINOR_ISSUES_METRIC, timeMachine, cell ),
+                                getTimeValue( ViolationStats.INFO_ISSUES_METRIC, timeMachine, cell ),
+                                cell.getDate() ) );
+            }
+        }
+        catch ( Exception e )
+        {
+            throw new SonarManagerException( e );
+        }
+
+        return stats;
     }
 }
