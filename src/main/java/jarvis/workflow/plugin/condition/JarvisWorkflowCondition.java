@@ -36,7 +36,7 @@ public class JarvisWorkflowCondition extends AbstractJiraCondition
     {
 
         ApplicationUser user = ac.getUser();
-
+        
         assert user != null;
 
         log.warn( "Calling user :" + user.getUsername() );

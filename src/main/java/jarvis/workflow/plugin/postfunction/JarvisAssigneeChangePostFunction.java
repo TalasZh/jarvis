@@ -27,17 +27,17 @@ import com.opensymphony.module.propertyset.PropertySet;
 import com.opensymphony.workflow.WorkflowException;
 
 import jarvis.workflow.plugin.domain.IssueWrapper;
-import jarvis.workflow.plugin.service.impl.PluginSettingsService;
+import jarvis.workflow.plugin.service.impl.PluginSettingsServiceImpl;
 
 
 public class JarvisAssigneeChangePostFunction extends AbstractJiraFunctionProvider
 {
     //@formatter:off
-    private PluginSettingsService service;
+    private PluginSettingsServiceImpl service;
     private final UserManager      userManager;
     private final CrowdService     crowdService;
     private final GroupManager     groupManager;
-    private final IssueManager issueService;
+    private final IssueManager     issueService;
     //@formatter:on
     private static final Logger log = LoggerFactory.getLogger( JarvisAssigneeChangePostFunction.class );
     private Gson gson = new Gson();
@@ -51,8 +51,7 @@ public class JarvisAssigneeChangePostFunction extends AbstractJiraFunctionProvid
         this.crowdService = crowdService;
         this.groupManager = groupManager;
         this.issueService = issueService;
-
-        this.service = new PluginSettingsService( factory );
+        this.service = new PluginSettingsServiceImpl( factory );
     }
 
 

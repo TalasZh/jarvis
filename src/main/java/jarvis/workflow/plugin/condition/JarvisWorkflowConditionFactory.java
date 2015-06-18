@@ -21,8 +21,8 @@ import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.opensymphony.workflow.loader.AbstractDescriptor;
 import com.opensymphony.workflow.loader.ConditionDescriptor;
 
-import jarvis.workflow.plugin.service.IPluginSettingsService;
-import jarvis.workflow.plugin.service.impl.PluginSettingsService;
+import jarvis.workflow.plugin.service.PluginSettingsService;
+import jarvis.workflow.plugin.service.impl.PluginSettingsServiceImpl;
 
 
 public class JarvisWorkflowConditionFactory extends AbstractWorkflowPluginFactory
@@ -30,7 +30,7 @@ public class JarvisWorkflowConditionFactory extends AbstractWorkflowPluginFactor
 {
     //@formatter:off
     private final GroupManager           groupManager;
-    private final IPluginSettingsService pluginSettingsService;
+    private final PluginSettingsService pluginSettingsService;
     //@formatter:on
 
     private static final Logger log = LoggerFactory.getLogger( JarvisWorkflowConditionFactory.class );
@@ -40,7 +40,7 @@ public class JarvisWorkflowConditionFactory extends AbstractWorkflowPluginFactor
     {
 
         this.groupManager = groupManager;
-        pluginSettingsService = new PluginSettingsService( factory );
+        pluginSettingsService = new PluginSettingsServiceImpl( factory );
     }
 
 

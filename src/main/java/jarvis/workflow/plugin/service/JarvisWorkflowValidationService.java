@@ -16,13 +16,6 @@ public interface JarvisWorkflowValidationService
     public boolean validate( Issue issue, String status );
 
     /*
-    * validate if CF page exists
-    * @param  Issue
-    * @return true|false
-    * */
-    public boolean validateConfluencePageExists( Issue issue );
-
-    /*
     * check if Issue is locked from transitioning
     * @param  Issue
     * @return true|false

@@ -2,25 +2,26 @@ package jarvis.workflow.plugin.domain;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.google.gson.annotations.Expose;
 
 
 public class ConfluenceLabels
 {
-    List<Map> lables = new ArrayList<>();
+    @Expose
+    List<Map> labels = new ArrayList<>();
 
 
-    public List<Map> getLables()
+    public List<Map> getLabels()
     {
-        return lables;
+        return labels;
     }
 
 
-    public void setLables( final List<Map> lables )
+    public void setLabels( final List<Map> labels )
     {
-        this.lables = lables;
+        this.labels = labels;
     }
-
 }
