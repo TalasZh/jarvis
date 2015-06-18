@@ -100,16 +100,18 @@ const init = () => {
             console.error("Error: " + error);
         }
         else {
-            json.forEach(function (session) {
-                var captures = session.captures;
-                captures.forEach(function (annotation) {
-                    var captureId = annotation.id;
-                    if (!simpleStorage.storage.annotations[captureId]) {
-                        simpleStorage.storage.annotations[captureId] = {};
-                    }
-                    simpleStorage.storage.annotations[captureId] = annotation;
+            if (json) {
+                json.forEach(function (session) {
+                    var captures = session.captures;
+                    captures.forEach(function (annotation) {
+                        var captureId = annotation.id;
+                        if (!simpleStorage.storage.annotations[captureId]) {
+                            simpleStorage.storage.annotations[captureId] = {};
+                        }
+                        simpleStorage.storage.annotations[captureId] = annotation;
+                    });
                 });
-            });
+            }
             updateMatchers();
         }
     });
