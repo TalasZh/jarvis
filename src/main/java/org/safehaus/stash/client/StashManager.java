@@ -86,4 +86,6 @@ public interface StashManager
 
     public Page<ChangeSet> getChangesByJiraIssue( String issueKey, int limit, int start, int maxChanges )
             throws StashManagerException;
+
+    String getBaseUrl();
 }

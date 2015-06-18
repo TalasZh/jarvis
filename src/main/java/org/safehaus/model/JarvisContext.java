@@ -54,6 +54,12 @@ public class JarvisContext
         authenticationHandler = new CrowdAuthenticationHandler( cookie );
     }
 
+    public JarvisContext( final Cookie cookie )
+    {
+        this.cookie = cookie;
+        authenticationHandler = new CrowdAuthenticationHandler( cookie );
+    }
+
 
     public JarvisContext( final String jiraUrl, final String username, final String password )
     {
