@@ -9,6 +9,7 @@ import org.safehaus.sonar.model.DuplicationStats;
 import org.safehaus.sonar.model.QuantitativeStats;
 import org.safehaus.sonar.model.TimeComplexityStats;
 import org.safehaus.sonar.model.TimeDuplicationStats;
+import org.safehaus.sonar.model.TimeQuantitativeStats;
 import org.safehaus.sonar.model.TimeUnitTestStats;
 import org.safehaus.sonar.model.TimeViolationStats;
 import org.safehaus.sonar.model.UnitTestStats;
@@ -309,6 +310,52 @@ public class SonarManagerImpl implements SonarManager
                     .createForMetrics( resourceId, DuplicationStats.DUPLICATION_PERCENT_METRIC,
                             DuplicationStats.DUPLICATED_LINES_METRIC, DuplicationStats.DUPLICATED_BLOCKS_METRIC,
                             DuplicationStats.DUPLICATED_FILES_METRIC ).setFrom( fromDate ).setTo( toDate ) );
+
+            for ( TimeMachineCell cell : timeMachine.getCells() )
+            {
+                stats.add( new TimeDuplicationStats(
+                        getTimeValue( DuplicationStats.DUPLICATION_PERCENT_METRIC, timeMachine, cell ),
+                        getTimeValue( DuplicationStats.DUPLICATED_LINES_METRIC, timeMachine, cell ),
+                        getTimeValue( DuplicationStats.DUPLICATED_BLOCKS_METRIC, timeMachine, cell ),
+                        getTimeValue( DuplicationStats.DUPLICATED_FILES_METRIC, timeMachine, cell ), cell.getDate() ) );
+            }
+        }
+        catch ( Exception e )
+        {
+            throw new SonarManagerException( e );
+        }
+
+        return stats;
+    }
+
+
+    @Override
+    public Set<TimeQuantitativeStats> getTimeQuantitativeStats( final String resourceId, final Date fromDate,
+                                                                final Date toDate ) throws SonarManagerException
+    {
+        Set<TimeQuantitativeStats> stats = Sets.newHashSet();
+
+        try
+        {
+            TimeMachine timeMachine = sonarClient.find( TimeMachineQuery
+                    .createForMetrics( resourceId, QuantitativeStats.LINES_OF_CODE_METRIC,
+                            QuantitativeStats.LINES_METRIC, QuantitativeStats.FILES_METRIC,
+                            QuantitativeStats.DIRECTORIES_METRIC, QuantitativeStats.FUNCTIONS_METRIC,
+                            QuantitativeStats.CLASSES_METRIC, QuantitativeStats.STATEMENTS_METRIC,
+                            QuantitativeStats.ACCESSORS_METRIC ).setFrom( fromDate ).setTo( toDate ) );
+
+            for ( TimeMachineCell cell : timeMachine.getCells() )
+            {
+                stats.add( new TimeQuantitativeStats(
+                        getTimeValue( QuantitativeStats.LINES_OF_CODE_METRIC, timeMachine, cell ),
+                        getTimeValue( QuantitativeStats.LINES_METRIC, timeMachine, cell ),
+                        getTimeValue( QuantitativeStats.FILES_METRIC, timeMachine, cell ),
+                        getTimeValue( QuantitativeStats.DIRECTORIES_METRIC, timeMachine, cell ),
+                        getTimeValue( QuantitativeStats.FUNCTIONS_METRIC, timeMachine, cell ),
+                        getTimeValue( QuantitativeStats.CLASSES_METRIC, timeMachine, cell ),
+                        getTimeValue( QuantitativeStats.STATEMENTS_METRIC, timeMachine, cell ),
+                        getTimeValue( QuantitativeStats.ACCESSORS_METRIC, timeMachine, cell ), cell.getDate() ) );
+            }
         }
         catch ( Exception e )
         {

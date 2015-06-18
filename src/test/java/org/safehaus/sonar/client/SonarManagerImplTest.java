@@ -16,6 +16,7 @@ import org.safehaus.sonar.model.DuplicationStats;
 import org.safehaus.sonar.model.QuantitativeStats;
 import org.safehaus.sonar.model.TimeComplexityStats;
 import org.safehaus.sonar.model.TimeDuplicationStats;
+import org.safehaus.sonar.model.TimeQuantitativeStats;
 import org.safehaus.sonar.model.TimeUnitTestStats;
 import org.safehaus.sonar.model.TimeViolationStats;
 import org.safehaus.sonar.model.UnitTestStats;
@@ -161,11 +162,15 @@ public class SonarManagerImplTest
                 sonarManager.getTimeDuplicationStats( RESOURCE_ID, date( "2015-01-01" ), new Date() );
 
         assertFalse( timeDuplicationStats.isEmpty() );
+    }
 
 
-        for ( TimeDuplicationStats stats : timeDuplicationStats )
-        {
-            System.out.println( stats );
-        }
+    @Test
+    public void testGetTimeQuantitativeStats() throws Exception
+    {
+        Set<TimeQuantitativeStats> timeQuantitativeStatses =
+                sonarManager.getTimeQuantitativeStats( RESOURCE_ID, date( "2015-01-01" ), new Date() );
+
+        assertFalse( timeQuantitativeStatses.isEmpty() );
     }
 }
