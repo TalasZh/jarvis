@@ -157,10 +157,9 @@ function onShowPopup(popup, data, X, Y) {
 }
 
 function onShowSidebar(sidebar, data) {
-    console.log( "on show sidebar...");
+    sidebar.hide();
     sidebar.data = data;
     sidebar.show();
-    console.log('Show sidebar...');
 }
 
 function detachWorker(worker, workerArray) {
@@ -202,7 +201,7 @@ function getUserIssues(jira, username) {
 
 
 exports.main = function () {
-    tabs.open("https://wiki.ubuntu.com/");
+    // tabs.open("https://wiki.ubuntu.com/");
     //listProjects();
 
     var currentIssueKey = "";
@@ -370,11 +369,12 @@ exports.main = function () {
     });
 
     var annotation = panels.Panel({
-        width: 200,
-        height: 180,
+        width: 500,
+        height: 301,
         contentURL: data.url('annotation/annotation.html'),
         contentScriptFile: [data.url('jquery-2.1.3.min.js'),
-            data.url('annotation/annotation.js')],
+            data.url('annotation/annotation.js'),
+            data.url('markdown/js/bootstrap-markdown.js')],
         onShow: function () {
             this.postMessage(this.content);
         }

@@ -475,6 +475,8 @@ var annotationData;
       if (this.$isPreview == true) {
         // Avoid sequenced element creation on missused scenario
         // @see https://github.com/toopay/bootstrap-markdown/issues/170
+
+        console.log( "isPreview is already true....")
         return this;
       }
       
@@ -1254,30 +1256,30 @@ var annotationData;
             e.setSelection(cursor,cursor+chunk.length);
           }
         }]
-      }]
-      // ,{
-      //   name: 'groupUtil',
-      //   data: [{
-      //     name: 'cmdPreview',
-      //     toggle: true,
-      //     hotkey: 'Ctrl+P',
-      //     title: 'Preview',
-      //     btnText: 'Preview',
-      //     btnClass: 'btn btn-primary btn-sm',
-      //     icon: { glyph: 'glyphicon glyphicon-search', fa: 'fa fa-search', 'fa-3': 'icon-search' },
-      //     callback: function(e){
-      //       // Check the preview mode and toggle based on this flag
-      //       var isPreview = e.$isPreview,content;
+      }
+      ,{
+        name: 'groupUtil',
+        data: [{
+          name: 'cmdPreview',
+          toggle: true,
+          hotkey: 'Ctrl+P',
+          title: 'Preview',
+          btnText: 'Preview',
+          btnClass: 'btn btn-primary btn-sm',
+          icon: { glyph: 'glyphicon glyphicon-search', fa: 'fa fa-search', 'fa-3': 'icon-search' },
+          callback: function(e){
+            // Check the preview mode and toggle based on this flag
+            var isPreview = e.$isPreview,content;
 
-      //       if (isPreview === false) {
-      //         // Give flag that tell the editor enter preview mode
-      //         e.showPreview();
-      //       } else {
-      //         e.hidePreview();
-      //       }
-      //     }
-      //   }]
-      // }]
+            if (isPreview === false) {
+              // Give flag that tell the editor enter preview mode
+              e.showPreview();
+            } else {
+              e.hidePreview();
+            }
+          }
+        }]
+      }]
     ],
     additionalButtons:[], // Place to hook more buttons by code
     reorderButtonGroups:[],
@@ -1373,13 +1375,12 @@ var annotationData;
 
 }(window.jQuery);
 
-addon.port.emit("ping");
+self.port.emit("ping");
 
-addon.port.on("pong", function(data) {
+self.port.on("pong", function(data) {
   annotationData = data;
   console.log( data[2] );
   quote.text(data[2]);
 });
-
 
 console.log( "looooooaded....")
