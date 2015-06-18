@@ -7,6 +7,7 @@ import java.util.Set;
 import org.safehaus.sonar.model.ComplexityStats;
 import org.safehaus.sonar.model.DuplicationStats;
 import org.safehaus.sonar.model.QuantitativeStats;
+import org.safehaus.sonar.model.TimeComplexityStats;
 import org.safehaus.sonar.model.TimeUnitTestStats;
 import org.safehaus.sonar.model.TimeViolationStats;
 import org.safehaus.sonar.model.UnitTestStats;
@@ -250,6 +251,39 @@ public class SonarManagerImpl implements SonarManager
                                 getTimeValue( ViolationStats.MAJOR_ISSUES_METRIC, timeMachine, cell ),
                                 getTimeValue( ViolationStats.MINOR_ISSUES_METRIC, timeMachine, cell ),
                                 getTimeValue( ViolationStats.INFO_ISSUES_METRIC, timeMachine, cell ),
+                                cell.getDate() ) );
+            }
+        }
+        catch ( Exception e )
+        {
+            throw new SonarManagerException( e );
+        }
+
+        return stats;
+    }
+
+
+    @Override
+    public Set<TimeComplexityStats> getTimeComplexityStats( final String resourceId, final Date fromDate,
+                                                            final Date toDate ) throws SonarManagerException
+    {
+        Set<TimeComplexityStats> stats = Sets.newHashSet();
+
+        try
+        {
+            TimeMachine timeMachine = sonarClient.find( TimeMachineQuery
+                    .createForMetrics( resourceId, ComplexityStats.COMPLEXITY_METRIC,
+                            ComplexityStats.FILE_COMPLEXITY_METRIC, ComplexityStats.CLASS_COMPLEXITY_METRIC,
+                            ComplexityStats.FUNCTION_COMPLEXITY_METRIC ).setFrom( fromDate ).setTo( toDate ) );
+
+
+            for ( TimeMachineCell cell : timeMachine.getCells() )
+            {
+                stats.add(
+                        new TimeComplexityStats( getTimeValue( ComplexityStats.COMPLEXITY_METRIC, timeMachine, cell ),
+                                getTimeValue( ComplexityStats.FILE_COMPLEXITY_METRIC, timeMachine, cell ),
+                                getTimeValue( ComplexityStats.CLASS_COMPLEXITY_METRIC, timeMachine, cell ),
+                                getTimeValue( ComplexityStats.FUNCTION_COMPLEXITY_METRIC, timeMachine, cell ),
                                 cell.getDate() ) );
             }
         }

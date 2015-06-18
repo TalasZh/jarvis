@@ -14,6 +14,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.safehaus.sonar.model.ComplexityStats;
 import org.safehaus.sonar.model.DuplicationStats;
 import org.safehaus.sonar.model.QuantitativeStats;
+import org.safehaus.sonar.model.TimeComplexityStats;
 import org.safehaus.sonar.model.TimeUnitTestStats;
 import org.safehaus.sonar.model.TimeViolationStats;
 import org.safehaus.sonar.model.UnitTestStats;
@@ -139,5 +140,15 @@ public class SonarManagerImplTest
                 sonarManager.getTimeViolationStats( RESOURCE_ID, date( "2015-01-01" ), new Date() );
 
         assertFalse( timeViolationStats.isEmpty() );
+    }
+
+
+    @Test
+    public void testGetTimeComplexityStats() throws Exception
+    {
+        Set<TimeComplexityStats> timeComplexityStats =
+                sonarManager.getTimeComplexityStats( RESOURCE_ID, date( "2015-01-01" ), new Date() );
+
+        assertFalse( timeComplexityStats.isEmpty() );
     }
 }
