@@ -94,4 +94,8 @@
 
     <!-- Password reset token encoder -->
     <bean id="passwordTokenEncoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder"/>
+
+    <bean id="stashManager" class="org.safehaus.stash.client.StashManagerImpl">
+        <constructor-arg value="${stash.url}"/>
+    </bean>
 </beans>
