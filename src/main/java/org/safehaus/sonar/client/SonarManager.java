@@ -8,6 +8,7 @@ import org.safehaus.sonar.model.ComplexityStats;
 import org.safehaus.sonar.model.DuplicationStats;
 import org.safehaus.sonar.model.QuantitativeStats;
 import org.safehaus.sonar.model.TimeComplexityStats;
+import org.safehaus.sonar.model.TimeDuplicationStats;
 import org.safehaus.sonar.model.TimeUnitTestStats;
 import org.safehaus.sonar.model.TimeViolationStats;
 import org.safehaus.sonar.model.UnitTestStats;
@@ -43,5 +44,9 @@ public interface SonarManager
             throws SonarManagerException;
 
     public Set<TimeComplexityStats> getTimeComplexityStats( String resourceId, Date fromDate, Date toDate )
+            throws SonarManagerException;
+
+
+    public Set<TimeDuplicationStats> getTimeDuplicationStats( String resourceId, Date fromDate, Date toDate )
             throws SonarManagerException;
 }

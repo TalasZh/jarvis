@@ -8,6 +8,7 @@ import org.safehaus.sonar.model.ComplexityStats;
 import org.safehaus.sonar.model.DuplicationStats;
 import org.safehaus.sonar.model.QuantitativeStats;
 import org.safehaus.sonar.model.TimeComplexityStats;
+import org.safehaus.sonar.model.TimeDuplicationStats;
 import org.safehaus.sonar.model.TimeUnitTestStats;
 import org.safehaus.sonar.model.TimeViolationStats;
 import org.safehaus.sonar.model.UnitTestStats;
@@ -286,6 +287,28 @@ public class SonarManagerImpl implements SonarManager
                                 getTimeValue( ComplexityStats.FUNCTION_COMPLEXITY_METRIC, timeMachine, cell ),
                                 cell.getDate() ) );
             }
+        }
+        catch ( Exception e )
+        {
+            throw new SonarManagerException( e );
+        }
+
+        return stats;
+    }
+
+
+    @Override
+    public Set<TimeDuplicationStats> getTimeDuplicationStats( final String resourceId, final Date fromDate,
+                                                              final Date toDate ) throws SonarManagerException
+    {
+        Set<TimeDuplicationStats> stats = Sets.newHashSet();
+
+        try
+        {
+            TimeMachine timeMachine = sonarClient.find( TimeMachineQuery
+                    .createForMetrics( resourceId, DuplicationStats.DUPLICATION_PERCENT_METRIC,
+                            DuplicationStats.DUPLICATED_LINES_METRIC, DuplicationStats.DUPLICATED_BLOCKS_METRIC,
+                            DuplicationStats.DUPLICATED_FILES_METRIC ).setFrom( fromDate ).setTo( toDate ) );
         }
         catch ( Exception e )
         {
