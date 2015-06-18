@@ -1,17 +1,26 @@
 package org.safehaus.sonar.client;
 
 
+import java.util.Date;
+import java.util.Set;
+
 import org.safehaus.sonar.model.ComplexityStats;
 import org.safehaus.sonar.model.DuplicationStats;
 import org.safehaus.sonar.model.QuantitativeStats;
+import org.safehaus.sonar.model.TimeUnitTestStats;
 import org.safehaus.sonar.model.UnitTestStats;
 import org.safehaus.sonar.model.ViolationStats;
 import org.sonar.wsclient.Sonar;
 import org.sonar.wsclient.services.Resource;
 import org.sonar.wsclient.services.ResourceQuery;
+import org.sonar.wsclient.services.TimeMachine;
+import org.sonar.wsclient.services.TimeMachineCell;
+import org.sonar.wsclient.services.TimeMachineColumn;
+import org.sonar.wsclient.services.TimeMachineQuery;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
+import com.google.common.collect.Sets;
 
 
 public class SonarManagerImpl implements SonarManager
@@ -150,6 +159,59 @@ public class SonarManagerImpl implements SonarManager
                     resource.getMeasure( QuantitativeStats.CLASSES_METRIC ).getValue(),
                     resource.getMeasure( QuantitativeStats.STATEMENTS_METRIC ).getValue(),
                     resource.getMeasure( QuantitativeStats.ACCESSORS_METRIC ).getValue() );
+        }
+        catch ( Exception e )
+        {
+            throw new SonarManagerException( e );
+        }
+    }
+
+
+    protected double getTimeValue( String metric, TimeMachine timeMachine, TimeMachineCell cell )
+    {
+        for ( TimeMachineColumn column : timeMachine.getColumns() )
+        {
+            if ( column.getMetricKey().equals( metric ) )
+            {
+                Object value = cell.getValues()[column.getIndex()];
+                return value instanceof Long ? ( ( Long ) value ).doubleValue() : ( double ) value;
+            }
+        }
+
+        return -1d;
+    }
+
+
+    @Override
+    public Set<TimeUnitTestStats> getTimeUnitTestStats( final String resourceId, final Date fromDate,
+                                                        final Date toDate ) throws SonarManagerException
+    {
+        Set<TimeUnitTestStats> stats = Sets.newHashSet();
+        try
+        {
+            TimeMachine timeMachine = sonarClient.find( TimeMachineQuery
+                    .createForMetrics( resourceId, UnitTestStats.SUCCESS_PERCENT_METRIC, UnitTestStats.FAILURES_METRIC,
+                            UnitTestStats.ERRORS_METRIC, UnitTestStats.TESTS_COUNT_METRIC,
+                            UnitTestStats.EXEC_TIME_METRIC, UnitTestStats.COVERAGE_METRIC,
+                            UnitTestStats.LINE_COVERAGE_METRIC, UnitTestStats.BRANCH_COVERAGE_METRIC )
+                    .setFrom( fromDate ).setTo( toDate ) );
+
+            for ( TimeMachineCell cell : timeMachine.getCells() )
+            {
+                stats.add(
+                        new TimeUnitTestStats( getTimeValue( UnitTestStats.SUCCESS_PERCENT_METRIC, timeMachine, cell ),
+                                getTimeValue( UnitTestStats.FAILURES_METRIC, timeMachine, cell ),
+                                getTimeValue( UnitTestStats.ERRORS_METRIC, timeMachine, cell ),
+                                getTimeValue( UnitTestStats.TESTS_COUNT_METRIC, timeMachine, cell ),
+                                getTimeValue( UnitTestStats.EXEC_TIME_METRIC, timeMachine, cell ),
+                                getTimeValue( UnitTestStats.COVERAGE_METRIC, timeMachine, cell ),
+                                getTimeValue( UnitTestStats.LINE_COVERAGE_METRIC, timeMachine, cell ),
+                                getTimeValue( UnitTestStats.BRANCH_COVERAGE_METRIC, timeMachine, cell ),
+                                cell.getDate() ) );
+            }
+
+
+            return stats;
         }
         catch ( Exception e )
         {

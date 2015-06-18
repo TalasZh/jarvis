@@ -28,8 +28,8 @@ public class Main
 
         //String res = ApiHelper.queryPageContent(1376259);
 
-        String res = ApiHelper.addCommentToPage( "admin:admin", 1376259, "<p>New comment by API</p>" );
-        System.out.println( res );
+//        String res = ApiHelper.addCommentToPage( "admin:admin", 1376259, "<p>New comment by API</p>" );
+//        System.out.println( res );
 /*
         //To query spaces
         String spacesResponseJson = ApiHelper.querySpaces();
