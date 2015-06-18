@@ -1,17 +1,15 @@
-package org.safehaus.service.impl;
+package org.safehaus.jira;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.safehaus.exceptions.JiraClientException;
-import org.safehaus.model.JarvisIssue;
-import org.safehaus.model.JarvisIssueType;
-import org.safehaus.model.JarvisLink;
-import org.safehaus.model.JarvisMember;
+import org.safehaus.jira.model.JarvisIssue;
+import org.safehaus.jira.model.JarvisIssueType;
+import org.safehaus.jira.model.JarvisLink;
+import org.safehaus.jira.model.JarvisMember;
 import org.safehaus.model.JarvisProject;
-import org.safehaus.service.JiraClient;
-import org.safehaus.service.JiraManager;
 import org.safehaus.util.JarvisContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,4 +1,4 @@
-package org.safehaus.model;
+package org.safehaus.jira.model;
 
 
 import java.util.ArrayList;
@@ -6,9 +6,9 @@ import java.util.List;
 
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.safehaus.model.Views;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 

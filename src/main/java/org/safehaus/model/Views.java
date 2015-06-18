@@ -4,7 +4,7 @@ package org.safehaus.model;
 /**
  * Created by tzhamakeev on 5/22/15.
  */
-public class Views
+public abstract class Views
 {
 
     public interface CompleteView {}

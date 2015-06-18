@@ -1,9 +1,11 @@
-package org.safehaus.model;
+package org.safehaus.jira.model;
 
 
 import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlRootElement;
+
+import org.safehaus.model.BaseObject;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 

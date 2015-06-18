@@ -6,8 +6,8 @@ import java.io.IOException;
 import javax.ws.rs.core.Cookie;
 
 import org.safehaus.exceptions.JiraClientException;
-import org.safehaus.service.JiraClient;
-import org.safehaus.service.impl.JiraClientImpl;
+import org.safehaus.jira.JiraClient;
+import org.safehaus.jira.JiraClientImpl;
 import org.safehaus.util.CrowdAuthenticationHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
