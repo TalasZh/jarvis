@@ -11,7 +11,7 @@
       "description": "Service working port",
       "type": "string",
       "name": "mediatorPort",
-      "value": "8080",
+      "value": "80",
       "title": "Service port"
     },
     {

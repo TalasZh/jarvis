@@ -9,6 +9,24 @@ const SESSION_STATUS = {
     PAUSED: "Paused"
 };
 
+const ISSUE_STATUS = {
+    OPEN: "Open",
+    CLOSE: "Close",
+    CLOSED: "Closed",
+    IN_PROGRESS: "In Progress",
+    RESOLVED: "Resolved",
+
+    REQUIREMENTS: "Requirements",
+    DESIGN: "Design",
+    IMPLEMENTATION: "Implementation",
+    PLAYBOOK: "Playbook",
+
+    REQUIREMENTS_APPROVAL: "Requirements Approval",
+    DESIGN_APPROVAL: "Design Approval",
+    IMPLEMENTATION_APPROVAL: "Implementation Approval",
+    PLAYBOOK_APPROVAL: "Playbook Approval"
+};
+
 const ISSUE_TYPE = {
     RESEARCH: "Research",
     EPIC: "Epic",
@@ -19,174 +37,303 @@ const ISSUE_TYPE = {
     PHASE: "Phase"
 };
 
-var buildHierarchyBtn = $("#buildHierarchy");
-if (buildHierarchyBtn !== null) {
-    buildHierarchyBtn.hide();
-    buildHierarchyBtn.click(function () {
-        var x = $("#issueNumber");
-        var selectValue = x.text();
-        console.log(selectValue);
+init();
 
-        self.port.emit("build-hierarchy", selectValue);
+function init() {
+    attachListeners();
+    registerListeners();
+}
+
+function attachListeners() {
+    var startStop = $("#startStop");
+    if (startStop !== null) {
+        startStop.click(function () {
+            var x = $("#issueNumber");
+            var selectValue = x.text();
+            console.log(selectValue);
+            if (startStop.prop("value") === START) {
+                startStop.prop("value", STOP);
+                console.log("Session started for " + selectValue + " at time : " + getDateTime());
+                self.port.emit("start-progress", selectValue);
+            }
+            else {
+                startStop.prop("value", START);
+                console.log("Session stopped for " + selectValue + " at time : " + getDateTime());
+                self.port.emit("stop-progress", selectValue);
+            }
+        });
+    }
+
+    var pauseResume = $("#pauseResume");
+    if (pauseResume !== null) {
+        pauseResume.click(function () {
+            var x = $("#issueNumber");
+            var selectValue = x.text();
+            if (pauseResume.prop("value") === "Pause") {
+                pauseResume.prop("value", RESUME);
+                startStop.prop("disabled", true);
+                $("#annotator").prop("disabled", true);
+                console.log("Session paused for " + selectValue + " at time : " + getDateTime());
+                self.port.emit("pause-progress", selectValue);
+            }
+            else {
+                pauseResume.prop("value", PAUSE);
+                startStop.prop("disabled", false);
+                $("#annotator").prop("disabled", false);
+                console.log("Session resumed for " + selectValue + " at time : " + getDateTime());
+                self.port.emit("start-progress", selectValue);
+            }
+        });
+    }
+}
+
+function registerListeners() {
+
+    /**
+     * handles new issue and substitutes all required fields
+     */
+    self.port.on('set-issue', function (issue) {
+        console.log("Setting issue: " + JSON.stringify(issue.type));
+        if (!issue) {
+            return;
+        }
+        switch (issue.type.name) {
+            case ISSUE_TYPE.RESEARCH:
+                prepareViewForResearch(issue);
+                break;
+            case ISSUE_TYPE.STORY:
+                prepareViewForStory(issue);
+                break;
+            default:
+                prepareViewForIssue(issue);
+                break;
+        }
+        setGeneralFields(issue);
+    });
+
+    self.port.on('set-session', function (session) {
+        console.log("Setting session");
+        //Disable annotator for newly selected issue
+        //self.port.emit("left-click", false);
+
+        let startStopBtn = $("#startStop");
+        let pauseResumeBtn = $("#pauseResume");
+        let annotator = $("#annotator");
+
+        pushAnnotations(null);
+        pauseResumeBtn.prop("disabled", false);
+        startStopBtn.prop("disabled", false);
+        annotator.prop("disabled", false);
+
+        if (session) {
+            startStopBtn.prop("value", STOP);
+            pauseResumeBtn.show();
+            annotator.show();
+
+            switch (session.status) {
+                case SESSION_STATUS.IN_PROGRESS:
+                    console.log(session.status);
+                    pauseResumeBtn.prop("value", PAUSE);
+
+                    self.port.emit("left-click", true);
+                    annotator.prop("class", "btn btn-primary btn-sm");
+                    break;
+                case SESSION_STATUS.CLOSED:
+                    console.log(session.status);
+                    pauseResumeBtn.prop("disabled", true);
+                    startStopBtn.prop("disabled", false);
+                    annotator.prop("disabled", true);
+
+                    startStopBtn.prop("value", START);
+
+                    self.port.emit("left-click", false);
+                    annotator.prop("class", "btn btn-default btn-sm");
+                    break;
+                case SESSION_STATUS.PAUSED:
+                    console.log(session.status);
+                    pauseResumeBtn.prop("value", RESUME);
+                    annotator.prop("disabled", true);
+                    startStopBtn.prop("disabled", true);
+
+                    self.port.emit("left-click", false);
+                    annotator.prop("class", "btn btn-default btn-sm");
+                    break;
+            }
+            let captures = session.captures;
+            if (captures) {
+                pushAnnotations(captures);
+            }
+            else {
+                self.port.emit('get-annotations', session.key);
+            }
+        }
+        else {
+            self.port.emit("left-click", false);
+            annotator.prop("class", "btn btn-primary btn-sm");
+            startStopBtn.show();
+            startStopBtn.prop("value", START);
+            pauseResumeBtn.hide();
+            annotator.hide();
+        }
+    });
+    self.port.on('set-annotations', function (captures) {
+        pushAnnotations(captures);
+    });
+
+    self.port.on('add-annotation', function (capture) {
+        console.log("Adding annotation");
+        let annotationList = $("#list-annotations");
+        console.log(annotationList);
+        let elem = annotationList.find("#" + capture.id);
+        if (elem) {
+            elem.replaceWith(buildAnnotationElement(capture));
+        }
+        else {
+            annotationList.append(buildAnnotationElement(capture));
+        }
     });
 }
 
-var startStop = $("#startStop");
-if (startStop !== null) {
-    startStop.click(function () {
-        var x = $("#issueNumber");
-        var selectValue = x.text();
-        console.log(selectValue);
-        if (startStop.prop("value") === START) {
-            startStop.prop("value", STOP);
-            console.log("Session started for " + selectValue + " at time : " + getDateTime());
-            self.port.emit("start-progress", selectValue);
-        }
-        else {
-            startStop.prop("value", START);
-            console.log("Session stopped for " + selectValue + " at time : " + getDateTime());
-            self.port.emit("stop-progress", selectValue);
-        }
-    });
+function prepareViewForStory(issue) {
+    $("#annotations").hide();
+    $("#phases").hide();
+    $("#sessionControls").hide();
+    $("#storyControls").show();
+    attachStoryControlListeners(issue);
+    pushLinkedIssues(issue.links);
 }
 
-var pauseResume = $("#pauseResume");
-if (pauseResume !== null) {
-    pauseResume.click(function () {
-        var x = $("#issueNumber");
-        var selectValue = x.text();
-        if (pauseResume.prop("value") === "Pause") {
-            pauseResume.prop("value", RESUME);
-            startStop.prop("disabled", true);
-            $("#annotator").prop("disabled", true);
-            console.log("Session paused for " + selectValue + " at time : " + getDateTime());
-            self.port.emit("pause-progress", selectValue);
-        }
-        else {
-            pauseResume.prop("value", PAUSE);
-            startStop.prop("disabled", false);
-            $("#annotator").prop("disabled", false);
-            console.log("Session resumed for " + selectValue + " at time : " + getDateTime());
-            self.port.emit("start-progress", selectValue);
-        }
-    });
+function attachStoryControlListeners(issue) {
+    var buildHierarchyBtn = $("#buildHierarchy");
+    if (buildHierarchyBtn !== null) {
+        buildHierarchyBtn.off("click");
+        buildHierarchyBtn.click(function () {
+            var x = $("#issueNumber");
+            var selectValue = x.text();
+            console.log(selectValue);
+
+            self.port.emit("build-hierarchy", selectValue);
+        });
+    }
+
+    var storyStart = $("#storyStart");
+    if (storyStart !== null) {
+        storyStart.off("click");
+        storyStart.click(function () {
+            var x = $("#issueNumber");
+            var issueNumber = x.text();
+            console.log(issueNumber);
+            self.port.emit("startStory", issueNumber);
+        });
+    }
+
+    var storySendApproval = $("#storySendApproval");
+    if (storySendApproval) {
+        storySendApproval.off("click");
+        storySendApproval.click(function () {
+            var x = $("#issueNumber");
+            var selectValue = x.text();
+            console.log(selectValue);
+            self.port.emit("storySendApproval", selectValue);
+        });
+    }
+
+    var storyApprove = $("#storyApprove");
+    if (storyApprove) {
+        storyApprove.off("click");
+        storyApprove.click(function () {
+            var x = $("#issueNumber");
+            var selectValue = x.text();
+            console.log(selectValue);
+            self.port.emit("storyApprove", selectValue);
+        });
+    }
+
+    var storyReject = $("#storyReject");
+    if (storyReject) {
+        storyReject.off("click");
+        storyReject.click(function () {
+            var x = $("#issueNumber");
+            var selectValue = x.text();
+            console.log(selectValue);
+            self.port.emit("storyReject", selectValue);
+        });
+    }
+
+    var storyResolve = $("#storyResolve");
+    if (storyResolve) {
+        storyResolve.off("click");
+        storyResolve.click(function () {
+            var x = $("#issueNumber");
+            var selectValue = x.text();
+            console.log(selectValue);
+            self.port.emit("storyResolve", selectValue);
+        });
+    }
+
+    buildHierarchyBtn.show();
+    storySendApproval.show();
+    storyApprove.show();
+    storyReject.show();
+    storyResolve.show();
+    storyStart.show();
+
+    switch (issue.status) {
+        case ISSUE_STATUS.CLOSED:
+        case ISSUE_STATUS.CLOSE:
+            buildHierarchyBtn.hide();
+            storySendApproval.hide();
+            storyApprove.hide();
+            storyReject.hide();
+            storyStart.hide();
+            storyResolve.hide();
+            break;
+        case ISSUE_STATUS.RESOLVED:
+            buildHierarchyBtn.hide();
+            storySendApproval.hide();
+            storyApprove.hide();
+            storyReject.hide();
+            storyStart.hide();
+            break;
+        case ISSUE_STATUS.DESIGN:
+        case ISSUE_STATUS.IMPLEMENTATION:
+        case ISSUE_STATUS.REQUIREMENTS:
+        case ISSUE_STATUS.PLAYBOOK:
+            storyApprove.hide();
+            storyReject.hide();
+            storyResolve.hide();
+            storyStart.hide();
+            break;
+        case ISSUE_STATUS.DESIGN_APPROVAL:
+        case ISSUE_STATUS.IMPLEMENTATION_APPROVAL:
+        case ISSUE_STATUS.REQUIREMENTS_APPROVAL:
+        case ISSUE_STATUS.PLAYBOOK_APPROVAL:
+            storySendApproval.hide();
+            storyResolve.hide();
+            storyStart.hide();
+            break;
+        case ISSUE_STATUS.OPEN:
+            buildHierarchyBtn.hide();
+            storySendApproval.hide();
+            storyApprove.hide();
+            storyReject.hide();
+            storyResolve.hide();
+            break;
+    }
 }
-
-/**
- * handles new issue and substitutes all required fields
- */
-self.port.on('set-issue', function (issue) {
-    console.log("Setting issue: " + JSON.stringify(issue.type));
-    if (!issue) {
-        return;
-    }
-    switch (issue.type.name) {
-        case ISSUE_TYPE.RESEARCH:
-            prepareViewForResearch(issue);
-            break;
-        case ISSUE_TYPE.STORY:
-            prepareViewForIssue(issue);
-            $("#buildHierarchy").show();
-            break;
-        default:
-            prepareViewForIssue(issue);
-            break;
-    }
-    setGeneralFields(issue);
-});
-
-self.port.on('set-session', function (session) {
-    console.log("Setting session");
-    //Disable annotator for newly selected issue
-    self.port.emit("left-click", false);
-
-    let startStopBtn = $("#startStop");
-    let pauseResumeBtn = $("#pauseResume");
-    let annotator = $("#annotator");
-
-    pushAnnotations(null);
-    pauseResumeBtn.prop("disabled", false);
-    startStopBtn.prop("disabled", false);
-    annotator.prop("disabled", false);
-
-    if (session) {
-        startStopBtn.prop("value", STOP);
-        pauseResumeBtn.show();
-        annotator.show();
-
-        switch (session.status) {
-            case SESSION_STATUS.IN_PROGRESS:
-                console.log(session.status);
-                pauseResumeBtn.prop("value", PAUSE);
-
-                self.port.emit("left-click", true);
-                annotator.prop("class", "btn btn-primary btn-sm");
-                break;
-            case SESSION_STATUS.CLOSED:
-                console.log(session.status);
-                pauseResumeBtn.prop("disabled", true);
-                startStopBtn.prop("disabled", true);
-                annotator.prop("disabled", true);
-
-                self.port.emit("left-click", false);
-                annotator.prop("class", "btn btn-default btn-sm");
-                break;
-            case SESSION_STATUS.PAUSED:
-                console.log(session.status);
-                pauseResumeBtn.prop("value", RESUME);
-                annotator.prop("disabled", true);
-                startStopBtn.prop("disabled", true);
-
-                self.port.emit("left-click", false);
-                annotator.prop("class", "btn btn-default btn-sm");
-                break;
-        }
-        let captures = session.captures;
-        if (captures) {
-            pushAnnotations(captures);
-        }
-        else {
-            self.port.emit('get-annotations', session.key);
-        }
-    }
-    else {
-        self.port.emit("left-click", false);
-        annotator.prop("class", "btn btn-primary btn-sm");
-        startStopBtn.show();
-        startStopBtn.prop("value", START);
-        pauseResumeBtn.hide();
-        annotator.hide();
-    }
-});
-self.port.on('set-annotations', function (captures) {
-    pushAnnotations(captures);
-});
-
-self.port.on('add-annotation', function (capture) {
-    console.log("Adding annotation");
-    let annotationList = $("#list-annotations");
-    console.log(annotationList);
-    let elem = annotationList.find("#" + capture.id);
-    if (elem) {
-        elem.replaceWith(buildAnnotationElement(capture));
-    }
-    else {
-        annotationList.append(buildAnnotationElement(capture));
-    }
-});
-
 
 function prepareViewForIssue(issue) {
     $("#annotations").hide();
     $("#phases").hide();
-    $("#session-controls").hide();
-    $("#buildHierarchy").hide();
+    $("#sessionControls").hide();
+    $("#storyControls").hide();
     pushLinkedIssues(issue.links);
 }
 
 function prepareViewForResearch(issue) {
     $("#annotations").show();
-    $("#session-controls").show();
+    $("#sessionControls").show();
+    $("#storyControls").hide();
     $("#phases").show();
     pushLinkedIssues(issue.links);
     setSession(issue.key);
@@ -284,6 +431,20 @@ function setGeneralFields(issue) {
     $("#type").text(issue.type.name);
     $("#summary").text(issue.summary);
     $("#issueNumber").text(issue.key);
+    var issueTransitions = $("#issueTransitions");
+    issueTransitions.show();
+    issueTransitions.empty();
+
+    var transitions = issue.transitions;
+    transitions.forEach(function(entry) {
+        var transitionTemplate = '<input type="button" class="btn btn-primary btn-sm" id="'+entry.id + '" value="'+entry.name+'">';
+        issueTransitions.append(transitionTemplate);
+    });
+
+    issueTransitions.find("input").click(function() {
+        console.log("Applying issue transition with id " + $(this).attr("id"));
+        self.port.emit("transition-issue", $(this).attr("id"));
+    });
     buildCrumbs(issue);
 }
 
