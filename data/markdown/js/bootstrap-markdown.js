@@ -475,8 +475,6 @@ var annotationData;
       if (this.$isPreview == true) {
         // Avoid sequenced element creation on missused scenario
         // @see https://github.com/toopay/bootstrap-markdown/issues/170
-
-        console.log( "isPreview is already true....")
         return this;
       }
       
@@ -1306,8 +1304,7 @@ var annotationData;
     onShow: function (e) {},
     onPreview: function (e) {},
     onSave: function (e) {
-      // var quote = $('#myBlockquote');
-      addon.port.emit("hellooo", e.getContent());
+      addon.port.emit("saveAnnotation", e.getContent());
     },
     onBlur: function (e) {},
     onFocus: function (e) {},
@@ -1370,17 +1367,12 @@ var annotationData;
       })
     });
 
-
-
-
 }(window.jQuery);
 
-self.port.emit("ping");
+addon.port.emit("ping");
 
-self.port.on("pong", function(data) {
+addon.port.on("pong", function(data) {
   annotationData = data;
   console.log( data[2] );
   quote.text(data[2]);
 });
-
-console.log( "looooooaded....")

@@ -162,6 +162,7 @@ function onShowPopup(popup, data, X, Y) {
 function onShowSidebar(sidebar, data) {
     sidebar.hide();
     sidebar.data = data;
+    console.log( "sidebar.data " + sidebar.data )
     sidebar.show();
 }
 
@@ -219,7 +220,6 @@ function setIssue(issue, panel) {
     if (issue) {
         panel.port.emit('set-issue', issue);
     }
-
     currentIssueKey = issue.key;
 }
 
@@ -313,28 +313,21 @@ exports.main = function () {
         url: data.url("login/annotationSidebar.html"),
         onAttach: function (worker) {
             worker.port.on("ping", function() {
-                console.log("add-on script got the message");
+                console.log( "popup.data : " + popup.data )
                 worker.port.emit("pong", popup.data);
             });
-
-            worker.port.on("hellooo", function(data) {
-                console.log( "yuppiii");
+            worker.port.on("saveAnnotation", function(data) {
                 console.log( data );
-
                 handleNewAnnotation(data, popup.data, currentIssueKey, function (capture) {
-
                     console.log("data  " + data);
                     console.log("popup.data : " + popup.data);
                     console.log("currentIssueKey : " + currentIssueKey);
-
                     console.log("Handle new annotation callback");
                     getIssue(capture.jiraKey);
                 });
                 sidebar.hide();
-
             }); 
         }
-
     });
 
 
@@ -342,21 +335,6 @@ exports.main = function () {
     popup.port.on('annotate-button-pressed', function () {
         onShowSidebar(sidebar, popup.data);
     });
-
-
-    // popup.port.on('annotate-button-pressed', function () {
-    //     if (annotatorIsOn) {
-    //         onAttachWorker(annotationEditor, popup.data);
-    //         annotationEditor.show();
-    //     }
-    //     else {
-    //         notifications.notify({
-    //             title: 'Warning',
-    //             text: 'Annotator is not activated !'
-    //         });
-    //     }
-    //     popup.hide();
-    // });
 
     popup.port.on('highlight-button-pressed', function () {
         console.log("high is pressed");
@@ -434,10 +412,16 @@ exports.main = function () {
         contentURL: data.url('annotation/annotation.html'),
         contentScriptFile: [data.url('jquery-2.1.3.min.js'),
             data.url('annotation/annotation.js'),
-            data.url('markdown/js/bootstrap-markdown.js')],
+            data.url('markdown/js/bootstrap-markdown.js'),
+            data.url('markdown/js/to-markdown.js'),
+            data.url('markdown/js/markdown.js')],
         onShow: function () {
             this.postMessage(this.content);
+        },
+        onHide: function(){
+            this.port.emit("hidePreview");
         }
+
     });
 
     var button = ToggleButton({
