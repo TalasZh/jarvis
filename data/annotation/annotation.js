@@ -9,3 +9,9 @@ self.port.on("hidePreview", function(){
   var md = $("#comment-md").data('markdown');
   md.hidePreview();
 })
+
+
+let html = $('html');
+html.mouseleave(function() {
+  self.port.emit("mouseout-event");
+});

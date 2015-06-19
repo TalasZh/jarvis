@@ -376,8 +376,8 @@ exports.main = function () {
     });
 
     var annotation = panels.Panel({
-        width: 500,
-        height: 301,
+        width: 250,
+        height: 200,
         contentURL: data.url('annotation/annotation.html'),
         contentScriptFile: [data.url('jquery-2.1.3.min.js'),
             data.url('annotation/annotation.js'),
@@ -392,6 +392,11 @@ exports.main = function () {
             this.port.emit("hidePreview");
         }
 
+    });
+
+
+    annotation.port.on("mouseout-event", function () {
+        annotation.hide();
     });
 
     var button = ToggleButton({

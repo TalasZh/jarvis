@@ -18,9 +18,9 @@ self.on('message', function onMessage(annotations) {
         event.preventDefault();
     });
 
-    annotated.bind('mouseleave', function () {
-        self.port.emit('hide');
-    });
+    // annotated.bind('mouseleave', function () {
+    //     self.port.emit('hide');
+    // });
 });
 
 function createAnchor(annotation) {
