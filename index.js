@@ -262,9 +262,6 @@ function disableEnableAnnotator(activate, button) {
 
 
 exports.main = function () {
-    // tabs.open("https://wiki.ubuntu.com/");
-    //listProjects();
-
     var selector = pageMod.PageMod({
         include: ['*'],
         contentScriptWhen: 'ready',
@@ -295,8 +292,6 @@ exports.main = function () {
         }
     });
 
-
-
     var popup = panels.Panel({
         width: 25,
         height: 25,
@@ -305,32 +300,6 @@ exports.main = function () {
             data.url('popup/popup.js'),
             data.url('jquery.highlight.js')]
     });
-
-    var sidebar = sidebars.Sidebar({
-        id: 'my-sidebar',
-        title: 'Annotations',
-        width: 400,
-        url: data.url("login/annotationSidebar.html"),
-        onAttach: function (worker) {
-            worker.port.on("ping", function() {
-                console.log( "popup.data : " + popup.data )
-                worker.port.emit("pong", popup.data);
-            });
-            worker.port.on("saveAnnotation", function(data) {
-                console.log( data );
-                handleNewAnnotation(data, popup.data, currentIssueKey, function (capture) {
-                    console.log("data  " + data);
-                    console.log("popup.data : " + popup.data);
-                    console.log("currentIssueKey : " + currentIssueKey);
-                    console.log("Handle new annotation callback");
-                    getIssue(capture.jiraKey);
-                });
-                sidebar.hide();
-            }); 
-        }
-    });
-
-
 
     popup.port.on('annotate-button-pressed', function () {
         onShowSidebar(sidebar, popup.data);
@@ -412,9 +381,10 @@ exports.main = function () {
         contentURL: data.url('annotation/annotation.html'),
         contentScriptFile: [data.url('jquery-2.1.3.min.js'),
             data.url('annotation/annotation.js'),
-            data.url('markdown/js/bootstrap-markdown.js'),
+            data.url('markdown/js/bootstrap-markdown-popup.js'),
             data.url('markdown/js/to-markdown.js'),
             data.url('markdown/js/markdown.js')],
+
         onShow: function () {
             this.postMessage(this.content);
         },
@@ -463,6 +433,32 @@ exports.main = function () {
             button.state('window', {checked: false});
         }
     });
+
+
+    var sidebar = sidebars.Sidebar({
+        id: 'my-sidebar',
+        title: 'Annotations',
+        width: 400,
+        url: data.url("annotation/annotationSidebar.html"),
+        onAttach: function (worker) {
+            worker.port.on("ping", function() {
+                console.log( "popup.data : " + popup.data )
+                worker.port.emit("pong", popup.data);
+            });
+            worker.port.on("saveAnnotation", function(data) {
+                console.log( data );
+                handleNewAnnotation(data, popup.data, currentIssueKey, function (capture) {
+                    console.log("data  " + data);
+                    console.log("popup.data : " + popup.data);
+                    console.log("currentIssueKey : " + currentIssueKey);
+                    console.log("Handle new annotation callback");
+                    getIssue(capture.jiraKey, panel);
+                });
+                sidebar.hide();
+            }); 
+        }
+    });
+
 
     // When the panel is displayed it generated an event called
     // "show": we will listen for that event and when it happens,

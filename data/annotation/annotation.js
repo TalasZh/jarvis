@@ -5,7 +5,6 @@ self.on('message', function (message) {
     md.showPreview();
 });
 
-
 self.port.on("hidePreview", function(){
   var md = $("#comment-md").data('markdown');
   md.hidePreview();

@@ -1298,9 +1298,7 @@
     /* Events hook */
     onShow: function (e) {},
     onPreview: function (e) {},
-    onSave: function (e) {
-      addon.port.emit("saveAnnotation", e.getContent());
-    },
+    onSave: function (e) {},
     onBlur: function (e) {},
     onFocus: function (e) {},
     onChange: function(e) {},
@@ -1363,11 +1361,3 @@
     });
 
 }(window.jQuery);
-
-var quote = $('#myBlockquote');
-
-addon.port.emit("ping");
-
-addon.port.on("pong", function(data) {
-  quote.text(data[2]);
-});
