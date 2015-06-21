@@ -32,3 +32,7 @@ build/Release
 
 # Temporarily need to comment this out
 #node_modules
+
+bootstrap.js
+install.rdf
+

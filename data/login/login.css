@@ -5,3 +5,8 @@ a, a:active, a:focus {
 span {
     outline: none;
 }
+
+blockquote {
+    font-size: 100%;
+    font-style: italic;
+}
