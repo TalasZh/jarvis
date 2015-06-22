@@ -36,6 +36,11 @@
     <property name="securityCookieName" value="${security.cookieName}" />
   </bean>
 
+  <bean id="sonarAction" class="org.safehaus.webapp.action.SonarAction" scope="prototype">
+    <property name="sonarManager" ref="sonarManager" />
+    <property name="securityCookieName" value="${security.cookieName}" />
+  </bean>
+
   <bean id="sessionAction" class="org.safehaus.webapp.action.SessionAction" scope="prototype">
     <property name="sessionManager" ref="sessionManager" />
   </bean>

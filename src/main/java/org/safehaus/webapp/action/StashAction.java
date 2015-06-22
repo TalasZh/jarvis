@@ -41,7 +41,6 @@ public class StashAction extends BaseAction
         {
             JarvisContextHolder.setContext( new JarvisContext( getSecurityCookie() ) );
             page = stashManager.getProjects( 100, 0 );
-            Project p = new Project();
         }
         catch ( Exception e )
         {

@@ -1,7 +1,7 @@
 <%@ include file="/common/taglibs.jsp" %>
 
 <head>
-  <title><fmt:message key="jira.title"/></title>
+  <title><fmt:message key="stash.title"/></title>
   <meta name="menu" content="Stash"/>
 </head>
 <body class="home">

@@ -11,8 +11,9 @@
     <menu:displayMenu name="Home"/>
     <menu:displayMenu name="Jira"/>
     <menu:displayMenu name="Stash"/>
+    <menu:displayMenu name="Sonar"/>
     <menu:displayMenu name="SessionMenu"/>
-    <menu:displayMenu name="AdminMenu"/>
+<%--    <menu:displayMenu name="AdminMenu"/>--%>
     <menu:displayMenu name="Logout"/>
 </ul>
 </div>
