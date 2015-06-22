@@ -1,6 +1,11 @@
 package org.safehaus.webapp.action;
 
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Consumer;
+
 import org.safehaus.exceptions.JiraClientException;
 import org.safehaus.model.JarvisContext;
 import org.safehaus.sonar.client.SonarManager;
@@ -13,6 +18,7 @@ import org.safehaus.stash.client.Page;
 import org.safehaus.stash.client.StashManager;
 import org.safehaus.stash.model.Project;
 import org.safehaus.util.JarvisContextHolder;
+import org.sonar.wsclient.services.Resource;
 
 
 public class SonarAction extends BaseAction
@@ -25,6 +31,8 @@ public class SonarAction extends BaseAction
     private DuplicationStats duplicationStats;
     private QuantitativeStats quantitativeStats;
     private ViolationStats violationStats;
+    private Set<Resource> resources;
+    private String project;
 
 
     public void setSonarManager( final SonarManager sonarManager )
@@ -63,20 +71,54 @@ public class SonarAction extends BaseAction
     }
 
 
+    public Set<Resource> getResources()
+    {
+        return resources;
+    }
+
+
+    public String getProject()
+    {
+        return project;
+    }
+
+
+    public void setProject( final String project )
+    {
+        this.project = project;
+    }
+
+
     public String list() throws JiraClientException
     {
+        log.debug( project );
+
+        if ( this.cancel != null )
+        {
+            return "cancel";
+        }
+
+
         try
         {
             JarvisContextHolder.setContext( new JarvisContext( getSecurityCookie() ) );
-            unitTestStats = sonarManager.getUnitTestStats( RESOURCE_ID );
 
-            complexityStats = sonarManager.getComplexityStats( RESOURCE_ID );
+            resources = sonarManager.getResources();
 
-            duplicationStats = sonarManager.getDuplicationStats( RESOURCE_ID );
+            if ( project == null )
+            {
+                return SUCCESS;
+            }
 
-            quantitativeStats = sonarManager.getQuantitativeStats( RESOURCE_ID );
+            unitTestStats = sonarManager.getUnitTestStats( project );
 
-            violationStats = sonarManager.getViolationStats( RESOURCE_ID );
+            complexityStats = sonarManager.getComplexityStats( project );
+
+            duplicationStats = sonarManager.getDuplicationStats( project );
+
+            quantitativeStats = sonarManager.getQuantitativeStats( project );
+
+            violationStats = sonarManager.getViolationStats( project );
         }
         catch ( Exception e )
         {
