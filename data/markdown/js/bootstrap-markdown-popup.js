@@ -29,7 +29,7 @@
     // @see : https://github.com/toopay/bootstrap-markdown/issues/109
     var opts = ['autofocus', 'savable', 'hideable', 'width', 
       'height', 'resize', 'iconlibrary', 'language', 
-      'footer', 'fullscreen', 'hiddenButtons', 'disabledButtons'];
+      'footer', 'fullscreen', 'hiddenButtons', 'disabledButtons', 'deletable'];
     $.each(opts,function(_, opt){
       if (typeof $(element).data(opt) !== 'undefined') {
         options = typeof options == 'object' ? options : {}
@@ -337,9 +337,29 @@
                               + '"><i class="icon icon-white icon-ok"></i> '
                               + this.__localize('Save')
                               + '</button>');
+        }
+
+        editorFooter.append('&nbsp;&nbsp;');
+
+        if (options.deletable) {
+          createFooter = true;
+          var deleteHandler = 'cmdDelete';
+
+          // Register handler and callback
+          handler.push(deleteHandler);
+          callback.push(options.onDelete);
+
+          editorFooter.append('<button id="deleteButton" class="btn btn-sm btn-danger" data-provider="'
+                              + ns
+                              + '" data-handler="'
+                              + deleteHandler
+                              + '"><i class="icon icon-white icon-ok"></i> '
+                              + this.__localize('Delete')
+                              + '</button>');
 
 
         }
+
 
         footer = typeof options.footer === 'function' ? options.footer(this) : options.footer;
 
@@ -905,6 +925,7 @@
     language: 'en',
     initialstate: 'editor',
     parser: null,
+    deletable : true,
 
     /* Buttons Properties */
     buttons: [
@@ -1300,6 +1321,10 @@
     onPreview: function (e) {},
     onSave: function (e) {
       self.port.emit("updateAnnotation", e.getContent());
+      e.showPreview();
+    },
+    onDelete: function(e){
+      self.port.emit("deleteAnnotation", e.getContent());
     },
     onBlur: function (e) {},
     onFocus: function (e) {},

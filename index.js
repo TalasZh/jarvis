@@ -166,6 +166,24 @@ function handleExistingAnnotationUpdate(annotationText, anchor, sessionKey, capt
 }
 
 
+function deleteAnnotation(annotationText, anchor, sessionKey, captureId, callback) {
+    var newAnnotation = new Annotation(annotationText, anchor);
+    newAnnotation.id = captureId;
+    console.log("Deleting capture...");
+    mediator.deleteCapture(sessionKey, newAnnotation, function (error, json) {
+        if (error) {
+            console.error("Error : " + error);
+        }
+        else {
+            if (simpleStorage.storage.annotations[captureId]) {
+                simpleStorage.storage.annotations[captureId] = {};
+                updateMatchers();
+            }
+        }
+    });
+}
+
+
 function onAttachWorker(annotationEditor, data) {
     annotationEditor.annotationAnchor = data;
     annotationEditor.show();
@@ -439,6 +457,37 @@ exports.main = function () {
                   if (json[i].anchorText == annotation.textContent ){
                     var anchor = [annotation.baseUrl, "content", annotation.textContent];
                     handleExistingAnnotationUpdate(data, anchor, currentIssueKey, json[i].id, function (capture) {
+                        console.log("Handle existing annotation callback");
+                        getIssue(currentIssueKey, panel);
+                    });
+                  }
+                }
+            }
+        });
+    });
+
+    annotation.port.on("deleteAnnotation", function (data) {
+        console.log( annotation.baseUrl );
+        console.log( data  );
+        console.log( annotation.textContent );
+        console.log ( currentIssueKey );
+        if ( currentIssueKey == "" ){
+            notifications.notify({
+                title: 'Warning!',
+                text: 'Please select issue before deleting annotation.'
+            });
+            return;
+        }
+
+        mediator.listSessionCaptures(currentIssueKey, function (error, json) {
+            if (error) {
+                console.error("Error : " + error);
+            }
+            else {
+                for (var i = 0; i < json.length; i++){
+                  if (json[i].anchorText == annotation.textContent ){
+                    var anchor = [annotation.baseUrl, "content", annotation.textContent];
+                    deleteAnnotation(data, anchor, currentIssueKey, json[i].id, function (capture) {
                         console.log("Handle existing annotation callback");
                         getIssue(currentIssueKey, panel);
                     });
