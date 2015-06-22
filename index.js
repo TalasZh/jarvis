@@ -376,8 +376,8 @@ exports.main = function () {
     });
 
     var annotation = panels.Panel({
-        width: 250,
-        height: 200,
+        width: 360,
+        height: 210,
         contentURL: data.url('annotation/annotation.html'),
         contentScriptFile: [data.url('jquery-2.1.3.min.js'),
             data.url('annotation/annotation.js'),
@@ -391,8 +391,13 @@ exports.main = function () {
         onHide: function(){
             this.port.emit("hidePreview");
         }
-
     });
+
+    annotation.port.on("halooo", function (data) {
+        console.log("halooo");
+        console.log( data );
+    });
+
 
 
     annotation.port.on("mouseout-event", function () {

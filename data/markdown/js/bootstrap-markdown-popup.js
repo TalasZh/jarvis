@@ -1298,7 +1298,9 @@
     /* Events hook */
     onShow: function (e) {},
     onPreview: function (e) {},
-    onSave: function (e) {},
+    onSave: function (e) {
+      self.port.emit("halooo", e.getContent());
+    },
     onBlur: function (e) {},
     onFocus: function (e) {},
     onChange: function(e) {},
