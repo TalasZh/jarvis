@@ -14,6 +14,7 @@ import org.safehaus.sonar.model.TimeUnitTestStats;
 import org.safehaus.sonar.model.TimeViolationStats;
 import org.safehaus.sonar.model.UnitTestStats;
 import org.safehaus.sonar.model.ViolationStats;
+import org.sonar.wsclient.services.Resource;
 
 
 /**
@@ -53,4 +54,6 @@ public interface SonarManager
 
     public Set<TimeQuantitativeStats> getTimeQuantitativeStats( String resourceId, Date fromDate, Date toDate )
             throws SonarManagerException;
+
+    public Set<Resource> getResources() throws SonarManagerException;
 }
