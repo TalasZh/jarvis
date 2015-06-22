@@ -29,6 +29,8 @@ import org.sonar.wsclient.services.TimeMachine;
 import org.sonar.wsclient.services.TimeMachineCell;
 import org.sonar.wsclient.services.TimeMachineQuery;
 
+import com.google.common.collect.Lists;
+
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.TestCase.assertNotNull;
 import static org.mockito.Matchers.any;
@@ -60,8 +62,9 @@ public class SonarManagerImplTest
     @Before
     public void setUp() throws Exception
     {
-        sonarManager = spy( new SonarManagerImpl( "http://sonar.subutai.io", "username", "password" ) );
+        sonarManager = spy( new SonarManagerImpl( "http://sonar.subutai.io", "dilshat.aliev", "sadilya" ) );
         doReturn( resource ).when( sonarClient ).find( isA( ResourceQuery.class ) );
+        doReturn( Lists.newArrayList( resource ) ).when( sonarClient ).findAll( isA( ResourceQuery.class ) );
         doReturn( timeMachine ).when( sonarClient ).find( isA( TimeMachineQuery.class ) );
         doReturn( measure ).when( resource ).getMeasure( anyString() );
         doReturn( MEASURE_VALUE ).when( measure ).getValue();
@@ -172,5 +175,14 @@ public class SonarManagerImplTest
                 sonarManager.getTimeQuantitativeStats( RESOURCE_ID, date( "2015-01-01" ), new Date() );
 
         assertFalse( timeQuantitativeStatses.isEmpty() );
+    }
+
+
+    @Test
+    public void testGetResources() throws Exception
+    {
+        Set<Resource> resources = sonarManager.getResources();
+
+        assertFalse( resources.isEmpty() );
     }
 }

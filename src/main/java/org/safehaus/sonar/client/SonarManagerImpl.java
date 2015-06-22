@@ -364,4 +364,22 @@ public class SonarManagerImpl implements SonarManager
 
         return stats;
     }
+
+
+    @Override
+    public Set<Resource> getResources() throws SonarManagerException
+    {
+        Set<Resource> resources = Sets.newHashSet();
+
+        try
+        {
+            resources.addAll( sonarClient.findAll( ResourceQuery.create( null ) ) );
+        }
+        catch ( Exception e )
+        {
+            throw new SonarManagerException( e );
+        }
+
+        return resources;
+    }
 }
