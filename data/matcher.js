@@ -13,7 +13,13 @@ self.on('message', function onMessage(annotations) {
     // annotated.css('border', 'solid 3px yellow');
 
     annotated.bind('mouseenter', function (event) {
-        self.port.emit('show', $(this).attr('annotation'));
+        self.port.emit('show',                     
+            [
+                this['baseURI'],
+                $(this).attr('annotation'),
+                this['textContent']
+            ]
+        );
         event.stopPropagation();
         event.preventDefault();
     });

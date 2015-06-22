@@ -1299,7 +1299,7 @@
     onShow: function (e) {},
     onPreview: function (e) {},
     onSave: function (e) {
-      self.port.emit("halooo", e.getContent());
+      self.port.emit("updateAnnotation", e.getContent());
     },
     onBlur: function (e) {},
     onFocus: function (e) {},
