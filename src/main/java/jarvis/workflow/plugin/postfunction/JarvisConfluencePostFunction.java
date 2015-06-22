@@ -50,6 +50,7 @@ public class JarvisConfluencePostFunction extends AbstractJiraFunctionProvider
         {
             if ( storyId != null )
             {
+
                 String requirementsId =
                         jarvisConfluenceService.createConfluencePage( issue.getKey() + " REQUIREMENTS", storyId );
 

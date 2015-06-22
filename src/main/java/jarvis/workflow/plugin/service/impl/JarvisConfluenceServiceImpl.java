@@ -98,16 +98,16 @@ public class JarvisConfluenceServiceImpl implements JarvisConfluenceService
         String state = issue.getStatusObject().getSimpleStatus().getName();
 
         String url = this.url + "/search?";
-        String cql = "cql=(title=\"" + key + " " + state + "\" and type=page and space=" + getProjectSpaceKey() + ")";
-
-        try
-        {
-            cql = URLEncoder.encode( cql, "UTF-8" );
-        }
-        catch ( UnsupportedEncodingException e )
-        {
-            e.printStackTrace();
-        }
+        String cql = "cql=(title=%22" + key + "+" + state.toUpperCase() + "%22+and+type=page+and+space=" + getProjectSpaceKey() + ")";
+//
+//        try
+//        {
+//            cql = URLEncoder.encode( cql, "UTF-8" );
+//        }
+//        catch ( UnsupportedEncodingException e )
+//        {
+//            e.printStackTrace();
+//        }
 
         log.debug( "Making search request with URL {}", url );
 
