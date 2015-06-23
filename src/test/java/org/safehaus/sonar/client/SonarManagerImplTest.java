@@ -62,7 +62,7 @@ public class SonarManagerImplTest
     @Before
     public void setUp() throws Exception
     {
-        sonarManager = spy( new SonarManagerImpl( "http://sonar.subutai.io", "dilshat.aliev", "sadilya" ) );
+        sonarManager = spy( new SonarManagerImpl( "http://sonar.subutai.io", "username", "password" ) );
         doReturn( resource ).when( sonarClient ).find( isA( ResourceQuery.class ) );
         doReturn( Lists.newArrayList( resource ) ).when( sonarClient ).findAll( isA( ResourceQuery.class ) );
         doReturn( timeMachine ).when( sonarClient ).find( isA( TimeMachineQuery.class ) );
