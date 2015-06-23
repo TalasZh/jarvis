@@ -13,6 +13,7 @@ import org.safehaus.upsource.util.TestUtil;
 import org.safehaus.util.RestUtil;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.anyMap;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doReturn;
@@ -50,10 +51,16 @@ public class UpsourceManagerImplTest
         Set<Project> projects = upsourceManager.getAllProjects();
 
         assertFalse( projects.isEmpty() );
+    }
 
-        for ( Project project : projects )
-        {
-            System.out.println( project );
-        }
+
+    @Test
+    public void testGetProject() throws Exception
+    {
+        setResponse( TestUtil.PROJECT_JSON );
+
+        Project project = upsourceManager.getProject( TestUtil.PROJECT_ID );
+
+        assertNotNull( project );
     }
 }

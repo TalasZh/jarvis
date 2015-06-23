@@ -12,4 +12,10 @@ public class TestUtil
                     + "\"headHash\": \"fe8381528f2596b7\",\n" + "\"codeReviewIdPattern\": \"SBT-CR-{}\",\n"
                     + "\"lastCommitDate\": 1434986436000,\n" + "\"lastCommitAuthorName\": \"Ozlem Ceren Sahin\",\n"
                     + "\"projectModelType\": \"maven\"\n" + "}\n" + "]\n" + "}\n" + "}";
+    public static final String PROJECT_ID = "subutai";
+    public static final String PROJECT_JSON =
+            "{\n" + "\"result\": {\n" + "\"projectName\": \"Subutai\",\n" + "\"projectId\": \"subutai\",\n" +
+                    "\"headHash\": \"fe8381528f2596b7\",\n" + "\"codeReviewIdPattern\": \"SBT-CR-{}\",\n"
+                    + "\"lastCommitDate\": 1434986436000,\n" + "\"lastCommitAuthorName\": \"Ozlem Ceren Sahin\",\n"
+                    + "\"projectModelType\": \"maven\"\n" + "}\n" + "}";
 }
