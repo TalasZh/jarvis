@@ -1,17 +1,15 @@
-package org.safehaus.service.impl;
+package org.safehaus.jira;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.safehaus.exceptions.JiraClientException;
-import org.safehaus.model.JarvisIssue;
-import org.safehaus.model.JarvisIssueType;
-import org.safehaus.model.JarvisLink;
-import org.safehaus.model.JarvisMember;
+import org.safehaus.jira.model.JarvisIssue;
+import org.safehaus.jira.model.JarvisIssueType;
+import org.safehaus.jira.model.JarvisLink;
+import org.safehaus.jira.model.JarvisMember;
 import org.safehaus.model.JarvisProject;
-import org.safehaus.service.JiraClient;
-import org.safehaus.service.JiraManager;
 import org.safehaus.util.JarvisContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +39,12 @@ public class JiraManagerImpl implements JiraManager
     @Override
     public List<JarvisIssue> getIssues( final String projectId ) throws JiraClientException
     {
-        return getJiraClient().getIssues( projectId );
+        List<JarvisIssue> result = new ArrayList<JarvisIssue>();
+        for ( Issue issue : getJiraClient().getIssues( projectId ) )
+        {
+            result.add( buildJarvisIssue( issue ) );
+        }
+        return result;
     }
 
 
@@ -188,7 +191,9 @@ public class JiraManagerImpl implements JiraManager
                     link.getIssueLinkType().getDirection().name(),
                     new JarvisIssueType( i.getIssueType().getId(), i.getIssueType().getName() ) ) );
         }
-        return new JarvisIssue( issue.getId(), issue.getKey(), issue.getSummary(),
+
+        issue.getSelf();
+        return new JarvisIssue( issue.getId(), issue.getKey(), issue.getSummary(), issue.getSelf().toASCIIString(),
                 new JarvisIssueType( issue.getIssueType().getId(), issue.getIssueType().getName() ),
                 issue.getDescription(), issue.getTimeTracking() != null ?
                                         ( issue.getTimeTracking().getRemainingEstimateMinutes() != null ?
@@ -216,7 +221,7 @@ public class JiraManagerImpl implements JiraManager
                     link.getIssueLinkType().getDirection().name(),
                     new JarvisIssueType( i.getIssueType().getId(), i.getIssueType().getName() ) ) );
         }
-        return new JarvisIssue( issue.getId(), issue.getKey(), issue.getSummary(),
+        return new JarvisIssue( issue.getId(), issue.getKey(), issue.getSummary(), issue.getSelf().toASCIIString(),
                 new JarvisIssueType( issue.getIssueType().getId(), issue.getIssueType().getName() ),
                 issue.getDescription(), issue.getTimeTracking() != null ?
                                         ( issue.getTimeTracking().getRemainingEstimateMinutes() != null ?

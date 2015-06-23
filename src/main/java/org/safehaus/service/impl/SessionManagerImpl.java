@@ -6,14 +6,12 @@ import java.util.List;
 import org.safehaus.dao.SessionDao;
 import org.safehaus.exceptions.JiraClientException;
 import org.safehaus.model.Capture;
-import org.safehaus.model.JarvisIssue;
-import org.safehaus.model.JarvisLink;
+import org.safehaus.jira.model.JarvisIssue;
 import org.safehaus.model.JarvisSessionException;
-import org.safehaus.model.PhaseNotFoundException;
 import org.safehaus.model.Session;
 import org.safehaus.model.SessionNotFoundException;
 import org.safehaus.model.SessionStatus;
-import org.safehaus.service.JiraManager;
+import org.safehaus.jira.JiraManager;
 import org.safehaus.service.SessionManager;
 import org.safehaus.util.SecurityUtil;
 import org.slf4j.Logger;
@@ -133,8 +131,7 @@ public class SessionManagerImpl extends GenericManagerImpl<Session, Long> implem
 
 
     @Override
-    public Session startSession( final String id, String username )
-            throws JarvisSessionException, PhaseNotFoundException, JiraClientException
+    public Session startSession( final String id, String username ) throws JarvisSessionException, JiraClientException
     {
         JarvisIssue issue = jiraManager.getIssue( id );
 
@@ -227,6 +224,16 @@ public class SessionManagerImpl extends GenericManagerImpl<Session, Long> implem
         //        result = captureDao.saveCapture( result );
         logger.debug( "Updated capture:" + result );
         return result;
+    }
+
+
+    @Override
+    public void deleteCapture( final String sessionId, final String captureId ) throws SessionNotFoundException
+    {
+        Session session = getSession( sessionId );
+        session.deleteCapture( new Long( captureId ) );
+        sessionDao.saveSession( session );
+        logger.debug( "Capture deleted successfully:" + captureId );
     }
 
 

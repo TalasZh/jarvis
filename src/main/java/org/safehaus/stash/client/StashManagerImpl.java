@@ -494,4 +494,11 @@ public class StashManagerImpl implements StashManager
             throw new StashManagerException( e );
         }
     }
+
+
+    @Override
+    public String getBaseUrl()
+    {
+        return baseUrl;
+    }
 }

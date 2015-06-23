@@ -30,8 +30,8 @@ body#login {
 }
 
 /* Fix for dropdowns not working in IE: APF-1448 */
-.navbar { 
-    filter:none !important; 
+.navbar {
+    filter:none !important;
 }
 
 #switchLocale {

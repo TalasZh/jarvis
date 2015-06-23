@@ -6,9 +6,10 @@ import java.util.List;
 import javax.ws.rs.core.Cookie;
 
 import org.safehaus.exceptions.JiraClientException;
+import org.safehaus.jira.model.JarvisIssue;
 import org.safehaus.model.JarvisContext;
 import org.safehaus.model.JarvisProject;
-import org.safehaus.service.JiraManager;
+import org.safehaus.jira.JiraManager;
 import org.safehaus.util.JarvisContextHolder;
 
 import com.opensymphony.xwork2.Preparable;
@@ -25,6 +26,8 @@ public class JiraAction extends BaseAction implements Preparable
     private List<JarvisProject> projects;
     private String jiraUrl;
     private String securityCookieName;
+    private String project;
+    private List<JarvisIssue> issues;
 
 
     public void setJiraManager( final JiraManager jiraManager )
@@ -36,6 +39,12 @@ public class JiraAction extends BaseAction implements Preparable
     public void setSecurityCookieName( final String securityCookieName )
     {
         this.securityCookieName = securityCookieName;
+    }
+
+
+    public String getJiraUrl()
+    {
+        return jiraUrl;
     }
 
 
@@ -51,6 +60,24 @@ public class JiraAction extends BaseAction implements Preparable
     }
 
 
+    public String getProject()
+    {
+        return project;
+    }
+
+
+    public void setProject( final String project )
+    {
+        this.project = project;
+    }
+
+
+    public List<JarvisIssue> getIssues()
+    {
+        return issues;
+    }
+
+
     public String list() throws JiraClientException
     {
         try
@@ -58,6 +85,13 @@ public class JiraAction extends BaseAction implements Preparable
             JarvisContextHolder.setContext( new JarvisContext( jiraUrl, getSecurityCookie() ) );
 
             projects = jiraManager.getProjects();
+
+            if ( project == null )
+            {
+                return SUCCESS;
+            }
+
+            issues = jiraManager.getIssues( project );
         }
         catch ( Exception e )
         {

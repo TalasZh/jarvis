@@ -79,6 +79,14 @@
       <result name="success">/WEB-INF/pages/jira.jsp</result>
     </action>
 
+    <action name="stash" class="stashAction" method="list">
+      <result name="success">/WEB-INF/pages/stash.jsp</result>
+    </action>
+
+    <action name="sonar" class="sonarAction" method="list">
+      <result name="success">/WEB-INF/pages/sonar.jsp</result>
+    </action>
+
     <action name="signup">
       <result>/WEB-INF/pages/signup.jsp</result>
     </action>

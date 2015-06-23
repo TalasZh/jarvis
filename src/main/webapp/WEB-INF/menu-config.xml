@@ -6,18 +6,18 @@
   <Menus>
     <Menu name="Home" title="home.title" page="/home" roles="ROLE_ADMIN,ROLE_USER" />
     <Menu name="Jira" title="menu.jira" page="/jira" roles="ROLE_ADMIN,ROLE_USER" />
+    <Menu name="Stash" title="menu.stash" page="/stash" roles="ROLE_ADMIN,ROLE_USER" />
+    <Menu name="Sonar" title="menu.sonar" page="/sonar" roles="ROLE_ADMIN,ROLE_USER" />
     <Menu name="SessionMenu" title="menu.session" description="Session Menu" page="/sessions"
           roles="ROLE_ADMIN,ROLE_USER" />
-    <Menu name="AdminMenu" title="menu.admin" description="Admin Menu" roles="ROLE_ADMIN" page="/admin/users">
-      <Item name="ActiveUsers" title="home.activeUsers" page="/admin/activeUsers" />
-<!--
-      <Item name="ViewUsers" title="menu.admin.users" page="/admin/users" />
--->
-      <Item name="ReloadContext" title="menu.admin.reload" page="/admin/reload" />
-<!--
-      <Item name="FileUpload" title="menu.selectFile" page="/selectFile" />
--->
-    </Menu>
+    <!--
+        <Menu name="AdminMenu" title="menu.admin" description="Admin Menu" roles="ROLE_ADMIN" page="/admin/users">
+          <Item name="ActiveUsers" title="home.activeUsers" page="/admin/activeUsers" />
+          <Item name="ViewUsers" title="menu.admin.users" page="/admin/users" />
+          <Item name="ReloadContext" title="menu.admin.reload" page="/admin/reload" />
+          <Item name="FileUpload" title="menu.selectFile" page="/selectFile" />
+        </Menu>
+    -->
     <Menu name="Logout" title="user.logout" page="/logout" roles="ROLE_ADMIN,ROLE_USER" />
   </Menus>
 </MenuConfig>

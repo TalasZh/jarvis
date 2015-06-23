@@ -18,12 +18,12 @@ import org.safehaus.confluence.models.Content;
 import org.safehaus.confluence.models.Results;
 import org.safehaus.exceptions.JiraClientException;
 import org.safehaus.model.Capture;
-import org.safehaus.model.JarvisIssue;
-import org.safehaus.model.JarvisLink;
+import org.safehaus.jira.model.JarvisIssue;
+import org.safehaus.jira.model.JarvisLink;
 import org.safehaus.model.Session;
 import org.safehaus.model.SessionNotFoundException;
 import org.safehaus.model.Views;
-import org.safehaus.service.JiraManager;
+import org.safehaus.jira.JiraManager;
 import org.safehaus.service.SessionManager;
 import org.safehaus.service.SessionService;
 import org.safehaus.util.JarvisContextHolder;
@@ -233,6 +233,21 @@ public class SessionServiceImpl implements SessionService
 
 
     @Override
+    public Response deleteCapture( String sessionId, String captureId )
+    {
+        try
+        {
+            sessionManager.deleteCapture( sessionId, captureId );
+            return Response.ok().build();
+        }
+        catch ( SessionNotFoundException e )
+        {
+            throw new WebApplicationException( Response.Status.NOT_FOUND );
+        }
+    }
+
+
+    @Override
     public List<Capture> getCaptures( final String sessionId )
     {
         Session session = null;
@@ -383,7 +398,7 @@ public class SessionServiceImpl implements SessionService
     {
         try
         {
-//            setSecurityContext();
+            //            setSecurityContext();
             final String credentails = String.format( "%s=%s", CROWD_TOKEN_NAME, getCookie( CROWD_TOKEN_NAME ) );
 
             //            String remoteAddress = getRemoteAddress();
@@ -461,18 +476,16 @@ public class SessionServiceImpl implements SessionService
         return result;
     }
 
-//
-//    private String getRemoteAddress()
-//    {
-//        // Here We are getting cookies from HttpServletRequest
-//        Message message = PhaseInterceptorChain.getCurrentMessage();
-//        HttpServletRequest request = ( HttpServletRequest ) message.get( AbstractHTTPDestination.HTTP_REQUEST );
-//
-//
-//        String result = request.getRemoteAddr();
-//        logger.debug( String.format( "Remote client address: %s", result ) );
-//        return result;
-//    }
-
-
+    //
+    //    private String getRemoteAddress()
+    //    {
+    //        // Here We are getting cookies from HttpServletRequest
+    //        Message message = PhaseInterceptorChain.getCurrentMessage();
+    //        HttpServletRequest request = ( HttpServletRequest ) message.get( AbstractHTTPDestination.HTTP_REQUEST );
+    //
+    //
+    //        String result = request.getRemoteAddr();
+    //        logger.debug( String.format( "Remote client address: %s", result ) );
+    //        return result;
+    //    }
 }
