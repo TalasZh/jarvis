@@ -54,7 +54,7 @@ public interface JiraClient
 
     public List<JarvisMember> getProjectMemebers( String projectId ) throws JiraClientException;
 
-    List<JarvisIssue> getIssues( String projectId );
+    List<Issue> getIssues( String projectId );
 
 //    Status storyStart( String issueIdOrKey ) throws JiraClientException;
 

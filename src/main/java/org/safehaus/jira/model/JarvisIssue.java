@@ -31,6 +31,8 @@ public class JarvisIssue
     protected String projectKey;
     @JsonView( Views.JarvisIssueLong.class )
     protected String summary;
+    @JsonView( Views.JarvisIssueLong.class )
+    protected String self;
     //    @JsonView( Views.JarvisIssueLong.class )
     //    private Phase phase;
 
@@ -79,16 +81,16 @@ public class JarvisIssue
     }
 
 
-    public JarvisIssue( final Long id, final String key, final String summary, final JarvisIssueType type,
-                        final String issueDescription, final String timeRemaining, final String assignee,
-                        final String reporter, final String components, final String labels, final String status,
-                        final String resolution, final String fixVersion, final String dateCreated,
+    public JarvisIssue( final Long id, final String key, final String summary, final String self,
+                        final JarvisIssueType type, final String issueDescription, final String timeRemaining,
+                        final String assignee, final String reporter, final String components, final String labels,
+                        final String status, final String resolution, final String fixVersion, final String dateCreated,
                         final List<JarvisLink> links, final String projectKey, Iterable<Transition> transitions )
     {
         this.id = id;
         this.key = key;
         this.summary = summary;
-        //        this.phase = phase;
+        this.self = self;
         this.type = type;
         this.issueDescription = issueDescription;
         this.timeRemaining = timeRemaining;
@@ -152,6 +154,12 @@ public class JarvisIssue
     public void setSummary( final String summary )
     {
         this.summary = summary;
+    }
+
+
+    public String getSelf()
+    {
+        return self;
     }
 
 
