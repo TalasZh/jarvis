@@ -1,4 +1,4 @@
-package org.safehaus.stash.util;
+package org.safehaus.upsource.util;
 
 
 import org.junit.Before;

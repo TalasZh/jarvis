@@ -75,7 +75,6 @@ public class RestUtil
                 }
             }
 
-
             return clientResource.get().getText();
         }
         catch ( Exception e )

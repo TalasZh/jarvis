@@ -40,4 +40,10 @@ public class TestUtil
             + "\"9b45d8cb6f6b9a23d4e4232ad321f56a32409a86\"\n" + "],\n" + "\"childRevisions\": [\n"
             + "\"581a42f1813c7499277ac39d83fa4479e36d06c3\"\n" + "]\n" + "}\n" + "],\n"
             + "\"headHash\": \"fe8381528f2596b7\"\n" + "}\n" + "}";
+    public static final String REVISION_JSON =
+            "{\n" + "\"result\": {\n" + "\"revisionId\": \"53066db39b844d90a6ed16675669d352a745da58\",\n" +
+                    "\"revisionDate\": 1434986436000,\n"
+                    + "\"effectiveRevisionDate\": 1434986436000,\n" + "\"revisionCommitMessage\": \"modify activemq debian creator\\ \",\n" + "\"state\": 3,\n"
+                    + "\"revisionIdShort\": \"53066db\",\n" + "\"authorId\": \"~Ozlem Ceren Sahin <ozlemcs@critical-factor.com>\",\n"
+                    + "\"branchHeadLabel\": [\n" + "\"keshig-integ\"\n" + "],\n" + "\"parentRevisions\": [\n" + "\"581a42f1813c7499277ac39d83fa4479e36d06c3\"\n" + "]\n" + "}\n" + "}";
 }

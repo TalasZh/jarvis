@@ -69,11 +69,21 @@ public class UpsourceManagerImplTest
     @Test
     public void testGetRevisions() throws Exception
     {
-
         setResponse( TestUtil.REVISIONS_JSON );
 
         Set<Revision> revisions = upsourceManager.getRevisions( TestUtil.PROJECT_ID, 10 );
 
         assertFalse( revisions.isEmpty() );
+    }
+
+
+    @Test
+    public void testGetHeadRevision() throws Exception
+    {
+        setResponse( TestUtil.REVISION_JSON );
+
+        Revision revision = upsourceManager.getHeadRevision( TestUtil.PROJECT_ID );
+
+        assertNotNull( revision );
     }
 }

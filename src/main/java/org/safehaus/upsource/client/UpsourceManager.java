@@ -14,4 +14,6 @@ public interface UpsourceManager
     public Project getProject( String projectId ) throws UpsourceManagerException;
 
     public Set<Revision> getRevisions( String projectId, int limit ) throws UpsourceManagerException;
+
+    public Revision getHeadRevision( String projectId ) throws UpsourceManagerException;
 }
