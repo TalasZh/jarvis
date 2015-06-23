@@ -64,4 +64,18 @@ public class TestUtil
                     + "\"security_unit_tests\",\n" + "\"unit-tests\",\n" + "\"core-security\",\n"
 
                     + "\"fix-agent-protobuf\",\n" + "\"core-refactor\"\n" + "]\n" + "}\n" + "}";
+    public static final String FILE_NAME =
+            "/management/server/core/identity-manager/identity-manager-impl/src/main/java/org/safehaus/subutai/core"
+                    + "/identity/impl/ShiroLoginModule.java";
+    public static final String FILE_ANNOTATION_JSON =
+            "{\n" + "\"result\": {\n" + "\"retrospective\": [\n" + "{\n" + "\"startLine\": 0,\n" + "\"lineCount\": 4,\n"
+                    + "\"revision\": {\n" + "\"revisionId\": \"9cdbed405931b57ee230f5efe95d39272b159da4\",\n" +
+                    "\"revisionDate\": 1422012387000,\n" + "\"effectiveRevisionDate\": 1422012387000,\n"
+                    + "\"revisionCommitMessage\": \"secure UI with Shiro\\ \",\n" + "\"state\": 4,\n"
+                    + "\"revisionIdShort\": \"9cdbed4\",\n" + "\"authorId\": \"~Timur Zhamakeev <ztimur@gmail.com>\",\n"
+                    + "\"parentRevisions\": [\n" + "\"54a3c7ada7dafd93298032c22807d436fc7bc8ed\"\n" + "],\n" +
+                    "\"childRevisions\": [\n" + "\"35a89d369291641be7ce9fe1f3af17aee0e0593c\"\n" + "]\n" + "},\n"
+                    + "\"filePath\": \"/management/server/core/identity-manager/identity-manager-impl/src/main/java"
+                    + "/org/safehaus/subutai/core/identity/impl/ShiroLoginModule.java\"\n"
+                    + "}\n" + "]\n" + "}\n" + "}";
 }

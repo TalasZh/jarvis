@@ -3,6 +3,7 @@ package org.safehaus.upsource.client;
 
 import java.util.Set;
 
+import org.safehaus.upsource.model.FileAnnotation;
 import org.safehaus.upsource.model.Project;
 import org.safehaus.upsource.model.Revision;
 import org.safehaus.upsource.model.RevisionDiffItem;
@@ -27,4 +28,7 @@ public interface UpsourceManager
                                                      int limit ) throws UpsourceManagerException;
 
     public Set<String> getRevisionBranches( String projectId, String revisionId ) throws UpsourceManagerException;
+
+    public FileAnnotation getFileAnnotation( String projectId, String revisionId, String fileName )
+            throws UpsourceManagerException;
 }

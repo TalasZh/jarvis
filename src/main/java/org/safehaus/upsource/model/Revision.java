@@ -14,14 +14,35 @@ public class Revision
     private String revisionCommitMessage;
     private int state;
     private String revisionIdShort;
+    private String revisionProblemMessage;
     private String authorId;
     private Set<String> branchHeadLabel;
     private Set<String> parentRevisions;
+    private Set<String> childRevisions;
+    private Set<String> tags;
 
 
     public String getRevisionId()
     {
         return revisionId;
+    }
+
+
+    public String getRevisionProblemMessage()
+    {
+        return revisionProblemMessage;
+    }
+
+
+    public Set<String> getChildRevisions()
+    {
+        return childRevisions;
+    }
+
+
+    public Set<String> getTags()
+    {
+        return tags;
     }
 
 
@@ -79,7 +100,9 @@ public class Revision
         return Objects.toStringHelper( this ).add( "revisionId", revisionId ).add( "revisionDate", revisionDate )
                       .add( "effectiveRevisionDate", effectiveRevisionDate )
                       .add( "revisionCommitMessage", revisionCommitMessage ).add( "state", state )
-                      .add( "revisionIdShort", revisionIdShort ).add( "authorId", authorId )
-                      .add( "branchHeadLabel", branchHeadLabel ).add( "parentRevisions", parentRevisions ).toString();
+                      .add( "revisionIdShort", revisionIdShort ).add( "revisionProblemMessage", revisionProblemMessage )
+                      .add( "authorId", authorId ).add( "branchHeadLabel", branchHeadLabel )
+                      .add( "parentRevisions", parentRevisions ).add( "childRevisions", childRevisions )
+                      .add( "tags", tags ).toString();
     }
 }

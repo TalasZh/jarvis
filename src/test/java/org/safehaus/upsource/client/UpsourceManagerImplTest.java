@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.safehaus.upsource.model.FileAnnotation;
 import org.safehaus.upsource.model.Project;
 import org.safehaus.upsource.model.Revision;
 import org.safehaus.upsource.model.RevisionDiffItem;
@@ -132,5 +133,17 @@ public class UpsourceManagerImplTest
         Set<String> branchNames = upsourceManager.getRevisionBranches( TestUtil.PROJECT_ID, TestUtil.REVISION_ID );
 
         assertFalse( branchNames.isEmpty() );
+    }
+
+
+    @Test
+    public void testGetFileAnnotation() throws Exception
+    {
+        setResponse( TestUtil.FILE_ANNOTATION_JSON );
+
+        FileAnnotation fileAnnotation =
+                upsourceManager.getFileAnnotation( TestUtil.PROJECT_ID, TestUtil.REVISION_ID, TestUtil.FILE_NAME );
+
+        assertNotNull( fileAnnotation );
     }
 }
