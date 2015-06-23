@@ -176,7 +176,8 @@ function deleteAnnotation(annotationText, anchor, sessionKey, captureId, callbac
         }
         else {
             if (simpleStorage.storage.annotations[captureId]) {
-                simpleStorage.storage.annotations[captureId] = {};
+                delete simpleStorage.storage.annotations[captureId];
+
                 updateMatchers();
             }
         }
@@ -402,7 +403,7 @@ exports.main = function () {
                 annotation.baseUrl = data[0];
                 annotation.content = data[1];
                 annotation.textContent = data[2];
-
+                annotation.issueKey = data[3];
                 annotation.show();
             });
             worker.port.on('hide', function () {
@@ -424,7 +425,8 @@ exports.main = function () {
             data.url('annotation/annotation.js'),
             data.url('markdown/js/bootstrap-markdown-popup.js'),
             data.url('markdown/js/to-markdown.js'),
-            data.url('markdown/js/markdown.js')],
+            data.url('markdown/js/markdown.js'),
+            data.url('jquery.highlight.js')],
 
         onShow: function () {
             this.postMessage(this.content);
@@ -436,10 +438,13 @@ exports.main = function () {
 
 
     annotation.port.on("updateAnnotation", function (data) {
+        var currentIssueKey = annotation.issueKey;
+
         console.log( annotation.baseUrl );
         console.log( data  );
         console.log( annotation.textContent );
         console.log ( currentIssueKey );
+
         if ( currentIssueKey == "" ){
             notifications.notify({
                 title: 'Warning!',
@@ -467,6 +472,8 @@ exports.main = function () {
     });
 
     annotation.port.on("deleteAnnotation", function (data) {
+        var currentIssueKey = annotation.issueKey;
+        
         console.log( annotation.baseUrl );
         console.log( data  );
         console.log( annotation.textContent );
@@ -488,9 +495,11 @@ exports.main = function () {
                   if (json[i].anchorText == annotation.textContent ){
                     var anchor = [annotation.baseUrl, "content", annotation.textContent];
                     deleteAnnotation(data, anchor, currentIssueKey, json[i].id, function (capture) {
-                        console.log("Handle existing annotation callback");
+                        console.log("Handle deleting annotation callback");
                         getIssue(currentIssueKey, panel);
+
                     });
+                   
                   }
                 }
             }
@@ -499,6 +508,10 @@ exports.main = function () {
 
 
     annotation.port.on("mouseout-event", function () {
+        annotation.hide();
+    });
+
+    annotation.port.on("hide", function () {
         annotation.hide();
     });
 

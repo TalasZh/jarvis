@@ -532,7 +532,7 @@
 
       if (this.$element.is(':disabled') || this.$element.is('[readonly]')) {
         this.$editor.addClass('md-editor-disabled');
-        this.disableButtons('all');
+        this.disableButtons('all').enable('cmdDelete');
       }
 
       return this;
@@ -1325,6 +1325,7 @@
     },
     onDelete: function(e){
       self.port.emit("deleteAnnotation", e.getContent());
+      self.port.emit('hide');
     },
     onBlur: function (e) {},
     onFocus: function (e) {},
