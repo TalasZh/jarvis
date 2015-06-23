@@ -183,15 +183,7 @@ public class Session extends BaseObject
     {
         Capture result = null;
 
-        for ( Iterator<Capture> captureIterator = captures.iterator(); captureIterator.hasNext(); )
-        {
-            Capture c = captureIterator.next();
-            if ( captureId.equals( c.getId() ) )
-            {
-                result = c;
-                break;
-            }
-        }
+        result = findCapture( captureId );
         if ( result == null )
         {
             throw new IllegalArgumentException( "Capture not found." );
@@ -203,6 +195,37 @@ public class Session extends BaseObject
         result.setAnchorText( capture.getAnchorText() );
         result.setUrl( capture.getUrl() );
         return result;
+    }
+
+
+    private Capture findCapture( final Long captureId )
+    {
+        Capture result = null;
+        for ( Iterator<Capture> captureIterator = captures.iterator(); captureIterator.hasNext(); )
+        {
+            Capture c = captureIterator.next();
+            if ( captureId.equals( c.getId() ) )
+            {
+                result = c;
+                break;
+            }
+        }
+        return result;
+    }
+
+
+    public void deleteCapture( final Long captureId )
+    {
+        Capture result = null;
+
+        result = findCapture( captureId );
+        if ( result == null )
+        {
+            throw new IllegalArgumentException( "Capture not found." );
+        }
+
+        captures.remove( result );
+        result.setSession( null );
     }
 
 

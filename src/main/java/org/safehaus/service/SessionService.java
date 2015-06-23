@@ -4,6 +4,7 @@ package org.safehaus.service;
 import java.util.List;
 
 import javax.jws.WebService;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -87,7 +88,7 @@ public interface SessionService
     Response generate( @PathParam( "issueId" ) String issueId );
 
     /**
-     * Creates user's capture
+     * Updates user's capture
      *
      * @return capture capture object
      */
@@ -95,6 +96,13 @@ public interface SessionService
     @Path( "{sessionId}/capture/{captureId}" )
     Capture updateCapture( @PathParam( "sessionId" ) String sessionId, @PathParam( "captureId" ) String captureId,
                            Capture capture );
+
+    /**
+     * Deletes user's capture
+     */
+    @DELETE
+    @Path( "{sessionId}/capture/{captureId}" )
+    Response deleteCapture( @PathParam( "sessionId" ) String sessionId, @PathParam( "captureId" ) String captureId );
 
     /**
      * Updates user's capture
