@@ -20,6 +20,13 @@ public class Revision
     private Set<String> parentRevisions;
     private Set<String> childRevisions;
     private Set<String> tags;
+    private ReviewDescriptor reviewInfo;
+
+
+    public ReviewDescriptor getReviewInfo()
+    {
+        return reviewInfo;
+    }
 
 
     public String getRevisionId()
@@ -103,6 +110,6 @@ public class Revision
                       .add( "revisionIdShort", revisionIdShort ).add( "revisionProblemMessage", revisionProblemMessage )
                       .add( "authorId", authorId ).add( "branchHeadLabel", branchHeadLabel )
                       .add( "parentRevisions", parentRevisions ).add( "childRevisions", childRevisions )
-                      .add( "tags", tags ).toString();
+                      .add( "tags", tags ).add( "reviewInfo", reviewInfo ).toString();
     }
 }
