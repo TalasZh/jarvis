@@ -46,4 +46,6 @@ public class TestUtil
                     + "\"effectiveRevisionDate\": 1434986436000,\n" + "\"revisionCommitMessage\": \"modify activemq debian creator\\ \",\n" + "\"state\": 3,\n"
                     + "\"revisionIdShort\": \"53066db\",\n" + "\"authorId\": \"~Ozlem Ceren Sahin <ozlemcs@critical-factor.com>\",\n"
                     + "\"branchHeadLabel\": [\n" + "\"keshig-integ\"\n" + "],\n" + "\"parentRevisions\": [\n" + "\"581a42f1813c7499277ac39d83fa4479e36d06c3\"\n" + "]\n" + "}\n" + "}";
+
+    public static final String REVISION_FILTER = "author: {dilshat <daliev@critical-factor.com>}";
 }

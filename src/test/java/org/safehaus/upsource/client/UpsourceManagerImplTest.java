@@ -86,4 +86,16 @@ public class UpsourceManagerImplTest
 
         assertNotNull( revision );
     }
+
+
+    @Test
+    public void testGetFilteredRevisions() throws Exception
+    {
+        setResponse( TestUtil.REVISIONS_JSON );
+
+        Set<Revision> revisions =
+                upsourceManager.getFilteredRevisions( TestUtil.PROJECT_ID, 10, TestUtil.REVISION_FILTER );
+
+        assertFalse( revisions.isEmpty() );
+    }
 }
