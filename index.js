@@ -147,6 +147,44 @@ function handleNewAnnotation(annotationText, anchor, sessionKey, callback) {
     });
 }
 
+
+function handleExistingAnnotationUpdate(annotationText, anchor, sessionKey, captureId, callback) {
+    var newAnnotation = new Annotation(annotationText, anchor);
+    newAnnotation.id = captureId;
+    console.log("Updating capture...");
+    mediator.updateCapture(sessionKey, newAnnotation, function (error, json) {
+        if (error) {
+            console.error("Error : " + error);
+        }
+        else {
+            if (simpleStorage.storage.annotations[captureId]) {
+                simpleStorage.storage.annotations[captureId].comment = annotationText;
+                updateMatchers();
+            }
+        }
+    });
+}
+
+
+function deleteAnnotation(annotationText, anchor, sessionKey, captureId, callback) {
+    var newAnnotation = new Annotation(annotationText, anchor);
+    newAnnotation.id = captureId;
+    console.log("Deleting capture...");
+    mediator.deleteCapture(sessionKey, newAnnotation, function (error, json) {
+        if (error) {
+            console.error("Error : " + error);
+        }
+        else {
+            if (simpleStorage.storage.annotations[captureId]) {
+                delete simpleStorage.storage.annotations[captureId];
+
+                updateMatchers();
+            }
+        }
+    });
+}
+
+
 function onAttachWorker(annotationEditor, data) {
     annotationEditor.annotationAnchor = data;
     annotationEditor.show();
@@ -361,7 +399,11 @@ exports.main = function () {
                 worker.postMessage(simpleStorage.storage.annotations);
             }
             worker.port.on('show', function (data) {
-                annotation.content = data;
+
+                annotation.baseUrl = data[0];
+                annotation.content = data[1];
+                annotation.textContent = data[2];
+                annotation.issueKey = data[3];
                 annotation.show();
             });
             worker.port.on('hide', function () {
@@ -376,14 +418,15 @@ exports.main = function () {
     });
 
     var annotation = panels.Panel({
-        width: 250,
-        height: 200,
+        width: 360,
+        height: 210,
         contentURL: data.url('annotation/annotation.html'),
         contentScriptFile: [data.url('jquery-2.1.3.min.js'),
             data.url('annotation/annotation.js'),
             data.url('markdown/js/bootstrap-markdown-popup.js'),
             data.url('markdown/js/to-markdown.js'),
-            data.url('markdown/js/markdown.js')],
+            data.url('markdown/js/markdown.js'),
+            data.url('jquery.highlight.js')],
 
         onShow: function () {
             this.postMessage(this.content);
@@ -391,13 +434,87 @@ exports.main = function () {
         onHide: function(){
             this.port.emit("hidePreview");
         }
+    });
 
+
+    annotation.port.on("updateAnnotation", function (data) {
+        var currentIssueKey = annotation.issueKey;
+
+        console.log( annotation.baseUrl );
+        console.log( data  );
+        console.log( annotation.textContent );
+        console.log ( currentIssueKey );
+
+        if ( currentIssueKey == "" ){
+            notifications.notify({
+                title: 'Warning!',
+                text: 'Please select issue before updating annotation.'
+            });
+            return;
+        }
+
+        mediator.listSessionCaptures(currentIssueKey, function (error, json) {
+            if (error) {
+                console.error("Error : " + error);
+            }
+            else {
+                for (var i = 0; i < json.length; i++){
+                  if (json[i].anchorText == annotation.textContent ){
+                    var anchor = [annotation.baseUrl, "content", annotation.textContent];
+                    handleExistingAnnotationUpdate(data, anchor, currentIssueKey, json[i].id, function (capture) {
+                        console.log("Handle existing annotation callback");
+                        getIssue(currentIssueKey, panel);
+                    });
+                  }
+                }
+            }
+        });
+    });
+
+    annotation.port.on("deleteAnnotation", function (data) {
+        var currentIssueKey = annotation.issueKey;
+        
+        console.log( annotation.baseUrl );
+        console.log( data  );
+        console.log( annotation.textContent );
+        console.log ( currentIssueKey );
+        if ( currentIssueKey == "" ){
+            notifications.notify({
+                title: 'Warning!',
+                text: 'Please select issue before deleting annotation.'
+            });
+            return;
+        }
+
+        mediator.listSessionCaptures(currentIssueKey, function (error, json) {
+            if (error) {
+                console.error("Error : " + error);
+            }
+            else {
+                for (var i = 0; i < json.length; i++){
+                  if (json[i].anchorText == annotation.textContent ){
+                    var anchor = [annotation.baseUrl, "content", annotation.textContent];
+                    deleteAnnotation(data, anchor, currentIssueKey, json[i].id, function (capture) {
+                        console.log("Handle deleting annotation callback");
+                        getIssue(currentIssueKey, panel);
+
+                    });
+                   
+                  }
+                }
+            }
+        });
     });
 
 
     annotation.port.on("mouseout-event", function () {
         annotation.hide();
     });
+
+    annotation.port.on("hide", function () {
+        annotation.hide();
+    });
+
 
     var button = ToggleButton({
         id: "my-button",
