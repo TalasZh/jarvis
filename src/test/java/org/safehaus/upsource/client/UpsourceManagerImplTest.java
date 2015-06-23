@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.safehaus.upsource.model.Project;
+import org.safehaus.upsource.model.Revision;
 import org.safehaus.upsource.util.TestUtil;
 import org.safehaus.util.RestUtil;
 
@@ -62,5 +63,17 @@ public class UpsourceManagerImplTest
         Project project = upsourceManager.getProject( TestUtil.PROJECT_ID );
 
         assertNotNull( project );
+    }
+
+
+    @Test
+    public void testGetRevisions() throws Exception
+    {
+
+        setResponse( TestUtil.REVISIONS_JSON );
+
+        Set<Revision> revisions = upsourceManager.getRevisions( TestUtil.PROJECT_ID, 10 );
+
+        assertFalse( revisions.isEmpty() );
     }
 }

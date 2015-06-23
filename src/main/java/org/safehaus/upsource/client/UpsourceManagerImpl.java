@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.safehaus.upsource.model.Project;
+import org.safehaus.upsource.model.Revision;
 import org.safehaus.util.JsonUtil;
 import org.safehaus.util.RestUtil;
 
@@ -142,6 +143,23 @@ public class UpsourceManagerImpl implements UpsourceManager
             return jsonUtil
                     .from( get( "getProjectInfo", new ParamBuilder().add( "projectId", projectId ), null ).toString(),
                             Project.class );
+        }
+        catch ( Exception e )
+        {
+            throw new UpsourceManagerException( e );
+        }
+    }
+
+
+    @Override
+    public Set<Revision> getRevisions( final String projectId, final int limit ) throws UpsourceManagerException
+    {
+        try
+        {
+            return jsonUtil.from( get( "getRevisionsList",
+                    new ParamBuilder().add( "projectId", projectId ).add( "limit", limit ), "revision" ).toString(),
+                    new TypeToken<Set<Revision>>()
+                    {}.getType() );
         }
         catch ( Exception e )
         {
