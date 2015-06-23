@@ -15,6 +15,9 @@ import com.google.common.base.Strings;
 
 public class RestUtil
 {
+    //TODO throw exception if error code is not within 200-299
+
+
     //auth cookie
     private Cookie authCookie;
     //-------------
@@ -71,6 +74,7 @@ public class RestUtil
                     clientResource.addQueryParameter( queryParam.getKey(), queryParam.getValue() );
                 }
             }
+
 
             return clientResource.get().getText();
         }

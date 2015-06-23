@@ -87,11 +87,26 @@ public class UpsourceManagerImpl implements UpsourceManager
 
 
     protected JsonElement get( String apiPath, ParamBuilder paramBuilder, String elementName )
-            throws RestUtil.RestException
+            throws RestUtil.RestException, UpsourceManagerException
     {
         String response = restUtil.get( String.format( "%s/~rpc/%s", baseUrl, apiPath ),
                 paramBuilder == null ? null : paramBuilder.build() );
-        JsonObject result = ( JsonObject ) jsonUtil.from( response, JsonObject.class ).get( "result" );
+        JsonObject responseJO = jsonUtil.from( response, JsonObject.class );
+
+        if ( responseJO.has( "error" ) )
+        {
+            JsonObject errorJO = ( JsonObject ) responseJO.get( "error" );
+            throw new UpsourceManagerException( errorJO.get( "message" ).getAsString() );
+        }
+
+
+        JsonObject result = ( JsonObject ) responseJO.get( "result" );
+
+        if ( result == null )
+        {
+            throw new UpsourceManagerException( String.format( "Could not parse response %s", response ) );
+        }
+
 
         if ( Strings.isNullOrEmpty( elementName ) )
         {
