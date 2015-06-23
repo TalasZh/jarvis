@@ -84,4 +84,6 @@ public interface SessionManager extends GenericManager<Session, Long>
     Capture addCapture( String sessionId, Capture capture ) throws SessionNotFoundException;
 
     List<Session> getSessionsByParentId( Long parentId );
+
+    void deleteCapture( String sessionId, String captureId ) throws SessionNotFoundException;
 }

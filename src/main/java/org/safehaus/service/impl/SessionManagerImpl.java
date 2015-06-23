@@ -131,8 +131,7 @@ public class SessionManagerImpl extends GenericManagerImpl<Session, Long> implem
 
 
     @Override
-    public Session startSession( final String id, String username )
-            throws JarvisSessionException, JiraClientException
+    public Session startSession( final String id, String username ) throws JarvisSessionException, JiraClientException
     {
         JarvisIssue issue = jiraManager.getIssue( id );
 
@@ -225,6 +224,16 @@ public class SessionManagerImpl extends GenericManagerImpl<Session, Long> implem
         //        result = captureDao.saveCapture( result );
         logger.debug( "Updated capture:" + result );
         return result;
+    }
+
+
+    @Override
+    public void deleteCapture( final String sessionId, final String captureId ) throws SessionNotFoundException
+    {
+        Session session = getSession( sessionId );
+        session.deleteCapture( new Long( captureId ) );
+        sessionDao.saveSession( session );
+        logger.debug( "Capture deleted successfully:" + captureId );
     }
 
 
