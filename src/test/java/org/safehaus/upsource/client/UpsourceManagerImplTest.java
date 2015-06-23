@@ -122,4 +122,15 @@ public class UpsourceManagerImplTest
 
         assertFalse( revisionDiffItems.isEmpty() );
     }
+
+
+    @Test
+    public void testGetRevisionBranches() throws Exception
+    {
+        setResponse( TestUtil.REVISION_BRANCHES_JSON );
+
+        Set<String> branchNames = upsourceManager.getRevisionBranches( TestUtil.PROJECT_ID, TestUtil.REVISION_ID );
+
+        assertFalse( branchNames.isEmpty() );
+    }
 }

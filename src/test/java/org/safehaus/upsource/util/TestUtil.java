@@ -56,6 +56,12 @@ public class TestUtil
                     + "\"newFile\": {\n" + "\"projectId\": \"subutai\",\n"
                     + "\"revisionId\": \"e3c136eeaf405183e634dabad2749b4c23eb3987\",\n"
                     + "\"fileName\": \"/management/server/core/identity-manager/identity-manager-impl/src/main/java"
-                    + "/org/safehaus/subutai/core/identity/impl/ShiroLoginModule.java\"\n"
-                    + "},\n" + "\"fileIcon\": \"Class\"\n" + "}\n" + "]\n" + "}\n" + "}";
+                    + "/org/safehaus/subutai/core/identity/impl/ShiroLoginModule.java\"\n" + "},\n"
+                    + "\"fileIcon\": \"Class\"\n" + "}\n" + "]\n" + "}\n" + "}";
+    public static final String REVISION_BRANCHES_JSON =
+            "{\n" + "\"result\": {\n" + "\"branchName\": [\n" + "\"keshig-integ\",\n" + "\"karaf-from-scratch\",\n" +
+                    "\"test-agent\",\n" + "\"security-enhancement-unprivileged\",\n" + "\"master\",\n"
+                    + "\"security_unit_tests\",\n" + "\"unit-tests\",\n" + "\"core-security\",\n"
+
+                    + "\"fix-agent-protobuf\",\n" + "\"core-refactor\"\n" + "]\n" + "}\n" + "}";
 }

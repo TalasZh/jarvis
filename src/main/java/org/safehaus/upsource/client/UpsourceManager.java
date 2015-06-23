@@ -24,5 +24,7 @@ public interface UpsourceManager
     public Revision getRevision( String projectId, String revisionId ) throws UpsourceManagerException;
 
     public Set<RevisionDiffItem> getRevisionChanges( String projectId, String revisionId, String compareToRevisionId,
-                                                int limit ) throws UpsourceManagerException;
+                                                     int limit ) throws UpsourceManagerException;
+
+    public Set<String> getRevisionBranches( String projectId, String revisionId ) throws UpsourceManagerException;
 }
