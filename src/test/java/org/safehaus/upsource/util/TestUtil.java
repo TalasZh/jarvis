@@ -48,4 +48,5 @@ public class TestUtil
                     + "\"branchHeadLabel\": [\n" + "\"keshig-integ\"\n" + "],\n" + "\"parentRevisions\": [\n" + "\"581a42f1813c7499277ac39d83fa4479e36d06c3\"\n" + "]\n" + "}\n" + "}";
 
     public static final String REVISION_FILTER = "author: {dilshat <daliev@critical-factor.com>}";
+    public static final String REVISION_ID = "e3c136eeaf405183e634dabad2749b4c23eb3987";
 }

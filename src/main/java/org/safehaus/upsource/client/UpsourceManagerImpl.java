@@ -191,10 +191,26 @@ public class UpsourceManagerImpl implements UpsourceManager
         try
         {
             return jsonUtil.from( get( "getRevisionsListFiltered",
-                    new ParamBuilder().add( "projectId", projectId ).add( "limit", limit )
-                                      .add( "query", revisionFilter ), "revision" ).toString(),
+                            new ParamBuilder().add( "projectId", projectId ).add( "limit", limit )
+                                              .add( "query", revisionFilter ), "revision" ).toString(),
                     new TypeToken<Set<Revision>>()
                     {}.getType() );
+        }
+        catch ( Exception e )
+        {
+            throw new UpsourceManagerException( e );
+        }
+    }
+
+
+    @Override
+    public Revision getRevision( final String projectId, final String revisionId ) throws UpsourceManagerException
+    {
+        try
+        {
+            return jsonUtil.from( get( "getRevisionInfo",
+                    new ParamBuilder().add( "projectId", projectId ).add( "revisionId", revisionId ), null ).toString(),
+                    Revision.class );
         }
         catch ( Exception e )
         {

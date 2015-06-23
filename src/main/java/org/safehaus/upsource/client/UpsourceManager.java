@@ -19,4 +19,6 @@ public interface UpsourceManager
 
     public Set<Revision> getFilteredRevisions( String projectId, int limit, String revisionFilter )
             throws UpsourceManagerException;
+
+    public Revision getRevision( String projectId, String revisionId ) throws UpsourceManagerException;
 }
