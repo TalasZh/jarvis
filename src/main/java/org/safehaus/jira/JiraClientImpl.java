@@ -46,6 +46,7 @@ import com.atlassian.jira.rest.client.internal.ServerVersionConstants;
 import com.atlassian.jira.rest.client.internal.async.AsynchronousJiraRestClientFactory;
 import com.atlassian.util.concurrent.Promise;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 
 
 /**
@@ -199,20 +200,20 @@ public class JiraClientImpl implements JiraClient
 
 
     @Override
-    public List<JarvisIssue> getIssues( final String projectId )
+    public List<Issue> getIssues( final String projectId )
     {
-        List<JarvisIssue> result = new ArrayList<JarvisIssue>();
+//        List<JarvisIssue> result = new ArrayList<JarvisIssue>();
         final SearchResult searchResult =
                 restClient.getSearchClient().searchJql( String.format( "project = %s order by duedate", projectId ) )
                           .claim();
-
-        for ( Issue issue : searchResult.getIssues() )
-        {
-            JarvisIssue jarvisIssue = new JarvisIssue( issue.getId(), issue.getKey(), issue.getSummary(), projectId,
-                    new JarvisIssueType( issue.getIssueType().getId(), issue.getIssueType().getName() ) );
-            result.add( jarvisIssue );
-        }
-        return result;
+//
+//        for ( Issue issue : searchResult.getIssues() )
+//        {
+//            JarvisIssue jarvisIssue = new JarvisIssue( issue.getId(), issue.getKey(), issue.getSummary(), projectId,
+//                    new JarvisIssueType( issue.getIssueType().getId(), issue.getIssueType().getName() ) );
+//            result.add( jarvisIssue );
+//        }
+        return Lists.newArrayList( searchResult.getIssues() );
     }
 
 
@@ -260,8 +261,7 @@ public class JiraClientImpl implements JiraClient
         }
         else
         {
-            throw new JiraClientException(
-                    String.format( "It is not possible to change state '%d'.", transitonId ) );
+            throw new JiraClientException( String.format( "It is not possible to change state '%d'.", transitonId ) );
         }
         return getIssue( issueIdOrKey ).getStatus();
     }

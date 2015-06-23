@@ -39,7 +39,12 @@ public class JiraManagerImpl implements JiraManager
     @Override
     public List<JarvisIssue> getIssues( final String projectId ) throws JiraClientException
     {
-        return getJiraClient().getIssues( projectId );
+        List<JarvisIssue> result = new ArrayList<JarvisIssue>();
+        for ( Issue issue : getJiraClient().getIssues( projectId ) )
+        {
+            result.add( buildJarvisIssue( issue ) );
+        }
+        return result;
     }
 
 
@@ -186,7 +191,9 @@ public class JiraManagerImpl implements JiraManager
                     link.getIssueLinkType().getDirection().name(),
                     new JarvisIssueType( i.getIssueType().getId(), i.getIssueType().getName() ) ) );
         }
-        return new JarvisIssue( issue.getId(), issue.getKey(), issue.getSummary(),
+
+        issue.getSelf();
+        return new JarvisIssue( issue.getId(), issue.getKey(), issue.getSummary(), issue.getSelf().toASCIIString(),
                 new JarvisIssueType( issue.getIssueType().getId(), issue.getIssueType().getName() ),
                 issue.getDescription(), issue.getTimeTracking() != null ?
                                         ( issue.getTimeTracking().getRemainingEstimateMinutes() != null ?
@@ -214,7 +221,7 @@ public class JiraManagerImpl implements JiraManager
                     link.getIssueLinkType().getDirection().name(),
                     new JarvisIssueType( i.getIssueType().getId(), i.getIssueType().getName() ) ) );
         }
-        return new JarvisIssue( issue.getId(), issue.getKey(), issue.getSummary(),
+        return new JarvisIssue( issue.getId(), issue.getKey(), issue.getSummary(), issue.getSelf().toASCIIString(),
                 new JarvisIssueType( issue.getIssueType().getId(), issue.getIssueType().getName() ),
                 issue.getDescription(), issue.getTimeTracking() != null ?
                                         ( issue.getTimeTracking().getRemainingEstimateMinutes() != null ?
