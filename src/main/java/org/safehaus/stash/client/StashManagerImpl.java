@@ -17,8 +17,8 @@ import org.safehaus.stash.model.Project;
 import org.safehaus.stash.model.PullRequest;
 import org.safehaus.stash.model.PullRequestState;
 import org.safehaus.stash.model.Repository;
-import org.safehaus.stash.util.AtlassianRestUtil;
-import org.safehaus.stash.util.JsonUtil;
+import org.safehaus.util.RestUtil;
+import org.safehaus.util.JsonUtil;
 import org.safehaus.util.JarvisContextHolder;
 
 import com.google.common.base.Preconditions;
@@ -69,16 +69,16 @@ public class StashManagerImpl implements StashManager
     }
 
 
-    protected String get( String apiPath, Object... args ) throws AtlassianRestUtil.RestException, StashManagerException
+    protected String get( String apiPath, Object... args ) throws RestUtil.RestException, StashManagerException
     {
         if ( !Strings.isNullOrEmpty( username ) && !Strings.isNullOrEmpty( password ) )
         {
-            return new AtlassianRestUtil( username, password )
+            return new RestUtil( username, password )
                     .get( String.format( "%s/%s", baseUrl, String.format( apiPath, args ) ), null );
         }
         else if ( JarvisContextHolder.getContext() != null && JarvisContextHolder.getContext().getCookie() != null )
         {
-            return new AtlassianRestUtil( JarvisContextHolder.getContext().getCookie() )
+            return new RestUtil( JarvisContextHolder.getContext().getCookie() )
                     .get( String.format( "%s/%s", baseUrl, String.format( apiPath, args ) ), null );
         }
         else
