@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.safehaus.upsource.model.Project;
 import org.safehaus.upsource.model.Revision;
+import org.safehaus.upsource.model.RevisionDiffItem;
 
 
 public interface UpsourceManager
@@ -21,4 +22,7 @@ public interface UpsourceManager
             throws UpsourceManagerException;
 
     public Revision getRevision( String projectId, String revisionId ) throws UpsourceManagerException;
+
+    public Set<RevisionDiffItem> getRevisionChanges( String projectId, String revisionId, String compareToRevisionId,
+                                                int limit ) throws UpsourceManagerException;
 }

@@ -42,11 +42,20 @@ public class TestUtil
             + "\"headHash\": \"fe8381528f2596b7\"\n" + "}\n" + "}";
     public static final String REVISION_JSON =
             "{\n" + "\"result\": {\n" + "\"revisionId\": \"53066db39b844d90a6ed16675669d352a745da58\",\n" +
-                    "\"revisionDate\": 1434986436000,\n"
-                    + "\"effectiveRevisionDate\": 1434986436000,\n" + "\"revisionCommitMessage\": \"modify activemq debian creator\\ \",\n" + "\"state\": 3,\n"
-                    + "\"revisionIdShort\": \"53066db\",\n" + "\"authorId\": \"~Ozlem Ceren Sahin <ozlemcs@critical-factor.com>\",\n"
-                    + "\"branchHeadLabel\": [\n" + "\"keshig-integ\"\n" + "],\n" + "\"parentRevisions\": [\n" + "\"581a42f1813c7499277ac39d83fa4479e36d06c3\"\n" + "]\n" + "}\n" + "}";
+                    "\"revisionDate\": 1434986436000,\n" + "\"effectiveRevisionDate\": 1434986436000,\n"
+                    + "\"revisionCommitMessage\": \"modify activemq debian creator\\ \",\n" + "\"state\": 3,\n"
+                    + "\"revisionIdShort\": \"53066db\",\n"
+                    + "\"authorId\": \"~Ozlem Ceren Sahin <ozlemcs@critical-factor.com>\",\n"
+                    + "\"branchHeadLabel\": [\n" + "\"keshig-integ\"\n" + "],\n" + "\"parentRevisions\": [\n"
+                    + "\"581a42f1813c7499277ac39d83fa4479e36d06c3\"\n" + "]\n" + "}\n" + "}";
 
     public static final String REVISION_FILTER = "author: {dilshat <daliev@critical-factor.com>}";
     public static final String REVISION_ID = "e3c136eeaf405183e634dabad2749b4c23eb3987";
+    public static final String REVISION_CHANGES_JSON =
+            "{\n" + "\"result\": {\n" + "\"diff\": [\n" + "{\n" + "\"projectId\": \"subutai\",\n" + "\"diffType\": 3,\n"
+                    + "\"newFile\": {\n" + "\"projectId\": \"subutai\",\n"
+                    + "\"revisionId\": \"e3c136eeaf405183e634dabad2749b4c23eb3987\",\n"
+                    + "\"fileName\": \"/management/server/core/identity-manager/identity-manager-impl/src/main/java"
+                    + "/org/safehaus/subutai/core/identity/impl/ShiroLoginModule.java\"\n"
+                    + "},\n" + "\"fileIcon\": \"Class\"\n" + "}\n" + "]\n" + "}\n" + "}";
 }

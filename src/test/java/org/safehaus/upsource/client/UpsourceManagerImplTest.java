@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.safehaus.upsource.model.Project;
 import org.safehaus.upsource.model.Revision;
+import org.safehaus.upsource.model.RevisionDiffItem;
 import org.safehaus.upsource.util.TestUtil;
 import org.safehaus.util.RestUtil;
 
@@ -108,5 +109,17 @@ public class UpsourceManagerImplTest
                 upsourceManager.getFilteredRevisions( TestUtil.PROJECT_ID, 10, TestUtil.REVISION_FILTER );
 
         assertFalse( revisions.isEmpty() );
+    }
+
+
+    @Test
+    public void testGetRevisionChanges() throws Exception
+    {
+        setResponse( TestUtil.REVISION_CHANGES_JSON );
+
+        Set<RevisionDiffItem> revisionDiffItems =
+                upsourceManager.getRevisionChanges( TestUtil.PROJECT_ID, TestUtil.REVISION_ID, null, 10 );
+
+        assertFalse( revisionDiffItems.isEmpty() );
     }
 }

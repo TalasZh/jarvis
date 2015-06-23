@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.safehaus.upsource.model.Project;
 import org.safehaus.upsource.model.Revision;
+import org.safehaus.upsource.model.RevisionDiffItem;
 import org.safehaus.util.JsonUtil;
 import org.safehaus.util.RestUtil;
 
@@ -52,6 +53,14 @@ public class UpsourceManagerImpl implements UpsourceManager
         }
 
 
+        public ParamBuilder addValueNoQuote( String name, String value )
+        {
+            params.put( String.format( "\"%s\"", name ), value );
+
+            return this;
+        }
+
+
         public ParamBuilder add( String name, Integer value )
         {
             params.put( String.format( "\"%s\"", name ), value.toString() );
@@ -83,6 +92,12 @@ public class UpsourceManagerImpl implements UpsourceManager
             finalMap.put( "params", paramJson.toString() );
 
             return finalMap;
+        }
+
+
+        public String getParamString()
+        {
+            return build().get( "params" );
         }
     }
 
@@ -211,6 +226,33 @@ public class UpsourceManagerImpl implements UpsourceManager
             return jsonUtil.from( get( "getRevisionInfo",
                     new ParamBuilder().add( "projectId", projectId ).add( "revisionId", revisionId ), null ).toString(),
                     Revision.class );
+        }
+        catch ( Exception e )
+        {
+            throw new UpsourceManagerException( e );
+        }
+    }
+
+
+    @Override
+    public Set<RevisionDiffItem> getRevisionChanges( final String projectId, final String revisionId,
+                                                     final String compareToRevisionId, final int limit )
+            throws UpsourceManagerException
+    {
+        try
+        {
+            ParamBuilder paramBuilder = new ParamBuilder().addValueNoQuote( "revision",
+                    new ParamBuilder().add( "projectId", projectId ).add( "revisionId", revisionId ).getParamString() )
+                                                          .add( "limit", limit );
+
+            if ( !Strings.isNullOrEmpty( compareToRevisionId ) )
+            {
+                paramBuilder.add( "compareToRevisionId", compareToRevisionId );
+            }
+
+            return jsonUtil.from( get( "getRevisionChanges", paramBuilder, "diff" ).toString(),
+                    new TypeToken<Set<RevisionDiffItem>>()
+                    {}.getType() );
         }
         catch ( Exception e )
         {
