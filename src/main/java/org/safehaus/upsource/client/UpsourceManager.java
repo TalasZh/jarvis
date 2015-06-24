@@ -6,9 +6,12 @@ import java.util.Set;
 import org.safehaus.upsource.model.FileAnnotation;
 import org.safehaus.upsource.model.FileHistory;
 import org.safehaus.upsource.model.Project;
+import org.safehaus.upsource.model.ProjectActivity;
+import org.safehaus.upsource.model.ReviewDescriptor;
 import org.safehaus.upsource.model.ReviewList;
 import org.safehaus.upsource.model.Revision;
 import org.safehaus.upsource.model.RevisionDiffItem;
+import org.safehaus.upsource.model.TimeUnitEnum;
 
 
 /**
@@ -47,4 +50,10 @@ public interface UpsourceManager
             throws UpsourceManagerException;
 
     public ReviewList getReviews( String projectId, String query, int limit ) throws UpsourceManagerException;
+
+    public ReviewDescriptor getReviewDetails( String projectId, String reviewId ) throws UpsourceManagerException;
+
+
+    public ProjectActivity getProjectActivity( String projectId, String module, TimeUnitEnum period,
+                                               long referenceTime ) throws UpsourceManagerException;
 }

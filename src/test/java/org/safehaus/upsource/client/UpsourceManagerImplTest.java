@@ -11,9 +11,12 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.safehaus.upsource.model.FileAnnotation;
 import org.safehaus.upsource.model.FileHistory;
 import org.safehaus.upsource.model.Project;
+import org.safehaus.upsource.model.ProjectActivity;
+import org.safehaus.upsource.model.ReviewDescriptor;
 import org.safehaus.upsource.model.ReviewList;
 import org.safehaus.upsource.model.Revision;
 import org.safehaus.upsource.model.RevisionDiffItem;
+import org.safehaus.upsource.model.TimeUnitEnum;
 import org.safehaus.upsource.util.TestUtil;
 import org.safehaus.util.RestUtil;
 
@@ -182,5 +185,28 @@ public class UpsourceManagerImplTest
         ReviewList reviewList = upsourceManager.getReviews( TestUtil.PROJECT_ID, "", 10 );
 
         assertNotNull( reviewList );
+    }
+
+
+    @Test
+    public void testGetReviewDetails() throws Exception
+    {
+        setResponse( TestUtil.REVIEW_JSON );
+
+        ReviewDescriptor reviewDetails = upsourceManager.getReviewDetails( TestUtil.PROJECT_ID, TestUtil.REVIEW_ID );
+
+        assertNotNull( reviewDetails );
+    }
+
+
+    @Test
+    public void testGetProjectActivity() throws Exception
+    {
+        setResponse( TestUtil.PROJECT_ACTIVITY_JSON );
+
+        ProjectActivity projectActivity =
+                upsourceManager.getProjectActivity( TestUtil.PROJECT_ID, "", TimeUnitEnum.MONTH, 4L );
+
+        assertNotNull( projectActivity );
     }
 }

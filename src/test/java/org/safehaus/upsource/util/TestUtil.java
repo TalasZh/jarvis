@@ -91,10 +91,10 @@ public class TestUtil
                     + "\"parentRevisions\": [\n" + "\"54a3c7ada7dafd93298032c22807d436fc7bc8ed\"\n" + "],\n"
                     + "\"childRevisions\": [\n" + "\"35a89d369291641be7ce9fe1f3af17aee0e0593c\"\n" + "]\n" + "},\n"
                     + "\"fileName\": \"/management/server/core/identity-manager/identity-manager-impl/src/main/java"
-                    + "/org/safehaus/subutai/core/identity/impl/ShiroLoginModule.java\"\n"
-                    + "}\n" + "],\n" + "\"graph\": {\n" + "\"width\": 1,\n" + "\"rows\": [\n" + "{\n" + "\"nodes\": [\n"
-                    + "{\n" + "\"position\": 0,\n" + "\"color\": 1300,\n" + "\"type\": 1\n" + "}\n" + "],\n"
-                    + "\"edges\": [\n" + "{\n" + "\"position\": 0,\n" + "\"toPosition\": 0,\n" + "\"isUp\": false,\n"
+                    + "/org/safehaus/subutai/core/identity/impl/ShiroLoginModule.java\"\n" + "}\n" + "],\n"
+                    + "\"graph\": {\n" + "\"width\": 1,\n" + "\"rows\": [\n" + "{\n" + "\"nodes\": [\n" + "{\n"
+                    + "\"position\": 0,\n" + "\"color\": 1300,\n" + "\"type\": 1\n" + "}\n" + "],\n" + "\"edges\": [\n"
+                    + "{\n" + "\"position\": 0,\n" + "\"toPosition\": 0,\n" + "\"isUp\": false,\n"
                     + "\"isSolid\": false,\n" + "\"color\": 1300\n" + "}\n" + "]\n" + "},\n" + "{\n" + "\"nodes\": [\n"
                     + "{\n" + "\"position\": 0,\n" + "\"color\": 1300,\n" + "\"type\": 1\n" + "}\n" + "]\n" + "}\n"
                     + "]\n" + "}\n" + "}\n" + "}";
@@ -102,10 +102,37 @@ public class TestUtil
             "{\n" + "\"result\": {\n" + "\"reviews\": [\n" + "{\n" + "\"reviewId\": {\n"
                     + "\"projectId\": \"subutai\",\n" + "\"reviewId\": \"SBT-CR-1\"\n" + "},\n"
                     + "\"title\": \"Refactored Messenger to user reference list instead of explicit listener "
-                    + "binding\",\n"
-                    + "\"participants\": [\n" + "{\n" + "\"userId\": \"~dilshat <daliev@critical-factor.com>\",\n"
-                    + "\"role\": 1,\n" + "\"state\": 1\n" + "},\n" + "{\n"
-                    + "\"userId\": \"e84a1a2a-21fc-42d5-a439-3851b2950eea\",\n" + "\"role\": 2,\n" + "\"state\": 2\n"
-                    + "}\n" + "],\n" + "\"state\": 2,\n" + "\"unread\": false,\n" + "\"priority\": 4\n" + "}\n" + "],\n"
-                    + "\"more\": false\n" + "}\n" + "}";
+                    + "binding\",\n" + "\"participants\": [\n" + "{\n"
+                    + "\"userId\": \"~dilshat <daliev@critical-factor.com>\",\n" + "\"role\": 1,\n" + "\"state\": 1\n"
+                    + "},\n" + "{\n" + "\"userId\": \"e84a1a2a-21fc-42d5-a439-3851b2950eea\",\n" + "\"role\": 2,\n"
+                    + "\"state\": 2\n" + "}\n" + "],\n" + "\"state\": 2,\n" + "\"unread\": false,\n"
+                    + "\"priority\": 4\n" + "}\n" + "],\n" + "\"more\": false\n" + "}\n" + "}";
+    public static final String REVIEW_ID = "SBT-CR-1";
+    public static final String REVIEW_JSON =
+            "{\n" + "\"result\": {\n" + "\"reviewId\": {\n" + "\"projectId\": \"subutai\",\n"
+                    + "\"reviewId\": \"SBT-CR-1\"\n" + "},\n"
+                    + "\"title\": \"Refactored Messenger to user reference list instead of explicit listener "
+                    + "binding\",\n" + "\"participants\": [\n" + "{\n"
+                    + "\"userId\": \"~dilshat <daliev@critical-factor.com>\",\n" + "\"role\": 1,\n" + "\"state\": 1\n"
+                    + "},\n" + "{\n" + "\"userId\": \"e84a1a2a-21fc-42d5-a439-3851b2950eea\",\n" + "\"role\": 2,\n"
+                    + "\"state\": 2\n" + "}\n" + "],\n" + "\"state\": 2,\n" + "\"canCreateIssue\": false\n" + "}\n"
+                    + "}";
+    public static final String PROJECT_ACTIVITY_JSON =
+            "{\n" + "\"result\": {\n" + "\"items\": [\n" + "{\n" + "\"time\": 1378944000000,\n" + "\"value\": 50\n" +
+                    "}\n" + "],\n" + "\"modules\": [\n" + "\"org.safehaus.subutai-command-executor-impl\",\n"
+                    + "\"org.safehaus.subutai-subutai-common\",\n" + "\"org.safehaus.subutai-peer-manager-ui\",\n"
+                    + "\"org.safehaus.subutai-plugin-manager-ui\",\n" + "\"org.safehaus.subutai-wol-manager-ui\",\n"
+
+                    + "\"org.safehaus.subutai-channel-manager-ui\",\n"
+                    + "\"org.safehaus.subutai-subutai-common-datasource\",\n"
+                    + "\"org.safehaus.subutai-peer-manager-api\",\n"
+                    + "\"org.safehaus.subutai-template-registry-impl\",\n"
+                    + "\"org.safehaus.subutai-network-manager-api\",\n"
+                    + "\"org.safehaus.subutai-network-manager-impl\",\n" + "\"org.safehaus.subutai-env-manager-cli\",\n"
+                    + "\"org.safehaus.subutai-template-registry-ui\",\n" + "\"org.safehaus.subutai-repository-manager"
+                    + "-impl\",\n" + "\"org.safehaus.subutai-broker-api\"\n" + "],\n" + "\"stats\": {\n"
+                    + "\"minCommitTime\": 1376866982000,\n" + "\"maxCommitTime\": 1435137675000,\n"
+                    + "\"totalCommits\": 13475,\n" + "\"minIndexedCommitTime\": 1417893496000,\n"
+                    + "\"maxIndexedCommitTime\": 1435135468000,\n" + "\"totalIndexedCommits\": 275,\n"
+                    + "\"projectModelKnown\": true\n" + "}\n" + "}\n" + "}";
 }
