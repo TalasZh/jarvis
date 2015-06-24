@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.safehaus.upsource.model.FileAnnotation;
+import org.safehaus.upsource.model.FileHistory;
 import org.safehaus.upsource.model.Project;
 import org.safehaus.upsource.model.Revision;
 import org.safehaus.upsource.model.RevisionDiffItem;
@@ -173,8 +174,8 @@ public class UpsourceManagerImpl implements UpsourceManager
         try
         {
             return jsonUtil.from( get( "getRevisionsList",
-                    new ParamBuilder().add( "projectId", projectId ).add( "limit", limit ), "revision" ).toString(),
-                    new TypeToken<Set<Revision>>()
+                            new ParamBuilder().add( "projectId", projectId ).add( "limit", limit ), "revision" )
+                            .toString(), new TypeToken<Set<Revision>>()
                     {}.getType() );
         }
         catch ( Exception e )
@@ -225,8 +226,8 @@ public class UpsourceManagerImpl implements UpsourceManager
         try
         {
             return jsonUtil.from( get( "getRevisionInfo",
-                    new ParamBuilder().add( "projectId", projectId ).add( "revisionId", revisionId ), null ).toString(),
-                    Revision.class );
+                            new ParamBuilder().add( "projectId", projectId ).add( "revisionId", revisionId ), null )
+                            .toString(), Revision.class );
         }
         catch ( Exception e )
         {
@@ -305,8 +306,26 @@ public class UpsourceManagerImpl implements UpsourceManager
         {
             return jsonUtil.from( get( "getFileContributors",
                     new ParamBuilder().add( "projectId", projectId ).add( "revisionId", revisionId )
-                                      .add( "fileName", fileName ), "authorIds" ).toString(), new TypeToken<Set<String>>()
-            {}.getType() );
+                                      .add( "fileName", fileName ), "authorIds" ).toString(),
+                    new TypeToken<Set<String>>()
+                    {}.getType() );
+        }
+        catch ( Exception e )
+        {
+            throw new UpsourceManagerException( e );
+        }
+    }
+
+
+    @Override
+    public FileHistory getFileHistory( final String projectId, final String revisionId, final String fileName )
+            throws UpsourceManagerException
+    {
+        try
+        {
+            return jsonUtil.from( get( "getFileHistory",
+                    new ParamBuilder().add( "projectId", projectId ).add( "revisionId", revisionId )
+                                      .add( "fileName", fileName ), null ).toString(), FileHistory.class );
         }
         catch ( Exception e )
         {

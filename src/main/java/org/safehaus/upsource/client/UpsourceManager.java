@@ -4,6 +4,7 @@ package org.safehaus.upsource.client;
 import java.util.Set;
 
 import org.safehaus.upsource.model.FileAnnotation;
+import org.safehaus.upsource.model.FileHistory;
 import org.safehaus.upsource.model.Project;
 import org.safehaus.upsource.model.Revision;
 import org.safehaus.upsource.model.RevisionDiffItem;
@@ -33,5 +34,8 @@ public interface UpsourceManager
             throws UpsourceManagerException;
 
     public Set<String> getFileContributors( String projectId, String revisionId, String fileName )
+            throws UpsourceManagerException;
+
+    public FileHistory getFileHistory( String projectId, String revisionId, String fileName )
             throws UpsourceManagerException;
 }

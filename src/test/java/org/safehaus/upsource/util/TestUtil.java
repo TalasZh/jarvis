@@ -82,4 +82,18 @@ public class TestUtil
             "{\n" + "\"result\": {\n" + "\"authorIds\": [\n" + "\"~Timur Zhamakeev <ztimur@gmail.com>\",\n" +
                     "\"~dilshat <daliev@critical-factor.com>\",\n" + "\"03540de1-269a-4ad4-9709-18809c55f4fc\"\n"
                     + "]\n" + "}\n" + "}";
+    public static final String FILE_HISTORY_JSON = "{\n" + "\"result\": {\n" + "\"history\": [\n" + "{\n"
+            + "\"diffType\": 1,\n" + "\"revision\": {\n"
+            + "\"revisionId\": \"9cdbed405931b57ee230f5efe95d39272b159da4\",\n" + "\"revisionDate\": 1422012387000,\n"
+            + "\"effectiveRevisionDate\": 1422012387000,\n"
+            + "\"revisionCommitMessage\": \"secure UI with Shiro\\ \",\n" + "\"state\": 4,\n"
+            + "\"revisionIdShort\": \"9cdbed4\",\n" + "\"authorId\": \"~Timur Zhamakeev <ztimur@gmail.com>\",\n"
+            + "\"parentRevisions\": [\n" + "\"54a3c7ada7dafd93298032c22807d436fc7bc8ed\"\n" + "],\n"
+            + "\"childRevisions\": [\n" + "\"35a89d369291641be7ce9fe1f3af17aee0e0593c\"\n" + "]\n" + "},\n"
+            + "\"fileName\": \"/management/server/core/identity-manager/identity-manager-impl/src/main/java/org/safehaus/subutai/core/identity/impl/ShiroLoginModule.java\"\n"
+            + "}\n" + "],\n" + "\"graph\": {\n" + "\"width\": 1,\n" + "\"rows\": [\n" + "{\n" + "\"nodes\": [\n" + "{\n"
+            + "\"position\": 0,\n" + "\"color\": 1300,\n" + "\"type\": 1\n" + "}\n" + "],\n" + "\"edges\": [\n" + "{\n"
+            + "\"position\": 0,\n" + "\"toPosition\": 0,\n" + "\"isUp\": false,\n" + "\"isSolid\": false,\n"
+            + "\"color\": 1300\n" + "}\n" + "]\n" + "},\n" + "{\n" + "\"nodes\": [\n" + "{\n" + "\"position\": 0,\n"
+            + "\"color\": 1300,\n" + "\"type\": 1\n" + "}\n" + "]\n" + "}\n" + "]\n" + "}\n" + "}\n" + "}";
 }

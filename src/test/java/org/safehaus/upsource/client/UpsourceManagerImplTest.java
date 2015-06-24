@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.safehaus.upsource.model.FileAnnotation;
+import org.safehaus.upsource.model.FileHistory;
 import org.safehaus.upsource.model.Project;
 import org.safehaus.upsource.model.Revision;
 import org.safehaus.upsource.model.RevisionDiffItem;
@@ -157,5 +158,17 @@ public class UpsourceManagerImplTest
                 upsourceManager.getFileContributors( TestUtil.PROJECT_ID, TestUtil.REVISION_ID, TestUtil.FILE_NAME );
 
         assertFalse( contributors.isEmpty() );
+    }
+
+
+    @Test
+    public void testGetFileHistory() throws Exception
+    {
+        setResponse( TestUtil.FILE_HISTORY_JSON );
+
+        FileHistory fileHistory =
+                upsourceManager.getFileHistory( TestUtil.PROJECT_ID, TestUtil.REVISION_ID, TestUtil.FILE_NAME );
+
+        assertNotNull( fileHistory );
     }
 }
