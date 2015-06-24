@@ -11,6 +11,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.safehaus.upsource.model.FileAnnotation;
 import org.safehaus.upsource.model.FileHistory;
 import org.safehaus.upsource.model.Project;
+import org.safehaus.upsource.model.ReviewList;
 import org.safehaus.upsource.model.Revision;
 import org.safehaus.upsource.model.RevisionDiffItem;
 import org.safehaus.upsource.util.TestUtil;
@@ -170,5 +171,16 @@ public class UpsourceManagerImplTest
                 upsourceManager.getFileHistory( TestUtil.PROJECT_ID, TestUtil.REVISION_ID, TestUtil.FILE_NAME );
 
         assertNotNull( fileHistory );
+    }
+
+
+    @Test
+    public void testGetReviews() throws Exception
+    {
+        setResponse( TestUtil.REVIEWS_JSON );
+
+        ReviewList reviewList = upsourceManager.getReviews( TestUtil.PROJECT_ID, "", 10 );
+
+        assertNotNull( reviewList );
     }
 }

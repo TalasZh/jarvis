@@ -6,10 +6,17 @@ import java.util.Set;
 import org.safehaus.upsource.model.FileAnnotation;
 import org.safehaus.upsource.model.FileHistory;
 import org.safehaus.upsource.model.Project;
+import org.safehaus.upsource.model.ReviewList;
 import org.safehaus.upsource.model.Revision;
 import org.safehaus.upsource.model.RevisionDiffItem;
 
 
+/**
+ * This manager provides means to execute a most commonly used subset of UpSource API. All methods are read-only, they
+ * do not perform amy mutator operations on UpSource.
+ *
+ * See <a href="https://upsource.jetbrains.com/~api_doc/index.html">UpSource REST API</a>
+ */
 public interface UpsourceManager
 {
     public Set<Project> getAllProjects() throws UpsourceManagerException;
@@ -38,4 +45,6 @@ public interface UpsourceManager
 
     public FileHistory getFileHistory( String projectId, String revisionId, String fileName )
             throws UpsourceManagerException;
+
+    public ReviewList getReviews( String projectId, String query, int limit ) throws UpsourceManagerException;
 }

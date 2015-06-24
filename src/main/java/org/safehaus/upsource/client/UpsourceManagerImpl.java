@@ -8,6 +8,7 @@ import java.util.Set;
 import org.safehaus.upsource.model.FileAnnotation;
 import org.safehaus.upsource.model.FileHistory;
 import org.safehaus.upsource.model.Project;
+import org.safehaus.upsource.model.ReviewList;
 import org.safehaus.upsource.model.Revision;
 import org.safehaus.upsource.model.RevisionDiffItem;
 import org.safehaus.util.JsonUtil;
@@ -305,8 +306,8 @@ public class UpsourceManagerImpl implements UpsourceManager
         try
         {
             return jsonUtil.from( get( "getFileContributors",
-                    new ParamBuilder().add( "projectId", projectId ).add( "revisionId", revisionId )
-                                      .add( "fileName", fileName ), "authorIds" ).toString(),
+                            new ParamBuilder().add( "projectId", projectId ).add( "revisionId", revisionId )
+                                              .add( "fileName", fileName ), "authorIds" ).toString(),
                     new TypeToken<Set<String>>()
                     {}.getType() );
         }
@@ -326,6 +327,23 @@ public class UpsourceManagerImpl implements UpsourceManager
             return jsonUtil.from( get( "getFileHistory",
                     new ParamBuilder().add( "projectId", projectId ).add( "revisionId", revisionId )
                                       .add( "fileName", fileName ), null ).toString(), FileHistory.class );
+        }
+        catch ( Exception e )
+        {
+            throw new UpsourceManagerException( e );
+        }
+    }
+
+
+    @Override
+    public ReviewList getReviews( final String projectId, final String query, final int limit )
+            throws UpsourceManagerException
+    {
+        try
+        {
+            return jsonUtil.from( get( "getReviews",
+                    new ParamBuilder().add( "projectId", projectId ).add( "query", query ).add( "limit", limit ), null )
+                    .toString(), ReviewList.class );
         }
         catch ( Exception e )
         {
