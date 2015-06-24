@@ -135,4 +135,9 @@ public class TestUtil
                     + "\"totalCommits\": 13475,\n" + "\"minIndexedCommitTime\": 1417893496000,\n"
                     + "\"maxIndexedCommitTime\": 1435135468000,\n" + "\"totalIndexedCommits\": 275,\n"
                     + "\"projectModelKnown\": true\n" + "}\n" + "}\n" + "}";
+    public static final String RESPONSIBILITY_DIST_JSON = "{\n" + "\"result\": {\n" + "\"items\": [\n" + "{\n" + "\"committer\": \"emininal <emininal@gmail.com>\"\n"
+            + "}\n" + "],\n" + "\"users\": [\n" + "{\n" + "\"committer\": \"skardan <kardan38@gmail.com>\",\n" + "\"userId\": \"~skardan <kardan38@gmail.com>\"\n"
+            + "}\n" + "],\n" + "\"modules\": [ … ],\n" + "\"stats\": {\n" + "\"minCommitTime\": 1376866982000,\n" + "\"maxCommitTime\": 1435137675000,\n"
+            + "\"totalCommits\": 13475,\n" + "\"minIndexedCommitTime\": 1417893496000,\n" + "\"maxIndexedCommitTime\": 1435135468000,\n"
+            + "\"totalIndexedCommits\": 275,\n" + "\"projectModelKnown\": true\n" + "}\n" + "}\n" + "}";
 }

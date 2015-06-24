@@ -1,6 +1,7 @@
 package org.safehaus.upsource.client;
 
 
+import java.util.Date;
 import java.util.Set;
 
 import org.junit.Before;
@@ -12,6 +13,7 @@ import org.safehaus.upsource.model.FileAnnotation;
 import org.safehaus.upsource.model.FileHistory;
 import org.safehaus.upsource.model.Project;
 import org.safehaus.upsource.model.ProjectActivity;
+import org.safehaus.upsource.model.ResponsibilityDistribution;
 import org.safehaus.upsource.model.ReviewDescriptor;
 import org.safehaus.upsource.model.ReviewList;
 import org.safehaus.upsource.model.Revision;
@@ -208,5 +210,17 @@ public class UpsourceManagerImplTest
                 upsourceManager.getProjectActivity( TestUtil.PROJECT_ID, "", TimeUnitEnum.MONTH, 4L );
 
         assertNotNull( projectActivity );
+    }
+
+
+    @Test
+    public void testGetResponsibilityDistribution() throws Exception
+    {
+        setResponse( TestUtil.RESPONSIBILITY_DIST_JSON );
+
+        ResponsibilityDistribution responsibilityDistribution = upsourceManager
+                .getResponsibilityDistribution( TestUtil.PROJECT_ID, new Date( 1435147019947L ), new Date() );
+
+        assertNotNull( responsibilityDistribution );
     }
 }

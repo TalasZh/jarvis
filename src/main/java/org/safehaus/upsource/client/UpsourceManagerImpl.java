@@ -1,6 +1,7 @@
 package org.safehaus.upsource.client;
 
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -9,6 +10,7 @@ import org.safehaus.upsource.model.FileAnnotation;
 import org.safehaus.upsource.model.FileHistory;
 import org.safehaus.upsource.model.Project;
 import org.safehaus.upsource.model.ProjectActivity;
+import org.safehaus.upsource.model.ResponsibilityDistribution;
 import org.safehaus.upsource.model.ReviewDescriptor;
 import org.safehaus.upsource.model.ReviewList;
 import org.safehaus.upsource.model.Revision;
@@ -186,8 +188,8 @@ public class UpsourceManagerImpl implements UpsourceManager
         try
         {
             return jsonUtil.from( get( "getRevisionsList",
-                    new ParamBuilder().add( "projectId", projectId ).add( "limit", limit ), "revision" ).toString(),
-                    new TypeToken<Set<Revision>>()
+                            new ParamBuilder().add( "projectId", projectId ).add( "limit", limit ), "revision" )
+                            .toString(), new TypeToken<Set<Revision>>()
                     {}.getType() );
         }
         catch ( Exception e )
@@ -238,8 +240,8 @@ public class UpsourceManagerImpl implements UpsourceManager
         try
         {
             return jsonUtil.from( get( "getRevisionInfo",
-                    new ParamBuilder().add( "projectId", projectId ).add( "revisionId", revisionId ), null ).toString(),
-                    Revision.class );
+                            new ParamBuilder().add( "projectId", projectId ).add( "revisionId", revisionId ), null )
+                            .toString(), Revision.class );
         }
         catch ( Exception e )
         {
@@ -370,8 +372,8 @@ public class UpsourceManagerImpl implements UpsourceManager
         try
         {
             return jsonUtil.from( get( "getReviewDetails",
-                    new ParamBuilder().add( "projectId", projectId ).add( "reviewId", reviewId ), null ).toString(),
-                    ReviewDescriptor.class );
+                            new ParamBuilder().add( "projectId", projectId ).add( "reviewId", reviewId ), null )
+                            .toString(), ReviewDescriptor.class );
         }
         catch ( Exception e )
         {
@@ -390,6 +392,24 @@ public class UpsourceManagerImpl implements UpsourceManager
                     new ParamBuilder().add( "projectId", projectId ).add( "module", module )
                                       .add( "period", period.getValue() ).add( "referenceTime", referenceTime ), null )
                     .toString(), ProjectActivity.class );
+        }
+        catch ( Exception e )
+        {
+            throw new UpsourceManagerException( e );
+        }
+    }
+
+
+    @Override
+    public ResponsibilityDistribution getResponsibilityDistribution( final String projectId, final Date fromDate,
+                                                                     final Date toDate ) throws UpsourceManagerException
+    {
+        try
+        {
+            return jsonUtil.from( get( "getResponsibilityDistribution",
+                            new ParamBuilder().add( "projectId", projectId ).add( "fromTime", fromDate.getTime() )
+                                              .add( "toTime", toDate.getTime() ), null ).toString(),
+                    ResponsibilityDistribution.class );
         }
         catch ( Exception e )
         {

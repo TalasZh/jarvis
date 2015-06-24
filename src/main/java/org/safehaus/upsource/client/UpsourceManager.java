@@ -1,12 +1,14 @@
 package org.safehaus.upsource.client;
 
 
+import java.util.Date;
 import java.util.Set;
 
 import org.safehaus.upsource.model.FileAnnotation;
 import org.safehaus.upsource.model.FileHistory;
 import org.safehaus.upsource.model.Project;
 import org.safehaus.upsource.model.ProjectActivity;
+import org.safehaus.upsource.model.ResponsibilityDistribution;
 import org.safehaus.upsource.model.ReviewDescriptor;
 import org.safehaus.upsource.model.ReviewList;
 import org.safehaus.upsource.model.Revision;
@@ -56,4 +58,7 @@ public interface UpsourceManager
 
     public ProjectActivity getProjectActivity( String projectId, String module, TimeUnitEnum period,
                                                long referenceTime ) throws UpsourceManagerException;
+
+    public ResponsibilityDistribution getResponsibilityDistribution( String projectId, Date fromDate, Date toDate )
+            throws UpsourceManagerException;
 }
