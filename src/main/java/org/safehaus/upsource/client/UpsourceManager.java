@@ -31,4 +31,7 @@ public interface UpsourceManager
 
     public FileAnnotation getFileAnnotation( String projectId, String revisionId, String fileName )
             throws UpsourceManagerException;
+
+    public Set<String> getFileContributors( String projectId, String revisionId, String fileName )
+            throws UpsourceManagerException;
 }

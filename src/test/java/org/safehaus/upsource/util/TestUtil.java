@@ -76,6 +76,10 @@ public class TestUtil
                     + "\"parentRevisions\": [\n" + "\"54a3c7ada7dafd93298032c22807d436fc7bc8ed\"\n" + "],\n" +
                     "\"childRevisions\": [\n" + "\"35a89d369291641be7ce9fe1f3af17aee0e0593c\"\n" + "]\n" + "},\n"
                     + "\"filePath\": \"/management/server/core/identity-manager/identity-manager-impl/src/main/java"
-                    + "/org/safehaus/subutai/core/identity/impl/ShiroLoginModule.java\"\n"
-                    + "}\n" + "]\n" + "}\n" + "}";
+                    + "/org/safehaus/subutai/core/identity/impl/ShiroLoginModule.java\"\n" + "}\n" + "]\n" + "}\n"
+                    + "}";
+    public static final String CONTRIBUTORS_JSON =
+            "{\n" + "\"result\": {\n" + "\"authorIds\": [\n" + "\"~Timur Zhamakeev <ztimur@gmail.com>\",\n" +
+                    "\"~dilshat <daliev@critical-factor.com>\",\n" + "\"03540de1-269a-4ad4-9709-18809c55f4fc\"\n"
+                    + "]\n" + "}\n" + "}";
 }

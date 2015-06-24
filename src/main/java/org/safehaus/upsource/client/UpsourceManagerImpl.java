@@ -295,4 +295,22 @@ public class UpsourceManagerImpl implements UpsourceManager
             throw new UpsourceManagerException( e );
         }
     }
+
+
+    @Override
+    public Set<String> getFileContributors( final String projectId, final String revisionId, final String fileName )
+            throws UpsourceManagerException
+    {
+        try
+        {
+            return jsonUtil.from( get( "getFileContributors",
+                    new ParamBuilder().add( "projectId", projectId ).add( "revisionId", revisionId )
+                                      .add( "fileName", fileName ), "authorIds" ).toString(), new TypeToken<Set<String>>()
+            {}.getType() );
+        }
+        catch ( Exception e )
+        {
+            throw new UpsourceManagerException( e );
+        }
+    }
 }

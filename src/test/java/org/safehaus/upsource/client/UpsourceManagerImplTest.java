@@ -146,4 +146,16 @@ public class UpsourceManagerImplTest
 
         assertNotNull( fileAnnotation );
     }
+
+
+    @Test
+    public void testGetFileContributors() throws Exception
+    {
+        setResponse( TestUtil.CONTRIBUTORS_JSON );
+
+        Set<String> contributors =
+                upsourceManager.getFileContributors( TestUtil.PROJECT_ID, TestUtil.REVISION_ID, TestUtil.FILE_NAME );
+
+        assertFalse( contributors.isEmpty() );
+    }
 }
