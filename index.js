@@ -1,11 +1,11 @@
 var data = require('sdk/self').data;
 var pageMod = require('sdk/page-mod');
-var selectors = [];
 var panels = require('sdk/panel');
 var simpleStorage = require('sdk/simple-storage');
 var notifications = require('sdk/notifications');
 
 var simplePrefs = require("sdk/simple-prefs");
+var { Hotkey } = require("sdk/hotkeys");
 
 var tabs = require("sdk/tabs");
 
@@ -30,6 +30,7 @@ var global_username;
 
 var annotatorIsOn = false;
 var firstClick = true;
+var selectors = [];
 var matchers = [];
 var currentIssueKey = "";
 
@@ -300,6 +301,23 @@ function disableEnableAnnotator(activate, button) {
 
 
 exports.main = function () {
+
+    function triggerPanelOpenEvent() {
+        if (!isAuthenticated()) {
+            button.state('window', {checked: false});
+            tabs.open(simplePrefs.prefs.mediatorProtocol + "://" + simplePrefs.prefs.mediatorHost + ":" + simplePrefs.prefs.mediatorPort);
+        }
+        else {
+            panel.show({
+                position: button
+            });
+            if (firstClick) {
+                firstClick = false;
+                listProjects(panel);
+            }
+        }
+    }
+
     var selector = pageMod.PageMod({
         include: ['*'],
         contentScriptWhen: 'ready',
@@ -526,19 +544,7 @@ exports.main = function () {
         },
         onChange: function (state) {
             if (state.checked) {
-                if (!isAuthenticated()) {
-                    button.state('window', {checked: false});
-                    tabs.open(simplePrefs.prefs.mediatorProtocol + "://" + simplePrefs.prefs.mediatorHost + ":" + simplePrefs.prefs.mediatorPort);
-                }
-                else {
-                    panel.show({
-                        position: button
-                    });
-                    if (firstClick) {
-                        firstClick = false;
-                        listProjects(panel);
-                    }
-                }
+                triggerPanelOpenEvent();
             }
         }
     });
@@ -791,7 +797,7 @@ exports.main = function () {
 
     panel.port.on("build-hierarchy", function (storyKey) {
         console.log(storyKey);
-        mediator.buildHierarchy(storyKey, function (error, json) {
+        mediator.buildHierarchy(storyKey, function (error) {
             if (error !== null) {
                 console.error("Error: " + error);
                 return;
@@ -802,7 +808,7 @@ exports.main = function () {
 
 
     panel.port.on("startStory", function (storyKey) {
-        mediator.storyStart(storyKey, function (error, json) {
+        mediator.storyStart(storyKey, function (error) {
             if (error) {
                 console.error("Error: " + error);
                 return;
@@ -858,7 +864,7 @@ exports.main = function () {
     });
 
     panel.port.on("transition-issue", function (transitionId) {
-        mediator.transitionIssue(currentIssueKey, transitionId, function (error, json) {
+        mediator.transitionIssue(currentIssueKey, transitionId, function (error) {
             if (error) {
                 console.log("Error couldn't transition issue: " + error);
                 return;
@@ -866,5 +872,18 @@ exports.main = function () {
             console.log("transited issue");
             getIssue(currentIssueKey, panel);
         });
+    });
+
+    var showPanel = Hotkey({
+        combo: "accel-shift-a",
+        onPress: function() {
+            console.log("Hotkey pressed...");
+            if (panel.isShowing) {
+                panel.hide();
+            }
+            else {
+                triggerPanelOpenEvent();
+            }
+        }
     });
 };
