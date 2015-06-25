@@ -14,7 +14,7 @@ public interface ConfluenceManager
 	 * Searches for pages, for now only spaceKey and title can be given
 	 * 
 	 * @param page
-	 * @return
+	 * @return List of pages matching given parameters
 	 * @throws ConfluenceManagerException
 	 */
 	List<Page> findPages( Page page ) throws ConfluenceManagerException;
@@ -61,9 +61,10 @@ public interface ConfluenceManager
 	 * version number.
 	 * 
 	 * @param page
+	 * @return
 	 * @throws ConfluenceManagerException
 	 */
-	void updatePage( Page page ) throws ConfluenceManagerException;
+	Page updatePage( Page page ) throws ConfluenceManagerException;
 
 
 	/**
@@ -106,6 +107,15 @@ public interface ConfluenceManager
 	 * @throws ConfluenceManagerException
 	 */
 	Space getSpace( String key ) throws ConfluenceManagerException;
+
+
+	/**
+	 * Finds all spaces.
+	 * 
+	 * @return
+	 * @throws ConfluenceManagerException
+	 */
+	List<Space> getAllSpaces() throws ConfluenceManagerException;
 
 
 	/**
@@ -154,4 +164,6 @@ public interface ConfluenceManager
 	 */
 	void deletePageLabels( String pageId, String labelName ) throws ConfluenceManagerException;
 
+
+	String getBaseUrl();
 }

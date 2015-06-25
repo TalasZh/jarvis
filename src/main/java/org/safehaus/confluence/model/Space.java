@@ -10,6 +10,8 @@ public class Space implements ConfluenceEntity
 
 	private Description description;
 
+	private Links _links;
+
 
 	public String getId()
 	{
@@ -70,6 +72,18 @@ public class Space implements ConfluenceEntity
 		this.description = description;
 	}
 
+
+	public Links get_links()
+	{
+		return _links;
+	}
+
+
+	public void set_links( Links _links )
+	{
+		this._links = _links;
+	}
+
 	public class Description
 	{
 		private Value plain;
@@ -116,5 +130,23 @@ public class Space implements ConfluenceEntity
 			}
 
 		}
+	}
+
+	public class Links
+	{
+		private String self;
+
+
+		public String getSelf()
+		{
+			return self;
+		}
+
+
+		public void setSelf( String self )
+		{
+			this.self = self;
+		}
+
 	}
 }

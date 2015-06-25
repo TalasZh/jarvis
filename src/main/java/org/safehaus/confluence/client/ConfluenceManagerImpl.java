@@ -7,13 +7,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import javax.ws.rs.core.Cookie;
 import org.safehaus.confluence.model.ConfluenceEntity;
 import org.safehaus.confluence.model.LabelResult;
 import org.safehaus.confluence.model.Page;
 import org.safehaus.confluence.model.PageResult;
 import org.safehaus.confluence.model.Space;
+import org.safehaus.confluence.model.SpaceResult;
 import org.safehaus.stash.util.AtlassianRestUtil.RestException;
+import org.safehaus.util.JarvisContextHolder;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.gson.Gson;
@@ -21,12 +22,10 @@ import com.google.gson.Gson;
 
 public class ConfluenceManagerImpl implements ConfluenceManager
 {
-	private String baseUrl;
+	private final String baseUrl;
 
 	private String username;
 	private String password;
-
-	private Cookie cookie;
 
 
 	public ConfluenceManagerImpl(String baseUrl)
@@ -49,13 +48,6 @@ public class ConfluenceManagerImpl implements ConfluenceManager
 	}
 
 
-	public ConfluenceManagerImpl(String baseUrl, Cookie cookie)
-	{
-		this.baseUrl = baseUrl;
-		this.cookie = cookie;
-	}
-
-
 	protected String get( String apiPath, Map<String, String> parameters ) throws RestException,
 	        ConfluenceManagerException
 	{
@@ -64,9 +56,10 @@ public class ConfluenceManagerImpl implements ConfluenceManager
 			return new ConfluenceRestUtil( username, password ).get( String.format( "%s/%s", baseUrl, apiPath ),
 			        parameters );
 		}
-		else if ( cookie != null )
+		else if ( JarvisContextHolder.getContext().getCookie() != null )
 		{
-			return new ConfluenceRestUtil( cookie ).get( String.format( "%s/%s", baseUrl, apiPath ), parameters );
+			return new ConfluenceRestUtil( JarvisContextHolder.getContext().getCookie() ).get(
+			        String.format( "%s/%s", baseUrl, apiPath ), parameters );
 		}
 		else
 		{
@@ -82,9 +75,10 @@ public class ConfluenceManagerImpl implements ConfluenceManager
 			return new ConfluenceRestUtil( username, password ).post( String.format( "%s/%s", baseUrl, apiPath ),
 			        entity );
 		}
-		else if ( cookie != null )
+		else if ( JarvisContextHolder.getContext().getCookie() != null )
 		{
-			return new ConfluenceRestUtil( cookie ).post( String.format( "%s/%s", baseUrl, apiPath ), entity );
+			return new ConfluenceRestUtil( JarvisContextHolder.getContext().getCookie() ).post(
+			        String.format( "%s/%s", baseUrl, apiPath ), entity );
 		}
 		else
 		{
@@ -101,9 +95,10 @@ public class ConfluenceManagerImpl implements ConfluenceManager
 			return new ConfluenceRestUtil( username, password ).post( String.format( "%s/%s", baseUrl, apiPath ),
 			        labels );
 		}
-		else if ( cookie != null )
+		else if ( JarvisContextHolder.getContext().getCookie() != null )
 		{
-			return new ConfluenceRestUtil( cookie ).post( String.format( "%s/%s", baseUrl, apiPath ), labels );
+			return new ConfluenceRestUtil( JarvisContextHolder.getContext().getCookie() ).post(
+			        String.format( "%s/%s", baseUrl, apiPath ), labels );
 		}
 		else
 		{
@@ -119,9 +114,10 @@ public class ConfluenceManagerImpl implements ConfluenceManager
 			return new ConfluenceRestUtil( username, password )
 			        .put( String.format( "%s/%s", baseUrl, apiPath ), entity );
 		}
-		else if ( cookie != null )
+		else if ( JarvisContextHolder.getContext().getCookie() != null )
 		{
-			return new ConfluenceRestUtil( cookie ).put( String.format( "%s/%s", baseUrl, apiPath ), entity );
+			return new ConfluenceRestUtil( JarvisContextHolder.getContext().getCookie() ).put(
+			        String.format( "%s/%s", baseUrl, apiPath ), entity );
 		}
 		else
 		{
@@ -138,9 +134,10 @@ public class ConfluenceManagerImpl implements ConfluenceManager
 			return new ConfluenceRestUtil( username, password ).delete( String.format( "%s/%s", baseUrl, apiPath ),
 			        parameters );
 		}
-		else if ( cookie != null )
+		else if ( JarvisContextHolder.getContext().getCookie() != null )
 		{
-			return new ConfluenceRestUtil( cookie ).delete( String.format( "%s/%s", baseUrl, apiPath ), parameters );
+			return new ConfluenceRestUtil( JarvisContextHolder.getContext().getCookie() ).delete(
+			        String.format( "%s/%s", baseUrl, apiPath ), parameters );
 		}
 		else
 		{
@@ -223,7 +220,7 @@ public class ConfluenceManagerImpl implements ConfluenceManager
 		try
 		{
 			Map<String, String> params = new HashMap<String, String>();
-			params.put( "expand", "body.view,body.storage,space,version" );
+			params.put( "expand", "body.storage,space,version" );
 			String response = get( String.format( "rest/api/content/%s", pageId ), params );
 
 			Page page = new Gson().fromJson( response, Page.class );
@@ -260,7 +257,7 @@ public class ConfluenceManagerImpl implements ConfluenceManager
 
 
 	@Override
-	public void updatePage( Page page ) throws ConfluenceManagerException
+	public Page updatePage( Page page ) throws ConfluenceManagerException
 	{
 		Preconditions.checkNotNull( page );
 		Preconditions.checkNotNull( page.getTitle() );
@@ -271,7 +268,9 @@ public class ConfluenceManagerImpl implements ConfluenceManager
 		{
 			String response = put( String.format( "rest/api/content/%s", page.getId() ), page );
 
-			System.out.println( response );
+			Page aPage = new Gson().fromJson( response, Page.class );
+
+			return aPage;
 		}
 		catch ( RestException e )
 		{
@@ -376,6 +375,26 @@ public class ConfluenceManagerImpl implements ConfluenceManager
 
 
 	@Override
+	public List<Space> getAllSpaces() throws ConfluenceManagerException
+	{
+		Map<String, String> parameters = new HashMap<String, String>();
+		parameters.put( "expand", "description.plain" );
+		try
+		{
+			String response = get( "rest/api/space/", parameters );
+
+			SpaceResult spaceResult = new Gson().fromJson( response, SpaceResult.class );
+
+			return spaceResult.getResults();
+		}
+		catch ( RestException e )
+		{
+			throw new ConfluenceManagerException( e.getMessage() );
+		}
+	}
+
+
+	@Override
 	public void deleteSpace( Space space ) throws ConfluenceManagerException
 	{
 		try
@@ -447,5 +466,11 @@ public class ConfluenceManagerImpl implements ConfluenceManager
 		{
 			throw new ConfluenceManagerException( e.getMessage() );
 		}
+	}
+	
+	@Override
+	public String getBaseUrl()
+	{
+	    return baseUrl;
 	}
 }

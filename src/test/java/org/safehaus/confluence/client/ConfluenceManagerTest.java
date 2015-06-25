@@ -2,6 +2,7 @@ package org.safehaus.confluence.client;
 
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.ws.rs.core.Cookie;
 import org.junit.Assert;
@@ -31,16 +32,20 @@ public class ConfluenceManagerTest
 	@Before
 	public void setup() throws Exception
 	{
+		// confluenceManager = new ConfluenceManagerImpl(
+		// "http://test-confluence.critical-factor.com", "aosmonov", "test" );
+
 		// For integration test we setup existing cookie instead of writing
 		// username password
-		confluenceManager = new ConfluenceManagerImpl( "http://test-confluence.critical-factor.com", "aosmonov", "test" );
-
-//		JarvisContextHolder.setContext( new JarvisContext( "", new Cookie( "seraph.confluence",
-//		        "2260994%3Ad35c7e6616ebaeb413cb0b2d5b4e254786c67d19" ) ) );
+		confluenceManager = new ConfluenceManagerImpl( "http://test-confluence.critical-factor.com" );
+		JarvisContextHolder.setContext( new JarvisContext( "", new Cookie( "crowd.token_key",
+		        "Y7YOliDraoSOi92XMZ00TQ00" ) ) );
 	}
 
 
-	@Test
+	// Tests are commented, to disable creation of spaces, pages every maven
+	// build.
+	// @Test
 	public void testClientTest()
 	{
 		Client client = new Client( Protocol.HTTP );
@@ -53,7 +58,7 @@ public class ConfluenceManagerTest
 	}
 
 
-	@Test
+	// @Test
 	public void testCreateNewSpace()
 	{
 		Space space = new Space();
@@ -79,7 +84,7 @@ public class ConfluenceManagerTest
 	}
 
 
-	@Test
+	// @Test
 	public void testGetSpace()
 	{
 		try
@@ -101,6 +106,29 @@ public class ConfluenceManagerTest
 
 
 	@Test
+	public void testGetAllSpaces()
+	{
+		try
+		{
+			List<Space> spaces = confluenceManager.getAllSpaces();
+
+			Assert.assertNotNull( spaces );
+
+			for ( Space space : spaces )
+			{
+				System.out.println( space.getKey() + "\t" + space.getName() + "\t"
+				        + space.getDescription().getPlain().getValue() );
+			}
+
+		}
+		catch ( ConfluenceManagerException e )
+		{
+			Assert.fail( e.getMessage() );
+		}
+	}
+
+
+	// @Test
 	public void testUpdateSpace()
 	{
 		Space space = new Space();
@@ -121,7 +149,7 @@ public class ConfluenceManagerTest
 	}
 
 
-	@Test
+	// @Test
 	public void testDeleteSpace()
 	{
 		Space space = new Space();
@@ -138,12 +166,12 @@ public class ConfluenceManagerTest
 	}
 
 
-	@Test
+	// @Test
 	public void testListPages()
 	{
 		try
 		{
-			Set<Page> pages = confluenceManager.listPages( "TEST", 0, 200 );
+			Set<Page> pages = confluenceManager.listPages( null, 0, 200 );
 
 			Assert.assertNotNull( pages );
 			for ( Page page : pages )
@@ -158,7 +186,7 @@ public class ConfluenceManagerTest
 	}
 
 
-	@Test
+	// @Test
 	public void testCreatePage()
 	{
 		Page page = new Page();
@@ -169,7 +197,7 @@ public class ConfluenceManagerTest
 		page.setSpace( new Space() );
 		page.getSpace().setKey( "TEST" );
 
-		page.setBodyStorageValue( "<p>This is test page's storage, created by junit test case.</p>" );
+		page.setBodyValue( "<p>This is test page's storage, created by junit test case.</p>" );
 
 		page.setVersionNumber( 1 );
 
@@ -185,8 +213,9 @@ public class ConfluenceManagerTest
 		}
 
 	}
-	
-	@Test
+
+
+	// @Test
 	public void testCreateSubPage()
 	{
 		Page page = new Page();
@@ -196,13 +225,13 @@ public class ConfluenceManagerTest
 
 		page.setSpace( new Space() );
 		page.getSpace().setKey( "TEST" );
-		
+
 		page.setAncestors( new HashSet<Page>() );
 		Page parent = new Page();
 		parent.setId( "1933376" );
 		page.getAncestors().add( parent );
 
-		page.setBodyStorageValue( "<p>This is test page's storage, created by junit test case.</p>" );
+		page.setBodyValue( "<p>This is test page's storage, created by junit test case.</p>" );
 
 		page.setVersionNumber( 1 );
 
@@ -220,22 +249,21 @@ public class ConfluenceManagerTest
 	}
 
 
-	@Test
+	// @Test
 	public void testGetPage() throws ConfluenceManagerException
 	{
 		Page page = confluenceManager.getPage( "1933376" );
 
 		Assert.assertNotNull( page );
-		Assert.assertNotNull( page.getBody() );
-		Assert.assertNotNull( page.getBody().getView() );
-		Assert.assertNotNull( page.getBody().getStorage() );
+		Assert.assertNotNull( page.getBodyValue() );
+		Assert.assertNotNull( page.get_links() );
 
-		System.out.println( page.getBody().getView().getValue() );
-		System.out.println( page.getBody().getStorage().getValue() );
+		System.out.println( page.getBodyValue() );
+		System.out.println( page.get_links().getWebui() );
 	}
 
 
-	@Test
+	// @Test
 	public void testUpdatePage()
 	{
 		Page page = new Page();
@@ -255,7 +283,7 @@ public class ConfluenceManagerTest
 	}
 
 
-	@Test
+	// @Test
 	public void testDeletePage()
 	{
 		Page page = new Page();
@@ -272,7 +300,7 @@ public class ConfluenceManagerTest
 	}
 
 
-	@Test
+	// @Test
 	public void testGetPageLabels()
 	{
 		try
@@ -293,7 +321,7 @@ public class ConfluenceManagerTest
 	}
 
 
-	@Test
+	// @Test
 	public void testDeletePageLabels()
 	{
 		try
@@ -307,7 +335,7 @@ public class ConfluenceManagerTest
 	}
 
 
-	@Test
+	// @Test
 	public void testAddPageLabels()
 	{
 		Set<String> labels = new HashSet<String>();

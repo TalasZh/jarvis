@@ -106,4 +106,8 @@
     <constructor-arg value="sonar-bot" />
     <constructor-arg value='7"CV23xR2A#K3h' />
   </bean>
+  
+  <bean id="confluenceManager" class="org.safehaus.confluence.client.ConfluenceManagerImpl">
+  	<constructor-arg value="${confluence.url}" />
+  </bean>
 </beans>

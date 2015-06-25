@@ -1,7 +1,6 @@
 package org.safehaus.confluence.model;
 
 
-import java.util.HashSet;
 import java.util.Set;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
@@ -20,7 +19,7 @@ public class Page implements ConfluenceEntity
 
 	private Version version;
 
-	private Metadata metadata;
+	private Links _links;
 
 	private Set<Page> ancestors;
 
@@ -97,6 +96,18 @@ public class Page implements ConfluenceEntity
 	}
 
 
+	public Links get_links()
+	{
+		return _links;
+	}
+
+
+	public void set_links( Links _links )
+	{
+		this._links = _links;
+	}
+
+
 	public Set<Page> getAncestors()
 	{
 		return ancestors;
@@ -117,22 +128,7 @@ public class Page implements ConfluenceEntity
 	}
 
 
-	public void setBodyViewValue( String viewValue )
-	{
-		if ( body == null )
-		{
-			body = new Body();
-		}
-		if ( body.getView() == null )
-		{
-			body.setView( body.new Value() );
-			body.getView().setRepresentation( "view" );
-		}
-		body.getView().setValue( viewValue );
-	}
-
-
-	public void setBodyStorageValue( String storageValue )
+	public void setBodyValue( String storageValue )
 	{
 		if ( body == null )
 		{
@@ -144,6 +140,19 @@ public class Page implements ConfluenceEntity
 			body.getStorage().setRepresentation( "storage" );
 		}
 		body.getStorage().setValue( storageValue );
+	}
+
+
+	public String getBodyValue()
+	{
+		if ( body == null || body.getStorage() == null )
+		{
+			return null;
+		}
+		else
+		{
+			return body.getStorage().getValue();
+		}
 	}
 
 
@@ -167,23 +176,16 @@ public class Page implements ConfluenceEntity
 	}
 
 
-	public void addLabelString( String labelName )
+	public String getWebLink()
 	{
-		if ( metadata == null )
+		if ( _links == null )
 		{
-			metadata = new Metadata();
+			return null;
 		}
-		if ( metadata.getLabels() == null )
+		else
 		{
-			metadata.setLabels( new LabelResult() );
+			return _links.getWebui();
 		}
-		if ( metadata.getLabels().getResults() == null )
-		{
-			metadata.getLabels().setResults( new HashSet<LabelResult.Label>() );
-		}
-		LabelResult.Label label = metadata.getLabels().new Label();
-		label.setName( labelName );
-		metadata.getLabels().getResults().add( label );
 	}
 
 	public class Body
@@ -265,20 +267,59 @@ public class Page implements ConfluenceEntity
 
 	}
 
-	public class Metadata
+	public class Links
 	{
-		private LabelResult labels;
+		private String webui;
+		private String tinyui;
+		private String collection;
+		private String base;
 
 
-		public LabelResult getLabels()
+		public String getWebui()
 		{
-			return labels;
+			return webui;
 		}
 
 
-		public void setLabels( LabelResult labels )
+		public void setWebui( String webui )
 		{
-			this.labels = labels;
+			this.webui = webui;
+		}
+
+
+		public String getTinyui()
+		{
+			return tinyui;
+		}
+
+
+		public void setTinyui( String tinyui )
+		{
+			this.tinyui = tinyui;
+		}
+
+
+		public String getCollection()
+		{
+			return collection;
+		}
+
+
+		public void setCollection( String collection )
+		{
+			this.collection = collection;
+		}
+
+
+		public String getBase()
+		{
+			return base;
+		}
+
+
+		public void setBase( String base )
+		{
+			this.base = base;
 		}
 
 	}
