@@ -17,6 +17,7 @@ import org.safehaus.upsource.model.ProjectCommitters;
 import org.safehaus.upsource.model.ResponsibilityDistribution;
 import org.safehaus.upsource.model.ReviewDescriptor;
 import org.safehaus.upsource.model.ReviewList;
+import org.safehaus.upsource.model.ReviewStatistics;
 import org.safehaus.upsource.model.Revision;
 import org.safehaus.upsource.model.RevisionDiffItem;
 import org.safehaus.upsource.model.TimeUnitEnum;
@@ -249,5 +250,16 @@ public class UpsourceManagerImplTest
                 upsourceManager.getUserActivity( TestUtil.PROJECT_ID, TimeUnitEnum.MONTH, 4L, Sets.newHashSet( "" ) );
 
         assertNotNull( userActivity );
+    }
+
+
+    @Test
+    public void testGetReviewStatistics() throws Exception
+    {
+        setResponse( TestUtil.REVIEW_STATS_JSON );
+
+        ReviewStatistics reviewStatistics = upsourceManager.getReviewStatistics( TestUtil.PROJECT_ID );
+
+        assertNotNull( reviewStatistics );
     }
 }

@@ -158,4 +158,18 @@ public class TestUtil
                     + "      \"totalCommits\": 13491,\n" + "      \"minIndexedCommitTime\": 1417893496000,\n"
                     + "      \"maxIndexedCommitTime\": 1435135468000,\n" + "      \"totalIndexedCommits\": 275,\n"
                     + "      \"projectModelKnown\": true\n" + "    }\n" + "  }\n" + "}";
+    public static final String REVIEW_STATS_JSON =
+            "{\n" + "  \"result\": {\n" + "    \"openReviews\": 0,\n" + "    \"closedReviews\": 1,\n" + "    "
+                    + "\"allRevisions\": 13514,\n" + "    \"revisionsCoveredByOpenReviews\": 0,\n"
+                    + "    \"revisionsCoveredByClosedReviews\": 0,\n" + "    \"authorStatsByReviews\": [\n"
+                    + "      {\n" + "        \"userId\": \"~dilshat <daliev@critical-factor.com>\",\n"
+                    + "        \"value\": 1\n" + "      }\n" + "    ],\n" + "    \"reviewerStatsByReviews\": [\n"
+                    + "      {\n" + "        \"userId\": \"e84a1a2a-21fc-42d5-a439-3851b2950eea\",\n"
+                    + "        \"value\": 1\n" + "      }\n" + "    ],\n" + "    \"authorStatsByRevisions\": [\n"
+                    + "      {\n"
+
+                    + "        \"userId\": \"~dilshat <daliev@critical-factor.com>\",\n" + "        \"value\": 0\n"
+                    + "      }\n" + "    ],\n" + "    \"reviewerStatsByRevisions\": [\n" + "      {\n"
+                    + "        \"userId\": \"e84a1a2a-21fc-42d5-a439-3851b2950eea\",\n" + "        \"value\": 0\n"
+                    + "      }\n" + "    ]\n" + "  }\n" + "}";
 }

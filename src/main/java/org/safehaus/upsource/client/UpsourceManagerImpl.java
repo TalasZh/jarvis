@@ -15,6 +15,7 @@ import org.safehaus.upsource.model.ProjectCommitters;
 import org.safehaus.upsource.model.ResponsibilityDistribution;
 import org.safehaus.upsource.model.ReviewDescriptor;
 import org.safehaus.upsource.model.ReviewList;
+import org.safehaus.upsource.model.ReviewStatistics;
 import org.safehaus.upsource.model.Revision;
 import org.safehaus.upsource.model.RevisionDiffItem;
 import org.safehaus.upsource.model.TimeUnitEnum;
@@ -450,14 +451,28 @@ public class UpsourceManagerImpl implements UpsourceManager
     {
         try
         {
-            String response = get( "getUserActivity",
+            return jsonUtil.from( get( "getUserActivity",
                     new ParamBuilder().add( "projectId", projectId ).add( "period", period.getValue() )
                                       .add( "referenceTime", referenceTime ).add( "committers", committers ), null )
+                    .toString(), UserActivity.class );
+        }
+        catch ( Exception e )
+        {
+            throw new UpsourceManagerException( e );
+        }
+    }
+
+
+    @Override
+    public ReviewStatistics getReviewStatistics( final String projectId ) throws UpsourceManagerException
+    {
+        try
+        {
+            String response = get( "getReviewStatistics", new ParamBuilder().add( "projectId", projectId ), null )
                                 .toString();
 
             System.out.println(response);
-
-            return jsonUtil.from( response, UserActivity.class );
+            return jsonUtil.from( response, ReviewStatistics.class );
         }
         catch ( Exception e )
         {

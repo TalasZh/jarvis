@@ -12,6 +12,7 @@ import org.safehaus.upsource.model.ProjectCommitters;
 import org.safehaus.upsource.model.ResponsibilityDistribution;
 import org.safehaus.upsource.model.ReviewDescriptor;
 import org.safehaus.upsource.model.ReviewList;
+import org.safehaus.upsource.model.ReviewStatistics;
 import org.safehaus.upsource.model.Revision;
 import org.safehaus.upsource.model.RevisionDiffItem;
 import org.safehaus.upsource.model.TimeUnitEnum;
@@ -68,4 +69,6 @@ public interface UpsourceManager
 
     public UserActivity getUserActivity( String projectId, TimeUnitEnum period, long referenceTime,
                                          Set<String> committers ) throws UpsourceManagerException;
+
+    public ReviewStatistics getReviewStatistics( String projectId ) throws UpsourceManagerException;
 }
