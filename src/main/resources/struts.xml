@@ -86,6 +86,10 @@
     <action name="sonar" class="sonarAction" method="list">
       <result name="success">/WEB-INF/pages/sonar.jsp</result>
     </action>
+    
+    <action name="confluence" class="confluenceAction" method="list">
+      <result name="success">/WEB-INF/pages/confluence.jsp</result>
+    </action>
 
     <action name="signup">
       <result>/WEB-INF/pages/signup.jsp</result>
