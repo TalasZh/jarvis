@@ -5,6 +5,10 @@ import com.datastax.driver.core.exceptions.NoHostAvailableException;
 
 import java.util.Date;
 import java.lang.StringBuilder;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
 
 /**
  * Created by neslihan on 26.05.2015.
@@ -16,6 +20,9 @@ public class CassandraConnector {
     private static String keyspaceName = "jarvis";
     private static String captureTableName = "capture";
 
+    private static String persistenceUnit = "CassandraEntityManager";
+    private EntityManagerFactory emf;
+
     public static String getKeyspace(){
         return keyspaceName;
     }
@@ -26,6 +33,11 @@ public class CassandraConnector {
 
     public enum ACTION{
         ADD, DROP
+    }
+
+    public CassandraConnector()
+    {
+        this.emf = Persistence.createEntityManagerFactory(persistenceUnit);
     }
 
     public CassandraConnector(String node)
