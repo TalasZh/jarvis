@@ -10,6 +10,8 @@ import org.safehaus.upsource.model.Project;
 import org.safehaus.upsource.model.ProjectActivity;
 import org.safehaus.upsource.model.ProjectCommitters;
 import org.safehaus.upsource.model.ResponsibilityDistribution;
+import org.safehaus.upsource.model.ReviewCoverage;
+import org.safehaus.upsource.model.ReviewCoverageStateEnum;
 import org.safehaus.upsource.model.ReviewDescriptor;
 import org.safehaus.upsource.model.ReviewList;
 import org.safehaus.upsource.model.ReviewStatistics;
@@ -71,4 +73,7 @@ public interface UpsourceManager
                                          Set<String> committers ) throws UpsourceManagerException;
 
     public ReviewStatistics getReviewStatistics( String projectId ) throws UpsourceManagerException;
+
+    public ReviewCoverage getReviewCoverage( String projectId, ReviewCoverageStateEnum state, TimeUnitEnum period,
+                                             long referenceTime ) throws UpsourceManagerException;
 }

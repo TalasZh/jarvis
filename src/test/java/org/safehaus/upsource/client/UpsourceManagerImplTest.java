@@ -15,6 +15,8 @@ import org.safehaus.upsource.model.Project;
 import org.safehaus.upsource.model.ProjectActivity;
 import org.safehaus.upsource.model.ProjectCommitters;
 import org.safehaus.upsource.model.ResponsibilityDistribution;
+import org.safehaus.upsource.model.ReviewCoverage;
+import org.safehaus.upsource.model.ReviewCoverageStateEnum;
 import org.safehaus.upsource.model.ReviewDescriptor;
 import org.safehaus.upsource.model.ReviewList;
 import org.safehaus.upsource.model.ReviewStatistics;
@@ -261,5 +263,17 @@ public class UpsourceManagerImplTest
         ReviewStatistics reviewStatistics = upsourceManager.getReviewStatistics( TestUtil.PROJECT_ID );
 
         assertNotNull( reviewStatistics );
+    }
+
+
+    @Test
+    public void testGetReviewCoverage() throws Exception
+    {
+        setResponse( TestUtil.REVIEW_COVERAGE_JSON );
+
+        ReviewCoverage reviewCoverage = upsourceManager
+                .getReviewCoverage( TestUtil.PROJECT_ID, ReviewCoverageStateEnum.ALL, TimeUnitEnum.MONTH, 4L );
+
+        assertNotNull( reviewCoverage );
     }
 }

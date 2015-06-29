@@ -172,4 +172,9 @@ public class TestUtil
                     + "      }\n" + "    ],\n" + "    \"reviewerStatsByRevisions\": [\n" + "      {\n"
                     + "        \"userId\": \"e84a1a2a-21fc-42d5-a439-3851b2950eea\",\n" + "        \"value\": 0\n"
                     + "      }\n" + "    ]\n" + "  }\n" + "}";
+    public static final String REVIEW_COVERAGE_JSON =
+            "{\n" + "  \"result\": {\n" + "    \"allRevisions\": [\n" + "      {\n"
+                    + "        \"time\": 1384128000000,\n" + "        \"value\": 229\n" + "      }\n" + "    ],\n"
+                    + "    \"coveredRevisions\": [\n" + "      {\n" + "        \"time\": 1384128000000,\n"
+                    + "        \"value\": 0\n" + "      }\n" + "    ]\n" + "  }\n" + "}";
 }

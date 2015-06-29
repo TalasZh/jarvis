@@ -13,6 +13,8 @@ import org.safehaus.upsource.model.Project;
 import org.safehaus.upsource.model.ProjectActivity;
 import org.safehaus.upsource.model.ProjectCommitters;
 import org.safehaus.upsource.model.ResponsibilityDistribution;
+import org.safehaus.upsource.model.ReviewCoverage;
+import org.safehaus.upsource.model.ReviewCoverageStateEnum;
 import org.safehaus.upsource.model.ReviewDescriptor;
 import org.safehaus.upsource.model.ReviewList;
 import org.safehaus.upsource.model.ReviewStatistics;
@@ -468,11 +470,27 @@ public class UpsourceManagerImpl implements UpsourceManager
     {
         try
         {
-            String response = get( "getReviewStatistics", new ParamBuilder().add( "projectId", projectId ), null )
-                                .toString();
+            return jsonUtil.from( get( "getReviewStatistics", new ParamBuilder().add( "projectId", projectId ), null )
+                    .toString(), ReviewStatistics.class );
+        }
+        catch ( Exception e )
+        {
+            throw new UpsourceManagerException( e );
+        }
+    }
 
-            System.out.println(response);
-            return jsonUtil.from( response, ReviewStatistics.class );
+
+    @Override
+    public ReviewCoverage getReviewCoverage( final String projectId, final ReviewCoverageStateEnum state,
+                                             final TimeUnitEnum period, final long referenceTime )
+            throws UpsourceManagerException
+    {
+        try
+        {
+            return jsonUtil.from( get( "getReviewCoverage",
+                    new ParamBuilder().add( "projectId", projectId ).add( "state", state.getValue() )
+                                      .add( "period", period.getValue() ).add( "referenceTime", referenceTime ), null )
+                    .toString(), ReviewCoverage.class );
         }
         catch ( Exception e )
         {
