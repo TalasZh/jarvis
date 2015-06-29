@@ -8,6 +8,7 @@ import org.safehaus.upsource.model.FileAnnotation;
 import org.safehaus.upsource.model.FileHistory;
 import org.safehaus.upsource.model.Project;
 import org.safehaus.upsource.model.ProjectActivity;
+import org.safehaus.upsource.model.ProjectCommitters;
 import org.safehaus.upsource.model.ResponsibilityDistribution;
 import org.safehaus.upsource.model.ReviewDescriptor;
 import org.safehaus.upsource.model.ReviewList;
@@ -61,4 +62,6 @@ public interface UpsourceManager
 
     public ResponsibilityDistribution getResponsibilityDistribution( String projectId, Date fromDate, Date toDate )
             throws UpsourceManagerException;
+
+    public ProjectCommitters getProjectCommitters( String projectId ) throws UpsourceManagerException;
 }

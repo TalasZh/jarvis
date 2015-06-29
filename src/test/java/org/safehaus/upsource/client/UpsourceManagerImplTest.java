@@ -13,6 +13,7 @@ import org.safehaus.upsource.model.FileAnnotation;
 import org.safehaus.upsource.model.FileHistory;
 import org.safehaus.upsource.model.Project;
 import org.safehaus.upsource.model.ProjectActivity;
+import org.safehaus.upsource.model.ProjectCommitters;
 import org.safehaus.upsource.model.ResponsibilityDistribution;
 import org.safehaus.upsource.model.ReviewDescriptor;
 import org.safehaus.upsource.model.ReviewList;
@@ -223,4 +224,17 @@ public class UpsourceManagerImplTest
 
         assertNotNull( responsibilityDistribution );
     }
+
+
+    @Test
+    public void testGetProjectCommitters() throws Exception
+    {
+        setResponse( TestUtil.COMMITERS_JSON );
+
+        ProjectCommitters projectCommitters = upsourceManager.getProjectCommitters( TestUtil.PROJECT_ID );
+
+        assertNotNull( projectCommitters );
+    }
+
+
 }
