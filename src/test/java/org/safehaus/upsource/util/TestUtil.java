@@ -149,4 +149,13 @@ public class TestUtil
             + "        \"committer\": \"damir aralbaev <daralbaev@critical-factor.com>\",\n"
             + "        \"userId\": \"5e6472c3-27df-40e2-b279-1a96e84b643a\"\n" + "      }\n" + "    ]\n" + "  }\n" +
             "}";
+    public static final String USER_ACTIVITY_JSON =
+            "{\n" + "  \"result\": {\n" + "    \"items\": [\n" + "      {\n" + "        \"time\": 1378944000000,\n" +
+                    "        \"value\": 0\n" + "      },\n" + "      {\n" + "        \"time\": 1381536000000,\n"
+                    + "        \"value\": 0\n" + "      }\n" + "    ],\n" + "    \"stats\": {\n"
+
+                    + "      \"minCommitTime\": 1376866982000,\n" + "      \"maxCommitTime\": 1435311078000,\n"
+                    + "      \"totalCommits\": 13491,\n" + "      \"minIndexedCommitTime\": 1417893496000,\n"
+                    + "      \"maxIndexedCommitTime\": 1435135468000,\n" + "      \"totalIndexedCommits\": 275,\n"
+                    + "      \"projectModelKnown\": true\n" + "    }\n" + "  }\n" + "}";
 }

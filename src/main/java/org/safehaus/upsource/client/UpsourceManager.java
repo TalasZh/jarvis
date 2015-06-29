@@ -15,6 +15,7 @@ import org.safehaus.upsource.model.ReviewList;
 import org.safehaus.upsource.model.Revision;
 import org.safehaus.upsource.model.RevisionDiffItem;
 import org.safehaus.upsource.model.TimeUnitEnum;
+import org.safehaus.upsource.model.UserActivity;
 
 
 /**
@@ -64,4 +65,7 @@ public interface UpsourceManager
             throws UpsourceManagerException;
 
     public ProjectCommitters getProjectCommitters( String projectId ) throws UpsourceManagerException;
+
+    public UserActivity getUserActivity( String projectId, TimeUnitEnum period, long referenceTime,
+                                         Set<String> committers ) throws UpsourceManagerException;
 }

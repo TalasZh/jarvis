@@ -1,6 +1,7 @@
 package org.safehaus.upsource.client;
 
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
@@ -17,6 +18,7 @@ import org.safehaus.upsource.model.ReviewList;
 import org.safehaus.upsource.model.Revision;
 import org.safehaus.upsource.model.RevisionDiffItem;
 import org.safehaus.upsource.model.TimeUnitEnum;
+import org.safehaus.upsource.model.UserActivity;
 import org.safehaus.util.JsonUtil;
 import org.safehaus.util.RestUtil;
 
@@ -35,7 +37,7 @@ public class UpsourceManagerImpl implements UpsourceManager
 
     protected RestUtil restUtil;
 
-    protected JsonUtil jsonUtil = new JsonUtil();
+    public JsonUtil jsonUtil = new JsonUtil();
 
 
     public UpsourceManagerImpl( final String baseUrl, final String username, final String password )
@@ -81,6 +83,14 @@ public class UpsourceManagerImpl implements UpsourceManager
         public ParamBuilder add( String name, Long value )
         {
             params.put( String.format( "\"%s\"", name ), value.toString() );
+
+            return this;
+        }
+
+
+        public ParamBuilder add( String name, Collection value )
+        {
+            params.put( String.format( "\"%s\"", name ), JsonUtil.toJson( value ) );
 
             return this;
         }
@@ -189,8 +199,8 @@ public class UpsourceManagerImpl implements UpsourceManager
         try
         {
             return jsonUtil.from( get( "getRevisionsList",
-                    new ParamBuilder().add( "projectId", projectId ).add( "limit", limit ), "revision" ).toString(),
-                    new TypeToken<Set<Revision>>()
+                            new ParamBuilder().add( "projectId", projectId ).add( "limit", limit ), "revision" )
+                            .toString(), new TypeToken<Set<Revision>>()
                     {}.getType() );
         }
         catch ( Exception e )
@@ -241,8 +251,8 @@ public class UpsourceManagerImpl implements UpsourceManager
         try
         {
             return jsonUtil.from( get( "getRevisionInfo",
-                    new ParamBuilder().add( "projectId", projectId ).add( "revisionId", revisionId ), null ).toString(),
-                    Revision.class );
+                            new ParamBuilder().add( "projectId", projectId ).add( "revisionId", revisionId ), null )
+                            .toString(), Revision.class );
         }
         catch ( Exception e )
         {
@@ -373,8 +383,8 @@ public class UpsourceManagerImpl implements UpsourceManager
         try
         {
             return jsonUtil.from( get( "getReviewDetails",
-                    new ParamBuilder().add( "projectId", projectId ).add( "reviewId", reviewId ), null ).toString(),
-                    ReviewDescriptor.class );
+                            new ParamBuilder().add( "projectId", projectId ).add( "reviewId", reviewId ), null )
+                            .toString(), ReviewDescriptor.class );
         }
         catch ( Exception e )
         {
@@ -424,9 +434,30 @@ public class UpsourceManagerImpl implements UpsourceManager
     {
         try
         {
-            return jsonUtil
-                    .from( get( "getProjectCommitters", new ParamBuilder().add( "projectId", projectId ),
-                                    null ).toString(), ProjectCommitters.class );
+            return jsonUtil.from( get( "getProjectCommitters", new ParamBuilder().add( "projectId", projectId ), null )
+                    .toString(), ProjectCommitters.class );
+        }
+        catch ( Exception e )
+        {
+            throw new UpsourceManagerException( e );
+        }
+    }
+
+
+    @Override
+    public UserActivity getUserActivity( final String projectId, final TimeUnitEnum period, final long referenceTime,
+                                         final Set<String> committers ) throws UpsourceManagerException
+    {
+        try
+        {
+            String response = get( "getUserActivity",
+                    new ParamBuilder().add( "projectId", projectId ).add( "period", period.getValue() )
+                                      .add( "referenceTime", referenceTime ).add( "committers", committers ), null )
+                                .toString();
+
+            System.out.println(response);
+
+            return jsonUtil.from( response, UserActivity.class );
         }
         catch ( Exception e )
         {

@@ -20,8 +20,11 @@ import org.safehaus.upsource.model.ReviewList;
 import org.safehaus.upsource.model.Revision;
 import org.safehaus.upsource.model.RevisionDiffItem;
 import org.safehaus.upsource.model.TimeUnitEnum;
+import org.safehaus.upsource.model.UserActivity;
 import org.safehaus.upsource.util.TestUtil;
 import org.safehaus.util.RestUtil;
+
+import com.google.common.collect.Sets;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -237,4 +240,14 @@ public class UpsourceManagerImplTest
     }
 
 
+    @Test
+    public void testGetUserActivity() throws Exception
+    {
+        setResponse( TestUtil.USER_ACTIVITY_JSON );
+
+        UserActivity userActivity =
+                upsourceManager.getUserActivity( TestUtil.PROJECT_ID, TimeUnitEnum.MONTH, 4L, Sets.newHashSet( "" ) );
+
+        assertNotNull( userActivity );
+    }
 }
