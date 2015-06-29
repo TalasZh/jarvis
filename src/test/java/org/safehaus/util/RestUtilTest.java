@@ -1,4 +1,4 @@
-package org.safehaus.stash.util;
+package org.safehaus.util;
 
 
 import org.junit.Before;
@@ -7,16 +7,17 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.restlet.resource.ClientResource;
+import org.safehaus.util.RestUtil;
 
 
 @RunWith( MockitoJUnitRunner.class )
-public class AtlassianRestUtilTest
+public class RestUtilTest
 {
 
     @Mock
     ClientResource clientResource;
 
-    AtlassianRestUtil atlassianRestUtil;
+    RestUtil restUtil;
 
 
     @Before

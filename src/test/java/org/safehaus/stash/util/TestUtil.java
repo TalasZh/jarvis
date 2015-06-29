@@ -1,4 +1,4 @@
-package org.safehaus.stash;
+package org.safehaus.stash.util;
 
 
 public class TestUtil

@@ -1,4 +1,4 @@
-package org.safehaus.stash.util;
+package org.safehaus.util;
 
 
 import java.util.Map;
@@ -13,8 +13,11 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 
 
-public class AtlassianRestUtil
+public class RestUtil
 {
+    //TODO throw exception if error code is not within 200-299
+
+
     //auth cookie
     private Cookie authCookie;
     //-------------
@@ -23,7 +26,7 @@ public class AtlassianRestUtil
     private String password;
 
 
-    public AtlassianRestUtil( final Cookie authCookie )
+    public RestUtil( final Cookie authCookie )
     {
         Preconditions.checkNotNull( authCookie );
 
@@ -31,7 +34,7 @@ public class AtlassianRestUtil
     }
 
 
-    public AtlassianRestUtil( final String username, final String password )
+    public RestUtil( final String username, final String password )
     {
         Preconditions.checkArgument( !Strings.isNullOrEmpty( username ) );
         Preconditions.checkArgument( !Strings.isNullOrEmpty( password ) );

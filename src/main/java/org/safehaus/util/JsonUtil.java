@@ -1,4 +1,4 @@
-package org.safehaus.stash.util;
+package org.safehaus.util;
 
 
 import java.lang.reflect.Type;

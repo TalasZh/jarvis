@@ -11,7 +11,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.safehaus.model.JarvisContext;
-import org.safehaus.stash.TestUtil;
+import org.safehaus.stash.util.TestUtil;
 import org.safehaus.stash.model.Activity;
 import org.safehaus.stash.model.Branch;
 import org.safehaus.stash.model.BuildStats;
@@ -26,7 +26,7 @@ import org.safehaus.stash.model.Project;
 import org.safehaus.stash.model.PullRequest;
 import org.safehaus.stash.model.PullRequestState;
 import org.safehaus.stash.model.Repository;
-import org.safehaus.stash.util.AtlassianRestUtil;
+import org.safehaus.util.RestUtil;
 import org.safehaus.util.JarvisContextHolder;
 
 import static junit.framework.Assert.assertFalse;
@@ -42,7 +42,7 @@ import static org.mockito.Mockito.spy;
 public class StashManagerImplTest
 {
     @Mock
-    AtlassianRestUtil atlassianRestUtil;
+    RestUtil restUtil;
 
     StashManagerImpl stashManager;
 
@@ -57,7 +57,7 @@ public class StashManagerImplTest
     }
 
 
-    private void setRestResponse( String response ) throws AtlassianRestUtil.RestException, StashManagerException
+    private void setRestResponse( String response ) throws RestUtil.RestException, StashManagerException
     {
         doReturn( response ).when( stashManager ).get( anyString(), anyVararg() );
     }
