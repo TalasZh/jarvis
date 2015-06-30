@@ -44,7 +44,9 @@ public class CloseValidator implements Validator
             log.warn( "Found inward issue link {}", link.getSourceObject().getKey() );
             destinationIssue = link.getSourceObject();
 
-            if ( !destinationIssue.getStatusObject().getName().equalsIgnoreCase( "CLOSED" ) )
+            if ( !destinationIssue.getStatusObject().getName().equalsIgnoreCase( "CLOSED" )
+                    || !destinationIssue.getStatusObject().getName().equalsIgnoreCase( "DONE" )
+                    ||!destinationIssue.getStatusObject().getName().equalsIgnoreCase( "RESOLVED" ))
             {
                 throw new JarvisWorkflowException(
                         destinationIssue.getKey() + " must be CLOSED before CLOSING ISSUE" );

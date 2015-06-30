@@ -164,7 +164,7 @@ public class JarvisConfluenceServiceImpl implements JarvisConfluenceService
         log.warn( "POST Url {}", url );
         HttpPost post = new HttpPost( url );
 
-        String encoding = "Y29uZmx1ZW5jZXVzZXI6MTIzNDU";
+        String encoding = "amFydmlzYm90OjZ2Q0Y2WWlCRjJvSA";
         post.setHeader( "Authorization", "Basic " + encoding );
 
         post.setHeader( "Content-Type", "application/json;charset=UTF-8" );
@@ -236,7 +236,7 @@ public class JarvisConfluenceServiceImpl implements JarvisConfluenceService
 
         HttpPost post = new HttpPost( url );
 
-        String encoding = "Y29uZmx1ZW5jZXVzZXI6MTIzNDU";
+        String encoding = "amFydmlzYm90OjZ2Q0Y2WWlCRjJvSA";
         post.setHeader( "Authorization", "Basic " + encoding );
 
         post.setHeader( "Content-Type", "application/json;charset=UTF-8" );
@@ -303,7 +303,7 @@ public class JarvisConfluenceServiceImpl implements JarvisConfluenceService
         }
 
         HttpPost post = new HttpPost( url );
-        String encoding = "Y29uZmx1ZW5jZXVzZXI6MTIzNDU";
+        String encoding = "amFydmlzYm90OjZ2Q0Y2WWlCRjJvSA";
         post.setHeader( "Authorization", "Basic " + encoding );
         post.setHeader( "Content-Type", "application/json;charset=UTF-8" );
 
@@ -344,7 +344,7 @@ public class JarvisConfluenceServiceImpl implements JarvisConfluenceService
         log.warn( "URL {}", url );
 
         HttpGet get = new HttpGet( url );
-        String encoding = "Y29uZmx1ZW5jZXVzZXI6MTIzNDU";
+        String encoding = "amFydmlzYm90OjZ2Q0Y2WWlCRjJvSA";
         get.setHeader( "Authorization", "Basic " + encoding );
 
         CloseableHttpResponse response = null;
