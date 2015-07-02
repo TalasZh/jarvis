@@ -47,6 +47,7 @@
 
   <bean id="sessionAction" class="org.safehaus.webapp.action.SessionAction" scope="prototype">
     <property name="sessionManager" ref="sessionManager" />
+    <property name="dataStore" ref="dataStore" />
   </bean>
 
   <bean id="passwordHintAction" class="org.safehaus.webapp.action.PasswordHintAction" scope="prototype">

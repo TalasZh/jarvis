@@ -41,4 +41,22 @@
   <!-- Activates scanning of @Repository -->
   <context:component-scan base-package="org.safehaus" />
 
+  <bean id="cassandraEntityManagerFactory"
+        class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+    <property name="persistenceUnitName" value="cassandra-pu" />
+    <property name="loadTimeWeaver">
+      <bean
+          class="org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver" />
+    </property>
+  </bean>
+
+  <bean id="dataStore" class="org.safehaus.service.impl.DataStoreImpl"
+        scope="singleton">
+    <property name="dao" ref="dao" />
+  </bean>
+
+  <bean id="dao" class="org.safehaus.dao.kundera.DaoImpl"
+        scope="singleton">
+  </bean>
+
 </beans>
