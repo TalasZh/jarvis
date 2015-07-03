@@ -13,7 +13,7 @@ public class Activity
 
     private long id;
     private long createdDate;
-    private User user;
+    private StashUser user;
     private String action;
     private String commentAction;
     private CommentAnchor commentAnchor;
@@ -33,7 +33,7 @@ public class Activity
         private long id;
         private long version;
         private String text;
-        private User author;
+        private StashUser author;
         private long createdDate;
         private long updatedDate;
 
@@ -64,7 +64,7 @@ public class Activity
         }
 
 
-        public User getAuthor()
+        public StashUser getAuthor()
         {
             return author;
         }

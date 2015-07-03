@@ -1,6 +1,8 @@
 package org.safehaus.jira.model;
 
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -10,9 +12,13 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * Created by tzhamakeev on 5/25/15.
  */
 @XmlRootElement
+@Embeddable
 public class JarvisIssueType
 {
+    @Column(name = "JARVISISSUE_TYPE_ID")
     private Long id;
+
+    @Column(name = "JARVISISSUE_TYPE_NAME")
     private String name;
 
 

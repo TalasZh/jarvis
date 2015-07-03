@@ -3,6 +3,8 @@ package org.safehaus.jira.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.safehaus.model.BaseObject;
@@ -11,12 +13,18 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 
 @XmlRootElement
+@Embeddable
 public class JarvisMember extends BaseObject implements Serializable
 {
     private static final long serialVersionUID = 3832626162173359411L;
 
+    @Column(name = "JARVIS_MEMBER_NAME")
     private String name;
+
+    @Column(name = "JARVIS_MEMBER_AVATAR")
     private String avatar;
+
+    @Column(name = "JARVIS_MEMBER_DISNAME")
     private String displayName;
 
 

@@ -6,13 +6,13 @@ import com.google.common.base.Objects;
 
 public class Event
 {
-    private User user;
+    private StashUser user;
     private String action;
     private long timestamp;
     private String details;
 
 
-    public User getUser()
+    public StashUser getUser()
     {
         return user;
     }

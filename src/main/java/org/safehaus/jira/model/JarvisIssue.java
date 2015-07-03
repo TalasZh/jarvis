@@ -4,10 +4,13 @@ package org.safehaus.jira.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.impetus.kundera.index.*;
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.safehaus.model.Views;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -17,6 +20,11 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 
 @XmlRootElement
+@Entity
+@Table(schema = "jarvis@cassandra-pu" )
+@IndexCollection( columns = {
+        @com.impetus.kundera.index.Index( name = "id" ), @com.impetus.kundera.index.Index( name = "key" )
+} )
 public class JarvisIssue
 {
     private static final long serialVersionUID = 3832626162173359411L;
@@ -24,46 +32,77 @@ public class JarvisIssue
     //    @JsonView( Views.JarvisIssueLong.class )
     //    private String token="unknown";
     @JsonView( Views.JarvisIssueShort.class )
+    @Id
     protected Long id;
+
     @JsonView( Views.JarvisIssueShort.class )
+    @Column
     protected String key;
+
     @JsonView( Views.JarvisIssueShort.class )
+    @Column
     protected String projectKey;
+
     @JsonView( Views.JarvisIssueLong.class )
+    @Column
     protected String summary;
+
     @JsonView( Views.JarvisIssueLong.class )
+    @Column
     protected String self;
     //    @JsonView( Views.JarvisIssueLong.class )
     //    private Phase phase;
 
     @JsonView( Views.JarvisIssueShort.class )
+    @Embedded
+    @Column
     protected JarvisIssueType type; //Task, Session, Phase, Epic, Story etc...
+
     @JsonView( Views.JarvisIssueLong.class )
+    @Column
     protected String issueDescription;
+
     @JsonView( Views.JarvisIssueLong.class )
+    @Column
     protected String timeRemaining;
+
     @JsonView( Views.JarvisIssueLong.class )
+    @Column
     protected String assignee;
+
     @JsonView( Views.JarvisIssueLong.class )
+    @Column
     protected String reporter;
+
     @JsonView( Views.JarvisIssueLong.class )
+    @Column
     protected String components;
+
     @JsonView( Views.JarvisIssueLong.class )
+    @Column
     protected String labels;
+
     @JsonView( Views.JarvisIssueLong.class )
+    @Column
     protected String status;
+
     @JsonView( Views.JarvisIssueLong.class )
+    @Column
     protected String resolution;
+
     @JsonView( Views.JarvisIssueLong.class )
+    @Column
     protected String fixVersion;
+
     @JsonView( Views.JarvisIssueLong.class )
+    @Column
     protected String dateCreated;
+
     @JsonView( Views.JarvisIssueLong.class )
     protected List<JarvisLink> links = new ArrayList<>();
 
     @JsonView( Views.JarvisIssueLong.class )
     protected Iterable<Transition> transitions = new ArrayList<>();
-
 
     public JarvisIssue()
     {
@@ -294,7 +333,8 @@ public class JarvisIssue
         this.dateCreated = dateCreated;
     }
 
-
+    @OneToMany(fetch = FetchType.EAGER)
+    @Column
     public List<JarvisLink> getLinks()
     {
         return links;

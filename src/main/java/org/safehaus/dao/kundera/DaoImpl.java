@@ -3,15 +3,12 @@ package org.safehaus.dao.kundera;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
-import javax.persistence.Query;
+import javax.persistence.*;
 
 import org.safehaus.dao.Dao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import com.impetus.client.cassandra.common.CassandraConstants;
 
 /**
  * Created by tzhamakeev on 7/2/15.
@@ -23,14 +20,12 @@ public class DaoImpl implements Dao
      */
     private static final Logger log = LoggerFactory.getLogger( DaoImpl.class );
 
-    @PersistenceContext( unitName = "cassandra-pu", type = PersistenceContextType.EXTENDED )
+    @PersistenceContext( unitName = "cassandra-pu", type = PersistenceContextType.EXTENDED, properties = {@PersistenceProperty(name = "cql.version",value="3.0.0")})
     private EntityManager em;
-
 
     public DaoImpl()
     {
     }
-
 
     @Override
     public void insert( Object entity )

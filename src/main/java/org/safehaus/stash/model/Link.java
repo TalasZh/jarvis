@@ -3,10 +3,16 @@ package org.safehaus.stash.model;
 
 import com.google.common.base.Objects;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
+@Embeddable
 public class Link
 {
+    @Column
     private String url;
+
+    @Column
     private String rel;
 
 

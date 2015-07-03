@@ -6,12 +6,12 @@ import com.google.common.base.Objects;
 
 public class PullRequestParticipant
 {
-    private User user;
+    private StashUser user;
     private PullRequestRole role;
     private boolean approved;
 
 
-    public User getUser()
+    public StashUser getUser()
     {
         return user;
     }

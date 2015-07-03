@@ -5,20 +5,44 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.common.base.Objects;
+import com.impetus.kundera.index.Index;
+import com.impetus.kundera.index.IndexCollection;
 
+import javax.persistence.*;
 
-public class User
+//@Entity
+//@Table( name = "STASH_USER", schema = "jarvis@cassandra-pu" )
+//@IndexCollection( columns = {
+//        @Index( name = "name" ), @Index( name = "emailAddress" ), @Index( name = "authorTimestamp" )
+//} )
+public class StashUser
 {
+    //@Column(name = "STASH_USER_NAME")
     private String name;
-    private long id;
-    private String displayName;
-    private String emailAddress;
-    private boolean active;
-    private String slug;
-    private UserType type;
-    private Link link;
-    private Map<String, Set<Map<String, String>>> links;
 
+    //@Id
+    private long id;
+
+    //@Column(name = "STASH_USER_DISPNAME")
+    private String displayName;
+
+    //@Column(name = "STASH_USER_EMAIL")
+    private String emailAddress;
+
+    //@Column(name = "STASH_USER_ISACTIVE")
+    private boolean active;
+
+    //@Column(name = "STASH_USER_ISACTIVE")
+    private String slug;
+
+    //@Enumerated( EnumType.ORDINAL )
+    private UserType type;
+
+    //@Embedded
+    //@Column(name = "STASH_USER_LINK")
+    private Link link;
+
+    private Map<String, Set<Map<String, String>>> links;
 
     public String getName()
     {
@@ -61,7 +85,8 @@ public class User
         return link;
     }
 
-
+    //@ElementCollection
+    //@Column
     public Map<String, Set<Map<String, String>>> getLinks()
     {
         return links;

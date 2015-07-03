@@ -69,7 +69,7 @@ public class SessionAction extends BaseAction
             document.setUplodedDate( new Date() );
             dataStore.insertDocument( document );
             DocumentInfo documentInfo=dataStore.findDocument( id );
-            log.debug( "Last created document: "+documentInfo );
+            log.debug( "Last created document: "+ documentInfo );
             List<DocumentInfo> docs = dataStore.findDocumentByOwnerName( "Timur" );
 
             log.debug("All documents:");

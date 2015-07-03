@@ -7,8 +7,9 @@
     <class>org.safehaus.model.Role</class>
     <class>org.safehaus.model.Session</class>
     <class>org.safehaus.model.Capture</class>
-    <!--    <class>org.safehaus.model.Story</class>
-        <class>org.safehaus.model.Phase</class>-->
+    <exclude-unlisted-classes>true</exclude-unlisted-classes>
+      <!--    <class>org.safehaus.model.Story</class>
+          <class>org.safehaus.model.Phase</class>-->
   </persistence-unit>
   <!--
     <persistence-unit name="CassandraEntityManager">
@@ -26,6 +27,12 @@
   <persistence-unit name="cassandra-pu">
     <provider>com.impetus.kundera.KunderaPersistence</provider>
     <class>org.safehaus.model.DocumentInfo</class>
+    <class>org.safehaus.jira.model.JarvisLink</class>
+    <class>org.safehaus.jira.model.JarvisIssueType</class>
+    <class>org.safehaus.jira.model.JarvisMember</class>
+    <class>org.safehaus.jira.model.JarvisIssue</class>
+    <class>org.safehaus.stash.model.StashUser</class>
+    <class>org.safehaus.stash.model.Link</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="kundera.nodes" value="localhost" />
@@ -36,6 +43,7 @@
       <property name="kundera.client" value="thrift" />
       <property name="kundera.client.lookup.class"
                 value="com.impetus.client.cassandra.thrift.ThriftClientFactory" />
+      <property name="cql.version" value="3.0.0"/>
       <property name="kundera.client.property" value="kundera-cassandra.xml" />
       <!-- 			<property name="kundera.cache.provider.class"
                value="com.impetus.kundera.cache.ehcache.EhCacheProvider" />

@@ -4,41 +4,44 @@ package org.safehaus.stash.model;
 import java.util.Set;
 
 import com.google.common.base.Objects;
+import com.impetus.kundera.index.Index;
+import com.impetus.kundera.index.IndexCollection;
 
+import javax.persistence.*;
 
 public class Commit
 {
     private String id;
-    private String displayId;
-    private User author;
-    private long authorTimestamp;
-    private String message;
-    private Set<MinimalCommit> parents;
 
+    private String displayId;
+
+    private StashUser author;
+
+    private long authorTimestamp;
+
+    private String message;
+
+    private Set<MinimalCommit> parents;
 
     public String getId()
     {
         return id;
     }
 
-
     public String getDisplayId()
     {
         return displayId;
     }
 
-
-    public User getAuthor()
+    public StashUser getAuthor()
     {
         return author;
     }
-
 
     public long getAuthorTimestamp()
     {
         return authorTimestamp;
     }
-
 
     public String getMessage()
     {
