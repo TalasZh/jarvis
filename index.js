@@ -49,7 +49,8 @@ function onPrefChange() {
 function isAuthenticated() {
     //check if cookies are exist if not redirect to auth page
     var cookieManager = Cc["@mozilla.org/cookiemanager;1"].getService(Ci.nsICookieManager2);
-    var count = cookieManager.getCookiesFromHost(simplePrefs.prefs.mediatorHost);
+    var url = require("sdk/url").URL;
+    var count = cookieManager.getCookiesFromHost(url(simplePrefs.prefs.mediatorHost).host);
 
     while (count.hasMoreElements()) {
         var cookie = count.getNext().QueryInterface(Ci.nsICookie2);
@@ -71,14 +72,12 @@ const init = () => {
     simpleStorage.storage.annotations = {};
 
     if (!isAuthenticated()) {
-        tabs.open(simplePrefs.prefs.mediatorProtocol + "://" + simplePrefs.prefs.mediatorHost);
+        tabs.open(simplePrefs.prefs.mediatorHost);
         return false;
     }
 
     if (!mediator) {
-        mediator = new MediatorApi(simplePrefs.prefs.mediatorProtocol,
-            simplePrefs.prefs.mediatorHost,
-            simplePrefs.prefs.mediatorPort,
+        mediator = new MediatorApi(simplePrefs.prefs.mediatorHost,
             null,
             null,
             true);
@@ -305,7 +304,7 @@ exports.main = function () {
     function triggerPanelOpenEvent() {
         if (!isAuthenticated()) {
             button.state('window', {checked: false});
-            tabs.open(simplePrefs.prefs.mediatorProtocol + "://" + simplePrefs.prefs.mediatorHost + ":" + simplePrefs.prefs.mediatorPort);
+            tabs.open(simplePrefs.prefs.mediatorHost);
         }
         else {
             panel.show({
@@ -756,7 +755,7 @@ exports.main = function () {
     });
 
     panel.port.on("link-clicked", function (issueId) {
-        tabs.open("http://test-jira.critical-factor.com/browse/" + issueId);
+        tabs.open(simplePrefs.prefs.jiraHost + "/browse/" + issueId);
     });
 
     panel.port.on("navigate-to", function (url) {
