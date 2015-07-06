@@ -2,8 +2,6 @@ package jarvis.workflow.plugin.service.impl;
 
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -73,24 +71,6 @@ public class JarvisConfluenceServiceImpl implements JarvisConfluenceService
 
 
     @Override
-    public String createConfluencePage( final Issue issue )
-    {
-        ConfluencePage page = new ConfluencePage();
-        //key of a story
-        String key = issue.getKey();
-        //status of a story
-        String status = issue.getStatusObject().getSimpleStatus().getName();
-        //type page|blog
-        page.setType( CONFLUENCE_PAGE_TYPE );
-        //title is a key
-        page.setTitle( key );
-        //page.setAncestors(  );
-
-        return null;
-    }
-
-
-    @Override
     public boolean confluencePageExists( final Issue issue )
     {
         String key = issue.getKey();
@@ -98,17 +78,8 @@ public class JarvisConfluenceServiceImpl implements JarvisConfluenceService
         String state = issue.getStatusObject().getSimpleStatus().getName();
 
         String url = this.url + "/search?";
-        String cql = "cql=(title=\"" + key + " " + state + "\" and type=page and space=" + getProjectSpaceKey() + ")";
-
-        try
-        {
-            cql = URLEncoder.encode( cql, "UTF-8" );
-        }
-        catch ( UnsupportedEncodingException e )
-        {
-            e.printStackTrace();
-        }
-
+        String cql = "cql=(title=%22" + key + "+" + state.toUpperCase() + "%22+and+type=page+and+space="
+                + getProjectSpaceKey() + ")";
         log.debug( "Making search request with URL {}", url );
 
         CloseableHttpResponse response = doGet( url + cql );
@@ -134,27 +105,6 @@ public class JarvisConfluenceServiceImpl implements JarvisConfluenceService
         }
 
         return false;
-    }
-
-
-    @Override
-    public ConfluencePage getConfluencePage()
-    {
-        return null;
-    }
-
-
-    @Override
-    public ConfluencePage findByTitleAndSpaceKey()
-    {
-        return null;
-    }
-
-
-    @Override
-    public void updateConfluencePage()
-    {
-
     }
 
 
@@ -214,7 +164,7 @@ public class JarvisConfluenceServiceImpl implements JarvisConfluenceService
         log.warn( "POST Url {}", url );
         HttpPost post = new HttpPost( url );
 
-        String encoding = "Y29uZmx1ZW5jZXVzZXI6MTIzNDU";
+        String encoding = "amFydmlzYm90OjZ2Q0Y2WWlCRjJvSA";
         post.setHeader( "Authorization", "Basic " + encoding );
 
         post.setHeader( "Content-Type", "application/json;charset=UTF-8" );
@@ -259,7 +209,6 @@ public class JarvisConfluenceServiceImpl implements JarvisConfluenceService
     }
 
 
-    @Override
     public boolean confluencePageExists( final String id )
     {
         String url = this.url + "/" + id;
@@ -287,7 +236,7 @@ public class JarvisConfluenceServiceImpl implements JarvisConfluenceService
 
         HttpPost post = new HttpPost( url );
 
-        String encoding = "Y29uZmx1ZW5jZXVzZXI6MTIzNDU";
+        String encoding = "amFydmlzYm90OjZ2Q0Y2WWlCRjJvSA";
         post.setHeader( "Authorization", "Basic " + encoding );
 
         post.setHeader( "Content-Type", "application/json;charset=UTF-8" );
@@ -354,7 +303,7 @@ public class JarvisConfluenceServiceImpl implements JarvisConfluenceService
         }
 
         HttpPost post = new HttpPost( url );
-        String encoding = "Y29uZmx1ZW5jZXVzZXI6MTIzNDU";
+        String encoding = "amFydmlzYm90OjZ2Q0Y2WWlCRjJvSA";
         post.setHeader( "Authorization", "Basic " + encoding );
         post.setHeader( "Content-Type", "application/json;charset=UTF-8" );
 
@@ -395,7 +344,7 @@ public class JarvisConfluenceServiceImpl implements JarvisConfluenceService
         log.warn( "URL {}", url );
 
         HttpGet get = new HttpGet( url );
-        String encoding = "Y29uZmx1ZW5jZXVzZXI6MTIzNDU";
+        String encoding = "amFydmlzYm90OjZ2Q0Y2WWlCRjJvSA";
         get.setHeader( "Authorization", "Basic " + encoding );
 
         CloseableHttpResponse response = null;

@@ -20,14 +20,12 @@
       <artifactId>httpclient</artifactId>
       <version>4.5</version>
     </dependency>
-
     <dependency>
       <groupId>com.atlassian.jira</groupId>
       <artifactId>jira-api</artifactId>
       <version>${jira.version}</version>
       <scope>provided</scope>
     </dependency>
-
     <!-- Add dependency on jira-core if you want access to JIRA implementation classes as well as the sanctioned API. -->
     <!-- This is not normally recommended, but may be required eg when migrating a plugin originally developed against JIRA 4.x -->
     <!--<dependency>-->
@@ -48,7 +46,6 @@
       <version>1.9.5</version>
       <scope>test</scope>
     </dependency>
-
     <!-- WIRED TEST RUNNER DEPENDENCIES -->
     <dependency>
       <groupId>com.atlassian.plugins</groupId>
@@ -72,15 +69,14 @@
       <artifactId>httpclient</artifactId>
       <version>4.3.6</version>
     </dependency>
-
     <!-- Uncomment to use TestKit in your project. Details at https://bitbucket.org/atlassian/jira-testkit -->
     <!-- You can read more about TestKit at https://developer.atlassian.com/display/JIRADEV/Plugin+Tutorial+-+Smarter+integration+testing+with+TestKit -->
     <!--
 <dependency>
-  <groupId>com.atlassian.jira.tests</groupId>
-  <artifactId>jira-testkit-client</artifactId>
-  <version>${testkit.version}</version>
-  <scope>test</scope>
+<groupId>com.atlassian.jira.tests</groupId>
+<artifactId>jira-testkit-client</artifactId>
+<version>${testkit.version}</version>
+<scope>test</scope>
 </dependency>
 -->
     <!--<dependency>-->
@@ -101,19 +97,23 @@
       <scope>test</scope>
     </dependency>
     <!--<dependency>-->
-      <!--<groupId>com.atlassian.applinks</groupId>-->
-      <!--<artifactId>applinks-api</artifactId>-->
-      <!--<version>4.2.5</version>-->
-      <!--<scope>provided</scope>-->
+    <!--<groupId>com.atlassian.applinks</groupId>-->
+    <!--<artifactId>applinks-api</artifactId>-->
+    <!--<version>4.2.5</version>-->
+    <!--<scope>provided</scope>-->
     <!--</dependency>-->
     <!--<dependency>-->
     <!--<groupId>com.atlassian.crowd</groupId>-->
     <!--<artifactId>crowd-integration-client-common</artifactId>-->
     <!--<version>2.8.2-m4</version>-->
     <!--</dependency>-->
-
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.6.6</version>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
-
   <repositories>
     <repository>
       <id>alternate-repository</id>
@@ -133,11 +133,11 @@
           <!-- Uncomment to install TestKit backdoor in JIRA. -->
           <!--
 <pluginArtifacts>
-  <pluginArtifact>
-    <groupId>com.atlassian.jira.tests</groupId>
-    <artifactId>jira-testkit-plugin</artifactId>
-    <version>${testkit.version}</version>
-  </pluginArtifact>
+<pluginArtifact>
+<groupId>com.atlassian.jira.tests</groupId>
+<artifactId>jira-testkit-plugin</artifactId>
+<version>${testkit.version}</version>
+</pluginArtifact>
 </pluginArtifacts>
 -->
         </configuration>
