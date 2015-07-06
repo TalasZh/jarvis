@@ -72,6 +72,7 @@ const init = () => {
     simpleStorage.storage.annotations = {};
 
     if (!isAuthenticated()) {
+        updateMatchers();
         tabs.open(simplePrefs.prefs.mediatorHost);
         return false;
     }

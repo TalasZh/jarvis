@@ -4,7 +4,7 @@
       "description": "Service root address",
       "type": "string",
       "name": "mediatorHost",
-      "value": "http://jarvis-test.critical-factor.com/jarvis-1.0-SNAPSHOT",
+      "value": "https://jarvis.subutai.io/jarvis-1.0-SNAPSHOT",
       "title": "Service root address"
     },
     {
