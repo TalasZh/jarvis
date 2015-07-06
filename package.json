@@ -1,25 +1,18 @@
 {
   "preferences": [
     {
-      "description": "Your service address",
+      "description": "Service root address",
       "type": "string",
       "name": "mediatorHost",
-      "value": "jarvis-test.critical-factor.com",
-      "title": "Service address"
+      "value": "https://jarvis.subutai.io/jarvis-1.0-SNAPSHOT",
+      "title": "Service root address"
     },
     {
-      "description": "Service working port",
+      "description": "Jira address",
       "type": "string",
-      "name": "mediatorPort",
-      "value": "80",
-      "title": "Service port"
-    },
-    {
-      "description": "Service protocol",
-      "type": "string",
-      "name": "mediatorProtocol",
-      "value": "http",
-      "title": "Service protocol"
+      "name": "jiraHost",
+      "value": "https://jira.subutai.io",
+      "title": "JIRA address"
     },
     {
       "label": "Apply",
