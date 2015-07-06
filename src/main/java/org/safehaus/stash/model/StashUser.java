@@ -10,86 +10,120 @@ import com.impetus.kundera.index.IndexCollection;
 
 import javax.persistence.*;
 
-//@Entity
-//@Table( name = "STASH_USER", schema = "jarvis@cassandra-pu" )
-//@IndexCollection( columns = {
-//        @Index( name = "name" ), @Index( name = "emailAddress" ), @Index( name = "authorTimestamp" )
-//} )
+@Entity
+@Table( name = "STASH_USER", schema = "jarvis@cassandra-pu" )
+@IndexCollection( columns = {
+        @Index( name = "name" ), @Index( name = "emailAddress" ), @Index( name = "authorTimestamp" )} )
 public class StashUser
 {
-    //@Column(name = "STASH_USER_NAME")
+    @Column(name = "STASH_USER_NAME")
     private String name;
 
-    //@Id
+    @Id
     private long id;
 
-    //@Column(name = "STASH_USER_DISPNAME")
+    @Column(name = "STASH_USER_DISPNAME")
     private String displayName;
 
-    //@Column(name = "STASH_USER_EMAIL")
+    @Column(name = "STASH_USER_EMAIL")
     private String emailAddress;
 
-    //@Column(name = "STASH_USER_ISACTIVE")
+    @Column(name = "STASH_USER_ISACTIVE")
     private boolean active;
 
-    //@Column(name = "STASH_USER_ISACTIVE")
+    @Column(name = "STASH_USER_SLUG")
     private String slug;
 
-    //@Enumerated( EnumType.ORDINAL )
+    @Enumerated( EnumType.ORDINAL )
+    @Column(name = "STASH_USER_TYPE")
     private UserType type;
 
-    //@Embedded
-    //@Column(name = "STASH_USER_LINK")
+    @Embedded
+    @Column(name = "STASH_USER_LINK")
     private Link link;
 
-    private Map<String, Set<Map<String, String>>> links;
+    @OneToMany(fetch = FetchType.EAGER)
+    @Column(name = "STASH_USER_LINKS")
+    private Map<String, HibernateSetMap> links;
 
     public String getName()
     {
         return name;
     }
 
+    public void setName(String name)
+    {
+        this.name = name;
+    }
 
     public long getId()
     {
         return id;
     }
 
+    public void setId(long id)
+    {
+        this.id = id;
+    }
 
     public String getDisplayName()
     {
         return displayName;
     }
 
+    public void setDisplayName(String displayName)
+    {
+        this.displayName = displayName;
+    }
 
-    public boolean isActive()
+    public boolean getActive()
     {
         return active;
     }
 
+    public void setActive(boolean active)
+    {
+        this.active = active;
+    }
 
     public String getSlug()
     {
         return slug;
     }
 
+    public void setSlug(String slug)
+    {
+        this.slug = slug;
+    }
 
     public UserType getType()
     {
         return type;
     }
 
+    public void setType(UserType type)
+    {
+        this.type = type;
+    }
 
     public Link getLink()
     {
         return link;
     }
 
-    //@ElementCollection
-    //@Column
-    public Map<String, Set<Map<String, String>>> getLinks()
+    public void setLink(Link link)
+    {
+        this.link = link;
+    }
+
+    public Map<String, HibernateSetMap> getLinks()
     {
         return links;
+    }
+
+    public void setLinks(Map<String, HibernateSetMap> links)
+    {
+        this.links = links;
     }
 
 
@@ -98,6 +132,10 @@ public class StashUser
         return emailAddress;
     }
 
+    public void setEmailAddress(String emailAddress)
+    {
+        this.emailAddress = emailAddress;
+    }
 
     @Override
     public String toString()

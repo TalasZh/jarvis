@@ -31,8 +31,10 @@
     <class>org.safehaus.jira.model.JarvisIssueType</class>
     <class>org.safehaus.jira.model.JarvisMember</class>
     <class>org.safehaus.jira.model.JarvisIssue</class>
-    <class>org.safehaus.stash.model.StashUser</class>
     <class>org.safehaus.stash.model.Link</class>
+    <class>org.safehaus.stash.model.HibernateLinkMap</class>
+    <class>org.safehaus.stash.model.HibernateSetMap</class>
+    <class>org.safehaus.stash.model.StashUser</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="kundera.nodes" value="localhost" />
