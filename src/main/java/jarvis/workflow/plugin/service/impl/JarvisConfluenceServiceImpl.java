@@ -40,11 +40,14 @@ public class JarvisConfluenceServiceImpl implements JarvisConfluenceService
     private PluginSettingsService pluginSettingsService;
     //@formatter:off
 
-    private final String CONFLUENCE_REST_URI          = "/rest/api";
+    private final String CONFLUENCE_REST_URI = "/rest/api";
 
-    private final String CONFLUENCE_CONTENT_URI       = "/content";
+    private final String CONFLUENCE_CONTENT_URI = "/content";
 
-    private final String CONFLUENCE_SPACE_URI         = "/space/";
+    private final String CONFLUENCE_SPACE_URI = "/space/";
+
+    private final String ENCODING = "BASE64 USER:PASSWORD ENCODING";
+
     //@formatter:on
 
     CloseableHttpClient httpClient;
@@ -164,8 +167,7 @@ public class JarvisConfluenceServiceImpl implements JarvisConfluenceService
         log.warn( "POST Url {}", url );
         HttpPost post = new HttpPost( url );
 
-        String encoding = "amFydmlzYm90OjZ2Q0Y2WWlCRjJvSA";
-        post.setHeader( "Authorization", "Basic " + encoding );
+        post.setHeader( "Authorization", "Basic " + ENCODING );
 
         post.setHeader( "Content-Type", "application/json;charset=UTF-8" );
         CloseableHttpResponse response = null;
@@ -236,8 +238,7 @@ public class JarvisConfluenceServiceImpl implements JarvisConfluenceService
 
         HttpPost post = new HttpPost( url );
 
-        String encoding = "amFydmlzYm90OjZ2Q0Y2WWlCRjJvSA";
-        post.setHeader( "Authorization", "Basic " + encoding );
+        post.setHeader( "Authorization", "Basic " + ENCODING );
 
         post.setHeader( "Content-Type", "application/json;charset=UTF-8" );
 
@@ -303,8 +304,7 @@ public class JarvisConfluenceServiceImpl implements JarvisConfluenceService
         }
 
         HttpPost post = new HttpPost( url );
-        String encoding = "amFydmlzYm90OjZ2Q0Y2WWlCRjJvSA";
-        post.setHeader( "Authorization", "Basic " + encoding );
+        post.setHeader( "Authorization", "Basic " + ENCODING );
         post.setHeader( "Content-Type", "application/json;charset=UTF-8" );
 
         CloseableHttpResponse response = null;
@@ -344,8 +344,7 @@ public class JarvisConfluenceServiceImpl implements JarvisConfluenceService
         log.warn( "URL {}", url );
 
         HttpGet get = new HttpGet( url );
-        String encoding = "amFydmlzYm90OjZ2Q0Y2WWlCRjJvSA";
-        get.setHeader( "Authorization", "Basic " + encoding );
+        get.setHeader( "Authorization", "Basic " + ENCODING );
 
         CloseableHttpResponse response = null;
         try
