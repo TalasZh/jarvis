@@ -1,4 +1,4 @@
-package io.subutai.postfunction;
+package io.subutai.jarvis.postfunction;
 
 
 import java.util.HashMap;

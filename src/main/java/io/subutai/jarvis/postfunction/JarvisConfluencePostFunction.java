@@ -1,21 +1,19 @@
-package io.subutai.postfunction;
+package io.subutai.jarvis.postfunction;
 
 
 import java.util.Map;
 
+import io.subutai.jarvis.service.JarvisConfluenceService;
+import io.subutai.jarvis.service.impl.JarvisConfluenceServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.atlassian.applinks.api.EntityLinkService;
 import com.atlassian.jira.issue.MutableIssue;
 import com.atlassian.jira.util.json.JSONException;
 import com.atlassian.jira.workflow.function.issue.AbstractJiraFunctionProvider;
 import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.opensymphony.module.propertyset.PropertySet;
 import com.opensymphony.workflow.WorkflowException;
-
-import io.subutai.service.JarvisConfluenceService;
-import io.subutai.service.impl.JarvisConfluenceServiceImpl;
 
 
 public class JarvisConfluencePostFunction extends AbstractJiraFunctionProvider

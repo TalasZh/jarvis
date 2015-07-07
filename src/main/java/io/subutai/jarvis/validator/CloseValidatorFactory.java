@@ -1,19 +1,20 @@
-package io.subutai.validator;
+package io.subutai.jarvis.validator;
 
 
+import java.util.HashMap;
 import java.util.Map;
 
 import com.atlassian.jira.plugin.workflow.AbstractWorkflowPluginFactory;
 import com.atlassian.jira.plugin.workflow.WorkflowPluginValidatorFactory;
-import com.google.common.collect.Maps;
 import com.opensymphony.workflow.loader.AbstractDescriptor;
 
 
-public class JarvisLabelValidatorFactory extends AbstractWorkflowPluginFactory implements WorkflowPluginValidatorFactory
+public class CloseValidatorFactory extends AbstractWorkflowPluginFactory implements WorkflowPluginValidatorFactory
 {
 
     protected void getVelocityParamsForInput( Map velocityParams )
     {
+        //the default message
 
     }
 
@@ -33,6 +34,6 @@ public class JarvisLabelValidatorFactory extends AbstractWorkflowPluginFactory i
 
     public Map getDescriptorParams( Map validatorParams )
     {
-        return Maps.newHashMap();
+        return new HashMap();
     }
 }

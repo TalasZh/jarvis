@@ -1,8 +1,9 @@
-package io.subutai.validator;
+package io.subutai.jarvis.validator;
 
 
 import java.util.Map;
 
+import io.subutai.jarvis.exception.JarvisWorkflowException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,9 +13,8 @@ import com.opensymphony.module.propertyset.PropertySet;
 import com.opensymphony.workflow.InvalidInputException;
 import com.opensymphony.workflow.Validator;
 
-import io.subutai.exception.JarvisWorkflowException;
-import io.subutai.service.JarvisConfluenceService;
-import io.subutai.service.impl.JarvisConfluenceServiceImpl;
+import io.subutai.jarvis.service.JarvisConfluenceService;
+import io.subutai.jarvis.service.impl.JarvisConfluenceServiceImpl;
 
 
 public class JarvisWorkflowValidator implements Validator

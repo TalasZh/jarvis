@@ -1,4 +1,4 @@
-package io.subutai.service;
+package io.subutai.jarvis.service;
 
 
 import com.atlassian.jira.issue.Issue;

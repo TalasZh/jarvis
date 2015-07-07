@@ -1,4 +1,4 @@
-package io.subutai.postfunction;
+package io.subutai.jarvis.postfunction;
 
 
 import java.util.HashMap;
@@ -6,15 +6,13 @@ import java.util.Map;
 
 import com.atlassian.jira.plugin.workflow.AbstractWorkflowPluginFactory;
 import com.atlassian.jira.plugin.workflow.WorkflowPluginFunctionFactory;
-import com.atlassian.jira.workflow.JiraWorkflow;
 import com.atlassian.jira.workflow.WorkflowManager;
 import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.opensymphony.workflow.loader.AbstractDescriptor;
 import com.opensymphony.workflow.loader.FunctionDescriptor;
 
-import io.subutai.service.PluginSettingsService;
-import io.subutai.service.impl.PluginSettingsServiceImpl;
-import webwork.action.ActionContext;
+import io.subutai.jarvis.service.PluginSettingsService;
+import io.subutai.jarvis.service.impl.PluginSettingsServiceImpl;
 
 
 public class JarvisConfluencePostFunctionFactory extends AbstractWorkflowPluginFactory

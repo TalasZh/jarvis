@@ -1,11 +1,11 @@
-package io.subutai.service;
+package io.subutai.jarvis.service;
 
 
 import java.util.Collection;
 
 import com.atlassian.crowd.embedded.api.Group;
 
-import io.subutai.domain.IssueWrapper;
+import io.subutai.jarvis.domain.IssueWrapper;
 
 
 public interface PluginSettingsService

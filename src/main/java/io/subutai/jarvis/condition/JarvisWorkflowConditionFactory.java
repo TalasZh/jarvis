@@ -1,4 +1,4 @@
-package io.subutai.condition;
+package io.subutai.jarvis.condition;
 
 
 import java.util.Collection;
@@ -9,7 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import io.subutai.service.PluginSettingsService;
+import io.subutai.jarvis.service.PluginSettingsService;
+import io.subutai.jarvis.service.impl.PluginSettingsServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,8 +22,6 @@ import com.atlassian.jira.util.collect.MapBuilder;
 import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.opensymphony.workflow.loader.AbstractDescriptor;
 import com.opensymphony.workflow.loader.ConditionDescriptor;
-
-import io.subutai.service.impl.PluginSettingsServiceImpl;
 
 
 public class JarvisWorkflowConditionFactory extends AbstractWorkflowPluginFactory

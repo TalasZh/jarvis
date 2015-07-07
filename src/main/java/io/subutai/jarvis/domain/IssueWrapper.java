@@ -1,4 +1,4 @@
-package io.subutai.domain;
+package io.subutai.jarvis.domain;
 
 
 import com.atlassian.crowd.embedded.api.User;

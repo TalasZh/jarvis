@@ -1,10 +1,10 @@
-package io.subutai.service.impl;
+package io.subutai.jarvis.service.impl;
 
 
 import java.util.Collection;
 
-import io.subutai.domain.IssueWrapper;
-import io.subutai.service.PluginSettingsService;
+import io.subutai.jarvis.domain.IssueWrapper;
+import io.subutai.jarvis.service.PluginSettingsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

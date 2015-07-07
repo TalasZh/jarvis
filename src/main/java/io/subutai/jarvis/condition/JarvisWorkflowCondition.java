@@ -1,4 +1,4 @@
-package io.subutai.condition;
+package io.subutai.jarvis.condition;
 
 
 import java.util.ArrayList;

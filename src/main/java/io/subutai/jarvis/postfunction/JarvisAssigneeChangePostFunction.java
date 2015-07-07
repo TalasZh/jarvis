@@ -1,4 +1,4 @@
-package io.subutai.postfunction;
+package io.subutai.jarvis.postfunction;
 
 
 import java.util.ArrayList;
@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import io.subutai.domain.IssueWrapper;
+import io.subutai.jarvis.domain.IssueWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +27,7 @@ import com.google.gson.Gson;
 import com.opensymphony.module.propertyset.PropertySet;
 import com.opensymphony.workflow.WorkflowException;
 
-import io.subutai.service.impl.PluginSettingsServiceImpl;
+import io.subutai.jarvis.service.impl.PluginSettingsServiceImpl;
 
 
 public class JarvisAssigneeChangePostFunction extends AbstractJiraFunctionProvider

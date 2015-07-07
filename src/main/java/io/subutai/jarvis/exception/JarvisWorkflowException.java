@@ -1,4 +1,4 @@
-package io.subutai.exception;
+package io.subutai.jarvis.exception;
 
 
 import java.util.ArrayList;

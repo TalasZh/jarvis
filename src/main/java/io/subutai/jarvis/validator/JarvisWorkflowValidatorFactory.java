@@ -1,4 +1,4 @@
-package io.subutai.validator;
+package io.subutai.jarvis.validator;
 
 import com.atlassian.core.util.map.EasyMap;
 import com.google.common.collect.Maps;
