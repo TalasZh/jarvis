@@ -1,4 +1,4 @@
-package jarvis.workflow.plugin.domain;
+package io.subutai.domain;
 
 
 import java.util.ArrayList;

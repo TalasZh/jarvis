@@ -1,11 +1,11 @@
-package jarvis.workflow.plugin.service;
+package io.subutai.service;
 
 
 import java.util.Collection;
 
 import com.atlassian.crowd.embedded.api.Group;
 
-import jarvis.workflow.plugin.domain.IssueWrapper;
+import io.subutai.domain.IssueWrapper;
 
 
 public interface PluginSettingsService

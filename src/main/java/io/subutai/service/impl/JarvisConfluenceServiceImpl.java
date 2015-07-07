@@ -1,4 +1,4 @@
-package jarvis.workflow.plugin.service.impl;
+package io.subutai.service.impl;
 
 
 import java.io.IOException;
@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.subutai.postfunction.JarvisConfluencePostFunctionFactory;
+import io.subutai.service.PluginSettingsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,11 +30,9 @@ import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import jarvis.workflow.plugin.domain.ConfluenceLabels;
-import jarvis.workflow.plugin.domain.ConfluencePage;
-import jarvis.workflow.plugin.postfunction.JarvisConfluencePostFunctionFactory;
-import jarvis.workflow.plugin.service.JarvisConfluenceService;
-import jarvis.workflow.plugin.service.PluginSettingsService;
+import io.subutai.domain.ConfluenceLabels;
+import io.subutai.domain.ConfluencePage;
+import io.subutai.service.JarvisConfluenceService;
 
 
 public class JarvisConfluenceServiceImpl implements JarvisConfluenceService

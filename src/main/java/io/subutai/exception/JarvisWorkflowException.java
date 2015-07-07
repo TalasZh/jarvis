@@ -1,4 +1,4 @@
-package jarvis.workflow.plugin.exception;
+package io.subutai.exception;
 
 
 import java.util.ArrayList;

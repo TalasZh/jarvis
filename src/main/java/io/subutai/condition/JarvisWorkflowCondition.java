@@ -1,4 +1,4 @@
-package jarvis.workflow.plugin.condition;
+package io.subutai.condition;
 
 
 import java.util.ArrayList;

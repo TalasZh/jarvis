@@ -1,4 +1,4 @@
-package jarvis.workflow.plugin.validator;
+package io.subutai.validator;
 
 
 import java.util.HashMap;

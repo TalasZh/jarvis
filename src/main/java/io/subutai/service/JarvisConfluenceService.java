@@ -1,4 +1,4 @@
-package jarvis.workflow.plugin.service;
+package io.subutai.service;
 
 
 import com.atlassian.jira.issue.Issue;

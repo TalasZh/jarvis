@@ -1,4 +1,4 @@
-package jarvis.workflow.plugin.postfunction;
+package io.subutai.postfunction;
 
 
 import java.util.HashMap;

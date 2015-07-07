@@ -1,8 +1,10 @@
-package jarvis.workflow.plugin.service.impl;
+package io.subutai.service.impl;
 
 
 import java.util.Collection;
 
+import io.subutai.domain.IssueWrapper;
+import io.subutai.service.PluginSettingsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,10 +12,8 @@ import com.atlassian.crowd.embedded.api.Group;
 import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.google.gson.Gson;
 
-import jarvis.workflow.plugin.domain.IssueWrapper;
 
-
-public class PluginSettingsServiceImpl implements jarvis.workflow.plugin.service.PluginSettingsService
+public class PluginSettingsServiceImpl implements PluginSettingsService
 {
     //@formatter:off
     final PluginSettingsFactory pluginSettingsFactory;

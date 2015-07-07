@@ -1,4 +1,4 @@
-package jarvis.workflow.plugin.postfunction;
+package io.subutai.postfunction;
 
 
 import java.util.Map;
@@ -14,8 +14,8 @@ import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.opensymphony.module.propertyset.PropertySet;
 import com.opensymphony.workflow.WorkflowException;
 
-import jarvis.workflow.plugin.service.JarvisConfluenceService;
-import jarvis.workflow.plugin.service.impl.JarvisConfluenceServiceImpl;
+import io.subutai.service.JarvisConfluenceService;
+import io.subutai.service.impl.JarvisConfluenceServiceImpl;
 
 
 public class JarvisConfluencePostFunction extends AbstractJiraFunctionProvider

@@ -1,4 +1,4 @@
-package jarvis.workflow.plugin.validator;
+package io.subutai.validator;
 
 import com.atlassian.core.util.map.EasyMap;
 import com.google.common.collect.Maps;

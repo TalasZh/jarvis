@@ -1,4 +1,4 @@
-package jarvis.workflow.plugin.postfunction;
+package io.subutai.postfunction;
 
 
 import java.util.HashMap;
@@ -12,8 +12,8 @@ import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.opensymphony.workflow.loader.AbstractDescriptor;
 import com.opensymphony.workflow.loader.FunctionDescriptor;
 
-import jarvis.workflow.plugin.service.PluginSettingsService;
-import jarvis.workflow.plugin.service.impl.PluginSettingsServiceImpl;
+import io.subutai.service.PluginSettingsService;
+import io.subutai.service.impl.PluginSettingsServiceImpl;
 import webwork.action.ActionContext;
 
 

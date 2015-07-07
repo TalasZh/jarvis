@@ -1,4 +1,4 @@
-package jarvis.workflow.plugin.validator;
+package io.subutai.validator;
 
 
 import java.util.Map;
@@ -12,9 +12,9 @@ import com.opensymphony.module.propertyset.PropertySet;
 import com.opensymphony.workflow.InvalidInputException;
 import com.opensymphony.workflow.Validator;
 
-import jarvis.workflow.plugin.exception.JarvisWorkflowException;
-import jarvis.workflow.plugin.service.JarvisConfluenceService;
-import jarvis.workflow.plugin.service.impl.JarvisConfluenceServiceImpl;
+import io.subutai.exception.JarvisWorkflowException;
+import io.subutai.service.JarvisConfluenceService;
+import io.subutai.service.impl.JarvisConfluenceServiceImpl;
 
 
 public class JarvisWorkflowValidator implements Validator

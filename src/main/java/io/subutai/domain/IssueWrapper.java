@@ -1,4 +1,4 @@
-package jarvis.workflow.plugin.domain;
+package io.subutai.domain;
 
 
 import com.atlassian.crowd.embedded.api.User;
