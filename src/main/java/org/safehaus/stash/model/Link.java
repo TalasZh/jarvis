@@ -9,24 +9,21 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class Link
 {
-    @Column
+    @Column(name = "url")
     private String url;
 
-    @Column
+    @Column(name = "rel")
     private String rel;
-
 
     public String getUrl()
     {
         return url;
     }
 
-
     public String getRel()
     {
         return rel;
     }
-
 
     @Override
     public String toString()

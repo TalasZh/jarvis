@@ -11,39 +11,39 @@ import com.impetus.kundera.index.IndexCollection;
 import javax.persistence.*;
 
 @Entity
-@Table( name = "STASH_USER", schema = "jarvis@cassandra-pu" )
+@Table( name = "stash_user", schema = "jarvis@cassandra-pu" )
 @IndexCollection( columns = {
         @Index( name = "name" ), @Index( name = "emailAddress" ), @Index( name = "authorTimestamp" )} )
 public class StashUser
 {
-    @Column(name = "STASH_USER_NAME")
+    @Column(name = "stash_user_name")
     private String name;
 
     @Id
     private long id;
 
-    @Column(name = "STASH_USER_DISPNAME")
+    @Column(name = "stash_user_dispname")
     private String displayName;
 
-    @Column(name = "STASH_USER_EMAIL")
+    @Column(name = "stash_user_email")
     private String emailAddress;
 
-    @Column(name = "STASH_USER_ISACTIVE")
+    @Column(name = "stash_user_active")
     private boolean active;
 
-    @Column(name = "STASH_USER_SLUG")
+    @Column(name = "stash_user_slug")
     private String slug;
 
     @Enumerated( EnumType.ORDINAL )
-    @Column(name = "STASH_USER_TYPE")
+    @Column(name = "stash_user_type")
     private UserType type;
 
     @Embedded
-    @Column(name = "STASH_USER_LINK")
+    @Column(name = "stash_user_link")
     private Link link;
 
     @OneToMany(fetch = FetchType.EAGER)
-    @Column(name = "STASH_USER_LINKS")
+    @Column(name = "stash_user_links")
     private Map<String, HibernateSetMap> links;
 
     public String getName()

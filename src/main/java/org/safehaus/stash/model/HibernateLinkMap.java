@@ -9,7 +9,7 @@ import java.util.Map;
  * Created by neslihan on 03.07.2015.
  */
 @Entity
-@Table( name = "HIBERNATE_LINK_MAP", schema = "jarvis@cassandra-pu" )
+@Table( name = "hibernate_link_map", schema = "jarvis@cassandra-pu" )
 @IndexCollection( columns = {
         @com.impetus.kundera.index.Index( name = "id" )})
 public class HibernateLinkMap {
@@ -20,7 +20,7 @@ public class HibernateLinkMap {
     private long id;
 
     @ElementCollection
-    @Column(name = "LINKS_MAP_VALUE")
+    @Column(name = "links_map_value")
     private Map<String,String> linksMap;
 
     public HibernateLinkMap(Map<String,String> linksMap)
