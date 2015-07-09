@@ -34,6 +34,8 @@ exports.main = function(options) {
 	var floatingCtrl = pageMod.PageMod({
 		include: ["*"],
 		contentScriptFile: [data.url("jquery-2.1.3.min.js"), 
+			data.url("annotator-full.1.2.10/annotator-full.min.js"),
+			data.url("annotator.offline.min.js"),
 			data.url("floatingElement.js")],
 		onAttach: function(worker) {
 			worker.postMessage({some: "options"});
