@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence xmlns="http://java.sun.com/xml/ns/persistence" version="1.0">
 
-  <persistence-unit name="ApplicationEntityManager" transaction-type="RESOURCE_LOCAL">
-    <provider>org.hibernate.ejb.HibernatePersistence</provider>
-    <class>org.safehaus.model.User</class>
-    <class>org.safehaus.model.Role</class>
-    <class>org.safehaus.model.Session</class>
-    <class>org.safehaus.model.Capture</class>
-    <exclude-unlisted-classes>true</exclude-unlisted-classes>
-      <!--    <class>org.safehaus.model.Story</class>
-          <class>org.safehaus.model.Phase</class>-->
-  </persistence-unit>
   <!--
     <persistence-unit name="CassandraEntityManager">
         <provider>com.impetus.kundera.KunderaPersistence</provider>
@@ -25,7 +15,7 @@
     </persistence-unit>-->
 
   <persistence-unit name="cassandra-pu">
-    <provider>com.impetus.kundera.KunderaPersistence</provider>
+  	<provider>com.impetus.kundera.KunderaPersistence</provider>
     <class>org.safehaus.model.DocumentInfo</class>
     <class>org.safehaus.jira.model.JarvisLink</class>
     <class>org.safehaus.jira.model.JarvisIssueType</class>
@@ -58,4 +48,5 @@
       META-INF directory is included in the jsf, spring, struts and tapestry projects using svn:externals.
       If you need to modify this file, please do so in web/common/src/main/resources/META-INF, check it
       in, and then "svn up" for the other modules. -->
+      
 </persistence>
