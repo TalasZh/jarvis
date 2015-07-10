@@ -1,12 +1,16 @@
 package org.safehaus.stash.model;
 
+import com.impetus.kundera.index.IndexCollection;
+
 import javax.persistence.*;
 
 /**
  * Created by neslihan on 08.07.2015.
  */
 @Entity
-@Table( name = "stash_issue", schema = "jarvis@cassandra-pu" )
+@Table( name = "stash_metric_issue", schema = "jarvis@cassandra-pu" )
+@IndexCollection( columns = {
+        @com.impetus.kundera.index.Index( name = "id" ), @com.impetus.kundera.index.Index( name = "author" ), @com.impetus.kundera.index.Index( name = "authorTimestamp" )})
 public class StashMetricIssue {
 
     @Id
