@@ -10,7 +10,7 @@ import java.util.Set;
  * Created by neslihan on 03.07.2015.
  */
 @Entity
-@Table( name = "HIBERNATE_SET_MAP", schema = "jarvis@cassandra-pu" )
+@Table( name = "hibernate_set_map", schema = "jarvis@cassandra-pu" )
 @IndexCollection( columns = {
         @com.impetus.kundera.index.Index( name = "id" )})
 public class HibernateSetMap {
@@ -21,7 +21,7 @@ public class HibernateSetMap {
     private long id;
 
     @OneToMany(fetch = FetchType.EAGER)
-    @Column(name = "LINKS_SET_VALUE")
+    @Column(name = "links_set_value")
     private Set<HibernateLinkMap> linksValue;
 
     public HibernateSetMap(Set<HibernateLinkMap> linksValue) {

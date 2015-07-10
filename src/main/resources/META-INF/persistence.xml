@@ -25,6 +25,10 @@
     <class>org.safehaus.stash.model.HibernateLinkMap</class>
     <class>org.safehaus.stash.model.HibernateSetMap</class>
     <class>org.safehaus.stash.model.StashUser</class>
+    <class>org.safehaus.stash.model.MinimalCommit</class>
+    <class>org.safehaus.stash.model.Commit</class>
+    <class>org.safehaus.stash.model.Path</class>
+    <class>org.safehaus.stash.model.StashMetricIssue</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="kundera.nodes" value="localhost" />
