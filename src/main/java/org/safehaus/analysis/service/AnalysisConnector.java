@@ -21,9 +21,12 @@ public class AnalysisConnector  {
 
     public static JiraClient jiraConnect() throws JiraClientException {
         log.info("jiraConnect()");
-        JarvisContextHolder.setContext(new JarvisContext("http://test-jira.critical-factor.com", "username", "password"));
-        JiraClient jiraClient = JarvisContextHolder.getContext().getJiraClient();
-
+        JiraClient jiraClient = null;
+        JarvisContextHolder.setContext(new JarvisContext("http://test-jira.critical-factor.com", "erma_bot", "foobar"));
+        if(JarvisContextHolder.getContext() != null && JarvisContextHolder.getContext().getJiraClient() != null){
+            jiraClient = JarvisContextHolder.getContext().getJiraClient();
+        }
+        else throw new JiraClientException("Jira Client is null.");
         return jiraClient;
     }
 
@@ -35,7 +38,8 @@ public class AnalysisConnector  {
 
     public static StashManager stashConnect() throws StashManagerException {
         log.info("stashConnect()");
-        StashManager stashMan = new StashManagerImpl("http://stash.critical-factor.com", "username", "password");
+        StashManager stashMan = null;
+        stashMan = new StashManagerImpl("http://stash.critical-factor.com", "erma_bot", "toobar");
         return stashMan;
     }
 
