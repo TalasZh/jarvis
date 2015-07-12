@@ -2899,8 +2899,8 @@ $(document).ready(function(){
     });
   };
 
-}( jQuery ));
-;(function ($) {
+}( jQuery ));;
+(function ($) {
 
   var methods = {
 
@@ -3200,7 +3200,8 @@ $(document).ready(function(){
         $.error( 'Method ' +  methodOrOptions + ' does not exist on jQuery.tooltip' );
       }
     }; // Plugin end
-}( jQuery ));;(function ($) {
+}( jQuery ));;
+(function ($) {
   $(document).ready(function() {
 
     $(document).on('click.card', '.card', function (e) {
@@ -3226,7 +3227,8 @@ $(document).ready(function(){
     });
 
   });
-}( jQuery ));;(function ($) {
+}( jQuery ));;
+(function ($) {
   $(document).ready(function() {
 
     $.fn.pushpin = function (options) {
@@ -3287,7 +3289,8 @@ $(document).ready(function(){
 
 
   });
-}( jQuery ));;(function ($) {
+}( jQuery ));;
+(function ($) {
   $(document).ready(function() {
 
     // jQuery reverse
@@ -3347,8 +3350,8 @@ $(document).ready(function(){
   };
 
 
-}( jQuery ));
-;(function ($) {
+}( jQuery ));;
+(function ($) {
   // Image transition function
   Materialize.fadeInImage =  function(selector){
     var element = $(selector);
@@ -3501,8 +3504,8 @@ $(document).ready(function(){
     //     { duration: 800, easing: [60, 10] });
     // });
   });
-}( jQuery ));
-;(function($) {
+}( jQuery ));;
+(function($) {
 
   // Input: Array of JSON objects {selector, offset, callback}
 
@@ -3565,7 +3568,8 @@ $(document).ready(function(){
     // Browser globals.
     else this.Picker = factory( jQuery )
 
-}(function( $ ) {
+}
+(function( $ ) {
 
 var $window = $( window )
 var $document = $( document )

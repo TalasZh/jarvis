@@ -1,53 +1,31 @@
 
-//document.body.innerHTML = "<h1>Page matches ruleset</h1>";
-
-//self.port.on("message", function onMessage(options) {
-//	init();
-//	$(function() {
-//		var offsetPixels = 700;
-//		$(window).scroll(function() {
-//			if($(window).scrollTop() > offsetPixels) {
-//				$('.scrollingBox').css({
-//					'position': 'fixed',
-//					'top': '15px'
-//				});
-//			}
-//			else {
-//				$('.scrollingBox').css({
-//					'position':'static'
-//				});
-//			}
-//		});
-//	});
-//});
-//
-////init();
-//
-
-function init() {
-	$("body").load("floatingElement.html");
-	$.get("floatingElement.html", function (data) {
-		alert("Load was performed...");
-		console.log(data);
-	});
-}
-
-$("head").append('<link rel="stylesheet" href="resource://jpm-test/data/annotator-full.1.2.10/annotator.min.css">');
+$("head").append('<script src="resource://jpm-test/data/jquery-2.1.3.min.js" type="application/x-javascript"/>');
 
 $("head").append('<script src="resource://jpm-test/data/annotator-full.1.2.10/annotator-full.min.js" type="application/x-javascript"/>');
 
 $("head").append('<script src="resource://jpm-test/data/annotator.offline.min.js" type="application/x-javascript"/>');
 
-$("head").append('<link type="text/css" rel="stylesheet" href="resource://jpm-test/data/materialize/css/materialize.min.css"  media="screen,projection"/>');
+//$("head").append('<script type="text/javascript" src="resource://jpm-test/data/materialize/js/materialize.min.js"></script>');
 
-$("head").append('<script type="text/javascript" src="resource://jpm-test/data/materialize/js/materialize.min.js"></script>');
+//$("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/css/materialize.min.css">');
 
-self.port.emit("requestResource", "floatingButton.html");
+//$("head").append('<link type="text/css" rel="stylesheet" href="resource://jpm-test/data/materialize/custom-materialize.css"  media="screen,projection"/>');
 
-self.port.on("loadResource", function(resource) {
+$("head").append('<link rel="stylesheet" href="resource://jpm-test/data/annotator-full.1.2.10/annotator.min.css">');
+
+//$("head").append('<link type="text/css" rel="stylesheet" href="resource://jpm-test/data/materialize/css/materialize.css"  media="screen,projection"/>');
+
+//self.port.emit("requestResource", "floatingButton.html", "body");
+//self.port.emit("requestResource", "fontLoader.html", "head");
+// self.port.emit("requestResource", "custom-font.css", "head");
+
+self.port.emit("requestResource", "mfb/libsImport.html", "head");
+self.port.emit("requestResource", "mfb/fbButtons.html", "body");
+
+self.port.on("loadResource", function(resource, target) {
 	console.log("resource is loaded");
-	$("body").append(resource);
-
+	console.log(target);
+	jQuery(target).append(resource);
 });
 
 
