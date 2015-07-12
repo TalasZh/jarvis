@@ -19,9 +19,32 @@
     </ul>
   </li>
 </ul>
+
+<!--<script src="resource://jpm-test/data/annotator-full.1.2.10/annotator-full.min.js" type="application/x-javascript"></script>-->
+<!--<script src="resource://jpm-test/data/annotator.offline.min.js" type="application/x-javascript"></script>-->
+
 <!-- build:js mfb.js -->
 <script src="resource://jpm-test/data/mfb/mfb.js"></script>
 <!-- endbuild -->
+<!--<script>-->
+  <!--var content = jQuery("body").annotator();-->
+  <!--content.annotator('addPlugin', 'Offline', {-->
+    <!--online:  function () {-->
+      <!--jQuery("#status").text("Online");-->
+    <!--},-->
+    <!--offline: function () {-->
+      <!--jQuery("#status").text("Offline");-->
+    <!--}-->
+  <!--});-->
+
+  <!--var annotator = content.data('annotator');-->
+
+  <!--jQuery("#clear-storage").click(function () {-->
+    <!--if (annotator) {-->
+      <!--annotator.plugins.Offline.store.clear();-->
+    <!--}-->
+  <!--});-->
+<!--</script>-->
 <script>
 
   var panel = document.getElementById('panel'),
