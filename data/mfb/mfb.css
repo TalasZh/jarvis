@@ -119,7 +119,7 @@
     #BUTTONS | Base
 \*------------------------------------*/
 .mfb-component__button--main, .mfb-component__button--child {
-  background-color: #E40A5D;
+  background-color: #1380B3;
   display: inline-block;
   position: relative;
   border: none;
@@ -128,7 +128,6 @@
   cursor: pointer;
   outline: none;
   padding: 0;
-  position: relative;
   -webkit-user-drag: none;
   color: #f1f1f1; }
 

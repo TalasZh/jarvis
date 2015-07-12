@@ -42,7 +42,7 @@ exports.main = function(options) {
 		include: ["*"],
 		//contentStyleFile: [data.url("materialize/custom-materialize.css")],
 		// contentStyle: '@font-face{font-family: "Material-Design-Icons";src: url("'+ data.url("materialize/font/material-design-icons/Material-Design-Icons.woff") + '") format("woff"); font-weight: normal;	font-style: normal;	}',
-		contentScriptWhen: "ready",
+		contentScriptWhen: "start",
 		contentScriptFile: [data.url("jquery-2.1.3.min.js"),
 			data.url("floatingElement.js")],
 		onAttach: function(worker) {
