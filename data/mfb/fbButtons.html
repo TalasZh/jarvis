@@ -1,4 +1,3 @@
-
 <ul id="jarvis-menu" class="mfb-component--br mfb-zoomin" data-mfb-toggle="hover">
   <li class="mfb-component__wrap">
     <a href="#" class="mfb-component__button--main">
@@ -7,80 +6,15 @@
     </a>
     <ul class="mfb-component__list">
       <li>
-        <a href="https://github.com/nobitagit/material-floating-button/" data-mfb-label="Enable annotator" class="mfb-component__button--child">
+        <a href="#" data-mfb-label="Enable annotator" class="mfb-component__button--child">
           <i class="mfb-component__child-icon jarvis-create"></i>
         </a>
       </li>
       <li>
-        <a href="https://github.com/nobitagit" data-mfb-label="Start other research" class="mfb-component__button--child">
+        <a href="#" data-mfb-label="Start other research" class="mfb-component__button--child">
           <i class="mfb-component__child-icon jarvis-view-list"></i>
         </a>
       </li>
     </ul>
   </li>
 </ul>
-
-<!--<script src="resource://jpm-test/data/annotator-full.1.2.10/annotator-full.min.js" type="application/x-javascript"></script>-->
-<!--<script src="resource://jpm-test/data/annotator.offline.min.js" type="application/x-javascript"></script>-->
-
-<!-- build:js mfb.js -->
-<script src="resource://jpm-test/data/mfb/mfb.js"></script>
-<!-- endbuild -->
-<!--<script>-->
-  <!--var content = jQuery("body").annotator();-->
-  <!--content.annotator('addPlugin', 'Offline', {-->
-    <!--online:  function () {-->
-      <!--jQuery("#status").text("Online");-->
-    <!--},-->
-    <!--offline: function () {-->
-      <!--jQuery("#status").text("Offline");-->
-    <!--}-->
-  <!--});-->
-
-  <!--var annotator = content.data('annotator');-->
-
-  <!--jQuery("#clear-storage").click(function () {-->
-    <!--if (annotator) {-->
-      <!--annotator.plugins.Offline.store.clear();-->
-    <!--}-->
-  <!--});-->
-<!--</script>-->
-<script>
-
-  var panel = document.getElementById('panel'),
-      menu = document.getElementById('jarvis-menu'),
-      showcode = document.getElementById('showcode'),
-      selectFx = document.getElementById('selections-fx'),
-      selectPos = document.getElementById('selections-pos'),
-  // demo defaults
-      effect = 'mfb-slidein-spring',
-      pos = 'mfb-component--br';
-
-  showcode.addEventListener('click', _toggleCode);
-  selectFx.addEventListener('change', switchEffect);
-  selectPos.addEventListener('change', switchPos);
-
-  function _toggleCode() {
-    panel.classList.toggle('viewCode');
-  }
-
-  function switchEffect(e){
-    effect = this.options[this.selectedIndex].value;
-    renderMenu();
-  }
-
-  function switchPos(e){
-    pos = this.options[this.selectedIndex].value;
-    renderMenu();
-  }
-
-  function renderMenu() {
-    menu.style.display = 'none';
-    // ?:-)
-    setTimeout(function() {
-      menu.style.display = 'block';
-      menu.className = pos + effect;
-    },1);
-  }
-
-</script>

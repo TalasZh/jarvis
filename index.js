@@ -27,16 +27,22 @@ function handleClick(state) {
   tabs.open("http://www.mozilla.org/");
 }
 
-
-
 exports.main = function(options) {
 
 	var floatingCtrl = pageMod.PageMod({
 		include: ["*"],
-		//contentStyleFile: [data.url("materialize/custom-materialize.css")],
+		contentStyleFile: [data.url("mfb/custom-materialize.css"),
+			data.url("annotator-full.1.2.10/annotator.min.css"),
+			data.url("mfb/mfb.css"),
+			data.url("mfb/index.css")
+		],
 		// contentStyle: '@font-face{font-family: "Material-Design-Icons";src: url("'+ data.url("materialize/font/material-design-icons/Material-Design-Icons.woff") + '") format("woff"); font-weight: normal;	font-style: normal;	}',
 		contentScriptWhen: "ready",
 		contentScriptFile: [data.url("jquery-2.1.3.min.js"),
+			data.url("annotator-full.1.2.10/annotator-full.min.js"),
+			data.url("annotator.offline.min.js"),
+			data.url("mfb/mfb.js"),
+			data.url("mfb/modernizr.touch.js"),
 			data.url("floatingElement.js")],
 		onAttach: function(worker) {
 
