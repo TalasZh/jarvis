@@ -1,32 +1,57 @@
 package org.safehaus.analysis;
 
+import com.impetus.kundera.index.IndexCollection;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.net.URI;
 import java.util.Date;
 
 /**
  * Created by kisik on 06.07.2015.
  */
-
+@Entity
+@Table( name = "jira_metric_issue", schema = "jarvis@cassandra-pu" )
+@IndexCollection( columns = {
+        @com.impetus.kundera.index.Index( name = "id" ), @com.impetus.kundera.index.Index( name = "key" )})
 public class JiraMetricIssue {
 
+    @Column
     private String key;
+
+    @Id
     private Long id;
 
+    @Column
     private String status;
+    @Column
     private String issueType;
+    @Column
     private String projectKey;
 
+    @Column
     private String reporterName;
+    @Column
     private String assigneeName;
 
+    @Column
     private String resolution;
+    @Column
     private Date creationDate;
+    @Column
     private Date updateDate;
+    @Column
     private Date dueDate;
+    @Column
     private Long priority;
 
+    @Column
     private Integer originalEstimateMinutes;
+    @Column
     private Integer remainingEstimateMinutes;
+    @Column
     private Integer timeSpentMinutes;
 
     public String getKey() {
