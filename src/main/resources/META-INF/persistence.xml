@@ -29,6 +29,7 @@
     <class>org.safehaus.stash.model.Commit</class>
     <class>org.safehaus.stash.model.Path</class>
     <class>org.safehaus.stash.model.StashMetricIssue</class>
+    <class>org.safehaus.analysis.JiraMetricIssue</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="kundera.nodes" value="localhost" />
