@@ -25,31 +25,45 @@
 
 .jarvis-add:before, .jarvis-close:before, .jarvis-create:before, .jarvis-view-list:before
 {
-	display: inline-block;
-	vertical-align: -10%;
-	width: 48px;
-	height: 48px;
-	position: relative;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
+	display: inline-block !important;
+	vertical-align: -10% !important;
+	width: 48px !important;
+	height: 48px !important;
+	position: relative !important;
+	-webkit-font-smoothing: antialiased !important;
+	-moz-osx-font-smoothing: grayscale !important;
+}
+
+.jarvis-issues {
+	list-style-type:none;
+	right: 0;
+	bottom: 0;
+	margin-top: 25px;
+	margin-right: 180px;
+	margin-bottom: 25px;
+	margin-left: 25px;
+	position: fixed;
+	white-space: nowrap;
+	z-index: 30;
+	padding-left: 0;
 }
 
 .jarvis-add:before
 {
-	content: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAH0lEQVQ4y2NgGAUw8B8IRjXgUoQLUEfDaDyQqmF4AwADqmeZrHJtnQAAAABJRU5ErkJggg==");
+	content: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAH0lEQVQ4y2NgGAUw8B8IRjXgUoQLUEfDaDyQqmF4AwADqmeZrHJtnQAAAABJRU5ErkJggg==") !important;
 }
 
 .jarvis-close:before
 {
-	content: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAdklEQVQ4y+WTuQ3AIBAEaQKK8NN/BEUArmccgGyj43MMIZo5TqtFqbUPJxYtbg2OvS44IJQKhguwdUETSiXjXr77KhGICRjihWKm8Dw3KXP4Z5VZ/Lfw7B5kyD1cy5C7uAx5iJcht6vhRTUi4OrC0Szftvi/vAFNdbZ2Dp661QAAAABJRU5ErkJggg==");
+	content: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAdklEQVQ4y+WTuQ3AIBAEaQKK8NN/BEUArmccgGyj43MMIZo5TqtFqbUPJxYtbg2OvS44IJQKhguwdUETSiXjXr77KhGICRjihWKm8Dw3KXP4Z5VZ/Lfw7B5kyD1cy5C7uAx5iJcht6vhRTUi4OrC0Szftvi/vAFNdbZ2Dp661QAAAABJRU5ErkJggg==") !important;
 }
 
 .jarvis-create:before
 {
-	content: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAbElEQVQ4y2NgGHrgv/f/L//7SVH+4z8ITCZWQ8V/GOgnxvRYIFkD1fCWGMf8/R8H1fLtvyt+5V5Qt0O0VBCrHKIllpBjkJUT4RhPSpR/H1jlHpQpdyMUlKQpB2ogTTmShu//3YlLxqQpH1wAAKOW8ZUUAHC/AAAAAElFTkSuQmCC");
+	content: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAbElEQVQ4y2NgGHrgv/f/L//7SVH+4z8ITCZWQ8V/GOgnxvRYIFkD1fCWGMf8/R8H1fLtvyt+5V5Qt0O0VBCrHKIllpBjkJUT4RhPSpR/H1jlHpQpdyMUlKQpB2ogTTmShu//3YlLxqQpH1wAAKOW8ZUUAHC/AAAAAElFTkSuQmCC") !important;
 }
 
 .jarvis-view-list:before
 {
-	content: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAHElEQVQ4y2NgGMngPxQgWOhg8GsY9fSop4cfAACILH6QhD3TxgAAAABJRU5ErkJggg==");
+	content: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAHElEQVQ4y2NgGMngPxQgWOhg8GsY9fSop4cfAACILH6QhD3TxgAAAABJRU5ErkJggg==") !important;
 }

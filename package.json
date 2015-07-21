@@ -1,13 +1,16 @@
 {
-  "title": "My Jetpack Addon",
-  "name": "jpm-test",
-  "version": "0.0.3",
-  "description": "A basic add-on",
+  "title": "Jarvis Annotator",
+  "name": "jarvis-addon",
+  "version": "0.0.4",
+  "description": "A Jarvis add-on for managing annotations",
   "main": "index.js",
-  "author": "",
+  "author": "Tooling",
   "engines": {
     "firefox": ">=38.0a1",
     "fennec": ">=38.0a1"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "jira-module": "file:jira-module"
+  }
 }

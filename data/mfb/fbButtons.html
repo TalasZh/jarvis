@@ -6,15 +6,32 @@
     </a>
     <ul class="mfb-component__list">
       <li>
-        <a href="#" data-mfb-label="Enable annotator" class="mfb-component__button--child">
+        <a id="jarvis-annotation-control" href="#" data-mfb-label="Enable annotator"
+           class="mfb-component__button--child">
           <i class="mfb-component__child-icon jarvis-create"></i>
         </a>
       </li>
       <li>
-        <a href="#" data-mfb-label="Start other research" class="mfb-component__button--child">
+        <a id="research-list" href="#" data-mfb-label="Start other research" class="mfb-component__button--child">
           <i class="mfb-component__child-icon jarvis-view-list"></i>
         </a>
       </li>
     </ul>
   </li>
 </ul>
+
+<ul id="issue-list" class="jarvis-issues">
+  <li>Coffee</li>
+  <li>Tea</li>
+  <li>Milk</li>
+</ul>
+
+<script src="resource://jarvis-addon/data/annotator.min.js"></script>
+
+<script>
+  var app = new annotator.App();
+  console.log(app);
+  app.include(annotator.ui.main);
+  //app.include(annotator.storage.http);
+  app.start();
+</script>
