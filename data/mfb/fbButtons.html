@@ -1,18 +1,18 @@
-<ul id="jarvis-menu" class="mfb-component--br mfb-zoomin" data-mfb-toggle="hover">
+<ul id="jarvis-menu" class="mfb-component--br mfb-slidein-spring" data-mfb-toggle="hover">
   <li class="mfb-component__wrap">
-    <a href="#" class="mfb-component__button--main">
+    <a class="mfb-component__button--main">
       <i class="mfb-component__main-icon--resting jarvis-add"></i>
       <i class="mfb-component__main-icon--active jarvis-close"></i>
     </a>
     <ul class="mfb-component__list">
       <li>
-        <a id="jarvis-annotation-control" href="#" data-mfb-label="Enable annotator"
+        <a id="jarvis-annotation-control" data-mfb-label="Enable annotator"
            class="mfb-component__button--child">
           <i class="mfb-component__child-icon jarvis-create"></i>
         </a>
       </li>
       <li>
-        <a id="research-list" href="#" data-mfb-label="Start other research" class="mfb-component__button--child">
+        <a id="list-researches" data-mfb-label="Start other research" class="mfb-component__button--child">
           <i class="mfb-component__child-icon jarvis-view-list"></i>
         </a>
       </li>
@@ -20,18 +20,5 @@
   </li>
 </ul>
 
-<ul id="issue-list" class="jarvis-issues">
-  <li>Coffee</li>
-  <li>Tea</li>
-  <li>Milk</li>
+<ul id="research-list" class="jarvis-issues">
 </ul>
-
-<script src="resource://jarvis-addon/data/annotator.min.js"></script>
-
-<script>
-  var app = new annotator.App();
-  console.log(app);
-  app.include(annotator.ui.main);
-  //app.include(annotator.storage.http);
-  app.start();
-</script>

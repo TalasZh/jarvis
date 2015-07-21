@@ -8,20 +8,26 @@ self.port.on("loadResource", function (resource, target) {
     annotatorControl.on("click", function () {
         annotatorIsOn = !annotatorIsOn;
         console.log("Annotator status: " + annotatorIsOn);
-        enableAnnotator();
+        //enableAnnotator();
+
     });
 
-	var researchList = jQuery("#research-list");
-	researchList.on("click", function() {
-		self.port.emit("getResearchList");
-	});
+    var researchList = jQuery("#list-researches");
+    researchList.on("click", function () {
+        console.log("research list is clicked");
+        self.port.emit("getResearchList");
+        jQuery("#research-list").slideToggle();
+    });
+    jQuery("#research-list").slideToggle();
     enableAnnotator();
 });
 
-self.port.on("setResearches", function(researches) {
-	var researchList = jQuery("#researchList");
-	researchList.empty();
-	for(var i = 0; i)
+self.port.on("setResearches", function (researches) {
+    var researchList = jQuery("#research-list");
+    researchList.empty();
+    for (let research of researches) {
+        researchList.append("<li>" + research.key + "</li>");
+    }
 });
 
 var annotatorIsOn = false;
@@ -49,9 +55,9 @@ function enableAnnotator() {
             jQuery("#status").text("Offline");
         }
     });
-    
+
     var annotator = content.data('annotator');
-    
+
     jQuery("#clear-storage").click(function () {
         if (annotator) {
             annotator.plugins.Offline.store.clear();
