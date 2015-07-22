@@ -1,5 +1,11 @@
 package org.safehaus.dao;
 
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+import javax.transaction.Transactional;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -13,9 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import javax.transaction.Transactional;
-import java.util.*;
-
 /**
  * Base class for running DAO tests.
  *
@@ -24,10 +27,11 @@ import java.util.*;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
-        locations = {"classpath:/applicationContext-resources.xml",
-                "classpath:/applicationContext-dao.xml",
-                "classpath*:/applicationContext.xml",
-                "classpath:**/applicationContext*.xml"})
+        locations = {"classpath:/applicationContext-resources.xml"
+        		,"classpath:/applicationContext-dao.xml"
+//        		,"classpath*:/applicationContext.xml"
+//        		,"classpath:**/applicationContext*.xml"
+                })
 @Transactional
 public abstract class BaseDaoTestCase {
     @Autowired
@@ -99,4 +103,5 @@ public abstract class BaseDaoTestCase {
         final FullTextSession fullTextSession = Search.getFullTextSession(currentSession);
         fullTextSession.flushToIndexes();
     }
+    
 }
