@@ -41,11 +41,13 @@ public class StashUser
     @Embedded
     @Column(name = "stash_user_link")
     private Link link;
-
+/*
+    // GSON library is not compatible with HibernateSetMap. Makes getCommits useless. Link to user is not a useful field ATM.
+    // Commented out for a future generic solution.
     @OneToMany(fetch = FetchType.EAGER)
     @Column(name = "stash_user_links")
     private Map<String, HibernateSetMap> links;
-
+*/
     public String getName()
     {
         return name;
@@ -115,7 +117,7 @@ public class StashUser
     {
         this.link = link;
     }
-
+/*
     public Map<String, HibernateSetMap> getLinks()
     {
         return links;
@@ -125,7 +127,7 @@ public class StashUser
     {
         this.links = links;
     }
-
+*/
 
     public String getEmailAddress()
     {
@@ -142,6 +144,6 @@ public class StashUser
     {
         return Objects.toStringHelper( this ).add( "name", name ).add( "id", id ).add( "displayName", displayName )
                       .add( "emailAddress", emailAddress ).add( "active", active ).add( "slug", slug )
-                      .add( "type", type ).add( "link", link ).add( "links", links ).toString();
+                      .add( "type", type ).add( "link", link )/*.add( "links", links )*/.toString();
     }
 }
