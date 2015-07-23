@@ -41,20 +41,19 @@ exports.main = function (options) {
         include: ["*"],
         attachTo: ["top"],
         contentStyleFile: [
-            //data.url("mfb/custom-materialize.css"),
-            //data.url("mfb/mfb.css"),
-            //data.url("mfb/index.css"),
+            data.url("mfb/custom.css"),
+            data.url("mfb/mfb.css"),
+            data.url("mfb/index.css"),
             data.url("annotator-full.1.2.10/annotator.min.css")
         ],
         contentScriptWhen: "ready",
         contentScriptFile: [
             data.url("jquery-2.1.3.min.js"),
+            data.url("list.min.js"),
             data.url("annotator-full.1.2.10/annotator-full.min.js"),
             data.url("annotator.offline.min.js"),
-            //data.url("annotator.min.js"),
-            //data.url("mfb/mfb.js"),
-            data.url("mfb/modernizr.touch.js"),
-            data.url("floatingElement.js")
+            data.url("floatingElement.js"),
+            data.url("mfb/custom.js")
         ],
         onAttach: function (worker) {
 
@@ -83,7 +82,7 @@ exports.main = function (options) {
 
 
     function handleClick(state) {
-        tabs.open("http://www.mozilla.org/");
+        tabs.open("https://wiki.ubuntu.com");
     }
 
     function pullResearches(redirect) {
@@ -117,7 +116,7 @@ exports.main = function (options) {
     }
 
 	function pullJiraResearches() {
-		jira.searchJira(searchQuery, null, function (researchError, json) {
+		jira.searchJira(searchQuery, ["summary", "status", "assignee", "issuetype"], function (researchError, json) {
 			if (researchError) {
 				jiraError = researchError;
 				console.error("Request completed with errors: " + researchError);

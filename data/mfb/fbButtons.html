@@ -7,26 +7,30 @@
     </a>
     <ul class="mfb-component__list">
       <li>
-        <a data-mfb-label="Enable annotator" class="mfb-component__button--child btn-jarvis-annotation-control">
+        <a id="btn-jarvis-annotation-control" data-mfb-label="Enable annotator" class="mfb-component__button--child">
           <i class="mfb-component__child-icon jarvis-create"></i>
         </a>
       </li>
 
       <li class="jarvis-toggle-research-list">
-        <a data-mfb-label="Start other research" class="mfb-component__button--child btn-jarvis-list-researches">
+        <a id="btn-jarvis-list-researches" data-mfb-label="Start other research" class="mfb-component__button--child">
           <i class="mfb-component__child-icon jarvis-view-list"></i>
         </a>
-        <div class="jarvis-research-list" data-jarvis-list-state="collapse">
-          <dl>
-          </dl>
+
+        <div id="jarvis-research-list-ctrl" class="jarvis-research-list" data-jarvis-list-state="collapse">
+          <input id="searchResearchIssues" type="text" class="form-control" placeholder="Search issues">
+
+          <div>
+            <dl class="list">
+            </dl>
+          </div>
         </div>
       </li>
-
     </ul>
   </li>
 </ul>
 
-<script src="resource://jarvis-addon/data/mfb/mfb.js" type="application/x-javascript"></script>
+<!--<script src="resource://jarvis-addon/data/mfb/mfb.js" type="application/x-javascript"></script>-->
 <!--<link rel="stylesheet" href="resource://jpm-test/data/mfb/index.css">-->
 <!--<link rel="stylesheet" href="resource://jpm-test/data/mfb/mfb.css">-->
-<!--<link rel="stylesheet" href="resource://jpm-test/data/mfb/custom-materialize.css">-->
+<!--<link rel="stylesheet" href="resource://jpm-test/data/mfb/custom.css">-->

@@ -1,0 +1,82 @@
+.jarvis-create:before, .jarvis-view-list:before
+{
+	/*font-size: 36px;*/
+	/*text-align: center;*/
+	/*line-height: 56px;*/
+	/*position: absolute;*/
+	font-size: 36px;
+	text-align: center;
+	line-height: 56px;
+	width: 100%;
+}
+
+.mfb-component__list li {
+	z-index: 32;
+}
+
+.jarvis-add:before
+{
+	content: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAH0lEQVQ4y2NgGAUw8B8IRjXgUoQLUEfDaDyQqmF4AwADqmeZrHJtnQAAAABJRU5ErkJggg==") !important;
+}
+
+.jarvis-close:before
+{
+	content: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAdklEQVQ4y+WTuQ3AIBAEaQKK8NN/BEUArmccgGyj43MMIZo5TqtFqbUPJxYtbg2OvS44IJQKhguwdUETSiXjXr77KhGICRjihWKm8Dw3KXP4Z5VZ/Lfw7B5kyD1cy5C7uAx5iJcht6vhRTUi4OrC0Szftvi/vAFNdbZ2Dp661QAAAABJRU5ErkJggg==") !important;
+}
+
+.jarvis-create:before
+{
+	content: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAbElEQVQ4y2NgGHrgv/f/L//7SVH+4z8ITCZWQ8V/GOgnxvRYIFkD1fCWGMf8/R8H1fLtvyt+5V5Qt0O0VBCrHKIllpBjkJUT4RhPSpR/H1jlHpQpdyMUlKQpB2ogTTmShu//3YlLxqQpH1wAAKOW8ZUUAHC/AAAAAElFTkSuQmCC") !important;
+}
+
+.jarvis-view-list:before
+{
+	content: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAHElEQVQ4y2NgGMngPxQgWOhg8GsY9fSop4cfAACILH6QhD3TxgAAAABJRU5ErkJggg==") !important;
+}
+
+
+.jarvis-research-list {
+	list-style-type:none;
+	right: -240px;
+	position: fixed;
+	white-space: nowrap;
+
+	background: rgba(0, 0, 0, 0.4);
+
+	z-index: 30;
+	top: 27px;
+
+	overflow-y: hidden;
+	width: 179px;
+	overflow-x: hidden;
+}
+
+#searchResearchIssues {
+	width: 100%;
+}
+
+.jarvis-research-list div {
+	min-height: 150px;
+	max-height: 150px;
+	/*width: 100px;*/
+	overflow-y: scroll;
+
+	overflow-x: hidden;
+}
+
+.mfb-component--bl.mfb-slidein-spring .jarvis-research-list,
+.mfb-component--br.mfb-slidein-spring .jarvis-research-list
+{
+	opacity: 0;
+	transition: all 0.5s;
+	transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.mfb-component--br.mfb-slidein-spring[data-mfb-toggle="hover"]:hover .jarvis-toggle-research-list:hover [data-jarvis-list-state="expand"],
+.mfb-component--br.mfb-slidein-spring[data-mfb-state="open"] .jarvis-toggle-research-list:hover [data-jarvis-list-state="expand"]
+{
+	opacity: 1;
+	transition-delay: 0.05s;
+	-webkit-transform: translate(-200px, 0px);
+	transform: translate(-300px, 0px);
+}
