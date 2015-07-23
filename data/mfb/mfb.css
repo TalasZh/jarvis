@@ -863,7 +863,6 @@
     position: absolute;
     top: 50%;
     margin-top: -11px;
-    transition: all 0.5s;
 }
 
 [data-mfb-toggle="hover"] [data-mfb-label]:hover:after,

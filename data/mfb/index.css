@@ -66,3 +66,27 @@
     opacity: 1;
   }
 }
+
+/*
+ * starting to implement animation of specific control
+ * */
+
+.mfb-component--bl.mfb-slidein-spring .jarvis-issues dt,
+.mfb-component--br.mfb-slidein-spring .jarvis-issues dt
+{
+    opacity: 0;
+    transition: all 0.5s;
+    transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.mfb-component--br.mfb-slidein-spring[data-mfb-toggle="hover"]:hover .jarvis-toggle-research-list:hover .jarvis-issues dt,
+.mfb-component--br.mfb-slidein-spring[data-mfb-state="open"] .jarvis-toggle-research-list:hover .jarvis-issues dt
+{
+    opacity: 1;
+	transition-delay: 0.05s;
+	-webkit-transform: translateY(-10px);
+	transform: translateY(-10px);
+
+	-webkit-transform: translateX(-60px);
+	transform: translateX(-60px);
+}

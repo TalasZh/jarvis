@@ -12,20 +12,14 @@ var data = require('sdk/self').data;
 var pageMod = require("sdk/page-mod");
 var floatingCtrls = [];
 var researches = null;
+var jiraError = null;
+var searchQuery ='issuetype in (Story) AND resolution = Unresolved AND assignee in (currentUser()) ORDER BY updatedDate DESC';
+
 
 var JiraApi = require("jira-module").JiraApi;
 
 var jira = new JiraApi("https://jira.subutai.io", "2", false, false);
-jira.searchJira('issuetype in (Story) AND resolution = Unresolved AND assignee in (currentUser()) ORDER BY updatedDate DESC', null, function (error, json) {
-    if (error) {
-        console.error("Request completed with errors: " + error);
-    }
-    else {
-        researches = json.issues;
-        console.log(researches);
-    }
-});
-
+pullJiraIssues();
 
 var button = ActionButton({
     id: "jarvis-activator",
@@ -41,6 +35,19 @@ var button = ActionButton({
 
 function handleClick(state) {
     tabs.open("http://www.mozilla.org/");
+}
+
+function pullJiraIssues() {
+	jira.searchJira(searchQuery, null, function (error, json) {
+		if (error) {
+			jiraError = error;
+			console.error("Request completed with errors: " + error);
+		}
+		else {
+			researches = json.issues;
+			console.log(researches);
+		}
+	});
 }
 
 exports.main = function (options) {
@@ -72,7 +79,10 @@ exports.main = function (options) {
             });
 
             worker.port.on("getResearchList", function () {
-                if (researches) {
+				if (jiraError) {
+					pullJiraIssues();
+				}
+				else if (researches) {
                     console.log(researches);
                     worker.port.emit("setResearches", researches);
                 }
