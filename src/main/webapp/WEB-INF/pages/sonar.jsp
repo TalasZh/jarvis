@@ -47,7 +47,8 @@
 
 
 </head>
-<body class="home">
+<body class="body-bg">
+
 
 <h2><fmt:message key="sonar.heading"/></h2>
 
@@ -57,31 +58,36 @@
 <div class="container-fluid">
 
   <div class="row">
-    <div class="col-sm-7">
-      <s:form action="sonar" enctype="application/x-www-form-urlencoded" method="post" validate="true" id="sonarForm"
-              cssClass="well">
+    <div class="col-sm-4">
+      <div class="panel panel-default">
+        <div align="center" style="padding: 15px 15px">
+          <s:form action="sonar" enctype="application/x-www-form-urlencoded" method="post" validate="true"
+                  id="sonarForm"
+                  cssClass="">
 
-        <s:select label="Project"
-                  headerKey="-1" headerValue="--- Select ---"
-                  list="resources"
-                  listKey="key"
-                  listValue="name"
-                  name="project"/>
+            <s:select label="Project"
+                      headerKey="-1" headerValue="--- Select ---"
+                      list="resources"
+                      listKey="key"
+                      listValue="name"
+                      name="project"/>
 
-        <div id="actions" class="form-group">
-          <s:submit type="button" key="button.upload" name="list" cssClass="btn btn-primary" theme="simple">
-            <i class="icon-upload icon-white"></i>
-            <fmt:message key="button.view"/>
-          </s:submit>
+            <div id="actions" class="form-group">
+              <s:submit type="button" key="button.upload" name="list" cssClass="btn btn-primary" theme="simple">
+                <i class="icon-upload icon-white"></i>
+                <fmt:message key="button.view"/>
+              </s:submit>
 
-          <a class="btn btn-default" href="home">
-            <i class="icon-remove"></i>
-            <fmt:message key="button.cancel"/>
-          </a>
+              <a class="btn btn-default" href="home">
+                <i class="icon-remove"></i>
+                <fmt:message key="button.cancel"/>
+              </a>
+            </div>
+          </s:form>
         </div>
-      </s:form>
-    </div>
+      </div>
 
+    </div>
   </div>
 
   <c:if test="${complexityStats != null}">
@@ -93,28 +99,28 @@
           <div class="panel-heading">Complexity</div>
           <div class="panel-body">
 
-            <ul class="list-group">
-              <li class="list-group-item">
-              <span class="badge"><s:property
-                  value="getText('number.format.float',{complexityStats.classComplexity})"/></span>
-                Class
-              </li>
-              <li class="list-group-item">
-              <span class="badge"><s:property
-                  value="getText('number.format.float',{complexityStats.functionComplexity})"/></span>
-                Function
-              </li>
-              <li class="list-group-item">
-              <span class="badge"><s:property
-                  value="getText('number.format.float',{complexityStats.fileComplexity})"/></span>
-                File
-              </li>
-              <li class="list-group-item">
-              <span class="badge"><s:property
-                  value="getText('number.format.float',{complexityStats.complexity})"/></span>
-                Total
-              </li>
-            </ul>
+            <table class="table table-striped table-bordered table-hover" cellpadding="2">
+              <tr>
+                <td>Class</td>
+                <td class="col-md-2" align="right"><span class="label label-warning label-as-badge"><s:property
+                    value="getText('number.format.float',{complexityStats.classComplexity})"/></span></td>
+              </tr>
+              <tr>
+                <td>Function</td>
+                <td align="right"><span class="label label-warning label-as-badge"><s:property
+                    value="getText('number.format.float',{complexityStats.functionComplexity})"/></span></td>
+              </tr>
+              <tr>
+                <td>File</td>
+                <td align="right"><span class="label label-warning label-as-badge"><s:property
+                    value="getText('number.format.float',{complexityStats.fileComplexity})"/></span></td>
+              </tr>
+              <tr>
+                <td>Total</td>
+                <td align="right"><span class="label label-warning label-as-badge"><s:property
+                    value="getText('number.format.float',{complexityStats.complexity})"/></span></td>
+              </tr>
+            </table>
 
           </div>
         </div>
@@ -126,28 +132,28 @@
           <div class="panel-heading">Duplications</div>
           <div class="panel-body">
 
-            <ul class="list-group">
-              <li class="list-group-item">
-              <span class="badge"><s:property
-                  value="getText('number.format.float',{duplicationStats.duplicationPercent})"/></span>
-                Duplication Percent
-              </li>
-              <li class="list-group-item">
-              <span class="badge"><s:property
-                  value="getText('number.format.int',{duplicationStats.duplicatedLines})"/></span>
-                Duplicated Lines
-              </li>
-              <li class="list-group-item">
-              <span class="badge"><s:property
-                  value="getText('number.format.int',{duplicationStats.duplicatedBlocks})"/></span>
-                Duplicated Blocks
-              </li>
-              <li class="list-group-item">
-              <span class="badge"><s:property
-                  value="getText('number.format.int',{duplicationStats.duplicatedFiles})"/></span>
-                Duplicated Files
-              </li>
-            </ul>
+            <table class="table table-striped table-bordered table-hover" cellpadding="2">
+              <tr>
+                <td>Dublication Percent</td>
+                <td class="col-md-2" align="right"><span class="label label-primary label-as-badge"><s:property
+                    value="getText('number.format.float',{duplicationStats.duplicationPercent})"/></span></td>
+              </tr>
+              <tr>
+                <td>Dublicated Lines</td>
+                <td align="right"><span class="label label-primary label-as-badge"><s:property
+                    value="getText('number.format.int',{duplicationStats.duplicatedLines})"/></span></td>
+              </tr>
+              <tr>
+                <td>Dublicated Blocks</td>
+                <td align="right"><span class="label label-primary label-as-badge"><s:property
+                    value="getText('number.format.int',{duplicationStats.duplicatedBlocks})"/></span></td>
+              </tr>
+              <tr>
+                <td>Duplicated Files</td>
+                <td align="right"><span class="label label-primary label-as-badge"><s:property
+                    value="getText('number.format.int',{duplicationStats.duplicatedFiles})"/></span></td>
+              </tr>
+            </table>
 
           </div>
         </div>
@@ -158,49 +164,54 @@
     <div class="row">
       <div class="col-md-4">
         <div class="panel panel-default">
-          <div class="panel-heading">Quantitative Stats</div>
+          <div class="panel-heading">
+            <strong> Quantitative Stats </strong>
+          </div>
           <div class="panel-body">
 
-            <ul class="list-group">
-              <li class="list-group-item">
-              <span class="badge"><s:property
-                  value="getText('number.format.int',{quantitativeStats.linesOfCode})"/></span>
-                Lines Of Code
-              </li>
-              <li class="list-group-item">
-                <span class="badge"><s:property value="getText('number.format.int',{quantitativeStats.lines})"/></span>
-                Lines
-              </li>
-              <li class="list-group-item">
-                <span class="badge"><s:property value="getText('number.format.int',{quantitativeStats.files})"/></span>
-                Files
-              </li>
-              <li class="list-group-item">
-              <span class="badge"><s:property
-                  value="getText('number.format.int',{quantitativeStats.directories})"/></span>
-                Directories
-              </li>
-              <li class="list-group-item">
-              <span class="badge"><s:property
-                  value="getText('number.format.int',{quantitativeStats.functions})"/></span>
-                Functions
-              </li>
-              <li class="list-group-item">
-                <span class="badge"><s:property
-                    value="getText('number.format.int',{quantitativeStats.classes})"/></span>
-                Classes
-              </li>
-              <li class="list-group-item">
-              <span class="badge"><s:property
-                  value="getText('number.format.int',{quantitativeStats.statements})"/></span>
-                Statements
-              </li>
-              <li class="list-group-item">
-              <span class="badge"><s:property
-                  value="getText('number.format.int',{quantitativeStats.accessors})"/></span>
-                Accessors
-              </li>
-            </ul>
+            <table class="table table-striped table-bordered table-hover" cellpadding="2">
+              <tr>
+                <td>Lines Of Code</td>
+                <td class="col-md-2" align="right"><span class="label label-info label-as-badge"><s:property
+                    value="getText('number.format.int',{quantitativeStats.linesOfCode})"/></span></td>
+              </tr>
+              <tr>
+                <td>Lines</td>
+                <td align="right"><span class="label label-info label-as-badge"><s:property
+                    value="getText('number.format.int',{quantitativeStats.lines})"/></span></td>
+              </tr>
+              <tr>
+                <td>Files</td>
+                <td align="right"><span class="label label-info label-as-badge"><s:property
+                    value="getText('number.format.int',{quantitativeStats.files})"/></span></td>
+              </tr>
+              <tr>
+                <td>Directories</td>
+                <td align="right"><span class="label label-info label-as-badge"><s:property
+                    value="getText('number.format.int',{quantitativeStats.directories})"/></span></td>
+              </tr>
+              <tr>
+                <td>Functions</td>
+                <td align="right"><span class="label label-info label-as-badge"><s:property
+                    value="getText('number.format.int',{quantitativeStats.functions})"/></span></td>
+              </tr>
+              <tr>
+                <td>Classes</td>
+                <td align="right"><span class="label label-info label-as-badge"><s:property
+                    value="getText('number.format.int',{quantitativeStats.classes})"/></span></td>
+              </tr>
+              <tr>
+                <td>Statements</td>
+                <td align="right"><span class="label label-info label-as-badge"><s:property
+                    value="getText('number.format.int',{quantitativeStats.statements})"/></span></td>
+              </tr>
+              <tr>
+                <td>Accessors</td>
+                <td align="right"><span class="label label-info label-as-badge"><s:property
+                    value="getText('number.format.int',{quantitativeStats.accessors})"/></span></td>
+              </tr>
+            </table>
+
 
           </div>
         </div>
@@ -210,47 +221,53 @@
       <div class="col-md-4">
 
         <div class="panel panel-default">
-          <div class="panel-heading">Unit Tests</div>
+          <div class="panel-heading">
+            <strong> Unit Tests </strong>
+          </div>
           <div class="panel-body">
-            <ul class="list-group">
-              <li class="list-group-item">
-              <span class="badge"><s:property
-                  value="getText('number.format.float',{unitTestStats.successPercent})"/></span>
-                Success Percent
-              </li>
-              <li class="list-group-item">
-                <span class="badge"><s:property value="getText('number.format.int',{unitTestStats.failures})"/></span>
-                Failures
-              </li>
-              <li class="list-group-item">
-                <span class="badge"><s:property value="getText('number.format.int',{unitTestStats.errors})"/></span>
-                Errors
-              </li>
-              <li class="list-group-item">
-                <span class="badge"><s:property value="getText('number.format.int',{unitTestStats.testsCount})"/></span>
-                Tests Count
-              </li>
-              <li class="list-group-item">
-              <span class="badge"><s:property
-                  value="getText('number.format.float',{unitTestStats.executionTime})"/></span>
-                Execution Time(sec)
-              </li>
-              <li class="list-group-item">
-              <span class="badge"><s:property
-                  value="getText('number.format.float',{unitTestStats.coveragePercent})"/></span>
-                Coverage Percent
-              </li>
-              <li class="list-group-item">
-              <span class="badge"><s:property
-                  value="getText('number.format.float',{unitTestStats.lineCoveragePercent})"/></span>
-                Line Coverage Percent
-              </li>
-              <li class="list-group-item">
-              <span class="badge"><s:property
-                  value="getText('number.format.float',{unitTestStats.branchCoveragePercent})"/></span>
-                Branch Coverage Percent
-              </li>
-            </ul>
+
+            <table class="table table-striped table-bordered table-hover" cellpadding="2">
+              <tr>
+                <td>Success Percent</td>
+                <td align="right" class="col-md-2"><span class="label label-success label-as-badge"><s:property
+                    value="getText('number.format.float',{unitTestStats.successPercent})"/></span></td>
+              </tr>
+              <tr>
+                <td>Failures</td>
+                <td align="right"><span class="label label-danger label-as-badge"><s:property
+                    value="getText('number.format.int',{unitTestStats.failures})"/></span></td>
+              </tr>
+              <tr>
+                <td>Errors</td>
+                <td align="right"><span class="label label-danger label-as-badge"><s:property
+                    value="getText('number.format.int',{unitTestStats.errors})"/></span></td>
+              </tr>
+              <tr>
+                <td>Test Count</td>
+                <td align="right"><span class="label label-info label-as-badge"><s:property
+                    value="getText('number.format.int',{unitTestStats.testsCount})"/></span></td>
+              </tr>
+              <tr>
+                <td>Execution Time(sec)</td>
+                <td align="right"><span class="label label-info label-as-badge"><s:property
+                    value="getText('number.format.float',{unitTestStats.executionTime})"/></span></td>
+              </tr>
+              <tr>
+                <td>Coverage Percent</td>
+                <td align="right"><span class="label label-info label-as-badge"><s:property
+                    value="getText('number.format.float',{unitTestStats.coveragePercent})"/></span></td>
+              </tr>
+              <tr>
+                <td>Line Coverage Percent</td>
+                <td align="right"><span class="label label-info label-as-badge"><s:property
+                    value="getText('number.format.float',{unitTestStats.lineCoveragePercent})"/></span></td>
+              </tr>
+              <tr>
+                <td>Branch Coverage Percent</td>
+                <td align="right"><span class="label label-info label-as-badge"><s:property
+                    value="getText('number.format.float',{unitTestStats.branchCoveragePercent})"/></span></td>
+              </tr>
+            </table>
 
           </div>
         </div>
@@ -259,54 +276,59 @@
       <div class="col-md-4">
 
         <div class="panel panel-default">
-          <div class="panel-heading">Violation Stats</div>
+          <div class="panel-heading">
+            <strong> Violation Stats </strong>
+          </div>
           <div class="panel-body">
-            <ul class="list-group">
-              <li class="list-group-item">
-              <span class="badge"><s:property
-                  value="getText('number.format.float',{violationStats.technicalDebt})"/></span>
-                Technical Debt(days)
-              </li>
-              <li class="list-group-item">
-                <span class="badge"><s:property
-                    value="getText('number.format.int',{violationStats.openIssues})"/></span>
-                Open Issues
-              </li>
-              <li class="list-group-item">
-              <span class="badge"><s:property
-                  value="getText('number.format.int',{violationStats.reopenedIssues})"/></span>
-                Reopened Issues
-              </li>
-              <li class="list-group-item">
-                <span class="badge"><s:property value="getText('number.format.int',{violationStats.allIssues})"/></span>
-                All Issues
-              </li>
-              <li class="list-group-item">
-              <span class="badge"><s:property
-                  value="getText('number.format.int',{violationStats.blockerIssues})"/></span>
-                Blocker Issues
-              </li>
-              <li class="list-group-item">
-              <span class="badge"><s:property
-                  value="getText('number.format.int',{violationStats.criticalIssues})"/></span>
-                Critical Issues
-              </li>
-              <li class="list-group-item">
-                <span class="badge"><s:property
-                    value="getText('number.format.int',{violationStats.majorIssues})"/></span>
-                Major Issues
-              </li>
-              <li class="list-group-item">
-                <span class="badge"><s:property
-                    value="getText('number.format.int',{violationStats.minorIssues})"/></span>
-                Minor Issues
-              </li>
-              <li class="list-group-item">
-                <span class="badge"><s:property
-                    value="getText('number.format.int',{violationStats.infoIssues})"/></span>
-                Info Issues
-              </li>
-            </ul>
+
+            <table class="table table-striped table-bordered table-hover" cellpadding="2">
+              <tr>
+                <td>Technical Debt(days)</td>
+                <td align="right" class="col-md-2"><span class="label label-info label-as-badge"><s:property
+                    value="getText('number.format.float',{violationStats.technicalDebt})"/></span></td>
+              </tr>
+              <tr>
+                <td>Open Issues</td>
+                <td align="right"><span class="label label-info label-as-badge"><s:property
+                    value="getText('number.format.int',{violationStats.openIssues})"/></span></td>
+              </tr>
+              <tr>
+                <td>Reopened Issues</td>
+                <td align="right"><span class="label label-info label-as-badge"><s:property
+                    value="getText('number.format.int',{violationStats.reopenedIssues})"/></span></td>
+              </tr>
+              <tr>
+                <td>All Issues</td>
+                <td align="right"><span class="label label-info label-as-badge"><s:property
+                    value="getText('number.format.int',{violationStats.allIssues})"/></span></td>
+              </tr>
+              <tr>
+                <td>Blocker Issues</td>
+                <td align="right"><span class="label label-danger label-as-badge"><s:property
+                    value="getText('number.format.int',{violationStats.blockerIssues})"/></span></td>
+              </tr>
+              <tr>
+                <td>Critical Issues</td>
+                <td align="right"><span class="label label-danger label-as-badge"><s:property
+                    value="getText('number.format.int',{violationStats.criticalIssues})"/></span></td>
+              </tr>
+              <tr>
+                <td>Major Issues</td>
+                <td align="right"><span class="label label-danger label-as-badge"><s:property
+                    value="getText('number.format.int',{violationStats.majorIssues})"/></span></td>
+              </tr>
+              <tr>
+                <td>Minor Issues</td>
+                <td align="right"><span class="label label-success label-as-badge"><s:property
+                    value="getText('number.format.int',{violationStats.minorIssues})"/></span></td>
+              </tr>
+              <tr>
+                <td>Info Issues</td>
+                <td align="right"><span class="label label-success label-as-badge"><s:property
+                    value="getText('number.format.int',{violationStats.infoIssues})"/></span></td>
+              </tr>
+            </table>
+
 
           </div>
         </div>
