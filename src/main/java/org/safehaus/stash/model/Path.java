@@ -4,6 +4,7 @@ import com.google.common.base.Objects;
 import com.impetus.kundera.index.IndexCollection;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -13,7 +14,7 @@ import java.util.List;
 @Table( name = "stash_path", schema = "jarvis@cassandra-pu" )
 @IndexCollection( columns = {
         @com.impetus.kundera.index.Index( name = "id" ), @com.impetus.kundera.index.Index( name = "name" )})
-public class Path {
+public class Path implements Serializable{
 
     @Id
     @TableGenerator( name = "id_gen", allocationSize = 30, initialValue = 100 )
@@ -71,5 +72,29 @@ public class Path {
     {
         return Objects.toStringHelper(this).add( "components", components ).add( "parent", parent )
                     .add( "name", name ).add( "extension", extension ).add( "toString", toString ).toString();
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setComponents(List<String> components) {
+        this.components = components;
+    }
+
+    public void setParent(String parent) {
+        this.parent = parent;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setExtension(String extension) {
+        this.extension = extension;
+    }
+
+    public void setToString(String toString) {
+        this.toString = toString;
     }
 }

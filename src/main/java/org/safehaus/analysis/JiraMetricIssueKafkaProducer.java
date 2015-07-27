@@ -8,11 +8,11 @@ import java.util.Properties;
 /**
  * Created by neslihan on 22.07.2015.
  */
-public class JiraMetricIssueProducer {
+public class JiraMetricIssueKafkaProducer {
     private Producer<String, JiraMetricIssue> producer;
     private static String topic = "jirametricissue";
 
-    public JiraMetricIssueProducer()
+    public JiraMetricIssueKafkaProducer()
     {
         Properties props = new Properties();
         props.put("zk.connect", "127.0.0.1:2181");

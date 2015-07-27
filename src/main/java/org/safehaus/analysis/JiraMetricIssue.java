@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.net.URI;
 import java.util.Date;
 
@@ -16,7 +17,7 @@ import java.util.Date;
 @Table( name = "jira_metric_issue", schema = "jarvis@cassandra-pu" )
 @IndexCollection( columns = {
         @com.impetus.kundera.index.Index( name = "id" ), @com.impetus.kundera.index.Index( name = "key" )})
-public class JiraMetricIssue {
+public class JiraMetricIssue implements Serializable {
 
     @Column
     private String key;

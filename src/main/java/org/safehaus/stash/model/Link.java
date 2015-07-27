@@ -5,9 +5,10 @@ import com.google.common.base.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import java.io.Serializable;
 
 @Embeddable
-public class Link
+public class Link implements Serializable
 {
     @Column(name = "url")
     private String url;

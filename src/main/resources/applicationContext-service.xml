@@ -110,4 +110,7 @@
   <bean id="confluenceManager" class="org.safehaus.confluence.client.ConfluenceManagerImpl">
   	<constructor-arg value="${confluence.url}" />
   </bean>
+
+  <bean id="jiraMetricIssueKafkaProducer" class="org.safehaus.analysis.JiraMetricIssueKafkaProducer">
+  </bean>
 </beans>

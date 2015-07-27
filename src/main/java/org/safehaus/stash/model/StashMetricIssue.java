@@ -3,6 +3,7 @@ package org.safehaus.stash.model;
 import com.impetus.kundera.index.IndexCollection;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Created by neslihan on 08.07.2015.
@@ -11,7 +12,7 @@ import javax.persistence.*;
 @Table( name = "stash_metric_issue", schema = "jarvis@cassandra-pu" )
 @IndexCollection( columns = {
         @com.impetus.kundera.index.Index( name = "id" ), @com.impetus.kundera.index.Index( name = "author" ), @com.impetus.kundera.index.Index( name = "authorTimestamp" )})
-public class StashMetricIssue {
+public class StashMetricIssue implements Serializable {
 
     @Id
     @TableGenerator( name = "id_gen", allocationSize = 30, initialValue = 100 )

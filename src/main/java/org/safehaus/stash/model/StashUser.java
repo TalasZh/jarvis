@@ -1,6 +1,7 @@
 package org.safehaus.stash.model;
 
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.Set;
 
@@ -14,7 +15,7 @@ import javax.persistence.*;
 @Table( name = "stash_user", schema = "jarvis@cassandra-pu" )
 @IndexCollection( columns = {
         @Index( name = "name" ), @Index( name = "emailAddress" ), @Index( name = "authorTimestamp" )} )
-public class StashUser
+public class StashUser implements Serializable
 {
     @Column(name = "stash_user_name")
     private String name;
