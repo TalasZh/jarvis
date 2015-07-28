@@ -113,4 +113,7 @@
 
   <bean id="jiraMetricIssueKafkaProducer" class="org.safehaus.analysis.JiraMetricIssueKafkaProducer">
   </bean>
+
+  <bean id="StashMetricIssueKafkaProducer" class="org.safehaus.analysis.StashMetricIssueKafkaProducer">
+  </bean>
 </beans>
