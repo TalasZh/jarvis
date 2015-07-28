@@ -34,28 +34,43 @@
 	-moz-osx-font-smoothing: grayscale !important;
 }
 
-.jarvis-issues:after {
+
+.jarvis-research-list {
+	list-style-type:none;
+	right: 0;
+	bottom: 0;
+	/*margin-top: 25px;*/
+	/*margin-right: 80px;*/
+	/*margin-bottom: 25px;*/
+	/*margin-left: 25px;*/
+	position: fixed;
+	white-space: nowrap;
+	z-index: 30;
+	/*padding-left: 0;*/
+
+
+}
+
+.jarvis-research-list:after {
 	opacity: 0;
 	transition: all 0.5s;
 	background: rgba(0, 0, 0, 0.4);
+	padding: 4px 10px;
 	border-radius: 3px;
 	color: rgba(255, 255, 255, 0.8);
 	font-size: 14px;
 	font-weight: normal;
+	pointer-events: none;
 	line-height: normal;
-	list-style-type:none;
-	right: 0;
-	bottom: 0;
-	margin-top: 0;
-	margin-right: 180px;
-	margin-bottom: 25px;
-	margin-left: 25px;
-	position: fixed;
-	white-space: nowrap;
-	z-index: 30;
-	padding-left: 0;
-	padding-top: 4px;
-	padding-right: 10px;
+	position: absolute;
+	/*top: 50%;*/
+	/*margin-top: -11px;*/
+}
+
+#list-researches [data-mfb-label]:after,
+{
+	content: attr(data-mfb-label);
+	right: -45px;
 }
 
 .jarvis-add:before

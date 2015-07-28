@@ -1,92 +1,148 @@
-.mfb-component--tl{
-  animation: fromTop 1s 1;
-  -webkit-animation: fromTop 1s 1;
-}
-.mfb-component--tr{
-  animation: fromTop 1.3s 1;
-  -webkit-animation: fromTop 1.3s 1;
-}
-.mfb-component--br{
-  animation: fromBottom 1.6s 1;
-  -webkit-animation: fromBottom 1.6s 1;
-}
-.mfb-component--bl{
-  animation: fromBottom 1.9s 1;
-  -webkit-animation: fromBottom 1.9s 1;
-}
-@keyframes fromBottom {
-  0% {
-    transform: translateY(250px);
-  }
-  100% {
-    transform: translateY(0);
-  }
-}
-@keyframes fromTop {
-  0% {
-    transform: translateY(-250px);
-  }
-  100% {
-    transform: translateY(0);
-  }
-}
-@-webkit-keyframes fromBottom {
-  0% {
-    transform: translateY(250px);
-  }
-  100% {
-    transform: translateY(0);
-  }
-}
-@-webkit-keyframes fromTop {
-  0% {
-    transform: translateY(-250px);
-  }
-  100% {
-    transform: translateY(0);
-  }
+.mfb-component--tl
+{
+    animation: fromTop 1s 1;
+    -webkit-animation: fromTop 1s 1;
 }
 
-@-webkit-keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-
-  100% {
-    opacity: 1;
-  }
+.mfb-component--tr
+{
+    animation: fromTop 1.3s 1;
+    -webkit-animation: fromTop 1.3s 1;
 }
 
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
+.mfb-component--br
+{
+    animation: fromBottom 1.6s 1;
+    -webkit-animation: fromBottom 1.6s 1;
+}
 
-  100% {
-    opacity: 1;
-  }
+.mfb-component--bl
+{
+    animation: fromBottom 1.9s 1;
+    -webkit-animation: fromBottom 1.9s 1;
+}
+
+@keyframes fromBottom
+{
+    0%
+    {
+        transform: translateY(250px);
+    }
+    100%
+    {
+        transform: translateY(0);
+    }
+}
+
+@keyframes fromTop
+{
+    0%
+    {
+        transform: translateY(-250px);
+    }
+    100%
+    {
+        transform: translateY(0);
+    }
+}
+
+@-webkit-keyframes fromBottom
+{
+    0%
+    {
+        transform: translateY(250px);
+    }
+    100%
+    {
+        transform: translateY(0);
+    }
+}
+
+@-webkit-keyframes fromTop
+{
+    0%
+    {
+        transform: translateY(-250px);
+    }
+    100%
+    {
+        transform: translateY(0);
+    }
+}
+
+@-webkit-keyframes fadeIn
+{
+    0%
+    {
+        opacity: 0;
+    }
+
+    100%
+    {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn
+{
+    0%
+    {
+        opacity: 0;
+    }
+
+    100%
+    {
+        opacity: 1;
+    }
 }
 
 /*
  * starting to implement animation of specific control
  * */
 
-.mfb-component--bl.mfb-slidein-spring .jarvis-issues dt,
-.mfb-component--br.mfb-slidein-spring .jarvis-issues dt
+.mfb-component--bl.mfb-slidein-spring .jarvis-research-list dt,
+.mfb-component--br.mfb-slidein-spring .jarvis-research-list dt
 {
     opacity: 0;
     transition: all 0.5s;
     transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
-.mfb-component--br.mfb-slidein-spring[data-mfb-toggle="hover"]:hover .jarvis-toggle-research-list:hover .jarvis-issues dt,
-.mfb-component--br.mfb-slidein-spring[data-mfb-state="open"] .jarvis-toggle-research-list:hover .jarvis-issues dt
+.mfb-component--br.mfb-slidein-spring[data-mfb-toggle="hover"]:hover .jarvis-toggle-research-list:hover .jarvis-research-list dt,
+.mfb-component--br.mfb-slidein-spring[data-mfb-state="open"] .jarvis-toggle-research-list:hover .jarvis-research-list dt
 {
     opacity: 1;
-	transition-delay: 0.05s;
-	-webkit-transform: translateY(-10px);
-	transform: translateY(-10px);
+    transition-delay: 0.05s;
+    -webkit-transform: translate(10px, 10px);
+    transform: translate(10px, 10px);
+}
 
-	-webkit-transform: translateX(-60px);
-	transform: translateX(-60px);
+.mfb-component--bl.mfb-slidein-spring .jarvis-research-list,
+.mfb-component--br.mfb-slidein-spring .jarvis-research-list
+{
+    opacity: 0;
+    /*transition: all 0.5s;*/
+    /*transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);*/
+
+    /*background: rgba(0, 0, 0, 0.4);*/
+
+    /*min-height: 150px;*/
+    /*max-height: 150px;*/
+    /*overflow-y: scroll;*/
+}
+
+.mfb-component--br.mfb-slidein-spring[data-mfb-toggle="hover"]:hover .jarvis-toggle-research-list:hover .jarvis-research-list[data-jarvis-list-state="expand"],
+.mfb-component--br.mfb-slidein-spring[data-mfb-state="open"] .jarvis-toggle-research-list:hover .jarvis-research-list[data-jarvis-list-state="expand"]
+{
+    opacity: 1;
+    transition-delay: 0.05s;
+
+    background: rgba(0, 0, 0, 0.4);
+
+    min-height: 150px;
+    max-height: 150px;
+    width: 100px;
+    overflow-y: scroll;
+
+    overflow-x: hidden;
 }

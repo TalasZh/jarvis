@@ -6,93 +6,105 @@
  * License: MIT
  */
 
- // build script hook - don't remove
- ;(function ( window, document, undefined ) {
- 
+// build script hook - don't remove
+;
+(function (window, document, undefined) {
 
-  'use strict';
 
-  /**
-   * Some defaults
-   */
-  var clickOpt = 'click',
-      hoverOpt = 'hover',
-      toggleMethod = 'data-mfb-toggle',
-      menuState = 'data-mfb-state',
-      isOpen = 'open',
-      isClosed = 'closed',
-      mainButtonClass = 'mfb-component__button--main';
+    //'use strict';
 
-  /**
-   * Internal references
-   */
-  var elemsToClick,
-      elemsToHover,
-      mainButton,
-      target,
-      currentState;
+    /**
+     * Some defaults
+     */
+    var clickOpt = 'click',
+        hoverOpt = 'hover',
+        toggleMethod = 'data-mfb-toggle',
+        menuState = 'data-mfb-state',
+        isOpen = 'open',
+        isClosed = 'closed',
+        mainButtonClass = 'mfb-component__button--main';
 
-  /**
-   * For every menu we need to get the main button and attach the appropriate evt.
-   */
-  function attachEvt( elems, evt ){
-    for( var i = 0, len = elems.length; i < len; i++ ){
-      mainButton = elems[i].querySelector('.' + mainButtonClass);
-      mainButton.addEventListener( evt , toggleButton, false);
-    }
-  }
+    /**
+     * Internal references
+     */
+    var elemsToClick,
+        elemsToHover,
+        mainButton,
+        target,
+        currentState;
 
-  /**
-   * Remove the hover option, set a click toggle and a default,
-   * initial state of 'closed' to menu that's been targeted.
-   */
-  function replaceAttrs( elems ){
-    for( var i = 0, len = elems.length; i < len; i++ ){
-      elems[i].setAttribute( toggleMethod, clickOpt );
-      elems[i].setAttribute( menuState, isClosed );
-    }
-  }
-
-  function getElemsByToggleMethod( selector ){
-    return document.querySelectorAll('[' + toggleMethod + '="' + selector + '"]');
-  }
-
-  /**
-   * The open/close action is performed by toggling an attribute
-   * on the menu main element.
-   *
-   * First, check if the target is the menu itself. If it's a child
-   * keep walking up the tree until we found the main element
-   * where we can toggle the state.
-   */
-  function toggleButton( evt ){
-
-    target = evt.target;
-    while ( target && !target.getAttribute( toggleMethod ) ){
-      target = target.parentNode;
-      if(!target) { return; }
+    /**
+     * For every menu we need to get the main button and attach the appropriate evt.
+     */
+    function attachEvt(elems, evt) {
+        for (var i = 0, len = elems.length; i < len; i++) {
+            mainButton = elems[i].querySelector('.' + mainButtonClass);
+            mainButton.addEventListener(evt, toggleButton, false);
+        }
     }
 
-    currentState = target.getAttribute( menuState ) === isOpen ? isClosed : isOpen;
+    /**
+     * Remove the hover option, set a click toggle and a default,
+     * initial state of 'closed' to menu that's been targeted.
+     */
+    function replaceAttrs(elems) {
+        for (var i = 0, len = elems.length; i < len; i++) {
+            elems[i].setAttribute(toggleMethod, clickOpt);
+            elems[i].setAttribute(menuState, isClosed);
+        }
+    }
 
-    target.setAttribute(menuState, currentState);
+    function getElemsByToggleMethod(selector) {
+        return document.querySelectorAll('[' + toggleMethod + '="' + selector + '"]');
+    }
 
-  }
+    /**
+     * The open/close action is performed by toggling an attribute
+     * on the menu main element.
+     *
+     * First, check if the target is the menu itself. If it's a child
+     * keep walking up the tree until we found the main element
+     * where we can toggle the state.
+     */
+    function toggleButton(evt) {
 
-  /**
-   * On touch enabled devices we assume that no hover state is possible.
-   * So, we get the menu with hover action configured and we set it up
-   * in order to make it usable with tap/click.
-   **/
-  if ( window.Modernizr && Modernizr.touch ){
-    elemsToHover = getElemsByToggleMethod( hoverOpt );
-    replaceAttrs( elemsToHover );
-  }
+        target = evt.target;
+        while (target && !target.getAttribute(toggleMethod)) {
+            target = target.parentNode;
+            if (!target) {
+                return;
+            }
+        }
 
-  elemsToClick = getElemsByToggleMethod( clickOpt );
+		var jarvisListState = jQuery("[data-jarvis-list-state]");
+		console.log("Jarvis list state element: " + jarvisListState);
+        if (target.getAttribute(menuState) === isOpen) {
+            currentState = isClosed;
+            jQuery("[data-jarvis-list-state]").data("collapse");
+        }
+        else {
+            currentState = isOpen;
+            jQuery("[data-jarvis-list-state]").data("expand");
+        }
 
-  attachEvt( elemsToClick, 'click' );
+        target.setAttribute(menuState, currentState);
+
+    }
+
+    /**
+     * On touch enabled devices we assume that no hover state is possible.
+     * So, we get the menu with hover action configured and we set it up
+     * in order to make it usable with tap/click.
+     **/
+    if (window.Modernizr && Modernizr.touch) {
+        elemsToHover = getElemsByToggleMethod(hoverOpt);
+        replaceAttrs(elemsToHover);
+    }
+
+    elemsToClick = getElemsByToggleMethod(clickOpt);
+
+    attachEvt(elemsToClick, 'click');
 
 // build script hook - don't remove
-})( window, document );
+})(window, document);
 

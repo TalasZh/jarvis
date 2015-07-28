@@ -12,5 +12,20 @@
   "license": "MIT",
   "dependencies": {
     "jira-module": "file:data/jira-module"
-  }
+  },
+  "preferences": [
+    {
+      "description": "JIRA address",
+      "type": "string",
+      "name": "jiraHost",
+      "value": "https://jira.subutai.io",
+      "title": "JIRA address"
+    },
+    {
+      "label": "Apply",
+      "type": "control",
+      "name": "applyChanges",
+      "title": "Apply changes"
+    }
+  ]
 }
