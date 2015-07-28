@@ -43,6 +43,7 @@
                     researchIssueList.attr("data-jarvis-list-state", "collapse");
                 }
             }, 1000);
+
         });
 
         $("#searchResearchIssues").keyup(function () {
