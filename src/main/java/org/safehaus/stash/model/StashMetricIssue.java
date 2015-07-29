@@ -17,7 +17,7 @@ public class StashMetricIssue implements Serializable {
     @Id
     @TableGenerator( name = "id_gen", allocationSize = 30, initialValue = 100 )
     @GeneratedValue( generator = "id_gen", strategy = GenerationType.TABLE )
-    private long id;
+    private String id;
 
     @OneToOne(targetEntity = Path.class)
     @AttributeOverride(name = "id", column = @Column(name = "path"))
@@ -92,7 +92,7 @@ public class StashMetricIssue implements Serializable {
         return author;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
@@ -116,7 +116,7 @@ public class StashMetricIssue implements Serializable {
         this.nodeType = nodeType;
     }
 
-    public void setId(long id) { this.id = id; }
+    public void setId(String id) { this.id = id; }
 
     public void setAuthor(StashUser author) { this.author = author; }
 

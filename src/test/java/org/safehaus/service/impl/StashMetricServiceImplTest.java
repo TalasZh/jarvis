@@ -30,7 +30,7 @@ public class StashMetricServiceImplTest
 	public void testInsertStashMetricIssue()
 	{
 		StashMetricIssue stashMetricIssue = new StashMetricIssue();
-		stashMetricIssue.setId( -3L );
+		stashMetricIssue.setId( "-3L" );
 
 		stashMetricService.insertStashMetricIssue( stashMetricIssue );
 
@@ -42,7 +42,7 @@ public class StashMetricServiceImplTest
 	public void testFindStashMetricIssueById()
 	{
 		StashMetricIssue stashMetricIssue = new StashMetricIssue();
-		Mockito.doReturn( stashMetricIssue ).when( dao ).findById( StashMetricIssue.class, -3L );
+		Mockito.doReturn( stashMetricIssue ).when( dao ).findById( StashMetricIssue.class, "-3L" );
 	}
 
 
@@ -69,7 +69,7 @@ public class StashMetricServiceImplTest
 	public void testUpdateStashMetricIssue()
 	{
 		StashMetricIssue stashMetricIssue = new StashMetricIssue();
-		stashMetricIssue.setId( -3L );
+		stashMetricIssue.setId( "-3L" );
 
 		stashMetricService.updateStashMetricIssue( stashMetricIssue );
 
@@ -88,7 +88,7 @@ public class StashMetricServiceImplTest
 	public void testDeleteStashMetricIssue()
 	{
 		StashMetricIssue stashMetricIssue = new StashMetricIssue();
-		stashMetricIssue.setId( -3L );
+		stashMetricIssue.setId( "-3L" );
 
 		stashMetricService.deleteStashMetricIssue( stashMetricIssue );
 

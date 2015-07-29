@@ -1,24 +1,20 @@
 package org.safehaus.service;
 
 import com.atlassian.jira.rest.client.api.domain.Issue;
-import com.atlassian.jira.rest.client.api.domain.Project;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.safehaus.analysis.JiraMetricIssue;
 import org.safehaus.analysis.service.AnalysisConnector;
 import org.safehaus.exceptions.JiraClientException;
 import org.safehaus.jira.JiraClient;
-import org.safehaus.model.JarvisContext;
 import org.safehaus.sonar.client.SonarManager;
 import org.safehaus.sonar.client.SonarManagerException;
 import org.safehaus.stash.client.StashManager;
 import org.safehaus.stash.client.StashManagerException;
-import org.safehaus.util.JarvisContextHolder;
+import org.safehaus.stash.client.Page;
+import org.safehaus.stash.model.*;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by kisik on 30.06.2015.
@@ -26,49 +22,85 @@ import java.util.List;
 public class AnalysisService {
     private final Log log = LogFactory.getLog(AnalysisService.class);
 
+    List<JiraMetricIssue> jiraMetricIssues;
+    List<StashMetricIssue> stashMetricIssues;
+    private Page<Project> stashProjects;
+
+    private String jiraURL = "http://test-jira.critical-factor.com";
+    private String jiraUsername = "erma_bot";
+    private String jiraPass = "foobar";
+
+    private String stashURL = "http://stash.critical-factor.com";
+    private String stashUsername = "kisik";
+    private String stashPass = "F3bruarycf";
+
+    private String sonarURL = "http://sonar.subutai.io";
+    private String sonarUsername = "kisik";
+    private String sonarPass = "F3bruarycf";
+
     public void run() {
         log.info("Running AnalysisService.run()");
 
         JiraClient jiraCl = null;
         try {
-            jiraCl = AnalysisConnector.jiraConnect();
-        } catch(JiraClientException e) {
-            log.error("Jira Connection couldn't be established.");
+            jiraCl = AnalysisConnector.jiraConnect(jiraURL, jiraUsername, jiraPass);
+        } catch (JiraClientException e) {
+            log.error("Jira connection failure.");
             e.printStackTrace();
         }
+        if(jiraCl != null)
+            getJiraMetricIssues(jiraCl);
 
-        SonarManager sonarMan = null;
-        try {
-            sonarMan = AnalysisConnector.sonarConnect();
-        } catch (SonarManagerException e) {
-            log.error("Sonar Connection couldn't be established.");
-            e.printStackTrace();
-        }
 
         StashManager stashMan = null;
         try {
-            stashMan = AnalysisConnector.stashConnect();
+            stashMan = AnalysisConnector.stashConnect(stashURL, stashUsername, stashPass);
         } catch (StashManagerException e) {
             log.error("Stash Connection couldn't be established.");
             e.printStackTrace();
         }
+        if(stashMan != null)
+            getStashMetricIssues(stashMan);
 
-        List<Project> jiraProjects = jiraCl.getAllProjects();
-        for(Project project : jiraProjects) {
-            log.info(project.getName());
-            log.info(project.getKey());
-            log.info("***************************");
+
+
+        getSonarMetricIssues();
+
+    }
+
+
+    private void getJiraMetricIssues(JiraClient jiraCl) {
+
+        List<String> projectKeys = new ArrayList<String>();
+        List<Issue> jiraIssues = new ArrayList<Issue>();
+
+        jiraMetricIssues = new ArrayList<>();
+
+        // Get all project names to use on getIssues
+
+        try {
+            List<com.atlassian.jira.rest.client.api.domain.Project> jiraProjects = jiraCl.getAllProjects();
+            log.error("After getAllProjects");
+            for(com.atlassian.jira.rest.client.api.domain.Project project : jiraProjects) {
+                log.info(project.getName());
+                projectKeys.add(project.getKey());
+            }
+        } catch (Exception e) {
+            log.error("Could not get all the projects.");
+            e.printStackTrace();
         }
 
-        List<Issue> jiraIssues = null;
         try {
-            jiraIssues = jiraCl.getIssues("JAR");
+            for(String projectKey : projectKeys) {
+                log.error(projectKey);
+                jiraIssues.addAll(jiraCl.getIssues("'" + projectKey + "'"));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
         log.info(jiraIssues.size());
 
-        List<JiraMetricIssue> merticIssueList = new ArrayList();
+
         for(Issue issue : jiraIssues) {
             JiraMetricIssue issueToAdd = new JiraMetricIssue();
             if(issue.getKey() != null)
@@ -100,7 +132,8 @@ public class AnalysisService {
             if(issue.getTimeTracking() != null && issue.getTimeTracking().getTimeSpentMinutes() != null)
                 issueToAdd.setTimeSpentMinutes(issue.getTimeTracking().getTimeSpentMinutes());
 
-            merticIssueList.add(issueToAdd);
+            // TODO send for producer
+            jiraMetricIssues.add(issueToAdd);
 
             log.info(issueToAdd.getKey());
             log.info(issueToAdd.getId());
@@ -118,5 +151,122 @@ public class AnalysisService {
             log.info(issueToAdd.getTimeSpentMinutes());
             log.info("--------------------------------------");
         }
+    }
+
+
+    private void getStashMetricIssues(StashManager stashMan) {
+
+        List<String> stashProjectKeys = new ArrayList<String>();
+
+        // Get all projects
+        try {
+            stashProjects = stashMan.getProjects(100, 0);
+        } catch (StashManagerException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Set<Project> stashProjectSet = null;
+        stashProjectSet = stashProjects.getValues();
+        for(Project p : stashProjectSet) {
+            stashProjectKeys.add(p.getKey());
+        }
+
+
+
+        List<Page<Repository>> reposList = new ArrayList<>();
+        List<Set<Repository>> reposSetList = new ArrayList<>();
+        List<Pair<String,String>> projectSlugPairs = new ArrayList<>();
+
+        for(int i = 0; i < stashProjectKeys.size(); i++) {
+            try {
+                reposList.add(stashMan.getRepos(stashProjectKeys.get(i), 100, 0));
+            } catch (StashManagerException e) {
+                e.printStackTrace();
+            }
+            reposSetList.add(reposList.get(i).getValues());
+            for(Repository r : reposSetList.get(i)) {
+                log.info(r.getSlug());
+                projectSlugPairs.add(new Pair<>(stashProjectKeys.get(i), r.getSlug()));
+            }
+        }
+
+        Page<Commit> commitPage = null;
+        Set<Commit> commitSet = new HashSet<>();
+        Set<Change> changeSet = new HashSet<>();
+        for(int i = 0; i < projectSlugPairs.size(); i++) {
+            try {
+                // TODO determine limit value and remove hardcoded number
+                commitPage = stashMan.getCommits(projectSlugPairs.get(i).getL(), projectSlugPairs.get(i).getR(), 1000, 0);
+            } catch (StashManagerException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if(commitPage != null)
+                commitSet = commitPage.getValues();
+
+            Page<Change> commitChanges = null;
+
+            for(Commit commit: commitSet) {
+                try {
+                    commitChanges = stashMan.getCommitChanges(projectSlugPairs.get(i).getL(), projectSlugPairs.get(i).getR(), commit.getId(), 1000, 0);
+                } catch (StashManagerException e) {
+                    e.printStackTrace();
+                }
+                if(commitChanges != null)
+                    changeSet = commitChanges.getValues();
+                commitChanges = null;
+
+                for(Change change : changeSet) {
+                    log.info(commit.getId());
+                    log.info(commit.getAuthor().getName());
+                    log.info(commit.getDisplayId());
+                    log.info(change.getType());
+                    log.info(change.getContentId());
+                    log.info(change.getNodeType());
+                    log.info(change.getPercentUnchanged());
+
+                    StashMetricIssue stashMetricIssue = new StashMetricIssue();
+                    stashMetricIssue.setPath(change.getPath());
+                    stashMetricIssue.setAuthor(commit.getAuthor());
+                    stashMetricIssue.setAuthorTimestamp(commit.getAuthorTimestamp());
+                    stashMetricIssue.setId(change.getContentId());
+                    stashMetricIssue.setNodeType(change.getNodeType());
+                    stashMetricIssue.setPercentUnchanged(change.getPercentUnchanged());
+                    stashMetricIssue.setProjectName(projectSlugPairs.get(i).getL());
+                    stashMetricIssue.setSrcPath(change.getSrcPath());
+                    stashMetricIssue.setType(change.getType());
+                }
+            }
+        }
+    }
+
+
+    private void getSonarMetricIssues() {
+
+        SonarManager sonarMan = null;
+        try {
+            sonarMan = AnalysisConnector.sonarConnect(sonarURL, sonarUsername, sonarPass);
+        } catch (SonarManagerException e) {
+            log.error("Sonar Connection couldn't be established.");
+            e.printStackTrace();
+        }
+    }
+
+
+
+    class Pair<L,R> {
+        private L l;
+        private R r;
+        public Pair(L l, R r){
+            this.l = l;
+            this.r = r;
+        }
+        public L getL(){ return l; }
+        public R getR(){ return r; }
+        public void setL(L l){ this.l = l; }
+        public void setR(R r){ this.r = r; }
     }
 }

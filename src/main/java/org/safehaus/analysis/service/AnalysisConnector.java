@@ -19,10 +19,10 @@ import org.safehaus.util.JarvisContextHolder;
 public class AnalysisConnector  {
     private static final Log log = LogFactory.getLog(AnalysisConnector.class);
 
-    public static JiraClient jiraConnect() throws JiraClientException {
+    public static JiraClient jiraConnect(String URL, String username, String pass) throws JiraClientException {
         log.info("jiraConnect()");
         JiraClient jiraClient = null;
-        JarvisContextHolder.setContext(new JarvisContext("http://test-jira.critical-factor.com", "erma_bot", "foobar"));
+        JarvisContextHolder.setContext(new JarvisContext(URL, username, pass));
         if(JarvisContextHolder.getContext() != null && JarvisContextHolder.getContext().getJiraClient() != null){
             jiraClient = JarvisContextHolder.getContext().getJiraClient();
         }
@@ -30,16 +30,16 @@ public class AnalysisConnector  {
         return jiraClient;
     }
 
-    public static SonarManager sonarConnect() throws SonarManagerException {
+    public static SonarManager sonarConnect(String URL, String username, String pass) throws SonarManagerException {
         log.info("sonarConnect()");
-        SonarManager sonarMan = new  SonarManagerImpl("http://sonar.subutai.io","sonar-bot", "7\"CV23xR2A#K3h");
+        SonarManager sonarMan = new  SonarManagerImpl(URL, username, pass);
         return sonarMan;
     }
 
-    public static StashManager stashConnect() throws StashManagerException {
+    public static StashManager stashConnect(String URL, String username, String pass) throws StashManagerException {
         log.info("stashConnect()");
         StashManager stashMan = null;
-        stashMan = new StashManagerImpl("http://stash.critical-factor.com", "erma_bot", "toobar");
+        stashMan = new StashManagerImpl(URL, username, pass);
         return stashMan;
     }
 

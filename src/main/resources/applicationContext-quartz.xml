@@ -9,48 +9,48 @@
             http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd"
        default-lazy-init="true">
 
-  <!-- Jira task -->
-  <bean name="jiraTask" class="org.safehaus.service.JiraTask">
-    <!--<property name="projectManager" ref="projectManager"/>-->
-    <!--<property name="issueManager" ref="issueManager"/>-->
-  </bean>
+    <!-- Jira task -->
+    <bean name="jiraTask" class="org.safehaus.service.JiraTask">
+        <!--<property name="projectManager" ref="projectManager"/>-->
+        <!--<property name="issueManager" ref="issueManager"/>-->
+    </bean>
 
-  <!-- Jira job -->
-  <bean name="jiraJob"
-        class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+    <!-- Jira job -->
+    <bean name="jiraJob"
+          class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
 
-    <property name="jobClass" value="org.safehaus.service.JiraQuartzJob" />
+        <property name="jobClass" value="org.safehaus.service.JiraQuartzJob" />
 
-    <property name="jobDataAsMap">
-      <map>
-        <entry key="jiraTask" value-ref="jiraTask" />
-      </map>
-    </property>
-  </bean>
+        <property name="jobDataAsMap">
+            <map>
+                <entry key="jiraTask" value-ref="jiraTask" />
+            </map>
+        </property>
+    </bean>
 
-  <!-- Cron Trigger, run every 10 seconds -->
-  <bean id="cronTrigger"
-        class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+    <!-- Cron Trigger, run every 10 seconds -->
+    <bean id="cronTrigger"
+          class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 
-    <property name="jobDetail" ref="jiraJob" />
-    <property name="cronExpression" value="0/30 * * * * ?" />
+        <property name="jobDetail" ref="jiraJob" />
+        <property name="cronExpression" value="0/30 * * * * ?" />
 
-  </bean>
+    </bean>
 
-  <!-- Scheduler -->
-  <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
-    <property name="jobDetails">
-      <list>
-        <ref bean="jiraJob" />
-      </list>
-    </property>
+    <!-- Scheduler -->
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="jobDetails">
+            <list>
+                <ref bean="jiraJob" />
+            </list>
+        </property>
 
-    <property name="triggers">
-      <list>
-        <ref bean="cronTrigger" />
-      </list>
-    </property>
-  </bean>
+        <property name="triggers">
+            <list>
+                <ref bean="cronTrigger" />
+            </list>
+        </property>
+    </bean>
 
 
 
@@ -69,7 +69,7 @@
 
     <bean id="cronTrigger2" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="analysisJob" />
-        <property name="cronExpression" value="0/30 * * * * ?" />
+        <property name="cronExpression" value="0 1/30 * * * ?" />
     </bean>
 
     <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
