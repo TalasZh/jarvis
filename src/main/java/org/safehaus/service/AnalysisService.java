@@ -27,16 +27,16 @@ public class AnalysisService {
     private Page<Project> stashProjects;
 
     private String jiraURL = "http://test-jira.critical-factor.com";
-    private String jiraUsername = "erma_bot";
-    private String jiraPass = "foobar";
+    private String jiraUsername = "username";
+    private String jiraPass = "password";
 
     private String stashURL = "http://stash.critical-factor.com";
-    private String stashUsername = "kisik";
-    private String stashPass = "F3bruarycf";
+    private String stashUsername = "username";
+    private String stashPass = "password";
 
     private String sonarURL = "http://sonar.subutai.io";
-    private String sonarUsername = "kisik";
-    private String sonarPass = "F3bruarycf";
+    private String sonarUsername = "username";
+    private String sonarPass = "password";
 
     public void run() {
         log.info("Running AnalysisService.run()");
