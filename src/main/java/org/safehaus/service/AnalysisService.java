@@ -4,8 +4,9 @@ import com.atlassian.jira.rest.client.api.domain.Issue;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.safehaus.analysis.JiraMetricIssue;
-import org.safehaus.analysis.service.AnalysisConnector;
-import org.safehaus.exceptions.JiraClientException;
+import org.safehaus.analysis.service.JiraConnector;
+import org.safehaus.analysis.service.SonarConnector;
+import org.safehaus.analysis.service.StashConnector;
 import org.safehaus.jira.JiraClient;
 import org.safehaus.sonar.client.SonarManager;
 import org.safehaus.sonar.client.SonarManagerException;
@@ -13,6 +14,7 @@ import org.safehaus.stash.client.StashManager;
 import org.safehaus.stash.client.StashManagerException;
 import org.safehaus.stash.client.Page;
 import org.safehaus.stash.model.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
 
@@ -22,49 +24,55 @@ import java.util.*;
 public class AnalysisService {
     private final Log log = LogFactory.getLog(AnalysisService.class);
 
+    @Autowired
+    private JiraConnector jiraConnector;
+
+    @Autowired
+    private  StashConnector stashConnector;
+
+    @Autowired
+    private SonarConnector sonarConnector;
+
     List<JiraMetricIssue> jiraMetricIssues;
     List<StashMetricIssue> stashMetricIssues;
     private Page<Project> stashProjects;
 
-    private String jiraURL = "http://test-jira.critical-factor.com";
-    private String jiraUsername = "username";
-    private String jiraPass = "password";
-
-    private String stashURL = "http://stash.critical-factor.com";
-    private String stashUsername = "username";
-    private String stashPass = "password";
-
-    private String sonarURL = "http://sonar.subutai.io";
-    private String sonarUsername = "username";
-    private String sonarPass = "password";
-
     public void run() {
         log.info("Running AnalysisService.run()");
-
+/*
+        // Get Jira Data
         JiraClient jiraCl = null;
         try {
-            jiraCl = AnalysisConnector.jiraConnect(jiraURL, jiraUsername, jiraPass);
+            jiraCl = jiraConnector.jiraConnect();
         } catch (JiraClientException e) {
-            log.error("Jira connection failure.");
             e.printStackTrace();
         }
         if(jiraCl != null)
             getJiraMetricIssues(jiraCl);
-
-
+*/
+/*
+        // Get Stash Data
         StashManager stashMan = null;
         try {
-            stashMan = AnalysisConnector.stashConnect(stashURL, stashUsername, stashPass);
+            stashMan = stashConnector.stashConnect();
         } catch (StashManagerException e) {
             log.error("Stash Connection couldn't be established.");
             e.printStackTrace();
         }
         if(stashMan != null)
             getStashMetricIssues(stashMan);
+*/
+        // Get Sonar Data
+        SonarManager sonarManager = null;
+        try {
+            sonarManager = sonarConnector.sonarConnect();
+        } catch (SonarManagerException e) {
+            log.error("Sonar Connection couldn't be established.");
+            e.printStackTrace();
+        }
 
-
-
-        getSonarMetricIssues();
+        if(sonarManager != null)
+            getSonarMetricIssues();
 
     }
 
@@ -168,9 +176,11 @@ public class AnalysisService {
         }
 
         Set<Project> stashProjectSet = null;
-        stashProjectSet = stashProjects.getValues();
-        for(Project p : stashProjectSet) {
-            stashProjectKeys.add(p.getKey());
+        if(stashProjects != null) {
+            stashProjectSet = stashProjects.getValues();
+            for(Project p : stashProjectSet) {
+                stashProjectKeys.add(p.getKey());
+            }
         }
 
 
@@ -238,6 +248,9 @@ public class AnalysisService {
                     stashMetricIssue.setProjectName(projectSlugPairs.get(i).getL());
                     stashMetricIssue.setSrcPath(change.getSrcPath());
                     stashMetricIssue.setType(change.getType());
+
+
+                    //TODO set stashmetric issue provider over here
                 }
             }
         }
@@ -245,14 +258,7 @@ public class AnalysisService {
 
 
     private void getSonarMetricIssues() {
-
-        SonarManager sonarMan = null;
-        try {
-            sonarMan = AnalysisConnector.sonarConnect(sonarURL, sonarUsername, sonarPass);
-        } catch (SonarManagerException e) {
-            log.error("Sonar Connection couldn't be established.");
-            e.printStackTrace();
-        }
+        log.info("Get Sonar Metric Issues ici.");
     }
 
 

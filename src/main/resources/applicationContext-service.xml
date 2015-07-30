@@ -116,4 +116,23 @@
 
   <bean id="StashMetricIssueKafkaProducer" class="org.safehaus.analysis.StashMetricIssueKafkaProducer">
   </bean>
+
+  <bean id="jiraConnector" class="org.safehaus.analysis.service.JiraConnectorImpl">
+    <constructor-arg value="${jira.url}" />
+    <constructor-arg value="${jira.analysisUser}" />
+    <constructor-arg value="${jira.analysisPass}" />
+  </bean>
+
+  <bean id="stashConnector" class="org.safehaus.analysis.service.StashConnectorImpl">
+    <constructor-arg value="${stash.url}" />
+    <constructor-arg value="${stash.analysisUser}" />
+    <constructor-arg value="${stash.analysisPass}" />
+  </bean>
+
+  <bean id="sonarConnector" class="org.safehaus.analysis.service.SonarConnectorImpl">
+    <constructor-arg value="${sonar.url}" />
+    <constructor-arg value="${sonar.analysisUser}" />
+    <constructor-arg value="${sonar.analysisPass}" />
+  </bean>
+
 </beans>
