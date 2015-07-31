@@ -9,6 +9,7 @@
     <Menu name="Stash" title="menu.stash" page="/stash" roles="ROLE_ADMIN,ROLE_USER" />
     <Menu name="Sonar" title="menu.sonar" page="/sonar" roles="ROLE_ADMIN,ROLE_USER" />
     <Menu name="Confluence" title="menu.confluence" page="/confluence" roles="ROLE_ADMIN,ROLE_USER" />
+    <Menu name="UserMetrics" title="menu.userMetrics" page="/usermetrics" roles="ROLE_ADMIN,ROLE_USER" />
     <Menu name="SessionMenu" title="menu.session" description="Session Menu" page="/sessions"
           roles="ROLE_ADMIN,ROLE_USER" />
     <!--

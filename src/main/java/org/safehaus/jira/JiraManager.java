@@ -32,6 +32,8 @@ public interface JiraManager
 
     List<JarvisProject> getProjects() throws JiraClientException;
 
+    List<JarvisMember> getProjectMembers( String projectId ) throws JiraClientException;
+
     JarvisIssue getIssue( String issueId ) throws JiraClientException;
 
     //    JarvisIssue createIssue( JarvisIssue issue, String token ) throws JiraClientException;

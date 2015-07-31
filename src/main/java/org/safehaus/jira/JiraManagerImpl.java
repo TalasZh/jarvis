@@ -66,6 +66,15 @@ public class JiraManagerImpl implements JiraManager
 
 
     @Override
+    public List<JarvisMember> getProjectMembers( String projectId ) throws JiraClientException
+    {
+        List<JarvisMember> members = getJiraClient().getProjectMemebers( projectId );
+
+        return members;
+    }
+
+
+    @Override
     public List<JarvisProject> getProjects() throws JiraClientException
     {
         List<Project> projects = getJiraClient().getAllProjects();

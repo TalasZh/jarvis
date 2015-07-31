@@ -138,6 +138,10 @@
       <result name="success">/WEB-INF/pages/sessionList.jsp</result>
     </action>
 
+    <action name="usermetrics" class="userMetricsAction" method="list">
+      <result name="success">/WEB-INF/pages/userMetrics.jsp</result>
+    </action>
+
     <!-- Add additional actions here -->
   </package>
 
