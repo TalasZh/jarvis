@@ -31,11 +31,17 @@
     <property name="securityCookieName" value="${security.cookieName}" />
   </bean>
 
+  <bean id="userMetricsAction" class="org.safehaus.webapp.action.UserMetricsAction" scope="prototype">
+    <property name="jiraManager" ref="jiraManager" />
+    <property name="jiraUrl" value="${jira.url}" />
+    <property name="securityCookieName" value="${security.cookieName}" />
+  </bean>
+
   <bean id="stashAction" class="org.safehaus.webapp.action.StashAction" scope="prototype">
     <property name="stashManager" ref="stashManager" />
     <property name="securityCookieName" value="${security.cookieName}" />
   </bean>
-  
+
   <bean id="confluenceAction" class="org.safehaus.webapp.action.ConfluenceAction" scope="prototype">
     <property name="securityCookieName" value="${security.cookieName}" />
   </bean>
