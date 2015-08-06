@@ -3,11 +3,31 @@
     //jQuery("head").append('<link rel="stylesheet" href="resource://jarvis-addon/data/mfb/mfb.css">');
     //jQuery("head").append('<link rel="stylesheet" href="resource://jarvis-addon/data/mfb/custom.css">');
 
-    var annotatorIsOn = false;
+    var currentSession = {
+        isAnnotationReadonly: true,
+        isAnnotatorOn: false,
+        activeResearch: null
+    };
+
+    if (self.options.currentSession) {
+        currentSession = self.options.currentSession;
+        updateAnnotatorStatus();
+    }
+
+
+    var annotatorTargetElement = "body";
+
     var options = {valueNames: ["jarvis-issue-key", "jarvis-issue-type"]};
     var researchIssuesList = new List("jarvis-research-list-ctrl", options);
 
     self.port.emit("requestResource", "mfb/fbButtons.html", "body");
+
+
+    self.port.on('detach', function () {
+        //Need to disable annotator too
+        jQuery("#jarvis-menu").remove();
+        destroyAnnotator();
+    });
 
     self.port.on("loadResource", function (resource, target) {
         console.log("resource is loaded");
@@ -15,8 +35,9 @@
         jQuery(target).append(resource);
         var annotatorControl = jQuery("#btn-jarvis-annotation-control");
         annotatorControl.on("click", function () {
-            annotatorIsOn = !annotatorIsOn;
-            console.log("Annotator status: " + annotatorIsOn);
+            currentSession.isAnnotatorOn = !currentSession.isAnnotatorOn;
+            console.log("Annotator status: " + currentSession.isAnnotatorOn);
+            updateAnnotatorStatus();
         });
 
         var researchList = jQuery("#btn-jarvis-list-researches");
@@ -30,7 +51,8 @@
                 jQuery(researchIssueList).attr("data-jarvis-list-state", "expand");
             }
             else {
-                jQuery(researchIssueList).attr("data-jarvis-list-state", "collapse");//, "jarvis-list-state", "collapse");
+                jQuery(researchIssueList).attr("data-jarvis-list-state", "collapse");//, "jarvis-list-state",
+                                                                                     // "collapse");
             }
             console.log(currentState);
         });
@@ -59,9 +81,17 @@
         researchIssuesList = new List("jarvis-research-list-ctrl", options);
         researchIssuesList.sort("jarvis-issue-key", {order: "asc"});
 
+        //if (currentSession.isAnnotatorOn) {
+        //    initializeAnnotator();
+        //
+        //}
         //enableAnnotator();
     });
 
+    /**
+     * Loads current user researches and
+     * registers click listeners for each research issue
+     */
     self.port.on("setResearches", function (error, researches) {
         console.log("Setting research issues...");
         var researchList = jQuery("#jarvis-research-list-ctrl").find("dl.list");
@@ -72,18 +102,18 @@
         }
         else {
             for (let research of researches) {
-                //<dt>
-                //  <a class="issueKey">KEY-1</a>
-                //  <span class="issueType">Issue</span>
-                //</dt>
-                console.log(research);
-                researchList.append("<dt > <a class='jarvis-issue-key'>" +
-                    research.key +
-                    "</a>" +
-                    "<span class='jarvis-issue-type'>" +
-                    research.fields.issuetype.name +
-                    "</span>" +
-                    "</dt>");
+                let issueObject = issueTemplateGeneration(research);
+                researchList.append(issueObject);
+
+                jQuery(issueObject).attr("data-research-key", research.key);
+                jQuery(issueObject).click(function () {
+                    currentSession.activeResearch = $(this).attr("data-research-key");
+                    currentSession.isAnnotationReadonly = false;
+                    //enableAnnotator();
+                    //enableAnnotation();
+                    updateAnnotatorStatus();
+                    console.log(currentSession.activeResearch);
+                });
             }
             if (researches.length == 0) {
                 alert("No Research issues are pulled...");
@@ -93,27 +123,124 @@
         }
     });
 
+    function issueTemplateGeneration(research) {
+        return jQuery.parseHTML("<dt > <a class='jarvis-issue-key'>" +
+            research.key +
+            "</a>" +
+            "<span class='jarvis-issue-type'>" +
+            research.fields.issuetype.name +
+            "</span>" +
+            "</dt>");
+    }
+
+    function updateAnnotatorStatus() {
+        var annotator = getAnnotator();
+        if (currentSession.isAnnotatorOn) {
+            if (!annotator) {
+                annotator = initializeAnnotator();
+            }
+            if (currentSession.isAnnotationReadonly) {
+                annotator._disableDocumentEvents();
+            }
+            else {
+                if (currentSession.activeResearch) {
+                    annotator._setupDocumentEvents();
+                }
+                else {
+                    annotator._disableDocumentEvents();
+                    currentSession.isAnnotationReadonly = true;
+                }
+            }
+        }
+        else if (!currentSession.isAnnotatorOn && annotator) {
+            annotator.destroy();
+            currentSession.isAnnotationReadonly = true;
+            currentSession.activeResearch = null;
+        }
+    }
+
+    /**
+     * Initializes annotator plugin if there is any
+     * or returns existing one
+     * @returns {annotator}
+     */
+    function initializeAnnotator() {
+        var annotator = getAnnotator();
+        if (annotator === undefined) {
+            var content = jQuery(annotatorTargetElement).annotator({
+                readOnly: true
+            });
+
+            content.annotator('addPlugin', 'Offline', {
+                online: function () {
+                    jQuery("#status").text("Online");
+                },
+                offline: function () {
+                    jQuery("#status").text("Offline");
+                },
+                setAnnotationDataBeforeCreation: function (annotation) {
+                    console.log("Annotation data being set...");
+                    //console.log(this);
+                    annotation.researchSession = currentSession.activeResearch;
+                    annotation.uri = window.location.href;
+                },
+                shouldLoadAnnotation: function (annotation) {
+                    return true;
+                    //return annotation.researchSession === annotator.options.researchSession;
+                }
+            });
+        }
+
+        return annotator;
+    }
+
+
+    function getAnnotator() {
+        return jQuery(annotatorTargetElement).data("annotator");
+    }
 
     function enableAnnotator() {
-        var content = jQuery("body").annotator({
-            readOnly: annotatorIsOn
-        });
 
-        content.annotator('addPlugin', 'Offline', {
-            online: function () {
-                jQuery("#status").text("Online");
-            },
-            offline: function () {
-                jQuery("#status").text("Offline");
-            }
-        });
+        //var annotator = content.data('annotator');
 
-        var annotator = content.data('annotator');
-
-        jQuery("#clear-storage").click(function () {
-            if (annotator) {
-                annotator.plugins.Offline.store.clear();
-            }
-        });
+        //jQuery("#clear-storage").click(function () {
+        //    if (annotator) {
+        //        annotator.plugins.Offline.store.clear();
+        //    }
+        //});
     }
+
+    function destroyAnnotator() {
+        var annotator = getAnnotator();
+        annotator.destroy();
+    }
+
+    /**
+     * Allow user to create annotations, by clicking on pop-up
+     * with little window to set comment
+     */
+    function enableAnnotation() {
+        if (currentSession.activeResearch) {
+            var annotator = getAnnotator();
+            if (annotator) {
+                annotator._setupDocumentEvents();
+            }
+            else {
+                annotator = initializeAnnotator();
+                annotator.options.researchSession = currentSession.activeResearch;
+            }
+        }
+    }
+
+    /**
+     * Disable user to create annotations, by clicking on pop-up
+     * with little window to set comment
+     */
+    function disableAnnotation() {
+        var annotator = getAnnotator();
+        if (annotator) {
+            annotator._disableDocumentEvents();
+        }
+    }
+
 })(window, document);

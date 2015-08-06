@@ -213,6 +213,38 @@
     border-top: 0
 }
 
+.annotator-viewer .annotator-session-indicator
+{
+    position: absolute;
+    top: 18px;
+    right: 5px;
+    padding-left: 5px;
+    -webkit-transition: opacity .2s ease-in;
+    -moz-transition: opacity .2s ease-in;
+    -o-transition: opacity .2s ease-in;
+    transition: opacity .2s ease-in;
+    float: right
+}
+
+.annotator-viewer li:hover .annotator-session-indicator button
+{
+    color: black;
+    opacity: 1;
+}
+
+.annotator-viewer .annotator-session-indicator button
+{
+    cursor: pointer;
+    display: inline-block;
+    height: 13px;
+    margin-left: 2px;
+    border: 0;
+    opacity: .6;
+    background-color: transparent;
+    outline: 0;
+    color: rgba(0, 0, 0, 0.9);
+}
+
 .annotator-viewer .annotator-controls
 {
     position: relative;

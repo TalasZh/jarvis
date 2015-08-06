@@ -14,15 +14,22 @@ var searchQuery = 'resolution = Unresolved AND assignee in (currentUser()) ORDER
 var JiraApi = require("jira-module").JiraApi;
 var simplePrefs = require("sdk/simple-prefs");
 
+var floatingCtrls = [];
+
 exports.main = function (options) {
 
-    var floatingCtrls = [];
+    var researchWorkers = [];
     var researches = [];
     var jiraError = null;
+    var currentSession = {
+        isAnnotationReadonly: true,
+        isAnnotatorOn: false,
+        activeResearch: null
+    };
 
     var jira = new JiraApi(simplePrefs.prefs.jiraHost, "2", false, false);
-	
-	simplePrefs.on("applyChanges", onPrefChange);
+
+    simplePrefs.on("applyChanges", onPrefChange);
 
     pullResearches(false);
 
@@ -36,8 +43,8 @@ exports.main = function (options) {
         },
         onClick: handleClick
     });
-    
-	var floatingCtrl = pageMod.PageMod({
+
+    var researchCtrl = pageMod.PageMod({
         include: ["*"],
         attachTo: ["top"],
         contentStyleFile: [
@@ -47,6 +54,7 @@ exports.main = function (options) {
             data.url("annotator-full.1.2.10/annotator.min.css")
         ],
         contentScriptWhen: "ready",
+        contentScriptOptions: currentSession,
         contentScriptFile: [
             data.url("jquery-2.1.3.min.js"),
             data.url("list.min.js"),
@@ -77,8 +85,21 @@ exports.main = function (options) {
                     worker.port.emit("setResearches", null, researches);
                 }
             });
+
+            worker.port.on("detach", function () {
+                detachWorker(this);
+            });
+
+            researchWorkers.push(worker);
         }
     });
+
+    function detachWorker(worker) {
+        var index = researchWorkers.indexOf(worker);
+        if (index != -1) {
+            researchWorkers.splice(index, 1);
+        }
+    }
 
 
     function handleClick(state) {
@@ -86,66 +107,40 @@ exports.main = function (options) {
     }
 
     function pullResearches(redirect) {
-		
-		isUserAuth(redirect, pullJiraResearches);
-
-        //jira.getCurrentUser(function(error, responseText) {
-        //    if (error) {
-        //        jiraError = error;
-        //        console.error("User is not authenticated... \n" + error);
-		//		if(redirect) {
-		//			tabs.open(simplePrefs.prefs.jiraHost);
-		//		}
-        //    }
-        //    else {
-        //        console.log(responseText);
-        //        console.log("Pulling researches");
-        //        jira.searchJira(searchQuery, null, function (researchError, json) {
-        //            if (researchError) {
-        //                jiraError = researchError;
-        //                console.error("Request completed with errors: " + researchError);
-        //            }
-        //            else {
-        //                jiraError = null;
-        //                researches = json.issues;
-        //                console.log("Researches: " + researches);
-        //            }
-        //        });
-        //    }
-        //});
+        isUserAuth(redirect, pullJiraResearches);
     }
 
-	function pullJiraResearches() {
-		jira.searchJira(searchQuery, ["summary", "status", "assignee", "issuetype"], function (researchError, json) {
-			if (researchError) {
-				jiraError = researchError;
-				console.error("Request completed with errors: " + researchError);
-			}
-			else {
-				jiraError = null;
-				researches = json.issues;
-				console.log("Researches: " + researches);
-			}
-		});
+    function pullJiraResearches() {
+        jira.searchJira(searchQuery, ["summary", "status", "assignee", "issuetype"], function (researchError, json) {
+            if (researchError) {
+                jiraError = researchError;
+                console.error("Request completed with errors: " + researchError);
+            }
+            else {
+                jiraError = null;
+                researches = json.issues;
+                console.log("Researches: " + researches);
+            }
+        });
 
-	}
+    }
 
-	function isUserAuth(redirect, callback) {
-		jira.getCurrentUser(function(error, responseText){
-			if(error) {
-				jiraError=error;
-				if(redirect){
-					tabs.open(simplePrefs.prefs.jiraHost);
-				}
-			}
-			else {
-				callback();
-			}
-		});
-	}
- 
-	function onPrefChange() {
-		jira = new JiraApi(simplePrefs.prefs.jiraHost, "2", false, false);
-	}
+    function isUserAuth(redirect, callback) {
+        jira.getCurrentUser(function (error, responseText) {
+            if (error) {
+                jiraError = error;
+                if (redirect) {
+                    tabs.open(simplePrefs.prefs.jiraHost);
+                }
+            }
+            else {
+                callback();
+            }
+        });
+    }
 
-}
+    function onPrefChange() {
+        jira = new JiraApi(simplePrefs.prefs.jiraHost, "2", false, false);
+    }
+
+};
