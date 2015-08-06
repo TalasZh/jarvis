@@ -9,10 +9,7 @@
         activeResearch: null
     };
 
-    if (self.options.currentSession) {
-        currentSession = self.options.currentSession;
-        updateAnnotatorStatus();
-    }
+
 
 
     var annotatorTargetElement = "body";
@@ -109,9 +106,10 @@
                 jQuery(issueObject).click(function () {
                     currentSession.activeResearch = $(this).attr("data-research-key");
                     currentSession.isAnnotationReadonly = false;
+                    currentSession.isAnnotatorOn = true;
                     //enableAnnotator();
-                    //enableAnnotation();
-                    updateAnnotatorStatus();
+                    enableAnnotation();
+                    //updateAnnotatorStatus();
                     console.log(currentSession.activeResearch);
                 });
             }
@@ -122,6 +120,16 @@
             researchIssuesList.sort("jarvis-issue-key", {order: "asc"});
         }
     });
+
+    //initializeWorker();
+
+    function initializeWorker() {
+        if (self.options.currentSession) {
+            console.log(self.options.currentSession);
+            currentSession = self.options.currentSession;
+            updateAnnotatorStatus();
+        }
+    }
 
     function issueTemplateGeneration(research) {
         return jQuery.parseHTML("<dt > <a class='jarvis-issue-key'>" +
@@ -134,6 +142,7 @@
     }
 
     function updateAnnotatorStatus() {
+        console.log(currentSession);
         var annotator = getAnnotator();
         if (currentSession.isAnnotatorOn) {
             if (!annotator) {
@@ -152,11 +161,12 @@
                 }
             }
         }
-        else if (!currentSession.isAnnotatorOn && annotator) {
+        else if (annotator) {
             annotator.destroy();
             currentSession.isAnnotationReadonly = true;
             currentSession.activeResearch = null;
         }
+        self.port.emit("updateCurrentSession", currentSession);
     }
 
     /**
@@ -168,7 +178,7 @@
         var annotator = getAnnotator();
         if (annotator === undefined) {
             var content = jQuery(annotatorTargetElement).annotator({
-                readOnly: true
+                readOnly: false
             });
 
             content.annotator('addPlugin', 'Offline', {

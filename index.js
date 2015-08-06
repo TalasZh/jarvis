@@ -54,7 +54,7 @@ exports.main = function (options) {
             data.url("annotator-full.1.2.10/annotator.min.css")
         ],
         contentScriptWhen: "ready",
-        contentScriptOptions: currentSession,
+        contentScriptOptions: {currentSession: currentSession},
         contentScriptFile: [
             data.url("jquery-2.1.3.min.js"),
             data.url("list.min.js"),
@@ -84,6 +84,11 @@ exports.main = function (options) {
                     console.log("Researches: " + researches);
                     worker.port.emit("setResearches", null, researches);
                 }
+            });
+
+            worker.port.on("updateCurrentSession", function (updatedSession) {
+                console.log("updateCurrentSession" + JSON.stringify(updatedSession));
+                currentSession = updatedSession;
             });
 
             worker.port.on("detach", function () {
