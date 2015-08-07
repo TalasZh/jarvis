@@ -36,4 +36,8 @@ public class StashMetricIssueKafkaProducer {
     {
         producer.close();
     }
+
+    public static String getTopic(){
+        return topic;
+    }
 }

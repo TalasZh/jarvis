@@ -34,4 +34,8 @@ public class JiraMetricIssueKafkaProducer {
     {
         producer.close();
     }
+
+    public static String getTopic(){
+        return topic;
+    }
 }
