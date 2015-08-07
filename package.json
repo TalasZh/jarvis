@@ -11,7 +11,8 @@
   },
   "license": "MIT",
   "dependencies": {
-    "jira-module": "file:data/jira-module"
+    "jira-module": "file:data/jira-module",
+    "mediator-api": "file:data/mediator-api"
   },
   "preferences": [
     {
