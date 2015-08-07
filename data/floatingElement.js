@@ -191,6 +191,11 @@
                     annotation.researchSession = currentSession.activeResearch;
                     annotation.uri = window.location.href;
                 },
+                setAnnotationData: function(annotation) {
+                    //TODO v1.2 - migration merge where local and remote annotations are coexist
+                    // v1.3 - should deal with unsynced data to sync with server, this step should be gradual
+                    annotation.annotator_schema_version = "v1.2";
+                },
                 shouldLoadAnnotation: function (annotation) {
                     return true;
                     //return annotation.researchSession === annotator.options.researchSession;
@@ -198,6 +203,7 @@
                 getCreatedAnnotation: function (annotation) {
                     console.log("Annotation created event is called");
                     console.log(annotation);
+                    self.port.emit("saveAnnotation", annotation);
                 }
             });
         }
