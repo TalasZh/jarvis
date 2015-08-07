@@ -10,8 +10,6 @@
     };
 
 
-
-
     var annotatorTargetElement = "body";
 
     var options = {valueNames: ["jarvis-issue-key", "jarvis-issue-type"]};
@@ -19,8 +17,15 @@
 
     self.port.emit("requestResource", "mfb/fbButtons.html", "body");
 
+    self.port.on("setCurrentSessionStatus", function (currentSessionStatus) {
+        console.log("Received object");
+        console.log(currentSessionStatus);
+        currentSession = currentSessionStatus;
+        updateAnnotatorStatus();
+    });
 
     self.port.on('detach', function () {
+        console.log("Detaching withing the script");
         //Need to disable annotator too
         jQuery("#jarvis-menu").remove();
         destroyAnnotator();
@@ -108,8 +113,8 @@
                     currentSession.isAnnotationReadonly = false;
                     currentSession.isAnnotatorOn = true;
                     //enableAnnotator();
-                    enableAnnotation();
-                    //updateAnnotatorStatus();
+                    //enableAnnotation();
+                    updateAnnotatorStatus();
                     console.log(currentSession.activeResearch);
                 });
             }
@@ -120,16 +125,6 @@
             researchIssuesList.sort("jarvis-issue-key", {order: "asc"});
         }
     });
-
-    //initializeWorker();
-
-    function initializeWorker() {
-        if (self.options.currentSession) {
-            console.log(self.options.currentSession);
-            currentSession = self.options.currentSession;
-            updateAnnotatorStatus();
-        }
-    }
 
     function issueTemplateGeneration(research) {
         return jQuery.parseHTML("<dt > <a class='jarvis-issue-key'>" +
@@ -142,7 +137,9 @@
     }
 
     function updateAnnotatorStatus() {
+        console.log("updating annotator status");
         console.log(currentSession);
+        self.port.emit("updateCurrentSession", currentSession);
         var annotator = getAnnotator();
         if (currentSession.isAnnotatorOn) {
             if (!annotator) {
@@ -162,11 +159,11 @@
             }
         }
         else if (annotator) {
+            console.log("Destroying annotator and nullifying models");
             annotator.destroy();
             currentSession.isAnnotationReadonly = true;
             currentSession.activeResearch = null;
         }
-        self.port.emit("updateCurrentSession", currentSession);
     }
 
     /**
@@ -197,6 +194,10 @@
                 shouldLoadAnnotation: function (annotation) {
                     return true;
                     //return annotation.researchSession === annotator.options.researchSession;
+                },
+                getCreatedAnnotation: function (annotation) {
+                    console.log("Annotation created event is called");
+                    console.log(annotation);
                 }
             });
         }

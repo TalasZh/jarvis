@@ -15,17 +15,18 @@ var JiraApi = require("jira-module").JiraApi;
 var simplePrefs = require("sdk/simple-prefs");
 
 var floatingCtrls = [];
+var currentSessionStatus = {
+    isAnnotationReadonly: true,
+    isAnnotatorOn: false,
+    activeResearch: null
+};
 
 exports.main = function (options) {
 
     var researchWorkers = [];
     var researches = [];
     var jiraError = null;
-    var currentSession = {
-        isAnnotationReadonly: true,
-        isAnnotatorOn: false,
-        activeResearch: null
-    };
+
 
     var jira = new JiraApi(simplePrefs.prefs.jiraHost, "2", false, false);
 
@@ -54,7 +55,6 @@ exports.main = function (options) {
             data.url("annotator-full.1.2.10/annotator.min.css")
         ],
         contentScriptWhen: "ready",
-        contentScriptOptions: {currentSession: currentSession},
         contentScriptFile: [
             data.url("jquery-2.1.3.min.js"),
             data.url("list.min.js"),
@@ -64,9 +64,15 @@ exports.main = function (options) {
             data.url("mfb/custom.js")
         ],
         onAttach: function (worker) {
-
             console.log("Worker initialized");
-            worker.postMessage({some: "options"});
+            worker.port.emit("setCurrentSessionStatus", currentSessionStatus);
+
+            worker.port.on("updateCurrentSession", function (updatedSession) {
+                console.log("Updating current session");
+                console.log(updatedSession);
+                currentSessionStatus = updatedSession;
+            });
+
             worker.port.on("requestResource", function (resourceName, target) {
                 console.log(data.url(resourceName));
                 console.log(target);
@@ -84,11 +90,6 @@ exports.main = function (options) {
                     console.log("Researches: " + researches);
                     worker.port.emit("setResearches", null, researches);
                 }
-            });
-
-            worker.port.on("updateCurrentSession", function (updatedSession) {
-                console.log("updateCurrentSession" + JSON.stringify(updatedSession));
-                currentSession = updatedSession;
             });
 
             worker.port.on("detach", function () {
