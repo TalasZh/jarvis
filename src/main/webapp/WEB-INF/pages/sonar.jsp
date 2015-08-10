@@ -4,6 +4,9 @@
   <title><fmt:message key="sonar.title"/></title>
   <meta name="menu" content="Sonar"/>
 
+  <!-- Loading Flat UI -->
+  <link href="../../styles/flat-ui.css" rel="stylesheet">
+  <link href="../../styles/css/style1.css" rel="stylesheet" type="text/css"/>
 
   <!--Load the AJAX API-->
   <script type="text/javascript" src="https://www.google.com/jsapi"></script>

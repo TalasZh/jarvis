@@ -66,14 +66,6 @@ ul.feedbackPanel {
     margin-bottom: 0;
 }
 
-.btn-group {
-    margin-bottom: 10px;
-}
-
-.btn-group .btn, .form-group .btn {
-    margin-left: 5px;
-}
-
 #search {
     float: right;
     margin-top: -40px;
