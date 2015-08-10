@@ -8,11 +8,12 @@
 
 var { ActionButton } = require('sdk/ui/button/action');
 var tabs = require("sdk/tabs");
-var data = require('sdk/self').data;
-var pageMod = require("sdk/page-mod");
-var searchQuery = 'resolution = Unresolved AND assignee in (currentUser()) ORDER BY updatedDate DESC';
-var JiraApi = require("jira-module").JiraApi;
+var simpleStorage = require("sdk/simple-storage");
 var simplePrefs = require("sdk/simple-prefs");
+var pageMod = require("sdk/page-mod");
+var data = require('sdk/self').data;
+var JiraApi = require("jira-module").JiraApi;
+var MediatorApi = require("mediator-api").MediatorApi;
 
 var floatingCtrls = [];
 var currentSessionStatus = {
@@ -23,12 +24,14 @@ var currentSessionStatus = {
 
 exports.main = function (options) {
 
+    var searchQuery = 'issuetype in (Research) AND resolution = Unresolved AND assignee in (currentUser()) ORDER BY updatedDate DESC';
     var researchWorkers = [];
     var researches = [];
     var jiraError = null;
 
 
     var jira = new JiraApi(simplePrefs.prefs.jiraHost, "2", false, false);
+    var mediator = new MediatorApi(simplePrefs.prefs.jarvisHost, null, null, true);
 
     simplePrefs.on("applyChanges", onPrefChange);
 
@@ -92,7 +95,15 @@ exports.main = function (options) {
                 }
             });
 
+            worker.port.on("saveUpdateAnnotation", function (annotation, duplicate) {
+                saveNewAnnotation(annotation, duplicate, function(newAnnotation) {
+                    //TODO update annotation id according to server's id assigned
+                    //worker.port.emit("updateWithServerAnnotation", newAnnotation);
+                });
+            });
+
             worker.port.on("detach", function () {
+                worker.port.emit("detachMe");
                 detachWorker(this);
             });
 
@@ -140,13 +151,61 @@ exports.main = function (options) {
                 }
             }
             else {
+                simpleStorage.storage.annotations = {};
                 callback();
+            }
+        });
+    }
+
+    function saveNewAnnotation(annotation, duplicate, callback) {
+        //TODO temporal workaround for migration purposes
+
+        var temp = duplicate;
+        //delete temp.id;
+        temp.localId = annotation.id;
+        temp.ranges = JSON.stringify(annotation.ranges);
+
+
+        console.log("Getting session");
+        console.log(temp);
+        console.log(annotation);
+        console.log(duplicate);
+        mediator.getSession(temp.researchSession, function (error, json) {
+            if (error) {
+                console.log("Error: " + error);
+            }
+            else if (!json) {
+                console.log("Starting session");
+                mediator.startSession(temp.researchSession, function (error, json) {
+                    if (error) {
+
+                        console.log("Error nothing to do here, seems dead end(");
+                    }
+                    else {
+                        console.log("Trying to save annotation again");
+                        saveNewAnnotation(annotation);
+                    }
+                });
+            }
+            else {
+                console.log("Saving annotation");
+                console.log(JSON.stringify(temp));
+                mediator.saveCapture(temp.researchSession, temp, function (error, json) {
+                    if (error) {
+                        console.log("Error: " + error);
+                    }
+                    else {
+                        console.log(json);
+                        callback(json);
+                    }
+                });
             }
         });
     }
 
     function onPrefChange() {
         jira = new JiraApi(simplePrefs.prefs.jiraHost, "2", false, false);
+        mediator = new MediatorApi(simplePrefs.prefs.jarvisHost, null, null, true);
     }
 
 };

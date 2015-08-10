@@ -24,7 +24,7 @@
         updateAnnotatorStatus();
     });
 
-    self.port.on('detach', function () {
+    self.port.on('detachMe', function () {
         console.log("Detaching withing the script");
         //Need to disable annotator too
         jQuery("#jarvis-menu").remove();
@@ -180,20 +180,23 @@
 
             content.annotator('addPlugin', 'Offline', {
                 online: function () {
-                    jQuery("#status").text("Online");
+                    //jQuery("#status").text("Online");
                 },
                 offline: function () {
-                    jQuery("#status").text("Offline");
+                    //jQuery("#status").text("Offline");
                 },
                 setAnnotationDataBeforeCreation: function (annotation) {
                     console.log("Annotation data being set...");
                     //console.log(this);
                     annotation.researchSession = currentSession.activeResearch;
+                    annotation.annotator_schema_version = "v1.2";
                     annotation.uri = window.location.href;
                 },
                 setAnnotationData: function(annotation) {
                     //TODO v1.2 - migration merge where local and remote annotations are coexist
                     // v1.3 - should deal with unsynced data to sync with server, this step should be gradual
+                    console.log("Annotation Data");
+
                     annotation.annotator_schema_version = "v1.2";
                 },
                 shouldLoadAnnotation: function (annotation) {
@@ -203,7 +206,8 @@
                 getCreatedAnnotation: function (annotation) {
                     console.log("Annotation created event is called");
                     console.log(annotation);
-                    self.port.emit("saveAnnotation", annotation);
+                    //console.log(offline);
+                    self.port.emit("saveUpdateAnnotation", annotation, jQuery.extend(true, {}, annotation));
                 }
             });
         }
