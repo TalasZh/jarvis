@@ -375,7 +375,7 @@ public class SessionServiceImpl implements SessionService
 				{
 					sb.append( String.format(
 					        "<tr><td>%s</td><td>%s</td><td><a href='%s'>Link</a></td><td>%s</td></tr>",
-					        capture.getCreated(), capture.getComment(), capture.getUrl(), capture.getAnchorText() ) );
+					        capture.getCreated(), capture.getText(), capture.getUri(), capture.getQuote() ) );
 				}
 				sb.append( "</table>" );
 			}

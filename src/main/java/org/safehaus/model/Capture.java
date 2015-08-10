@@ -3,73 +3,63 @@ package org.safehaus.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-import org.hibernate.search.annotations.DocumentId;
-import org.hibernate.search.annotations.Field;
-import org.hibernate.search.annotations.Indexed;
-
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 @Entity
 @Table( name = "app_capture" )
 @XmlRootElement
-public class Capture extends BaseObject implements Serializable
-{
+@JsonIgnoreProperties( ignoreUnknown = true )
+public class Capture extends BaseObject implements Serializable {
     private static final long serialVersionUID = 3832626162173359411L;
 
-    private Long id;
+    private Long remoteId;
     private Session session;
     private Date created = new Date();
-    private String annotationText;
-    private String url;
-    private String ancestorId;
-    private String anchorText;
-    private String comment;
+
+    private String researchSession;
+    private String uri;
+    private String ranges;
+    private String quote;
+    private String text;
+    private String id;
+    private String annotator_schema_version;
 
 
     /**
      * Default constructor - creates a new instance with no values set.
      */
-    public Capture()
-    {
+    public Capture() {
     }
 
 
     @Id
     @GeneratedValue( strategy = GenerationType.AUTO )
-    public Long getId()
-    {
-        return id;
+    public Long getRemoteId() {
+        return remoteId;
     }
 
 
-    public void setId( final Long id )
-    {
-        this.id = id;
+    public void setRemoteId( final Long id ) {
+        this.remoteId = id;
     }
 
 
@@ -77,8 +67,7 @@ public class Capture extends BaseObject implements Serializable
     @JoinColumn( name = "session_id" )
     @JsonIgnore
     @XmlTransient
-    public Session getSession()
-    {
+    public Session getSession() {
         return session;
     }
 
@@ -86,131 +75,131 @@ public class Capture extends BaseObject implements Serializable
     @JsonProperty
     @XmlElement
     @Transient
-    public String getJiraKey()
-    {
-        if ( session != null )
-        {
+    public String getJiraKey() {
+        if ( session != null ) {
             return session.getIssueKey();
-        }
-        else
-        {
+        } else {
             return null;
         }
     }
 
 
-    public void setSession( final Session session )
-    {
+    public void setSession( final Session session ) {
         this.session = session;
     }
 
 
-    public String getAnnotationText()
-    {
-        return annotationText;
+    public String getResearchSession() {
+        return researchSession;
     }
 
 
-    public void setAnnotationText( final String annotationText )
-    {
-        this.annotationText = annotationText;
+    public void setResearchSession( final String researchSession ) {
+        this.researchSession = researchSession;
     }
 
 
-    public String getUrl()
-    {
-        return url;
+    public String getUri() {
+        return uri;
     }
 
 
-    public void setUrl( final String url )
-    {
-        this.url = url;
+    public void setUri( final String uri ) {
+        this.uri = uri;
     }
 
 
-    public String getAncestorId()
-    {
-        return ancestorId;
+    public String getRanges() {
+        return ranges;
     }
 
 
-    public void setAncestorId( final String ancestorId )
-    {
-        this.ancestorId = ancestorId;
+    public void setRanges( final String ranges ) {
+        this.ranges = ranges;
     }
 
 
-    public String getAnchorText()
-    {
-        return anchorText;
+    public String getQuote() {
+        return quote;
     }
 
 
-    public void setAnchorText( final String anchorText )
-    {
-        this.anchorText = anchorText;
+    public void setQuote( final String quote ) {
+        this.quote = quote;
     }
 
 
-    public String getComment()
-    {
-        return comment;
+    public String getText() {
+        return text;
     }
 
 
-    public void setComment( final String comment )
-    {
-        this.comment = comment;
+    public void setText( final String text ) {
+        this.text = text;
+    }
+
+
+    public String getId() {
+        return id;
+    }
+
+
+    public void setId( final String localId ) {
+        this.id = localId;
+    }
+
+
+    public String getAnnotator_schema_version() {
+        return annotator_schema_version;
+    }
+
+
+    public void setAnnotator_schema_version( final String annotator_schema_version ) {
+        this.annotator_schema_version = annotator_schema_version;
     }
 
 
     /**
      * {@inheritDoc}
      */
-    public boolean equals( Object o )
-    {
-        if ( this == o )
-        {
+    public boolean equals( Object o ) {
+        if ( this == o ) {
             return true;
         }
-        if ( !( o instanceof Capture ) )
-        {
+        if ( !( o instanceof Capture ) ) {
             return false;
         }
 
         final Capture capture = ( Capture ) o;
 
-        return !( capture != null ? !capture.equals( capture.getId() ) : capture.getId() != null );
+        return !( capture != null ? !capture.equals( capture.getRemoteId() ) : capture.getRemoteId() != null );
     }
 
 
     /**
      * {@inheritDoc}
      */
-    public int hashCode()
-    {
-        return ( id != null ? id.hashCode() : 0 );
+    public int hashCode() {
+        return ( remoteId != null ? remoteId.hashCode() : 0 );
     }
 
 
     @Column( name = "created" )
-    public Date getCreated()
-    {
+    public Date getCreated() {
         return created;
     }
 
 
-    public void setCreated( final Date created )
-    {
+    public void setCreated( final Date created ) {
         this.created = created;
     }
 
 
     @Override
-    public String toString()
-    {
-        return new ToStringBuilder( this ).append( "id", id ).append( "url", url ).append( "created", created )
+    public String toString() {
+        return new ToStringBuilder( this ).append( "id", remoteId )
+                                          .append( "url", uri )
+                                          .append( "created", created )
                                           .append( "sessionId", session != null ? session.getId() : null ).toString();
     }
 }

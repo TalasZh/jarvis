@@ -3,7 +3,6 @@ package org.safehaus.model;
 
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -24,7 +23,6 @@ import org.hibernate.annotations.FetchMode;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 
 /**
@@ -189,11 +187,12 @@ public class Session extends BaseObject
             throw new IllegalArgumentException( "Capture not found." );
         }
 
-        result.setAncestorId( capture.getAncestorId() );
-        result.setAnnotationText( capture.getAnnotationText() );
-        result.setComment( capture.getComment() );
-        result.setAnchorText( capture.getAnchorText() );
-        result.setUrl( capture.getUrl() );
+        result.setResearchSession( capture.getResearchSession() );
+        result.setUri( capture.getUri() );
+        result.setRanges( capture.getRanges() );
+        result.setQuote( capture.getQuote() );
+        result.setText( capture.getText() );
+        result.setId( capture.getId() );
         return result;
     }
 
@@ -201,11 +200,8 @@ public class Session extends BaseObject
     private Capture findCapture( final Long captureId )
     {
         Capture result = null;
-        for ( Iterator<Capture> captureIterator = captures.iterator(); captureIterator.hasNext(); )
-        {
-            Capture c = captureIterator.next();
-            if ( captureId.equals( c.getId() ) )
-            {
+        for ( Capture c : captures ) {
+            if ( captureId.equals( c.getRemoteId() ) ) {
                 result = c;
                 break;
             }

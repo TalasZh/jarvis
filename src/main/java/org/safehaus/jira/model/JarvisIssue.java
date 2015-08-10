@@ -4,26 +4,31 @@ package org.safehaus.jira.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.impetus.kundera.index.*;
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.safehaus.model.Views;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.atlassian.jira.rest.client.api.domain.Transition;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.impetus.kundera.index.Index;
+import com.impetus.kundera.index.IndexCollection;
 
 
 @XmlRootElement
 @Entity
-@Table(schema = "jarvis@cassandra-pu" )
+@Table(name="jarvis_issue", schema = "jarvis@cassandra-pu" )
 @IndexCollection( columns = {
-        @com.impetus.kundera.index.Index( name = "id" ), @com.impetus.kundera.index.Index( name = "key" )
+        @Index( name = "id" ), @Index( name = "key" )
 } )
 public class JarvisIssue
 {
@@ -99,6 +104,8 @@ public class JarvisIssue
     protected String dateCreated;
 
     @JsonView( Views.JarvisIssueLong.class )
+    @OneToMany(fetch = FetchType.EAGER)
+    @Column
     protected List<JarvisLink> links = new ArrayList<>();
 
     @JsonView( Views.JarvisIssueLong.class )
@@ -147,7 +154,6 @@ public class JarvisIssue
     }
 
 
-    @Id
     public Long getId()
     {
         return id;
@@ -333,8 +339,6 @@ public class JarvisIssue
         this.dateCreated = dateCreated;
     }
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @Column
     public List<JarvisLink> getLinks()
     {
         return links;

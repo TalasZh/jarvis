@@ -18,6 +18,9 @@ To get started, please complete the following steps:
 point to localhost. Usually we can add it to /etc/hosts file.
 
 4. Run "mvn jetty:run" and view the application at http://jarvis-test.critical-factor.com:8080.
+   PS. to remotely debug jarvis instance set these parameters before your run above command
+   linux: export MAVEN_OPTS="-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,address=4000,server=y,suspend=n"
+   windows: set MAVEN_OPTS=-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,address=4000,server=y,suspend=n
 
 5. More information can be found at:
 
