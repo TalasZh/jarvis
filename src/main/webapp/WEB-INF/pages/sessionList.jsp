@@ -3,6 +3,9 @@
 <head>
   <title><fmt:message key="sessionList.title"/></title>
   <meta name="menu" content="SessionMenu"/>
+  <!-- Loading Flat UI -->
+  <link href="../../styles/flat-ui.css" rel="stylesheet">
+  <link href="../../styles/css/style1.css" rel="stylesheet" type="text/css"/>
 </head>
 <body class="body-bg">
 <div class="col-sm-10">
