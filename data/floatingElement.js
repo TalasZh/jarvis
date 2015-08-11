@@ -163,6 +163,7 @@
             annotator.destroy();
             currentSession.isAnnotationReadonly = true;
             currentSession.activeResearch = null;
+            location.reload();
         }
     }
 

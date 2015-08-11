@@ -95,11 +95,17 @@
      * On touch enabled devices we assume that no hover state is possible.
      * So, we get the menu with hover action configured and we set it up
      * in order to make it usable with tap/click.
+     *
+     * PS.
+     * Used this modernizr lib with version
+     * Modernizr 2.8.3 (Custom Build) | MIT & BSD
+     * Build: http://modernizr.com/download/#-touch-teststyles-prefixes
+     *
      **/
-    if (window.Modernizr && Modernizr.touch) {
-        elemsToHover = getElemsByToggleMethod(hoverOpt);
-        replaceAttrs(elemsToHover);
-    }
+    //if (window.Modernizr && Modernizr.touch) {
+    //    elemsToHover = getElemsByToggleMethod(hoverOpt);
+    //    replaceAttrs(elemsToHover);
+    //}
 
     elemsToClick = getElemsByToggleMethod(clickOpt);
 

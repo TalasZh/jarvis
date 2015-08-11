@@ -6,23 +6,25 @@
 //   callback(text);
 // }
 
-var { ActionButton } = require('sdk/ui/button/action');
-var tabs = require("sdk/tabs");
-var simpleStorage = require("sdk/simple-storage");
-var simplePrefs = require("sdk/simple-prefs");
-var pageMod = require("sdk/page-mod");
-var data = require('sdk/self').data;
-var JiraApi = require("jira-module").JiraApi;
-var MediatorApi = require("mediator-api").MediatorApi;
 
-var floatingCtrls = [];
-var currentSessionStatus = {
-    isAnnotationReadonly: true,
-    isAnnotatorOn: false,
-    activeResearch: null
-};
 
 exports.main = function (options) {
+
+    var { ActionButton } = require('sdk/ui/button/action');
+    var tabs = require("sdk/tabs");
+    var simpleStorage = require("sdk/simple-storage");
+    var simplePrefs = require("sdk/simple-prefs");
+    var pageMod = require("sdk/page-mod");
+    var data = require('sdk/self').data;
+    var JiraApi = require("jira-module").JiraApi;
+    var MediatorApi = require("mediator-api").MediatorApi;
+
+    var floatingCtrls = [];
+    var currentSessionStatus = {
+        isAnnotationReadonly: true,
+        isAnnotatorOn: false,
+        activeResearch: null
+    };
 
     var searchQuery = 'issuetype in (Research) AND resolution = Unresolved AND assignee in (currentUser()) ORDER BY updatedDate DESC';
     var researchWorkers = [];
