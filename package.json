@@ -1,7 +1,7 @@
 {
   "title": "Jarvis Annotator",
   "name": "jarvis-addon",
-  "version": "0.0.7",
+  "version": "0.0.9",
   "description": "A Jarvis add-on for managing annotations",
   "main": "index.js",
   "author": "Tooling",

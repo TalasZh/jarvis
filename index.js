@@ -26,7 +26,7 @@ exports.main = function (options) {
         activeResearch: null
     };
 
-    var searchQuery = 'issuetype in (Research) AND resolution = Unresolved AND assignee in (currentUser()) ORDER BY updatedDate DESC';
+    var searchQuery = 'issuetype = Research AND status not in (Resolved, Closed, Done) AND resolution = Unresolved AND assignee in (currentUser()) ORDER BY updatedDate DESC';
     var researchWorkers = [];
     var researches = [];
     var jiraError = null;
@@ -89,12 +89,13 @@ exports.main = function (options) {
                 if (jiraError) {
                     console.log("Couldn't retrieve issues");
                     worker.port.emit("setResearches", jiraError, []);
-                    pullResearches(true);
+                    //pullResearches(true);
                 }
                 else if (researches) {
                     console.log("Researches: " + researches);
                     worker.port.emit("setResearches", null, researches);
                 }
+                pullResearches(true);
             });
 
             worker.port.on("saveUpdateAnnotation", function (annotation, duplicate) {
@@ -122,7 +123,7 @@ exports.main = function (options) {
 
 
     function handleClick(state) {
-        tabs.open("https://wiki.ubuntu.com");
+        tabs.open(simplePrefs.prefs.jarvisHost);
     }
 
     function pullResearches(redirect) {
@@ -184,8 +185,14 @@ exports.main = function (options) {
                         console.log("Error nothing to do here, seems dead end(");
                     }
                     else {
+                        /**
+                         * fixme Gets recursive calls when issue key is changed but id persists
+                         * mediator says that selected issue is null but actually while starting
+                         * returns issue key with last key
+                         */
+                        console.log(json);
                         console.log("Trying to save annotation again");
-                        saveNewAnnotation(annotation);
+                        saveNewAnnotation(annotation, duplicate, callback);
                     }
                 });
             }
