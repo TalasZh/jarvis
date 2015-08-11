@@ -4,16 +4,25 @@ import com.atlassian.jira.rest.client.api.domain.Issue;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.safehaus.analysis.JiraMetricIssue;
+import org.safehaus.analysis.JiraMetricIssueKafkaProducer;
+import org.safehaus.analysis.service.ConfluenceConnector;
 import org.safehaus.analysis.service.JiraConnector;
 import org.safehaus.analysis.service.SonarConnector;
 import org.safehaus.analysis.service.StashConnector;
+import org.safehaus.confluence.client.*;
+import org.safehaus.confluence.client.ConfluenceManager;
+import org.safehaus.confluence.model.Space;
+import org.safehaus.exceptions.JiraClientException;
 import org.safehaus.jira.JiraClient;
 import org.safehaus.sonar.client.SonarManager;
 import org.safehaus.sonar.client.SonarManagerException;
+import org.safehaus.sonar.model.QuantitativeStats;
 import org.safehaus.stash.client.StashManager;
 import org.safehaus.stash.client.StashManagerException;
 import org.safehaus.stash.client.Page;
 import org.safehaus.stash.model.*;
+import org.sonar.wsclient.Sonar;
+import org.sonar.wsclient.services.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
@@ -26,19 +35,19 @@ public class AnalysisService {
 
     @Autowired
     private JiraConnector jiraConnector;
-
     @Autowired
     private  StashConnector stashConnector;
-
     @Autowired
     private SonarConnector sonarConnector;
+    @Autowired
+    private ConfluenceConnector confluenceConnector;
 
-    List<JiraMetricIssue> jiraMetricIssues;
-    List<StashMetricIssue> stashMetricIssues;
+
     private Page<Project> stashProjects;
 
     public void run() {
         log.info("Running AnalysisService.run()");
+
 /*
         // Get Jira Data
         JiraClient jiraCl = null;
@@ -49,8 +58,8 @@ public class AnalysisService {
         }
         if(jiraCl != null)
             getJiraMetricIssues(jiraCl);
-*/
-/*
+
+
         // Get Stash Data
         StashManager stashMan = null;
         try {
@@ -61,7 +70,7 @@ public class AnalysisService {
         }
         if(stashMan != null)
             getStashMetricIssues(stashMan);
-*/
+
         // Get Sonar Data
         SonarManager sonarManager = null;
         try {
@@ -72,8 +81,18 @@ public class AnalysisService {
         }
 
         if(sonarManager != null)
-            getSonarMetricIssues();
+            getSonarMetricIssues(sonarManager);
+*/
+        org.safehaus.confluence.client.ConfluenceManager confluenceManager = null;
+        try {
+             confluenceManager = confluenceConnector.confluenceConnect();
+        } catch ( ConfluenceManagerException e) {
+            log.error("Confluence Connection couldn't be established.");
+            e.printStackTrace();
+        }
 
+        if(confluenceManager != null)
+            getConfluenceMetric(confluenceManager);
     }
 
 
@@ -81,8 +100,7 @@ public class AnalysisService {
 
         List<String> projectKeys = new ArrayList<String>();
         List<Issue> jiraIssues = new ArrayList<Issue>();
-
-        jiraMetricIssues = new ArrayList<>();
+        JiraMetricIssueKafkaProducer kafkaProducer = new JiraMetricIssueKafkaProducer();
 
         // Get all project names to use on getIssues
 
@@ -140,8 +158,7 @@ public class AnalysisService {
             if(issue.getTimeTracking() != null && issue.getTimeTracking().getTimeSpentMinutes() != null)
                 issueToAdd.setTimeSpentMinutes(issue.getTimeTracking().getTimeSpentMinutes());
 
-            // TODO send for producer
-            jiraMetricIssues.add(issueToAdd);
+//            kafkaProducer.send(issueToAdd);
 
             log.info(issueToAdd.getKey());
             log.info(issueToAdd.getId());
@@ -249,7 +266,6 @@ public class AnalysisService {
                     stashMetricIssue.setSrcPath(change.getSrcPath());
                     stashMetricIssue.setType(change.getType());
 
-
                     //TODO set stashmetric issue provider over here
                 }
             }
@@ -257,8 +273,60 @@ public class AnalysisService {
     }
 
 
-    private void getSonarMetricIssues() {
+    private void getSonarMetricIssues(SonarManager sonarManager) {
+        Set<Resource> resources = null;
+        List<String> resourceKeys = new ArrayList<>();
+        List<Integer> resourceIDs = new ArrayList<>();
+
+
         log.info("Get Sonar Metric Issues ici.");
+        try {
+            resources = sonarManager.getResources();
+        } catch (SonarManagerException e) {
+            e.printStackTrace();
+        }
+        if(resources != null) {
+            for (Resource r : resources) {
+                log.info("Resource:");
+                log.info(r.getName());
+                log.info(r.getId());
+                log.info(r.getKey());
+                resourceKeys.add(r.getKey());
+                resourceIDs.add(r.getId());
+            }
+        }
+/*
+        try {
+            QuantitativeStats quantitativeStats = sonarManager.getQuantitativeStats(resourceKeys.get(resourceKeys.size() - 1).toString());
+            log.info("LOC: " + quantitativeStats.getLinesOfCode());
+        } catch (SonarManagerException e) {
+            e.printStackTrace();
+        }
+*/
+    }
+
+    private void getConfluenceMetric(ConfluenceManager confluenceManager) {
+        log.info("Get Confluence Metric Issues ici.");
+
+        List<Space> spaceList = null;
+        try {
+            spaceList = confluenceManager.getAllSpaces();
+        } catch (ConfluenceManagerException e) {
+            e.printStackTrace();
+        }
+        List<org.safehaus.confluence.model.Page> pageList = new ArrayList<org.safehaus.confluence.model.Page>();
+        for(Space s : spaceList) {
+            try {
+                pageList.addAll(confluenceManager.listPages(s.getKey(), 0, 100));
+            } catch (ConfluenceManagerException e) {
+                e.printStackTrace();
+            }
+        }
+
+        for(org.safehaus.confluence.model.Page p : pageList) {
+            log.info(p.getTitle());
+            //TODO need to update the cofluence api in order to get the author name.
+        }
     }
 
 

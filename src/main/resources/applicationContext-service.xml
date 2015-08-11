@@ -135,4 +135,10 @@
     <constructor-arg value="${sonar.analysisPass}" />
   </bean>
 
+  <bean id="confluenceConnector" class="org.safehaus.analysis.service.ConfluenceConnectorImpl">
+    <constructor-arg value="${confluence.url}" />
+    <constructor-arg value="${confluence.analysisUser}" />
+    <constructor-arg value="${confluence.analysisPass}" />
+  </bean>
+
 </beans>
