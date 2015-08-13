@@ -19,6 +19,15 @@ public class DateSave {
 
     Preferences prefs = Preferences.userNodeForPackage(DateSave.class);
 
+    public void resetLastGatheredDateJira() {
+        prefs.putLong(LAST_DATE_JIRA, 0);
+        try {
+            prefs.flush();
+        } catch (BackingStoreException e) {
+            e.printStackTrace();
+        }
+    }
+
     public Date getLastGatheredDateJira() throws IOException {
         return new Date(prefs.getLong(LAST_DATE_JIRA, 0));
     }

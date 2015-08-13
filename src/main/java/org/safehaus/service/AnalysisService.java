@@ -55,6 +55,7 @@ public class AnalysisService {
     public void run() {
         log.info("Running AnalysisService.run()");
 
+
         ds = new DateSave();
         try {
             lastGatheredJira = ds.getLastGatheredDateJira();
@@ -190,7 +191,7 @@ public class AnalysisService {
                 if (issueToAdd.getUpdateDate().after(lastGatheredJira)) {
                     // New issue, get it in the database.
                     log.info("Complies, ID:" + issueToAdd.getId() + " UpDate:" + issueToAdd.getUpdateDate());
-                    //kafkaProducer.send(issueToAdd);
+                    kafkaProducer.send(issueToAdd);
 
                 } else {
                     // Discard changes because it is already in our database.
@@ -199,7 +200,7 @@ public class AnalysisService {
             }
         }
 
-        // No problem gathering new issues from Jira, which means it should update the last garthering date as of now.
+        // No problem gathering new issues from Jira, which means it should update the last gathering date as of now.
         if(jiraIssues.size() > 0) {
             lastGatheredJira = new Date(System.currentTimeMillis());
         }
