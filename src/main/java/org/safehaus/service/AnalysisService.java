@@ -21,10 +21,12 @@ import org.safehaus.stash.client.StashManager;
 import org.safehaus.stash.client.StashManagerException;
 import org.safehaus.stash.client.Page;
 import org.safehaus.stash.model.*;
+import org.safehaus.util.DateSave;
 import org.sonar.wsclient.Sonar;
 import org.sonar.wsclient.services.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -42,13 +44,33 @@ public class AnalysisService {
     @Autowired
     private ConfluenceConnector confluenceConnector;
 
+    Date lastGatheredJira = null;
+    Date lastGatheredStash = null;
+    Date lastGatheredSonar = null;
+    Date lastGatheredConfluence = null;
 
+    DateSave ds;
     private Page<Project> stashProjects;
 
     public void run() {
         log.info("Running AnalysisService.run()");
 
-/*
+        ds = new DateSave();
+        try {
+            lastGatheredJira = ds.getLastGatheredDateJira();
+            lastGatheredStash = ds.getLastGatheredDateStash();
+            lastGatheredSonar = ds.getLastGatheredDateSonar();
+            lastGatheredConfluence = ds.getLastGatheredDateConfluence();
+
+            log.info("Last Saved Jira: " + lastGatheredJira.toString());
+            log.info("Last Saved Stash: " + lastGatheredStash.toString());
+            log.info("Last Saved Sonar: " + lastGatheredSonar.toString());
+            log.info("Last Saved Confluence: " + lastGatheredConfluence.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
         // Get Jira Data
         JiraClient jiraCl = null;
         try {
@@ -59,7 +81,7 @@ public class AnalysisService {
         if(jiraCl != null)
             getJiraMetricIssues(jiraCl);
 
-
+/*
         // Get Stash Data
         StashManager stashMan = null;
         try {
@@ -83,6 +105,7 @@ public class AnalysisService {
         if(sonarManager != null)
             getSonarMetricIssues(sonarManager);
 */
+        /*
         org.safehaus.confluence.client.ConfluenceManager confluenceManager = null;
         try {
              confluenceManager = confluenceConnector.confluenceConnect();
@@ -92,7 +115,14 @@ public class AnalysisService {
         }
 
         if(confluenceManager != null)
-            getConfluenceMetric(confluenceManager);
+            getConfluenceMetric(confluenceManager);*/
+
+        // Set time.
+        try {
+            ds.saveLastGatheredDates(lastGatheredJira.getTime(), lastGatheredStash.getTime(), lastGatheredSonar.getTime(), lastGatheredConfluence.getTime());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -103,7 +133,6 @@ public class AnalysisService {
         JiraMetricIssueKafkaProducer kafkaProducer = new JiraMetricIssueKafkaProducer();
 
         // Get all project names to use on getIssues
-
         try {
             List<com.atlassian.jira.rest.client.api.domain.Project> jiraProjects = jiraCl.getAllProjects();
             log.error("After getAllProjects");
@@ -125,7 +154,6 @@ public class AnalysisService {
             e.printStackTrace();
         }
         log.info(jiraIssues.size());
-
 
         for(Issue issue : jiraIssues) {
             JiraMetricIssue issueToAdd = new JiraMetricIssue();
@@ -158,24 +186,24 @@ public class AnalysisService {
             if(issue.getTimeTracking() != null && issue.getTimeTracking().getTimeSpentMinutes() != null)
                 issueToAdd.setTimeSpentMinutes(issue.getTimeTracking().getTimeSpentMinutes());
 
-//            kafkaProducer.send(issueToAdd);
+            if(lastGatheredJira != null) {
+                if (issueToAdd.getUpdateDate().after(lastGatheredJira)) {
+                    // New issue, get it in the database.
+                    log.info("Complies, ID:" + issueToAdd.getId() + " UpDate:" + issueToAdd.getUpdateDate());
+                    //kafkaProducer.send(issueToAdd);
 
-            log.info(issueToAdd.getKey());
-            log.info(issueToAdd.getId());
-            log.info(issueToAdd.getStatus());
-            log.info(issueToAdd.getProjectKey());
-            log.info(issueToAdd.getReporterName());
-            log.info(issueToAdd.getAssigneeName());
-            log.info(issueToAdd.getResolution());
-            log.info(issueToAdd.getCreationDate());
-            log.info(issueToAdd.getUpdateDate());
-            log.info(issueToAdd.getDueDate());
-            log.info(issueToAdd.getPriority());
-            log.info(issueToAdd.getOriginalEstimateMinutes());
-            log.info(issueToAdd.getRemainingEstimateMinutes());
-            log.info(issueToAdd.getTimeSpentMinutes());
-            log.info("--------------------------------------");
+                } else {
+                    // Discard changes because it is already in our database.
+                    log.info("Does not, ID:" + issueToAdd.getId() + " UpDate:" + issueToAdd.getUpdateDate());
+                }
+            }
         }
+
+        // No problem gathering new issues from Jira, which means it should update the last garthering date as of now.
+        if(jiraIssues.size() > 0) {
+            lastGatheredJira = new Date(System.currentTimeMillis());
+        }
+
     }
 
 

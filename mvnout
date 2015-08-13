@@ -1,0 +1,306 @@
+[INFO] Scanning for projects...
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building Jarvis Application 1.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] >>> jetty-maven-plugin:9.2.1.v20140609:run (default-cli) > test-compile @ jarvis >>>
+Downloading: http://repo.spring.io/libs-milestone/com/sun/mail/javax.mail/1.4.1/javax.mail-1.4.1.pom
+Downloading: http://maven.restlet.com/com/sun/mail/javax.mail/1.4.1/javax.mail-1.4.1.pom
+Downloading: https://oss.sonatype.org/content/repositories/releases/com/sun/mail/javax.mail/1.4.1/javax.mail-1.4.1.pom
+Downloading: http://kundera.googlecode.com/svn/maven2/maven-missing-resources/com/sun/mail/javax.mail/1.4.1/javax.mail-1.4.1.pom
+Downloading: https://repo.maven.apache.org/maven2/com/sun/mail/javax.mail/1.4.1/javax.mail-1.4.1.pom
+[WARNING] The POM for com.sun.mail:javax.mail:jar:1.4.1 is missing, no dependency information available
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.3.1:enforce (enforce-versions) @ jarvis ---
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ jarvis ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 0 resource
+[INFO] Copying 73 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.1:compile (default-compile) @ jarvis ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- native2ascii-maven-plugin:1.0-beta-1:native2ascii (native2ascii-utf8) @ jarvis ---
+[INFO] Includes: [ApplicationResources_el*.properties, ApplicationResources_zh*.properties, ApplicationResources_ko*.properties, displaytag_el*.properties, displaytag_zh*.properties, errors_el*, errors_ko*, errors_tr*, errors_zh*]
+[INFO] Excludes: []
+[INFO] Processing /home/kisik/codeBase/core/target/classes/errors_zh.properties
+[INFO] Processing /home/kisik/codeBase/core/target/classes/errors_ko.properties
+[INFO] Processing /home/kisik/codeBase/core/target/classes/ApplicationResources_zh_TW.properties
+[INFO] Processing /home/kisik/codeBase/core/target/classes/errors_zh_CN.properties
+[INFO] Processing /home/kisik/codeBase/core/target/classes/displaytag_zh.properties
+[INFO] Processing /home/kisik/codeBase/core/target/classes/ApplicationResources_el.properties
+[INFO] Processing /home/kisik/codeBase/core/target/classes/errors_zh_TW.properties
+[INFO] Processing /home/kisik/codeBase/core/target/classes/displaytag_zh_CN.properties
+[INFO] Processing /home/kisik/codeBase/core/target/classes/ApplicationResources_zh_CN.properties
+[INFO] Processing /home/kisik/codeBase/core/target/classes/displaytag_zh_TW.properties
+[INFO] Processing /home/kisik/codeBase/core/target/classes/ApplicationResources_ko.properties
+[INFO] Processing /home/kisik/codeBase/core/target/classes/errors_tr.properties
+[INFO] Processing /home/kisik/codeBase/core/target/classes/displaytag_el.properties
+[INFO] Processing /home/kisik/codeBase/core/target/classes/errors_el.properties
+[INFO] Processing /home/kisik/codeBase/core/target/classes/ApplicationResources_zh.properties
+[INFO] 
+[INFO] --- native2ascii-maven-plugin:1.0-beta-1:native2ascii (native2ascii-8859_1) @ jarvis ---
+[INFO] Includes: [errors_de.properties, errors_fr.properties, errors_nl.properties, errors_pt*.properties]
+[INFO] Excludes: []
+[INFO] Processing /home/kisik/codeBase/core/target/classes/errors_pt.properties
+[INFO] Processing /home/kisik/codeBase/core/target/classes/errors_de.properties
+[INFO] Processing /home/kisik/codeBase/core/target/classes/errors_fr.properties
+[INFO] Processing /home/kisik/codeBase/core/target/classes/errors_nl.properties
+[INFO] Processing /home/kisik/codeBase/core/target/classes/errors_pt_BR.properties
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ jarvis ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 21 resources
+[INFO] Copying 12 resources
+[INFO] 
+[INFO] --- build-helper-maven-plugin:1.9.1:reserve-network-port (reserve-ports) @ jarvis ---
+[INFO] Reserved port 48945 for cargo.port
+[INFO] Reserved port 49718 for cargo.ajp.port
+[INFO] Reserved port 39395 for cargo.debug.port
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.1:testCompile (default-testCompile) @ jarvis ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] <<< jetty-maven-plugin:9.2.1.v20140609:run (default-cli) < test-compile @ jarvis <<<
+[INFO] 
+[INFO] --- jetty-maven-plugin:9.2.1.v20140609:run (default-cli) @ jarvis ---
+[INFO] Logging initialized @9454ms
+[INFO] Configuring Jetty for project: Jarvis Application
+[INFO] webAppSourceDirectory not set. Trying src/main/webapp
+[INFO] Reload Mechanic: automatic
+[INFO] Classes = /home/kisik/codeBase/core/target/classes
+[INFO] Context path = /
+[INFO] Tmp directory = /home/kisik/codeBase/core/target/tmp
+[INFO] Web defaults = org/eclipse/jetty/webapp/webdefault.xml
+[INFO] Web overrides =  none
+[INFO] web.xml file = file:/home/kisik/codeBase/core/src/main/webapp/WEB-INF/web.xml
+[INFO] Webapp directory = /home/kisik/codeBase/core/src/main/webapp
+[INFO] jetty-9.2.1.v20140609
+[INFO] No Spring WebApplicationInitializer types detected on classpath
+[INFO] Initializing Spring root WebApplicationContext
+[dd] INFO [main] ContextLoader.initWebApplicationContext(285) | Root WebApplicationContext: initialization started
+[dd] INFO [main] XmlWebApplicationContext.prepareRefresh(510) | Refreshing Root WebApplicationContext: startup date [Thu Aug 13 09:49:11 EEST 2015]; root of context hierarchy
+[dd] INFO [main] XmlBeanDefinitionReader.loadBeanDefinitions(317) | Loading XML bean definitions from class path resource [applicationContext-resources.xml]
+[dd] INFO [main] XmlBeanDefinitionReader.loadBeanDefinitions(317) | Loading XML bean definitions from class path resource [applicationContext-dao.xml]
+[dd] INFO [main] XmlBeanDefinitionReader.loadBeanDefinitions(317) | Loading XML bean definitions from class path resource [applicationContext-service.xml]
+[dd] INFO [main] DefaultListableBeanFactory.registerBeanDefinition(829) | Overriding bean definition for bean 'confluenceManager': replacing [Generic bean: class [org.safehaus.service.impl.ConfluenceManagerImpl]; scope=singleton; abstract=false; lazyInit=true; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [/home/kisik/codeBase/core/target/classes/org/safehaus/service/impl/ConfluenceManagerImpl.class]] with [Generic bean: class [org.safehaus.confluence.client.ConfluenceManagerImpl]; scope=; abstract=false; lazyInit=true; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in class path resource [applicationContext-service.xml]]
+[dd] INFO [main] XmlBeanDefinitionReader.loadBeanDefinitions(317) | Loading XML bean definitions from class path resource [applicationContext-quartz.xml]
+[dd] INFO [main] XmlBeanDefinitionReader.loadBeanDefinitions(317) | Loading XML bean definitions from class path resource [applicationContext-CrowdClient.xml]
+[dd] INFO [main] XmlBeanDefinitionReader.loadBeanDefinitions(317) | Loading XML bean definitions from ServletContext resource [/WEB-INF/applicationContext-struts.xml]
+[dd] INFO [main] XmlBeanDefinitionReader.loadBeanDefinitions(317) | Loading XML bean definitions from ServletContext resource [/WEB-INF/applicationContext.xml]
+[dd] INFO [main] XmlBeanDefinitionReader.loadBeanDefinitions(317) | Loading XML bean definitions from ServletContext resource [/WEB-INF/cxf-servlet.xml]
+[dd] INFO [main] XmlBeanDefinitionReader.loadBeanDefinitions(317) | Loading XML bean definitions from class path resource [META-INF/cxf/cxf.xml]
+[dd] INFO [main] XmlBeanDefinitionReader.loadBeanDefinitions(317) | Loading XML bean definitions from class path resource [META-INF/cxf/cxf-servlet.xml]
+[dd] INFO [main] XmlBeanDefinitionReader.loadBeanDefinitions(317) | Loading XML bean definitions from ServletContext resource [/WEB-INF/security.xml]
+[dd] INFO [main] SpringSecurityCoreVersion.performVersionChecks(58) | You are running with Spring Security Core 3.2.5.RELEASE
+[dd] INFO [main] SecurityNamespaceHandler.<init>(75) | Spring Security 'config' module version is 3.2.5.RELEASE
+[dd] INFO [main] HttpSecurityBeanDefinitionParser.checkFilterChainOrder(266) | Checking sorted filter chain: [Root bean: class [org.springframework.security.web.context.SecurityContextPersistenceFilter]; scope=; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null, order = 200, Root bean: class [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter]; scope=; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null, order = 400, <logoutFilter>, order = 700, <authenticationProcessingFilter>, order = 1100, Root bean: class [org.springframework.security.web.savedrequest.RequestCacheAwareFilter]; scope=; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null, order = 1600, Root bean: class [org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter]; scope=; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null, order = 1700, Root bean: class [org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter]; scope=; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null, order = 1900, Root bean: class [org.springframework.security.web.authentication.AnonymousAuthenticationFilter]; scope=; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null, order = 2000, Root bean: class [org.springframework.security.web.session.SessionManagementFilter]; scope=; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null, order = 2100, Root bean: class [org.springframework.security.web.access.ExceptionTranslationFilter]; scope=; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null, order = 2200, <org.springframework.security.web.access.intercept.FilterSecurityInterceptor#0>, order = 2300]
+[dd] INFO [main] PropertyPlaceholderConfigurer.loadProperties(172) | Loading properties file from class path resource [jdbc.properties]
+[dd] INFO [main] PropertyPlaceholderConfigurer.loadProperties(172) | Loading properties file from class path resource [mail.properties]
+[dd] INFO [main] PropertyPlaceholderConfigurer.loadProperties(172) | Loading properties file from class path resource [hibernate.properties]
+[dd] INFO [main] PropertyPlaceholderConfigurer.loadProperties(172) | Loading properties file from class path resource [jarvis.properties]
+[dd] INFO [main] AutowiredAnnotationBeanPostProcessor.<init>(153) | JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+[dd] INFO [main] PostProcessorRegistrationDelegate$BeanPostProcessorChecker.postProcessAfterInitialization(309) | Bean 'userManagerTx' of type [class org.springframework.aop.support.DefaultBeanFactoryPointcutAdvisor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[dd] INFO [main] PostProcessorRegistrationDelegate$BeanPostProcessorChecker.postProcessAfterInitialization(309) | Bean 'userManagerSecurity' of type [class org.springframework.aop.support.DefaultBeanFactoryPointcutAdvisor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[dd] INFO [main] PostProcessorRegistrationDelegate$BeanPostProcessorChecker.postProcessAfterInitialization(309) | Bean 'managerTx' of type [class org.springframework.aop.support.DefaultBeanFactoryPointcutAdvisor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[dd] INFO [main] PostProcessorRegistrationDelegate$BeanPostProcessorChecker.postProcessAfterInitialization(309) | Bean 'org.springframework.security.access.method.MapBasedMethodSecurityMetadataSource#0' of type [class org.springframework.security.access.method.MapBasedMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[dd] INFO [main] PostProcessorRegistrationDelegate$BeanPostProcessorChecker.postProcessAfterInitialization(309) | Bean 'org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource#0' of type [class org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[dd] INFO [main] PostProcessorRegistrationDelegate$BeanPostProcessorChecker.postProcessAfterInitialization(309) | Bean 'org.springframework.security.methodSecurityMetadataSourceAdvisor' of type [class org.springframework.security.access.intercept.aopalliance.MethodSecurityMetadataSourceAdvisor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[dd] INFO [main] PostProcessorRegistrationDelegate$BeanPostProcessorChecker.postProcessAfterInitialization(309) | Bean 'org.springframework.transaction.annotation.AnnotationTransactionAttributeSource#0' of type [class org.springframework.transaction.annotation.AnnotationTransactionAttributeSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[dd] INFO [main] PostProcessorRegistrationDelegate$BeanPostProcessorChecker.postProcessAfterInitialization(309) | Bean 'org.springframework.transaction.config.internalTransactionAdvisor' of type [class org.springframework.transaction.interceptor.BeanFactoryTransactionAttributeSourceAdvisor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[dd] INFO [main] LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(339) | Building JPA container EntityManagerFactory for persistence unit 'cassandra-pu'
+[dd] INFO [main] EntityManagerFactoryImpl.<init>(111) | Loading Core
+[dd] INFO [main] CoreLoader.load(41) | Loading Kundera Core Metdata ... 
+[dd] INFO [main] EntityManagerFactoryImpl.configurePersistenceUnit(677) | Loading Persistence Unit MetaData For Persistence Unit(s) cassandra-pu.
+[dd] INFO [main] PersistenceUnitConfiguration.configure(106) | Loading Metadata from persistence.xml ...
+[dd] INFO [main] PersistenceUnitConfiguration.configure(77) | Loading Metadata from persistence.xml ...
+[dd] INFO [main] PersistenceUnitConfiguration.configure(94) | Finishing persistence unit metadata configuration ...
+[dd] WARN [main] MetaModelBuilder.buildType(221) | Cannot process for : null as it is not a collection but annotated with @ElementCollection
+[dd] WARN [main] MetaModelBuilder.buildType(221) | Cannot process for : null as it is not a collection but annotated with @ElementCollection
+[dd] INFO [main] ClientMetadataBuilder.buildClientFactoryMetadata(37) | Loading client factory for persistence unit cassandra-pu
+[dd] INFO [main] ClientResolver.instantiateClientFactory(73) | Initializing client factory for: cassandra-pu
+[dd] INFO [main] ClientResolver.instantiateClientFactory(152) | Finishing factory initialization
+[dd] INFO [main] SchemaConfiguration.configure(112) | Configuring schema export for : cassandra-pu
+[dd] INFO [main] CassandraPropertyReader.getPlacement_strategy(112) | Returning placement strategy value org.apache.cassandra.locator.SimpleStrategy
+[dd] INFO [main] GenericClientFactory.load(110) | Loading client metadata for persistence unit : cassandra-pu
+[dd] INFO [main] GenericClientFactory.load(114) | Initializing client for persistence unit : cassandra-pu
+[dd] INFO [main] GenericClientFactory.load(118) | Constructing pool for persistence unit : cassandra-pu
+[dd] INFO [main] ConnectionPool.init(360) | ConnectionPool initialized.
+[dd] INFO [main] EntityManagerFactoryImpl.configure(192) | EntityManagerFactory created for persistence unit : cassandra-pu
+[dd] INFO [main] SoapClientPropertiesImpl.loadAndLogPropertyString(114) | Loading property: 'application.name' : 'jarvis-test'
+[dd] INFO [main] SoapClientPropertiesImpl.loadAndLogPropertyString(114) | Loading property: 'application.login.url' : 'http://test-crowd.critica-factor.com/crowd/console/'
+[dd] INFO [main] SoapClientPropertiesImpl.loadAndLogPropertyString(114) | Loading property: 'session.tokenkey' : 'crowd.tokenkey'
+[dd] INFO [main] SoapClientPropertiesImpl.loadAndLogPropertyString(114) | Loading property: 'session.lastvalidation' : 'session.lastvalidation'
+[dd] INFO [main] SoapClientPropertiesImpl.loadAndLogPropertyString(114) | Loading property: 'session.validationinterval' : '2'
+[dd] INFO [main] SoapClientPropertiesImpl.loadAndLogPropertyString(118) | Failed to find value for property: cookie.domain
+[dd] INFO [main] SoapClientPropertiesImpl.loadAndLogPropertyString(114) | Loading property: 'crowd.server.url' : 'http://test-crowd.critical-factor.com/crowd/services/'
+[dd] INFO [main] EhCacheManagerFactoryBean.afterPropertiesSet(129) | Initializing EhCache CacheManager
+[dd] INFO [main] Version.<clinit>(24) | Hibernate Validator 4.2.0.Final
+[dd] INFO [main] HibernateTransactionManager.afterPropertiesSet(360) | Using DataSource [org.apache.commons.dbcp.BasicDataSource@4e23ddf0] of Hibernate SessionFactory for HibernateTransactionManager
+[dd] INFO [main] ReflectionServiceFactoryBean.buildServiceFromClass(434) | Creating Service {http://impl.service.safehaus.org/}UserService from class org.safehaus.service.UserService
+[dd] INFO [main] ServerImpl.initDestination(85) | Setting the server's publish address to be /UserService
+[dd] INFO [main] ReflectionServiceFactoryBean.buildServiceFromClass(434) | Creating Service {http://impl.service.safehaus.org/}SessionService from class org.safehaus.service.SessionService
+[dd] INFO [main] ServerImpl.initDestination(85) | Setting the server's publish address to be /SessionService
+[dd] INFO [main] ReflectionServiceFactoryBean.buildServiceFromClass(434) | Creating Service {http://impl.service.safehaus.org/}ProjectService from class org.safehaus.service.ProjectService
+[dd] INFO [main] ServerImpl.initDestination(85) | Setting the server's publish address to be /ProjectService
+[dd] WARN [main] AnnotationUtils.doGetAnnotatedMethod(172) | Method getUserByUsername in org.safehaus.service.UserService has no JAX-RS Path or HTTP Method annotations
+[dd] INFO [main] ServerImpl.initDestination(85) | Setting the server's publish address to be /api
+[dd] INFO [main] DefaultSecurityFilterChain.<init>(28) | Creating filter chain: Ant [pattern='/images'], []
+[dd] INFO [main] DefaultSecurityFilterChain.<init>(28) | Creating filter chain: Ant [pattern='/styles'], []
+[dd] INFO [main] DefaultSecurityFilterChain.<init>(28) | Creating filter chain: Ant [pattern='/scripts'], []
+[dd] INFO [main] DefaultSecurityFilterChain.<init>(28) | Creating filter chain: Ant [pattern='/assets/**'], []
+[dd] INFO [main] DefaultSecurityFilterChain.<init>(28) | Creating filter chain: org.springframework.security.web.util.matcher.AnyRequestMatcher@1, [org.springframework.security.web.context.SecurityContextPersistenceFilter@37d12d0e, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6f8c6694, org.springframework.security.web.authentication.logout.LogoutFilter@71b01319, com.atlassian.crowd.integration.springsecurity.CrowdSSOAuthenticationProcessingFilter@16fa28eb, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@28fdce67, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@24c9a52a, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@55105271, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@126a8548, org.springframework.security.web.session.SessionManagementFilter@54a2ff94, org.springframework.security.web.access.ExceptionTranslationFilter@3d2be0df, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@6affbed1]
+[dd] INFO [main] DefaultFilterChainValidator.checkLoginPageIsntProtected(124) | Checking whether login URL '/login.jsp' is accessible with your configuration
+[dd] INFO [main] StdSchedulerFactory.instantiate(1157) | Using default implementation for ThreadExecutor
+[dd] INFO [main] SchedulerSignalerImpl.<init>(61) | Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+[dd] INFO [main] QuartzScheduler.<init>(243) | Quartz Scheduler v.2.1.5 created.
+[dd] INFO [main] RAMJobStore.initialize(154) | RAMJobStore initialized.
+[dd] INFO [main] QuartzScheduler.initialize(268) | Scheduler meta-data: Quartz Scheduler (v2.1.5) 'org.springframework.scheduling.quartz.SchedulerFactoryBean#0' with instanceId 'NON_CLUSTERED'
+  Scheduler class: 'org.quartz.core.QuartzScheduler' - running locally.
+  NOT STARTED.
+  Currently in standby mode.
+  Number of jobs executed: 0
+  Using thread pool 'org.quartz.simpl.SimpleThreadPool' - with 10 threads.
+  Using job-store 'org.quartz.simpl.RAMJobStore' - which does not support persistence. and is not clustered.
+
+[dd] INFO [main] StdSchedulerFactory.instantiate(1306) | Quartz scheduler 'org.springframework.scheduling.quartz.SchedulerFactoryBean#0' initialized from an externally provided properties instance.
+[dd] INFO [main] StdSchedulerFactory.instantiate(1310) | Quartz scheduler version: 2.1.5
+[dd] INFO [main] QuartzScheduler.setJobFactory(2247) | JobFactory set to: org.springframework.scheduling.quartz.AdaptableJobFactory@561e8bab
+[dd] INFO [main] StdSchedulerFactory.instantiate(1157) | Using default implementation for ThreadExecutor
+[dd] INFO [main] SchedulerSignalerImpl.<init>(61) | Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+[dd] INFO [main] QuartzScheduler.<init>(243) | Quartz Scheduler v.2.1.5 created.
+[dd] INFO [main] RAMJobStore.initialize(154) | RAMJobStore initialized.
+[dd] INFO [main] QuartzScheduler.initialize(268) | Scheduler meta-data: Quartz Scheduler (v2.1.5) 'org.springframework.scheduling.quartz.SchedulerFactoryBean#1' with instanceId 'NON_CLUSTERED'
+  Scheduler class: 'org.quartz.core.QuartzScheduler' - running locally.
+  NOT STARTED.
+  Currently in standby mode.
+  Number of jobs executed: 0
+  Using thread pool 'org.quartz.simpl.SimpleThreadPool' - with 10 threads.
+  Using job-store 'org.quartz.simpl.RAMJobStore' - which does not support persistence. and is not clustered.
+
+[dd] INFO [main] StdSchedulerFactory.instantiate(1306) | Quartz scheduler 'org.springframework.scheduling.quartz.SchedulerFactoryBean#1' initialized from an externally provided properties instance.
+[dd] INFO [main] StdSchedulerFactory.instantiate(1310) | Quartz scheduler version: 2.1.5
+[dd] INFO [main] QuartzScheduler.setJobFactory(2247) | JobFactory set to: org.springframework.scheduling.quartz.AdaptableJobFactory@12b0440b
+[dd] INFO [main] DefaultLifecycleProcessor.start(341) | Starting beans in phase 2147483647
+[dd] INFO [main] SchedulerFactoryBean.startScheduler(647) | Starting Quartz Scheduler now
+[dd] INFO [main] QuartzScheduler.start(534) | Scheduler org.springframework.scheduling.quartz.SchedulerFactoryBean#0_$_NON_CLUSTERED started.
+[dd] INFO [main] SchedulerFactoryBean.startScheduler(647) | Starting Quartz Scheduler now
+[dd] INFO [main] QuartzScheduler.start(534) | Scheduler org.springframework.scheduling.quartz.SchedulerFactoryBean#1_$_NON_CLUSTERED started.
+[dd] INFO [main] ContextLoader.initWebApplicationContext(325) | Root WebApplicationContext: initialization completed in 8772 ms
+[dd] DEBUG [main] StartupListener.contextInitialized(47) | Initializing context...
+[dd] DEBUG [main] StartupListener.contextInitialized(82) | Remember Me Enabled? true
+[dd] DEBUG [main] StartupListener.contextInitialized(84) | Password Encoder: BCryptPasswordEncoder
+[dd] DEBUG [main] StartupListener.contextInitialized(86) | Populating drop-downs...
+[dd] DEBUG [main] LookupDaoHibernate.getRoles(39) | Retrieving all role names...
+[dd] DEBUG [main] StartupListener.setupContext(130) | Drop-down initialization complete [OK]
+[dd] DEBUG [main] StartupListener.setupContext(135) | Full text search reindexing complete [OK]
+[dd] WARN [main] StartupListener.contextInitialized(96) | META-INF/MANIFEST.MF not found.
+[dd] INFO [main] StartupListener.contextInitialized(115) | Application version set to: 75489
+[dd] WARN [main] velocity.logVelocityMessage(145) | WebappLoader is deprecated. Use org.apache.velocity.tools.view.WebappResourceLoader instead.
+[dd] DEBUG [main] LocaleFilter.init(177) | Initializing filter 'localeFilter'
+[dd] DEBUG [main] LocaleFilter.init(202) | Filter 'localeFilter' configured successfully
+[INFO] org.tuckey.web.filters.urlrewrite.UrlRewriteFilter INFO: conf reload check disabled
+[INFO] org.tuckey.web.filters.urlrewrite.UrlRewriteFilter INFO: loaded (conf ok)
+[dd] INFO [main] XmlConfigurationProvider.info(46) | Parsing configuration file [struts-default.xml]
+[dd] INFO [main] XmlConfigurationProvider.info(46) | Parsing configuration file [struts-plugin.xml]
+[dd] INFO [main] XmlConfigurationProvider.info(46) | Parsing configuration file [struts.xml]
+[dd] INFO [main] AbstractBeanSelectionProvider.info(46) | Choosing bean (spring) for (com.opensymphony.xwork2.ObjectFactory)
+[dd] INFO [main] AbstractBeanSelectionProvider.info(46) | Choosing bean (struts) for (com.opensymphony.xwork2.factory.ActionFactory)
+[dd] INFO [main] AbstractBeanSelectionProvider.info(46) | Choosing bean (struts) for (com.opensymphony.xwork2.factory.ResultFactory)
+[dd] INFO [main] AbstractBeanSelectionProvider.info(46) | Choosing bean (struts) for (com.opensymphony.xwork2.factory.ConverterFactory)
+[dd] INFO [main] AbstractBeanSelectionProvider.info(46) | Choosing bean (struts) for (com.opensymphony.xwork2.factory.InterceptorFactory)
+[dd] INFO [main] AbstractBeanSelectionProvider.info(46) | Choosing bean (struts) for (com.opensymphony.xwork2.factory.ValidatorFactory)
+[dd] INFO [main] AbstractBeanSelectionProvider.info(46) | Choosing bean (struts) for (com.opensymphony.xwork2.factory.UnknownHandlerFactory)
+[dd] INFO [main] AbstractBeanSelectionProvider.info(46) | Choosing bean (struts) for (com.opensymphony.xwork2.FileManagerFactory)
+[dd] INFO [main] AbstractBeanSelectionProvider.info(46) | Choosing bean (struts) for (com.opensymphony.xwork2.conversion.impl.XWorkConverter)
+[dd] INFO [main] AbstractBeanSelectionProvider.info(46) | Choosing bean (struts) for (com.opensymphony.xwork2.conversion.impl.CollectionConverter)
+[dd] INFO [main] AbstractBeanSelectionProvider.info(46) | Choosing bean (struts) for (com.opensymphony.xwork2.conversion.impl.ArrayConverter)
+[dd] INFO [main] AbstractBeanSelectionProvider.info(46) | Choosing bean (struts) for (com.opensymphony.xwork2.conversion.impl.DateConverter)
+[dd] INFO [main] AbstractBeanSelectionProvider.info(46) | Choosing bean (struts) for (com.opensymphony.xwork2.conversion.impl.NumberConverter)
+[dd] INFO [main] AbstractBeanSelectionProvider.info(46) | Choosing bean (struts) for (com.opensymphony.xwork2.conversion.impl.StringConverter)
+[dd] INFO [main] AbstractBeanSelectionProvider.info(46) | Choosing bean (struts) for (com.opensymphony.xwork2.conversion.ConversionPropertiesProcessor)
+[dd] INFO [main] AbstractBeanSelectionProvider.info(46) | Choosing bean (struts) for (com.opensymphony.xwork2.conversion.ConversionFileProcessor)
+[dd] INFO [main] AbstractBeanSelectionProvider.info(46) | Choosing bean (struts) for (com.opensymphony.xwork2.conversion.ConversionAnnotationProcessor)
+[dd] INFO [main] AbstractBeanSelectionProvider.info(46) | Choosing bean (struts) for (com.opensymphony.xwork2.conversion.TypeConverterCreator)
+[dd] INFO [main] AbstractBeanSelectionProvider.info(46) | Choosing bean (struts) for (com.opensymphony.xwork2.conversion.TypeConverterHolder)
+[dd] INFO [main] AbstractBeanSelectionProvider.info(46) | Choosing bean (struts) for (com.opensymphony.xwork2.TextProvider)
+[dd] INFO [main] AbstractBeanSelectionProvider.info(46) | Choosing bean (struts) for (com.opensymphony.xwork2.LocaleProvider)
+[dd] INFO [main] AbstractBeanSelectionProvider.info(46) | Choosing bean (struts) for (com.opensymphony.xwork2.ActionProxyFactory)
+[dd] INFO [main] AbstractBeanSelectionProvider.info(46) | Choosing bean (struts) for (com.opensymphony.xwork2.conversion.ObjectTypeDeterminer)
+[dd] INFO [main] AbstractBeanSelectionProvider.info(46) | Choosing bean (struts) for (org.apache.struts2.dispatcher.mapper.ActionMapper)
+[dd] INFO [main] AbstractBeanSelectionProvider.info(46) | Choosing bean (jakarta) for (org.apache.struts2.dispatcher.multipart.MultiPartRequest)
+[dd] INFO [main] AbstractBeanSelectionProvider.info(46) | Choosing bean (struts) for (org.apache.struts2.views.freemarker.FreemarkerManager)
+[dd] INFO [main] AbstractBeanSelectionProvider.info(46) | Choosing bean (struts) for (org.apache.struts2.views.velocity.VelocityManager)
+[dd] INFO [main] AbstractBeanSelectionProvider.info(46) | Choosing bean (struts) for (org.apache.struts2.components.UrlRenderer)
+[dd] INFO [main] AbstractBeanSelectionProvider.info(46) | Choosing bean (struts) for (com.opensymphony.xwork2.validator.ActionValidatorManager)
+[dd] INFO [main] AbstractBeanSelectionProvider.info(46) | Choosing bean (struts) for (com.opensymphony.xwork2.util.ValueStackFactory)
+[dd] INFO [main] AbstractBeanSelectionProvider.info(46) | Choosing bean (struts) for (com.opensymphony.xwork2.util.reflection.ReflectionProvider)
+[dd] INFO [main] AbstractBeanSelectionProvider.info(46) | Choosing bean (struts) for (com.opensymphony.xwork2.util.reflection.ReflectionContextFactory)
+[dd] INFO [main] AbstractBeanSelectionProvider.info(46) | Choosing bean (struts) for (com.opensymphony.xwork2.util.PatternMatcher)
+[dd] INFO [main] AbstractBeanSelectionProvider.info(46) | Choosing bean (struts) for (org.apache.struts2.dispatcher.StaticContentLoader)
+[dd] INFO [main] AbstractBeanSelectionProvider.info(46) | Choosing bean (struts) for (com.opensymphony.xwork2.UnknownHandlerManager)
+[dd] INFO [main] AbstractBeanSelectionProvider.info(46) | Choosing bean (struts) for (org.apache.struts2.views.util.UrlHelper)
+[dd] INFO [main] AbstractBeanSelectionProvider.info(46) | Choosing bean (struts) for (com.opensymphony.xwork2.util.TextParser)
+[dd] INFO [main] AbstractBeanSelectionProvider.info(46) | Choosing bean (struts) for (org.apache.struts2.dispatcher.DispatcherErrorHandler)
+[dd] INFO [main] AbstractBeanSelectionProvider.info(46) | Choosing bean (struts) for (com.opensymphony.xwork2.security.ExcludedPatternsChecker)
+[dd] INFO [main] AbstractBeanSelectionProvider.info(46) | Choosing bean (struts) for (com.opensymphony.xwork2.security.AcceptedPatternsChecker)
+[dd] INFO [main] DefaultBeanSelectionProvider.info(46) | Loading global messages from [ApplicationResources]
+[dd] INFO [main] DefaultBeanSelectionProvider.info(46) | Loading global messages from [errors]
+[dd] INFO [main] StrutsSpringObjectFactory.info(46) | Initializing Struts-Spring integration...
+[dd] INFO [main] SpringObjectFactory.info(46) | Setting autowire strategy to name
+[dd] INFO [main] StrutsSpringObjectFactory.info(46) | ... initialized Struts-Spring integration successfully
+[dd] INFO [main] WroFilter.init(126) | wro4j version: 1.7.5
+[dd] INFO [main] WroFilter.init(127) | wro4j configuration: ro.isdc.wro.config.jmx.WroConfiguration@376aaeec[
+  cacheUpdatePeriod=0
+  modelUpdatePeriod=0
+  resourceWatcherUpdatePeriod=0
+  resourceWatcherAsync=false
+  gzipEnabled=false
+  debug=true
+  ignoreMissingResources=false
+  disableCache=false
+  cacheGzippedContent=false
+  jmxEnabled=true
+  wroManagerClassName=ro.isdc.wro.manager.factory.ConfigurableWroManagerFactory
+  encoding=UTF-8
+  mbeanName=<null>
+  header=<null>
+  connectionTimeout=2000
+  parallelPreprocessing=false
+  ignoreEmptyGroup=true
+  ignoreFailingProcessor=false
+  minimizeEnabled=true
+]
+[INFO] Started o.e.j.m.p.JettyWebAppContext@59636c47{/,[file:/home/kisik/codeBase/core/src/main/webapp/, jar:file:/home/kisik/.m2/repository/org/webjars/jquery-cookie/1.3.1/jquery-cookie-1.3.1.jar!/META-INF/resources, jar:file:/home/kisik/.m2/repository/org/webjars/bootstrap/3.3.1/bootstrap-3.3.1.jar!/META-INF/resources, jar:file:/home/kisik/.m2/repository/org/webjars/bootstrap-datepicker/1.3.1/bootstrap-datepicker-1.3.1.jar!/META-INF/resources, jar:file:/home/kisik/.m2/repository/org/webjars/bootswatch-spacelab/3.3.1+2/bootswatch-spacelab-3.3.1+2.jar!/META-INF/resources, jar:file:/home/kisik/.m2/repository/org/webjars/jquery/1.11.1/jquery-1.11.1.jar!/META-INF/resources],AVAILABLE}{file:/home/kisik/codeBase/core/src/main/webapp/}
+[WARNING] !RequestLog
+[INFO] Started ServerConnector@72fb922c{HTTP/1.1}{0.0.0.0:8080}
+[INFO] Started @36934ms
+[INFO] Started Jetty Server
+[INFO] Stopped ServerConnector@72fb922c{HTTP/1.1}{0.0.0.0:8080}
+[INFO] org.tuckey.web.filters.urlrewrite.UrlRewriteFilter INFO: destroy called
+[INFO] Closing Spring root WebApplicationContext
+[dd] INFO [Thread-1] XmlWebApplicationContext.doClose(862) | Closing Root WebApplicationContext: startup date [Thu Aug 13 09:49:11 EEST 2015]; root of context hierarchy
+[dd] INFO [Thread-1] DefaultLifecycleProcessor.stop(356) | Stopping beans in phase 2147483647
+[dd] INFO [Thread-1] QuartzScheduler.standby(572) | Scheduler org.springframework.scheduling.quartz.SchedulerFactoryBean#0_$_NON_CLUSTERED paused.
+[dd] INFO [Thread-1] QuartzScheduler.standby(572) | Scheduler org.springframework.scheduling.quartz.SchedulerFactoryBean#1_$_NON_CLUSTERED paused.
+[dd] INFO [Thread-1] SchedulerFactoryBean.destroy(765) | Shutting down Quartz Scheduler
+[dd] INFO [Thread-1] QuartzScheduler.shutdown(653) | Scheduler org.springframework.scheduling.quartz.SchedulerFactoryBean#1_$_NON_CLUSTERED shutting down.
+[dd] INFO [Thread-1] QuartzScheduler.standby(572) | Scheduler org.springframework.scheduling.quartz.SchedulerFactoryBean#1_$_NON_CLUSTERED paused.
+[dd] INFO [Thread-1] QuartzScheduler.shutdown(725) | Scheduler org.springframework.scheduling.quartz.SchedulerFactoryBean#1_$_NON_CLUSTERED shutdown complete.
+[dd] INFO [Thread-1] SchedulerFactoryBean.destroy(765) | Shutting down Quartz Scheduler
+[dd] INFO [Thread-1] QuartzScheduler.shutdown(653) | Scheduler org.springframework.scheduling.quartz.SchedulerFactoryBean#0_$_NON_CLUSTERED shutting down.
+[dd] INFO [Thread-1] QuartzScheduler.standby(572) | Scheduler org.springframework.scheduling.quartz.SchedulerFactoryBean#0_$_NON_CLUSTERED paused.
+[dd] INFO [Thread-1] QuartzScheduler.shutdown(725) | Scheduler org.springframework.scheduling.quartz.SchedulerFactoryBean#0_$_NON_CLUSTERED shutdown complete.
+[dd] INFO [Thread-1] EhCacheManagerFactoryBean.destroy(181) | Shutting down EhCache CacheManager
+[dd] INFO [Thread-1] LocalContainerEntityManagerFactoryBean.destroy(462) | Closing JPA EntityManagerFactory for persistence unit 'cassandra-pu'
+[INFO] Stopped o.e.j.m.p.JettyWebAppContext@59636c47{/,[file:/home/kisik/codeBase/core/src/main/webapp/, jar:file:/home/kisik/.m2/repository/org/webjars/jquery-cookie/1.3.1/jquery-cookie-1.3.1.jar!/META-INF/resources, jar:file:/home/kisik/.m2/repository/org/webjars/bootstrap/3.3.1/bootstrap-3.3.1.jar!/META-INF/resources, jar:file:/home/kisik/.m2/repository/org/webjars/bootstrap-datepicker/1.3.1/bootstrap-datepicker-1.3.1.jar!/META-INF/resources, jar:file:/home/kisik/.m2/repository/org/webjars/bootswatch-spacelab/3.3.1+2/bootswatch-spacelab-3.3.1+2.jar!/META-INF/resources, jar:file:/home/kisik/.m2/repository/org/webjars/jquery/1.11.1/jquery-1.11.1.jar!/META-INF/resources],UNAVAILABLE}{file:/home/kisik/codeBase/core/src/main/webapp/}
+[INFO] Jetty server exiting.
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 01:11 min
+[INFO] Finished at: 2015-08-13T09:49:56+03:00
+[INFO] Final Memory: 64M/1052M
+[INFO] ------------------------------------------------------------------------
