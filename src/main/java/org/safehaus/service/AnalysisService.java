@@ -1,10 +1,12 @@
 package org.safehaus.service;
 
 
-import com.atlassian.jira.rest.client.api.domain.Issue;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.safehaus.analysis.JiraMetricIssue;
 import org.safehaus.analysis.JiraMetricIssueKafkaProducer;
@@ -12,25 +14,29 @@ import org.safehaus.analysis.service.ConfluenceConnector;
 import org.safehaus.analysis.service.JiraConnector;
 import org.safehaus.analysis.service.SonarConnector;
 import org.safehaus.analysis.service.StashConnector;
-import org.safehaus.exceptions.JiraClientException;
-import org.safehaus.confluence.client.*;
 import org.safehaus.confluence.client.ConfluenceManager;
+import org.safehaus.confluence.client.ConfluenceManagerException;
 import org.safehaus.confluence.model.Space;
+import org.safehaus.exceptions.JiraClientException;
 import org.safehaus.jira.JiraClient;
 import org.safehaus.sonar.client.SonarManager;
 import org.safehaus.sonar.client.SonarManagerException;
-import org.safehaus.sonar.model.QuantitativeStats;
+import org.safehaus.stash.client.Page;
 import org.safehaus.stash.client.StashManager;
 import org.safehaus.stash.client.StashManagerException;
-import org.safehaus.stash.client.Page;
-import org.safehaus.stash.model.*;
+import org.safehaus.stash.model.Change;
+import org.safehaus.stash.model.Commit;
+import org.safehaus.stash.model.Project;
+import org.safehaus.stash.model.Repository;
+import org.safehaus.stash.model.StashMetricIssue;
 import org.safehaus.util.DateSave;
-import org.sonar.wsclient.Sonar;
 import org.sonar.wsclient.services.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.IOException;
-import java.util.*;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import com.atlassian.jira.rest.client.api.domain.Issue;
 
 
 /**
@@ -42,7 +48,7 @@ public class AnalysisService
 
     @Autowired
     private JiraConnector jiraConnector;
-    
+
     @Autowired
     private StashConnector stashConnector;
 
@@ -64,22 +70,27 @@ public class AnalysisService
     DateSave ds;
     private Page<Project> stashProjects;
 
-    public void run() {
-        log.info("Running AnalysisService.run()");
+
+    public void run()
+    {
+        log.info( "Running AnalysisService.run()" );
 
 
         ds = new DateSave();
-        try {
+        try
+        {
             lastGatheredJira = ds.getLastGatheredDateJira();
             lastGatheredStash = ds.getLastGatheredDateStash();
             lastGatheredSonar = ds.getLastGatheredDateSonar();
             lastGatheredConfluence = ds.getLastGatheredDateConfluence();
 
-            log.info("Last Saved Jira: " + lastGatheredJira.toString());
-            log.info("Last Saved Stash: " + lastGatheredStash.toString());
-            log.info("Last Saved Sonar: " + lastGatheredSonar.toString());
-            log.info("Last Saved Confluence: " + lastGatheredConfluence.toString());
-        } catch (IOException e) {
+            log.info( "Last Saved Jira: " + lastGatheredJira.toString() );
+            log.info( "Last Saved Stash: " + lastGatheredStash.toString() );
+            log.info( "Last Saved Sonar: " + lastGatheredSonar.toString() );
+            log.info( "Last Saved Confluence: " + lastGatheredConfluence.toString() );
+        }
+        catch ( IOException e )
+        {
             e.printStackTrace();
         }
 
@@ -147,15 +158,19 @@ public class AnalysisService
             getConfluenceMetric(confluenceManager);*/
 
         // Set time.
-        try {
-            ds.saveLastGatheredDates(lastGatheredJira.getTime(), lastGatheredStash.getTime(), lastGatheredSonar.getTime(), lastGatheredConfluence.getTime());
-        } catch (IOException e) {
+        try
+        {
+            ds.saveLastGatheredDates( lastGatheredJira.getTime(), lastGatheredStash.getTime(),
+                    lastGatheredSonar.getTime(), lastGatheredConfluence.getTime() );
+        }
+        catch ( IOException e )
+        {
             e.printStackTrace();
         }
     }
 
 
-    private void getJiraMetricIssues(JiraClient jiraCl)
+    private void getJiraMetricIssues( JiraClient jiraCl )
     {
 
         List<String> projectKeys = new ArrayList<String>();
@@ -261,17 +276,21 @@ public class AnalysisService
 
             // TODO send for producer
             jiraMetricIssues.add( issueToAdd );
-            if(lastGatheredJira != null) {
-                if (issueToAdd.getUpdateDate().after(lastGatheredJira)) {
+            if ( lastGatheredJira != null )
+            {
+                if ( issueToAdd.getUpdateDate().after( lastGatheredJira ) )
+                {
                     // New issue, get it in the database.
-                    log.info("Complies, ID:" + issueToAdd.getIssueId() + " UpDate:" + issueToAdd.getUpdateDate());
-                    kafkaProducer.send(issueToAdd);
+                    log.info( "Complies, ID:" + issueToAdd.getIssueId() + " UpDate:" + issueToAdd.getUpdateDate() );
+                    kafkaProducer.send( issueToAdd );
 
             //            log.info( issueToAdd.toString() );
             //            log.info( "--------------------------------------" );
-                } else {
+                }
+                else
+                {
                     // Discard changes because it is already in our database.
-                    log.info("Does not, ID:" + issueToAdd.getIssueId() + " UpDate:" + issueToAdd.getUpdateDate());
+                    log.info( "Does not, ID:" + issueToAdd.getIssueId() + " UpDate:" + issueToAdd.getUpdateDate() );
                 }
             }
         }
@@ -297,12 +316,12 @@ public class AnalysisService
         }
 
         // No problem gathering new issues from Jira, which means it should update the last gathering date as of now.
-        if(jiraIssues.size() > 0) {
-            lastGatheredJira = new Date(System.currentTimeMillis());
+        if ( jiraIssues.size() > 0 )
+        {
+            lastGatheredJira = new Date( System.currentTimeMillis() );
         }
 
     }
-
 
 
     private void getStashMetricIssues( StashManager stashMan )
@@ -429,31 +448,38 @@ public class AnalysisService
     }
 
 
-    private void getSonarMetricIssues(SonarManager sonarManager) {
+    private void getSonarMetricIssues( SonarManager sonarManager )
+    {
         Set<Resource> resources = null;
         List<String> resourceKeys = new ArrayList<>();
         List<Integer> resourceIDs = new ArrayList<>();
 
 
-        log.info("Get Sonar Metric Issues ici.");
-        try {
+        log.info( "Get Sonar Metric Issues ici." );
+        try
+        {
             resources = sonarManager.getResources();
-        } catch (SonarManagerException e) {
+        }
+        catch ( SonarManagerException e )
+        {
             e.printStackTrace();
         }
-        if(resources != null) {
-            for (Resource r : resources) {
-                log.info("Resource:");
-                log.info(r.getName());
-                log.info(r.getId());
-                log.info(r.getKey());
-                resourceKeys.add(r.getKey());
-                resourceIDs.add(r.getId());
+        if ( resources != null )
+        {
+            for ( Resource r : resources )
+            {
+                log.info( "Resource:" );
+                log.info( r.getName() );
+                log.info( r.getId() );
+                log.info( r.getKey() );
+                resourceKeys.add( r.getKey() );
+                resourceIDs.add( r.getId() );
             }
         }
 /*
         try {
-            QuantitativeStats quantitativeStats = sonarManager.getQuantitativeStats(resourceKeys.get(resourceKeys.size() - 1).toString());
+            QuantitativeStats quantitativeStats = sonarManager.getQuantitativeStats(resourceKeys.get(resourceKeys
+            .size() - 1).toString());
             log.info("LOC: " + quantitativeStats.getLinesOfCode());
         } catch (SonarManagerException e) {
             e.printStackTrace();
@@ -461,26 +487,36 @@ public class AnalysisService
 */
     }
 
-    private void getConfluenceMetric(ConfluenceManager confluenceManager) {
-        log.info("Get Confluence Metric Issues ici.");
+
+    private void getConfluenceMetric( ConfluenceManager confluenceManager )
+    {
+        log.info( "Get Confluence Metric Issues ici." );
 
         List<Space> spaceList = null;
-        try {
+        try
+        {
             spaceList = confluenceManager.getAllSpaces();
-        } catch (ConfluenceManagerException e) {
+        }
+        catch ( ConfluenceManagerException e )
+        {
             e.printStackTrace();
         }
         List<org.safehaus.confluence.model.Page> pageList = new ArrayList<org.safehaus.confluence.model.Page>();
-        for(Space s : spaceList) {
-            try {
-                pageList.addAll(confluenceManager.listPages(s.getKey(), 0, 100));
-            } catch (ConfluenceManagerException e) {
+        for ( Space s : spaceList )
+        {
+            try
+            {
+                pageList.addAll( confluenceManager.listPages( s.getKey(), 0, 100 ) );
+            }
+            catch ( ConfluenceManagerException e )
+            {
                 e.printStackTrace();
             }
         }
 
-        for(org.safehaus.confluence.model.Page p : pageList) {
-            log.info(p.getTitle());
+        for ( org.safehaus.confluence.model.Page p : pageList )
+        {
+            log.info( p.getTitle() );
             //TODO need to update the cofluence api in order to get the author name.
         }
     }
