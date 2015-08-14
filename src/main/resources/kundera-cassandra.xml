@@ -11,12 +11,12 @@
       </connection>
       <schemas>
         <schema>
-          <name>jarvis@cassandra_pu</name>
+          <name>jarvis</name>
           <properties>
             <property name="strategy.class" value="SimpleStrategy" />
             <property name="replcation.factor" value="3" />
             <property name="durable.writes" value="true" />
-            <!--property name="inverted.indexing.enabled" value="true" /-->
+            <property name="inverted.indexing.enabled" value="true" />
           </properties>
         </schema>
       </schemas>

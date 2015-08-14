@@ -18,13 +18,13 @@ public class JarvisMember extends BaseObject implements Serializable
 {
     private static final long serialVersionUID = 3832626162173359411L;
 
-    @Column(name = "JARVIS_MEMBER_NAME")
+    @Column(name = "jarvis_member_name")
     private String name;
 
-    @Column(name = "JARVIS_MEMBER_AVATAR")
+    @Column(name = "jarvis_member_avatar")
     private String avatar;
 
-    @Column(name = "JARVIS_MEMBER_DISNAME")
+    @Column(name = "jarvis_member_display_name")
     private String displayName;
 
 

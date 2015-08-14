@@ -15,37 +15,37 @@ import com.impetus.kundera.index.IndexCollection;
 
 
 @Entity
-@Table( name = "DOCUMENT", schema = "jarvis@cassandra-pu" )
+@Table( name = "document", schema = "jarvis@cassandra-pu" )
 @IndexCollection( columns = {
         @Index( name = "ownerName" ), @Index( name = "ownerId" ), @Index( name = "documentName" )
 } )
 public class DocumentInfo
 {
     @Id
-    //    @Column( name = "DOCUMENT_ID" )
+    @Column( name = "document_id" )
     //    @TableGenerator( name = "id_gen", allocationSize = 30, initialValue = 100 )
     //    @GeneratedValue( /*generator = "id_gen", */strategy = GenerationType.TABLE )
     private String key;
 
-    @Column( name = "EMPLOYEE_NAME" )
+    @Column( name = "employee_name" )
     private String ownerName;
 
-    @Column( name = "EMPLOYEE_ID" )
+    @Column( name = "employee_id" )
     private int ownerId;
 
-    @Column( name = "UPLOADED_DATE" )
+    @Column( name = "uploaded_date" )
     private Date uplodedDate;
 
-    @Column( name = "DOCUMENT_FORMAT" )
+    @Column( name = "document_format" )
     private DataFormat dataFormat;
 
-    @Column( name = "DOCUMENT_NAME" )
+    @Column( name = "document_name" )
     private String documentName;
 
-    @Column( name = "DATA" )
+    @Column( name = "data" )
     private byte[] data;
 
-    @Column( name = "SIZE" )
+    @Column( name = "size" )
     private long size;
 
 

@@ -38,74 +38,74 @@ public class JarvisIssue
     //    private String token="unknown";
     @JsonView( Views.JarvisIssueShort.class )
     @Id
+    @Column(name = "jarvis_issue_id")
     protected Long id;
 
     @JsonView( Views.JarvisIssueShort.class )
-    @Column
+    @Column(name = "jarvis_issue_key")
     protected String key;
 
     @JsonView( Views.JarvisIssueShort.class )
-    @Column
+    @Column(name = "project_key")
     protected String projectKey;
 
     @JsonView( Views.JarvisIssueLong.class )
-    @Column
+    @Column(name = "summery")
     protected String summary;
 
     @JsonView( Views.JarvisIssueLong.class )
-    @Column
+    @Column(name = "self")
     protected String self;
     //    @JsonView( Views.JarvisIssueLong.class )
     //    private Phase phase;
 
     @JsonView( Views.JarvisIssueShort.class )
     @Embedded
-    @Column
     protected JarvisIssueType type; //Task, Session, Phase, Epic, Story etc...
 
     @JsonView( Views.JarvisIssueLong.class )
-    @Column
+    @Column(name = "issue_description")
     protected String issueDescription;
 
     @JsonView( Views.JarvisIssueLong.class )
-    @Column
+    @Column(name ="time_remaining")
     protected String timeRemaining;
 
     @JsonView( Views.JarvisIssueLong.class )
-    @Column
+    @Column(name = "assignee")
     protected String assignee;
 
     @JsonView( Views.JarvisIssueLong.class )
-    @Column
+    @Column(name = "reporter")
     protected String reporter;
 
     @JsonView( Views.JarvisIssueLong.class )
-    @Column
+    @Column(name ="components")
     protected String components;
 
     @JsonView( Views.JarvisIssueLong.class )
-    @Column
+    @Column(name = "labels")
     protected String labels;
 
     @JsonView( Views.JarvisIssueLong.class )
-    @Column
+    @Column(name = "status")
     protected String status;
 
     @JsonView( Views.JarvisIssueLong.class )
-    @Column
+    @Column(name = "resolution")
     protected String resolution;
 
     @JsonView( Views.JarvisIssueLong.class )
-    @Column
+    @Column(name = "fix_version")
     protected String fixVersion;
 
     @JsonView( Views.JarvisIssueLong.class )
-    @Column
+    @Column(name = "date_created")
     protected String dateCreated;
 
     @JsonView( Views.JarvisIssueLong.class )
     @OneToMany(fetch = FetchType.EAGER)
-    @Column
+    @Column(name = "links")
     protected List<JarvisLink> links = new ArrayList<>();
 
     @JsonView( Views.JarvisIssueLong.class )

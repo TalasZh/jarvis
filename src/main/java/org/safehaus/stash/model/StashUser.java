@@ -21,6 +21,7 @@ public class StashUser implements Serializable
     private String name;
 
     @Id
+    @Column(name = "user_id")
     private long id;
 
     @Column(name = "stash_user_dispname")
@@ -40,7 +41,6 @@ public class StashUser implements Serializable
     private UserType type;
 
     @Embedded
-    @Column(name = "stash_user_link")
     private Link link;
 /*
     // GSON library is not compatible with HibernateSetMap. Makes getCommits useless. Link to user is not a useful field ATM.

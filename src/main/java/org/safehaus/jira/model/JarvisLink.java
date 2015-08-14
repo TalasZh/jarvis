@@ -13,24 +13,25 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 @XmlRootElement
 //@Embeddable
 @Entity
-@Table(schema = "jarvis@cassandra-pu" )
+@Table( name = "jarvis_link", schema = "jarvis@cassandra-pu" )
 public class JarvisLink
 {
-    //@Column(name = "JARVIS_LINK_ID")
     @Id
+    @Column(name = "link_id")
     private Long id;
 
-    @Column(name = "JARVIS_LINK_KEY")
+    @Column( name = "link_key" )
     private String key;
 
-    @Column(name = "JARVIS_LINK_TYPE")
+    @Column( name = "link_type" )
     private String linkType;
 
 
-    @Column(name = "JARVIS_LINK_DIRECTION")
+    @Column( name = "link_direction" )
     private String linkDirection;
 
-    @Column(name = "JARVIS_LINK_ATYPE")
+    @Embedded
+//    @Column( name = "JARVIS_LINK_ATYPE" )
     private JarvisIssueType type;
 
 

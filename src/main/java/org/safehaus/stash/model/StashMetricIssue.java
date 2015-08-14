@@ -1,9 +1,23 @@
 package org.safehaus.stash.model;
 
+import com.impetus.kundera.index.Index;
 import com.impetus.kundera.index.IndexCollection;
 
-import javax.persistence.*;
 import java.io.Serializable;
+
+import javax.persistence.AttributeOverride;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.TableGenerator;
+
 
 /**
  * Created by neslihan on 08.07.2015.
@@ -11,12 +25,13 @@ import java.io.Serializable;
 @Entity
 @Table( name = "stash_metric_issue", schema = "jarvis@cassandra-pu" )
 @IndexCollection( columns = {
-        @com.impetus.kundera.index.Index( name = "id" ), @com.impetus.kundera.index.Index( name = "author" ), @com.impetus.kundera.index.Index( name = "authorTimestamp" )})
+        @Index( name = "id" ), @Index( name = "author" ), @Index( name = "authorTimestamp" )})
 public class StashMetricIssue implements Serializable {
 
     @Id
     @TableGenerator( name = "id_gen", allocationSize = 30, initialValue = 100 )
     @GeneratedValue( generator = "id_gen", strategy = GenerationType.TABLE )
+    @Column(name = "stash_metric_id")
     private String id;
 
     @OneToOne(targetEntity = Path.class)
@@ -25,21 +40,22 @@ public class StashMetricIssue implements Serializable {
 
     @OneToOne(targetEntity = Path.class)
     @AttributeOverride(name = "id", column = @Column(name = "path"))
+    @Column(name = "src_path")
     private Path srcPath;
 
-    @Column
+    @Column(name = "percent_unchanged")
     private int percentUnchanged;
 
     @Enumerated( EnumType.ORDINAL )
-    @Column(name = "type")
+    @Column(name = "change_type")
     private Change.ChangeType type;
 
     @Enumerated( EnumType.ORDINAL )
-    @Column(name = "type")
+    @Column(name = "node_type")
     private Change.NodeType nodeType;
 
     @OneToOne(targetEntity = StashUser.class)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "associated_user_id")
     private StashUser author;
 
     @Column(name = "author_ts")

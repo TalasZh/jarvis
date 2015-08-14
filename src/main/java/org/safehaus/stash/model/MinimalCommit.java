@@ -30,4 +30,31 @@ public class MinimalCommit
     {
         return Objects.toStringHelper( this ).add( "id", id ).add( "displayId", displayId ).toString();
     }
+
+
+    @Override
+    public boolean equals( final Object o )
+    {
+        if ( this == o )
+        {
+            return true;
+        }
+        if ( !( o instanceof MinimalCommit ) )
+        {
+            return false;
+        }
+
+        final MinimalCommit that = ( MinimalCommit ) o;
+
+        return id.equals( that.id ) && displayId.equals( that.displayId );
+    }
+
+
+    @Override
+    public int hashCode()
+    {
+        int result = id.hashCode();
+        result = 31 * result + displayId.hashCode();
+        return result;
+    }
 }

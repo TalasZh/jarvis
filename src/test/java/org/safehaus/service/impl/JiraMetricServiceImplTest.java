@@ -30,7 +30,7 @@ public class JiraMetricServiceImplTest
 	public void testInsertJiraMetricIssue()
 	{
 		JiraMetricIssue jiraMetricIssue = new JiraMetricIssue();
-		jiraMetricIssue.setId( -2L );
+		jiraMetricIssue.setIssueId( -2L );
 
 		jiraMetricService.insertJiraMetricIssue( jiraMetricIssue );
 
@@ -42,7 +42,7 @@ public class JiraMetricServiceImplTest
 	public void testFindJiraMetricIssueById()
 	{
 		JiraMetricIssue jiraMetricIssue = new JiraMetricIssue();
-		jiraMetricIssue.setId( -2L );
+		jiraMetricIssue.setIssueId( -2L );
 		jiraMetricIssue.setAssigneeName( "Test" );
 
 		Mockito.when( dao.findById( JiraMetricIssue.class, -2L ) ).thenReturn( jiraMetricIssue );
@@ -50,7 +50,7 @@ public class JiraMetricServiceImplTest
 		JiraMetricIssue newIssue = jiraMetricService.findJiraMetricIssueById( -2L );
 
 		Assert.assertNotNull( newIssue );
-		Assert.assertEquals( (long) newIssue.getId(), -2L );
+		Assert.assertEquals( (long) newIssue.getIssueId(), -2L );
 		Assert.assertEquals( newIssue.getAssigneeName(), "Test" );
 
 		Mockito.verify( dao ).findById( JiraMetricIssue.class, -2L );
@@ -61,7 +61,7 @@ public class JiraMetricServiceImplTest
 	public void testFindJiraMetricIssueByPK()
 	{
 		JiraMetricIssue jiraMetricIssue = new JiraMetricIssue();
-		jiraMetricIssue.setId( -2L );
+		jiraMetricIssue.setIssueId( -2L );
 		jiraMetricIssue.setAssigneeName( "Test" );
 
 		Mockito.when( dao.findById( JiraMetricIssue.class, jiraMetricIssue ) ).thenReturn( jiraMetricIssue );
@@ -69,7 +69,7 @@ public class JiraMetricServiceImplTest
 		JiraMetricIssue newIssue = jiraMetricService.findJiraMetricIssueByPK( jiraMetricIssue );
 
 		Assert.assertNotNull( newIssue );
-		Assert.assertEquals( (long) newIssue.getId(), -2L );
+		Assert.assertEquals( (long) newIssue.getIssueId(), -2L );
 		Assert.assertEquals( newIssue.getAssigneeName(), "Test" );
 
 		Mockito.verify( dao ).findById( JiraMetricIssue.class, jiraMetricIssue );
@@ -194,7 +194,7 @@ public class JiraMetricServiceImplTest
 	public void testUpdateJiraMetricIssue()
 	{
 		JiraMetricIssue issue = new JiraMetricIssue();
-		issue.setId( -2L );
+		issue.setIssueId( -2L );
 		jiraMetricService.updateJiraMetricIssue( issue );
 
 		Mockito.verify( dao ).merge( Matchers.any() );
@@ -212,7 +212,7 @@ public class JiraMetricServiceImplTest
 	public void testDeleteJiraMetricIssue()
 	{
 		JiraMetricIssue issue = new JiraMetricIssue();
-		issue.setId( -2L );
+		issue.setIssueId( -2L );
 
 		jiraMetricService.deleteJiraMetricIssue( issue );
 

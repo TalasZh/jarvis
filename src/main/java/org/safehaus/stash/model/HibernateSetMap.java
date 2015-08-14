@@ -1,9 +1,9 @@
 package org.safehaus.stash.model;
 
 import com.impetus.kundera.index.*;
+import com.impetus.kundera.index.Index;
 
 import javax.persistence.*;
-import javax.persistence.Index;
 import java.util.Set;
 
 /**
@@ -12,12 +12,13 @@ import java.util.Set;
 @Entity
 @Table( name = "hibernate_set_map", schema = "jarvis@cassandra-pu" )
 @IndexCollection( columns = {
-        @com.impetus.kundera.index.Index( name = "id" )})
+        @Index( name = "id" )})
 public class HibernateSetMap {
 
     @Id
     @TableGenerator( name = "id_gen", allocationSize = 30, initialValue = 100 )
     @GeneratedValue( generator = "id_gen", strategy = GenerationType.TABLE )
+    @Column(name= "map_id")
     private long id;
 
     @OneToMany(fetch = FetchType.EAGER)

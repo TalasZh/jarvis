@@ -1,6 +1,7 @@
 package org.safehaus.service;
 
 
+import java.util.Collection;
 import java.util.List;
 import org.safehaus.analysis.JiraMetricIssue;
 
@@ -38,4 +39,6 @@ public interface JiraMetricService
 
 
 	void deleteJiraMetricIssue( JiraMetricIssue jiraMetricIssue );
+
+	void batchInsert(List<JiraMetricIssue> issues);
 }

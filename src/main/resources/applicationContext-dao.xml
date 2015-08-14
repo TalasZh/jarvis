@@ -42,22 +42,56 @@
   <!-- Activates scanning of @Repository -->
   <context:component-scan base-package="org.safehaus" />
 
-  <bean id="cassandraEntityManagerFactory"
-        class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-    <property name="persistenceUnitName" value="cassandra-pu" />
-    <property name="loadTimeWeaver">
-      <bean
-          class="org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver" />
-    </property>
-  </bean>
+  <!--<bean id="cassandraEntityManagerFactory"-->
+        <!--class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">-->
+    <!--<property name="persistenceUnitName" value="cassandra-pu" />-->
+    <!--<property name="loadTimeWeaver">-->
+      <!--<bean-->
+          <!--class="org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver" />-->
+    <!--</property>-->
+  <!--</bean>-->
 
   <bean id="dataStore" class="org.safehaus.service.impl.DataStoreImpl"
         scope="singleton">
     <property name="dao" ref="dao" />
   </bean>
 
+  <bean id="jiraMetricService" class="org.safehaus.service.impl.JiraMetricServiceImpl"
+        scope="singleton">
+    <property name="dao" ref="dao" />
+  </bean>
+
   <bean id="dao" class="org.safehaus.dao.kundera.DaoImpl"
         scope="singleton">
+  </bean>
+
+
+  <bean id="emf-cassandra" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+    <property name="persistenceUnitName" value="cassandra-pu" />
+    <property name="jpaProperties">
+      <props>
+        <prop key="cql.version">3.0.0</prop>
+      </props>
+    </property>
+    <property name="loadTimeWeaver">
+      <bean class="org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver" />
+    </property>
+  </bean>
+
+
+  <bean id="matchAllWithPropReq"
+        class="org.springframework.transaction.interceptor.MatchAlwaysTransactionAttributeSource">
+    <property name="transactionAttribute" value="PROPAGATION_REQUIRED" />
+  </bean>
+
+  <bean id="jndiTemplate" class="org.springframework.jndi.JndiTemplate"
+        lazy-init="true">
+    <property name="environment">
+      <props>
+        <prop key="java.naming.factory.initial">org.apache.naming.java.javaURLContextFactory</prop>
+        <prop key="java.naming.factory.url.pkgs">org.apache.naming</prop>
+      </props>
+    </property>
   </bean>
 
 </beans>

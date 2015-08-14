@@ -25,6 +25,7 @@ import com.atlassian.httpclient.api.HttpStatus;
 import com.atlassian.jira.rest.client.api.AuthenticationHandler;
 import com.atlassian.jira.rest.client.api.JiraRestClient;
 import com.atlassian.jira.rest.client.api.JiraRestClientFactory;
+import com.atlassian.jira.rest.client.api.ProjectRestClient;
 import com.atlassian.jira.rest.client.api.RestClientException;
 import com.atlassian.jira.rest.client.api.domain.BasicComponent;
 import com.atlassian.jira.rest.client.api.domain.BasicIssue;
@@ -82,7 +83,6 @@ public class JiraClientImpl implements JiraClient
             // Print the result
             System.out.println( String.format( "Your admin user's email address is: %s\r\n", user.getEmailAddress() ) );
         }
-
         catch ( Exception e )
         {
             System.out.println( String.format( "Error on creating JiraClient: %s", e.toString() ) );
@@ -108,17 +108,24 @@ public class JiraClientImpl implements JiraClient
 
     public List<Project> getAllProjects()
     {
-        if ( projects.size() == 0 )
+        try
         {
-            Iterable<BasicProject> pList = restClient.getProjectClient().getAllProjects().claim();
-            Iterator<BasicProject> i = pList.iterator();
-
-            while ( i.hasNext() )
+            ProjectRestClient projectRestClient = restClient.getProjectClient();
+            if ( projects.size() == 0 )
             {
-                BasicProject p = i.next();
+                Iterable<BasicProject> pList = projectRestClient.getAllProjects().claim();
 
-                projects.add( restClient.getProjectClient().getProject( p.getSelf() ).claim() );
+                for ( final BasicProject p : pList )
+                {
+                    URI project = p.getSelf();
+                    Promise<Project> projectPromise = projectRestClient.getProject( project );
+                    projects.add( projectPromise.claim() );
+                }
             }
+        }
+        catch ( Exception e )
+        {
+            logger.error( "Couldn't get project specific information {}", e.getMessage() );
         }
 
         return projects;
@@ -202,17 +209,18 @@ public class JiraClientImpl implements JiraClient
     @Override
     public List<Issue> getIssues( final String projectId )
     {
-//        List<JarvisIssue> result = new ArrayList<JarvisIssue>();
+        //        List<JarvisIssue> result = new ArrayList<JarvisIssue>();
         final SearchResult searchResult =
                 restClient.getSearchClient().searchJql( String.format( "project = %s order by duedate", projectId ) )
                           .claim();
-//
-//        for ( Issue issue : searchResult.getIssues() )
-//        {
-//            JarvisIssue jarvisIssue = new JarvisIssue( issue.getId(), issue.getKey(), issue.getSummary(), projectId,
-//                    new JarvisIssueType( issue.getIssueType().getId(), issue.getIssueType().getName() ) );
-//            result.add( jarvisIssue );
-//        }
+        //
+        //        for ( Issue issue : searchResult.getIssues() )
+        //        {
+        //            JarvisIssue jarvisIssue = new JarvisIssue( issue.getId(), issue.getKey(), issue.getSummary(),
+        // projectId,
+        //                    new JarvisIssueType( issue.getIssueType().getId(), issue.getIssueType().getName() ) );
+        //            result.add( jarvisIssue );
+        //        }
         return Lists.newArrayList( searchResult.getIssues() );
     }
 

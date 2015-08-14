@@ -1,5 +1,6 @@
 package org.safehaus.analysis;
 
+import com.impetus.kundera.index.Index;
 import com.impetus.kundera.index.IndexCollection;
 
 import javax.persistence.Column;
@@ -7,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.net.URI;
 import java.util.Date;
 
 /**
@@ -16,59 +16,70 @@ import java.util.Date;
 @Entity
 @Table( name = "jira_metric_issue", schema = "jarvis@cassandra-pu" )
 @IndexCollection( columns = {
-        @com.impetus.kundera.index.Index( name = "id" ), @com.impetus.kundera.index.Index( name = "key" )})
+        @Index( name = "issue_id" ), @Index( name = "issue_key" )})
 public class JiraMetricIssue implements Serializable {
 
-    @Column
-    private String key;
+//    @Id
+    @Column(name = "issue_key")
+    private String issueKey;
 
     @Id
-    private Long id;
+    @Column(name = "issue_id")
+    private Long issueId;
 
-    @Column
+    @Column(name = "status")
     private String status;
-    @Column
+
+    @Column(name = "issue_status")
     private String issueType;
-    @Column
+
+    @Column(name = "project_key")
     private String projectKey;
 
-    @Column
+    @Column(name = "reporter_name")
     private String reporterName;
-    @Column
+
+    @Column(name = "assignee_name")
     private String assigneeName;
 
-    @Column
+    @Column(name = "resolution")
     private String resolution;
-    @Column
+
+    @Column(name = "creation_date")
     private Date creationDate;
-    @Column
+
+    @Column(name = "update_date")
     private Date updateDate;
-    @Column
+
+    @Column(name = "due_date")
     private Date dueDate;
-    @Column
+
+    @Column(name = "priority")
     private Long priority;
 
-    @Column
+    @Column(name = "original_estimate_in_minutes")
     private Integer originalEstimateMinutes;
-    @Column
+
+    @Column(name = "remaining_estimate_in_minutes")
     private Integer remainingEstimateMinutes;
-    @Column
+
+    @Column(name = "time_spent_in_minutes")
     private Integer timeSpentMinutes;
 
-    public String getKey() {
-        return key;
+    public String getIssueKey() {
+        return issueKey;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setIssueKey( String key ) {
+        this.issueKey = key;
     }
 
-    public Long getId() {
-        return id;
+    public Long getIssueId() {
+        return issueId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIssueId( Long id ) {
+        this.issueId = id;
     }
 
     public String getStatus() {
@@ -173,5 +184,53 @@ public class JiraMetricIssue implements Serializable {
 
     public void setTimeSpentMinutes(Integer timeSpentMinutes) {
         this.timeSpentMinutes = timeSpentMinutes;
+    }
+
+
+    @Override
+    public String toString()
+    {
+        return "JiraMetricIssue{" +
+                "issueKey='" + issueKey + '\'' +
+                ", issueId=" + issueId +
+                ", status='" + status + '\'' +
+                ", issueType='" + issueType + '\'' +
+                ", projectKey='" + projectKey + '\'' +
+                ", reporterName='" + reporterName + '\'' +
+                ", assigneeName='" + assigneeName + '\'' +
+                ", resolution='" + resolution + '\'' +
+                ", creationDate=" + creationDate +
+                ", updateDate=" + updateDate +
+                ", dueDate=" + dueDate +
+                ", priority=" + priority +
+                ", originalEstimateMinutes=" + originalEstimateMinutes +
+                ", remainingEstimateMinutes=" + remainingEstimateMinutes +
+                ", timeSpentMinutes=" + timeSpentMinutes +
+                '}';
+    }
+
+
+    @Override
+    public boolean equals( final Object o )
+    {
+        if ( this == o )
+        {
+            return true;
+        }
+        if ( !( o instanceof JiraMetricIssue ) )
+        {
+            return false;
+        }
+
+        final JiraMetricIssue that = ( JiraMetricIssue ) o;
+
+        return issueId.equals( that.issueId );
+    }
+
+
+    @Override
+    public int hashCode()
+    {
+        return issueId.hashCode();
     }
 }

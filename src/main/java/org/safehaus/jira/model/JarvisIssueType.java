@@ -15,10 +15,10 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 @Embeddable
 public class JarvisIssueType
 {
-    @Column(name = "JARVISISSUE_TYPE_ID")
+    @Column(name = "jarvis_issue_type_id")
     private Long id;
 
-    @Column(name = "JARVISISSUE_TYPE_NAME")
+    @Column(name = "jarvis_issue_type_name")
     private String name;
 
 
@@ -62,5 +62,32 @@ public class JarvisIssueType
     public String toString()
     {
         return new ToStringBuilder( this ).append( "id", id ).append( "name", name ).toString();
+    }
+
+
+    @Override
+    public boolean equals( final Object o )
+    {
+        if ( this == o )
+        {
+            return true;
+        }
+        if ( !( o instanceof JarvisIssueType ) )
+        {
+            return false;
+        }
+
+        final JarvisIssueType that = ( JarvisIssueType ) o;
+
+        return id.equals( that.id ) && name.equals( that.name );
+    }
+
+
+    @Override
+    public int hashCode()
+    {
+        int result = id.hashCode();
+        result = 31 * result + name.hashCode();
+        return result;
     }
 }
