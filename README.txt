@@ -29,5 +29,7 @@ point to localhost. Usually we can add it to /etc/hosts file.
 6. Download and install Cassandra from
    http://cassandra.apache.org/download/
 
-   create keyspace named "jarvis"
+   create keyspace named "jarvis";
+   create keyspace Jarvis with replication ={'class' : 'SimpleStrategy', 'replication_factor':3};
+
 

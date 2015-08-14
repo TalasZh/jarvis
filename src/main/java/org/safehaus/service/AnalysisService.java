@@ -7,19 +7,29 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import org.safehaus.analysis.JiraMetricIssue;
+import org.safehaus.analysis.JiraMetricIssueKafkaProducer;
+import org.safehaus.analysis.service.ConfluenceConnector;
 import org.safehaus.analysis.service.JiraConnector;
 import org.safehaus.analysis.service.SonarConnector;
 import org.safehaus.analysis.service.StashConnector;
 import org.safehaus.exceptions.JiraClientException;
+import org.safehaus.confluence.client.*;
+import org.safehaus.confluence.client.ConfluenceManager;
+import org.safehaus.confluence.model.Space;
 import org.safehaus.jira.JiraClient;
 import org.safehaus.sonar.client.SonarManager;
 import org.safehaus.sonar.client.SonarManagerException;
+import org.safehaus.sonar.model.QuantitativeStats;
 import org.safehaus.stash.client.StashManager;
 import org.safehaus.stash.client.StashManagerException;
 import org.safehaus.stash.client.Page;
 import org.safehaus.stash.model.*;
+import org.safehaus.util.DateSave;
+import org.sonar.wsclient.Sonar;
+import org.sonar.wsclient.services.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.IOException;
 import java.util.*;
 
 
@@ -32,24 +42,47 @@ public class AnalysisService
 
     @Autowired
     private JiraConnector jiraConnector;
-
+    
     @Autowired
     private StashConnector stashConnector;
 
     @Autowired
     private SonarConnector sonarConnector;
+    @Autowired
+    private ConfluenceConnector confluenceConnector;
 
     @Autowired
     private JiraMetricService jiraMetricService;
 
     List<JiraMetricIssue> jiraMetricIssues;
     List<StashMetricIssue> stashMetricIssues;
+    Date lastGatheredJira = null;
+    Date lastGatheredStash = null;
+    Date lastGatheredSonar = null;
+    Date lastGatheredConfluence = null;
+
+    DateSave ds;
     private Page<Project> stashProjects;
 
+    public void run() {
+        log.info("Running AnalysisService.run()");
 
-    public void run()
-    {
-        log.info( "Running AnalysisService.run()" );
+
+        ds = new DateSave();
+        try {
+            lastGatheredJira = ds.getLastGatheredDateJira();
+            lastGatheredStash = ds.getLastGatheredDateStash();
+            lastGatheredSonar = ds.getLastGatheredDateSonar();
+            lastGatheredConfluence = ds.getLastGatheredDateConfluence();
+
+            log.info("Last Saved Jira: " + lastGatheredJira.toString());
+            log.info("Last Saved Stash: " + lastGatheredStash.toString());
+            log.info("Last Saved Sonar: " + lastGatheredSonar.toString());
+            log.info("Last Saved Confluence: " + lastGatheredConfluence.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
         // Get Jira Data
         JiraClient jiraCl = null;
@@ -85,7 +118,7 @@ public class AnalysisService
         }
         if(stashMan != null)
             getStashMetricIssues(stashMan);
-*/
+
         // Get Sonar Data
         SonarManager sonarManager = null;
         try
@@ -98,18 +131,36 @@ public class AnalysisService
             e.printStackTrace();
         }
 
-        if ( sonarManager != null )
-        {
-            getSonarMetricIssues();
+        if(sonarManager != null)
+            getSonarMetricIssues(sonarManager);
+*/
+        /*
+        org.safehaus.confluence.client.ConfluenceManager confluenceManager = null;
+        try {
+             confluenceManager = confluenceConnector.confluenceConnect();
+        } catch ( ConfluenceManagerException e) {
+            log.error("Confluence Connection couldn't be established.");
+            e.printStackTrace();
+        }
+
+        if(confluenceManager != null)
+            getConfluenceMetric(confluenceManager);*/
+
+        // Set time.
+        try {
+            ds.saveLastGatheredDates(lastGatheredJira.getTime(), lastGatheredStash.getTime(), lastGatheredSonar.getTime(), lastGatheredConfluence.getTime());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
 
-    private void getJiraMetricIssues( JiraClient jiraCl )
+    private void getJiraMetricIssues(JiraClient jiraCl)
     {
 
-        List<String> projectKeys = new ArrayList<>();
-        List<Issue> jiraIssues = new ArrayList<>();
+        List<String> projectKeys = new ArrayList<String>();
+        List<Issue> jiraIssues = new ArrayList<Issue>();
+        JiraMetricIssueKafkaProducer kafkaProducer = new JiraMetricIssueKafkaProducer();
 
         jiraMetricIssues = new ArrayList<>();
 
@@ -210,9 +261,19 @@ public class AnalysisService
 
             // TODO send for producer
             jiraMetricIssues.add( issueToAdd );
+            if(lastGatheredJira != null) {
+                if (issueToAdd.getUpdateDate().after(lastGatheredJira)) {
+                    // New issue, get it in the database.
+                    log.info("Complies, ID:" + issueToAdd.getIssueId() + " UpDate:" + issueToAdd.getUpdateDate());
+                    kafkaProducer.send(issueToAdd);
 
             //            log.info( issueToAdd.toString() );
             //            log.info( "--------------------------------------" );
+                } else {
+                    // Discard changes because it is already in our database.
+                    log.info("Does not, ID:" + issueToAdd.getIssueId() + " UpDate:" + issueToAdd.getUpdateDate());
+                }
+            }
         }
 
         log.info( "Getting jira metric service" );
@@ -234,13 +295,14 @@ public class AnalysisService
             //                }
             //            }
         }
+
+        // No problem gathering new issues from Jira, which means it should update the last gathering date as of now.
+        if(jiraIssues.size() > 0) {
+            lastGatheredJira = new Date(System.currentTimeMillis());
+        }
+
     }
 
-
-    private void batchIssuesInsert()
-    {
-
-    }
 
 
     private void getStashMetricIssues( StashManager stashMan )
@@ -360,7 +422,6 @@ public class AnalysisService
                     stashMetricIssue.setSrcPath( change.getSrcPath() );
                     stashMetricIssue.setType( change.getType() );
 
-
                     //TODO set stashmetric issue provider over here
                 }
             }
@@ -368,9 +429,60 @@ public class AnalysisService
     }
 
 
-    private void getSonarMetricIssues()
-    {
-        log.info( "Get Sonar Metric Issues ici." );
+    private void getSonarMetricIssues(SonarManager sonarManager) {
+        Set<Resource> resources = null;
+        List<String> resourceKeys = new ArrayList<>();
+        List<Integer> resourceIDs = new ArrayList<>();
+
+
+        log.info("Get Sonar Metric Issues ici.");
+        try {
+            resources = sonarManager.getResources();
+        } catch (SonarManagerException e) {
+            e.printStackTrace();
+        }
+        if(resources != null) {
+            for (Resource r : resources) {
+                log.info("Resource:");
+                log.info(r.getName());
+                log.info(r.getId());
+                log.info(r.getKey());
+                resourceKeys.add(r.getKey());
+                resourceIDs.add(r.getId());
+            }
+        }
+/*
+        try {
+            QuantitativeStats quantitativeStats = sonarManager.getQuantitativeStats(resourceKeys.get(resourceKeys.size() - 1).toString());
+            log.info("LOC: " + quantitativeStats.getLinesOfCode());
+        } catch (SonarManagerException e) {
+            e.printStackTrace();
+        }
+*/
+    }
+
+    private void getConfluenceMetric(ConfluenceManager confluenceManager) {
+        log.info("Get Confluence Metric Issues ici.");
+
+        List<Space> spaceList = null;
+        try {
+            spaceList = confluenceManager.getAllSpaces();
+        } catch (ConfluenceManagerException e) {
+            e.printStackTrace();
+        }
+        List<org.safehaus.confluence.model.Page> pageList = new ArrayList<org.safehaus.confluence.model.Page>();
+        for(Space s : spaceList) {
+            try {
+                pageList.addAll(confluenceManager.listPages(s.getKey(), 0, 100));
+            } catch (ConfluenceManagerException e) {
+                e.printStackTrace();
+            }
+        }
+
+        for(org.safehaus.confluence.model.Page p : pageList) {
+            log.info(p.getTitle());
+            //TODO need to update the cofluence api in order to get the author name.
+        }
     }
 
 
