@@ -282,10 +282,17 @@ public class AnalysisService
                 {
                     // New issue, get it in the database.
                     log.info( "Complies, ID:" + issueToAdd.getIssueId() + " UpDate:" + issueToAdd.getUpdateDate() );
-                    kafkaProducer.send( issueToAdd );
+                    try
+                    {
+                        kafkaProducer.send( issueToAdd );
+                    }
+                    catch ( Exception ex )
+                    {
+                        log.error( "Error while sending message", ex );
+                    }
 
-            //            log.info( issueToAdd.toString() );
-            //            log.info( "--------------------------------------" );
+                    //            log.info( issueToAdd.toString() );
+                    //            log.info( "--------------------------------------" );
                 }
                 else
                 {
@@ -320,7 +327,6 @@ public class AnalysisService
         {
             lastGatheredJira = new Date( System.currentTimeMillis() );
         }
-
     }
 
 
