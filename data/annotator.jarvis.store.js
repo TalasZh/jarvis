@@ -62,14 +62,13 @@ console.log("custom.js lib is loaded...");
 
         var _t;
         __extends(JarvisStore, _super);
-        _t = Annotator._t;
 
-        JarvisStore.prototype.events = {
-            annotationCreated: "annotationCreated",
-            annotationDeleted: "annotationDeleted",
-            annotationUpdated: "annotationUpdated",
-            beforeAnnotationCreated: "setupResearchFields"
-        };
+        //JarvisStore.prototype.events = {
+        //    annotationCreated: "annotationCreated",
+        //    annotationDeleted: "annotationDeleted",
+        //    annotationUpdated: "annotationUpdated",
+        //    beforeAnnotationCreated: "setupResearchFields"
+        //};
         JarvisStore.prototype.options = {
             hostURL: "some host url",
             basePath: "basePath",
@@ -81,12 +80,27 @@ console.log("custom.js lib is loaded...");
         };
 
         function JarvisStore(element, options) {
+
+            var handlers, event, handler;
             this._onError = __bind(this._onError, this);
             this._onLoadAnnotationsFromSearch = __bind(this._onLoadAnnotationsFromSearch, this);
             this._onLoadAnnotations = __bind(this._onLoadAnnotations, this);
             this._getAnnotations = __bind(this._getAnnotations, this);
             JarvisStore.__super__.constructor.apply(this, arguments);
-            this.annotations = []
+            handlers = {
+                annotationCreated: "onAnnotationCreated",
+                annotationDeleted: "onAnnotationDeleted",
+                annotationUpdated: "onAnnotationUpdated",
+                beforeAnnotationCreated: "onBeforeAnnotationCreated"
+            };
+            this.annotations = [];
+            for (event in handlers) {
+                if (!__hasProp.call(handlers, event)) continue;
+                handler = handlers[event];
+                if (typeof this.options[handler] === "function") {
+                    this.on(event, jQuery.proxy(this.options, handler));
+                }
+            }
         }
 
         JarvisStore.prototype.pluginInit = function () {
@@ -122,27 +136,6 @@ console.log("custom.js lib is loaded...");
                 console.log("Calling error notification...");
                 self.port.emit("onAnnotationCreated", annotation);
                 this._onError("create", 401);
-                //var opts = {
-                //    url: this._makeUri("/sessions/" + annotation.researchSession + "/capture"),
-                //    content: JSON.stringify(annotation)
-                //};
-                //return this._doRequest(opts, function (response) {
-                //    if (response.status !== 200) {
-                //        _this._onError("create", response.status);
-                //        return;
-                //    }
-                //    if (response.json.id) {
-                //        console.warn(Annotator._t("Warning: No ID returned from server for annotation "), annotation);
-                //    }
-                //    return _this.updateAnnotation(annotation, response.json);
-                //}, "POST");
-
-                //return this._apiRequest("create", annotation, function (data) {
-                //    if (data.id == null) {
-                //        console.warn(Annotator._t("Warning: No ID returned from server for annotation "), annotation)
-                //    }
-                //    return _this.updateAnnotation(annotation, data)
-                //})
             } else {
                 return this.updateAnnotation(annotation, {})
             }

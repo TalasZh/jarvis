@@ -7,7 +7,6 @@
 // }
 
 
-
 exports.main = function (options) {
 
     var { ActionButton } = require('sdk/ui/button/action');
@@ -23,7 +22,10 @@ exports.main = function (options) {
     var currentSessionStatus = {
         isAnnotationReadonly: true,
         isAnnotatorOn: false,
-        activeResearch: null
+        activeResearch: null,
+        jarvisHost: simplePrefs.prefs.jarvisHost,
+        jiraHost: simplePrefs.prefs.jiraHost,
+        annotations: []
     };
 
     var searchQuery = 'issuetype = Research AND status not in (Resolved, Closed, Done) AND resolution = Unresolved AND assignee in (currentUser()) ORDER BY updatedDate DESC';
@@ -66,7 +68,7 @@ exports.main = function (options) {
             data.url("annotator-full.1.2.10/annotator-full.min.js"),
             data.url("annotator.offline.min.js"),
             data.url("floatingElement.js"),
-            data.url("mfb/custom.js")
+            data.url("annotator.jarvis.store.js")
         ],
         onAttach: function (worker) {
             console.log("Worker initialized");
@@ -99,14 +101,19 @@ exports.main = function (options) {
             });
 
             worker.port.on("saveUpdateAnnotation", function (annotation, duplicate) {
-                saveNewAnnotation(annotation, duplicate, function(newAnnotation) {
+                saveNewAnnotation(annotation, duplicate, function (newAnnotation) {
                     //TODO update annotation id according to server's id assigned
                     //worker.port.emit("updateWithServerAnnotation", newAnnotation);
                 });
             });
+            worker.port.on("onAnnotationCreated", function(annotation) {
+                _onAnnotationCreated(annotation, function (error, data) {
+
+                })
+            });
 
             worker.port.on("detach", function () {
-                worker.port.emit("detachMe");
+                //worker.port.emit("detachMe");
                 detachWorker(this);
             });
 
@@ -150,12 +157,55 @@ exports.main = function (options) {
             if (error) {
                 jiraError = error;
                 if (redirect) {
-                    tabs.open(simplePrefs.prefs.jiraHost);
+                    tabs.open(simplePrefs.prefs.jarvisHost);
                 }
             }
             else {
                 simpleStorage.storage.annotations = {};
                 callback();
+            }
+        });
+    }
+
+    function _onAnnotationCreated(annotation, callback) {
+        console.log("Getting session");
+        console.log(annotation);
+        mediator.getSession(annotation.researchSession, function (error, json) {
+            if (error) {
+                console.log("Error: " + error);
+            }
+            else if (!json) {
+                console.log("Starting session");
+                mediator.startSession(annotation.researchSession, function (error, json) {
+                    if (error) {
+
+                        console.log("Error nothing to do here, seems dead end(");
+                    }
+                    else {
+                        /**
+                         * fixme Gets recursive calls when issue key is changed but id persists
+                         * mediator says that selected issue is null but actually while starting
+                         * returns issue key with last key
+                         */
+                        console.log(json);
+                        console.log("Trying to save annotation again");
+                        _onAnnotationCreated(annotation, callback);
+                    }
+                });
+            }
+            else {
+                console.log("Saving annotation");
+                console.log(JSON.stringify(annotation));
+                mediator.saveCapture(annotation.researchSession, annotation, function (error, json) {
+                    if (error) {
+                        console.log("Error: " + error);
+                        callback(error);
+                    }
+                    else {
+                        console.log(json);
+                        callback(null, json);
+                    }
+                });
             }
         });
     }
@@ -215,6 +265,8 @@ exports.main = function (options) {
     function onPrefChange() {
         jira = new JiraApi(simplePrefs.prefs.jiraHost, "2", false, false);
         mediator = new MediatorApi(simplePrefs.prefs.jarvisHost, null, null, true);
+        currentSessionStatus.jarvisHost = simplePrefs.prefs.jarvisHost;
+        currentSessionStatus.jiraHost = simplePrefs.prefs.jiraHost;
     }
 
 };

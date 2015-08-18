@@ -6,7 +6,10 @@
     var currentSession = {
         isAnnotationReadonly: true,
         isAnnotatorOn: false,
-        activeResearch: null
+        activeResearch: null,
+        jarvisHost: "",
+        jiraHost: "",
+        annotations: []
     };
 
 
@@ -24,10 +27,11 @@
         updateAnnotatorStatus();
     });
 
-    self.port.on('detachMe', function () {
+    self.port.on('detach', function () {
         console.log("Detaching withing the script");
         //Need to disable annotator too
         jQuery("#jarvis-menu").remove();
+        //self.port.emit("detachWorker", );
         destroyAnnotator();
     });
 
@@ -179,38 +183,55 @@
                 readOnly: false
             });
 
-            content.annotator('addPlugin', 'Offline', {
-                online: function () {
-                    //jQuery("#status").text("Online");
+            content.annotator("addPlugin", "JarvisStore", {
+                onAnnotationCreated: function(annotation) {
+                    console.log("Annotation created event triggered...");
                 },
-                offline: function () {
-                    //jQuery("#status").text("Offline");
+                onAnnotationDeleted: function(annotation) {
+                    console.log("Annotation deleted...");
                 },
-                setAnnotationDataBeforeCreation: function (annotation) {
-                    console.log("Annotation data being set...");
-                    //console.log(this);
+                onAnnotationUpdated: function(annotation) {
+                    console.log("Annotation updated...");
+                },
+                onBeforeAnnotationCreated: function(annotation) {
+                    console.log("Before annotation created...");
                     annotation.researchSession = currentSession.activeResearch;
-                    annotation.annotator_schema_version = "v1.2";
-                    annotation.uri = window.location.href;
-                },
-                setAnnotationData: function(annotation) {
-                    //TODO v1.2 - migration merge where local and remote annotations are coexist
-                    // v1.3 - should deal with unsynced data to sync with server, this step should be gradual
-                    console.log("Annotation Data");
-
-                    annotation.annotator_schema_version = "v1.2";
-                },
-                shouldLoadAnnotation: function (annotation) {
-                    return true;
-                    //return annotation.researchSession === annotator.options.researchSession;
-                },
-                getCreatedAnnotation: function (annotation) {
-                    console.log("Annotation created event is called");
-                    console.log(annotation);
-                    //console.log(offline);
-                    self.port.emit("saveUpdateAnnotation", annotation, jQuery.extend(true, {}, annotation));
                 }
             });
+            Annotator.showNotification("Annotator initialized", Annotator.Notification.INFO);
+
+            //content.annotator('addPlugin', 'Offline', {
+            //    online: function () {
+            //        //jQuery("#status").text("Online");
+            //    },
+            //    offline: function () {
+            //        //jQuery("#status").text("Offline");
+            //    },
+            //    setAnnotationDataBeforeCreation: function (annotation) {
+            //        console.log("Annotation data being set...");
+            //        //console.log(this);
+            //        annotation.researchSession = currentSession.activeResearch;
+            //        annotation.annotator_schema_version = "v1.2";
+            //        annotation.uri = window.location.href;
+            //    },
+            //    setAnnotationData: function (annotation) {
+            //        //TODO v1.2 - migration merge where local and remote annotations are coexist
+            //        // v1.3 - should deal with unsynced data to sync with server, this step should be gradual
+            //        console.log("Annotation Data");
+            //
+            //        annotation.annotator_schema_version = "v1.2";
+            //    },
+            //    shouldLoadAnnotation: function (annotation) {
+            //        return true;
+            //        //return annotation.researchSession === annotator.options.researchSession;
+            //    },
+            //    getCreatedAnnotation: function (annotation) {
+            //        console.log("Annotation created event is called");
+            //        console.log(annotation);
+            //        //console.log(offline);
+            //        self.port.emit("saveUpdateAnnotation", annotation, jQuery.extend(true, {}, annotation));
+            //    }
+            //});
         }
 
         return annotator;
