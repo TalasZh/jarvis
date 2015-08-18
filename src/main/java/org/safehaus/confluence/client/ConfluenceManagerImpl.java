@@ -215,10 +215,60 @@ public class ConfluenceManagerImpl implements ConfluenceManager
         }
     }
 
+    @Override
+    public Set<Page> listPagesWithOptions( String spaceKey, Integer start, Integer limit,
+                                           boolean expandSpace, boolean expandBody, boolean expandVersion, boolean expandContainer ) throws ConfluenceManagerException
+    {
+        try
+        {
+            Map<String, String> params = new HashMap<String, String>();
+            ArrayList<String> expandOptions = new ArrayList<>();
+            String expandOptionsCombined;
+            if ( spaceKey != null )
+            {
+                params.put( "spaceKey", spaceKey );
+            }
+            if ( start != null )
+            {
+                params.put( "start", String.valueOf( start ) );
+            }
+            if ( limit != null )
+            {
+                params.put( "limit", String.valueOf( limit ) );
+            }
+            if(expandSpace)
+                expandOptions.add("space");
+            if(expandBody)
+                expandOptions.add("body.view");
+            if(expandVersion)
+                expandOptions.add("version");
+            if(expandContainer)
+                expandOptions.add("container");
+
+            if(expandOptions.size() > 0) {
+                expandOptionsCombined = expandOptions.get(0);
+                for(int i = 1; i < expandOptions.size(); i++) {
+                    expandOptionsCombined += ("," + expandOptions.get(i));
+                }
+                params.put("expand", expandOptionsCombined);
+            }
+
+            String response = get( "rest/api/content", params );
+
+            PageResult pageResult = new Gson().fromJson( response, PageResult.class );
+
+            return pageResult.getResults();
+        }
+        catch ( Exception e )
+        {
+            throw new ConfluenceManagerException( e );
+        }
+    }
 
     @Override
     public Page getPage( String pageId ) throws ConfluenceManagerException
     {
+
         try
         {
             Map<String, String> params = new HashMap<String, String>();
@@ -226,6 +276,7 @@ public class ConfluenceManagerImpl implements ConfluenceManager
             String response = get( String.format( "rest/api/content/%s", pageId ), params );
 
             Page page = new Gson().fromJson( response, Page.class );
+
 
             return page;
         }
@@ -271,6 +322,7 @@ public class ConfluenceManagerImpl implements ConfluenceManager
             String response = put( String.format( "rest/api/content/%s", page.getId() ), page );
 
             Page aPage = new Gson().fromJson( response, Page.class );
+
 
             return aPage;
         }
