@@ -2,7 +2,7 @@
  * Created by talas on 7/28/15.
  */
 //((function () {
-console.log("custom.js lib is loaded...");
+console.log("JarvisStore lib is loaded...");
 //var listIssues = jQuery("#btn-jarvis-list-researches");
 //listIssues.on("click", function () {
 //    var researchIssueList = jQuery("#jarvis-research-list-ctrl");
@@ -109,7 +109,7 @@ console.log("custom.js lib is loaded...");
             if (!Annotator.supported()) {
                 return
             }
-            console.log("Store plugin is being initialized...");
+            console.log("Store plugin initialized...");
             //if (this.annotator.plugins.Auth) {
             //    return this.annotator.plugins.Auth.withToken(this._getAnnotations)
             //} else {

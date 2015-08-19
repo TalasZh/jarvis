@@ -9,7 +9,7 @@
 
 exports.main = function (options) {
 
-    var { ActionButton } = require('sdk/ui/button/action');
+    var { ToggleButton } = require('sdk/ui/button/toggle');
     var tabs = require("sdk/tabs");
     var simpleStorage = require("sdk/simple-storage");
     var simplePrefs = require("sdk/simple-prefs");
@@ -22,7 +22,7 @@ exports.main = function (options) {
     var currentSessionStatus = {
         isAnnotationReadonly: true,
         isAnnotatorOn: false,
-        activeResearch: null,
+        activeResearch: [],
         jarvisHost: simplePrefs.prefs.jarvisHost,
         jiraHost: simplePrefs.prefs.jiraHost,
         annotations: []
@@ -41,7 +41,7 @@ exports.main = function (options) {
 
     pullResearches(false);
 
-    var button = ActionButton({
+    var button = ToggleButton({
         id: "jarvis-activator",
         label: "Enable/Disable Jarvis",
         icon: {
@@ -49,77 +49,89 @@ exports.main = function (options) {
             "32": data.url('jarvis_logo_32x32_cropped.png'),
             "64": data.url('jarvis_logo_64x64_cropped.png')
         },
-        onClick: handleClick
+        onChange: handleClick
     });
 
-    var researchCtrl = pageMod.PageMod({
-        include: ["*"],
-        attachTo: ["top"],
-        contentStyleFile: [
-            data.url("mfb/custom.css"),
-            data.url("mfb/mfb.css"),
-            data.url("mfb/index.css"),
-            data.url("annotator-full.1.2.10/annotator.min.css")
-        ],
-        contentScriptWhen: "ready",
-        contentScriptFile: [
-            data.url("jquery-2.1.3.min.js"),
-            data.url("list.min.js"),
-            data.url("annotator-full.1.2.10/annotator-full.min.js"),
-            data.url("annotator.offline.min.js"),
-            data.url("floatingElement.js"),
-            data.url("annotator.jarvis.store.js")
-        ],
-        onAttach: function (worker) {
-            console.log("Worker initialized");
-            worker.port.emit("setCurrentSessionStatus", currentSessionStatus);
+    function initialize() {
 
-            worker.port.on("updateCurrentSession", function (updatedSession) {
-                console.log("Updating current session");
-                console.log(updatedSession);
-                currentSessionStatus = updatedSession;
-            });
+        onPrefChange();
 
-            worker.port.on("requestResource", function (resourceName, target) {
-                console.log(data.url(resourceName));
-                console.log(target);
-                worker.port.emit("loadResource", data.load(resourceName), target);
-            });
+        var researchCtrl = pageMod.PageMod({
+            include: ["*"],
+            attachTo: ["top"],
+            contentStyleFile: [
+                data.url("mfb/custom.css"),
+                data.url("mfb/mfb.css"),
+                data.url("mfb/index.css"),
+                data.url("annotator-full.1.2.10/annotator.min.css")
+            ],
+            contentScriptWhen: "ready",
+            contentScriptFile: [
+                data.url("jquery-2.1.3.min.js"),
+                data.url("list.min.js"),
+                data.url("annotator-full.1.2.10/annotator-full.min.js"),
+                data.url("annotator.offline.min.js"),
+                data.url("floatingElement.js"),
+                data.url("annotator.jarvis.store.js")
+            ],
+            onAttach: function (worker) {
+                console.log("Worker initialized");
+                jira.getCurrentUser(function (error, responseText) {
+                    if (error) {
+                        worker.port.emit("onErrorMessage", error);
+                    }
+                    else {
+                        pullJiraResearches();
+                        pullAnnotations(worker);
+                        worker.port.emit("loadResource", data.load("mfb/fbButtons.html"), "body");
 
-            worker.port.on("getResearchList", function () {
-                console.log("Jira error: " + jiraError);
-                if (jiraError) {
-                    console.log("Couldn't retrieve issues");
-                    worker.port.emit("setResearches", jiraError, []);
-                    //pullResearches(true);
-                }
-                else if (researches) {
-                    console.log("Researches: " + researches);
-                    worker.port.emit("setResearches", null, researches);
-                }
-                pullResearches(true);
-            });
+                    }
 
-            worker.port.on("saveUpdateAnnotation", function (annotation, duplicate) {
-                saveNewAnnotation(annotation, duplicate, function (newAnnotation) {
-                    //TODO update annotation id according to server's id assigned
-                    //worker.port.emit("updateWithServerAnnotation", newAnnotation);
                 });
-            });
-            worker.port.on("onAnnotationCreated", function(annotation) {
-                _onAnnotationCreated(annotation, function (error, data) {
+                worker.port.emit("setCurrentSessionStatus", currentSessionStatus);
 
-                })
-            });
+                worker.port.on("updateCurrentSession", function (updatedSession) {
+                    console.log("Updating current session");
+                    console.log(updatedSession);
+                    currentSessionStatus.activeResearch = updatedSession.activeResearch;
+                    currentSessionStatus.isAnnotationReadonly = updatedSession.isAnnotationReadonly;
+                    currentSessionStatus.isAnnotatorOn = updatedSession.isAnnotatorOn;
+                });
 
-            worker.port.on("detach", function () {
-                //worker.port.emit("detachMe");
-                detachWorker(this);
-            });
+                worker.port.on("getResearchList", function () {
+                    console.log("Jira error: " + jiraError);
+                    if (jiraError) {
+                        console.log("Couldn't retrieve issues");
+                        worker.port.emit("setResearches", jiraError, []);
+                        //pullResearches(true);
+                    }
+                    else if (researches) {
+                        console.log("Researches: " + researches);
+                        worker.port.emit("setResearches", null, researches);
+                    }
+                });
 
-            researchWorkers.push(worker);
-        }
-    });
+                worker.port.on("saveUpdateAnnotation", function (annotation, duplicate) {
+                    saveNewAnnotation(annotation, duplicate, function (newAnnotation) {
+                        //TODO update annotation id according to server's id assigned
+                        //worker.port.emit("updateWithServerAnnotation", newAnnotation);
+                    });
+                });
+                worker.port.on("onAnnotationCreated", function (annotation) {
+                    _onAnnotationCreated(annotation, function (error, data) {
+
+                    })
+                });
+
+                worker.port.on("detach", function () {
+                    //worker.port.emit("detachMe");
+                    detachWorker(this);
+                });
+
+                researchWorkers.push(worker);
+            }
+        });
+    }
 
     function detachWorker(worker) {
         var index = researchWorkers.indexOf(worker);
@@ -130,11 +142,52 @@ exports.main = function (options) {
 
 
     function handleClick(state) {
-        tabs.open(simplePrefs.prefs.jarvisHost);
+        //tabs.open(simplePrefs.prefs.jarvisHost);
+        state.checked = !state.checked;
+        if (state.checked) {
+            initialize();
+            tabs.activeTab.reload();
+        }
     }
 
     function pullResearches(redirect) {
-        isUserAuth(redirect, pullJiraResearches);
+        jira.getCurrentUser(function (error, responseText) {
+            if (error) {
+                jiraError = error;
+                if (redirect) {
+                    tabs.open(simplePrefs.prefs.jarvisHost);
+                }
+            }
+            else {
+                simpleStorage.storage.annotations = {};
+                pullJiraResearches();
+            }
+        });
+    }
+
+    function pullAnnotations(worker) {
+        console.log("Pulling annotations");
+        mediator.listCaptures(function (error, json) {
+            if (error) {
+                console.error(error + " while pulling annotations");
+                if (worker) {
+                    worker.port.emit("onErrorMessage", error);
+                }
+            }
+            else {
+                console.log("Annotations pulled");
+                console.log(json);
+                var annotationsArray = [];
+                for (var inx = 0; inx < json.length; inx++) {
+                    var annotation = json[inx];
+                    var ranges = JSON.parse(annotation.ranges);
+                    annotation.ranges = ranges;
+                    annotationsArray.push(annotation);
+                    console.log(annotation);
+                }
+                currentSessionStatus.annotations = annotationsArray;
+            }
+        });
     }
 
     function pullJiraResearches() {
@@ -150,21 +203,6 @@ exports.main = function (options) {
             }
         });
 
-    }
-
-    function isUserAuth(redirect, callback) {
-        jira.getCurrentUser(function (error, responseText) {
-            if (error) {
-                jiraError = error;
-                if (redirect) {
-                    tabs.open(simplePrefs.prefs.jarvisHost);
-                }
-            }
-            else {
-                simpleStorage.storage.annotations = {};
-                callback();
-            }
-        });
     }
 
     function _onAnnotationCreated(annotation, callback) {
@@ -262,7 +300,7 @@ exports.main = function (options) {
         });
     }
 
-    function onPrefChange() {
+    function onPrefChange(callback) {
         jira = new JiraApi(simplePrefs.prefs.jiraHost, "2", false, false);
         mediator = new MediatorApi(simplePrefs.prefs.jarvisHost, null, null, true);
         currentSessionStatus.jarvisHost = simplePrefs.prefs.jarvisHost;

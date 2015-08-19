@@ -6,7 +6,7 @@
     var currentSession = {
         isAnnotationReadonly: true,
         isAnnotatorOn: false,
-        activeResearch: null,
+        activeResearch: "null",
         jarvisHost: "",
         jiraHost: "",
         annotations: []
@@ -18,8 +18,10 @@
     var options = {valueNames: ["jarvis-issue-key", "jarvis-issue-type"]};
     var researchIssuesList = new List("jarvis-research-list-ctrl", options);
 
-    self.port.emit("requestResource", "mfb/fbButtons.html", "body");
-
+    /**
+     * Inherit base configuration from main controller
+     * Configurations saved within @currentSession object
+     */
     self.port.on("setCurrentSessionStatus", function (currentSessionStatus) {
         console.log("Received object");
         console.log(currentSessionStatus);
@@ -27,14 +29,41 @@
         updateAnnotatorStatus();
     });
 
+    /**
+     * For the moment use annotators notification functionality,
+     * but later one replace with fully customiezd one
+     */
+    self.port.on("onErrorMessage", function (errorMsg) {
+        var annotator = getAnnotator();
+        if (!annotator) {
+            currentSession.isAnnotatorOn = true;
+            currentSession.activeResearch = "null";
+            updateAnnotatorStatus();
+        }
+
+        Annotator.showNotification(errorMsg, Annotator.Notification.ERROR);
+    });
+
+    /**
+     * Clean up some ui controls
+     */
     self.port.on('detach', function () {
         console.log("Detaching withing the script");
         //Need to disable annotator too
-        jQuery("#jarvis-menu").remove();
+        //jQuery("#jarvis-menu").remove();
+
+        var elem = window.document.getElementById("jarvis-menu");
+        elem.parentNode.removeChild(elem);
+        //elem.remove();
+
         //self.port.emit("detachWorker", );
         destroyAnnotator();
     });
 
+    /**
+     * Import floating buttons to page,
+     * with list to start research session
+     */
     self.port.on("loadResource", function (resource, target) {
         console.log("resource is loaded");
         console.log(target);
@@ -140,6 +169,10 @@
             "</dt>");
     }
 
+    /**
+     * Update main session controller to save
+     * active instance across all pages
+     */
     function updateAnnotatorStatus() {
         console.log("updating annotator status");
         console.log(currentSession);
@@ -183,22 +216,32 @@
                 readOnly: false
             });
 
-            content.annotator("addPlugin", "JarvisStore", {
-                onAnnotationCreated: function(annotation) {
+            annotator = getAnnotator();
+            annotator.addPlugin("JarvisStore", {
+                onAnnotationCreated: function (annotation) {
                     console.log("Annotation created event triggered...");
                 },
-                onAnnotationDeleted: function(annotation) {
+                onAnnotationDeleted: function (annotation) {
                     console.log("Annotation deleted...");
                 },
-                onAnnotationUpdated: function(annotation) {
+                onAnnotationUpdated: function (annotation) {
                     console.log("Annotation updated...");
                 },
-                onBeforeAnnotationCreated: function(annotation) {
+                onBeforeAnnotationCreated: function (annotation) {
                     console.log("Before annotation created...");
                     annotation.researchSession = currentSession.activeResearch;
+                    annotation.annotator_schema_version = "v1.2";
+                    annotation.uri = window.location.href;
                 }
             });
-            Annotator.showNotification("Annotator initialized", Annotator.Notification.INFO);
+
+            console.log("Annotator initialized \nLoading annotations");
+            console.log(currentSession.annotations);
+
+            annotator.loadAnnotations(currentSession.annotations);
+
+
+            Annotator.showNotification("Annotator initialized. Active Session: " + currentSession.activeResearch, Annotator.Notification.INFO);
 
             //content.annotator('addPlugin', 'Offline', {
             //    online: function () {
@@ -237,21 +280,14 @@
         return annotator;
     }
 
-
+    /**
+     * Query dom element to extract annotator object
+     * @returns {Annotator}
+     */
     function getAnnotator() {
         return jQuery(annotatorTargetElement).data("annotator");
     }
 
-    function enableAnnotator() {
-
-        //var annotator = content.data('annotator');
-
-        //jQuery("#clear-storage").click(function () {
-        //    if (annotator) {
-        //        annotator.plugins.Offline.store.clear();
-        //    }
-        //});
-    }
 
     function destroyAnnotator() {
         var annotator = getAnnotator();
