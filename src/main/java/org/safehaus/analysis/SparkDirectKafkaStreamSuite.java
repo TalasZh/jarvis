@@ -313,7 +313,7 @@ public class SparkDirectKafkaStreamSuite implements Serializable
         kafkaParams.put( "auto.offset.reset", "smallest" );
 
         conf = new SparkConf().setAppName( appName );
-        conf.setMaster( sparkMaster );
+        conf.setMaster( sparkMaster ).set("spark.cassandra.connection.host", "localhost");;
         jssc = new JavaStreamingContext( conf, Durations.seconds( 60 ) );
 
         //Create the stream for jira-logs
