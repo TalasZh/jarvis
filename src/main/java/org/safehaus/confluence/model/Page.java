@@ -252,19 +252,35 @@ public class Page implements ConfluenceEntity
 	public class Version
 	{
 		private int number;
+        private String when;
 
+        private By by;
+
+        public String getWhen() {
+            return when;
+        }
+
+        public void setWhen(String when) {
+            this.when = when;
+        }
 
 		public int getNumber()
 		{
 			return number;
 		}
 
-
 		public void setNumber( int number )
 		{
 			this.number = number;
 		}
 
+        public By getBy() {
+            return by;
+        }
+
+        public void setBy(By by) {
+            this.by = by;
+        }
 	}
 
 	public class Links
@@ -323,5 +339,45 @@ public class Page implements ConfluenceEntity
 		}
 
 	}
+
+    public class By
+    {
+        private String type;
+        private String username;
+        private String displayName;
+        private String userKey;
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getUsername() {
+            return username;
+        }
+
+        public void setUsername(String username) {
+            this.username = username;
+        }
+
+        public String getDisplayName() {
+            return displayName;
+        }
+
+        public void setDisplayName(String displayName) {
+            this.displayName = displayName;
+        }
+
+        public String getUserKey() {
+            return userKey;
+        }
+
+        public void setUserKey(String userKey) {
+            this.userKey = userKey;
+        }
+    }
 
 }
