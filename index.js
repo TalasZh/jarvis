@@ -84,7 +84,6 @@ exports.main = function (options) {
                         pullJiraResearches();
                         pullAnnotations(worker);
                         worker.port.emit("loadResource", data.load("mfb/fbButtons.html"), "body");
-
                     }
 
                 });
@@ -111,20 +110,49 @@ exports.main = function (options) {
                     }
                 });
 
-                worker.port.on("saveUpdateAnnotation", function (annotation, duplicate) {
-                    saveNewAnnotation(annotation, duplicate, function (newAnnotation) {
-                        //TODO update annotation id according to server's id assigned
-                        //worker.port.emit("updateWithServerAnnotation", newAnnotation);
+                worker.port.on("_onAnnotationCreated", function (annotation) {
+                    _onAnnotationCreated(annotation, function (error, data) {
+                        if (error) {
+                            worker.port.emit("onErrorMessage", error);
+                        }
+                        else {
+                            console.log();
+                            worker.port.emit("_afterAnnotationUpdate", annotation, data);
+                        }
+                    })
+                });
+
+                worker.port.on("_onAnnotationUpdated", function (annotation) {
+                    console.log("Updating annotation");
+                    console.log(annotation);
+                    var preformatted = Object.assign({}, annotation);
+                    preformatted.ranges = JSON.stringify(annotation.ranges);
+                    mediator.updateCapture(annotation.researchSession, preformatted, function (error, json) {
+                        if (error) {
+                            worker.port.emit("onErrorMessage", error);
+                        }
+                        else {
+                            worker.port.emit("_afterAnnotationUpdate", annotation, annotation);
+                        }
                     });
                 });
-                worker.port.on("onAnnotationCreated", function (annotation) {
-                    _onAnnotationCreated(annotation, function (error, data) {
 
-                    })
+                worker.port.on("_onAnnotationDeleted", function (annotation) {
+                    console.log("Deleting annotation");
+                    console.log(annotation);
+                    mediator.deleteCapture(annotation.researchSession, annotation, function (error, json) {
+                        if (error) {
+                            worker.port.emit("onErrorMessage", error);
+                        }
+                        else {
+                            currentSessionStatus.annotations.splice(currentSessionStatus.annotations.indexOf(annotation), 1);
+                        }
+                    });
                 });
 
                 worker.port.on("detach", function () {
                     //worker.port.emit("detachMe");
+                    console.log("Detaching worker from controller...");
                     detachWorker(this);
                 });
 
@@ -171,7 +199,7 @@ exports.main = function (options) {
             if (error) {
                 console.error(error + " while pulling annotations");
                 if (worker) {
-                    worker.port.emit("onErrorMessage", error);
+                    worker.port.emit("onErrorMessage", error + " while pulling annotations");
                 }
             }
             else {
@@ -186,6 +214,7 @@ exports.main = function (options) {
                     console.log(annotation);
                 }
                 currentSessionStatus.annotations = annotationsArray;
+                worker.port.emit("onLoadAnnotations", annotationsArray);
             }
         });
     }
@@ -207,6 +236,7 @@ exports.main = function (options) {
 
     function _onAnnotationCreated(annotation, callback) {
         console.log("Getting session");
+
         console.log(annotation);
         mediator.getSession(annotation.researchSession, function (error, json) {
             if (error) {
@@ -234,7 +264,9 @@ exports.main = function (options) {
             else {
                 console.log("Saving annotation");
                 console.log(JSON.stringify(annotation));
-                mediator.saveCapture(annotation.researchSession, annotation, function (error, json) {
+                var preformatted = Object.assign({}, annotation);
+                preformatted.ranges = JSON.stringify(annotation.ranges);
+                mediator.saveCapture(annotation.researchSession, preformatted, function (error, json) {
                     if (error) {
                         console.log("Error: " + error);
                         callback(error);

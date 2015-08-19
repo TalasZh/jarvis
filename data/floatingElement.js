@@ -13,10 +13,16 @@
     };
 
 
-    var annotatorTargetElement = "body";
+    var annotatorTargetElement = "body",
+        options = {valueNames: ["jarvis-issue-key", "jarvis-issue-type"]},
+        researchIssuesList = new List("jarvis-research-list-ctrl", options),
+        __indexOf = [].indexOf || function (item) {
+                for (var i = 0, l = this.length; i < l; i++) {
+                    if (i in this && this[i] === item)return i
+                }
+                return -1
+            };
 
-    var options = {valueNames: ["jarvis-issue-key", "jarvis-issue-type"]};
-    var researchIssuesList = new List("jarvis-research-list-ctrl", options);
 
     /**
      * Inherit base configuration from main controller
@@ -27,6 +33,33 @@
         console.log(currentSessionStatus);
         currentSession = currentSessionStatus;
         updateAnnotatorStatus();
+    });
+
+
+    self.port.on("_afterAnnotationUpdate", function (oldAnnotation, newAnnotation) {
+        //if (__indexOf.call(this.annotations, annotation) < 0) {
+
+        //}
+        //else{
+        jQuery.extend(oldAnnotation, newAnnotation);
+        //}
+        console.log("annotation updated");
+        console.log(oldAnnotation);
+        console.log(oldAnnotation.highlights[0]);
+        console.log(JSON.stringify(oldAnnotation));
+        var annotation = __indexOf()
+        console.log(jQuery(oldAnnotation.highlights).data("annotation"));
+        jQuery(oldAnnotation.highlights).data("annotation", oldAnnotation);
+    });
+
+    self.port.on("onLoadAnnotations", function (annotations) {
+        console.log("Annotations loaded...");
+        console.log(annotations);
+        var annotator = getAnnotator();
+        if (annotator) {
+            annotator.loadAnnotations(annotations);
+        }
+        currentSession.annotations = annotations;
     });
 
     /**
@@ -199,7 +232,9 @@
             console.log("Destroying annotator and nullifying models");
             annotator.destroy();
             currentSession.isAnnotationReadonly = true;
+            currentSession.isAnnotatorOn = false;
             currentSession.activeResearch = null;
+            self.port.emit("updateCurrentSession", currentSession);
             location.reload();
         }
     }
@@ -220,12 +255,18 @@
             annotator.addPlugin("JarvisStore", {
                 onAnnotationCreated: function (annotation) {
                     console.log("Annotation created event triggered...");
+                    self.port.emit("_onAnnotationCreated", annotation);
+                    //console.log(jQuery(annotation.highlights).data("annotation"));
+                    currentSession.annotations.push(annotation);
                 },
                 onAnnotationDeleted: function (annotation) {
                     console.log("Annotation deleted...");
+                    self.port.emit("_onAnnotationDeleted", annotation);
+                    currentSession.annotations.splice(currentSession.annotations.indexOf(annotation), 1);
                 },
                 onAnnotationUpdated: function (annotation) {
                     console.log("Annotation updated...");
+                    self.port.emit("_onAnnotationUpdated", annotation);
                 },
                 onBeforeAnnotationCreated: function (annotation) {
                     console.log("Before annotation created...");
@@ -238,10 +279,7 @@
             console.log("Annotator initialized \nLoading annotations");
             console.log(currentSession.annotations);
 
-            annotator.loadAnnotations(currentSession.annotations);
-
-
-            Annotator.showNotification("Annotator initialized. Active Session: " + currentSession.activeResearch, Annotator.Notification.INFO);
+            Annotator.showNotification("Active Session: " + currentSession.activeResearch, Annotator.Notification.INFO);
 
             //content.annotator('addPlugin', 'Offline', {
             //    online: function () {
