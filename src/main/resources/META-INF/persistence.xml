@@ -34,6 +34,7 @@
     <class>org.safehaus.stash.model.Path</class>
     <class>org.safehaus.stash.model.StashMetricIssue</class>
     <class>org.safehaus.analysis.JiraMetricIssue</class>
+    <class>org.safehaus.analysis.UserMetricInfo</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="kundera.nodes" value="localhost" />
