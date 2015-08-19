@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.joda.time.DateTime;
 import org.safehaus.analysis.JiraMetricIssue;
 import org.safehaus.analysis.JiraMetricIssueKafkaProducer;
 import org.safehaus.analysis.service.ConfluenceConnector;
@@ -16,6 +17,7 @@ import org.safehaus.analysis.service.SonarConnector;
 import org.safehaus.analysis.service.StashConnector;
 import org.safehaus.confluence.client.ConfluenceManager;
 import org.safehaus.confluence.client.ConfluenceManagerException;
+import org.safehaus.confluence.model.ConfluenceMetric;
 import org.safehaus.confluence.model.Space;
 import org.safehaus.exceptions.JiraClientException;
 import org.safehaus.jira.JiraClient;
@@ -62,6 +64,8 @@ public class AnalysisService
 
     List<JiraMetricIssue> jiraMetricIssues;
     List<StashMetricIssue> stashMetricIssues;
+    List<ConfluenceMetric> confluenceMetrics;
+
     Date lastGatheredJira = null;
     Date lastGatheredStash = null;
     Date lastGatheredSonar = null;
@@ -118,7 +122,7 @@ public class AnalysisService
             }
         }
 
-/*
+
         // Get Stash Data
         StashManager stashMan = null;
         try {
@@ -144,8 +148,7 @@ public class AnalysisService
 
         if(sonarManager != null)
             getSonarMetricIssues(sonarManager);
-*/
-        /*
+
         org.safehaus.confluence.client.ConfluenceManager confluenceManager = null;
         try {
              confluenceManager = confluenceConnector.confluenceConnect();
@@ -155,7 +158,7 @@ public class AnalysisService
         }
 
         if(confluenceManager != null)
-            getConfluenceMetric(confluenceManager);*/
+            getConfluenceMetric(confluenceManager);
 
         // Set time.
         try
@@ -274,7 +277,6 @@ public class AnalysisService
                 issueToAdd.setTimeSpentMinutes( issue.getTimeTracking().getTimeSpentMinutes() );
             }
 
-            // TODO send for producer
             jiraMetricIssues.add( issueToAdd );
             if ( lastGatheredJira != null )
             {
@@ -389,7 +391,6 @@ public class AnalysisService
         {
             try
             {
-                // TODO determine limit value and remove hardcoded number
                 commitPage =
                         stashMan.getCommits( projectSlugPairs.get( i ).getL(), projectSlugPairs.get( i ).getR(), 1000,
                                 0 );
@@ -447,7 +448,6 @@ public class AnalysisService
                     stashMetricIssue.setSrcPath( change.getSrcPath() );
                     stashMetricIssue.setType( change.getType() );
 
-                    //TODO set stashmetric issue provider over here
                 }
             }
         }
@@ -496,7 +496,9 @@ public class AnalysisService
 
     private void getConfluenceMetric( ConfluenceManager confluenceManager )
     {
-        log.info( "Get Confluence Metric Issues ici." );
+        log.info( "getConfluenceMetric" );
+
+        confluenceMetrics = new ArrayList<>();
 
         List<Space> spaceList = null;
         try
@@ -512,7 +514,7 @@ public class AnalysisService
         {
             try
             {
-                pageList.addAll( confluenceManager.listPages( s.getKey(), 0, 100 ) );
+                pageList.addAll( confluenceManager.listPagesWithOptions(s.getKey(), 0, 100, false, true, true, false));
             }
             catch ( ConfluenceManagerException e )
             {
@@ -522,8 +524,28 @@ public class AnalysisService
 
         for ( org.safehaus.confluence.model.Page p : pageList )
         {
-            log.info( p.getTitle() );
-            //TODO need to update the cofluence api in order to get the author name.
+            ConfluenceMetric cf = new ConfluenceMetric();
+
+            cf.setAuthorDisplayName(p.getVersion().getBy().getDisplayName());
+            cf.setAuthorUserKey(p.getVersion().getBy().getUserKey());
+            cf.setAuthorUsername(p.getVersion().getBy().getUsername());
+            cf.setBodyLength(p.getBody().getView().getValue().length());
+            cf.setPageID(Integer.parseInt(p.getId()));
+            cf.setTitle(p.getTitle());
+            cf.setVersionNumber(p.getVersion().getNumber());
+            cf.setWhen( new DateTime(p.getVersion().getWhen()).toDate() );
+
+            log.info("------------------------------------------------");
+            log.info("PageID:      " + cf.getPageID());
+            log.info("When:        " + cf.getWhen());
+            log.info("Number:      " + cf.getVersionNumber());
+            log.info("Username:    " + cf.getAuthorUsername());
+            log.info("Displayname: " + cf.getAuthorDisplayName());
+            log.info("UserKey:     " + cf.getAuthorUserKey());
+            log.info("BodyLen:     " + cf.getBodyLength());
+            log.info("Title:       " + cf.getTitle());
+
+            confluenceMetrics.add(cf);
         }
     }
 
