@@ -32,6 +32,23 @@ public interface ConfluenceManager
 	 */
 	Set<Page> listPages( String spaceKey, Integer start, Integer limit ) throws ConfluenceManagerException;
 
+	/**
+	 * lists pages in specified space, can be iterated giving start and limit
+	 * parameters.
+	 *
+	 * @param spaceKey
+	 * @param start
+	 * @param limit
+	 * @param expandSpace
+	 * @param expandBody
+	 * @param expandVersion
+	 * @param expandContainer
+	 * @return
+	 * @throws ConfluenceManagerException
+	 */
+	Set<Page> listPagesWithOptions( String spaceKey, Integer start, Integer limit,
+										   boolean expandSpace, boolean expandBody, boolean expandVersion, boolean expandContainer ) throws ConfluenceManagerException;
+
 
 	/**
 	 * Returns a piece of Content.
