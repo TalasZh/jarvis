@@ -27,12 +27,21 @@
 
 .jarvis-create:before
 {
-    content: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAbElEQVQ4y2NgGHrgv/f/L//7SVH+4z8ITCZWQ8V/GOgnxvRYIFkD1fCWGMf8/R8H1fLtvyt+5V5Qt0O0VBCrHKIllpBjkJUT4RhPSpR/H1jlHpQpdyMUlKQpB2ogTTmShu//3YlLxqQpH1wAAKOW8ZUUAHC/AAAAAElFTkSuQmCC") !important;
+    /*List icon*/
+    content: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAHElEQVQ4y2NgGMngPxQgWOhg8GsY9fSop4cfAACILH6QhD3TxgAAAABJRU5ErkJggg==") !important;
+    /*Pencil icon / Edit*/
+    /*content: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAbElEQVQ4y2NgGHrgv/f/L//7SVH+4z8ITCZWQ8V/GOgnxvRYIFkD1fCWGMf8/R8H1fLtvyt+5V5Qt0O0VBCrHKIllpBjkJUT4RhPSpR/H1jlHpQpdyMUlKQpB2ogTTmShu//3YlLxqQpH1wAAKOW8ZUUAHC/AAAAAElFTkSuQmCC") !important;*/
 }
 
 .jarvis-view-list[data-jarvis-session-status="start"]:before
 {
-    content: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAHElEQVQ4y2NgGMngPxQgWOhg8GsY9fSop4cfAACILH6QhD3TxgAAAABJRU5ErkJggg==") !important;
+    /*Power icon*/
+    content: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAA2UlEQVQ4y9XSMU4CQRQAULYwbKJ4DA0JkSMQC4OVjWcxEfEwKCQYzkGId0A6QVqXZrV5NpqwOzOdhf5y8t+f+fN/o/FfAn4fODeIAfd6sfS2Ald14BrvTkPwjIksAJknLOrpl3h1GH1Sywb9KhjjJtW0AR6rYIV2EnSwqoIPHCRBE58haCZBjjJ8Uic5oS6WYdO3STDEKPzWtaNo+rEtLmKDm/4Mbu88M8M8tho7TLVq1WconMSXb4c3d87kcl1DWxTR5fu+ZaEe82j1PdT34EWptDQKWv2L8QWlK/Ex3LPkLgAAAABJRU5ErkJggg==") !important;
+
+    /*List icon*/
+    /*content: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAHElEQVQ4y2NgGMngPxQgWOhg8GsY9fSop4cfAACILH6QhD3TxgAAAABJRU5ErkJggg==") !important;*/
+
+    /*Play button*/
     /*content: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAZElEQVQ4y+3SMRGDUBAE0E9DiYAoCBqiAhWJC1ARXMTE94AD+rQ0PDRsQQXbv5nbmy3lTil+Hhng76NJAFR9BthM2gTA4pUBdrMuAbAaTgS7b3JSVHozJm+tnsk03sk00vFdIQd836pPRlQhUgAAAABJRU5ErkJggg==") !important;*/
 }
 

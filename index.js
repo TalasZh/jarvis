@@ -18,12 +18,13 @@ exports.main = function (options) {
     var sidebarCtrl = require("sdk/ui/sidebar");
     var JiraApi = require("jira-module").JiraApi;
     var MediatorApi = require("mediator-api").MediatorApi;
+    var panels = require("sdk/panel");
 
     var floatingCtrls = [];
     var currentSessionStatus = {
         isAnnotationReadonly: true,
         isAnnotatorOn: false,
-        activeResearch: [],
+        activeResearch: "null",
         jarvisHost: simplePrefs.prefs.jarvisHost,
         jiraHost: simplePrefs.prefs.jiraHost,
         annotations: []
@@ -56,19 +57,13 @@ exports.main = function (options) {
         width: 550,
         url: data.url("annotation_list/annotation-sidebar.html"),
         onAttach: function (worker) {
-            console.log("Sidebar workers");
-
-            console.log(sidebars.length);
-
             worker.port.on("openAnnotationLink", function (annotation) {
-
                 currentSessionStatus.isAnnotatorOn = true;
                 currentSessionStatus.isAnnotationReadonly = true;
                 currentSessionStatus.activeResearch = annotation.researchSession;
                 tabs.activeTab.url = annotation.uri;
             });
             sidebars.push(worker);
-            //loadAnnotationToSidebar();
         },
         onShow: function () {
             console.log("Sidebar is showing...");
@@ -97,6 +92,31 @@ exports.main = function (options) {
         }
     }
 
+    var panel = panels.Panel({
+        contentURL: data.url("session-panel/session-panel.html"),
+        contentScriptFile: [
+            data.url("jquery-2.1.3.min.js"),
+            data.url("session-panel/session-panel.js")
+        ],
+        onShow: function () {
+            panel.port.emit("loadResearches", researches);
+        }
+    });
+
+    panel.port.on("startResearchSession", function (researchKey) {
+        currentSessionStatus.activeResearch = researchKey;
+        currentSessionStatus.isAnnotatorOn = true;
+        currentSessionStatus.isAnnotationReadonly = false;
+        button.icon = {
+            "16": data.url('mfb/ic_visibility_black_36dp/web/ic_visibility_black_36dp_2x.png'),
+            "32": data.url('mfb/ic_visibility_black_36dp/web/ic_visibility_black_36dp_2x.png'),
+            "64": data.url('mfb/ic_visibility_black_36dp/web/ic_visibility_black_36dp_2x.png')
+        };
+        onPrefChange();
+        tabs.activeTab.reload();
+        panel.hide();
+    });
+
     var button = ToggleButton({
         id: "jarvis-activator",
         label: "Enable/Disable Jarvis",
@@ -111,19 +131,45 @@ exports.main = function (options) {
                 checked: this.checked
             });
             this.checked = !this.checked;
+            if (currentSessionStatus.activeResearch === "null") {
+                console.log(panel);
+                panel.show({
+                    position: button
+                });
+                this.icon = {
+                    "16": data.url('mfb/ic_visibility_black_36dp/web/ic_visibility_black_36dp_2x.png'),
+                    "32": data.url('mfb/ic_visibility_black_36dp/web/ic_visibility_black_36dp_2x.png'),
+                    "64": data.url('mfb/ic_visibility_black_36dp/web/ic_visibility_black_36dp_2x.png')
+                };
+                return;
+            }
+            else {
+                onPrefChange();
+                tabs.activeTab.reload();
+            }
 
             if (this.checked) {
                 currentSessionStatus.isAnnotatorOn = false;
                 currentSessionStatus.isAnnotationReadonly = true;
+                this.icon = {
+                    "16": data.url('mfb/ic_visibility_off_black_36dp/web/ic_visibility_off_black_36dp_2x.png'),
+                    "32": data.url('mfb/ic_visibility_off_black_36dp/web/ic_visibility_off_black_36dp_2x.png'),
+                    "64": data.url('mfb/ic_visibility_off_black_36dp/web/ic_visibility_off_black_36dp_2x.png')
+                };
             }
             else {
                 currentSessionStatus.isAnnotatorOn = true;
                 currentSessionStatus.isAnnotationReadonly = false;
+                this.icon = {
+                    "16": data.url('mfb/ic_visibility_black_36dp/web/ic_visibility_black_36dp_2x.png'),
+                    "32": data.url('mfb/ic_visibility_black_36dp/web/ic_visibility_black_36dp_2x.png'),
+                    "64": data.url('mfb/ic_visibility_black_36dp/web/ic_visibility_black_36dp_2x.png')
+                };
             }
-            onPrefChange();
-            tabs.activeTab.reload();
+
         }
     });
+
 
     function handleClick(state) {
         //tabs.open(simplePrefs.prefs.jarvisHost);
@@ -294,14 +340,12 @@ exports.main = function (options) {
             }
             else {
                 console.log("Annotations pulled");
-                console.log(json);
                 var annotationsArray = [];
                 for (var inx = 0; inx < json.length; inx++) {
                     var annotation = json[inx];
                     var ranges = JSON.parse(annotation.ranges);
                     annotation.ranges = ranges;
                     annotationsArray.push(annotation);
-                    console.log(annotation);
                 }
                 currentSessionStatus.annotations = annotationsArray;
                 worker.port.emit("onLoadAnnotations", annotationsArray);
