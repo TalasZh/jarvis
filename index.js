@@ -59,8 +59,9 @@ exports.main = function (options) {
         onAttach: function (worker) {
             worker.port.on("openAnnotationLink", function (annotation) {
                 currentSessionStatus.isAnnotatorOn = true;
-                currentSessionStatus.isAnnotationReadonly = true;
+                currentSessionStatus.isAnnotationReadonly = false;
                 currentSessionStatus.activeResearch = annotation.researchSession;
+                updateToggleButtonState(true);
                 tabs.activeTab.url = annotation.uri;
             });
             sidebars.push(worker);
@@ -150,6 +151,11 @@ exports.main = function (options) {
 
                 button.state("window", {
                     checked: false
+                    //icon: {
+                    //    "16": data.url('mfb/ic_visibility_off_black_36dp/web/ic_visibility_off_black_36dp_2x.png'),
+                    //    "32": data.url('mfb/ic_visibility_off_black_36dp/web/ic_visibility_off_black_36dp_2x.png'),
+                    //    "64": data.url('mfb/ic_visibility_off_black_36dp/web/ic_visibility_off_black_36dp_2x.png')
+                    //}
                 });
 
                 panel.show({
@@ -168,32 +174,37 @@ exports.main = function (options) {
             }
             console.log("Chaning button state");
             var current = this.state("tab").checked;
-            current = !current;
-            if (current) {
-                this.state("tab", {checked: true});
-                button.checked = true;
-                currentSessionStatus.isAnnotatorOn = true;
-                currentSessionStatus.isAnnotationReadonly = false;
-                this.icon = {
-                    "16": data.url('mfb/ic_visibility_black_36dp/web/ic_visibility_black_36dp_2x.png'),
-                    "32": data.url('mfb/ic_visibility_black_36dp/web/ic_visibility_black_36dp_2x.png'),
-                    "64": data.url('mfb/ic_visibility_black_36dp/web/ic_visibility_black_36dp_2x.png')
-                };
-            }
-            else {
-                this.state("tab", {checked: false});
-                button.checked = false;
-                currentSessionStatus.isAnnotatorOn = false;
-                currentSessionStatus.isAnnotationReadonly = true;
-                this.icon = {
-                    "16": data.url('mfb/ic_visibility_off_black_36dp/web/ic_visibility_off_black_36dp_2x.png'),
-                    "32": data.url('mfb/ic_visibility_off_black_36dp/web/ic_visibility_off_black_36dp_2x.png'),
-                    "64": data.url('mfb/ic_visibility_off_black_36dp/web/ic_visibility_off_black_36dp_2x.png')
-                };
-            }
+            updateToggleButtonState(!current);
 
         }
     });
+
+    function updateToggleButtonState(checked) {
+        if (checked) {
+            button.state("tab", {
+                checked: true,
+                icon: {
+                    "16": data.url('mfb/ic_visibility_black_36dp/web/ic_visibility_black_36dp_2x.png'),
+                    "32": data.url('mfb/ic_visibility_black_36dp/web/ic_visibility_black_36dp_2x.png'),
+                    "64": data.url('mfb/ic_visibility_black_36dp/web/ic_visibility_black_36dp_2x.png')
+                }
+            });
+            currentSessionStatus.isAnnotatorOn = true;
+            currentSessionStatus.isAnnotationReadonly = false;
+        }
+        else {
+            button.state("tab", {
+                checked: false,
+                icon: {
+                    "16": data.url('mfb/ic_visibility_off_black_36dp/web/ic_visibility_off_black_36dp_2x.png'),
+                    "32": data.url('mfb/ic_visibility_off_black_36dp/web/ic_visibility_off_black_36dp_2x.png'),
+                    "64": data.url('mfb/ic_visibility_off_black_36dp/web/ic_visibility_off_black_36dp_2x.png')
+                }
+            });
+            currentSessionStatus.isAnnotatorOn = false;
+            currentSessionStatus.isAnnotationReadonly = true;
+        }
+    }
 
     var researchCtrl = pageMod.PageMod({
         include: ["*"],
@@ -237,7 +248,7 @@ exports.main = function (options) {
                 currentSessionStatus.isAnnotationReadonly = updatedSession.isAnnotationReadonly;
                 currentSessionStatus.isAnnotatorOn = updatedSession.isAnnotatorOn;
 
-                if (currentSessionStatus.activeResearch === "null") {
+                if (currentSessionStatus.activeResearch !== "null") {
                     mediator.getSession(currentSessionStatus.activeResearch, function (error, json) {
                         if (error) {
                             console.log("Error: " + error);

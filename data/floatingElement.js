@@ -284,7 +284,7 @@
                         self.port.emit("_onAnnotationUpdated", annotation);
                     }
                     else {
-                        showNotification("Couldn't delete annotation! Please reload page.", Annotator.Notification.ERROR);
+                        showNotification("Couldn't update annotation! Please reload page.", Annotator.Notification.ERROR);
                     }
                 },
                 onBeforeAnnotationCreated: function (annotation) {
