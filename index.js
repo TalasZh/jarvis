@@ -135,8 +135,22 @@ exports.main = function (options) {
             //this.checked = !this.checked;
             if (currentSessionStatus.activeResearch === "null") {
                 console.log(panel);
-                button.checked = false;
-                //this.state("tab", {checked: false});
+                //this.checked = false;
+                //for (let tab in tabs) {
+                //    try {
+                //        button.state(tab, {
+                //            checked: false
+                //        });
+                //    }
+                //    catch (ex) {
+                //        console.error(ex.message);
+                //    }
+                //}
+
+                button.state("window", {
+                    checked: false
+                });
+
                 panel.show({
                     position: button
                 });
@@ -151,8 +165,9 @@ exports.main = function (options) {
                 onPrefChange();
                 tabs.activeTab.reload();
             }
+            console.log("Chaning button state");
             var current = this.state("tab").checked;
-            //current = !current;
+            current = !current;
             if (current) {
                 this.state("tab", {checked: true});
                 button.checked = true;

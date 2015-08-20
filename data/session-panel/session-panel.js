@@ -3,6 +3,7 @@
     self.port.on("loadResearches", function (researches) {
         console.log(researches);
         var researchElement = jQuery("#researches");
+        researchElement.empty();
         for (var inx in researches) {
             if (researches.hasOwnProperty(inx)) {
                 var research = researches[inx];
