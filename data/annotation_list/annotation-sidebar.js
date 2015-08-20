@@ -17,7 +17,6 @@
 
                         var sTemplate = sessionTemplate(temp);
                         jQuery(sTemplate).data("annotation", temp);
-                        console.log(temp.uri);
                         $(sTemplate).click(function () {
                             addon.port.emit("openAnnotationLink", $(this).data("annotation"));
                         });

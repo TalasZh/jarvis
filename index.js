@@ -112,6 +112,11 @@ exports.main = function (options) {
             "32": data.url('mfb/ic_visibility_black_36dp/web/ic_visibility_black_36dp_2x.png'),
             "64": data.url('mfb/ic_visibility_black_36dp/web/ic_visibility_black_36dp_2x.png')
         };
+        button.state(
+            "tab", {
+                checked: true
+            }
+        );
         onPrefChange();
         tabs.activeTab.reload();
         panel.hide();
@@ -127,19 +132,18 @@ exports.main = function (options) {
             "64": data.url('jarvis_logo_64x64_cropped.png')
         },
         onChange: function () {
-            this.state("tab", {
-                checked: this.checked
-            });
-            this.checked = !this.checked;
+            //this.checked = !this.checked;
             if (currentSessionStatus.activeResearch === "null") {
                 console.log(panel);
+                button.checked = false;
+                //this.state("tab", {checked: false});
                 panel.show({
                     position: button
                 });
                 this.icon = {
-                    "16": data.url('mfb/ic_visibility_black_36dp/web/ic_visibility_black_36dp_2x.png'),
-                    "32": data.url('mfb/ic_visibility_black_36dp/web/ic_visibility_black_36dp_2x.png'),
-                    "64": data.url('mfb/ic_visibility_black_36dp/web/ic_visibility_black_36dp_2x.png')
+                    "16": data.url('mfb/ic_visibility_off_black_36dp/web/ic_visibility_off_black_36dp_2x.png'),
+                    "32": data.url('mfb/ic_visibility_off_black_36dp/web/ic_visibility_off_black_36dp_2x.png'),
+                    "64": data.url('mfb/ic_visibility_off_black_36dp/web/ic_visibility_off_black_36dp_2x.png')
                 };
                 return;
             }
@@ -147,17 +151,11 @@ exports.main = function (options) {
                 onPrefChange();
                 tabs.activeTab.reload();
             }
-
-            if (this.checked) {
-                currentSessionStatus.isAnnotatorOn = false;
-                currentSessionStatus.isAnnotationReadonly = true;
-                this.icon = {
-                    "16": data.url('mfb/ic_visibility_off_black_36dp/web/ic_visibility_off_black_36dp_2x.png'),
-                    "32": data.url('mfb/ic_visibility_off_black_36dp/web/ic_visibility_off_black_36dp_2x.png'),
-                    "64": data.url('mfb/ic_visibility_off_black_36dp/web/ic_visibility_off_black_36dp_2x.png')
-                };
-            }
-            else {
+            var current = this.state("tab").checked;
+            //current = !current;
+            if (current) {
+                this.state("tab", {checked: true});
+                button.checked = true;
                 currentSessionStatus.isAnnotatorOn = true;
                 currentSessionStatus.isAnnotationReadonly = false;
                 this.icon = {
@@ -166,22 +164,20 @@ exports.main = function (options) {
                     "64": data.url('mfb/ic_visibility_black_36dp/web/ic_visibility_black_36dp_2x.png')
                 };
             }
+            else {
+                this.state("tab", {checked: false});
+                button.checked = false;
+                currentSessionStatus.isAnnotatorOn = false;
+                currentSessionStatus.isAnnotationReadonly = true;
+                this.icon = {
+                    "16": data.url('mfb/ic_visibility_off_black_36dp/web/ic_visibility_off_black_36dp_2x.png'),
+                    "32": data.url('mfb/ic_visibility_off_black_36dp/web/ic_visibility_off_black_36dp_2x.png'),
+                    "64": data.url('mfb/ic_visibility_off_black_36dp/web/ic_visibility_off_black_36dp_2x.png')
+                };
+            }
 
         }
     });
-
-
-    function handleClick(state) {
-        //tabs.open(simplePrefs.prefs.jarvisHost);
-        button.state("tab", {
-            checked: !button.checked
-        });
-        //state.checked = !state.checked;
-        if (button.checked) {
-            initialize();
-            tabs.activeTab.reload();
-        }
-    }
 
     var researchCtrl = pageMod.PageMod({
         include: ["*"],

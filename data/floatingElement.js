@@ -278,6 +278,25 @@
                     annotation.uri = window.location.href;
                 }
             });
+            annotator.setupPlugins({}, {
+                Auth: false,
+                Tags: false,
+                Filter: {
+                    addAnnotationFilter: false,
+                    filters: [
+                        {
+                            label: Annotator._t("Comment"),
+                            property: "text"
+                        },
+                        {
+                            label: Annotator._t("Quote"),
+                            property: "quote"
+                        }
+                    ]
+                },
+                Store: false,
+                AnnotateItPermissions: false
+            });
 
             console.log("Annotator initialized \nLoading annotations");
             console.log(currentSession.annotations);
