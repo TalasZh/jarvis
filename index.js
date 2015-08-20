@@ -15,6 +15,7 @@ exports.main = function (options) {
     var simplePrefs = require("sdk/simple-prefs");
     var pageMod = require("sdk/page-mod");
     var data = require('sdk/self').data;
+    var sidebarCtrl = require("sdk/ui/sidebar");
     var JiraApi = require("jira-module").JiraApi;
     var MediatorApi = require("mediator-api").MediatorApi;
 
@@ -30,6 +31,7 @@ exports.main = function (options) {
 
     var searchQuery = 'issuetype = Research AND status not in (Resolved, Closed, Done) AND resolution = Unresolved AND assignee in (currentUser()) ORDER BY updatedDate DESC';
     var researchWorkers = [];
+    var sidebars = [];
     var researches = [];
     var jiraError = null;
 
@@ -41,6 +43,61 @@ exports.main = function (options) {
 
     pullResearches(false);
 
+    var sidebar = sidebarCtrl.Sidebar({
+        id: "annotationsSidebar",
+        title: "Annotations",
+        width: 550,
+        url: data.url("annotation_list/annotation-sidebar.html"),
+        onAttach: function (worker) {
+            console.log("Sidebar workers");
+
+            console.log(sidebars.length);
+
+            worker.port.on("openAnnotationLink", function (url) {
+                tabs.open(url);
+            });
+
+            var researches = {};
+            for (var inx = 0; inx < currentSessionStatus.annotations.length; inx++) {
+                var annotation = currentSessionStatus.annotations[inx];
+                var researchKey = annotation.researchSession;
+                if (!researches[researchKey]) {
+                    researches[researchKey] = {key: researchKey, sessions: []};
+                }
+                researches[researchKey].sessions.push(annotation);
+            }
+
+            if (worker) {
+                console.log("Worker is not null");
+                console.log(worker);
+                worker.port.emit("loadResearchSessions", researches);
+            }
+
+            sidebars.push(worker);
+        },
+        onShow: function () {
+            console.log("Sidebar is showing...");
+            var researches = {};
+            for (var inx = 0; inx < currentSessionStatus.annotations.length; inx++) {
+                var annotation = currentSessionStatus.annotations[inx];
+                var researchKey = annotation.researchSession;
+                if (!researches[researchKey]) {
+                    researches[researchKey] = {key: researchKey, sessions: []};
+                }
+                researches[researchKey].sessions.push(annotation);
+            }
+
+
+            for (var worker in sidebars) {
+                if (sidebars.hasOwnProperty(worker)) {
+                    console.log("Worker is not null");
+                    console.log(worker);
+                    sidebars[worker].port.emit("loadResearchSessions", researches);
+                }
+            }
+        }
+    });
+
     var button = ToggleButton({
         id: "jarvis-activator",
         label: "Enable/Disable Jarvis",
@@ -49,132 +106,149 @@ exports.main = function (options) {
             "32": data.url('jarvis_logo_32x32_cropped.png'),
             "64": data.url('jarvis_logo_64x64_cropped.png')
         },
-        onChange: handleClick
+        onChange: function () {
+            this.state("tab", {
+                checked: this.checked
+            });
+            this.checked = !this.checked;
+
+            if (this.checked) {
+                currentSessionStatus.isAnnotatorOn = true;
+            }
+            else {
+                currentSessionStatus.isAnnotatorOn = false;
+            }
+            onPrefChange();
+            tabs.activeTab.reload();
+        }
     });
 
-    function initialize() {
+    function handleClick(state) {
+        //tabs.open(simplePrefs.prefs.jarvisHost);
+        button.state("tab", {
+            checked: !button.checked
+        });
+        //state.checked = !state.checked;
+        if (button.checked) {
+            initialize();
+            tabs.activeTab.reload();
+        }
+    }
 
-        onPrefChange();
+    var researchCtrl = pageMod.PageMod({
+        include: ["*"],
+        attachTo: ["top"],
+        contentStyleFile: [
+            data.url("mfb/custom.css"),
+            data.url("mfb/mfb.css"),
+            data.url("mfb/index.css"),
+            data.url("annotator-full.1.2.10/annotator.min.css")
+        ],
+        contentScriptWhen: "ready",
+        contentScriptFile: [
+            data.url("jquery-2.1.3.min.js"),
+            data.url("list.min.js"),
+            data.url("annotator-full.1.2.10/annotator-full.min.js"),
+            data.url("annotator.offline.min.js"),
+            data.url("floatingElement.js"),
+            data.url("annotator.jarvis.store.js")
+        ],
+        onAttach: function (worker) {
+            console.log("Worker initialized");
+            jira.getCurrentUser(function (error, responseText) {
+                if (error) {
+                    worker.port.emit("onErrorMessage", error);
+                }
+                else {
+                    pullJiraResearches();
+                    pullAnnotations(worker);
 
-        var researchCtrl = pageMod.PageMod({
-            include: ["*"],
-            attachTo: ["top"],
-            contentStyleFile: [
-                data.url("mfb/custom.css"),
-                data.url("mfb/mfb.css"),
-                data.url("mfb/index.css"),
-                data.url("annotator-full.1.2.10/annotator.min.css")
-            ],
-            contentScriptWhen: "ready",
-            contentScriptFile: [
-                data.url("jquery-2.1.3.min.js"),
-                data.url("list.min.js"),
-                data.url("annotator-full.1.2.10/annotator-full.min.js"),
-                data.url("annotator.offline.min.js"),
-                data.url("floatingElement.js"),
-                data.url("annotator.jarvis.store.js")
-            ],
-            onAttach: function (worker) {
-                console.log("Worker initialized");
-                jira.getCurrentUser(function (error, responseText) {
+                }
+
+            });
+            worker.port.emit("loadResource", data.load("mfb/fbButtons.html"), "body");
+
+            worker.port.emit("setCurrentSessionStatus", currentSessionStatus);
+
+            worker.port.on("updateCurrentSession", function (updatedSession) {
+                console.log("Updating current session");
+                console.log(updatedSession);
+                currentSessionStatus.activeResearch = updatedSession.activeResearch;
+                currentSessionStatus.isAnnotationReadonly = updatedSession.isAnnotationReadonly;
+                currentSessionStatus.isAnnotatorOn = updatedSession.isAnnotatorOn;
+            });
+
+            worker.port.on("getResearchList", function () {
+                console.log("Jira error: " + jiraError);
+                if (jiraError) {
+                    console.log("Couldn't retrieve issues");
+                    worker.port.emit("setResearches", jiraError, []);
+                    //pullResearches(true);
+                }
+                else if (researches) {
+                    console.log("Researches: " + researches);
+                    worker.port.emit("setResearches", null, researches);
+                }
+            });
+
+            worker.port.on("_onAnnotationCreated", function (annotation) {
+                _onAnnotationCreated(annotation, function (error, data) {
                     if (error) {
                         worker.port.emit("onErrorMessage", error);
                     }
                     else {
-                        pullJiraResearches();
-                        pullAnnotations(worker);
-                        worker.port.emit("loadResource", data.load("mfb/fbButtons.html"), "body");
+                        console.log();
+                        worker.port.emit("_afterAnnotationUpdate", annotation, data);
                     }
+                })
+            });
 
-                });
-                worker.port.emit("setCurrentSessionStatus", currentSessionStatus);
-
-                worker.port.on("updateCurrentSession", function (updatedSession) {
-                    console.log("Updating current session");
-                    console.log(updatedSession);
-                    currentSessionStatus.activeResearch = updatedSession.activeResearch;
-                    currentSessionStatus.isAnnotationReadonly = updatedSession.isAnnotationReadonly;
-                    currentSessionStatus.isAnnotatorOn = updatedSession.isAnnotatorOn;
-                });
-
-                worker.port.on("getResearchList", function () {
-                    console.log("Jira error: " + jiraError);
-                    if (jiraError) {
-                        console.log("Couldn't retrieve issues");
-                        worker.port.emit("setResearches", jiraError, []);
-                        //pullResearches(true);
+            worker.port.on("_onAnnotationUpdated", function (annotation) {
+                console.log("Updating annotation");
+                console.log(annotation);
+                var preformatted = Object.assign({}, annotation);
+                preformatted.ranges = JSON.stringify(annotation.ranges);
+                mediator.updateCapture(annotation.researchSession, preformatted, function (error, json) {
+                    if (error) {
+                        worker.port.emit("onErrorMessage", error);
                     }
-                    else if (researches) {
-                        console.log("Researches: " + researches);
-                        worker.port.emit("setResearches", null, researches);
+                    else {
+                        worker.port.emit("_afterAnnotationUpdate", annotation, annotation);
                     }
                 });
+            });
 
-                worker.port.on("_onAnnotationCreated", function (annotation) {
-                    _onAnnotationCreated(annotation, function (error, data) {
-                        if (error) {
-                            worker.port.emit("onErrorMessage", error);
-                        }
-                        else {
-                            console.log();
-                            worker.port.emit("_afterAnnotationUpdate", annotation, data);
-                        }
-                    })
+            worker.port.on("_onAnnotationDeleted", function (annotation) {
+                console.log("Deleting annotation");
+                console.log(annotation);
+                mediator.deleteCapture(annotation.researchSession, annotation, function (error, json) {
+                    if (error) {
+                        worker.port.emit("onErrorMessage", error);
+                    }
+                    else {
+                        currentSessionStatus.annotations.splice(currentSessionStatus.annotations.indexOf(annotation), 1);
+                    }
                 });
+            });
 
-                worker.port.on("_onAnnotationUpdated", function (annotation) {
-                    console.log("Updating annotation");
-                    console.log(annotation);
-                    var preformatted = Object.assign({}, annotation);
-                    preformatted.ranges = JSON.stringify(annotation.ranges);
-                    mediator.updateCapture(annotation.researchSession, preformatted, function (error, json) {
-                        if (error) {
-                            worker.port.emit("onErrorMessage", error);
-                        }
-                        else {
-                            worker.port.emit("_afterAnnotationUpdate", annotation, annotation);
-                        }
-                    });
-                });
+            worker.port.on("detach", function () {
+                //worker.port.emit("detachMe");
+                console.log("Detaching worker from controller...");
+                detachWorker(this);
+            });
 
-                worker.port.on("_onAnnotationDeleted", function (annotation) {
-                    console.log("Deleting annotation");
-                    console.log(annotation);
-                    mediator.deleteCapture(annotation.researchSession, annotation, function (error, json) {
-                        if (error) {
-                            worker.port.emit("onErrorMessage", error);
-                        }
-                        else {
-                            currentSessionStatus.annotations.splice(currentSessionStatus.annotations.indexOf(annotation), 1);
-                        }
-                    });
-                });
+            worker.port.on("showAnnotations", function () {
+                sidebar.show();
+            });
 
-                worker.port.on("detach", function () {
-                    //worker.port.emit("detachMe");
-                    console.log("Detaching worker from controller...");
-                    detachWorker(this);
-                });
-
-                researchWorkers.push(worker);
-            }
-        });
-    }
+            researchWorkers.push(worker);
+        }
+    });
 
     function detachWorker(worker) {
         var index = researchWorkers.indexOf(worker);
         if (index != -1) {
             researchWorkers.splice(index, 1);
-        }
-    }
-
-
-    function handleClick(state) {
-        //tabs.open(simplePrefs.prefs.jarvisHost);
-        state.checked = !state.checked;
-        if (state.checked) {
-            initialize();
-            tabs.activeTab.reload();
         }
     }
 

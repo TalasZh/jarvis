@@ -47,7 +47,7 @@
         console.log(oldAnnotation);
         console.log(oldAnnotation.highlights[0]);
         console.log(JSON.stringify(oldAnnotation));
-        var annotation = __indexOf()
+        //var annotation = __indexOf()
         console.log(jQuery(oldAnnotation.highlights).data("annotation"));
         jQuery(oldAnnotation.highlights).data("annotation", oldAnnotation);
     });
@@ -103,9 +103,10 @@
         jQuery(target).append(resource);
         var annotatorControl = jQuery("#btn-jarvis-annotation-control");
         annotatorControl.on("click", function () {
-            currentSession.isAnnotatorOn = !currentSession.isAnnotatorOn;
+            //currentSession.isAnnotatorOn = !currentSession.isAnnotatorOn;
             console.log("Annotator status: " + currentSession.isAnnotatorOn);
-            updateAnnotatorStatus();
+            self.port.emit("showAnnotations");
+            //updateAnnotatorStatus();
         });
 
         var researchList = jQuery("#btn-jarvis-list-researches");
