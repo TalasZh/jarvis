@@ -39,6 +39,13 @@ exports.main = function (options) {
     var jira = new JiraApi(simplePrefs.prefs.jiraHost, "2", false, false);
     var mediator = new MediatorApi(simplePrefs.prefs.jarvisHost, null, null, true);
 
+    var __indexOf = [].indexOf || function (item) {
+            for (var i = 0, l = this.length; i < l; i++) {
+                if (i in this && this[i] === item)return i
+            }
+            return -1
+        };
+
     simplePrefs.on("applyChanges", onPrefChange);
 
     pullResearches(false);
@@ -53,54 +60,47 @@ exports.main = function (options) {
 
             console.log(sidebars.length);
 
-            worker.port.on("openAnnotationLink", function (url) {
-                tabs.open(url);
+            worker.port.on("openAnnotationLink", function (annotation) {
+
+                currentSessionStatus.isAnnotatorOn = true;
+                currentSessionStatus.isAnnotationReadonly = true;
+                currentSessionStatus.activeResearch = annotation.researchSession;
+                tabs.activeTab.url = annotation.uri;
             });
-
-            var researches = {};
-            for (var inx = 0; inx < currentSessionStatus.annotations.length; inx++) {
-                var annotation = currentSessionStatus.annotations[inx];
-                var researchKey = annotation.researchSession;
-                if (!researches[researchKey]) {
-                    researches[researchKey] = {key: researchKey, sessions: []};
-                }
-                researches[researchKey].sessions.push(annotation);
-            }
-
-            if (worker) {
-                console.log("Worker is not null");
-                console.log(worker);
-                worker.port.emit("loadResearchSessions", researches);
-            }
-
             sidebars.push(worker);
+            //loadAnnotationToSidebar();
         },
         onShow: function () {
             console.log("Sidebar is showing...");
-            var researches = {};
-            for (var inx = 0; inx < currentSessionStatus.annotations.length; inx++) {
-                var annotation = currentSessionStatus.annotations[inx];
-                var researchKey = annotation.researchSession;
-                if (!researches[researchKey]) {
-                    researches[researchKey] = {key: researchKey, sessions: []};
-                }
-                researches[researchKey].sessions.push(annotation);
-            }
-
-
-            for (var worker in sidebars) {
-                if (sidebars.hasOwnProperty(worker)) {
-                    console.log("Worker is not null");
-                    console.log(worker);
-                    sidebars[worker].port.emit("loadResearchSessions", researches);
-                }
-            }
+            loadAnnotationToSidebar();
         }
     });
+
+    function loadAnnotationToSidebar() {
+        var researches = {};
+        for (var inx = 0; inx < currentSessionStatus.annotations.length; inx++) {
+            var annotation = currentSessionStatus.annotations[inx];
+            var researchKey = annotation.researchSession;
+            if (!researches[researchKey]) {
+                researches[researchKey] = {key: researchKey, sessions: []};
+            }
+            researches[researchKey].sessions.push(annotation);
+        }
+
+
+        for (var worker in sidebars) {
+            if (sidebars.hasOwnProperty(worker)) {
+                console.log("Worker is not null");
+                console.log(worker);
+                sidebars[worker].port.emit("loadResearchSessions", researches);
+            }
+        }
+    }
 
     var button = ToggleButton({
         id: "jarvis-activator",
         label: "Enable/Disable Jarvis",
+        checked: false,
         icon: {
             "16": data.url('jarvis_logo_16x16_cropped.png'),
             "32": data.url('jarvis_logo_32x32_cropped.png'),
@@ -113,10 +113,12 @@ exports.main = function (options) {
             this.checked = !this.checked;
 
             if (this.checked) {
-                currentSessionStatus.isAnnotatorOn = true;
+                currentSessionStatus.isAnnotatorOn = false;
+                currentSessionStatus.isAnnotationReadonly = true;
             }
             else {
-                currentSessionStatus.isAnnotatorOn = false;
+                currentSessionStatus.isAnnotatorOn = true;
+                currentSessionStatus.isAnnotationReadonly = false;
             }
             onPrefChange();
             tabs.activeTab.reload();
@@ -199,6 +201,11 @@ exports.main = function (options) {
                     else {
                         console.log();
                         worker.port.emit("_afterAnnotationUpdate", annotation, data);
+                        if (__indexOf.call(currentSessionStatus.annotations, data) < 0) {
+                            currentSessionStatus.annotations.push(data);
+                            loadAnnotationToSidebar();
+                        }
+
                     }
                 })
             });
@@ -214,6 +221,15 @@ exports.main = function (options) {
                     }
                     else {
                         worker.port.emit("_afterAnnotationUpdate", annotation, annotation);
+                        for (var inx in currentSessionStatus.annotations) {
+                            if (currentSessionStatus.annotations.hasOwnProperty(inx)) {
+                                var annot = currentSessionStatus.annotations[inx];
+                                if (annot.id === annotation.id) {
+                                    currentSessionStatus.annotations[inx] = annotation;
+                                }
+                            }
+                        }
+                        loadAnnotationToSidebar();
                     }
                 });
             });

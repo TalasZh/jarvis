@@ -50,6 +50,8 @@
         //var annotation = __indexOf()
         console.log(jQuery(oldAnnotation.highlights).data("annotation"));
         jQuery(oldAnnotation.highlights).data("annotation", oldAnnotation);
+        location.reload();
+
     });
 
     self.port.on("onLoadAnnotations", function (annotations) {

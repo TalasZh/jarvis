@@ -10,13 +10,17 @@
                 researchesElement.append(rTemplate);
 
                 var annotationsField = rTemplate.find("div.list-group.list-annotations");
-                console.log("Annotations field");
-                console.log(annotationsField);
                 var sessions = researches[research].sessions;
                 for (var session in sessions) {
                     if (sessions.hasOwnProperty(session)) {
                         var temp = sessions[session];
+
                         var sTemplate = sessionTemplate(temp);
+                        jQuery(sTemplate).data("annotation", temp);
+                        console.log(temp.uri);
+                        $(sTemplate).click(function () {
+                            addon.port.emit("openAnnotationLink", $(this).data("annotation"));
+                        });
                         annotationsField.append(sTemplate);
                     }
                 }
@@ -40,15 +44,13 @@
     }
 
     function sessionTemplate(session) {
-        console.log("Printing session...");
-        console.log(session);
-        return jQuery("<div/>").html("<a href='" + session.uri + "' class=\"list-group-item\">\
+        return jQuery.parseHTML("<a class=\"list-group-item\">\
         <blockquote class=\"list-group-item-text annotation-comment\">" +
             session.quote +
             "</blockquote>\
             <div class=\"annotation-comment\">\
             <p class=\"list-group-item-heading\">" + session.text + "</p>\
             </div>\
-            </a>").contents();
+            </a>");
     }
 })(window, document);
