@@ -43,6 +43,15 @@ public interface SessionService
     List<Session> getSessions();
 
     /**
+     * Retrieves a list of all user's sessions' captures.
+     *
+     * @return List
+     */
+    @GET
+    @Path( "captures" )
+    List<Capture> getAllCaptures();
+
+    /**
      * Starts user's session
      *
      * @return Session
@@ -107,7 +116,7 @@ public interface SessionService
     /**
      * Updates user's capture
      *
-     * @return capture capture object
+     * @return created capture object
      */
     @POST
     @Path( "{sessionId}/capture" )

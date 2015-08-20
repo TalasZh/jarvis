@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Capture extends BaseObject implements Serializable {
     private static final long serialVersionUID = 3832626162173359411L;
 
-    private Long remoteId;
+    private Long id;
     private Session session;
     private Date created = new Date();
 
@@ -40,7 +40,9 @@ public class Capture extends BaseObject implements Serializable {
     private String ranges;
     private String quote;
     private String text;
-    private String id;
+
+    @Column( name = "offline_id" )
+    private String offlineId;
     private String annotator_schema_version;
 
 
@@ -53,13 +55,15 @@ public class Capture extends BaseObject implements Serializable {
 
     @Id
     @GeneratedValue( strategy = GenerationType.AUTO )
-    public Long getRemoteId() {
-        return remoteId;
+    public Long getId()
+    {
+        return id;
     }
 
 
-    public void setRemoteId( final Long id ) {
-        this.remoteId = id;
+    public void setId( final Long id )
+    {
+        this.id = id;
     }
 
 
@@ -139,13 +143,15 @@ public class Capture extends BaseObject implements Serializable {
     }
 
 
-    public String getId() {
-        return id;
+    public String getOfflineId()
+    {
+        return offlineId;
     }
 
 
-    public void setId( final String localId ) {
-        this.id = localId;
+    public void setOfflineId( final String localId )
+    {
+        this.offlineId = localId;
     }
 
 
@@ -172,7 +178,7 @@ public class Capture extends BaseObject implements Serializable {
 
         final Capture capture = ( Capture ) o;
 
-        return !( capture != null ? !capture.equals( capture.getRemoteId() ) : capture.getRemoteId() != null );
+        return !( capture != null ? !capture.equals( capture.getId() ) : capture.getId() != null );
     }
 
 
@@ -180,7 +186,7 @@ public class Capture extends BaseObject implements Serializable {
      * {@inheritDoc}
      */
     public int hashCode() {
-        return ( remoteId != null ? remoteId.hashCode() : 0 );
+        return ( id != null ? id.hashCode() : 0 );
     }
 
 
@@ -197,7 +203,7 @@ public class Capture extends BaseObject implements Serializable {
 
     @Override
     public String toString() {
-        return new ToStringBuilder( this ).append( "id", remoteId )
+        return new ToStringBuilder( this ).append( "id", id )
                                           .append( "url", uri )
                                           .append( "created", created )
                                           .append( "sessionId", session != null ? session.getId() : null ).toString();

@@ -27,7 +27,7 @@ public class CaptureDaoHibernate extends GenericDaoHibernate<Capture, Long> impl
     {
         if ( log.isDebugEnabled() )
         {
-            log.debug( "capture's id: " + capture.getRemoteId() );
+            log.debug( "capture's id: " + capture.getId() );
         }
         getSession().saveOrUpdate( capture );
         // necessary to throw a DataIntegrityViolation and catch it in UserManager

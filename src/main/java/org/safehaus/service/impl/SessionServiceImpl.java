@@ -6,16 +6,13 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+
 import javax.jws.WebService;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.cxf.jaxrs.impl.ResponseBuilderImpl;
-import org.apache.cxf.message.Message;
-import org.apache.cxf.phase.PhaseInterceptorChain;
-import org.apache.cxf.transport.http.AbstractHTTPDestination;
+
 import org.safehaus.confluence.client.ConfluenceManager;
 import org.safehaus.confluence.client.ConfluenceManagerException;
 import org.safehaus.confluence.model.Page;
@@ -36,6 +33,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.cxf.jaxrs.impl.ResponseBuilderImpl;
+import org.apache.cxf.message.Message;
+import org.apache.cxf.phase.PhaseInterceptorChain;
+import org.apache.cxf.transport.http.AbstractHTTPDestination;
+
 import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.collect.ImmutableList;
 
@@ -109,6 +113,21 @@ public class SessionServiceImpl implements SessionService
 		}
 
 		return sessionManager.getSessionsByUsername( userDetails.getUsername() );
+	}
+
+
+	@Override
+	@JsonView( Views.CompleteView.class )
+	public List<Capture> getAllCaptures()
+	{
+		List<Capture> captures = new ArrayList<>();
+		List<Session> sessions = getSessions();
+		for ( final Session session : sessions )
+		{
+			captures.addAll( session.getCaptures() );
+		}
+
+		return captures;
 	}
 
 

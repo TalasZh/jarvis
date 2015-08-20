@@ -192,7 +192,7 @@ public class Session extends BaseObject
         result.setRanges( capture.getRanges() );
         result.setQuote( capture.getQuote() );
         result.setText( capture.getText() );
-        result.setId( capture.getId() );
+        result.setOfflineId( capture.getOfflineId() );
         return result;
     }
 
@@ -201,7 +201,8 @@ public class Session extends BaseObject
     {
         Capture result = null;
         for ( Capture c : captures ) {
-            if ( captureId.equals( c.getRemoteId() ) ) {
+            if ( captureId.equals( c.getId() ) )
+            {
                 result = c;
                 break;
             }
