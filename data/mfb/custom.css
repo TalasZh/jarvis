@@ -36,7 +36,10 @@
 .jarvis-view-list[data-jarvis-session-status="start"]:before
 {
     /*Power icon*/
-    content: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAA2UlEQVQ4y9XSMU4CQRQAULYwbKJ4DA0JkSMQC4OVjWcxEfEwKCQYzkGId0A6QVqXZrV5NpqwOzOdhf5y8t+f+fN/o/FfAn4fODeIAfd6sfS2Ald14BrvTkPwjIksAJknLOrpl3h1GH1Sywb9KhjjJtW0AR6rYIV2EnSwqoIPHCRBE58haCZBjjJ8Uic5oS6WYdO3STDEKPzWtaNo+rEtLmKDm/4Mbu88M8M8tho7TLVq1WconMSXb4c3d87kcl1DWxTR5fu+ZaEe82j1PdT34EWptDQKWv2L8QWlK/Ex3LPkLgAAAABJRU5ErkJggg==") !important;
+    /*content: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAA2UlEQVQ4y9XSMU4CQRQAULYwbKJ4DA0JkSMQC4OVjWcxEfEwKCQYzkGId0A6QVqXZrV5NpqwOzOdhf5y8t+f+fN/o/FfAn4fODeIAfd6sfS2Ald14BrvTkPwjIksAJknLOrpl3h1GH1Sywb9KhjjJtW0AR6rYIV2EnSwqoIPHCRBE58haCZBjjJ8Uic5oS6WYdO3STDEKPzWtaNo+rEtLmKDm/4Mbu88M8M8tho7TLVq1WconMSXb4c3d87kcl1DWxTR5fu+ZaEe82j1PdT34EWptDQKWv2L8QWlK/Ex3LPkLgAAAABJRU5ErkJggg==") !important;*/
+
+    /*Search icon*/
+    content: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAvklEQVQ4Ec3BO4rCYBgAwA/NOf6gZ1jZRlDwVoreI4W9+DiS0VJTGytlthMCyZLSmYjvZuGk8lY5msf/ZLaaCll0s8XDUjKQW6lRRBcLPPzEh4kas2jnhGU0WOMQ7VRI0WCEW7TzxiAaDPGKdirk0WCMe7RzxCoabLCPduaoTeLDryem0UWB2trI0NjGE7voJlNo2uEqj25mDm5e7vamEa64yKMvuQtKKfqSK1FK0ZdcibMUfUlKZyn6k6T4Xn//4NdJ9ptTNwAAAABJRU5ErkJggg==") !important;
 
     /*List icon*/
     /*content: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAHElEQVQ4y2NgGMngPxQgWOhg8GsY9fSop4cfAACILH6QhD3TxgAAAABJRU5ErkJggg==") !important;*/

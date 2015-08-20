@@ -50,7 +50,8 @@
         //var annotation = __indexOf()
         console.log(jQuery(oldAnnotation.highlights).data("annotation"));
         jQuery(oldAnnotation.highlights).data("annotation", oldAnnotation);
-        location.reload();
+        //location.reload();
+        showNotification("Annotation updated.", Annotator.Notification.SUCCESS);
 
     });
 
@@ -69,14 +70,8 @@
      * but later one replace with fully customiezd one
      */
     self.port.on("onErrorMessage", function (errorMsg) {
-        var annotator = getAnnotator();
-        if (!annotator) {
-            currentSession.isAnnotatorOn = true;
-            currentSession.activeResearch = "null";
-            updateAnnotatorStatus();
-        }
-
-        Annotator.showNotification(errorMsg, Annotator.Notification.ERROR);
+        currentSession.activeResearch = "null";
+        showNotification(errorMsg, Annotator.Notification.ERROR)
     });
 
     /**
@@ -195,6 +190,17 @@
         }
     });
 
+
+    function showNotification(msg, type) {
+        var annotator = getAnnotator();
+        if (!annotator) {
+            currentSession.isAnnotatorOn = true;
+            updateAnnotatorStatus();
+        }
+
+        Annotator.showNotification(msg, type);
+    }
+
     function issueTemplateGeneration(research) {
         return jQuery.parseHTML("<dt > <a class='jarvis-issue-key'>" +
             research.key +
@@ -222,7 +228,7 @@
                 annotator._disableDocumentEvents();
             }
             else {
-                if (currentSession.activeResearch) {
+                if (currentSession.activeResearch !== "null") {
                     annotator._setupDocumentEvents();
                 }
                 else {
@@ -264,12 +270,22 @@
                 },
                 onAnnotationDeleted: function (annotation) {
                     console.log("Annotation deleted...");
-                    self.port.emit("_onAnnotationDeleted", annotation);
-                    currentSession.annotations.splice(currentSession.annotations.indexOf(annotation), 1);
+                    if (annotation.id) {
+                        currentSession.annotations.splice(currentSession.annotations.indexOf(annotation), 1);
+                        self.port.emit("_onAnnotationDeleted", annotation);
+                    }
+                    else {
+                        showNotification("Couldn't delete annotation! Please reload page.", Annotator.Notification.ERROR);
+                    }
                 },
                 onAnnotationUpdated: function (annotation) {
                     console.log("Annotation updated...");
-                    self.port.emit("_onAnnotationUpdated", annotation);
+                    if (annotation.id) {
+                        self.port.emit("_onAnnotationUpdated", annotation);
+                    }
+                    else {
+                        showNotification("Couldn't delete annotation! Please reload page.", Annotator.Notification.ERROR);
+                    }
                 },
                 onBeforeAnnotationCreated: function (annotation) {
                     console.log("Before annotation created...");

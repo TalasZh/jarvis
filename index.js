@@ -135,6 +135,7 @@ exports.main = function (options) {
             //this.checked = !this.checked;
             if (currentSessionStatus.activeResearch === "null") {
                 console.log(panel);
+                //fixme seems like a bug in firefox api
                 //this.checked = false;
                 //for (let tab in tabs) {
                 //    try {
@@ -235,6 +236,29 @@ exports.main = function (options) {
                 currentSessionStatus.activeResearch = updatedSession.activeResearch;
                 currentSessionStatus.isAnnotationReadonly = updatedSession.isAnnotationReadonly;
                 currentSessionStatus.isAnnotatorOn = updatedSession.isAnnotatorOn;
+
+                if (currentSessionStatus.activeResearch === "null") {
+                    mediator.getSession(currentSessionStatus.activeResearch, function (error, json) {
+                        if (error) {
+                            console.log("Error: " + error);
+                            worker.port.emit("onErrorMessage", error);
+                        }
+                        else if (!json) {
+                            console.log("Starting session");
+                            mediator.startSession(currentSessionStatus.activeResearch, function (error, json) {
+                                if (error) {
+                                    console.log("Error nothing to do here, seems dead end( " + error);
+                                    worker.port.emit("onErrorMessage", "Error nothing to do here, seems dead end( " + error);
+                                }
+                                else {
+                                }
+                            });
+                        }
+                        else {
+                            console.log("Research session already started...");
+                        }
+                    });
+                }
             });
 
             worker.port.on("getResearchList", function () {
@@ -386,13 +410,14 @@ exports.main = function (options) {
         mediator.getSession(annotation.researchSession, function (error, json) {
             if (error) {
                 console.log("Error: " + error);
+                callback(error);
             }
             else if (!json) {
                 console.log("Starting session");
                 mediator.startSession(annotation.researchSession, function (error, json) {
                     if (error) {
-
-                        console.log("Error nothing to do here, seems dead end(");
+                        console.log("Error nothing to do here, seems dead end(" + error);
+                        callback("Error nothing to do here, seems dead end( " + error);
                     }
                     else {
                         /**
