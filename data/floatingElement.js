@@ -224,16 +224,18 @@
             if (!annotator) {
                 annotator = initializeAnnotator();
             }
-            if (currentSession.isAnnotationReadonly) {
-                annotator._disableDocumentEvents();
-            }
-            else {
-                if (currentSession.activeResearch !== "null") {
-                    annotator._setupDocumentEvents();
+            if (annotator) {
+                if (currentSession.isAnnotationReadonly) {
+                    annotator._disableDocumentEvents();
                 }
                 else {
-                    annotator._disableDocumentEvents();
-                    currentSession.isAnnotationReadonly = true;
+                    if (currentSession.activeResearch !== "null") {
+                        annotator._setupDocumentEvents();
+                    }
+                    else {
+                        annotator._disableDocumentEvents();
+                        currentSession.isAnnotationReadonly = true;
+                    }
                 }
             }
         }
@@ -254,7 +256,11 @@
      * @returns {annotator}
      */
     function initializeAnnotator() {
+        if (currentSession.jiraError) {
+            return undefined;
+        }
         var annotator = getAnnotator();
+
         if (annotator === undefined) {
             var content = jQuery(annotatorTargetElement).annotator({
                 readOnly: false

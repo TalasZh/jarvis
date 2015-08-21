@@ -19,6 +19,7 @@ exports.main = function (options) {
     var JiraApi = require("jira-module").JiraApi;
     var MediatorApi = require("mediator-api").MediatorApi;
     var panels = require("sdk/panel");
+    var {setTimeout} = require("sdk/timers");
 
     var floatingCtrls = [];
     var currentSessionStatus = {
@@ -27,14 +28,14 @@ exports.main = function (options) {
         activeResearch: "null",
         jarvisHost: simplePrefs.prefs.jarvisHost,
         jiraHost: simplePrefs.prefs.jiraHost,
-        annotations: []
+        annotations: [],
+        jiraError: null,
+        researches: []
     };
 
     var searchQuery = 'issuetype = Research AND status not in (Resolved, Closed, Done) AND resolution = Unresolved AND assignee in (currentUser()) ORDER BY updatedDate DESC';
     var researchWorkers = [];
     var sidebars = [];
-    var researches = [];
-    var jiraError = null;
 
 
     var jira = new JiraApi(simplePrefs.prefs.jiraHost, "2", false, false);
@@ -100,7 +101,7 @@ exports.main = function (options) {
             data.url("session-panel/session-panel.js")
         ],
         onShow: function () {
-            panel.port.emit("loadResearches", researches);
+            panel.port.emit("loadResearches", currentSessionStatus.researches);
         }
     });
 
@@ -134,6 +135,7 @@ exports.main = function (options) {
         },
         onChange: function () {
             //this.checked = !this.checked;
+            pullResearches(true);
             if (currentSessionStatus.activeResearch === "null") {
                 console.log(panel);
                 //fixme seems like a bug in firefox api
@@ -172,7 +174,7 @@ exports.main = function (options) {
                 onPrefChange();
                 tabs.activeTab.reload();
             }
-            console.log("Chaning button state");
+            console.log("Changing button state");
             var current = this.state("tab").checked;
             updateToggleButtonState(!current);
 
@@ -187,7 +189,8 @@ exports.main = function (options) {
                     "16": data.url('mfb/ic_visibility_black_36dp/web/ic_visibility_black_36dp_2x.png'),
                     "32": data.url('mfb/ic_visibility_black_36dp/web/ic_visibility_black_36dp_2x.png'),
                     "64": data.url('mfb/ic_visibility_black_36dp/web/ic_visibility_black_36dp_2x.png')
-                }
+                },
+                label: currentSessionStatus.activeResearch
             });
             currentSessionStatus.isAnnotatorOn = true;
             currentSessionStatus.isAnnotationReadonly = false;
@@ -229,6 +232,9 @@ exports.main = function (options) {
             jira.getCurrentUser(function (error, responseText) {
                 if (error) {
                     worker.port.emit("onErrorMessage", error);
+                    //setTimeout(function () {
+                    //    tabs.open(simplePrefs.prefs.jarvisHost);
+                    //}, 3000);
                 }
                 else {
                     pullJiraResearches();
@@ -273,15 +279,15 @@ exports.main = function (options) {
             });
 
             worker.port.on("getResearchList", function () {
-                console.log("Jira error: " + jiraError);
-                if (jiraError) {
+                console.log("Jira error: " + currentSessionStatus.jiraError);
+                if (currentSessionStatus.jiraError) {
                     console.log("Couldn't retrieve issues");
-                    worker.port.emit("setResearches", jiraError, []);
+                    worker.port.emit("setResearches", currentSessionStatus.jiraError, []);
                     //pullResearches(true);
                 }
-                else if (researches) {
-                    console.log("Researches: " + researches);
-                    worker.port.emit("setResearches", null, researches);
+                else if (currentSessionStatus.researches) {
+                    console.log("Researches: " + currentSessionStatus.researches);
+                    worker.port.emit("setResearches", null, currentSessionStatus.researches);
                 }
             });
 
@@ -363,10 +369,10 @@ exports.main = function (options) {
     function pullResearches(redirect) {
         jira.getCurrentUser(function (error, responseText) {
             if (error) {
-                jiraError = error;
-                if (redirect) {
+                currentSessionStatus.jiraError = error;
+                setTimeout(function () {
                     tabs.open(simplePrefs.prefs.jarvisHost);
-                }
+                }, 3000);
             }
             else {
                 simpleStorage.storage.annotations = {};
@@ -402,13 +408,13 @@ exports.main = function (options) {
     function pullJiraResearches() {
         jira.searchJira(searchQuery, ["summary", "status", "assignee", "issuetype"], function (researchError, json) {
             if (researchError) {
-                jiraError = researchError;
+                currentSessionStatus.jiraError = researchError;
                 console.error("Request completed with errors: " + researchError);
             }
             else {
-                jiraError = null;
-                researches = json.issues;
-                console.log("Researches: " + researches);
+                currentSessionStatus.jiraError = null;
+                currentSessionStatus.researches = json.issues;
+                console.log("Researches: " + currentSessionStatus.researches);
             }
         });
 
@@ -455,58 +461,6 @@ exports.main = function (options) {
                     else {
                         console.log(json);
                         callback(null, json);
-                    }
-                });
-            }
-        });
-    }
-
-    function saveNewAnnotation(annotation, duplicate, callback) {
-        //TODO temporal workaround for migration purposes
-
-        var temp = duplicate;
-        //delete temp.id;
-        temp.localId = annotation.id;
-        temp.ranges = JSON.stringify(annotation.ranges);
-
-
-        console.log("Getting session");
-        console.log(temp);
-        console.log(annotation);
-        console.log(duplicate);
-        mediator.getSession(temp.researchSession, function (error, json) {
-            if (error) {
-                console.log("Error: " + error);
-            }
-            else if (!json) {
-                console.log("Starting session");
-                mediator.startSession(temp.researchSession, function (error, json) {
-                    if (error) {
-
-                        console.log("Error nothing to do here, seems dead end(");
-                    }
-                    else {
-                        /**
-                         * fixme Gets recursive calls when issue key is changed but id persists
-                         * mediator says that selected issue is null but actually while starting
-                         * returns issue key with last key
-                         */
-                        console.log(json);
-                        console.log("Trying to save annotation again");
-                        saveNewAnnotation(annotation, duplicate, callback);
-                    }
-                });
-            }
-            else {
-                console.log("Saving annotation");
-                console.log(JSON.stringify(temp));
-                mediator.saveCapture(temp.researchSession, temp, function (error, json) {
-                    if (error) {
-                        console.log("Error: " + error);
-                    }
-                    else {
-                        console.log(json);
-                        callback(json);
                     }
                 });
             }

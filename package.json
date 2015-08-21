@@ -1,7 +1,7 @@
 {
   "title": "Jarvis Annotator",
   "name": "jarvis-addon",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "A Jarvis add-on for managing annotations",
   "main": "index.js",
   "author": "Tooling",
@@ -26,7 +26,7 @@
       "description": "JARVIS host address",
       "type": "string",
       "name": "jarvisHost",
-      "value": "https://jarvis.subutai.io/jarvis-1.0-SNAPSHOT",
+      "value": "https://jarvis.subutai.io",
       "title": "JARVIS host address"
     },
     {
