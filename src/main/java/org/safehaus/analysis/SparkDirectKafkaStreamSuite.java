@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.safehaus.model.User;
 import org.safehaus.stash.model.StashMetricIssue;
 
 import org.apache.spark.SparkConf;
@@ -216,18 +217,19 @@ public class SparkDirectKafkaStreamSuite implements Serializable
                                     Integer>> tuple3Tuple4Tuple2 )
                             throws Exception
                     {
-                        UserMetricInfo metricInfo = new UserMetricInfo();
-                        metricInfo.setDeveloperId( tuple3Tuple4Tuple2._1()._1() );
-                        metricInfo.setJiraProductivity(
-                                ( ( double ) tuple3Tuple4Tuple2._2()._1() / ( double ) tuple3Tuple4Tuple2._2()._2() )
-                                        * 100.0 );
 
                         Calendar cal = Calendar.getInstance();
                         cal.clear();
                         cal.set( Calendar.YEAR, tuple3Tuple4Tuple2._1()._3() );
-                        cal.set( Calendar.MONTH, tuple3Tuple4Tuple2._1()._2() );
+                        cal.set(Calendar.MONTH, tuple3Tuple4Tuple2._1()._2());
 
-                        metricInfo.setMetricMonthDate( cal.getTime() );
+                        UserMetricInfo.UserMonthInfo userMonthInfo = new UserMetricInfo.UserMonthInfo(tuple3Tuple4Tuple2._1()._1(),cal.getTime() );
+
+                        UserMetricInfo metricInfo = new UserMetricInfo();
+                        metricInfo.setJiraProductivity(
+                                ( ( double ) tuple3Tuple4Tuple2._2()._1() / ( double ) tuple3Tuple4Tuple2._2()._2() )
+                                        * 100.0 );
+                        metricInfo.setDeveloperMonthInfo(userMonthInfo);
 
                         /*System.out.println( "METRICS STREAM: " + metricInfo.getDeveloperId() + " " + metricInfo
                                 .getJiraProductivity() + " " + metricInfo.getMetricMonthDate() );*/
