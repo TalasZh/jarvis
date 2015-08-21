@@ -48,6 +48,45 @@ public class SparkDirectKafkaStreamSuite implements Serializable
     private static String keyspaceName = new String("jarvis");
     private static String jiraMetricTblName = new String("user_jira_metric_info");
 
+    //Work-around for hibernate changing the table column names
+    // and cassandra-streaming not being compatible with it.
+    public static class UserMetricInfoInternal implements Serializable
+    {
+        private String  developerId;
+
+        private Double jiraProductivity;
+
+        private Date metricMonthDate;
+
+        public UserMetricInfoInternal(){}
+
+        public String getDeveloperId() {
+            return developerId;
+        }
+
+        public Double getJiraProductivity() {
+            return jiraProductivity;
+        }
+
+        public Date getMetricMonthDate()
+        {
+            return metricMonthDate;
+        }
+
+
+        public void setMetricMonthDate( final Date metricMonthDate )
+        {
+            this.metricMonthDate = metricMonthDate;
+        }
+
+        public void setJiraProductivity(Double jiraProductivity) {
+            this.jiraProductivity = jiraProductivity;
+        }
+
+        public void setDeveloperId(String developerId) {
+            this.developerId = developerId;
+        }
+    }
 
     public SparkDirectKafkaStreamSuite()
     {
@@ -178,7 +217,7 @@ public class SparkDirectKafkaStreamSuite implements Serializable
         jiraUserProductivityMetric.print();
 
         //Save only those stream who has finalized records
-        JavaDStream<UserMetricInfo> metricsDStream = jiraUserProductivityMetric.filter(
+        JavaDStream<UserMetricInfoInternal> metricsDStream = jiraUserProductivityMetric.filter(
                 new Function<Tuple2<Tuple3<String, Integer, Integer>, Tuple4<Integer, Integer, Integer, Integer>>, Boolean>()
 
                 {
@@ -208,11 +247,11 @@ public class SparkDirectKafkaStreamSuite implements Serializable
                     }
                 } ).map(
                 new Function<Tuple2<Tuple3<String, Integer, Integer>, Tuple4<Integer, Integer, Integer,
-                        Integer>>, UserMetricInfo>()
+                        Integer>>, UserMetricInfoInternal>()
 
                 {
                     @Override
-                    public UserMetricInfo call(
+                    public UserMetricInfoInternal call(
                             final Tuple2<Tuple3<String, Integer, Integer>, Tuple4<Integer, Integer, Integer,
                                     Integer>> tuple3Tuple4Tuple2 )
                             throws Exception
@@ -223,13 +262,12 @@ public class SparkDirectKafkaStreamSuite implements Serializable
                         cal.set( Calendar.YEAR, tuple3Tuple4Tuple2._1()._3() );
                         cal.set(Calendar.MONTH, tuple3Tuple4Tuple2._1()._2());
 
-                        UserMetricInfo.UserMonthInfo userMonthInfo = new UserMetricInfo.UserMonthInfo(tuple3Tuple4Tuple2._1()._1(),cal.getTime() );
-
-                        UserMetricInfo metricInfo = new UserMetricInfo();
+                        UserMetricInfoInternal metricInfo = new UserMetricInfoInternal();
+                        metricInfo.setDeveloperId(tuple3Tuple4Tuple2._1()._1());
                         metricInfo.setJiraProductivity(
                                 ( ( double ) tuple3Tuple4Tuple2._2()._1() / ( double ) tuple3Tuple4Tuple2._2()._2() )
                                         * 100.0 );
-                        metricInfo.setDeveloperMonthInfo(userMonthInfo);
+                        metricInfo.setMetricMonthDate(cal.getTime());
 
                         /*System.out.println( "METRICS STREAM: " + metricInfo.getDeveloperId() + " " + metricInfo
                                 .getJiraProductivity() + " " + metricInfo.getMetricMonthDate() );*/
@@ -239,7 +277,7 @@ public class SparkDirectKafkaStreamSuite implements Serializable
 
         metricsDStream.print();
 
-        javaFunctions(metricsDStream).writerBuilder( keyspaceName, jiraMetricTblName, mapToRow(UserMetricInfo.class) ).saveToCassandra();
+        javaFunctions(metricsDStream).writerBuilder( keyspaceName, jiraMetricTblName, mapToRow(UserMetricInfoInternal.class) ).saveToCassandra();
     }
 
     public static void startJiraStream(JavaStreamingContext jssc, HashSet<String> topicsSet, HashMap<String, String> kafkaParams)
