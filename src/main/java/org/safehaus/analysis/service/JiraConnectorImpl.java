@@ -41,12 +41,16 @@ public class JiraConnectorImpl implements JiraConnector
         else
         {
             JarvisContextHolder.setContext( new JarvisContext( jiraURL, jiraUserName, jiraPass ) );
-            if ( JarvisContextHolder.getContext() != null && JarvisContextHolder.getContext().getJiraClient() == null )
+            if ( JarvisContextHolder.getContext() != null && JarvisContextHolder.getContext().getJiraClient() != null )
             {
                 jiraClient = JarvisContextHolder.getContext().getJiraClient();
             }
             else
+            {
+                log.info( "JarvisContextHolder is null." );
                 throw new JiraClientException( "Jira Client is null." );
+            }
+
         }
         return jiraClient;
     }
