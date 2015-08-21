@@ -41,7 +41,7 @@ import static com.datastax.spark.connector.japi.CassandraStreamingJavaUtil.javaF
  */
 public class SparkDirectKafkaStreamSuite implements Serializable
 {
-    private static String brokerList = new String( "localhost:9092,localhost:9093" );
+    private static String brokerList = new String( "localhost:9092" );
     private static String sparkMaster = new String( "local[3]" );
     private static String appName = new String( "JarvisStreamConsumer" );
     private static AtomicReference<Date> mostRecentTaskDate = new AtomicReference<>(  );
