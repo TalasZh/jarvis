@@ -1,16 +1,15 @@
 package org.safehaus.service;
 
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import org.joda.time.DateTime;
 import org.safehaus.analysis.JiraMetricIssue;
 import org.safehaus.analysis.JiraMetricIssueKafkaProducer;
+import org.safehaus.analysis.SparkDirectKafkaStreamSuite;
 import org.safehaus.analysis.service.ConfluenceConnector;
 import org.safehaus.analysis.service.JiraConnector;
 import org.safehaus.analysis.service.SonarConnector;
@@ -34,10 +33,8 @@ import org.safehaus.stash.model.StashMetricIssue;
 import org.safehaus.util.DateSave;
 import org.sonar.wsclient.services.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import com.atlassian.jira.rest.client.api.domain.Issue;
 
 
@@ -50,15 +47,12 @@ public class AnalysisService
 
     @Autowired
     private JiraConnector jiraConnector;
-
     @Autowired
     private StashConnector stashConnector;
-
     @Autowired
     private SonarConnector sonarConnector;
     @Autowired
     private ConfluenceConnector confluenceConnector;
-
     @Autowired
     private JiraMetricService jiraMetricService;
 
@@ -70,17 +64,19 @@ public class AnalysisService
     Date lastGatheredStash = null;
     Date lastGatheredSonar = null;
     Date lastGatheredConfluence = null;
-
     DateSave ds;
     private Page<Project> stashProjects;
-
+    private static boolean streamingStarted = false;
+    private static boolean resetLastGathered = true;
 
     public void run()
     {
         log.info( "Running AnalysisService.run()" );
 
-
         ds = new DateSave();
+        if(resetLastGathered)
+            ds.resetLastGatheredDateJira();
+
         try
         {
             lastGatheredJira = ds.getLastGatheredDateJira();
@@ -98,7 +94,6 @@ public class AnalysisService
             e.printStackTrace();
         }
 
-
         // Get Jira Data
         JiraClient jiraCl = null;
         try
@@ -107,8 +102,7 @@ public class AnalysisService
         }
         catch ( JiraClientException e )
         {
-            log.error( "Jira Connection couldn't be established" );
-            e.printStackTrace();
+            log.error( "Jira Connection couldn't be established" + e );
         }
         if ( jiraCl != null )
         {
@@ -121,6 +115,8 @@ public class AnalysisService
                 log.error( "Error pooling issues...", ex );
             }
         }
+        else
+            log.error( "JiraClientNull...");
 
 
         // Get Stash Data
@@ -133,7 +129,6 @@ public class AnalysisService
         }
         if(stashMan != null)
             getStashMetricIssues(stashMan);
-
         // Get Sonar Data
         SonarManager sonarManager = null;
         try
@@ -145,18 +140,20 @@ public class AnalysisService
             log.error( "Sonar Connection couldn't be established." );
             e.printStackTrace();
         }
-
         if(sonarManager != null)
             getSonarMetricIssues(sonarManager);
 
+        //Get Confluence data
         org.safehaus.confluence.client.ConfluenceManager confluenceManager = null;
-        try {
+        try
+        {
              confluenceManager = confluenceConnector.confluenceConnect();
-        } catch ( ConfluenceManagerException e) {
-            log.error("Confluence Connection couldn't be established.");
+        }
+        catch ( ConfluenceManagerException e)
+        {
+            log.error("Confluence Connection couldn't be established." + e);
             e.printStackTrace();
         }
-
         if(confluenceManager != null)
             getConfluenceMetric(confluenceManager);
 
@@ -170,12 +167,24 @@ public class AnalysisService
         {
             e.printStackTrace();
         }
+
+        if(!streamingStarted)
+        {
+            try {
+                SparkDirectKafkaStreamSuite.startStreams();
+                streamingStarted = true;
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
     }
 
 
     private void getJiraMetricIssues( JiraClient jiraCl )
     {
-
+        log.info( "getJiraMetricIssues" );
         List<String> projectKeys = new ArrayList<String>();
         List<Issue> jiraIssues = new ArrayList<Issue>();
         JiraMetricIssueKafkaProducer kafkaProducer = new JiraMetricIssueKafkaProducer();
@@ -197,7 +206,6 @@ public class AnalysisService
         catch ( Exception e )
         {
             log.error( "Could not get all the projects. {}", e );
-            e.printStackTrace();
         }
 
         try
@@ -336,6 +344,7 @@ public class AnalysisService
     {
 
         List<String> stashProjectKeys = new ArrayList<String>();
+        stashMetricIssues = new ArrayList<>();
 
         // Get all projects
         try
@@ -448,6 +457,7 @@ public class AnalysisService
                     stashMetricIssue.setSrcPath( change.getSrcPath() );
                     stashMetricIssue.setType( change.getType() );
 
+                    stashMetricIssues.add(stashMetricIssue);
                 }
             }
         }
@@ -507,18 +517,20 @@ public class AnalysisService
         }
         catch ( ConfluenceManagerException e )
         {
-            e.printStackTrace();
+            log.error( "Confluence Manager Exception ", e );
         }
         List<org.safehaus.confluence.model.Page> pageList = new ArrayList<org.safehaus.confluence.model.Page>();
-        for ( Space s : spaceList )
+        if(spaceList != null)
         {
-            try
+            for (Space s : spaceList)
             {
-                pageList.addAll( confluenceManager.listPagesWithOptions(s.getKey(), 0, 100, false, true, true, false));
-            }
-            catch ( ConfluenceManagerException e )
-            {
-                e.printStackTrace();
+                try
+                {
+                    pageList.addAll(confluenceManager.listPagesWithOptions(s.getKey(), 0, 100, false, true, true, false));
+                }
+                catch (ConfluenceManagerException e) {
+                    log.error( "Confluence Manager Exception ", e );
+                }
             }
         }
 
