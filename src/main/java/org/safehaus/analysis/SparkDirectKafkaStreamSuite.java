@@ -296,15 +296,18 @@ public class SparkDirectKafkaStreamSuite implements Serializable
                     }
                 } );
 
-        JavaPairDStream<String, JiraMetricIssue> jiraAuthorIssuesDStream = jiraIssuesDStream.mapToPair(
-                new PairFunction<JiraMetricIssue, String, JiraMetricIssue>()
-                {
-                    public Tuple2<String, JiraMetricIssue> call( JiraMetricIssue jiraMetricIssue ) throws Exception
-                    {
-                        return new Tuple2<String, JiraMetricIssue>( jiraMetricIssue.getAssigneeName(),
-                                jiraMetricIssue );
+        JavaPairDStream<String, JiraMetricIssue> jiraAuthorIssuesDStream = jiraIssuesDStream.filter(new Function<JiraMetricIssue, Boolean>() {
+            @Override
+            public Boolean call(JiraMetricIssue jiraMetricIssue) throws Exception {
+                return jiraMetricIssue.getAssigneeName()!=null;
+            }
+        }).mapToPair(
+                new PairFunction<JiraMetricIssue, String, JiraMetricIssue>() {
+                    public Tuple2<String, JiraMetricIssue> call(JiraMetricIssue jiraMetricIssue) throws Exception {
+                        return new Tuple2<String, JiraMetricIssue>(jiraMetricIssue.getAssigneeName(),
+                                jiraMetricIssue);
                     }
-                } );
+                });
 
         JavaPairDStream<String, Integer> jiraAuthorIssueCountDStream = jiraAuthorIssuesDStream.mapToPair(
                 new PairFunction<Tuple2<String, JiraMetricIssue>, String, Integer>()
@@ -330,12 +333,40 @@ public class SparkDirectKafkaStreamSuite implements Serializable
     public static void startStashStreaming(JavaStreamingContext jssc, HashSet<String> topicsSet, HashMap<String,
             String> kafkaParams)
     {
-        JavaPairInputDStream<String, StashMetricIssue> stashLogDStream = KafkaUtils.createDirectStream( jssc,
+        JavaPairInputDStream<String, StashMetricIssue> stashLogDStream = KafkaUtils.createDirectStream(jssc,
                 String.class, StashMetricIssue.class, StringDecoder.class, StashMetricIssueKafkaSerializer.class,
-                kafkaParams, topicsSet );
+                kafkaParams, topicsSet);
 
         stashLogDStream.print();
 
+        JavaDStream<StashMetricIssue> stashIssuesDStream = stashLogDStream.map(new Function<Tuple2<String, StashMetricIssue>, StashMetricIssue>() {
+            @Override
+            public StashMetricIssue call(Tuple2<String, StashMetricIssue> stringStashMetricIssueTuple2) throws Exception {
+                return stringStashMetricIssueTuple2._2();
+            }
+        });
+
+
+        JavaPairDStream<Tuple3<String, Integer, Integer>, Integer> stashUserMonthlyProductivityMetrics = stashIssuesDStream.filter(new Function<StashMetricIssue, Boolean>() {
+            @Override
+            public Boolean call(StashMetricIssue stashMetricIssue) throws Exception {
+                return (stashMetricIssue.getAuthor() != null && stashMetricIssue.getAuthor().getName() != null);
+            }
+        }).mapToPair(new PairFunction<StashMetricIssue, Tuple3<String, Integer, Integer>, Integer>() {
+            @Override
+            public Tuple2<Tuple3<String, Integer, Integer>, Integer> call(StashMetricIssue stashMetricIssue) throws Exception {
+                Date date = new Date(stashMetricIssue.getAuthorTimestamp());
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(date);
+                Integer month = cal.get(Calendar.MONTH);
+                Integer year = cal.get(Calendar.YEAR);
+
+                return new Tuple2<Tuple3<String, Integer, Integer>, Integer>(new Tuple3<String, Integer, Integer>(stashMetricIssue.getAuthor().getName(), month, year),
+                        1);
+            }
+        });
+
+        stashUserMonthlyProductivityMetrics.print();
     }
 
 
