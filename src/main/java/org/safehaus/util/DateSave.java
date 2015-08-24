@@ -1,6 +1,9 @@
 package org.safehaus.util;
 
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.io.IOException;
 import java.util.Date;
 import java.util.prefs.BackingStoreException;
@@ -12,6 +15,7 @@ import java.util.prefs.Preferences;
  */
 public class DateSave
 {
+    private final Log log = LogFactory.getLog(DateSave.class);
     private static final String LAST_DATE_JIRA = "lastGatheredDateJira";
     private static final String LAST_DATE_STASH = "lastGatheredDateStash";
     private static final String LAST_DATE_SONAR = "lastGatheredDateSonar";
@@ -20,17 +24,28 @@ public class DateSave
     Preferences prefs = Preferences.userNodeForPackage( DateSave.class );
 
 
-    public void resetLastGatheredDateJira()
+    public void resetLastGatheredDateJira() throws BackingStoreException
     {
         prefs.putLong( LAST_DATE_JIRA, 0 );
-        try
-        {
-            prefs.flush();
-        }
-        catch ( BackingStoreException e )
-        {
-            e.printStackTrace();
-        }
+        prefs.flush();
+    }
+
+    public void resetLastGatheredDateStash() throws BackingStoreException
+    {
+        prefs.putLong( LAST_DATE_STASH, 0 );
+        prefs.flush();
+    }
+
+    public void resetLastGatheredDateSonar() throws BackingStoreException
+    {
+        prefs.putLong( LAST_DATE_SONAR, 0 );
+        prefs.flush();
+    }
+
+    public void resetLastGatheredDateConfluence() throws BackingStoreException
+    {
+        prefs.putLong( LAST_DATE_CONFLUENCE, 0 );
+        prefs.flush();
     }
 
 

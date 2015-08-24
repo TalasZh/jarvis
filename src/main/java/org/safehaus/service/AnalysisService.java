@@ -6,10 +6,13 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.prefs.BackingStoreException;
+
 import org.joda.time.DateTime;
 import org.safehaus.analysis.JiraMetricIssue;
 import org.safehaus.analysis.JiraMetricIssueKafkaProducer;
 import org.safehaus.analysis.SparkDirectKafkaStreamSuite;
+import org.safehaus.analysis.StashMetricIssueKafkaProducer;
 import org.safehaus.analysis.service.ConfluenceConnector;
 import org.safehaus.analysis.service.JiraConnector;
 import org.safehaus.analysis.service.SonarConnector;
@@ -67,15 +70,51 @@ public class AnalysisService
     DateSave ds;
     private Page<Project> stashProjects;
     private static boolean streamingStarted = false;
-    private static boolean resetLastGathered = true;
+
+    private static boolean resetLastGatheredJira = true;
+    private static boolean resetLastGatheredStash = true;
+    private static boolean resetLastGatheredSonar = true;
+    private static boolean resetLastGatheredConfluence = true;
 
     public void run()
     {
         log.info( "Running AnalysisService.run()" );
 
         ds = new DateSave();
-        if(resetLastGathered)
-            ds.resetLastGatheredDateJira();
+
+        // Reset the time values and get all the data since unix start time if necessary.
+        if(resetLastGatheredJira) {
+            try {
+                ds.resetLastGatheredDateJira();
+            }
+            catch (BackingStoreException e) {
+                log.error(e);
+            }
+        }
+        if(resetLastGatheredStash) {
+            try {
+                ds.resetLastGatheredDateStash();
+            }
+            catch (BackingStoreException e) {
+                log.error(e);
+            }
+        }
+        if(resetLastGatheredSonar) {
+            try {
+                ds.resetLastGatheredDateSonar();
+            }
+            catch (BackingStoreException e) {
+                log.error(e);
+            }
+        }
+        if(resetLastGatheredConfluence) {
+            try {
+                ds.resetLastGatheredDateConfluence();
+            }
+            catch (BackingStoreException e) {
+                log.error(e);
+            }
+        }
 
         try
         {
@@ -91,7 +130,7 @@ public class AnalysisService
         }
         catch ( IOException e )
         {
-            e.printStackTrace();
+            log.error(e);
         }
 
         // Get Jira Data
@@ -311,6 +350,7 @@ public class AnalysisService
                 }
             }
         }
+        kafkaProducer.close();
 
         log.info( "Getting jira metric service" );
         //        JiraMetricService jiraMetricService = JiraMetricUtil.getService();
@@ -344,6 +384,7 @@ public class AnalysisService
     {
 
         List<String> stashProjectKeys = new ArrayList<String>();
+        StashMetricIssueKafkaProducer kafkaProducer = new StashMetricIssueKafkaProducer();
         stashMetricIssues = new ArrayList<>();
 
         // Get all projects
@@ -373,7 +414,7 @@ public class AnalysisService
 
         List<Page<Repository>> reposList = new ArrayList<>();
         List<Set<Repository>> reposSetList = new ArrayList<>();
-        List<Pair<String, String>> projectSlugPairs = new ArrayList<>();
+        List<Triple<String, String, String>> projectKeyNameSlugTriples = new ArrayList<>();
 
         for ( int i = 0; i < stashProjectKeys.size(); i++ )
         {
@@ -389,19 +430,19 @@ public class AnalysisService
             for ( Repository r : reposSetList.get( i ) )
             {
                 log.info( r.getSlug() );
-                projectSlugPairs.add( new Pair<>( stashProjectKeys.get( i ), r.getSlug() ) );
+                projectKeyNameSlugTriples.add( new Triple<String, String, String>( stashProjectKeys.get( i ), r.getProject().getName(), r.getSlug() ) );
             }
         }
 
         Page<Commit> commitPage = null;
         Set<Commit> commitSet = new HashSet<>();
         Set<Change> changeSet = new HashSet<>();
-        for ( int i = 0; i < projectSlugPairs.size(); i++ )
+        for ( int i = 0; i < projectKeyNameSlugTriples.size(); i++ )
         {
             try
             {
                 commitPage =
-                        stashMan.getCommits( projectSlugPairs.get( i ).getL(), projectSlugPairs.get( i ).getR(), 1000,
+                        stashMan.getCommits( projectKeyNameSlugTriples.get( i ).getL(), projectKeyNameSlugTriples.get( i ).getR(), 1000,
                                 0 );
             }
             catch ( StashManagerException e )
@@ -423,8 +464,8 @@ public class AnalysisService
             {
                 try
                 {
-                    commitChanges = stashMan.getCommitChanges( projectSlugPairs.get( i ).getL(),
-                            projectSlugPairs.get( i ).getR(), commit.getId(), 1000, 0 );
+                    commitChanges = stashMan.getCommitChanges( projectKeyNameSlugTriples.get( i ).getL(),
+                            projectKeyNameSlugTriples.get( i ).getR(), commit.getId(), 1000, 0 );
                 }
                 catch ( StashManagerException e )
                 {
@@ -438,14 +479,6 @@ public class AnalysisService
 
                 for ( Change change : changeSet )
                 {
-                    log.info( commit.getId() );
-                    log.info( commit.getAuthor().getName() );
-                    log.info( commit.getDisplayId() );
-                    log.info( change.getType() );
-                    log.info( change.getContentId() );
-                    log.info( change.getNodeType() );
-                    log.info( change.getPercentUnchanged() );
-
                     StashMetricIssue stashMetricIssue = new StashMetricIssue();
                     stashMetricIssue.setPath( change.getPath() );
                     stashMetricIssue.setAuthor( commit.getAuthor() );
@@ -453,14 +486,37 @@ public class AnalysisService
                     stashMetricIssue.setId( change.getContentId() );
                     stashMetricIssue.setNodeType( change.getNodeType() );
                     stashMetricIssue.setPercentUnchanged( change.getPercentUnchanged() );
-                    stashMetricIssue.setProjectName( projectSlugPairs.get( i ).getL() );
+                    stashMetricIssue.setProjectName( projectKeyNameSlugTriples.get( i ).getM() );
+                    stashMetricIssue.setProjectKey(projectKeyNameSlugTriples.get( i ).getL());
                     stashMetricIssue.setSrcPath( change.getSrcPath() );
                     stashMetricIssue.setType( change.getType() );
 
-                    stashMetricIssues.add(stashMetricIssue);
+                    log.info(stashMetricIssue.getPath());
+                    log.info(stashMetricIssue.getAuthor());
+                    log.info(stashMetricIssue.getAuthorTimestamp());
+                    log.info(stashMetricIssue.getId());
+                    log.info(stashMetricIssue.getNodeType());
+                    log.info(stashMetricIssue.getPercentUnchanged());
+                    log.info(stashMetricIssue.getProjectName());
+                    log.info(stashMetricIssue.getProjectKey());
+                    log.info(stashMetricIssue.getSrcPath());
+                    log.info(stashMetricIssue.getType());
+
+                    // if the commit is made after lastGathered date put it in the qualified changes.
+                    if(lastGatheredStash != null)
+                        if(stashMetricIssue.getAuthorTimestamp() > lastGatheredStash.getTime())
+                            stashMetricIssues.add(stashMetricIssue);
                 }
             }
         }
+        for(StashMetricIssue smi : stashMetricIssues)
+            kafkaProducer.send(smi);
+
+        if ( stashMetricIssues.size() > 0 )
+        {
+            lastGatheredStash = new Date( System.currentTimeMillis() );
+        }
+        kafkaProducer.close();
     }
 
 
@@ -562,15 +618,17 @@ public class AnalysisService
     }
 
 
-    class Pair<L, R>
+    class Triple<L, M, R>
     {
         private L l;
         private R r;
+        private M m;
 
 
-        public Pair( L l, R r )
+        public Triple( L l, M m , R r)
         {
             this.l = l;
+            this.m = m;
             this.r = r;
         }
 
@@ -579,20 +637,23 @@ public class AnalysisService
         {
             return l;
         }
-
-
+        public M getM()
+        {
+            return m;
+        }
         public R getR()
         {
             return r;
         }
 
-
         public void setL( L l )
         {
             this.l = l;
         }
-
-
+        public void setM( M m )
+        {
+            this.m = m;
+        }
         public void setR( R r )
         {
             this.r = r;

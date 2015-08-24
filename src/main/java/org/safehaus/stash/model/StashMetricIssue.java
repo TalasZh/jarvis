@@ -65,6 +65,9 @@ public class StashMetricIssue implements Serializable {
     //Repository->Project->name
     private String projectName;
 
+    @Column(name = "project_key")
+    private String projectKey;
+
     public StashMetricIssue(){}
 
     public StashMetricIssue(Path path, Path srcPath, int percentUnchanged, Change.ChangeType type, Change.NodeType nodeType)
@@ -139,4 +142,12 @@ public class StashMetricIssue implements Serializable {
     public void setAuthorTimestamp(long authorTimestamp) {  this.authorTimestamp = authorTimestamp; }
 
     public void setProjectName(String projectName) { this.projectName = projectName; }
+
+    public void setProjectKey(String projectKey) {
+        this.projectKey = projectKey;
+    }
+
+    public String getProjectKey() {
+        return projectKey;
+    }
 }
