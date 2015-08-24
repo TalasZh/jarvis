@@ -22,6 +22,12 @@ import com.atlassian.jira.rest.client.api.domain.Project;
 import com.atlassian.jira.rest.client.api.domain.Status;
 import com.atlassian.jira.rest.client.api.domain.Transition;
 
+import net.rcarz.jiraclient.JiraException;
+import net.rcarz.jiraclient.greenhopper.GreenHopperClient;
+import net.rcarz.jiraclient.greenhopper.RapidView;
+import net.rcarz.jiraclient.greenhopper.Sprint;
+import net.rcarz.jiraclient.greenhopper.SprintReport;
+
 
 @Service( "jiraManager" )
 public class JiraManagerImpl implements JiraManager
@@ -186,6 +192,49 @@ public class JiraManagerImpl implements JiraManager
     }
 
 
+    @Override
+    public List<RapidView> getRapidViews() throws JiraException
+    {
+        return getJiraSprintClient().getRapidViews();
+    }
+
+
+    @Override
+    public RapidView getRapidView( final int rapidViewId ) throws JiraException
+    {
+        return getJiraSprintClient().getRapidView( rapidViewId );
+    }
+
+
+    @Override
+    public List<Sprint> getProjectSprints( final int rapidViewId ) throws JiraException
+    {
+        return getJiraSprintClient().getRapidView( rapidViewId ).getSprints();
+    }
+
+
+    @Override
+    public SprintReport getSprintReport( final int rapidViewId, final int sprintId ) throws JiraException
+    {
+        List<Sprint> sprints = getProjectSprints( rapidViewId );
+        for ( Sprint sprint : sprints )
+        {
+            if ( sprint.getId() == sprintId )
+            {
+                return getJiraSprintClient().getRapidView( rapidViewId ).getSprintReport( sprint );
+            }
+        }
+        return null;
+    }
+
+
+    @Override
+    public Sprint getSprint( final int rapidViewId, final int sprintId ) throws JiraException
+    {
+        return getSprintReport( rapidViewId, sprintId ).getSprint();
+    }
+
+
     private JarvisIssue buildJarvisIssue( Issue issue ) throws JiraClientException
     {
         if ( issue == null )
@@ -261,5 +310,11 @@ public class JiraManagerImpl implements JiraManager
     private JiraClient getJiraClient() throws JiraClientException
     {
         return JarvisContextHolder.getContext().getJiraClient();
+    }
+
+
+    private GreenHopperClient getJiraSprintClient()
+    {
+        return JarvisContextHolder.getContext().getJiraSprintClient();
     }
 }

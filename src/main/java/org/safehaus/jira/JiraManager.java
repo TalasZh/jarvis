@@ -11,6 +11,11 @@ import org.safehaus.model.JarvisProject;
 import com.atlassian.jira.rest.client.api.domain.Status;
 import com.atlassian.jira.rest.client.api.domain.Transition;
 
+import net.rcarz.jiraclient.JiraException;
+import net.rcarz.jiraclient.greenhopper.RapidView;
+import net.rcarz.jiraclient.greenhopper.Sprint;
+import net.rcarz.jiraclient.greenhopper.SprintReport;
+
 
 /**
  * Created by tzhamakeev on 5/19/15.
@@ -61,4 +66,38 @@ public interface JiraManager
     Status storyReject( String issueIdOrKey ) throws JiraClientException;
 
     Status reopenIssue( String id ) throws JiraClientException;
+
+
+    //******************************************************************************************************************
+    // Sprint related data
+
+    /**********************************
+     *  All agile boards
+     */
+    public List<RapidView> getRapidViews() throws JiraException;
+
+
+    /**********************************
+     *  agile board
+     */
+    public RapidView getRapidView( int rapidViewId ) throws JiraException;
+
+
+    /**********************************
+     *
+     */
+    public List<Sprint> getProjectSprints( int rapidViewId ) throws JiraException;
+
+
+    /**********************************
+     *
+     */
+    public SprintReport getSprintReport( int rapidViewId, int sprintId) throws JiraException;
+
+
+    /**********************************
+     *
+     */
+    public Sprint getSprint(int rapidViewId, int sprintId) throws JiraException;
+
 }

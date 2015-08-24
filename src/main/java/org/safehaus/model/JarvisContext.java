@@ -6,6 +6,7 @@ import java.io.IOException;
 import javax.ws.rs.core.Cookie;
 
 import org.safehaus.exceptions.JiraClientException;
+import org.safehaus.jira.CookieAuth;
 import org.safehaus.jira.JiraClient;
 import org.safehaus.jira.JiraClientImpl;
 import org.safehaus.util.CrowdAuthenticationHandler;
@@ -20,6 +21,8 @@ import com.atlassian.jira.rest.client.api.AuthenticationHandler;
 import com.atlassian.jira.rest.client.auth.AnonymousAuthenticationHandler;
 import com.atlassian.jira.rest.client.auth.BasicHttpAuthenticationHandler;
 
+import net.rcarz.jiraclient.greenhopper.GreenHopperClient;
+
 
 /**
  * Created by tzhamakeev on 6/3/15.
@@ -31,6 +34,7 @@ public class JarvisContext
     private AuthenticationHandler authenticationHandler;
     private String jiraUrl;
     private JiraClient jiraClient;
+    private net.rcarz.jiraclient.JiraClient jiraSprintClient;
 
 
     public JarvisContext( final String jiraUrl )
@@ -53,6 +57,7 @@ public class JarvisContext
         this.cookie = cookie;
         authenticationHandler = new CrowdAuthenticationHandler( cookie );
     }
+
 
     public JarvisContext( final Cookie cookie )
     {
@@ -78,6 +83,17 @@ public class JarvisContext
         }
 
         return jiraClient;
+    }
+
+
+    public GreenHopperClient getJiraSprintClient()
+    {
+        if ( jiraSprintClient == null )
+        {
+            jiraSprintClient = new net.rcarz.jiraclient.JiraClient( jiraUrl, new CookieAuth( cookie.getValue() ) );
+        }
+
+        return new GreenHopperClient( jiraSprintClient );
     }
 
 
