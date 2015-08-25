@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+import akka.actor.Stash;
 import org.safehaus.model.User;
 import org.safehaus.stash.model.StashMetricIssue;
 
@@ -35,6 +36,10 @@ import scala.Tuple4;
 import static com.datastax.spark.connector.japi.CassandraJavaUtil.mapToRow;
 import static com.datastax.spark.connector.japi.CassandraStreamingJavaUtil.javaFunctions;
 
+import org.safehaus.analysis.StashUserMetricInfo.StashUserMetricInfoInternal;
+import org.safehaus.analysis.UserMetricInfo.UserMetricInfoInternal;
+
+
 
 /**
  * Created by neslihan on 07.08.2015.
@@ -44,49 +49,63 @@ public class SparkDirectKafkaStreamSuite implements Serializable
     private static String brokerList = new String( "localhost:9092" );
     private static String sparkMaster = new String( "local[3]" );
     private static String appName = new String( "JarvisStreamConsumer" );
-    private static AtomicReference<Date> mostRecentTaskDate = new AtomicReference<>(  );
+    private static AtomicReference<Date> mostRecentJiraTaskDate = new AtomicReference<>(  );
     private static String keyspaceName = new String("jarvis");
     private static String jiraMetricTblName = new String("user_jira_metric_info");
+    private static String stashMetricTlbName = new String("user_stash_metric_info");
+    private static AtomicReference<Date> mostRecentStashCommitDate = new AtomicReference<>();
 
-    //Work-around for hibernate changing the table column names
-    // and cassandra-streaming not being compatible with it.
-    public static class UserMetricInfoInternal implements Serializable
-    {
-        private String  developerId;
+    public static Function2<List<Tuple3<Integer, Integer,Integer>>, Optional<Tuple3<Integer, Integer,Integer>>, Optional<Tuple3<Integer, Integer,Integer>>> STASH_COMMIT_RUNNING_SUM =
+            new Function2<List<Tuple3<Integer, Integer,Integer>>, Optional<Tuple3<Integer, Integer,Integer>>, Optional<Tuple3<Integer, Integer,Integer>>>() {
+        @Override
+        public Optional<Tuple3<Integer, Integer,Integer>> call(List<Tuple3<Integer, Integer,Integer>> values, Optional<Tuple3<Integer, Integer,Integer>> state) throws Exception {
+            Tuple3<Integer, Integer,Integer> newSum = state.or(new Tuple3<Integer, Integer,Integer>(0, 0, 0));
+            Integer allCommitsCnt = newSum._1();
 
-        private Double jiraProductivity;
+            Integer thisMonth = -1;
+            Integer thisYear = -1;
+            boolean firstTime;
 
-        private Date metricMonthDate;
+            if(state.isPresent())
+            {
+                firstTime = false;
+                thisMonth = newSum._2();
+                thisYear = newSum._3();
 
-        public UserMetricInfoInternal(){}
+                //System.out.println("State present checks! "+thisMonth+"-"+thisYear);
 
-        public String getDeveloperId() {
-            return developerId;
+                if(mostRecentStashCommitDate.get() != null)
+                {
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime( mostRecentStashCommitDate.get() );
+
+                    if( cal.get( Calendar.YEAR ) > thisYear || (cal.get(Calendar.YEAR) == thisYear && cal.get(Calendar.MONTH) > thisMonth))
+                    {
+                        //System.out.println("Returning absent! values: "+thisMonth+"-"+thisYear);
+                        return Optional.absent();
+                    }
+                }
+
+            } else
+            {
+                firstTime = true;
+            }
+
+            for (Tuple3<Integer, Integer,Integer> value : values) {
+                allCommitsCnt += value._1();
+
+                if(firstTime){
+                    thisMonth = value._2();
+                    thisYear = value._3();
+                    firstTime = false;
+                }
+            }
+
+
+            newSum = new Tuple3<Integer, Integer, Integer>(allCommitsCnt, thisMonth, thisYear);
+            return Optional.of(newSum);
         }
-
-        public Double getJiraProductivity() {
-            return jiraProductivity;
-        }
-
-        public Date getMetricMonthDate()
-        {
-            return metricMonthDate;
-        }
-
-
-        public void setMetricMonthDate( final Date metricMonthDate )
-        {
-            this.metricMonthDate = metricMonthDate;
-        }
-
-        public void setJiraProductivity(Double jiraProductivity) {
-            this.jiraProductivity = jiraProductivity;
-        }
-
-        public void setDeveloperId(String developerId) {
-            this.developerId = developerId;
-        }
-    }
+    };
 
     public SparkDirectKafkaStreamSuite()
     {
@@ -116,10 +135,10 @@ public class SparkDirectKafkaStreamSuite implements Serializable
 
                             //System.out.println("State present checks! "+thisMonth+"-"+thisYear);
 
-                            if(mostRecentTaskDate.get() != null)
+                            if(mostRecentJiraTaskDate.get() != null)
                             {
                                 Calendar cal = Calendar.getInstance();
-                                cal.setTime( mostRecentTaskDate.get() );
+                                cal.setTime( mostRecentJiraTaskDate.get() );
 
                                 if( cal.get( Calendar.YEAR ) > thisYear || (cal.get(Calendar.YEAR) == thisYear && cal.get(Calendar.MONTH) > thisMonth))
                                 {
@@ -178,14 +197,14 @@ public class SparkDirectKafkaStreamSuite implements Serializable
                     public void call( final Date date ) throws Exception
                     {
                         //System.out.println( "new rdd's!!!" );
-                        if ( mostRecentTaskDate.get() == null || mostRecentTaskDate.get().before( date ) )
+                        if ( mostRecentJiraTaskDate.get() == null || mostRecentJiraTaskDate.get().before( date ) )
                         {
-                            mostRecentTaskDate.set( date );
+                            mostRecentJiraTaskDate.set( date );
                         }
                     }
                 } );
 
-                //System.out.println( "Most recent update date: " + mostRecentTaskDate.get() );
+                //System.out.println( "Most recent update date: " + mostRecentJiraTaskDate.get() );
                 return null;
             }
         } );
@@ -231,10 +250,10 @@ public class SparkDirectKafkaStreamSuite implements Serializable
                         Integer thisMonth = tuple3Tuple4Tuple2._1()._2();
                         Integer thisYear = tuple3Tuple4Tuple2._1()._3();
 
-                        if(mostRecentTaskDate.get() != null)
+                        if(mostRecentJiraTaskDate.get() != null)
                         {
                             Calendar cal = Calendar.getInstance();
-                            cal.setTime( mostRecentTaskDate.get() );
+                            cal.setTime( mostRecentJiraTaskDate.get() );
 
                             if( cal.get( Calendar.YEAR ) > thisYear || (cal.get(Calendar.YEAR) == thisYear && cal.get(Calendar.MONTH) > thisMonth))
                             {
@@ -269,8 +288,6 @@ public class SparkDirectKafkaStreamSuite implements Serializable
                                         * 100.0 );
                         metricInfo.setMetricMonthDate(cal.getTime());
 
-                        /*System.out.println( "METRICS STREAM: " + metricInfo.getDeveloperId() + " " + metricInfo
-                                .getJiraProductivity() + " " + metricInfo.getMetricMonthDate() );*/
                         return metricInfo;
                     }
                 } );
@@ -288,13 +305,11 @@ public class SparkDirectKafkaStreamSuite implements Serializable
                         JiraMetricIssueKafkaSerializer.class, kafkaParams, topicsSet );
 
         JavaDStream<JiraMetricIssue> jiraIssuesDStream = jiraLogDStream.map(
-                new Function<Tuple2<String, JiraMetricIssue>, JiraMetricIssue>()
-                {
-                    public JiraMetricIssue call( Tuple2<String, JiraMetricIssue> tuple2 )
-                    {
+                new Function<Tuple2<String, JiraMetricIssue>, JiraMetricIssue>() {
+                    public JiraMetricIssue call(Tuple2<String, JiraMetricIssue> tuple2) {
                         return tuple2._2();
                     }
-                } );
+                });
 
         JavaPairDStream<String, JiraMetricIssue> jiraAuthorIssuesDStream = jiraIssuesDStream.filter(new Function<JiraMetricIssue, Boolean>() {
             @Override
@@ -310,26 +325,143 @@ public class SparkDirectKafkaStreamSuite implements Serializable
                 });
 
         JavaPairDStream<String, Integer> jiraAuthorIssueCountDStream = jiraAuthorIssuesDStream.mapToPair(
-                new PairFunction<Tuple2<String, JiraMetricIssue>, String, Integer>()
-                {
-                    public Tuple2<String, Integer> call( Tuple2<String, JiraMetricIssue> JiraMetricIssueTuple2 )
-                            throws Exception
-                    {
-                        return new Tuple2<String, Integer>( JiraMetricIssueTuple2._1(), 1 );
+                new PairFunction<Tuple2<String, JiraMetricIssue>, String, Integer>() {
+                    public Tuple2<String, Integer> call(Tuple2<String, JiraMetricIssue> JiraMetricIssueTuple2)
+                            throws Exception {
+                        return new Tuple2<String, Integer>(JiraMetricIssueTuple2._1(), 1);
                     }
-                } ).reduceByKey( new Function2<Integer, Integer, Integer>()
-        {
-            public Integer call( Integer i1, Integer i2 ) throws Exception
-            {
+                }).reduceByKey(new Function2<Integer, Integer, Integer>() {
+            public Integer call(Integer i1, Integer i2) throws Exception {
                 return i1 + i2;
             }
-        } );
+        });
 
         jiraAuthorIssueCountDStream.print();
 
-        computeJiraProductivityMetric( jiraAuthorIssuesDStream );
+        computeJiraProductivityMetric(jiraAuthorIssuesDStream);
     }
 
+    public static void computeStashProductivityMetric(JavaDStream<StashMetricIssue> stashIssuesDStream)
+    {
+        //author,month,year - cntCommits,month, year
+        JavaPairDStream<Tuple3<String, Integer, Integer>, Tuple3<Integer,Integer,Integer>> stashUserMonthlyProductivityMetrics = stashIssuesDStream.filter(new Function<StashMetricIssue, Boolean>() {
+            @Override
+            public Boolean call(StashMetricIssue stashMetricIssue) throws Exception {
+                if(stashMetricIssue != null && stashMetricIssue.getAuthor() == null)
+                {
+                    System.out.println("NULL AUTHOR!!");
+                }
+
+                return (stashMetricIssue!= null && stashMetricIssue.getAuthor() != null && stashMetricIssue.getAuthor().getName() != null);
+            }
+        }).mapToPair(new PairFunction<StashMetricIssue, Tuple3<String, Integer, Integer>, Tuple3<Integer, Integer, Integer>>() {
+            @Override
+            public Tuple2<Tuple3<String, Integer, Integer>, Tuple3<Integer, Integer, Integer>> call(StashMetricIssue stashMetricIssue) throws Exception {
+                Date date = new Date(stashMetricIssue.getAuthorTimestamp());
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(date);
+                Integer month = cal.get(Calendar.MONTH);
+                Integer year = cal.get(Calendar.YEAR);
+
+                System.out.println(stashMetricIssue.getAuthor().getName() + " - " + stashMetricIssue.getAuthor().getDisplayName() + " - "
+                        + stashMetricIssue.getAuthor().getEmailAddress() + stashMetricIssue.getAuthor().getId() + "\n\n\n");
+
+                return new Tuple2<Tuple3<String, Integer, Integer>, Tuple3<Integer, Integer, Integer>>(new Tuple3<String, Integer, Integer>(stashMetricIssue.getAuthor().getName(), month, year),
+                        new Tuple3<>(1, month, year));
+            }
+        }).updateStateByKey(STASH_COMMIT_RUNNING_SUM);
+
+        stashUserMonthlyProductivityMetrics.print();
+        stashUserMonthlyProductivityMetrics.count();
+
+        // This stream keeps track of the most-recent-date at each batch of the stream
+        JavaDStream<Date> stashUpdateDateStream =
+                stashIssuesDStream.filter(new Function<StashMetricIssue, Boolean>() {
+                    @Override
+                    public Boolean call(StashMetricIssue stashMetricIssue) throws Exception {
+                        return (stashMetricIssue != null);
+                    }
+                }).map(new Function<StashMetricIssue, Date>() {
+                    @Override
+                    public Date call(final StashMetricIssue stashMetricIssue)
+                            throws Exception {
+                        return new Date(stashMetricIssue.getAuthorTimestamp());
+                    }
+                });
+
+
+        stashUpdateDateStream.foreachRDD(new Function<JavaRDD<Date>, Void>() {
+            @Override
+            public Void call(final JavaRDD<Date> dateJavaRDD) throws Exception {
+                dateJavaRDD.foreach(new VoidFunction<Date>() {
+                    @Override
+                    public void call(final Date date) throws Exception {
+                        //System.out.println( "new rdd's!!!" );
+                        if (mostRecentStashCommitDate.get() == null || mostRecentStashCommitDate.get().before(date)) {
+                            mostRecentStashCommitDate.set(date);
+                        }
+                    }
+                });
+                return null;
+            }
+        });
+
+        JavaDStream<StashUserMetricInfoInternal> metricsDStream = stashUserMonthlyProductivityMetrics.filter(
+                new Function<Tuple2<Tuple3<String, Integer, Integer>, Tuple3<Integer, Integer, Integer>>, Boolean>()
+
+                {
+                    @Override
+                    public Boolean call(
+                            final Tuple2<Tuple3<String, Integer, Integer>, Tuple3<Integer, Integer,Integer>> tuple3Tuple3Tuple2 )
+                            throws Exception
+                    {
+
+                        Integer thisMonth = tuple3Tuple3Tuple2._1()._2();
+                        Integer thisYear = tuple3Tuple3Tuple2._1()._3();
+
+                        if(mostRecentStashCommitDate.get() != null)
+                        {
+                            Calendar cal = Calendar.getInstance();
+                            cal.setTime( mostRecentStashCommitDate.get() );
+
+                            if( cal.get( Calendar.YEAR ) > thisYear || (cal.get(Calendar.YEAR) == thisYear && cal.get(Calendar.MONTH) > thisMonth))
+                            {
+                                //System.out.println("Filtering out these tuples for database! ");
+                                return true;
+                            }
+                        }
+
+                        return false;
+                    }
+                } ).map(
+                new Function<Tuple2<Tuple3<String, Integer, Integer>, Tuple3<Integer, Integer,Integer>>, StashUserMetricInfoInternal>()
+
+                {
+                    @Override
+                    public StashUserMetricInfoInternal call(
+                            final Tuple2<Tuple3<String, Integer, Integer>, Tuple3<Integer, Integer,Integer>> tuple3Tuple3Tuple2 )
+                            throws Exception
+                    {
+
+                        Calendar cal = Calendar.getInstance();
+                        cal.clear();
+                        cal.set( Calendar.YEAR, tuple3Tuple3Tuple2._1()._3() );
+                        cal.set(Calendar.MONTH, tuple3Tuple3Tuple2._1()._2());
+
+                        StashUserMetricInfoInternal metricInfo = new StashUserMetricInfoInternal();
+                        metricInfo.setDeveloperId(tuple3Tuple3Tuple2._1()._1());
+                        metricInfo.setStashCommitCnt(tuple3Tuple3Tuple2._2()._1());
+                        metricInfo.setMetricMonthDate(cal.getTime());
+
+                        System.out.println( "STASH METRICS STREAM: " + metricInfo.getDeveloperId() + " " + metricInfo
+                                .getStashCommitCnt() + " " + metricInfo.getMetricMonthDate() );
+                        return metricInfo;
+                    }
+                } );
+
+        metricsDStream.print();
+        javaFunctions(metricsDStream).writerBuilder( keyspaceName, stashMetricTlbName, mapToRow(StashUserMetricInfoInternal.class) ).saveToCassandra();
+    }
     public static void startStashStreaming(JavaStreamingContext jssc, HashSet<String> topicsSet, HashMap<String,
             String> kafkaParams)
     {
@@ -346,27 +478,7 @@ public class SparkDirectKafkaStreamSuite implements Serializable
             }
         });
 
-
-        JavaPairDStream<Tuple3<String, Integer, Integer>, Integer> stashUserMonthlyProductivityMetrics = stashIssuesDStream.filter(new Function<StashMetricIssue, Boolean>() {
-            @Override
-            public Boolean call(StashMetricIssue stashMetricIssue) throws Exception {
-                return (stashMetricIssue.getAuthor() != null && stashMetricIssue.getAuthor().getName() != null);
-            }
-        }).mapToPair(new PairFunction<StashMetricIssue, Tuple3<String, Integer, Integer>, Integer>() {
-            @Override
-            public Tuple2<Tuple3<String, Integer, Integer>, Integer> call(StashMetricIssue stashMetricIssue) throws Exception {
-                Date date = new Date(stashMetricIssue.getAuthorTimestamp());
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(date);
-                Integer month = cal.get(Calendar.MONTH);
-                Integer year = cal.get(Calendar.YEAR);
-
-                return new Tuple2<Tuple3<String, Integer, Integer>, Integer>(new Tuple3<String, Integer, Integer>(stashMetricIssue.getAuthor().getName(), month, year),
-                        1);
-            }
-        });
-
-        stashUserMonthlyProductivityMetrics.print();
+        computeStashProductivityMetric(stashIssuesDStream);
     }
 
 

@@ -74,4 +74,44 @@ public class UserMetricInfo implements Serializable{
     public void setDeveloperMonthInfo(UserMonthInfo developerMonthInfo) {
         this.developerMonthInfo = developerMonthInfo;
     }
+
+    //Work-around for hibernate changing the table column names
+    // and cassandra-streaming not being compatible with it.
+    public static class UserMetricInfoInternal implements Serializable
+    {
+        private String  developerId;
+
+        private Double jiraProductivity;
+
+        private Date metricMonthDate;
+
+        public UserMetricInfoInternal(){}
+
+        public String getDeveloperId() {
+            return developerId;
+        }
+
+        public Double getJiraProductivity() {
+            return jiraProductivity;
+        }
+
+        public Date getMetricMonthDate()
+        {
+            return metricMonthDate;
+        }
+
+
+        public void setMetricMonthDate( final Date metricMonthDate )
+        {
+            this.metricMonthDate = metricMonthDate;
+        }
+
+        public void setJiraProductivity(Double jiraProductivity) {
+            this.jiraProductivity = jiraProductivity;
+        }
+
+        public void setDeveloperId(String developerId) {
+            this.developerId = developerId;
+        }
+    }
 }
