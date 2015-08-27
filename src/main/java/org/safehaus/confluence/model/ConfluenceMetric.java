@@ -1,12 +1,13 @@
 package org.safehaus.confluence.model;
 
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by kisik on 10.08.2015.
  */
-public class ConfluenceMetric
+public class ConfluenceMetric implements Serializable
 {
     private int pageID;
     private String authorUsername;
