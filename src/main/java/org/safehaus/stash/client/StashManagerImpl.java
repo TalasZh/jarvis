@@ -1,6 +1,7 @@
 package org.safehaus.stash.client;
 
 
+import java.util.Date;
 import java.util.Set;
 
 import org.safehaus.stash.model.Activity;
@@ -17,9 +18,9 @@ import org.safehaus.stash.model.Project;
 import org.safehaus.stash.model.PullRequest;
 import org.safehaus.stash.model.PullRequestState;
 import org.safehaus.stash.model.Repository;
-import org.safehaus.util.RestUtil;
-import org.safehaus.util.JsonUtil;
 import org.safehaus.util.JarvisContextHolder;
+import org.safehaus.util.JsonUtil;
+import org.safehaus.util.RestUtil;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
@@ -37,8 +38,8 @@ public class StashManagerImpl implements StashManager
 
 
     /**
-     * This constructor is used when Stash is to be accessed in the context of a user's web session based on Crowd SSO cookie.
-     * SSO cookie is retrieved from JarvisContext
+     * This constructor is used when Stash is to be accessed in the context of a user's web session based on Crowd SSO
+     * cookie. SSO cookie is retrieved from JarvisContext
      *
      * @param baseUrl - base url of Stash e.g. stash.my-company.com
      */
@@ -96,7 +97,8 @@ public class StashManagerImpl implements StashManager
             String response = get( "rest/api/1.0/projects?limit=%d&start=%d", limit, start );
 
             return jsonUtil.from( response, new TypeToken<Page<Project>>()
-            {}.getType() );
+            {
+            }.getType() );
         }
         catch ( Exception e )
         {
@@ -131,7 +133,8 @@ public class StashManagerImpl implements StashManager
                     get( "rest/api/1.0/projects/%s/permissions/groups?limit=%d&start=%d", projectKey, limit, start );
 
             return jsonUtil.from( response, new TypeToken<Page<Group>>()
-            {}.getType() );
+            {
+            }.getType() );
         }
         catch ( Exception e )
         {
@@ -149,7 +152,8 @@ public class StashManagerImpl implements StashManager
             String response = get( "rest/api/1.0/projects/%s/repos?limit=%d&start=%d", projectKey, limit, start );
 
             return jsonUtil.from( response, new TypeToken<Page<Repository>>()
-            {}.getType() );
+            {
+            }.getType() );
         }
         catch ( Exception e )
         {
@@ -187,7 +191,8 @@ public class StashManagerImpl implements StashManager
                             + "=%d", projectKey, repoSlug, state.name(), branchName, limit, start );
 
             return jsonUtil.from( response, new TypeToken<Page<PullRequest>>()
-            {}.getType() );
+            {
+            }.getType() );
         }
         catch ( Exception e )
         {
@@ -222,7 +227,8 @@ public class StashManagerImpl implements StashManager
             String response = get( "rest/api/1.0/projects/%s/repos/%s/pull-requests/%d/activities?limit=%d&start=%d" );
 
             return jsonUtil.from( response, new TypeToken<Page<Activity>>()
-            {}.getType() );
+            {
+            }.getType() );
         }
         catch ( Exception e )
         {
@@ -242,7 +248,8 @@ public class StashManagerImpl implements StashManager
                             repoSlug, prId, limit, start );
 
             return jsonUtil.from( response, new TypeToken<Page<Commit>>()
-            {}.getType() );
+            {
+            }.getType() );
         }
         catch ( Exception e )
         {
@@ -262,7 +269,8 @@ public class StashManagerImpl implements StashManager
                             repoSlug, prId, limit, start );
 
             return jsonUtil.from( response, new TypeToken<Page<Change>>()
-            {}.getType() );
+            {
+            }.getType() );
         }
         catch ( Exception e )
         {
@@ -282,7 +290,8 @@ public class StashManagerImpl implements StashManager
                             start );
 
             return jsonUtil.from( response, new TypeToken<Page<Branch>>()
-            {}.getType() );
+            {
+            }.getType() );
         }
         catch ( Exception e )
         {
@@ -319,7 +328,8 @@ public class StashManagerImpl implements StashManager
                             repoSlug, fromCommitId, toCommitId, limit, start );
 
             return jsonUtil.from( response, new TypeToken<Page<Change>>()
-            {}.getType() );
+            {
+            }.getType() );
         }
         catch ( Exception e )
         {
@@ -339,7 +349,8 @@ public class StashManagerImpl implements StashManager
                             start );
 
             return jsonUtil.from( response, new TypeToken<Page<Commit>>()
-            {}.getType() );
+            {
+            }.getType() );
         }
         catch ( Exception e )
         {
@@ -376,7 +387,8 @@ public class StashManagerImpl implements StashManager
                             commitId, limit, start );
 
             return jsonUtil.from( response, new TypeToken<Page<Change>>()
-            {}.getType() );
+            {
+            }.getType() );
         }
         catch ( Exception e )
         {
@@ -394,7 +406,8 @@ public class StashManagerImpl implements StashManager
             String response = get( "rest/audit/1.0/projects/%s/events?limit=%d&start=%d", projectKey, limit, start );
 
             return jsonUtil.from( response, new TypeToken<Page<Event>>()
-            {}.getType() );
+            {
+            }.getType() );
         }
         catch ( Exception e )
         {
@@ -414,7 +427,8 @@ public class StashManagerImpl implements StashManager
                             start );
 
             return jsonUtil.from( response, new TypeToken<Page<Event>>()
-            {}.getType() );
+            {
+            }.getType() );
         }
         catch ( Exception e )
         {
@@ -448,7 +462,8 @@ public class StashManagerImpl implements StashManager
             String response = get( "rest/build-status/1.0/commits/%s?limit=%d&start=%d", commitId, limit, start );
 
             return jsonUtil.from( response, new TypeToken<Page<BuildStatus>>()
-            {}.getType() );
+            {
+            }.getType() );
         }
         catch ( Exception e )
         {
@@ -467,7 +482,8 @@ public class StashManagerImpl implements StashManager
                     get( "rest/jira/1.0/projects/%s/repos/%s/pull-requests/%d/issues", projectKey, repoSlug, prId );
 
             return jsonUtil.from( response, new TypeToken<Set<JiraIssue>>()
-            {}.getType() );
+            {
+            }.getType() );
         }
         catch ( Exception e )
         {
@@ -487,7 +503,8 @@ public class StashManagerImpl implements StashManager
                             maxChanges );
 
             return jsonUtil.from( response, new TypeToken<Page<ChangeSet>>()
-            {}.getType() );
+            {
+            }.getType() );
         }
         catch ( Exception e )
         {
@@ -500,5 +517,14 @@ public class StashManagerImpl implements StashManager
     public String getBaseUrl()
     {
         return baseUrl;
+    }
+
+
+    @Override
+    public Date getCommitDate( final String projectKey, final String repoSlug, final String commitId )
+            throws StashManagerException
+    {
+        Date date = new Date( getCommit( projectKey, repoSlug, commitId ).getAuthorTimestamp() );
+        return date;
     }
 }
