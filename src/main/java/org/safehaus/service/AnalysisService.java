@@ -130,7 +130,7 @@ public class AnalysisService
             log.error(e);
         }
 
-/*        // Get Jira Data
+        // Get Jira Data
         JiraClient jiraCl = null;
         try
         {
@@ -177,7 +177,7 @@ public class AnalysisService
             e.printStackTrace();
         }
         if(sonarManager != null)
-            getSonarMetricIssues(sonarManager);*/
+            getSonarMetricIssues(sonarManager);
 
         //Get Confluence data
         org.safehaus.confluence.client.ConfluenceManager confluenceManager = null;
