@@ -44,6 +44,7 @@ public class DaoImpl implements Dao
     public void insert( Object entity )
     {
         em.persist( entity );
+        em.flush();
         em.clear();
     }
 
@@ -52,6 +53,7 @@ public class DaoImpl implements Dao
     public void merge( Object entity )
     {
         em.merge( entity );
+        em.flush();
         em.clear();
     }
 
@@ -60,6 +62,7 @@ public class DaoImpl implements Dao
     public void remove( Object entity )
     {
         em.remove( entity );
+        em.flush();
         em.clear();
     }
 
@@ -103,9 +106,11 @@ public class DaoImpl implements Dao
             if ( ++counter == Constants.BATCH_SIZE )
             {
                 counter = 0;
+                em.flush();
                 em.clear();
             }
         }
+        em.flush();
         em.clear();
     }
 
