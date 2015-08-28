@@ -9,10 +9,7 @@ import java.util.Set;
 import java.util.prefs.BackingStoreException;
 
 import org.joda.time.DateTime;
-import org.safehaus.analysis.JiraMetricIssue;
-import org.safehaus.analysis.JiraMetricIssueKafkaProducer;
-import org.safehaus.analysis.SparkDirectKafkaStreamSuite;
-import org.safehaus.analysis.StashMetricIssueKafkaProducer;
+import org.safehaus.analysis.*;
 import org.safehaus.analysis.service.ConfluenceConnector;
 import org.safehaus.analysis.service.JiraConnector;
 import org.safehaus.analysis.service.SonarConnector;
@@ -133,7 +130,7 @@ public class AnalysisService
             log.error(e);
         }
 
-        // Get Jira Data
+/*        // Get Jira Data
         JiraClient jiraCl = null;
         try
         {
@@ -180,7 +177,7 @@ public class AnalysisService
             e.printStackTrace();
         }
         if(sonarManager != null)
-            getSonarMetricIssues(sonarManager);
+            getSonarMetricIssues(sonarManager);*/
 
         //Get Confluence data
         org.safehaus.confluence.client.ConfluenceManager confluenceManager = null;
@@ -563,6 +560,7 @@ public class AnalysisService
     private void getConfluenceMetric( ConfluenceManager confluenceManager )
     {
         log.info( "getConfluenceMetric" );
+        ConfluenceMetricKafkaProducer confluenceMetricKafkaProducer = new ConfluenceMetricKafkaProducer();
 
         confluenceMetrics = new ArrayList<>();
 
@@ -615,6 +613,11 @@ public class AnalysisService
 
             confluenceMetrics.add(cf);
         }
+        for(ConfluenceMetric cf : confluenceMetrics)
+        {
+            confluenceMetricKafkaProducer.send(cf);
+        }
+        confluenceMetricKafkaProducer.close();
     }
 
 
