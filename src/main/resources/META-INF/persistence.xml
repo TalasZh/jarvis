@@ -36,6 +36,7 @@
     <class>org.safehaus.analysis.JiraMetricIssue</class>
     <class>org.safehaus.analysis.UserMetricInfo</class>
     <class>org.safehaus.analysis.StashUserMetricInfo</class>
+    <class>org.safehaus.analysis.ConfluenceMetricInfo</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="kundera.nodes" value="localhost" />

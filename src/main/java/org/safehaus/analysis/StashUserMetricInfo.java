@@ -78,6 +78,4 @@ public class StashUserMetricInfo implements Serializable{
             this.metricMonthDate = metricMonthDate;
         }
     }
-
-
 }

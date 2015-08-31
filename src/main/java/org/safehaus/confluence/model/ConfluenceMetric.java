@@ -18,6 +18,8 @@ public class ConfluenceMetric implements Serializable
     private String title;
     private long bodyLength;
 
+    public ConfluenceMetric() {}
+
     public int getPageID() {
         return pageID;
     }
