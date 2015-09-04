@@ -42,65 +42,6 @@ public class JiraMetricServiceImpl implements JiraMetricService
         return dao.findById( JiraMetricIssue.class, id );
     }
 
-
-    @Override
-    public JiraMetricIssue findJiraMetricIssueByPK( JiraMetricIssue jiraMetricIssue )
-    {
-        log.info( "Finding JiraMetricIssue with PK, id: {}", jiraMetricIssue.getIssueId() );
-        return dao.findById( JiraMetricIssue.class, jiraMetricIssue );
-    }
-
-
-    @Override
-    public List<JiraMetricIssue> findJiraMetricIssuesByStatus( String status )
-    {
-        String query = "Select j from " + JiraMetricIssue.class.getSimpleName() + " j where j.status = " + status;
-
-        log.info( "Finding JiraMetricIssues by status: {}", status );
-
-        List<JiraMetricIssue> jiraMetricIssues = ( List<JiraMetricIssue> ) dao.findByQuery( query );
-        return jiraMetricIssues;
-    }
-
-
-    @Override
-    public List<JiraMetricIssue> findJiraMetricIssuesByIssueType( String issueType )
-    {
-        String query = "Select j from " + JiraMetricIssue.class.getSimpleName() + " j where j.issueType = " + issueType;
-
-        log.info( "Finding JiraMetricIssues by issueType: {}", issueType );
-
-        List<JiraMetricIssue> jiraMetricIssues = ( List<JiraMetricIssue> ) dao.findByQuery( query );
-        return jiraMetricIssues;
-    }
-
-
-    @Override
-    public List<JiraMetricIssue> findJiraMetricIssuesByProjectKey( String projectKey )
-    {
-        String query =
-                "Select j from " + JiraMetricIssue.class.getSimpleName() + " j where j.projectKey = " + projectKey;
-
-        log.info( "Finding JiraMetricIssues by projectKey: {}", projectKey );
-
-        List<JiraMetricIssue> jiraMetricIssues = ( List<JiraMetricIssue> ) dao.findByQuery( query );
-        return jiraMetricIssues;
-    }
-
-
-    @Override
-    public List<JiraMetricIssue> findJiraMetricIssuesByReporterName( String reporterName )
-    {
-        String query =
-                "Select j from " + JiraMetricIssue.class.getSimpleName() + " j where j.reporterName = " + reporterName;
-
-        log.info( "Finding JiraMetricIssues by reporterName: {}", reporterName );
-
-        List<JiraMetricIssue> jiraMetricIssues = ( List<JiraMetricIssue> ) dao.findByQuery( query );
-        return jiraMetricIssues;
-    }
-
-
     @Override
     public List<JiraMetricIssue> findJiraMetricIssuesByAssigneeName( String assigneeName )
     {
@@ -108,19 +49,6 @@ public class JiraMetricServiceImpl implements JiraMetricService
                 "Select j from " + JiraMetricIssue.class.getSimpleName() + " j where j.assigneeName = " + assigneeName;
 
         log.info( "Finding JiraMetricIssues by assigneeName: {}", assigneeName );
-
-        List<JiraMetricIssue> jiraMetricIssues = ( List<JiraMetricIssue> ) dao.findByQuery( query );
-        return jiraMetricIssues;
-    }
-
-
-    @Override
-    public List<JiraMetricIssue> findJiraMetricIssuesByResolution( String resolution )
-    {
-        String query =
-                "Select j from " + JiraMetricIssue.class.getSimpleName() + " j where j.resolution = " + resolution;
-
-        log.info( "Finding JiraMetricIssues by resolution: {}", resolution );
 
         List<JiraMetricIssue> jiraMetricIssues = ( List<JiraMetricIssue> ) dao.findByQuery( query );
         return jiraMetricIssues;
