@@ -25,6 +25,7 @@ import org.safehaus.confluence.model.ConfluenceMetric;
 import org.safehaus.confluence.model.Space;
 import org.safehaus.exceptions.JiraClientException;
 import org.safehaus.jira.JiraClient;
+import org.safehaus.persistence.CassandraConnector;
 import org.safehaus.sonar.client.SonarManager;
 import org.safehaus.sonar.client.SonarManagerException;
 import org.safehaus.stash.client.Page;
@@ -77,6 +78,7 @@ public class AnalysisService
     DateSave ds;
     private Page<Project> stashProjects;
     private static boolean streamingStarted = false;
+    private static boolean indexCreated = false;
 
     private static boolean resetLastGatheredJira = true;
     private static boolean resetLastGatheredStash = true;
@@ -152,6 +154,23 @@ public class AnalysisService
         {
             log.error( e );
         }
+
+
+        /*
+           TODO This creation of the index over here is a workaround,
+           because kundera creation of index for jira_metric_issue can
+           not be done due to the failure of some other tables creation.
+        */
+        if(indexCreated == false)
+        {
+            CassandraConnector cassandraConnector = new CassandraConnector("localhost");
+            cassandraConnector.connect();
+            cassandraConnector.executeStatement("use jarvis;");
+            cassandraConnector.executeStatement("CREATE INDEX jmi_assignee_idx ON jira_metric_issue (\"assignee_name\");");
+            cassandraConnector.close();
+            indexCreated = true;
+        }
+
 
         // Get Jira Data
         JiraClient jiraCl = null;
