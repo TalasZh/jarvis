@@ -27,7 +27,7 @@ import com.impetus.kundera.index.IndexCollection;
 @Table( name = "stash_metric_issue", schema = "jarvis@cassandra-pu" )
 @IndexCollection( columns = {
         @Index( name = "id" ), @Index( name = "author" ), @Index( name = "authorTimestamp" ),
-        @Index( name = "projectName" )
+        @Index( name = "projectName" ), @Index( name = "projectKey" )
 } )
 public class StashMetricIssue implements Serializable
 {
@@ -205,5 +205,23 @@ public class StashMetricIssue implements Serializable
     public String getProjectKey()
     {
         return projectKey;
+    }
+
+
+    @Override
+    public String toString()
+    {
+        return "StashMetricIssue{" +
+                "id='" + id + '\'' +
+                ", path=" + path +
+                ", srcPath=" + srcPath +
+                ", percentUnchanged=" + percentUnchanged +
+                ", type=" + type +
+                ", nodeType=" + nodeType +
+                ", author=" + author +
+                ", authorTimestamp=" + authorTimestamp +
+                ", projectName='" + projectName + '\'' +
+                ", projectKey='" + projectKey + '\'' +
+                '}';
     }
 }

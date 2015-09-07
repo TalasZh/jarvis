@@ -10,9 +10,11 @@ public interface StashMetricService
 {
 	void insertStashMetricIssue( StashMetricIssue stashMetricIssue );
 
-	StashMetricIssue findStashMetricIssueById( Long id );
+	StashMetricIssue findStashMetricIssueById( String id );
 
 	List<StashMetricIssue> findStashMetricIssuesByProjectName( String projectName );
+
+	List<StashMetricIssue> getStashMetricsByProjectKey( String projectKey );
 
 	List<StashMetricIssue> getStashMetricIssuesByAuthor( Long authorId );
 

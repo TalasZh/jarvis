@@ -193,7 +193,14 @@ public class AnalysisService
         }
         if ( stashMan != null )
         {
-            getStashMetricIssues( stashMan );
+            try
+            {
+                getStashMetricIssues( stashMan );
+            }
+            catch ( Exception ex )
+            {
+                log.error( "Error persisting stash metric issues.", ex );
+            }
         }
         // Get Sonar Data
         SonarManager sonarManager = null;
@@ -524,23 +531,14 @@ public class AnalysisService
                     stashMetricIssue.setSrcPath( change.getSrcPath() );
                     stashMetricIssue.setType( change.getType() );
 
-                    log.info( stashMetricIssue.getPath() );
-                    log.info( stashMetricIssue.getAuthor() );
-                    log.info( stashMetricIssue.getAuthorTimestamp() );
-                    log.info( stashMetricIssue.getId() );
-                    log.info( stashMetricIssue.getNodeType() );
-                    log.info( stashMetricIssue.getPercentUnchanged() );
-                    log.info( stashMetricIssue.getProjectName() );
-                    log.info( stashMetricIssue.getProjectKey() );
-                    log.info( stashMetricIssue.getSrcPath() );
-                    log.info( stashMetricIssue.getType() );
-
+                    log.info( stashMetricIssue.toString() );
                     // if the commit is made after lastGathered date put it in the qualified changes.
                     if ( lastGatheredStash != null )
                     {
                         if ( stashMetricIssue.getAuthorTimestamp() > lastGatheredStash.getTime() )
                         {
                             stashMetricIssues.add( stashMetricIssue );
+                            stashMetricService.insertStashMetricIssue( stashMetricIssue );
                         }
                     }
                 }

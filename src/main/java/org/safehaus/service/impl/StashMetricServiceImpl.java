@@ -30,7 +30,7 @@ public class StashMetricServiceImpl implements StashMetricService
 
 
     @Override
-    public StashMetricIssue findStashMetricIssueById( Long id )
+    public StashMetricIssue findStashMetricIssueById( String id )
     {
         log.info( "Finding StashMetricIssue by id: {}", id );
         return dao.findById( StashMetricIssue.class, id );
@@ -44,6 +44,18 @@ public class StashMetricServiceImpl implements StashMetricService
                 "Select s from " + StashMetricIssue.class.getSimpleName() + " s where s.projectName = " + projectName;
 
         log.info( "Finding StashMetricIssue by projectName : {}", projectName );
+        List<StashMetricIssue> stashMetricIssues = ( List<StashMetricIssue> ) dao.findByQuery( query );
+        return stashMetricIssues;
+    }
+
+
+    @Override
+    public List<StashMetricIssue> getStashMetricsByProjectKey( String projectKey )
+    {
+        String query =
+                "Select s from " + StashMetricIssue.class.getSimpleName() + " s where s.projectKey = " + projectKey;
+
+        log.info( "Finding StashMetricIssue by projectName : {}", projectKey );
         List<StashMetricIssue> stashMetricIssues = ( List<StashMetricIssue> ) dao.findByQuery( query );
         return stashMetricIssues;
     }
