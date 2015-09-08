@@ -47,8 +47,11 @@
     </bean>
 
 
-
     <bean name="analysisService" class="org.safehaus.service.AnalysisService">
+        <constructor-arg value="${reset.jira}" />
+        <constructor-arg value="${reset.stash}" />
+        <constructor-arg value="${reset.sonar}" />
+        <constructor-arg value="${reset.confluence}" />
     </bean>
 
 
@@ -63,7 +66,7 @@
 
     <bean id="cronTrigger2" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="analysisJob" />
-        <property name="cronExpression" value="0 39 * * * ?" />
+        <property name="cronExpression" value="0 03 * * * ?" />
     </bean>
 
     <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">

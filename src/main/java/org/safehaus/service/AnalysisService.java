@@ -53,6 +53,14 @@ public class AnalysisService
 {
     private final Log log = LogFactory.getLog( AnalysisService.class );
 
+    public AnalysisService(boolean jira, boolean stash, boolean sonar, boolean confluence)
+    {
+        this.resetLastGatheredJira = jira;
+        this.resetLastGatheredStash = stash;
+        this.resetLastGatheredSonar = sonar;
+        this.resetLastGatheredConfluence = confluence;
+    }
+
     @Autowired
     private JiraConnector jiraConnector;
     @Autowired
@@ -80,10 +88,10 @@ public class AnalysisService
     private static boolean streamingStarted = false;
     private static boolean indexCreated = false;
 
-    private static boolean resetLastGatheredJira = true;
-    private static boolean resetLastGatheredStash = true;
-    private static boolean resetLastGatheredSonar = true;
-    private static boolean resetLastGatheredConfluence = true;
+    private static boolean resetLastGatheredJira;
+    private static boolean resetLastGatheredStash;
+    private static boolean resetLastGatheredSonar;
+    private static boolean resetLastGatheredConfluence;
 
 
     public void run()
@@ -452,11 +460,11 @@ public class AnalysisService
         }
         catch ( StashManagerException e )
         {
-            log.error( "Stash error", e );
+            log.error("Stash error", e);
         }
         catch ( Exception e )
         {
-            log.error( "Unexpected error", e );
+            log.error("Unexpected error", e);
         }
 
         Set<Project> stashProjectSet;
@@ -489,8 +497,8 @@ public class AnalysisService
             {
                 log.info( r.getSlug() );
                 projectKeyNameSlugTriples
-                        .add( new Triple<String, String, String>( stashProjectKeys.get( i ), r.getProject().getName(),
-                                r.getSlug() ) );
+                        .add(new Triple<String, String, String>(stashProjectKeys.get(i), r.getProject().getName(),
+                                r.getSlug()));
             }
         }
 
@@ -506,11 +514,11 @@ public class AnalysisService
             }
             catch ( StashManagerException e )
             {
-                log.error( "Stash error", e );
+                log.error("Stash error", e);
             }
             catch ( Exception e )
             {
-                log.error( "Unexpected error occurred.", e );
+                log.error("Unexpected error occurred.", e);
             }
             if ( commitPage != null )
             {
@@ -546,9 +554,9 @@ public class AnalysisService
                     stashMetricIssue.setNodeType( change.getNodeType() );
                     stashMetricIssue.setPercentUnchanged( change.getPercentUnchanged() );
                     stashMetricIssue.setProjectName( projectKeyNameSlugTriples.get( i ).getM() );
-                    stashMetricIssue.setProjectKey( projectKeyNameSlugTriples.get( i ).getL() );
-                    stashMetricIssue.setSrcPath( change.getSrcPath() );
-                    stashMetricIssue.setType( change.getType() );
+                    stashMetricIssue.setProjectKey(projectKeyNameSlugTriples.get(i).getL());
+                    stashMetricIssue.setSrcPath(change.getSrcPath());
+                    stashMetricIssue.setType(change.getType());
 
                     log.info( stashMetricIssue.toString() );
                     // if the commit is made after lastGathered date put it in the qualified changes.
