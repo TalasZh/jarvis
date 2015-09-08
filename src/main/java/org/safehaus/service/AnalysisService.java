@@ -1,5 +1,6 @@
 package org.safehaus.service;
 
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,7 +10,11 @@ import java.util.Set;
 import java.util.prefs.BackingStoreException;
 
 import org.joda.time.DateTime;
-import org.safehaus.analysis.*;
+import org.safehaus.analysis.ConfluenceMetricKafkaProducer;
+import org.safehaus.analysis.JiraMetricIssue;
+import org.safehaus.analysis.JiraMetricIssueKafkaProducer;
+import org.safehaus.analysis.SparkDirectKafkaStreamSuite;
+import org.safehaus.analysis.StashMetricIssueKafkaProducer;
 import org.safehaus.analysis.service.ConfluenceConnector;
 import org.safehaus.analysis.service.JiraConnector;
 import org.safehaus.analysis.service.SonarConnector;
@@ -20,6 +25,7 @@ import org.safehaus.confluence.model.ConfluenceMetric;
 import org.safehaus.confluence.model.Space;
 import org.safehaus.exceptions.JiraClientException;
 import org.safehaus.jira.JiraClient;
+import org.safehaus.persistence.CassandraConnector;
 import org.safehaus.sonar.client.SonarManager;
 import org.safehaus.sonar.client.SonarManagerException;
 import org.safehaus.stash.client.Page;
@@ -33,8 +39,10 @@ import org.safehaus.stash.model.StashMetricIssue;
 import org.safehaus.util.DateSave;
 import org.sonar.wsclient.services.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 import com.atlassian.jira.rest.client.api.domain.Issue;
 
 
@@ -44,6 +52,14 @@ import com.atlassian.jira.rest.client.api.domain.Issue;
 public class AnalysisService
 {
     private final Log log = LogFactory.getLog( AnalysisService.class );
+
+    public AnalysisService(boolean jira, boolean stash, boolean sonar, boolean confluence)
+    {
+        this.resetLastGatheredJira = jira;
+        this.resetLastGatheredStash = stash;
+        this.resetLastGatheredSonar = sonar;
+        this.resetLastGatheredConfluence = confluence;
+    }
 
     @Autowired
     private JiraConnector jiraConnector;
@@ -56,6 +72,9 @@ public class AnalysisService
     @Autowired
     private JiraMetricService jiraMetricService;
 
+    @Autowired
+    private StashMetricService stashMetricService;
+
     List<JiraMetricIssue> jiraMetricIssues;
     List<StashMetricIssue> stashMetricIssues;
     List<ConfluenceMetric> confluenceMetrics;
@@ -67,11 +86,13 @@ public class AnalysisService
     DateSave ds;
     private Page<Project> stashProjects;
     private static boolean streamingStarted = false;
+    private static boolean indexCreated = false;
 
-    private static boolean resetLastGatheredJira = true;
-    private static boolean resetLastGatheredStash = true;
-    private static boolean resetLastGatheredSonar = true;
-    private static boolean resetLastGatheredConfluence = true;
+    private static boolean resetLastGatheredJira;
+    private static boolean resetLastGatheredStash;
+    private static boolean resetLastGatheredSonar;
+    private static boolean resetLastGatheredConfluence;
+
 
     public void run()
     {
@@ -80,36 +101,48 @@ public class AnalysisService
         ds = new DateSave();
 
         // Reset the time values and get all the data since unix start time if necessary.
-        if(resetLastGatheredJira) {
-            try {
+        if ( resetLastGatheredJira )
+        {
+            try
+            {
                 ds.resetLastGatheredDateJira();
             }
-            catch (BackingStoreException e) {
-                log.error(e);
+            catch ( BackingStoreException e )
+            {
+                log.error( e );
             }
         }
-        if(resetLastGatheredStash) {
-            try {
+        if ( resetLastGatheredStash )
+        {
+            try
+            {
                 ds.resetLastGatheredDateStash();
             }
-            catch (BackingStoreException e) {
-                log.error(e);
+            catch ( BackingStoreException e )
+            {
+                log.error( e );
             }
         }
-        if(resetLastGatheredSonar) {
-            try {
+        if ( resetLastGatheredSonar )
+        {
+            try
+            {
                 ds.resetLastGatheredDateSonar();
             }
-            catch (BackingStoreException e) {
-                log.error(e);
+            catch ( BackingStoreException e )
+            {
+                log.error( e );
             }
         }
-        if(resetLastGatheredConfluence) {
-            try {
+        if ( resetLastGatheredConfluence )
+        {
+            try
+            {
                 ds.resetLastGatheredDateConfluence();
             }
-            catch (BackingStoreException e) {
-                log.error(e);
+            catch ( BackingStoreException e )
+            {
+                log.error( e );
             }
         }
 
@@ -127,8 +160,25 @@ public class AnalysisService
         }
         catch ( IOException e )
         {
-            log.error(e);
+            log.error( e );
         }
+
+
+        /*
+           TODO This creation of the index over here is a workaround,
+           because kundera creation of index for jira_metric_issue can
+           not be done due to the failure of some other tables creation.
+        */
+        if(indexCreated == false)
+        {
+            CassandraConnector cassandraConnector = new CassandraConnector("localhost");
+            cassandraConnector.connect();
+            cassandraConnector.executeStatement("use jarvis;");
+            cassandraConnector.executeStatement("CREATE INDEX jmi_assignee_idx ON jira_metric_issue (\"assignee_name\");");
+            cassandraConnector.close();
+            indexCreated = true;
+        }
+
 
         // Get Jira Data
         JiraClient jiraCl = null;
@@ -152,19 +202,33 @@ public class AnalysisService
             }
         }
         else
-            log.error( "JiraClientNull...");
+        {
+            log.error( "JiraClientNull..." );
+        }
 
 
         // Get Stash Data
         StashManager stashMan = null;
-        try {
+        try
+        {
             stashMan = stashConnector.stashConnect();
-        } catch (StashManagerException e) {
-            log.error("Stash Connection couldn't be established.");
+        }
+        catch ( StashManagerException e )
+        {
+            log.error( "Stash Connection couldn't be established." );
             e.printStackTrace();
         }
-        if(stashMan != null)
-            getStashMetricIssues(stashMan);
+        if ( stashMan != null )
+        {
+            try
+            {
+                getStashMetricIssues( stashMan );
+            }
+            catch ( Exception ex )
+            {
+                log.error( "Error persisting stash metric issues.", ex );
+            }
+        }
         // Get Sonar Data
         SonarManager sonarManager = null;
         try
@@ -176,22 +240,26 @@ public class AnalysisService
             log.error( "Sonar Connection couldn't be established." );
             e.printStackTrace();
         }
-        if(sonarManager != null)
-            getSonarMetricIssues(sonarManager);
+        if ( sonarManager != null )
+        {
+            getSonarMetricIssues( sonarManager );
+        }
 
         //Get Confluence data
         org.safehaus.confluence.client.ConfluenceManager confluenceManager = null;
         try
         {
-             confluenceManager = confluenceConnector.confluenceConnect();
+            confluenceManager = confluenceConnector.confluenceConnect();
         }
-        catch ( ConfluenceManagerException e)
+        catch ( ConfluenceManagerException e )
         {
-            log.error("Confluence Connection couldn't be established." + e);
+            log.error( "Confluence Connection couldn't be established." + e );
             e.printStackTrace();
         }
-        if(confluenceManager != null)
-            getConfluenceMetric(confluenceManager);
+        if ( confluenceManager != null )
+        {
+            getConfluenceMetric( confluenceManager );
+        }
 
         // Set time.
         try
@@ -204,13 +272,14 @@ public class AnalysisService
             e.printStackTrace();
         }
 
-        if(!streamingStarted)
+        if ( !streamingStarted )
         {
-            try {
+            try
+            {
                 SparkDirectKafkaStreamSuite.startStreams();
                 streamingStarted = true;
             }
-            catch (Exception e)
+            catch ( Exception e )
             {
                 e.printStackTrace();
             }
@@ -391,14 +460,14 @@ public class AnalysisService
         }
         catch ( StashManagerException e )
         {
-            e.printStackTrace();
+            log.error("Stash error", e);
         }
         catch ( Exception e )
         {
-            e.printStackTrace();
+            log.error("Unexpected error", e);
         }
 
-        Set<Project> stashProjectSet = null;
+        Set<Project> stashProjectSet;
         if ( stashProjects != null )
         {
             stashProjectSet = stashProjects.getValues();
@@ -427,7 +496,9 @@ public class AnalysisService
             for ( Repository r : reposSetList.get( i ) )
             {
                 log.info( r.getSlug() );
-                projectKeyNameSlugTriples.add( new Triple<String, String, String>( stashProjectKeys.get( i ), r.getProject().getName(), r.getSlug() ) );
+                projectKeyNameSlugTriples
+                        .add(new Triple<String, String, String>(stashProjectKeys.get(i), r.getProject().getName(),
+                                r.getSlug()));
             }
         }
 
@@ -438,17 +509,16 @@ public class AnalysisService
         {
             try
             {
-                commitPage =
-                        stashMan.getCommits( projectKeyNameSlugTriples.get( i ).getL(), projectKeyNameSlugTriples.get( i ).getR(), 1000,
-                                0 );
+                commitPage = stashMan.getCommits( projectKeyNameSlugTriples.get( i ).getL(),
+                        projectKeyNameSlugTriples.get( i ).getR(), 1000, 0 );
             }
             catch ( StashManagerException e )
             {
-                e.printStackTrace();
+                log.error("Stash error", e);
             }
             catch ( Exception e )
             {
-                e.printStackTrace();
+                log.error("Unexpected error occurred.", e);
             }
             if ( commitPage != null )
             {
@@ -484,30 +554,30 @@ public class AnalysisService
                     stashMetricIssue.setNodeType( change.getNodeType() );
                     stashMetricIssue.setPercentUnchanged( change.getPercentUnchanged() );
                     stashMetricIssue.setProjectName( projectKeyNameSlugTriples.get( i ).getM() );
-                    stashMetricIssue.setProjectKey(projectKeyNameSlugTriples.get( i ).getL());
-                    stashMetricIssue.setSrcPath( change.getSrcPath() );
-                    stashMetricIssue.setType( change.getType() );
+                    stashMetricIssue.setProjectKey(projectKeyNameSlugTriples.get(i).getL());
+                    stashMetricIssue.setSrcPath(change.getSrcPath());
+                    stashMetricIssue.setType(change.getType());
 
-                    log.info(stashMetricIssue.getPath());
-                    log.info(stashMetricIssue.getAuthor());
-                    log.info(stashMetricIssue.getAuthorTimestamp());
-                    log.info(stashMetricIssue.getId());
-                    log.info(stashMetricIssue.getNodeType());
-                    log.info(stashMetricIssue.getPercentUnchanged());
-                    log.info(stashMetricIssue.getProjectName());
-                    log.info(stashMetricIssue.getProjectKey());
-                    log.info(stashMetricIssue.getSrcPath());
-                    log.info(stashMetricIssue.getType());
-
+                    log.info( stashMetricIssue.toString() );
                     // if the commit is made after lastGathered date put it in the qualified changes.
-                    if(lastGatheredStash != null)
-                        if(stashMetricIssue.getAuthorTimestamp() > lastGatheredStash.getTime())
-                            stashMetricIssues.add(stashMetricIssue);
+                    if ( lastGatheredStash != null )
+                    {
+                        if ( stashMetricIssue.getAuthorTimestamp() > lastGatheredStash.getTime() )
+                        {
+                            stashMetricIssues.add( stashMetricIssue );
+                            stashMetricService.insertStashMetricIssue( stashMetricIssue );
+                        }
+                    }
                 }
             }
         }
-        for(StashMetricIssue smi : stashMetricIssues)
-            kafkaProducer.send(smi);
+        for ( StashMetricIssue smi : stashMetricIssues )
+        {
+            kafkaProducer.send( smi );
+        }
+
+
+        stashMetricService.batchInsert( stashMetricIssues );
 
         if ( stashMetricIssues.size() > 0 )
         {
@@ -574,15 +644,17 @@ public class AnalysisService
             log.error( "Confluence Manager Exception ", e );
         }
         List<org.safehaus.confluence.model.Page> pageList = new ArrayList<org.safehaus.confluence.model.Page>();
-        if(spaceList != null)
+        if ( spaceList != null )
         {
-            for (Space s : spaceList)
+            for ( Space s : spaceList )
             {
                 try
                 {
-                    pageList.addAll(confluenceManager.listPagesWithOptions(s.getKey(), 0, 100, false, true, true, false));
+                    pageList.addAll(
+                            confluenceManager.listPagesWithOptions( s.getKey(), 0, 100, false, true, true, false ) );
                 }
-                catch (ConfluenceManagerException e) {
+                catch ( ConfluenceManagerException e )
+                {
                     log.error( "Confluence Manager Exception ", e );
                 }
             }
@@ -592,30 +664,30 @@ public class AnalysisService
         {
             ConfluenceMetric cf = new ConfluenceMetric();
 
-            cf.setAuthorDisplayName(p.getVersion().getBy().getDisplayName());
-            cf.setAuthorUserKey(p.getVersion().getBy().getUserKey());
-            cf.setAuthorUsername(p.getVersion().getBy().getUsername());
-            cf.setBodyLength(p.getBody().getView().getValue().length());
-            cf.setPageID(Integer.parseInt(p.getId()));
-            cf.setTitle(p.getTitle());
-            cf.setVersionNumber(p.getVersion().getNumber());
-            cf.setWhen( new DateTime(p.getVersion().getWhen()).toDate() );
+            cf.setAuthorDisplayName( p.getVersion().getBy().getDisplayName() );
+            cf.setAuthorUserKey( p.getVersion().getBy().getUserKey() );
+            cf.setAuthorUsername( p.getVersion().getBy().getUsername() );
+            cf.setBodyLength( p.getBody().getView().getValue().length() );
+            cf.setPageID( Integer.parseInt( p.getId() ) );
+            cf.setTitle( p.getTitle() );
+            cf.setVersionNumber( p.getVersion().getNumber() );
+            cf.setWhen( new DateTime( p.getVersion().getWhen() ).toDate() );
 
-            log.info("------------------------------------------------");
-            log.info("PageID:      " + cf.getPageID());
-            log.info("When:        " + cf.getWhen());
-            log.info("Number:      " + cf.getVersionNumber());
-            log.info("Username:    " + cf.getAuthorUsername());
-            log.info("Displayname: " + cf.getAuthorDisplayName());
-            log.info("UserKey:     " + cf.getAuthorUserKey());
-            log.info("BodyLen:     " + cf.getBodyLength());
-            log.info("Title:       " + cf.getTitle());
+            log.info( "------------------------------------------------" );
+            log.info( "PageID:      " + cf.getPageID() );
+            log.info( "When:        " + cf.getWhen() );
+            log.info( "Number:      " + cf.getVersionNumber() );
+            log.info( "Username:    " + cf.getAuthorUsername() );
+            log.info( "Displayname: " + cf.getAuthorDisplayName() );
+            log.info( "UserKey:     " + cf.getAuthorUserKey() );
+            log.info( "BodyLen:     " + cf.getBodyLength() );
+            log.info( "Title:       " + cf.getTitle() );
 
-            confluenceMetrics.add(cf);
+            confluenceMetrics.add( cf );
         }
-        for(ConfluenceMetric cf : confluenceMetrics)
+        for ( ConfluenceMetric cf : confluenceMetrics )
         {
-            confluenceMetricKafkaProducer.send(cf);
+            confluenceMetricKafkaProducer.send( cf );
         }
         confluenceMetricKafkaProducer.close();
     }
@@ -628,7 +700,7 @@ public class AnalysisService
         private M m;
 
 
-        public Triple( L l, M m , R r)
+        public Triple( L l, M m, R r )
         {
             this.l = l;
             this.m = m;
@@ -640,23 +712,32 @@ public class AnalysisService
         {
             return l;
         }
+
+
         public M getM()
         {
             return m;
         }
+
+
         public R getR()
         {
             return r;
         }
 
+
         public void setL( L l )
         {
             this.l = l;
         }
+
+
         public void setM( M m )
         {
             this.m = m;
         }
+
+
         public void setR( R r )
         {
             this.r = r;

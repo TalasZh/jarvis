@@ -1,7 +1,5 @@
 package org.safehaus.stash.model;
 
-import com.impetus.kundera.index.Index;
-import com.impetus.kundera.index.IndexCollection;
 
 import java.io.Serializable;
 
@@ -18,6 +16,9 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
+import com.impetus.kundera.index.Index;
+import com.impetus.kundera.index.IndexCollection;
+
 
 /**
  * Created by neslihan on 08.07.2015.
@@ -25,52 +26,59 @@ import javax.persistence.TableGenerator;
 @Entity
 @Table( name = "stash_metric_issue", schema = "jarvis@cassandra-pu" )
 @IndexCollection( columns = {
-        @Index( name = "id" ), @Index( name = "author" ), @Index( name = "authorTimestamp" )})
-public class StashMetricIssue implements Serializable {
+        @Index( name = "id" ), @Index( name = "author" ), @Index( name = "authorTimestamp" ),
+        @Index( name = "projectName" ), @Index( name = "projectKey" )
+} )
+public class StashMetricIssue implements Serializable
+{
 
     @Id
     @TableGenerator( name = "id_gen", allocationSize = 30, initialValue = 100 )
     @GeneratedValue( generator = "id_gen", strategy = GenerationType.TABLE )
-    @Column(name = "stash_metric_id")
+    @Column( name = "stash_metric_id" )
     private String id;
 
-    @OneToOne(targetEntity = Path.class)
-    @AttributeOverride(name = "id", column = @Column(name = "path"))
+    @OneToOne( targetEntity = Path.class )
+    @AttributeOverride( name = "id", column = @Column( name = "path" ) )
     private Path path;
 
-    @OneToOne(targetEntity = Path.class)
-    @AttributeOverride(name = "id", column = @Column(name = "path"))
-    @Column(name = "src_path")
+    @OneToOne( targetEntity = Path.class )
+    @AttributeOverride( name = "id", column = @Column( name = "path" ) )
+    @Column( name = "src_path" )
     private Path srcPath;
 
-    @Column(name = "percent_unchanged")
+    @Column( name = "percent_unchanged" )
     private int percentUnchanged;
 
-    @Enumerated( EnumType.ORDINAL )
-    @Column(name = "change_type")
+    @Enumerated( EnumType.STRING )
+    @Column( name = "change_type" )
     private Change.ChangeType type;
 
-    @Enumerated( EnumType.ORDINAL )
-    @Column(name = "node_type")
+    @Enumerated( EnumType.STRING )
+    @Column( name = "node_type" )
     private Change.NodeType nodeType;
 
-    @OneToOne(targetEntity = StashUser.class)
-    @JoinColumn(name = "associated_user_id")
+    @OneToOne( targetEntity = StashUser.class )
+    @JoinColumn( name = "associated_user_id" )
     private StashUser author;
 
-    @Column(name = "author_ts")
+    @Column( name = "author_ts" )
     private long authorTimestamp;
 
-    @Column(name = "project_name")
-    //Repository->Project->name
+    @Column( name = "project_name" )
     private String projectName;
 
-    @Column(name = "project_key")
+    @Column( name = "project_key" )
     private String projectKey;
 
-    public StashMetricIssue(){}
 
-    public StashMetricIssue(Path path, Path srcPath, int percentUnchanged, Change.ChangeType type, Change.NodeType nodeType)
+    public StashMetricIssue()
+    {
+    }
+
+
+    public StashMetricIssue( Path path, Path srcPath, int percentUnchanged, Change.ChangeType type,
+                             Change.NodeType nodeType )
     {
         this.path = path;
         this.srcPath = srcPath;
@@ -79,75 +87,141 @@ public class StashMetricIssue implements Serializable {
         this.nodeType = nodeType;
     }
 
-    public Path getPath() {
+
+    public Path getPath()
+    {
         return path;
     }
 
-    public Path getSrcPath() {
+
+    public Path getSrcPath()
+    {
         return srcPath;
     }
 
-    public int getPercentUnchanged() {
+
+    public int getPercentUnchanged()
+    {
         return percentUnchanged;
     }
 
-    public Change.ChangeType getType() {
+
+    public Change.ChangeType getType()
+    {
         return type;
     }
 
-    public Change.NodeType getNodeType() {
+
+    public Change.NodeType getNodeType()
+    {
         return nodeType;
     }
 
-    public String getProjectName() {
+
+    public String getProjectName()
+    {
         return projectName;
     }
 
-    public long getAuthorTimestamp() {
+
+    public long getAuthorTimestamp()
+    {
         return authorTimestamp;
     }
 
-    public StashUser getAuthor() {
+
+    public StashUser getAuthor()
+    {
         return author;
     }
 
-    public String getId() {
+
+    public String getId()
+    {
         return id;
     }
 
-    public void setType(Change.ChangeType type) {
+
+    public void setType( Change.ChangeType type )
+    {
         this.type = type;
     }
 
-    public void setPath(Path path) {
+
+    public void setPath( Path path )
+    {
         this.path = path;
     }
 
-    public void setSrcPath(Path srcPath) {
+
+    public void setSrcPath( Path srcPath )
+    {
         this.srcPath = srcPath;
     }
 
-    public void setPercentUnchanged(int percentUnchanged) {
+
+    public void setPercentUnchanged( int percentUnchanged )
+    {
         this.percentUnchanged = percentUnchanged;
     }
 
-    public void setNodeType(Change.NodeType nodeType) {
+
+    public void setNodeType( Change.NodeType nodeType )
+    {
         this.nodeType = nodeType;
     }
 
-    public void setId(String id) { this.id = id; }
 
-    public void setAuthor(StashUser author) { this.author = author; }
+    public void setId( String id )
+    {
+        this.id = id;
+    }
 
-    public void setAuthorTimestamp(long authorTimestamp) {  this.authorTimestamp = authorTimestamp; }
 
-    public void setProjectName(String projectName) { this.projectName = projectName; }
+    public void setAuthor( StashUser author )
+    {
+        this.author = author;
+    }
 
-    public void setProjectKey(String projectKey) {
+
+    public void setAuthorTimestamp( long authorTimestamp )
+    {
+        this.authorTimestamp = authorTimestamp;
+    }
+
+
+    public void setProjectName( String projectName )
+    {
+        this.projectName = projectName;
+    }
+
+
+    public void setProjectKey( String projectKey )
+    {
         this.projectKey = projectKey;
     }
 
-    public String getProjectKey() {
+
+    public String getProjectKey()
+    {
         return projectKey;
+    }
+
+
+    @Override
+    public String toString()
+    {
+        return "StashMetricIssue{" +
+                "id='" + id + '\'' +
+                ", path=" + path +
+                ", srcPath=" + srcPath +
+                ", percentUnchanged=" + percentUnchanged +
+                ", type=" + type +
+                ", nodeType=" + nodeType +
+                ", author=" + author +
+                ", authorTimestamp=" + authorTimestamp +
+                ", projectName='" + projectName + '\'' +
+                ", projectKey='" + projectKey + '\'' +
+                '}';
     }
 }

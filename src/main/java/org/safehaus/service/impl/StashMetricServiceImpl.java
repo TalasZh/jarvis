@@ -2,6 +2,7 @@ package org.safehaus.service.impl;
 
 
 import java.util.List;
+
 import org.safehaus.dao.Dao;
 import org.safehaus.service.StashMetricService;
 import org.safehaus.stash.model.StashMetricIssue;
@@ -14,63 +15,104 @@ import org.springframework.stereotype.Service;
 @Service
 public class StashMetricServiceImpl implements StashMetricService
 {
-	private static final Logger log = LoggerFactory.getLogger( StashMetricServiceImpl.class );
+    private static final Logger log = LoggerFactory.getLogger( StashMetricServiceImpl.class );
 
-	@Autowired
-	private Dao dao;
-
-
-	@Override
-	public void insertStashMetricIssue( StashMetricIssue stashMetricIssue )
-	{
-		log.info( "Inserting new StashMetricIssue" );
-		dao.insert( stashMetricIssue );
-	}
+    @Autowired
+    private Dao dao;
 
 
-	@Override
-	public StashMetricIssue findStashMetricIssueById( Long id )
-	{
-		log.info( "Finding StashMetricIssue by id: {}", id );
-		return dao.findById( StashMetricIssue.class, id );
-	}
+    @Override
+    public void insertStashMetricIssue( StashMetricIssue stashMetricIssue )
+    {
+        log.info( "Inserting new StashMetricIssue" );
+        dao.insert( stashMetricIssue );
+    }
 
 
-	@Override
-	public List<StashMetricIssue> findStashMetricIssuesByProjectName( String projectName )
-	{
-		String query = "Select s from " + StashMetricIssue.class.getSimpleName() + " s where s.projectName = "
-		        + projectName;
-
-		log.info( "Finding StashMetricIssue by projectName : {}", projectName );
-		List<StashMetricIssue> stashMetricIssues = (List<StashMetricIssue>) dao.findByQuery( query );
-		return stashMetricIssues;
-	}
+    @Override
+    public StashMetricIssue findStashMetricIssueById( String id )
+    {
+        log.info( "Finding StashMetricIssue by id: {}", id );
+        return dao.findById( StashMetricIssue.class, id );
+    }
 
 
-	@Override
-	public void updateStashMetricIssue( StashMetricIssue stashMetricIssue )
-	{
-		if ( stashMetricIssue == null )
-		{
-			throw new IllegalArgumentException( "Entity or Entity.id should not be null to perform update." );
-		}
+    @Override
+    public List<StashMetricIssue> findStashMetricIssuesByProjectName( String projectName )
+    {
+        String query =
+                "Select s from " + StashMetricIssue.class.getSimpleName() + " s where s.projectName = " + projectName;
 
-		log.info( "Updating StashMetricIssue with id {}", stashMetricIssue.getId() );
-		dao.merge( stashMetricIssue );
-	}
+        log.info( "Finding StashMetricIssue by projectName : {}", projectName );
+        List<StashMetricIssue> stashMetricIssues = ( List<StashMetricIssue> ) dao.findByQuery( query );
+        return stashMetricIssues;
+    }
 
 
-	@Override
-	public void deleteStashMetricIssue( StashMetricIssue stashMetricIssue )
-	{
-		if ( stashMetricIssue == null )
-		{
-			throw new IllegalArgumentException( "Entity or Entity.id should not be null to perform delete." );
-		}
+    @Override
+    public List<StashMetricIssue> getStashMetricsByProjectKey( String projectKey )
+    {
+        String query =
+                "Select s from " + StashMetricIssue.class.getSimpleName() + " s where s.projectKey = " + projectKey;
 
-		log.info( "Removing StashMetricIssue with id {}", stashMetricIssue.getId() );
-		dao.remove( stashMetricIssue );
-	}
+        log.info( "Finding StashMetricIssue by projectName : {}", projectKey );
+        List<StashMetricIssue> stashMetricIssues = ( List<StashMetricIssue> ) dao.findByQuery( query );
+        return stashMetricIssues;
+    }
 
+
+    @Override
+    public List<StashMetricIssue> getStashMetricIssuesByAuthor( final Long authorId )
+    {
+        String query = "Select s from " + StashMetricIssue.class.getSimpleName() + " s where s.author.id = " + authorId;
+
+        log.info( "Finding StashMetricIssue by projectName : {}", authorId );
+        List<StashMetricIssue> stashMetricIssues = ( List<StashMetricIssue> ) dao.findByQuery( query );
+        return stashMetricIssues;
+    }
+
+
+    @Override
+    public List<StashMetricIssue> getStashMetricIssuesByAuthorTimestamp( final Long timestamp )
+    {
+        String query =
+                "Select s from " + StashMetricIssue.class.getSimpleName() + " s where s.authorTimestamp = " + timestamp;
+
+        log.info( "Finding StashMetricIssue by projectName : {}", timestamp );
+        List<StashMetricIssue> stashMetricIssues = ( List<StashMetricIssue> ) dao.findByQuery( query );
+        return stashMetricIssues;
+    }
+
+
+    @Override
+    public void updateStashMetricIssue( StashMetricIssue stashMetricIssue )
+    {
+        if ( stashMetricIssue == null )
+        {
+            throw new IllegalArgumentException( "Entity or Entity.id should not be null to perform update." );
+        }
+
+        log.info( "Updating StashMetricIssue with id {}", stashMetricIssue.getId() );
+        dao.merge( stashMetricIssue );
+    }
+
+
+    @Override
+    public void deleteStashMetricIssue( StashMetricIssue stashMetricIssue )
+    {
+        if ( stashMetricIssue == null )
+        {
+            throw new IllegalArgumentException( "Entity or Entity.id should not be null to perform delete." );
+        }
+
+        log.info( "Removing StashMetricIssue with id {}", stashMetricIssue.getId() );
+        dao.remove( stashMetricIssue );
+    }
+
+
+    @Override
+    public void batchInsert( final List<StashMetricIssue> issues )
+    {
+        dao.batchInsert( issues );
+    }
 }

@@ -1,20 +1,17 @@
 package org.safehaus.dao.kundera;
 
 
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceContextType;
+import javax.persistence.Query;
 
 import org.safehaus.Constants;
 import org.safehaus.dao.Dao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.impetus.client.cassandra.common.CassandraConstants;
-import com.impetus.kundera.client.Client;
 
 
 /**
@@ -99,19 +96,32 @@ public class DaoImpl implements Dao
     @Override
     public <T> void batchInsert( final List<T> entities )
     {
-        int counter = 0;
-        for ( final T entity : entities )
+        try
         {
-            em.persist( entity );
-            if ( ++counter == Constants.BATCH_SIZE )
+            if ( entities.size() > 0 )
             {
-                counter = 0;
-                em.flush();
-                em.clear();
+                int counter = 0;
+                for ( final T entity : entities )
+                {
+                    em.persist( entity );
+                    if ( ++counter == Constants.BATCH_SIZE )
+                    {
+                        counter = 0;
+                        em.flush();
+                        em.clear();
+                    }
+                }
+                if ( counter > 0 )
+                {
+                    em.flush();
+                    em.clear();
+                }
             }
         }
-        em.flush();
-        em.clear();
+        catch ( Exception ex )
+        {
+            log.error( "Error batch inserting data.", ex );
+        }
     }
 
 
