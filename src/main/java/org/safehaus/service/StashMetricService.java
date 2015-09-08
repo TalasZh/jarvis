@@ -16,9 +16,9 @@ public interface StashMetricService
 
 	List<StashMetricIssue> getStashMetricsByProjectKey( String projectKey );
 
-	List<StashMetricIssue> getStashMetricIssuesByAuthor( Long authorId );
+	List<StashMetricIssue> getStashMetricIssuesByAuthor( String authorId );
 
-	List<StashMetricIssue> getStashMetricIssuesByAuthorTimestamp( Long timestamp );
+	List<StashMetricIssue> getStashMetricIssuesByAuthorTimestamp( String timestamp );
 
 	void updateStashMetricIssue( StashMetricIssue stashMetricIssue );
 

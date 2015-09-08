@@ -3,8 +3,13 @@ package org.safehaus.service.impl;
 
 import java.util.List;
 
+import javax.jws.WebService;
+
+import org.codehaus.jackson.map.annotate.JsonView;
 import org.safehaus.dao.Dao;
+import org.safehaus.model.Views;
 import org.safehaus.service.StashMetricService;
+import org.safehaus.service.rest.StashMetricsRestService;
 import org.safehaus.stash.model.StashMetricIssue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +18,9 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class StashMetricServiceImpl implements StashMetricService
+@WebService( serviceName = "StashMetricService", endpointInterface = "org.safehaus.service.rest"
+        + ".StashMetricsRestService" )
+public class StashMetricServiceImpl implements StashMetricService, StashMetricsRestService
 {
     private static final Logger log = LoggerFactory.getLogger( StashMetricServiceImpl.class );
 
@@ -30,6 +37,7 @@ public class StashMetricServiceImpl implements StashMetricService
 
 
     @Override
+    @JsonView( Views.CompleteView.class )
     public StashMetricIssue findStashMetricIssueById( String id )
     {
         log.info( "Finding StashMetricIssue by id: {}", id );
@@ -38,6 +46,7 @@ public class StashMetricServiceImpl implements StashMetricService
 
 
     @Override
+    @JsonView( Views.CompleteView.class )
     public List<StashMetricIssue> findStashMetricIssuesByProjectName( String projectName )
     {
         String query =
@@ -50,6 +59,7 @@ public class StashMetricServiceImpl implements StashMetricService
 
 
     @Override
+    @JsonView( Views.CompleteView.class )
     public List<StashMetricIssue> getStashMetricsByProjectKey( String projectKey )
     {
         String query =
@@ -62,7 +72,8 @@ public class StashMetricServiceImpl implements StashMetricService
 
 
     @Override
-    public List<StashMetricIssue> getStashMetricIssuesByAuthor( final Long authorId )
+    @JsonView( Views.CompleteView.class )
+    public List<StashMetricIssue> getStashMetricIssuesByAuthor( final String authorId )
     {
         String query = "Select s from " + StashMetricIssue.class.getSimpleName() + " s where s.author.id = " + authorId;
 
@@ -73,7 +84,8 @@ public class StashMetricServiceImpl implements StashMetricService
 
 
     @Override
-    public List<StashMetricIssue> getStashMetricIssuesByAuthorTimestamp( final Long timestamp )
+    @JsonView( Views.CompleteView.class )
+    public List<StashMetricIssue> getStashMetricIssuesByAuthorTimestamp( final String timestamp )
     {
         String query =
                 "Select s from " + StashMetricIssue.class.getSimpleName() + " s where s.authorTimestamp = " + timestamp;
