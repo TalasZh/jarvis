@@ -306,10 +306,10 @@ public class SparkDirectKafkaStreamSuite implements Serializable
                         Integer thisMonth = tuple3Tuple4Tuple2._1()._2();
                         Integer thisYear = tuple3Tuple4Tuple2._1()._3();
 
-                        if(mostRecentConfluenceActivityDate.get() != null)
+                        if(mostRecentJiraTaskDate.get() != null)
                         {
                             Calendar cal = Calendar.getInstance();
-                            cal.setTime( mostRecentConfluenceActivityDate.get() );
+                            cal.setTime( mostRecentJiraTaskDate.get() );
 
                             if( cal.get( Calendar.YEAR ) > thisYear || (cal.get(Calendar.YEAR) == thisYear && cal.get(Calendar.MONTH) > thisMonth))
                             {
