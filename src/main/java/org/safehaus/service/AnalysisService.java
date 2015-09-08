@@ -53,13 +53,15 @@ public class AnalysisService
 {
     private final Log log = LogFactory.getLog( AnalysisService.class );
 
-    public AnalysisService(boolean jira, boolean stash, boolean sonar, boolean confluence)
+
+    public AnalysisService( boolean jira, boolean stash, boolean sonar, boolean confluence )
     {
         this.resetLastGatheredJira = jira;
         this.resetLastGatheredStash = stash;
         this.resetLastGatheredSonar = sonar;
         this.resetLastGatheredConfluence = confluence;
     }
+
 
     @Autowired
     private JiraConnector jiraConnector;
@@ -169,12 +171,13 @@ public class AnalysisService
            because kundera creation of index for jira_metric_issue can
            not be done due to the failure of some other tables creation.
         */
-        if(indexCreated == false)
+        if ( indexCreated == false )
         {
-            CassandraConnector cassandraConnector = new CassandraConnector("localhost");
+            CassandraConnector cassandraConnector = new CassandraConnector( "localhost" );
             cassandraConnector.connect();
-            cassandraConnector.executeStatement("use jarvis;");
-            cassandraConnector.executeStatement("CREATE INDEX jmi_assignee_idx ON jira_metric_issue (\"assignee_name\");");
+            cassandraConnector.executeStatement( "use jarvis;" );
+            cassandraConnector
+                    .executeStatement( "CREATE INDEX jmi_assignee_idx ON jira_metric_issue (\"assignee_name\");" );
             cassandraConnector.close();
             indexCreated = true;
         }
@@ -460,11 +463,11 @@ public class AnalysisService
         }
         catch ( StashManagerException e )
         {
-            log.error("Stash error", e);
+            log.error( "Stash error", e );
         }
         catch ( Exception e )
         {
-            log.error("Unexpected error", e);
+            log.error( "Unexpected error", e );
         }
 
         Set<Project> stashProjectSet;
@@ -497,8 +500,8 @@ public class AnalysisService
             {
                 log.info( r.getSlug() );
                 projectKeyNameSlugTriples
-                        .add(new Triple<String, String, String>(stashProjectKeys.get(i), r.getProject().getName(),
-                                r.getSlug()));
+                        .add( new Triple<String, String, String>( stashProjectKeys.get( i ), r.getProject().getName(),
+                                r.getSlug() ) );
             }
         }
 
@@ -514,11 +517,11 @@ public class AnalysisService
             }
             catch ( StashManagerException e )
             {
-                log.error("Stash error", e);
+                log.error( "Stash error", e );
             }
             catch ( Exception e )
             {
-                log.error("Unexpected error occurred.", e);
+                log.error( "Unexpected error occurred.", e );
             }
             if ( commitPage != null )
             {
@@ -554,9 +557,9 @@ public class AnalysisService
                     stashMetricIssue.setNodeType( change.getNodeType() );
                     stashMetricIssue.setPercentUnchanged( change.getPercentUnchanged() );
                     stashMetricIssue.setProjectName( projectKeyNameSlugTriples.get( i ).getM() );
-                    stashMetricIssue.setProjectKey(projectKeyNameSlugTriples.get(i).getL());
-                    stashMetricIssue.setSrcPath(change.getSrcPath());
-                    stashMetricIssue.setType(change.getType());
+                    stashMetricIssue.setProjectKey( projectKeyNameSlugTriples.get( i ).getL() );
+                    stashMetricIssue.setSrcPath( change.getSrcPath() );
+                    stashMetricIssue.setType( change.getType() );
 
                     log.info( stashMetricIssue.toString() );
                     // if the commit is made after lastGathered date put it in the qualified changes.
@@ -565,11 +568,11 @@ public class AnalysisService
                         if ( stashMetricIssue.getAuthorTimestamp() > lastGatheredStash.getTime() )
                         {
                             stashMetricIssues.add( stashMetricIssue );
-                            stashMetricService.insertStashMetricIssue( stashMetricIssue );
                         }
                     }
                 }
             }
+            stashMetricService.batchInsert( stashMetricIssues );
         }
         for ( StashMetricIssue smi : stashMetricIssues )
         {

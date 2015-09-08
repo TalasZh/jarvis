@@ -13,22 +13,21 @@
   <import resource="classpath:META-INF/cxf/cxf.xml" />
   <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
 
-
-
   <!-- For mail settings and future properties files -->
   <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-      <property name="ignoreUnresolvablePlaceholders" value="true"/>
-      <property name="locations">
-          <list>
-              <value>classpath:jdbc.properties</value>
-              <value>classpath:mail.properties</value>
-              <value>classpath:hibernate.properties</value>
-              <value>classpath:jarvis.properties</value>
-          </list>
-      </property>
-      <property name="systemPropertiesMode">
-          <util:constant static-field="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_OVERRIDE"/>
-      </property>
+    <property name="ignoreUnresolvablePlaceholders" value="true" />
+    <property name="locations">
+      <list>
+        <value>classpath:jdbc.properties</value>
+        <value>classpath:mail.properties</value>
+        <value>classpath:hibernate.properties</value>
+        <value>classpath:jarvis.properties</value>
+      </list>
+    </property>
+    <property name="systemPropertiesMode">
+      <util:constant
+          static-field="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+    </property>
   </bean>
 
   <bean id="abstractLoggingInterceptor" abstract="true">
@@ -79,6 +78,7 @@
   <jaxws:endpoint id="userService" implementor="#userManager" address="/UserService" />
   <jaxws:endpoint id="sessionService" implementor="#sessionServiceImpl" address="/SessionService" />
   <jaxws:endpoint id="projectService" implementor="#projectManager" address="/ProjectService" />
+  <jaxws:endpoint id="stashMetricService" implementor="#stashMetricsManager" address="/StashMetricServiceImpl" />
   <!--<jaxws:endpoint id="issueService" implementor="#issueManager" address="/IssueService"/>-->
   <!-- Add new endpoints for additional services you'd like to expose -->
 
@@ -90,6 +90,7 @@
       <ref bean="userManager" />
       <ref bean="projectManager" />
       <ref bean="sessionServiceImpl" />
+      <ref bean="stashMetricsManager" />
       <!--<ref bean="issueManager"/>-->
     </jaxrs:serviceBeans>
     <jaxrs:providers>

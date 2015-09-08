@@ -17,9 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
-@Service
-@WebService( serviceName = "StashMetricService", endpointInterface = "org.safehaus.service.rest"
-        + ".StashMetricsRestService" )
+@Service( "stashMetricsManager" )
+@WebService( serviceName = "StashMetricServiceImpl",
+        endpointInterface = "org.safehaus.service.rest.StashMetricsRestService" )
 public class StashMetricServiceImpl implements StashMetricService, StashMetricsRestService
 {
     private static final Logger log = LoggerFactory.getLogger( StashMetricServiceImpl.class );

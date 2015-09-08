@@ -15,7 +15,7 @@ import org.safehaus.stash.model.StashMetricIssue;
  * Created by talas on 9/8/15.
  */
 @WebService
-@Path( "/metrics/stash" )
+@Path( "/metrics" )
 public interface StashMetricsRestService
 {
     @GET

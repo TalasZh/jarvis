@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import com.impetus.kundera.index.Index;
 import com.impetus.kundera.index.IndexCollection;
@@ -23,6 +24,7 @@ import com.impetus.kundera.index.IndexCollection;
 /**
  * Created by neslihan on 08.07.2015.
  */
+@XmlRootElement
 @Entity
 @Table( name = "stash_metric_issue", schema = "jarvis@cassandra-pu" )
 @IndexCollection( columns = {

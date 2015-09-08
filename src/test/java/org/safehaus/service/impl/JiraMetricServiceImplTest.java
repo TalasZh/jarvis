@@ -3,6 +3,7 @@ package org.safehaus.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -66,89 +67,13 @@ public class JiraMetricServiceImplTest
 
 		Mockito.when( dao.findById( JiraMetricIssue.class, jiraMetricIssue ) ).thenReturn( jiraMetricIssue );
 
-		JiraMetricIssue newIssue = jiraMetricService.findJiraMetricIssueByPK( jiraMetricIssue );
+		JiraMetricIssue newIssue = jiraMetricService.findJiraMetricIssueById( jiraMetricIssue.getIssueId() );
 
 		Assert.assertNotNull( newIssue );
 		Assert.assertEquals( (long) newIssue.getIssueId(), -2L );
 		Assert.assertEquals( newIssue.getAssigneeName(), "Test" );
 
 		Mockito.verify( dao ).findById( JiraMetricIssue.class, jiraMetricIssue );
-	}
-
-
-	@Test
-	public void testFindJiraMetricIssuesByStatus()
-	{
-		List<JiraMetricIssue> issueList = new ArrayList<JiraMetricIssue>();
-		issueList.add( new JiraMetricIssue() );
-		issueList.add( new JiraMetricIssue() );
-
-		Mockito.doReturn( issueList ).when( dao ).findByQuery( Matchers.anyString() );
-
-		List<JiraMetricIssue> newList = jiraMetricService.findJiraMetricIssuesByStatus( "open" );
-
-		Assert.assertNotNull( newList );
-		Assert.assertTrue( newList.size() > 0 );
-		Assert.assertTrue( newList.size() == 2 );
-
-		Mockito.verify( dao ).findByQuery( Matchers.anyString() );
-	}
-
-
-	@Test
-	public void testFindJiraMetricIssuesByIssueType()
-	{
-		List<JiraMetricIssue> issueList = new ArrayList<JiraMetricIssue>();
-		issueList.add( new JiraMetricIssue() );
-		issueList.add( new JiraMetricIssue() );
-
-		Mockito.doReturn( issueList ).when( dao ).findByQuery( Matchers.anyString() );
-
-		List<JiraMetricIssue> newList = jiraMetricService.findJiraMetricIssuesByIssueType( "bug" );
-
-		Assert.assertNotNull( newList );
-		Assert.assertTrue( newList.size() > 0 );
-		Assert.assertTrue( newList.size() == 2 );
-
-		Mockito.verify( dao ).findByQuery( Matchers.anyString() );
-	}
-
-
-	@Test
-	public void testFindJiraMetricIssuesByProjectKey()
-	{
-		List<JiraMetricIssue> issueList = new ArrayList<JiraMetricIssue>();
-		issueList.add( new JiraMetricIssue() );
-		issueList.add( new JiraMetricIssue() );
-
-		Mockito.doReturn( issueList ).when( dao ).findByQuery( Matchers.anyString() );
-
-		List<JiraMetricIssue> newList = jiraMetricService.findJiraMetricIssuesByProjectKey( "KMS" );
-
-		Assert.assertNotNull( newList );
-		Assert.assertTrue( newList.size() > 0 );
-		Assert.assertTrue( newList.size() == 2 );
-
-		Mockito.verify( dao ).findByQuery( Matchers.anyString() );
-	}
-
-
-	@Test
-	public void testFindJiraMetricIssuesByReporterName()
-	{
-		List<JiraMetricIssue> issueList = new ArrayList<JiraMetricIssue>();
-		issueList.add( new JiraMetricIssue() );
-		issueList.add( new JiraMetricIssue() );
-
-		Mockito.doReturn( issueList ).when( dao ).findByQuery( Matchers.anyString() );
-
-		List<JiraMetricIssue> newList = jiraMetricService.findJiraMetricIssuesByReporterName( "ttest" );
-
-		Assert.assertNotNull( newList );
-		Assert.assertTrue( newList.size() > 0 );
-		Assert.assertTrue( newList.size() == 2 );
-
-		Mockito.verify( dao ).findByQuery( Matchers.anyString() );
 	}
 
 
@@ -162,25 +87,6 @@ public class JiraMetricServiceImplTest
 		Mockito.doReturn( issueList ).when( dao ).findByQuery( Matchers.anyString() );
 
 		List<JiraMetricIssue> newList = jiraMetricService.findJiraMetricIssuesByAssigneeName( "ttest" );
-
-		Assert.assertNotNull( newList );
-		Assert.assertTrue( newList.size() > 0 );
-		Assert.assertTrue( newList.size() == 2 );
-
-		Mockito.verify( dao ).findByQuery( Matchers.anyString() );
-	}
-
-
-	@Test
-	public void testFindJiraMetricIssuesByResolution()
-	{
-		List<JiraMetricIssue> issueList = new ArrayList<JiraMetricIssue>();
-		issueList.add( new JiraMetricIssue() );
-		issueList.add( new JiraMetricIssue() );
-
-		Mockito.doReturn( issueList ).when( dao ).findByQuery( Matchers.anyString() );
-
-		List<JiraMetricIssue> newList = jiraMetricService.findJiraMetricIssuesByResolution( "Resolved" );
 
 		Assert.assertNotNull( newList );
 		Assert.assertTrue( newList.size() > 0 );
