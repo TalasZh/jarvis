@@ -171,8 +171,8 @@ public class AnalysisService
         */
         if(indexCreated == false)
         {
-            CassandraConnector cassandraConnector = new CassandraConnector("localhost");
-            cassandraConnector.connect();
+            CassandraConnector cassandraConnector =CassandraConnector.getInstance();
+            cassandraConnector.connect("localhost");
             cassandraConnector.executeStatement("use jarvis;");
             cassandraConnector.executeStatement("CREATE INDEX jmi_assignee_idx ON jira_metric_issue (\"assignee_name\");");
             cassandraConnector.close();
