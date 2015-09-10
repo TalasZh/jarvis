@@ -1,13 +1,9 @@
 package org.safehaus.dao;
 
 
-import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-
-import org.safehaus.dao.GenericDao;
 
 
 /**
@@ -35,5 +31,5 @@ public interface Dao
 
     List<?> findByQuery( String queryString, String paramater, Object parameterValue );
 
-    <T> void batchInsert(List<T> entities);
+    <T> int batchInsert( List<T> entities );
 }

@@ -10,7 +10,9 @@ import java.util.Set;
 import java.util.prefs.BackingStoreException;
 
 import org.joda.time.DateTime;
+import org.safehaus.analysis.ChangeCompoundKey;
 import org.safehaus.analysis.ConfluenceMetricKafkaProducer;
+import org.safehaus.analysis.JiraIssueChangelog;
 import org.safehaus.analysis.JiraMetricIssue;
 import org.safehaus.analysis.JiraMetricIssueKafkaProducer;
 import org.safehaus.analysis.SparkDirectKafkaStreamSuite;
@@ -43,7 +45,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.atlassian.jira.rest.client.api.domain.ChangelogGroup;
+import com.atlassian.jira.rest.client.api.domain.ChangelogItem;
 import com.atlassian.jira.rest.client.api.domain.Issue;
+import com.google.common.collect.Lists;
 
 
 /**
@@ -392,6 +397,29 @@ public class AnalysisService
             {
                 issueToAdd.setTimeSpentMinutes( issue.getTimeTracking().getTimeSpentMinutes() );
             }
+            if ( issue.getChangelog() != null )
+            {
+                List<JiraIssueChangelog> changelogList = Lists.newArrayList();
+                Iterable<ChangelogGroup> iterable = issue.getChangelog();
+                for ( final ChangelogGroup changelogGroup : iterable )
+                {
+                    Iterable<ChangelogItem> itemIterable = changelogGroup.getItems();
+                    for ( final ChangelogItem changelogItem : itemIterable )
+                    {
+                        ChangeCompoundKey itemCompoundKey =
+                                new ChangeCompoundKey( issue.getId(), changelogGroup.getCreated().getMillis(),
+                                        issue.getKey() );
+                        JiraIssueChangelog jiraIssueChangelog =
+                                new JiraIssueChangelog( itemCompoundKey, changelogGroup.getAuthor().getName(),
+                                        changelogItem.getFieldType().name(), changelogItem.getField(),
+                                        changelogItem.getFromString(), changelogItem.getToString(),
+                                        changelogItem.getFrom(), changelogItem.getTo() );
+                        changelogList.add( jiraIssueChangelog );
+                    }
+                }
+
+                issueToAdd.setChangelogList( changelogList );
+            }
 
             jiraMetricIssues.add( issueToAdd );
             if ( lastGatheredJira != null )
@@ -540,6 +568,7 @@ public class AnalysisService
                 catch ( StashManagerException e )
                 {
                     e.printStackTrace();
+                    log.error( "error pulling commmits messages", e );
                 }
                 if ( commitChanges != null )
                 {
@@ -561,18 +590,19 @@ public class AnalysisService
                     stashMetricIssue.setSrcPath( change.getSrcPath() );
                     stashMetricIssue.setType( change.getType() );
 
-                    log.info( stashMetricIssue.toString() );
+                    //                    log.info( stashMetricIssue.toString() );
                     // if the commit is made after lastGathered date put it in the qualified changes.
                     if ( lastGatheredStash != null )
                     {
                         if ( stashMetricIssue.getAuthorTimestamp() > lastGatheredStash.getTime() )
                         {
                             stashMetricIssues.add( stashMetricIssue );
+                            stashMetricService.insertStashMetricIssue( stashMetricIssue );
                         }
                     }
                 }
+                //                stashMetricService.batchInsert( stashMetricIssues );
             }
-            stashMetricService.batchInsert( stashMetricIssues );
         }
         for ( StashMetricIssue smi : stashMetricIssues )
         {
@@ -580,7 +610,7 @@ public class AnalysisService
         }
 
 
-        stashMetricService.batchInsert( stashMetricIssues );
+        //        stashMetricService.batchInsert( stashMetricIssues );
 
         if ( stashMetricIssues.size() > 0 )
         {

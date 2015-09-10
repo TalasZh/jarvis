@@ -53,20 +53,25 @@
 
   <bean id="dataStore" class="org.safehaus.service.impl.DataStoreImpl"
         scope="singleton">
-    <property name="dao" ref="dao" />
+    <property name="dao" ref="daoService" />
   </bean>
 
   <bean id="jiraMetricService" class="org.safehaus.service.impl.JiraMetricServiceImpl"
         scope="singleton">
-    <property name="dao" ref="dao" />
+    <property name="dao" ref="daoService" />
   </bean>
 
   <bean id="stashMetricService" class="org.safehaus.service.impl.StashMetricServiceImpl"
         scope="singleton">
   </bean>
 
-  <bean id="dao" class="org.safehaus.dao.kundera.DaoImpl"
+  <!--<bean id="dao" class="org.safehaus.dao.kundera.DaoImpl"-->
+  <!--scope="singleton">-->
+  <!--</bean>-->
+
+  <bean id="daoService" class="org.safehaus.dao.kundera.DaoServiceImpl"
         scope="singleton">
+    <property name="emf" ref="emf-cassandra" />
   </bean>
 
   <bean id="emf-cassandra" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">

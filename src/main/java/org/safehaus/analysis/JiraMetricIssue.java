@@ -1,14 +1,23 @@
 package org.safehaus.analysis;
 
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import com.google.common.collect.Lists;
 import com.impetus.kundera.index.Index;
 import com.impetus.kundera.index.IndexCollection;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import java.io.Serializable;
-import java.util.Date;
 
 /**
  * Created by kisik on 06.07.2015.
@@ -65,6 +74,16 @@ public class JiraMetricIssue implements Serializable {
 
     @Column(name = "time_spent_in_minutes")
     private Integer timeSpentMinutes;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "changelog_id")
+    private List<JiraIssueChangelog> changelogList = Lists.newArrayList();
+
+
+    public JiraMetricIssue()
+    {
+    }
+
 
     public String getIssueKey() {
         return issueKey;
@@ -184,6 +203,18 @@ public class JiraMetricIssue implements Serializable {
 
     public void setTimeSpentMinutes(Integer timeSpentMinutes) {
         this.timeSpentMinutes = timeSpentMinutes;
+    }
+
+
+    public List<JiraIssueChangelog> getChangelogList()
+    {
+        return changelogList;
+    }
+
+
+    public void setChangelogList( final List<JiraIssueChangelog> changelogList )
+    {
+        this.changelogList = changelogList;
     }
 
 

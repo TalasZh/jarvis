@@ -24,5 +24,5 @@ public interface StashMetricService
 
 	void deleteStashMetricIssue( StashMetricIssue stashMetricIssue );
 
-	void batchInsert( List<StashMetricIssue> issues );
+	int batchInsert( List<StashMetricIssue> issues );
 }

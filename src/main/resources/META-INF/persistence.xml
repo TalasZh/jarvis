@@ -34,6 +34,7 @@
     <class>org.safehaus.stash.model.Path</class>
     <class>org.safehaus.stash.model.StashMetricIssue</class>
     <class>org.safehaus.analysis.JiraMetricIssue</class>
+    <class>org.safehaus.analysis.JiraIssueChangelog</class>
     <class>org.safehaus.analysis.UserMetricInfo</class>
     <class>org.safehaus.analysis.StashUserMetricInfo</class>
     <class>org.safehaus.analysis.ConfluenceMetricInfo</class>
@@ -54,8 +55,7 @@
       <property name="kundera.client.property" value="kundera-cassandra.xml" />
       <!-- 			<property name="kundera.cache.provider.class"
                value="com.impetus.kundera.cache.ehcache.EhCacheProvider" />
-             <property name="kundera.cache.config.resource" value="/ehcache-test.xml" />
-             <property name="kundera.client.property" value="kunderaCounter.xml" />-->
+             <property name="kundera.cache.config.resource" value="/ehcache-test.xml" />-->
     </properties>
   </persistence-unit>
 

@@ -123,8 +123,8 @@ public class StashMetricServiceImpl implements StashMetricService, StashMetricsR
 
 
     @Override
-    public void batchInsert( final List<StashMetricIssue> issues )
+    public int batchInsert( final List<StashMetricIssue> issues )
     {
-        dao.batchInsert( issues );
+        return dao.batchInsert( issues );
     }
 }

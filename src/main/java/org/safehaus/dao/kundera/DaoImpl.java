@@ -94,15 +94,11 @@ public class DaoImpl implements Dao
 
 
     @Override
-    public <T> void batchInsert( final List<T> entities )
+    public <T> int batchInsert( final List<T> entities )
     {
-
+        int totalPersisted = 0;
         try
         {
-            if ( em.getTransaction().isActive() )
-            {
-                return;
-            }
             if ( entities.size() > 0 )
             {
                 int counter = 0;
@@ -114,27 +110,22 @@ public class DaoImpl implements Dao
                         counter = 0;
                         em.flush();
                         em.clear();
+                        totalPersisted += counter;
                     }
                 }
-                if ( counter > 0 )
+                if ( ++counter > 0 )
                 {
                     em.flush();
                     em.clear();
+                    totalPersisted += counter;
                 }
             }
         }
         catch ( Exception ex )
         {
-            if ( em.isOpen() )
-            {
-                if ( em.getTransaction().isActive() )
-                {
-                    em.getTransaction().rollback();
-                }
-                em.close();
-            }
             log.error( "Error batch inserting data.", ex );
         }
+        return totalPersisted;
     }
 
 
