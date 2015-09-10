@@ -2,6 +2,9 @@ package org.safehaus.persistence;
 
 import com.datastax.driver.core.*;
 import com.datastax.driver.core.exceptions.NoHostAvailableException;
+import org.apache.cassandra.thrift.Cassandra;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.util.Date;
 import java.lang.StringBuilder;
@@ -19,9 +22,21 @@ public class CassandraConnector {
     private Session session;
     private static String keyspaceName = "jarvis";
     private static String captureTableName = "capture";
+    private static  CassandraConnector instance = null;
+    private static final Log logger = LogFactory.getLog(CassandraConnector.class);
 
-    private static String persistenceUnit = "CassandraEntityManager";
-    private EntityManagerFactory emf;
+    private CassandraConnector() {}
+
+    public synchronized static CassandraConnector getInstance()
+    {
+        if(instance == null)
+        {
+            instance = new CassandraConnector();
+            logger.info("Created singleton instance for CassandraConnector");
+        }
+
+        return instance;
+    }
 
     public static String getKeyspace(){
         return keyspaceName;
@@ -35,20 +50,10 @@ public class CassandraConnector {
         ADD, DROP
     }
 
-    public CassandraConnector()
-    {
-        this.emf = Persistence.createEntityManagerFactory(persistenceUnit);
-    }
-
-    public CassandraConnector(String node)
-    {
-        this.node = new String(node);
-        cluster = null;
-    }
-
-    public void connect()
+    public void connect(String node)
     {
         try {
+            this.node = new String(node);
             cluster = Cluster.builder()
                     .addContactPoint(node).build();
 

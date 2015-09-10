@@ -3,7 +3,6 @@ package org.safehaus.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -56,26 +55,6 @@ public class JiraMetricServiceImplTest
 
 		Mockito.verify( dao ).findById( JiraMetricIssue.class, -2L );
 	}
-
-
-	@Test
-	public void testFindJiraMetricIssueByPK()
-	{
-		JiraMetricIssue jiraMetricIssue = new JiraMetricIssue();
-		jiraMetricIssue.setIssueId( -2L );
-		jiraMetricIssue.setAssigneeName( "Test" );
-
-		Mockito.when( dao.findById( JiraMetricIssue.class, jiraMetricIssue ) ).thenReturn( jiraMetricIssue );
-
-		JiraMetricIssue newIssue = jiraMetricService.findJiraMetricIssueById( jiraMetricIssue.getIssueId() );
-
-		Assert.assertNotNull( newIssue );
-		Assert.assertEquals( (long) newIssue.getIssueId(), -2L );
-		Assert.assertEquals( newIssue.getAssigneeName(), "Test" );
-
-		Mockito.verify( dao ).findById( JiraMetricIssue.class, jiraMetricIssue );
-	}
-
 
 	@Test
 	public void testFindJiraMetricIssuesByÅssigneeName()
