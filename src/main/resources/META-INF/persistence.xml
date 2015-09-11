@@ -38,6 +38,7 @@
     <class>org.safehaus.analysis.UserMetricInfo</class>
     <class>org.safehaus.analysis.StashUserMetricInfo</class>
     <class>org.safehaus.analysis.ConfluenceMetricInfo</class>
+    <class>org.safehaus.analysis.StashUserCollaborationMetricInfo</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="kundera.nodes" value="localhost" />
