@@ -18,8 +18,8 @@ import javax.persistence.Table;
 public class JiraIssueChangelog implements Serializable
 {
     @EmbeddedId
-    @OrderBy( "compoundKey.created DESC" )
-    private ChangeCompoundKey compoundKey;
+    @OrderBy( "changeKey.created DESC" )
+    private ChangeCompositeKey changeKey;
 
     @Column( name = "author" )
     private String author;
@@ -48,11 +48,11 @@ public class JiraIssueChangelog implements Serializable
     }
 
 
-    public JiraIssueChangelog( final ChangeCompoundKey compoundKey, final String author, final String type,
+    public JiraIssueChangelog( final ChangeCompositeKey changeKey, final String author, final String type,
                                final String field, final String fromString, final String toString, final String from,
                                final String to )
     {
-        this.compoundKey = compoundKey;
+        this.changeKey = changeKey;
         this.author = author;
         this.type = type;
         this.field = field;
@@ -63,15 +63,15 @@ public class JiraIssueChangelog implements Serializable
     }
 
 
-    public ChangeCompoundKey getCompoundKey()
+    public ChangeCompositeKey getChangeKey()
     {
-        return compoundKey;
+        return changeKey;
     }
 
 
-    public void setCompoundKey( final ChangeCompoundKey compoundKey )
+    public void setChangeKey( final ChangeCompositeKey compoundKey )
     {
-        this.compoundKey = compoundKey;
+        this.changeKey = compoundKey;
     }
 
 
@@ -173,13 +173,13 @@ public class JiraIssueChangelog implements Serializable
 
         final JiraIssueChangelog that = ( JiraIssueChangelog ) o;
 
-        return !( compoundKey != null ? !compoundKey.equals( that.compoundKey ) : that.compoundKey != null );
+        return !( changeKey != null ? !changeKey.equals( that.changeKey ) : that.changeKey != null );
     }
 
 
     @Override
     public int hashCode()
     {
-        return compoundKey != null ? compoundKey.hashCode() : 0;
+        return changeKey != null ? changeKey.hashCode() : 0;
     }
 }
