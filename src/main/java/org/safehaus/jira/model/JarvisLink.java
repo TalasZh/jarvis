@@ -1,7 +1,11 @@
 package org.safehaus.jira.model;
 
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -17,7 +21,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 public class JarvisLink
 {
     @Id
-    @Column(name = "link_id")
+    @Column( name = "link_id" )
     private Long id;
 
     @Column( name = "link_key" )
@@ -31,7 +35,7 @@ public class JarvisLink
     private String linkDirection;
 
     @Embedded
-//    @Column( name = "JARVIS_LINK_ATYPE" )
+    //    @Column( name = "JARVIS_LINK_ATYPE" )
     private JarvisIssueType type;
 
 

@@ -6,11 +6,12 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.atlassian.jira.rest.client.api.domain.Transition;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+
+import net.rcarz.jiraclient.Transition;
 
 
 /**
@@ -34,7 +35,7 @@ public class JiraTransitionSerializer extends StdSerializer<Transition>
         logger.debug( serializerProvider.getActiveView() != null ? serializerProvider.getActiveView().getName() :
                       "View not found" );
         jsonGenerator.writeStartObject();
-        jsonGenerator.writeNumberField( "id", transition.getId() );
+        jsonGenerator.writeStringField( "id", transition.getId() );
         jsonGenerator.writeStringField( "name", transition.getName() );
         jsonGenerator.writeEndObject();
     }

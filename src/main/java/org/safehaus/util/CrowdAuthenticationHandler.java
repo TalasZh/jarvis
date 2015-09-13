@@ -3,14 +3,17 @@ package org.safehaus.util;
 
 import javax.ws.rs.core.Cookie;
 
-import com.atlassian.httpclient.api.Request;
-import com.atlassian.jira.rest.client.api.AuthenticationHandler;
+import org.apache.http.HttpRequest;
+
+import net.rcarz.jiraclient.ICredentials;
+import net.rcarz.jiraclient.JiraException;
+import net.rcarz.jiraclient.RestClient;
 
 
 /**
  * Created by tzhamakeev on 5/26/15.
  */
-public class CrowdAuthenticationHandler implements AuthenticationHandler
+public class CrowdAuthenticationHandler implements ICredentials
 {
     private Cookie cookie;
 
@@ -22,8 +25,29 @@ public class CrowdAuthenticationHandler implements AuthenticationHandler
 
 
     @Override
-    public void configure( final Request request )
+    public void initialize( final RestClient client ) throws JiraException
     {
-        request.setHeader( "Cookie", String.format( "%s=%s", cookie.getName(), cookie.getValue() ) );
+
+    }
+
+
+    @Override
+    public void authenticate( final HttpRequest httpRequest )
+    {
+        httpRequest.addHeader( "Cookie", String.format( "%s=%s", cookie.getName(), cookie.getValue() ) );
+    }
+
+
+    @Override
+    public String getLogonName()
+    {
+        return null;
+    }
+
+
+    @Override
+    public void logout( final RestClient client ) throws JiraException
+    {
+
     }
 }

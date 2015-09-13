@@ -10,10 +10,10 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
 import org.safehaus.exceptions.JiraClientException;
+import org.safehaus.jira.JiraManager;
 import org.safehaus.jira.model.JarvisIssue;
 import org.safehaus.model.JarvisProject;
 import org.safehaus.model.Views;
-import org.safehaus.jira.JiraManager;
 import org.safehaus.service.ProjectService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,10 +25,11 @@ import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.PhaseInterceptorChain;
 import org.apache.cxf.transport.http.AbstractHTTPDestination;
 
-import com.atlassian.jira.rest.client.api.domain.Status;
-import com.atlassian.jira.rest.client.api.domain.Transition;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.collect.Lists;
+
+import net.rcarz.jiraclient.Status;
+import net.rcarz.jiraclient.Transition;
 
 
 @Service( "projectManager" )
@@ -48,13 +49,6 @@ public class ProjectServiceImpl implements ProjectService
         this.jiraManager = jiraManager;
     }
 
-
-    //    @Autowired
-    //    public void setProjectDao( final ProjectDao projectDao )
-    //    {
-    //        this.dao = projectDao;
-    //        this.projectDao = projectDao;
-    //    }
 
 
     @Override

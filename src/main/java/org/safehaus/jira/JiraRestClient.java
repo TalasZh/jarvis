@@ -1,24 +1,23 @@
 package org.safehaus.jira;
 
 
-import java.io.IOException;
 import java.util.List;
 
 import org.safehaus.exceptions.JiraClientException;
 import org.safehaus.jira.model.JarvisIssue;
 import org.safehaus.jira.model.JarvisMember;
 
-import com.atlassian.jira.rest.client.api.domain.Component;
-import com.atlassian.jira.rest.client.api.domain.Issue;
-import com.atlassian.jira.rest.client.api.domain.Project;
-import com.atlassian.jira.rest.client.api.domain.Status;
-import com.atlassian.jira.rest.client.api.domain.Transition;
+import net.rcarz.jiraclient.Component;
+import net.rcarz.jiraclient.Issue;
+import net.rcarz.jiraclient.Project;
+import net.rcarz.jiraclient.Status;
+import net.rcarz.jiraclient.Transition;
 
 
 /**
  * Created by tzhamakeev on 5/5/15.
  */
-public interface JiraClient
+public interface JiraRestClient
 {
     public static final String BLOCKS_LINK_NAME = "Blocks";
     public static final String OUTBOUND = "OUTBOUND";
@@ -40,15 +39,13 @@ public interface JiraClient
 
     public Issue getIssue( String issueKey );
 
-//    void updateIssueState( String issueKeyOrId, Integer transitionId );
+    void updateIssueState( String issueKeyOrId, Integer transitionId );
 
     void startIssue( String issueKeyOrId ) throws JiraClientException;
 
     void resolveIssue( String issueKeyOrId ) throws JiraClientException;
 
     Iterable<Transition> getTransitions( String issueKeyOrId ) throws JiraClientException;
-
-    public void close() throws IOException;
 
     Issue createIssue( JarvisIssue jarvisIssue ) throws JiraClientException;
 

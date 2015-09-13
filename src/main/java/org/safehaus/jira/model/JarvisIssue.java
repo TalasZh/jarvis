@@ -11,22 +11,24 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.safehaus.model.Views;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.atlassian.jira.rest.client.api.domain.Transition;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.impetus.kundera.index.Index;
 import com.impetus.kundera.index.IndexCollection;
 
+import net.rcarz.jiraclient.Transition;
+
 
 @XmlRootElement
 @Entity
-@Table(name="jarvis_issue", schema = "jarvis@cassandra-pu" )
+@Table( name = "jarvis_issue", schema = "jarvis@cassandra-pu" )
 @IndexCollection( columns = {
         @Index( name = "id" ), @Index( name = "key" )
 } )
@@ -38,23 +40,23 @@ public class JarvisIssue
     //    private String token="unknown";
     @JsonView( Views.JarvisIssueShort.class )
     @Id
-    @Column(name = "jarvis_issue_id")
+    @Column( name = "jarvis_issue_id" )
     protected Long id;
 
     @JsonView( Views.JarvisIssueShort.class )
-    @Column(name = "jarvis_issue_key")
+    @Column( name = "jarvis_issue_key" )
     protected String key;
 
     @JsonView( Views.JarvisIssueShort.class )
-    @Column(name = "project_key")
+    @Column( name = "project_key" )
     protected String projectKey;
 
     @JsonView( Views.JarvisIssueLong.class )
-    @Column(name = "summery")
+    @Column( name = "summery" )
     protected String summary;
 
     @JsonView( Views.JarvisIssueLong.class )
-    @Column(name = "self")
+    @Column( name = "self" )
     protected String self;
     //    @JsonView( Views.JarvisIssueLong.class )
     //    private Phase phase;
@@ -64,52 +66,54 @@ public class JarvisIssue
     protected JarvisIssueType type; //Task, Session, Phase, Epic, Story etc...
 
     @JsonView( Views.JarvisIssueLong.class )
-    @Column(name = "issue_description")
+    @Column( name = "issue_description" )
     protected String issueDescription;
 
     @JsonView( Views.JarvisIssueLong.class )
-    @Column(name ="time_remaining")
+    @Column( name = "time_remaining" )
     protected String timeRemaining;
 
     @JsonView( Views.JarvisIssueLong.class )
-    @Column(name = "assignee")
+    @Column( name = "assignee" )
     protected String assignee;
 
     @JsonView( Views.JarvisIssueLong.class )
-    @Column(name = "reporter")
+    @Column( name = "reporter" )
     protected String reporter;
 
     @JsonView( Views.JarvisIssueLong.class )
-    @Column(name ="components")
+    @Column( name = "components" )
     protected String components;
 
     @JsonView( Views.JarvisIssueLong.class )
-    @Column(name = "labels")
+    @Column( name = "labels" )
     protected String labels;
 
     @JsonView( Views.JarvisIssueLong.class )
-    @Column(name = "status")
+    @Column( name = "status" )
     protected String status;
 
     @JsonView( Views.JarvisIssueLong.class )
-    @Column(name = "resolution")
+    @Column( name = "resolution" )
     protected String resolution;
 
     @JsonView( Views.JarvisIssueLong.class )
-    @Column(name = "fix_version")
+    @Column( name = "fix_version" )
     protected String fixVersion;
 
     @JsonView( Views.JarvisIssueLong.class )
-    @Column(name = "date_created")
+    @Column( name = "date_created" )
     protected String dateCreated;
 
     @JsonView( Views.JarvisIssueLong.class )
-    @OneToMany(fetch = FetchType.EAGER)
-    @Column(name = "links")
+    @OneToMany( fetch = FetchType.EAGER )
+    @Column( name = "links" )
     protected List<JarvisLink> links = new ArrayList<>();
 
     @JsonView( Views.JarvisIssueLong.class )
+    @Transient
     protected Iterable<Transition> transitions = new ArrayList<>();
+
 
     public JarvisIssue()
     {
@@ -338,6 +342,7 @@ public class JarvisIssue
     {
         this.dateCreated = dateCreated;
     }
+
 
     public List<JarvisLink> getLinks()
     {

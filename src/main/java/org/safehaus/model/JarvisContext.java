@@ -1,14 +1,12 @@
 package org.safehaus.model;
 
 
-import java.io.IOException;
-
 import javax.ws.rs.core.Cookie;
 
 import org.safehaus.exceptions.JiraClientException;
-import org.safehaus.jira.CookieAuth;
-import org.safehaus.jira.JiraClient;
-import org.safehaus.jira.JiraClientImpl;
+import org.safehaus.jira.JiraRestClient;
+import org.safehaus.jira.JiraRestClientImpl;
+import org.safehaus.util.AnonymousAuthenticationHandler;
 import org.safehaus.util.CrowdAuthenticationHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,10 +15,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.atlassian.jira.rest.client.api.AuthenticationHandler;
-import com.atlassian.jira.rest.client.auth.AnonymousAuthenticationHandler;
-import com.atlassian.jira.rest.client.auth.BasicHttpAuthenticationHandler;
-
+import net.rcarz.jiraclient.BasicCredentials;
+import net.rcarz.jiraclient.ICredentials;
+import net.rcarz.jiraclient.JiraException;
 import net.rcarz.jiraclient.greenhopper.GreenHopperClient;
 
 
@@ -31,9 +28,9 @@ public class JarvisContext
 {
     private static Logger logger = LoggerFactory.getLogger( JarvisContext.class );
     private Cookie cookie;
-    private AuthenticationHandler authenticationHandler;
+    private ICredentials authenticationHandler;
     private String jiraUrl;
-    private JiraClient jiraClient;
+    private JiraRestClient jiraRestClient;
     private net.rcarz.jiraclient.JiraClient jiraSprintClient;
 
 
@@ -44,7 +41,7 @@ public class JarvisContext
     }
 
 
-    public JarvisContext( final String jiraUrl, AuthenticationHandler authenticationHandler )
+    public JarvisContext( final String jiraUrl, ICredentials authenticationHandler )
     {
         this.authenticationHandler = authenticationHandler;
         this.jiraUrl = jiraUrl;
@@ -69,20 +66,20 @@ public class JarvisContext
     public JarvisContext( final String jiraUrl, final String username, final String password )
     {
         this.jiraUrl = jiraUrl;
-        authenticationHandler = new BasicHttpAuthenticationHandler( username, password );
+        authenticationHandler = new BasicCredentials( username, password );
     }
 
 
-    public JiraClient getJiraClient() throws JiraClientException
+    public JiraRestClient getJiraRestClient() throws JiraClientException
     {
-        if ( jiraClient == null )
+        if ( jiraRestClient == null )
         {
             logger.debug(
                     String.format( "Creating JIRA client using [%s]...", authenticationHandler.getClass().getName() ) );
-            jiraClient = new JiraClientImpl( jiraUrl, authenticationHandler );
+            jiraRestClient = new JiraRestClientImpl( jiraUrl, authenticationHandler );
         }
 
-        return jiraClient;
+        return jiraRestClient;
     }
 
 
@@ -90,7 +87,14 @@ public class JarvisContext
     {
         if ( jiraSprintClient == null )
         {
-            jiraSprintClient = new net.rcarz.jiraclient.JiraClient( jiraUrl, new CookieAuth( cookie.getValue() ) );
+            try
+            {
+                jiraSprintClient = new net.rcarz.jiraclient.JiraClient( jiraUrl, authenticationHandler );
+            }
+            catch ( JiraException e )
+            {
+                logger.error( "Error initializing jira rest client", e );
+            }
         }
 
         return new GreenHopperClient( jiraSprintClient );
@@ -99,17 +103,9 @@ public class JarvisContext
 
     public void destroy()
     {
-        if ( jiraClient != null )
+        if ( jiraRestClient != null )
         {
             logger.debug( "Destoying JIRA client..." );
-            try
-            {
-                jiraClient.close();
-            }
-            catch ( IOException e )
-            {
-                logger.error( e.getMessage(), e );
-            }
         }
     }
 

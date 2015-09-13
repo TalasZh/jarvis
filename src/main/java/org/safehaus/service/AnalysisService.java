@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.prefs.BackingStoreException;
 
 import org.joda.time.DateTime;
-import org.safehaus.analysis.ChangeCompoundKey;
+import org.safehaus.analysis.ChangeCompositeKey;
 import org.safehaus.analysis.ConfluenceMetricKafkaProducer;
 import org.safehaus.analysis.JiraIssueChangelog;
 import org.safehaus.analysis.JiraMetricIssue;
@@ -26,7 +26,7 @@ import org.safehaus.confluence.client.ConfluenceManagerException;
 import org.safehaus.confluence.model.ConfluenceMetric;
 import org.safehaus.confluence.model.Space;
 import org.safehaus.exceptions.JiraClientException;
-import org.safehaus.jira.JiraClient;
+import org.safehaus.jira.JiraRestClient;
 import org.safehaus.persistence.CassandraConnector;
 import org.safehaus.sonar.client.SonarManager;
 import org.safehaus.sonar.client.SonarManagerException;
@@ -45,10 +45,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.atlassian.jira.rest.client.api.domain.ChangelogGroup;
-import com.atlassian.jira.rest.client.api.domain.ChangelogItem;
-import com.atlassian.jira.rest.client.api.domain.Issue;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+
+import net.rcarz.jiraclient.ChangeLog;
+import net.rcarz.jiraclient.ChangeLogEntry;
+import net.rcarz.jiraclient.ChangeLogItem;
+import net.rcarz.jiraclient.Issue;
 
 
 /**
@@ -82,7 +85,7 @@ public class AnalysisService
     @Autowired
     private StashMetricService stashMetricService;
 
-    List<JiraMetricIssue> jiraMetricIssues;
+    Set<JiraMetricIssue> jiraMetricIssues;
     List<StashMetricIssue> stashMetricIssues;
     List<ConfluenceMetric> confluenceMetrics;
 
@@ -178,17 +181,18 @@ public class AnalysisService
         */
         if ( indexCreated == false )
         {
-            CassandraConnector cassandraConnector =CassandraConnector.getInstance();
-            cassandraConnector.connect("localhost");
-            cassandraConnector.executeStatement("use jarvis;");
-            cassandraConnector.executeStatement("CREATE INDEX jmi_assignee_idx ON jira_metric_issue (\"assignee_name\");");
+            CassandraConnector cassandraConnector = CassandraConnector.getInstance();
+            cassandraConnector.connect( "localhost" );
+            cassandraConnector.executeStatement( "use jarvis;" );
+            cassandraConnector
+                    .executeStatement( "CREATE INDEX jmi_assignee_idx ON jira_metric_issue (\"assignee_name\");" );
             cassandraConnector.close();
             indexCreated = true;
         }
 
 
         // Get Jira Data
-        JiraClient jiraCl = null;
+        JiraRestClient jiraCl = null;
         try
         {
             jiraCl = jiraConnector.jiraConnect();
@@ -294,23 +298,23 @@ public class AnalysisService
     }
 
 
-    private void getJiraMetricIssues( JiraClient jiraCl )
+    private void getJiraMetricIssues( JiraRestClient jiraCl )
     {
         log.info( "getJiraMetricIssues" );
         List<String> projectKeys = new ArrayList<String>();
         List<Issue> jiraIssues = new ArrayList<Issue>();
         JiraMetricIssueKafkaProducer kafkaProducer = new JiraMetricIssueKafkaProducer();
 
-        jiraMetricIssues = new ArrayList<>();
+        jiraMetricIssues = Sets.newHashSet();
 
         // Get all project names to use on getIssues
 
         try
         {
-            List<com.atlassian.jira.rest.client.api.domain.Project> jiraProjects = jiraCl.getAllProjects();
+            List<net.rcarz.jiraclient.Project> jiraProjects = jiraCl.getAllProjects();
             log.info( "After getAllProjects" );
             log.info( "Printing all projects" );
-            for ( com.atlassian.jira.rest.client.api.domain.Project project : jiraProjects )
+            for ( net.rcarz.jiraclient.Project project : jiraProjects )
             {
                 projectKeys.add( project.getKey() );
             }
@@ -325,19 +329,26 @@ public class AnalysisService
             log.info( "Printing issues" );
             for ( String projectKey : projectKeys )
             {
-                jiraIssues.addAll( jiraCl.getIssues( "'" + projectKey + "'" ) );
+                List<Issue> issues = jiraCl.getIssues( "'" + projectKey + "'" );
+                for ( final Issue issue : issues )
+                {
+                    //                    Issue tmp = jiraCl.getIssue( issue.getKey() );
+                    jiraIssues.add( issue );
+                }
+
+                //                jiraIssues.addAll( jiraCl.getIssues( "'" + projectKey + "'" ) );
             }
         }
         catch ( Exception e )
         {
-            e.printStackTrace();
+            log.error( "Error getting full issue information", e );
         }
 
         log.info( jiraIssues.size() );
 
 
         log.info( "Preparing issues for jarvis format..." );
-        for ( Issue issue : jiraIssues )
+        for ( final Issue issue : jiraIssues )
         {
             JiraMetricIssue issueToAdd = new JiraMetricIssue();
             if ( issue.getKey() != null )
@@ -346,7 +357,7 @@ public class AnalysisService
             }
             if ( issue.getId() != null )
             {
-                issueToAdd.setIssueId( issue.getId() );
+                issueToAdd.setIssueId( Long.valueOf( issue.getId() ) );
             }
             if ( issue.getStatus() != null && issue.getStatus().getName() != null )
             {
@@ -368,59 +379,58 @@ public class AnalysisService
             {
                 issueToAdd.setResolution( issue.getResolution().getName() );
             }
-            if ( issue.getCreationDate() != null )
+            if ( issue.getCreatedDate() != null )
             {
-                issueToAdd.setCreationDate( issue.getCreationDate().toDate() );
+                issueToAdd.setCreationDate( issue.getCreatedDate() );
             }
-            if ( issue.getUpdateDate() != null )
+            if ( issue.getUpdatedDate() != null )
             {
-                issueToAdd.setUpdateDate( issue.getUpdateDate().toDate() );
+                issueToAdd.setUpdateDate( issue.getUpdatedDate() );
             }
             if ( issue.getDueDate() != null )
             {
-                issueToAdd.setDueDate( issue.getDueDate().toDate() );
+                issueToAdd.setDueDate( issue.getDueDate() );
             }
             if ( issue.getPriority() != null && issue.getPriority().getId() != null )
             {
-                issueToAdd.setPriority( issue.getPriority().getId() );
+                issueToAdd.setPriority( Long.valueOf( issue.getPriority().getId() ) );
             }
-            if ( issue.getTimeTracking() != null && issue.getTimeTracking().getOriginalEstimateMinutes() != null )
+            if ( issue.getTimeTracking() != null )
             {
-                issueToAdd.setOriginalEstimateMinutes( issue.getTimeTracking().getOriginalEstimateMinutes() );
+                issueToAdd.setOriginalEstimateMinutes( issue.getTimeTracking().getOriginalEstimateSeconds() / 60 );
             }
-            if ( issue.getTimeTracking() != null && issue.getTimeTracking().getRemainingEstimateMinutes() != null )
+            if ( issue.getTimeTracking() != null )
             {
-                issueToAdd.setRemainingEstimateMinutes( issue.getTimeTracking().getRemainingEstimateMinutes() );
+                issueToAdd.setRemainingEstimateMinutes( issue.getTimeTracking().getRemainingEstimateSeconds() / 60 );
             }
-            if ( issue.getTimeTracking() != null && issue.getTimeTracking().getTimeSpentMinutes() != null )
+            if ( issue.getTimeTracking() != null )
             {
-                issueToAdd.setTimeSpentMinutes( issue.getTimeTracking().getTimeSpentMinutes() );
+                issueToAdd.setTimeSpentMinutes( issue.getTimeTracking().getTimeSpentSeconds() / 60 );
             }
-            if ( issue.getChangelog() != null )
+            if ( issue.getChangeLog() != null )
             {
-                List<JiraIssueChangelog> changelogList = Lists.newArrayList();
-                Iterable<ChangelogGroup> iterable = issue.getChangelog();
-                for ( final ChangelogGroup changelogGroup : iterable )
+                final List<JiraIssueChangelog> changelogList = Lists.newArrayList();
+                final ChangeLog changeLog = issue.getChangeLog();
+
+                for ( final ChangeLogEntry changeLogEntry : changeLog.getEntries() )
                 {
-                    Iterable<ChangelogItem> itemIterable = changelogGroup.getItems();
-                    for ( final ChangelogItem changelogItem : itemIterable )
+                    for ( final ChangeLogItem changeLogItem : changeLogEntry.getItems() )
                     {
-                        ChangeCompoundKey itemCompoundKey =
-                                new ChangeCompoundKey( issue.getId(), changelogGroup.getCreated().getMillis(),
-                                        issue.getKey() );
+                        ChangeCompositeKey changeCompositeKey = new ChangeCompositeKey( Long.valueOf( issue.getId() ),
+                                changeLogEntry.getCreated().getTime(), issue.getKey() );
                         JiraIssueChangelog jiraIssueChangelog =
-                                new JiraIssueChangelog( itemCompoundKey, changelogGroup.getAuthor().getName(),
-                                        changelogItem.getFieldType().name(), changelogItem.getField(),
-                                        changelogItem.getFromString(), changelogItem.getToString(),
-                                        changelogItem.getFrom(), changelogItem.getTo() );
+                                new JiraIssueChangelog( changeCompositeKey, changeLogEntry.getAuthor().getDisplayName(),
+                                        changeLogItem.getFieldType(), changeLogItem.getField(),
+                                        changeLogItem.getFromString(), changeLogItem.getToString(),
+                                        changeLogItem.getTo(), changeLogItem.getToString() );
                         changelogList.add( jiraIssueChangelog );
                     }
                 }
-
                 issueToAdd.setChangelogList( changelogList );
             }
 
             jiraMetricIssues.add( issueToAdd );
+            jiraMetricService.insertJiraMetricIssue( issueToAdd );
             if ( lastGatheredJira != null )
             {
                 if ( issueToAdd.getUpdateDate().after( lastGatheredJira ) )
@@ -454,7 +464,15 @@ public class AnalysisService
         {
             log.info( "Saving issues formatted for jarvis..." );
             log.info( "Performing batch insert" );
-            jiraMetricService.batchInsert( jiraMetricIssues );
+            new Thread( new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    jiraMetricService.batchInsert( Lists.newArrayList( jiraMetricIssues ) );
+                }
+            } ).start();
+
             //            for ( final JiraMetricIssue jiraIssue : jiraMetricIssues )
             //            {
             //                try

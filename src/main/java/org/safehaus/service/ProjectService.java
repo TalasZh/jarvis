@@ -17,9 +17,10 @@ import org.safehaus.jira.model.JarvisIssue;
 import org.safehaus.model.JarvisProject;
 import org.safehaus.model.Views;
 
-import com.atlassian.jira.rest.client.api.domain.Status;
-import com.atlassian.jira.rest.client.api.domain.Transition;
 import com.fasterxml.jackson.annotation.JsonView;
+
+import net.rcarz.jiraclient.Status;
+import net.rcarz.jiraclient.Transition;
 
 
 @WebService

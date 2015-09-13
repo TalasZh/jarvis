@@ -43,7 +43,7 @@ public class JiraTask
 //    {
 //        try
 //        {
-//            JiraClient jiraClient = new JiraClientImpl( JIRA_URL, "jirabot", "jira135pwd" );
+    //            JiraRestClient jiraClient = new JiraRestClientImpl( JIRA_URL, "jirabot", "jira135pwd" );
 //            try
 //            {
 //                List<com.atlassian.jira.rest.client.api.domain.Project> jiraProjects = jiraClient.getAllProjects();
@@ -78,7 +78,7 @@ public class JiraTask
 //    {
 //        try
 //        {
-//            JiraClient jiraClient = new JiraClientImpl( JIRA_URL, "jirabot", "jira135pwd" );
+    //            JiraRestClient jiraClient = new JiraRestClientImpl( JIRA_URL, "jirabot", "jira135pwd" );
 //            try
 //            {
 //                List<Issue> stories = jiraClient.getIssues( "JAR", 1000, 0, "Story" );

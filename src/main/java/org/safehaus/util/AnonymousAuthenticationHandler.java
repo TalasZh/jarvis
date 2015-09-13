@@ -1,4 +1,4 @@
-package org.safehaus.jira;
+package org.safehaus.util;
 
 
 import org.apache.http.HttpRequest;
@@ -9,19 +9,10 @@ import net.rcarz.jiraclient.RestClient;
 
 
 /**
- * Created by ermek on 8/20/15.
+ * Created by talas on 9/13/15.
  */
-public class CookieAuth implements ICredentials
+public class AnonymousAuthenticationHandler implements ICredentials
 {
-    private final String TOKEN;
-
-
-    public CookieAuth( final String token )
-    {
-        TOKEN = token;
-    }
-
-
     @Override
     public void initialize( final RestClient client ) throws JiraException
     {
@@ -30,9 +21,9 @@ public class CookieAuth implements ICredentials
 
 
     @Override
-    public void authenticate( final HttpRequest httpRequest )
+    public void authenticate( final HttpRequest req )
     {
-        httpRequest.addHeader( "Cookie", String.format( "crowd.token_key=%s", TOKEN ) );
+
     }
 
 

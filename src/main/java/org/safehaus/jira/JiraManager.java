@@ -8,10 +8,9 @@ import org.safehaus.jira.model.JarvisIssue;
 import org.safehaus.jira.model.JarvisMember;
 import org.safehaus.model.JarvisProject;
 
-import com.atlassian.jira.rest.client.api.domain.Status;
-import com.atlassian.jira.rest.client.api.domain.Transition;
-
 import net.rcarz.jiraclient.JiraException;
+import net.rcarz.jiraclient.Status;
+import net.rcarz.jiraclient.Transition;
 import net.rcarz.jiraclient.greenhopper.RapidView;
 import net.rcarz.jiraclient.greenhopper.Sprint;
 import net.rcarz.jiraclient.greenhopper.SprintReport;

@@ -1,13 +1,13 @@
 package org.safehaus.analysis.service;
 
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import org.safehaus.exceptions.JiraClientException;
-import org.safehaus.jira.JiraClient;
+import org.safehaus.jira.JiraRestClient;
 import org.safehaus.model.JarvisContext;
 import org.safehaus.util.JarvisContextHolder;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 /**
@@ -30,20 +30,21 @@ public class JiraConnectorImpl implements JiraConnector
 
 
     @Override
-    public JiraClient jiraConnect() throws JiraClientException
+    public JiraRestClient jiraConnect() throws JiraClientException
     {
         log.info( "jiraConnect()" );
-        JiraClient jiraClient = null;
-        if ( JarvisContextHolder.getContext() != null && JarvisContextHolder.getContext().getJiraClient() != null )
+        JiraRestClient jiraRestClient = null;
+        if ( JarvisContextHolder.getContext() != null && JarvisContextHolder.getContext().getJiraRestClient() != null )
         {
-            jiraClient = JarvisContextHolder.getContext().getJiraClient();
+            jiraRestClient = JarvisContextHolder.getContext().getJiraRestClient();
         }
         else
         {
             JarvisContextHolder.setContext( new JarvisContext( jiraURL, jiraUserName, jiraPass ) );
-            if ( JarvisContextHolder.getContext() != null && JarvisContextHolder.getContext().getJiraClient() != null )
+            if ( JarvisContextHolder.getContext() != null
+                    && JarvisContextHolder.getContext().getJiraRestClient() != null )
             {
-                jiraClient = JarvisContextHolder.getContext().getJiraClient();
+                jiraRestClient = JarvisContextHolder.getContext().getJiraRestClient();
             }
             else
             {
@@ -52,6 +53,6 @@ public class JiraConnectorImpl implements JiraConnector
             }
 
         }
-        return jiraClient;
+        return jiraRestClient;
     }
 }
