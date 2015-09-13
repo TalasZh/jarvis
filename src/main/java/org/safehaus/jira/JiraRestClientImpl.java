@@ -128,6 +128,14 @@ public class JiraRestClientImpl implements JiraRestClient
     private List<Issue> searchJira( String jql, Integer maxResult, Integer startIndex )
     {
         List<Issue> result = Lists.newArrayList();
+        if ( maxResult == null )
+        {
+            maxResult = 50;
+        }
+        if ( startIndex == null )
+        {
+            startIndex = 0;
+        }
         try
         {
             Issue.SearchResult searchResult = jiraClient.searchIssues( jql, "", "changelog", maxResult, startIndex );
