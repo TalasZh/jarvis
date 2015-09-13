@@ -20,21 +20,15 @@ public class ChangeCompositeKey implements Serializable
     @Column( name = "change_item_id" )
     String changeItemId;
 
-    @Column( name = "issue_id" )
-    private Long issueId;
-
-    @Column( name = "issue_key" )
-    private String issueKey;
-
     @Column( name = "created" )
     private Long created;
 
 
-    public ChangeCompositeKey( final Long issueId, final Long created, final String issueKey )
+    public ChangeCompositeKey( final Long created )
     {
         //        this.itemKey = new ItemCompoundKey( issueId, issueKey, UUID.randomUUID().toString() );
-        this.issueId = issueId;
-        this.issueKey = issueKey;
+        //        this.issueId = issueId;
+        //        this.issueKey = issueKey;
         this.changeItemId = UUID.randomUUID().toString();
         this.created = created;
     }
@@ -92,29 +86,29 @@ public class ChangeCompositeKey implements Serializable
         this.changeItemId = changeItemId;
     }
 
-
-    public Long getIssueId()
-    {
-        return issueId;
-    }
-
-
-    public void setIssueId( final Long issueId )
-    {
-        this.issueId = issueId;
-    }
-
-
-    public String getIssueKey()
-    {
-        return issueKey;
-    }
-
-
-    public void setIssueKey( final String issueKey )
-    {
-        this.issueKey = issueKey;
-    }
+    //
+    //    public Long getIssueId()
+    //    {
+    //        return issueId;
+    //    }
+    //
+    //
+    //    public void setIssueId( final Long issueId )
+    //    {
+    //        this.issueId = issueId;
+    //    }
+    //
+    //
+    //    public String getIssueKey()
+    //    {
+    //        return issueKey;
+    //    }
+    //
+    //
+    //    public void setIssueKey( final String issueKey )
+    //    {
+    //        this.issueKey = issueKey;
+    //    }
 
 
     @Override
@@ -147,8 +141,8 @@ public class ChangeCompositeKey implements Serializable
     {
         return "ChangeCompositeKey{" +
                 "changeItemId='" + changeItemId + '\'' +
-                ", issueId=" + issueId +
-                ", issueKey='" + issueKey + '\'' +
+                //                ", issueId=" + issueId +
+                //                ", issueKey='" + issueKey + '\'' +
                 ", created=" + created +
                 '}';
     }

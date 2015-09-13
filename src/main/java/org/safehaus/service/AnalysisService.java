@@ -416,10 +416,11 @@ public class AnalysisService
                 {
                     for ( final ChangeLogItem changeLogItem : changeLogEntry.getItems() )
                     {
-                        ChangeCompositeKey changeCompositeKey = new ChangeCompositeKey( Long.valueOf( issue.getId() ),
-                                changeLogEntry.getCreated().getTime(), issue.getKey() );
+                        ChangeCompositeKey changeCompositeKey =
+                                new ChangeCompositeKey( changeLogEntry.getCreated().getTime() );
                         JiraIssueChangelog jiraIssueChangelog =
-                                new JiraIssueChangelog( changeCompositeKey, changeLogEntry.getAuthor().getDisplayName(),
+                                new JiraIssueChangelog( changeCompositeKey, issue.getKey(),
+                                        Long.valueOf( issue.getId() ), changeLogEntry.getAuthor().getDisplayName(),
                                         changeLogItem.getFieldType(), changeLogItem.getField(),
                                         changeLogItem.getFromString(), changeLogItem.getToString(),
                                         changeLogItem.getTo(), changeLogItem.getToString() );

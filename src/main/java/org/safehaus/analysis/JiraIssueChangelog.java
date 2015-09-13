@@ -21,6 +21,12 @@ public class JiraIssueChangelog implements Serializable
     @OrderBy( "changeKey.created DESC" )
     private ChangeCompositeKey changeKey;
 
+    @Column( name = "issue_id" )
+    private Long issueId;
+
+    @Column( name = "issue_key" )
+    private String issueKey;
+
     @Column( name = "author" )
     private String author;
 
@@ -48,11 +54,14 @@ public class JiraIssueChangelog implements Serializable
     }
 
 
-    public JiraIssueChangelog( final ChangeCompositeKey changeKey, final String author, final String type,
+    public JiraIssueChangelog( final ChangeCompositeKey changeKey, String issueKey, Long issueId, final String author,
+                               final String type,
                                final String field, final String fromString, final String toString, final String from,
                                final String to )
     {
         this.changeKey = changeKey;
+        this.issueId = issueId;
+        this.issueKey = issueKey;
         this.author = author;
         this.type = type;
         this.field = field;
@@ -60,6 +69,30 @@ public class JiraIssueChangelog implements Serializable
         this.toString = toString;
         this.from = from;
         this.to = to;
+    }
+
+
+    public Long getIssueId()
+    {
+        return issueId;
+    }
+
+
+    public void setIssueId( final Long issueId )
+    {
+        this.issueId = issueId;
+    }
+
+
+    public String getIssueKey()
+    {
+        return issueKey;
+    }
+
+
+    public void setIssueKey( final String issueKey )
+    {
+        this.issueKey = issueKey;
     }
 
 
