@@ -13,12 +13,6 @@ public interface Dao
 {
     EntityManager getEntityManager();
 
-    void closeEntityManager();
-
-    void clearEntityManager();
-
-    void shutDown();
-
     void insert( Object entity );
 
     void merge( Object entity );

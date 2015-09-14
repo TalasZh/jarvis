@@ -46,27 +46,6 @@ public class DaoServiceImpl implements Dao
 
 
     @Override
-    public void closeEntityManager()
-    {
-
-    }
-
-
-    @Override
-    public void clearEntityManager()
-    {
-
-    }
-
-
-    @Override
-    public void shutDown()
-    {
-
-    }
-
-
-    @Override
     public void insert( final Object entity )
     {
         EntityManager em = emf.createEntityManager();
