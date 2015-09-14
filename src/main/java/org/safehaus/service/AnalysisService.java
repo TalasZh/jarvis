@@ -465,14 +465,9 @@ public class AnalysisService
         {
             log.info( "Saving issues formatted for jarvis..." );
             log.info( "Performing batch insert" );
-            new Thread( new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    jiraMetricService.batchInsert( Lists.newArrayList( jiraMetricIssues ) );
-                }
-            } ).start();
+
+            jiraMetricService.batchInsert( Lists.newArrayList( jiraMetricIssues ) );
+
 
             //            for ( final JiraMetricIssue jiraIssue : jiraMetricIssues )
             //            {
