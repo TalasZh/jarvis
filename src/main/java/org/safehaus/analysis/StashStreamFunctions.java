@@ -186,10 +186,10 @@ public class StashStreamFunctions {
                 StashUserCollaborationMetricInfoInternal collabMetricInfo = new StashUserCollaborationMetricInfoInternal();
                 collabMetricInfo.setDeveloperId(tuple3HashSetTuple2._1()._1());
                 collabMetricInfo.setStashCollaborationCount(tuple3HashSetTuple2._2().size());
-                collabMetricInfo.setMetricMonthDate(cal.getTime());
+                collabMetricInfo.setMetricMonthTimestamp(cal.getTimeInMillis());
 
                 System.out.println("STASH COLLABORATION STREAM: " + collabMetricInfo.getDeveloperId() + " " + collabMetricInfo
-                        .getStashCollaborationCount() + " " + collabMetricInfo.getMetricMonthDate());
+                        .getStashCollaborationCount() + " " + collabMetricInfo.getMetricMonthTimestamp());
                 return collabMetricInfo;
 
             }
