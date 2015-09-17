@@ -65,7 +65,12 @@
         scope="singleton">
   </bean>
 
-  <!--<bean id="dao" class="org.safehaus.dao.kundera.DaoImpl"-->
+  <bean id="stashUserMetricService" class="org.safehaus.service.impl.StashUserMetricServiceImpl"
+        scope="singleton">
+    <property name="dao" ref="daoService" />
+  </bean>
+
+        <!--<bean id="dao" class="org.safehaus.dao.kundera.DaoImpl"-->
   <!--scope="singleton">-->
   <!--</bean>-->
 
