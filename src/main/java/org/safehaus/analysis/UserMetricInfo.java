@@ -18,7 +18,7 @@ import javax.persistence.*;
 public class UserMetricInfo implements Serializable{
 
     @Embeddable()
-    public static class UserMonthInfo{
+    public static class UserMonthInfo implements Serializable{
 
         @Column(name = "developer_id")
         private String developerId;
@@ -31,6 +31,8 @@ public class UserMetricInfo implements Serializable{
             this.developerId = developerId;
             this.metricMonthTimestamp = metricMonthTimestamp;
         }
+
+        public UserMonthInfo(){}
 
         public String getDeveloperId() {
             return developerId;
