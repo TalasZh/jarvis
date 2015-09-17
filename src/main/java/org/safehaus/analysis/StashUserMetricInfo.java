@@ -50,7 +50,7 @@ public class StashUserMetricInfo implements Serializable{
 
         private Integer stashCommitCnt;
 
-        private Date metricMonthDate;
+        private long metricMonthTimestamp;
 
         public StashUserMetricInfoInternal(){}
 
@@ -62,8 +62,8 @@ public class StashUserMetricInfo implements Serializable{
             return stashCommitCnt;
         }
 
-        public Date getMetricMonthDate() {
-            return metricMonthDate;
+        public long getMetricMonthTimestamp() {
+            return metricMonthTimestamp;
         }
 
         public void setDeveloperId(String developerId) {
@@ -74,8 +74,8 @@ public class StashUserMetricInfo implements Serializable{
             this.stashCommitCnt = jiraCommitCnt;
         }
 
-        public void setMetricMonthDate(Date metricMonthDate) {
-            this.metricMonthDate = metricMonthDate;
+        public void setMetricMonthTimestamp(long metricMonthTimestamp) {
+            this.metricMonthTimestamp = metricMonthTimestamp;
         }
     }
 }
