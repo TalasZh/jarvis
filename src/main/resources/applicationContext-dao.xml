@@ -74,6 +74,11 @@
         scope="singleton">
     <property name="dao" ref="daoService" />
   </bean>
+
+  <bean id="confluenceUserMetricService" class="org.safehaus.service.impl.ConfluenceMetricServiceImpl"
+        scope="singleton">
+    <property name="dao" ref="daoService" />
+  </bean>
         <!--<bean id="dao" class="org.safehaus.dao.kundera.DaoImpl"-->
   <!--scope="singleton">-->
   <!--</bean>-->
