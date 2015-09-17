@@ -60,17 +60,15 @@ public class JiraManagerImpl implements JiraManager
 
 
     {
-        //        Project project = getJiraClient().getProject( projectId );
-        //        List<String> types = new ArrayList<>();
-        //
-        //        for ( final IssueType issueType : project.getIssueTypes() )
-        //        {
-        //            types.add( issueType.getName() );
-        //        }
-        //        return new JarvisProject( project.getId(), project.getKey(), project.getName(), project
-        // .getDescription(),
-        //                types );
-        return null;
+        Project project = getJiraClient().getProject( projectId );
+        List<String> types = Lists.newArrayList();
+
+        for ( final IssueType issueType : project.getIssueTypes() )
+        {
+            types.add( issueType.getName() );
+        }
+        return new JarvisProject( Long.valueOf( project.getId() ), project.getKey(), project.getName(),
+                project.getDescription(), types );
     }
 
 
@@ -87,19 +85,19 @@ public class JiraManagerImpl implements JiraManager
     public List<JarvisProject> getProjects() throws JiraClientException
     {
         List<Project> projects = getJiraClient().getAllProjects();
-        List<JarvisProject> result = new ArrayList<>();
+        List<JarvisProject> result = Lists.newArrayList();
 
         for ( Project project : projects )
         {
 
-            List<String> types = new ArrayList<>();
+            List<String> types = Lists.newArrayList();
 
             for ( final IssueType issueType : project.getIssueTypes() )
             {
                 types.add( issueType.getName() );
             }
             result.add( new JarvisProject( Long.valueOf( project.getId() ), project.getKey(), project.getName(),
-                            project.getDescription(), types ) );
+                    project.getDescription(), types ) );
         }
         return result;
     }
@@ -108,19 +106,16 @@ public class JiraManagerImpl implements JiraManager
     @Override
     public JarvisIssue getIssue( final String issueId ) throws JiraClientException
     {
-        //        Issue issue = getJiraClient().getIssue( issueId );
-        //
-        //        return buildJarvisIssue( issue, getJiraClient().getTransitions( issueId ) );
-        return null;
+        Issue issue = getJiraClient().getIssue( issueId );
+        return buildJarvisIssue( issue, getJiraClient().getTransitions( issueId ) );
     }
 
 
     @Override
     public JarvisIssue createIssue( final JarvisIssue issue ) throws JiraClientException
     {
-        //        Issue jiraIssue = getJiraClient().createIssue( issue );
-        //        return buildJarvisIssue( jiraIssue );
-        return null;
+        Issue jiraIssue = getJiraClient().createIssue( issue );
+        return buildJarvisIssue( jiraIssue );
     }
 
 
@@ -152,48 +147,6 @@ public class JiraManagerImpl implements JiraManager
     {
         getJiraClient().resolveIssue( issueKeyOrId );
     }
-    //
-    //
-    //    @Override
-    //    public Status reopenIssue( final String id ) throws JiraClientException
-    //    {
-    //        return getJiraClient().changeStatus( id, ISSUE_REOPEN_ACTION_NAME );
-    //    }
-    //
-    //
-    //    @Override
-    //    public Status storyStart( final String issueIdOrKey ) throws JiraClientException
-    //    {
-    //        return getJiraClient().changeStatus( issueIdOrKey, STORY_START_ACTION_NAME );
-    //    }
-    //
-    //
-    //    @Override
-    //    public Status storyRequestApproval( final String issueIdOrKey ) throws JiraClientException
-    //    {
-    //        return getJiraClient().changeStatus( issueIdOrKey, STORY_REQUEST_APPROVAL_ACTION_NAME );
-    //    }
-    //
-    //
-    //    @Override
-    //    public Status storyResolve( final String issueIdOrKey ) throws JiraClientException
-    //    {
-    //        return getJiraClient().changeStatus( issueIdOrKey, STORY_RESOLVE_ACTION_NAME );
-    //    }
-    //
-    //
-    //    @Override
-    //    public Status storyApprove( final String issueIdOrKey ) throws JiraClientException
-    //    {
-    //        return getJiraClient().changeStatus( issueIdOrKey, STORY_APPROVE_ACTION_NAME );
-    //    }
-    //
-    //
-    //    @Override
-    //    public Status storyReject( final String issueIdOrKey ) throws JiraClientException
-    //    {
-    //        return getJiraClient().changeStatus( issueIdOrKey, STORY_REJECT_ACTION_NAME );
-    //    }
 
 
     @Override
@@ -290,11 +243,23 @@ public class JiraManagerImpl implements JiraManager
         List<JarvisLink> links = Lists.newArrayList();
         for ( IssueLink link : issue.getIssueLinks() )
         {
-            Issue i = getJiraClient().getIssue( link.getInwardIssue().getKey() );
-            links.add(
-                    new JarvisLink( Long.valueOf( i.getId() ), link.getInwardIssue().getKey(), link.getType().getName(),
-                            link.getType().getOutward(), new JarvisIssueType( Long.valueOf( i.getIssueType().getId() ),
-                            i.getIssueType().getName() ) ) );
+            String issueKey;
+            if ( link.getInwardIssue() != null )
+            {
+                issueKey = link.getInwardIssue().getKey();
+            }
+            else if ( link.getOutwardIssue() != null )
+            {
+                issueKey = link.getOutwardIssue().getKey();
+            }
+            else
+            {
+                continue;
+            }
+            Issue i = getJiraClient().getIssue( issueKey );
+            links.add( new JarvisLink( Long.valueOf( i.getId() ), i.getKey(), link.getType().getName(),
+                    link.getType().getOutward(),
+                    new JarvisIssueType( Long.valueOf( i.getIssueType().getId() ), i.getIssueType().getName() ) ) );
         }
 
         issue.getSelf();
