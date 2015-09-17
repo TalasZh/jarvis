@@ -52,7 +52,7 @@ public class StashUserCollaborationMetricInfo implements Serializable {
 
         private String  developerId;
 
-        private Date metricMonthDate;
+        private long metricMonthTimestamp;
 
         private Integer stashCollaborationCount;
 
@@ -65,16 +65,16 @@ public class StashUserCollaborationMetricInfo implements Serializable {
             return developerId;
         }
 
-        public Date getMetricMonthDate() {
-            return metricMonthDate;
+        public long getMetricMonthTimestamp() {
+            return metricMonthTimestamp;
         }
 
         public void setDeveloperId(String developerId) {
             this.developerId = developerId;
         }
 
-        public void setMetricMonthDate(Date metricMonthDate) {
-            this.metricMonthDate = metricMonthDate;
+        public void setMetricMonthTimestamp(long metricMonthTimestamp) {
+            this.metricMonthTimestamp = metricMonthTimestamp;
         }
 
         public void setStashCollaborationCount(Integer stashCollaborationCount)
