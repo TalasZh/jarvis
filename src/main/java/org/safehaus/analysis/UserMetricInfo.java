@@ -23,13 +23,13 @@ public class UserMetricInfo implements Serializable{
         @Column(name = "developer_id")
         private String developerId;
 
-        @Column(name = "metric_month_date")
-        private Date metricMonthDate;
+        @Column(name = "metric_month_timestamp")
+        private long metricMonthTimestamp;
 
-        public UserMonthInfo(String developerId, Date metricMonthDate)
+        public UserMonthInfo(String developerId, long metricMonthTimestamp)
         {
             this.developerId = developerId;
-            this.metricMonthDate = metricMonthDate;
+            this.metricMonthTimestamp = metricMonthTimestamp;
         }
 
         public String getDeveloperId() {
@@ -40,12 +40,12 @@ public class UserMetricInfo implements Serializable{
             this.developerId = developerId;
         }
 
-        public Date getMetricMonthDate() {
-            return metricMonthDate;
+        public long getMetricMonthTimestamp() {
+            return metricMonthTimestamp;
         }
 
-        public void setMetricMonthDate(Date metricMonthDate) {
-            this.metricMonthDate = metricMonthDate;
+        public void setMetricMonthTimestamp(long metricMonthTimestamp) {
+            this.metricMonthTimestamp = metricMonthTimestamp;
         }
     }
 
@@ -83,7 +83,7 @@ public class UserMetricInfo implements Serializable{
 
         private Double jiraProductivity;
 
-        private Date metricMonthDate;
+        private long metricMonthTimestamp;
 
         public UserMetricInfoInternal(){}
 
@@ -95,15 +95,15 @@ public class UserMetricInfo implements Serializable{
             return jiraProductivity;
         }
 
-        public Date getMetricMonthDate()
+        public long getMetricMonthTimestamp()
         {
-            return metricMonthDate;
+            return metricMonthTimestamp;
         }
 
 
-        public void setMetricMonthDate( final Date metricMonthDate )
+        public void setMetricMonthTimestamp( final long metricMonthTimestamp )
         {
-            this.metricMonthDate = metricMonthDate;
+            this.metricMonthTimestamp = metricMonthTimestamp;
         }
 
         public void setJiraProductivity(Double jiraProductivity) {

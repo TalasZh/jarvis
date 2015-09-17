@@ -304,10 +304,10 @@ public class StashStreamFunctions {
                         StashUserMetricInfoInternal metricInfo = new StashUserMetricInfoInternal();
                         metricInfo.setDeveloperId(tuple3Tuple3Tuple2._1()._1());
                         metricInfo.setStashCommitCnt(tuple3Tuple3Tuple2._2()._1());
-                        metricInfo.setMetricMonthDate(cal.getTime());
+                        metricInfo.setMetricMonthTimestamp(cal.getTimeInMillis());
 
                         System.out.println("STASH METRICS STREAM: " + metricInfo.getDeveloperId() + " " + metricInfo
-                                .getStashCommitCnt() + " " + metricInfo.getMetricMonthDate());
+                                .getStashCommitCnt() + " " + metricInfo.getMetricMonthTimestamp());
                         return metricInfo;
                     }
                 });

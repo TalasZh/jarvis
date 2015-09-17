@@ -205,7 +205,7 @@ public class JiraStreamFunctions {
                         metricInfo.setJiraProductivity(
                                 ( ( double ) tuple3Tuple4Tuple2._2()._1() / ( double ) tuple3Tuple4Tuple2._2()._2() )
                                         * 100.0 );
-                        metricInfo.setMetricMonthDate(cal.getTime());
+                        metricInfo.setMetricMonthTimestamp(cal.getTimeInMillis());
 
                         return metricInfo;
                     }
