@@ -70,6 +70,10 @@
     <property name="dao" ref="daoService" />
   </bean>
 
+  <bean id="userMetricService" class="org.safehaus.service.impl.UserMetricServiceImpl"
+        scope="singleton">
+    <property name="dao" ref="daoService" />
+  </bean>
         <!--<bean id="dao" class="org.safehaus.dao.kundera.DaoImpl"-->
   <!--scope="singleton">-->
   <!--</bean>-->
