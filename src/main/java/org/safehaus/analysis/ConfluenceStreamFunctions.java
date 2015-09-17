@@ -184,10 +184,10 @@ public class ConfluenceStreamFunctions {
                         ConfluenceMetricInfo.ConfluenceMetricInfoInternal metricInfo = new ConfluenceMetricInfo.ConfluenceMetricInfoInternal();
                         metricInfo.setDeveloperId(tuple3Tuple3Tuple2._1()._1());
                         metricInfo.setConfluenceActivityCount(tuple3Tuple3Tuple2._2()._1());
-                        metricInfo.setMetricMonthDate(cal.getTime());
+                        metricInfo.setMetricMonthTimestamp(cal.getTimeInMillis());
 
                         System.out.println("CONFLUENCE METRICS STREAM: " + metricInfo.getDeveloperId() + " " + metricInfo
-                                .getConfluenceActivityCount() + " " + metricInfo.getMetricMonthDate());
+                                .getConfluenceActivityCount() + " " + metricInfo.getMetricMonthTimestamp());
                         return metricInfo;
                     }
                 });

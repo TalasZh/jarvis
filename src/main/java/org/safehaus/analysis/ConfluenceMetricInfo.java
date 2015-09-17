@@ -46,7 +46,7 @@ public class ConfluenceMetricInfo implements Serializable{
     public static class ConfluenceMetricInfoInternal implements Serializable
     {
         private String  developerId;
-        private Date metricMonthDate;
+        private long metricMonthTimestamp;
         private Integer confluenceActivityCount;
 
         public ConfluenceMetricInfoInternal(){}
@@ -59,8 +59,8 @@ public class ConfluenceMetricInfo implements Serializable{
             return confluenceActivityCount;
         }
 
-        public Date getMetricMonthDate() {
-            return metricMonthDate;
+        public long getMetricMonthTimestamp() {
+            return metricMonthTimestamp;
         }
 
         public void setDeveloperId(String developerId) {
@@ -71,8 +71,8 @@ public class ConfluenceMetricInfo implements Serializable{
             this.confluenceActivityCount = confluenceActivityCount;
         }
 
-        public void setMetricMonthDate(Date metricMonthDate) {
-            this.metricMonthDate = metricMonthDate;
+        public void setMetricMonthTimestamp(long metricMonthTimestamp) {
+            this.metricMonthTimestamp = metricMonthTimestamp;
         }
     }
 
