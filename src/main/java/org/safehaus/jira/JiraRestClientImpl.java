@@ -138,7 +138,8 @@ public class JiraRestClientImpl implements JiraRestClient
         }
         try
         {
-            Issue.SearchResult searchResult = jiraClient.searchIssues( jql, "", "changelog", maxResult, startIndex );
+            Issue.SearchResult searchResult =
+                    jiraClient.searchIssues( jql, "*all", "changelog", maxResult, startIndex );
             result.addAll( searchResult.issues );
         }
         catch ( JiraException e )
@@ -171,7 +172,7 @@ public class JiraRestClientImpl implements JiraRestClient
     public List<Issue> getIssues( final String projectId )
     {
         //        List<JarvisIssue> result = new ArrayList<JarvisIssue>();
-        String jql = String.format( "project = %s order by duedate", projectId );
+        String jql = String.format( "project = '%s' order by duedate", projectId );
         return searchJira( jql, null, null );
     }
 
