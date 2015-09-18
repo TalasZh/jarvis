@@ -20,6 +20,7 @@ public class DateSave
     private static final String LAST_DATE_STASH = "lastGatheredDateStash";
     private static final String LAST_DATE_SONAR = "lastGatheredDateSonar";
     private static final String LAST_DATE_CONFLUENCE = "lastGatheredDateConfluence";
+    private static final String IS_SPARK_STARTED_ID = "IsSparkStartedAlready";
 
     Preferences prefs = Preferences.userNodeForPackage( DateSave.class );
 
@@ -49,6 +50,12 @@ public class DateSave
     }
 
 
+    public void resetSparkStarted() throws BackingStoreException
+    {
+        prefs.putBoolean( IS_SPARK_STARTED_ID, false );
+        prefs.flush();
+    }
+
     public Date getLastGatheredDateJira() throws IOException
     {
         return new Date( prefs.getLong( LAST_DATE_JIRA, 0 ) );
@@ -72,6 +79,15 @@ public class DateSave
         return new Date( prefs.getLong( LAST_DATE_CONFLUENCE, 0 ) );
     }
 
+    public boolean getIsSparkStarted() throws IOException
+    {
+        return prefs.getBoolean(IS_SPARK_STARTED_ID, false);
+    }
+
+    public void saveIsSparkStarted(boolean sparkStarted)
+    {
+        prefs.putBoolean(IS_SPARK_STARTED_ID, sparkStarted);
+    }
 
     public void saveLastGatheredDates( long lastGatheredDateJira, long lastGatheredDateStash,
                                        long lastGatheredDateSonar, long lastGatheredDateConfluence ) throws IOException
