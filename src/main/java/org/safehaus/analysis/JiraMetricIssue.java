@@ -25,10 +25,10 @@ import com.impetus.kundera.index.IndexCollection;
 @Entity
 @Table( name = "jira_metric_issue", schema = "jarvis@cassandra-pu" )
 @IndexCollection( columns = {
-        @Index( name = "issue_id" ), @Index( name = "issue_key" )})
+        @Index( name = "issueId" ), @Index( name = "issueKey" )})
 public class JiraMetricIssue implements Serializable {
 
-//    @Id
+//    @Idgo
     @Column(name = "issue_key")
     private String issueKey;
 

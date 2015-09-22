@@ -194,6 +194,35 @@ public class DaoServiceImpl implements Dao
 
 
     @Override
+    public List<?> findByQuery( final String queryString, final String parameter1, final Object parameterValue1,
+                                final String parameter2, final Object parameterValue2, final String parameter3,
+                                final Object parameterValue3 )
+    {
+        EntityManager em = emf.createEntityManager();
+        List<?> result = Lists.newArrayList();
+        try
+        {
+            em.getTransaction().begin();
+            Query query = em.createQuery( queryString );
+            query.setParameter( parameter1, parameterValue1 );
+            query.setParameter( parameter2, parameterValue2 );
+            query.setParameter( parameter3, parameterValue3 );
+            result = query.getResultList();
+            em.getTransaction().commit();
+        }
+        catch ( Exception ex )
+        {
+            LOGGER.error( "Error executing query", ex );
+            if ( em.getTransaction().isActive() )
+            {
+                em.getTransaction().rollback();
+            }
+        }
+        return result;
+    }
+
+
+    @Override
     public <T> int batchInsert( final List<T> entities )
     {
         int totalPersisted = 0;

@@ -8,13 +8,20 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+
+import com.impetus.kundera.index.Index;
+import com.impetus.kundera.index.IndexCollection;
 
 
 /**
  * Created by talas on 9/8/15.
  */
+@XmlRootElement
 @Entity
 @Table( name = "jira_issue_changelog", schema = "jarvis@cassandra-pu" )
+@IndexCollection( columns = {
+        @Index( name = "author" ), @Index( name = "type" ), @Index( name = "field")})
 public class JiraIssueChangelog implements Serializable
 {
     @EmbeddedId

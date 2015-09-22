@@ -1,6 +1,7 @@
 package org.safehaus.jira;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.safehaus.exceptions.JiraClientException;
@@ -18,7 +19,9 @@ import com.google.common.collect.Lists;
 
 import net.rcarz.jiraclient.Issue;
 import net.rcarz.jiraclient.IssueLink;
+import net.rcarz.jiraclient.IssueType;
 import net.rcarz.jiraclient.JiraException;
+import net.rcarz.jiraclient.Project;
 import net.rcarz.jiraclient.Status;
 import net.rcarz.jiraclient.Transition;
 import net.rcarz.jiraclient.greenhopper.GreenHopperClient;
@@ -83,25 +86,22 @@ public class JiraManagerImpl implements JiraManager
     @Override
     public List<JarvisProject> getProjects() throws JiraClientException
     {
-        //        List<Project> projects = getJiraClient().getAllProjects();
-        //        List<JarvisProject> result = new ArrayList<>();
-        //
-        //        for ( Project project : projects )
-        //        {
-        //
-        //            List<String> types = new ArrayList<>();
-        //
-        //            for ( final IssueType issueType : project.getIssueTypes() )
-        //            {
-        //                types.add( issueType.getName() );
-        //            }
-        //            result.add(
-        //                    new JarvisProject( project.getId(), project.getKey(), project.getName(), project
-        // .getDescription(),
-        //                            types ) );
-        //        }
-        //        return result;
-        return null;
+        List<Project> projects = getJiraClient().getAllProjects();
+        List<JarvisProject> result = new ArrayList<>();
+
+        for ( Project project : projects )
+        {
+
+            List<String> types = new ArrayList<>();
+
+            for ( final IssueType issueType : project.getIssueTypes() )
+            {
+                types.add( issueType.getName() );
+            }
+            result.add( new JarvisProject( Long.valueOf( project.getId() ), project.getKey(), project.getName(),
+                            project.getDescription(), types ) );
+        }
+        return result;
     }
 
 

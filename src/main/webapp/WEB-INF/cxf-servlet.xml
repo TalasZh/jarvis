@@ -79,6 +79,8 @@
   <jaxws:endpoint id="sessionService" implementor="#sessionServiceImpl" address="/SessionService" />
   <jaxws:endpoint id="projectService" implementor="#projectManager" address="/ProjectService" />
   <jaxws:endpoint id="stashMetricService" implementor="#stashMetricsManager" address="/StashMetricServiceImpl" />
+  <jaxws:endpoint id="jiraMetricService" implementor="#jiraMetricsManager" address="/JiraMetricServiceImpl" />
+  <jaxws:endpoint id="jiraChangelogService" implementor="#jiraChangelogManager" address="/JiraChangelogServiceImpl" />
   <!--<jaxws:endpoint id="issueService" implementor="#issueManager" address="/IssueService"/>-->
   <!-- Add new endpoints for additional services you'd like to expose -->
 
@@ -91,6 +93,8 @@
       <ref bean="projectManager" />
       <ref bean="sessionServiceImpl" />
       <ref bean="stashMetricsManager" />
+      <ref bean="jiraMetricsManager"/>
+      <ref bean="jiraChangelogManager"/>
       <!--<ref bean="issueManager"/>-->
     </jaxrs:serviceBeans>
     <jaxrs:providers>
