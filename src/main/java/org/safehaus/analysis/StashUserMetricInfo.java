@@ -1,15 +1,17 @@
 package org.safehaus.analysis;
 
-import com.impetus.kundera.index.Index;
-import com.impetus.kundera.index.IndexCollection;
-import org.safehaus.analysis.UserMetricInfo.UserMonthInfo;
+
+import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.io.Serializable;
-import java.util.Date;
+
+import org.safehaus.analysis.UserMetricInfo.UserMonthInfo;
+
+import com.impetus.kundera.index.Index;
+import com.impetus.kundera.index.IndexCollection;
 
 /**
  * Created by neslihan on 25.08.2015.

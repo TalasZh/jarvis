@@ -43,7 +43,7 @@ public class JiraChangelogRestServiceImpl implements JiraChangelogRestService
     {
         String query = "Select j from " + JiraIssueChangelog.class.getSimpleName()
                 + " j where j.author =:author and j.field =:field and j.type =:type";
-        LOG.info( "Finding IssueChangelog by key author,field,type : {}", author, field, type );
+        LOG.info( "Finding IssueChangelog by key author,field,type : {} {} {}", author, field, type );
 
         List<JiraIssueChangelog> changelogs =
                 ( List<JiraIssueChangelog> ) dao.findByQuery( query, "author", author, "field", field, "type", type );

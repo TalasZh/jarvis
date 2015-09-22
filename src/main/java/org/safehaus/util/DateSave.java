@@ -1,13 +1,13 @@
 package org.safehaus.util;
 
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import java.io.IOException;
 import java.util.Date;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 /**
@@ -79,14 +79,16 @@ public class DateSave
         return new Date( prefs.getLong( LAST_DATE_CONFLUENCE, 0 ) );
     }
 
+
     public boolean getIsSparkStarted() throws IOException
     {
-        return prefs.getBoolean(IS_SPARK_STARTED_ID, false);
+        return prefs.getBoolean( IS_SPARK_STARTED_ID, false );
     }
 
-    public void saveIsSparkStarted(boolean sparkStarted)
+
+    public void saveIsSparkStarted( boolean sparkStarted )
     {
-        prefs.putBoolean(IS_SPARK_STARTED_ID, sparkStarted);
+        prefs.putBoolean( IS_SPARK_STARTED_ID, sparkStarted );
     }
 
     public void saveLastGatheredDates( long lastGatheredDateJira, long lastGatheredDateStash,
