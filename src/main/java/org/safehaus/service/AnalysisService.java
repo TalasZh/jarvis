@@ -283,17 +283,14 @@ public class AnalysisService
             e.printStackTrace();
         }
 
-        try
-        {
-            if ( !ds.getIsSparkStarted() )
-            {
-                System.out.println( "Starting Sparkkk Streaming" );
+        try {
+            if (!ds.getIsSparkStarted()) {
+                System.out.println("Starting Sparkkk Streaming");
                 SparkDirectKafkaStreamSuite.startStreams();
-                ds.saveIsSparkStarted( true );
+                ds.saveIsSparkStarted(true);
             }
         }
-        catch ( Exception e )
-        {
+        catch(Exception e){
                 e.printStackTrace();
         }
 
@@ -432,7 +429,7 @@ public class AnalysisService
                 issueToAdd.setChangelogList( changelogList );
             }
 
-            jiraMetricIssues.add( issueToAdd );
+            jiraMetricIssues.add(issueToAdd);
             jiraMetricService.insertJiraMetricIssue( issueToAdd );
             if ( lastGatheredJira != null )
             {
@@ -466,7 +463,7 @@ public class AnalysisService
         if ( jiraMetricService != null )
         {
             log.info( "Saving issues formatted for jarvis..." );
-            log.info( "Performing batch insert" );
+            log.info("Performing batch insert");
 
             jiraMetricService.batchInsert( Lists.newArrayList( jiraMetricIssues ) );
 

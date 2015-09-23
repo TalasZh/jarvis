@@ -79,6 +79,15 @@ public class DateSave
         return new Date( prefs.getLong( LAST_DATE_CONFLUENCE, 0 ) );
     }
 
+    public boolean getIsSparkStarted() throws IOException
+    {
+        return prefs.getBoolean(IS_SPARK_STARTED_ID, false);
+    }
+
+    public void saveIsSparkStarted(boolean sparkStarted)
+    {
+        prefs.putBoolean(IS_SPARK_STARTED_ID, sparkStarted);
+    }
 
     public boolean getIsSparkStarted() throws IOException
     {

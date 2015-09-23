@@ -79,7 +79,7 @@
         scope="singleton">
     <property name="dao" ref="daoService" />
   </bean>
-  <!--<bean id="dao" class="org.safehaus.dao.kundera.DaoImpl"-->
+        <!--<bean id="dao" class="org.safehaus.dao.kundera.DaoImpl"-->
   <!--scope="singleton">-->
   <!--</bean>-->
 
