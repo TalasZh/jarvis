@@ -25,5 +25,8 @@ public interface Dao
 
     List<?> findByQuery( String queryString, String paramater, Object parameterValue );
 
+    List<?> findByQuery( String queryString, String parameter1, Object parameterValue1, String parameter2,
+                         Object parameterValue2, String parameter3, Object parameterValue3 );
+
     <T> int batchInsert( List<T> entities );
 }

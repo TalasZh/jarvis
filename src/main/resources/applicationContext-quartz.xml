@@ -66,7 +66,7 @@
 
     <bean id="cronTrigger2" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="analysisJob" />
-        <property name="cronExpression" value="* 7 * * * ?" />
+        <property name="cronExpression" value="* 5 * * * ?" />
     </bean>
 
     <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
@@ -75,7 +75,7 @@
                 <ref bean="analysisJob" />
             </list>
         </property>
-
+        <!---->
         <property name="triggers">
             <list>
                 <ref bean="cronTrigger2" />
