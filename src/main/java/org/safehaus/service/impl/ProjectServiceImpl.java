@@ -56,12 +56,13 @@ public class ProjectServiceImpl implements ProjectService
     {
         //        setContext();
         JarvisProject result = jiraManager.getProject( projectId );
-        result.setTeamMembers( jiraManager.getProjectMemebers( projectId ) );
+        result.setTeamMembers( jiraManager.getProjectMembers( projectId ) );
         return result;
     }
 
 
     @Override
+    @JsonView( Views.JarvisProjectShort.class )
     public List<JarvisProject> getProjects()
     {
         //        setContext();

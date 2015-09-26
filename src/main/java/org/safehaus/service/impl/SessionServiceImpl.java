@@ -411,7 +411,8 @@ public class SessionServiceImpl implements SessionService
 			{
 				if ( jarvisLink.getLinkType().equals( "Blocks" ) && jarvisLink.getLinkDirection().equals( "INBOUND" ) )
 				{
-					Page subPage = generateSubPage( credentails, storyPage.getId(), jarvisLink.getKey() );
+					Page subPage = generateSubPage( credentails, storyPage.getId(),
+							jarvisLink.getLinkDirection().getIssueKey() );
 					sb.append( String.format( "<li><a href='%s'>%s</a></li>", subPage.getWebLink(),
 					        subPage.getTitle() ) );
 				}
@@ -490,7 +491,8 @@ public class SessionServiceImpl implements SessionService
 			{
 				if ( jarvisLink.getLinkType().equals( "Blocks" ) && jarvisLink.getLinkDirection().equals( "INBOUND" ) )
 				{
-					Page subPage = generateSubPage( credentails, storyPage.getId(), jarvisLink.getKey() );
+					Page subPage = generateSubPage( credentails, storyPage.getId(),
+							jarvisLink.getLinkDirection().getIssueKey() );
 					sb.append( String.format( "<li><a href='%s'>%s</a></li>", subPage.getWebLink(),
 					        subPage.getTitle() ) );
 				}

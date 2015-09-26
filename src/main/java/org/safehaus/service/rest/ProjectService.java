@@ -28,7 +28,6 @@ public interface ProjectService
 {
     @GET
     @Path( "projects" )
-    @JsonView( Views.JarvisProjectShort.class )
     List<JarvisProject> getProjects();
 
     @GET

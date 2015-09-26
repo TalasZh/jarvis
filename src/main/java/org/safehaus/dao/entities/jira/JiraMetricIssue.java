@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -24,12 +26,14 @@ import net.rcarz.jiraclient.ChangeLogEntry;
 import net.rcarz.jiraclient.ChangeLogItem;
 import net.rcarz.jiraclient.Issue;
 import net.rcarz.jiraclient.IssueLink;
+import net.rcarz.jiraclient.IssueType;
 
 
 /**
  * Created by kisik on 06.07.2015.
  */
 @Entity
+@Access( AccessType.FIELD )
 @Table( name = "jira_metric_issue", schema = "jarvis@cassandra-pu" )
 @IndexCollection( columns = {
         @Index( name = "issue_id" ), @Index( name = "issue_key" )
@@ -46,9 +50,6 @@ public class JiraMetricIssue implements Serializable
     @Column( name = "status" )
     private String status;
 
-    @Column( name = "issue_status" )
-    private String issueType;
-
     @Column( name = "project_key" )
     private String projectKey;
 
@@ -57,9 +58,6 @@ public class JiraMetricIssue implements Serializable
 
     @Column( name = "description" )
     private String description;
-
-    @Embedded
-    private JarvisIssueType type;
 
     @Column( name = "reporter_name" )
     private String reporterName;
@@ -91,9 +89,16 @@ public class JiraMetricIssue implements Serializable
     @Column( name = "time_spent_in_minutes" )
     private Integer timeSpentMinutes;
 
+    @Embedded
+    private JarvisIssueType type;
+
     @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER )
     @JoinColumn( name = "changelog_id" )
     private List<JiraIssueChangelog> changelogList = Lists.newArrayList();
+
+    @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER )
+    @JoinColumn( name = "issue_link_id" )
+    private List<JarvisLink> issueLinks = Lists.newArrayList();
 
 
     public JiraMetricIssue()
@@ -105,59 +110,72 @@ public class JiraMetricIssue implements Serializable
     {
         if ( issue.getKey() != null )
         {
-            this.setIssueKey( issue.getKey() );
+            this.issueKey = issue.getKey();
+        }
+        if ( issue.getSummary() != null )
+        {
+            this.summary = issue.getSummary();
+        }
+        if ( issue.getDescription() != null )
+        {
+            this.description = issue.getDescription();
         }
         if ( issue.getId() != null )
         {
-            this.setIssueId( Long.valueOf( issue.getId() ) );
+            this.issueId = Long.valueOf( issue.getId() );
         }
         if ( issue.getStatus() != null && issue.getStatus().getName() != null )
         {
-            this.setStatus( issue.getStatus().getName() );
+            this.status = issue.getStatus().getName();
         }
         if ( issue.getProject() != null && issue.getProject().getKey() != null )
         {
-            this.setProjectKey( issue.getProject().getKey() );
+            this.projectKey = issue.getProject().getKey();
         }
         if ( issue.getReporter() != null && issue.getReporter().getName() != null )
         {
-            this.setReporterName( issue.getReporter().getName() );
+            this.reporterName = issue.getReporter().getName();
         }
         if ( issue.getAssignee() != null && issue.getAssignee().getName() != null )
         {
-            this.setAssigneeName( issue.getAssignee().getName() );
+            this.assigneeName = issue.getAssignee().getName();
         }
         if ( issue.getResolution() != null && issue.getResolution().getName() != null )
         {
-            this.setResolution( issue.getResolution().getName() );
+            this.resolution = issue.getResolution().getName();
         }
         if ( issue.getCreatedDate() != null )
         {
-            this.setCreationDate( issue.getCreatedDate() );
+            this.creationDate = issue.getCreatedDate();
         }
         if ( issue.getUpdatedDate() != null )
         {
-            this.setUpdateDate( issue.getUpdatedDate() );
+            this.updateDate = issue.getUpdatedDate();
         }
         if ( issue.getDueDate() != null )
         {
-            this.setDueDate( issue.getDueDate() );
+            this.dueDate = issue.getDueDate();
         }
         if ( issue.getPriority() != null && issue.getPriority().getId() != null )
         {
-            this.setPriority( Long.valueOf( issue.getPriority().getId() ) );
+            this.priority = Long.valueOf( issue.getPriority().getId() );
         }
         if ( issue.getTimeTracking() != null )
         {
-            this.setOriginalEstimateMinutes( issue.getTimeTracking().getOriginalEstimateSeconds() / 60 );
+            this.originalEstimateMinutes = issue.getTimeTracking().getOriginalEstimateSeconds() / 60;
         }
         if ( issue.getTimeTracking() != null )
         {
-            this.setRemainingEstimateMinutes( issue.getTimeTracking().getRemainingEstimateSeconds() / 60 );
+            this.remainingEstimateMinutes = issue.getTimeTracking().getRemainingEstimateSeconds() / 60;
         }
         if ( issue.getTimeTracking() != null )
         {
-            this.setTimeSpentMinutes( issue.getTimeTracking().getTimeSpentSeconds() / 60 );
+            this.timeSpentMinutes = issue.getTimeTracking().getTimeSpentSeconds() / 60;
+        }
+        if ( issue.getIssueType() != null )
+        {
+            IssueType jiraIssueType = issue.getIssueType();
+            this.type = new JarvisIssueType( Long.valueOf( jiraIssueType.getId() ), jiraIssueType.getName() );
         }
         if ( issue.getChangeLog() != null )
         {
@@ -178,15 +196,40 @@ public class JiraMetricIssue implements Serializable
                     changelogList.add( jiraIssueChangelog );
                 }
             }
-            this.setChangelogList( changelogList );
+            this.changelogList = changelogList;
         }
 
         if ( issue.getIssueLinks() != null )
         {
+            List<JarvisLink> jarvisIssueLinks = Lists.newArrayList();
             for ( final IssueLink issueLink : issue.getIssueLinks() )
             {
+                net.rcarz.jiraclient.LinkType jiraLinkType = issueLink.getType();
+                LinkType linkType = new LinkType( Long.valueOf( jiraLinkType.getId() ), jiraLinkType.getName(),
+                        jiraLinkType.getInward(), jiraLinkType.getOutward() );
 
+                LinkDirection linkDirection = new LinkDirection();
+                Issue linkedIssue = issueLink.getInwardIssue();
+                linkDirection.setDirection( LinkDirection.Direction.INWARD );
+                if ( linkedIssue == null )
+                {
+                    linkedIssue = issueLink.getOutwardIssue();
+                    linkDirection.setDirection( LinkDirection.Direction.OUTWARD );
+                }
+
+                linkDirection.setIssueId( Long.valueOf( linkedIssue.getId() ) );
+                linkDirection.setIssueKey( linkedIssue.getKey() );
+
+                IssueType linkedIssueType = linkedIssue.getIssueType();
+                if ( linkedIssueType != null )
+                {
+                    JarvisIssueType jarvisIssueType =
+                            new JarvisIssueType( Long.valueOf( linkedIssueType.getId() ), linkedIssueType.getName() );
+                    jarvisIssueLinks.add( new JarvisLink( Long.valueOf( issueLink.getId() ), linkType, linkDirection,
+                            jarvisIssueType ) );
+                }
             }
+            this.issueLinks = jarvisIssueLinks;
         }
     }
 
@@ -224,18 +267,6 @@ public class JiraMetricIssue implements Serializable
     public void setStatus( String status )
     {
         this.status = status;
-    }
-
-
-    public String getIssueType()
-    {
-        return issueType;
-    }
-
-
-    public void setIssueType( String issueType )
-    {
-        this.issueType = issueType;
     }
 
 
@@ -390,7 +421,6 @@ public class JiraMetricIssue implements Serializable
                 "issueKey='" + issueKey + '\'' +
                 ", issueId=" + issueId +
                 ", status='" + status + '\'' +
-                ", issueType='" + issueType + '\'' +
                 ", projectKey='" + projectKey + '\'' +
                 ", reporterName='" + reporterName + '\'' +
                 ", assigneeName='" + assigneeName + '\'' +

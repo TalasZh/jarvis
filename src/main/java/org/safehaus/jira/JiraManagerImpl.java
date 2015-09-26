@@ -7,6 +7,8 @@ import org.safehaus.dao.entities.jira.JarvisIssue;
 import org.safehaus.dao.entities.jira.JarvisIssueType;
 import org.safehaus.dao.entities.jira.JarvisLink;
 import org.safehaus.dao.entities.jira.JarvisMember;
+import org.safehaus.dao.entities.jira.LinkDirection;
+import org.safehaus.dao.entities.jira.LinkType;
 import org.safehaus.exceptions.JiraClientException;
 import org.safehaus.model.JarvisProject;
 import org.safehaus.util.JarvisContextHolder;
@@ -33,6 +35,7 @@ import net.rcarz.jiraclient.greenhopper.SprintReport;
 public class JiraManagerImpl implements JiraManager
 {
     private static Logger logger = LoggerFactory.getLogger( JiraManagerImpl.class );
+
 
     @Override
     public List<JarvisIssue> getIssues( final String projectId ) throws JiraClientException
@@ -117,7 +120,7 @@ public class JiraManagerImpl implements JiraManager
         JarvisLink blockedIssueLink = issue.getLink( JiraRestClient.BLOCKS_LINK_NAME, JiraRestClient.OUTBOUND );
         if ( blockedIssueLink != null )
         {
-            buildBlocksChain( blockedIssueLink.getKey(), chain );
+            buildBlocksChain( blockedIssueLink.getLinkDirection().getIssueKey(), chain );
         }
 
         chain.add( issue );
@@ -232,23 +235,27 @@ public class JiraManagerImpl implements JiraManager
         List<JarvisLink> links = Lists.newArrayList();
         for ( IssueLink link : issue.getIssueLinks() )
         {
-            String issueKey;
-            if ( link.getInwardIssue() != null )
+            net.rcarz.jiraclient.LinkType jiraLinkType = link.getType();
+            LinkType jarvisLinkType = new LinkType( Long.valueOf( jiraLinkType.getId() ), jiraLinkType.getName(),
+                    jiraLinkType.getInward(), jiraLinkType.getOutward() );
+
+            Issue i = link.getInwardIssue();
+            LinkDirection jarvisLinkDirection = new LinkDirection();
+            jarvisLinkDirection.setDirection( LinkDirection.Direction.INWARD );
+
+            if ( i == null )
             {
-                issueKey = link.getInwardIssue().getKey();
+                i = link.getOutwardIssue();
+                jarvisLinkDirection.setDirection( LinkDirection.Direction.OUTWARD );
             }
-            else if ( link.getOutwardIssue() != null )
+
+            if ( i != null )
             {
-                issueKey = link.getOutwardIssue().getKey();
+                jarvisLinkDirection.setIssueId( Long.valueOf( i.getId() ) );
+                jarvisLinkDirection.setIssueKey( i.getKey() );
+                links.add( new JarvisLink( Long.valueOf( i.getId() ), jarvisLinkType, jarvisLinkDirection,
+                        new JarvisIssueType( Long.valueOf( i.getIssueType().getId() ), i.getIssueType().getName() ) ) );
             }
-            else
-            {
-                continue;
-            }
-            Issue i = getJiraClient().getIssue( issueKey );
-            links.add( new JarvisLink( Long.valueOf( i.getId() ), i.getKey(), link.getType().getName(),
-                    link.getType().getOutward(),
-                    new JarvisIssueType( Long.valueOf( i.getIssueType().getId() ), i.getIssueType().getName() ) ) );
         }
 
         issue.getSelf();
@@ -275,10 +282,29 @@ public class JiraManagerImpl implements JiraManager
         List<JarvisLink> links = Lists.newArrayList();
         for ( IssueLink link : issue.getIssueLinks() )
         {
+            net.rcarz.jiraclient.LinkType jiraLinkType = link.getType();
+            LinkType jarvisLinkType = new LinkType( Long.valueOf( jiraLinkType.getId() ), jiraLinkType.getName(),
+                    jiraLinkType.getInward(), jiraLinkType.getOutward() );
+
             Issue i = link.getInwardIssue();
-            links.add( new JarvisLink( Long.valueOf( i.getId() ), i.getKey(), link.getType().getName(),
-                    link.getType().getInward(),
-                    new JarvisIssueType( Long.valueOf( i.getIssueType().getId() ), i.getIssueType().getName() ) ) );
+            LinkDirection jarvisLinkDirection = new LinkDirection();
+            jarvisLinkDirection.setDirection( LinkDirection.Direction.INWARD );
+
+            if ( i == null )
+            {
+                i = link.getOutwardIssue();
+                jarvisLinkDirection.setDirection( LinkDirection.Direction.OUTWARD );
+            }
+
+            if ( i != null )
+            {
+                jarvisLinkDirection.setIssueId( Long.valueOf( i.getId() ) );
+                jarvisLinkDirection.setIssueKey( i.getKey() );
+                links.add( new JarvisLink( Long.valueOf( i.getId() ), jarvisLinkType, jarvisLinkDirection,
+                        new JarvisIssueType( Long.valueOf( i.getIssueType().getId() ), i.getIssueType().getName() ) ) );
+            }
+
+
         }
 
         issue.getSelf();

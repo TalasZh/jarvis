@@ -24,18 +24,14 @@ public class JarvisLink
     @Column( name = "link_id" )
     private Long id;
 
-    @Column( name = "link_key" )
-    private String key;
-
-    @Column( name = "link_type" )
-    private String linkType;
-
-
-    @Column( name = "link_direction" )
-    private String linkDirection;
+    @Embedded
+    private LinkType linkType;
 
     @Embedded
-    //    @Column( name = "JARVIS_LINK_ATYPE" )
+    private LinkDirection linkDirection;
+
+
+    @Embedded
     private JarvisIssueType type;
 
 
@@ -44,11 +40,10 @@ public class JarvisLink
     }
 
 
-    public JarvisLink( final Long id, final String key, final String linkType, final String linkDirection,
+    public JarvisLink( final Long id, final LinkType linkType, final LinkDirection linkDirection,
                        final JarvisIssueType type )
     {
         this.id = id;
-        this.key = key;
         this.linkType = linkType;
         this.linkDirection = linkDirection;
         this.type = type;
@@ -61,13 +56,7 @@ public class JarvisLink
     }
 
 
-    public String getKey()
-    {
-        return key;
-    }
-
-
-    public String getLinkType()
+    public LinkType getLinkType()
     {
         return linkType;
     }
@@ -79,7 +68,7 @@ public class JarvisLink
     }
 
 
-    public String getLinkDirection()
+    public LinkDirection getLinkDirection()
     {
         return linkDirection;
     }
@@ -88,7 +77,7 @@ public class JarvisLink
     @Override
     public String toString()
     {
-        return new ToStringBuilder( this ).append( "id", id ).append( "key", key ).append( "linkType", linkType )
+        return new ToStringBuilder( this ).append( "id", id ).append( "linkType", linkType )
                                           .append( "linkDirection", linkDirection ).append( "type", type ).toString();
     }
 }
