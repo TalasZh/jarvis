@@ -1,15 +1,19 @@
 package org.safehaus.dao.hibernate;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.safehaus.dao.LookupDao;
-import org.safehaus.model.Role;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
+
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.safehaus.dao.LookupDao;
+import org.safehaus.model.Role;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 
 /**
  * Hibernate implementation of LookupDao.
@@ -18,6 +22,7 @@ import org.hibernate.Session;
  *      Modified by jgarcia: updated to hibernate 4
  */
 @Repository
+@Transactional
 public class LookupDaoHibernate implements LookupDao {
     private Log log = LogFactory.getLog(LookupDaoHibernate.class);
     private final SessionFactory sessionFactory;

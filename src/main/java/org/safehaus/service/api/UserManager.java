@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.safehaus.dao.UserDao;
 import org.safehaus.model.User;
+import org.safehaus.service.GenericManager;
 import org.safehaus.service.UserExistsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;

@@ -1,4 +1,4 @@
-package org.safehaus.service.api;
+package org.safehaus.service;
 
 import java.io.Serializable;
 import java.util.List;

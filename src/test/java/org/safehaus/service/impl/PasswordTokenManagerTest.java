@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.safehaus.model.User;
-import org.safehaus.service.api.PasswordTokenManager;
+import org.safehaus.service.PasswordTokenManager;
 import org.safehaus.service.api.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

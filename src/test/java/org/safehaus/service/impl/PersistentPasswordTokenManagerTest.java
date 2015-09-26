@@ -2,7 +2,7 @@ package org.safehaus.service.impl;
 
 
 import org.junit.Ignore;
-import org.safehaus.service.api.PasswordTokenManager;
+import org.safehaus.service.PasswordTokenManager;
 import org.safehaus.service.api.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

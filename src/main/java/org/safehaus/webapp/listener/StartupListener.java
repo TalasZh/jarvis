@@ -14,8 +14,8 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import org.safehaus.Constants;
-import org.safehaus.service.api.GenericManager;
-import org.safehaus.service.api.LookupManager;
+import org.safehaus.service.GenericManager;
+import org.safehaus.service.LookupManager;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.AuthenticationProvider;

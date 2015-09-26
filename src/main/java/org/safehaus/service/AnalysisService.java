@@ -95,7 +95,7 @@ public class AnalysisService
     DateSave ds;
     private Page<Project> stashProjects;
     private static boolean streamingStarted = false;
-    private static boolean indexCreated = true;
+    private static boolean indexCreated = false;
 
     private static boolean resetLastGatheredJira;
     private static boolean resetLastGatheredStash;

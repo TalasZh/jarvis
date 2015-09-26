@@ -10,6 +10,7 @@ import org.safehaus.model.Capture;
 import org.safehaus.model.JarvisSessionException;
 import org.safehaus.model.Session;
 import org.safehaus.model.SessionNotFoundException;
+import org.safehaus.service.GenericManager;
 import org.springframework.beans.factory.annotation.Autowired;
 
 

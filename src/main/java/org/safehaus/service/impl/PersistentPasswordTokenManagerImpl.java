@@ -9,7 +9,7 @@ import java.util.Date;
 import javax.sql.DataSource;
 
 import org.safehaus.model.User;
-import org.safehaus.service.api.PasswordTokenManager;
+import org.safehaus.service.PasswordTokenManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 

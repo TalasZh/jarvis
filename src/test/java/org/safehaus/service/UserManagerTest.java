@@ -11,7 +11,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.safehaus.Constants;
 import org.safehaus.model.User;
-import org.safehaus.service.api.RoleManager;
 import org.safehaus.service.api.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 

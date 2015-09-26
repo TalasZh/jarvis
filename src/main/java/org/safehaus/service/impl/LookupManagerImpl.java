@@ -7,7 +7,7 @@ import java.util.List;
 import org.safehaus.dao.LookupDao;
 import org.safehaus.model.LabelValue;
 import org.safehaus.model.Role;
-import org.safehaus.service.api.LookupManager;
+import org.safehaus.service.LookupManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

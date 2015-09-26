@@ -14,7 +14,7 @@ import javax.ws.rs.core.Cookie;
 import org.safehaus.Constants;
 import org.safehaus.model.User;
 import org.safehaus.service.MailEngine;
-import org.safehaus.service.api.RoleManager;
+import org.safehaus.service.RoleManager;
 import org.safehaus.service.api.UserManager;
 import org.springframework.mail.SimpleMailMessage;
 

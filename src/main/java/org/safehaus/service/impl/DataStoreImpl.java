@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.safehaus.dao.Dao;
 import org.safehaus.model.DocumentInfo;
-import org.safehaus.service.api.DataStore;
+import org.safehaus.service.DataStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

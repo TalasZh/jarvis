@@ -1,4 +1,4 @@
-package org.safehaus.service.api;
+package org.safehaus.service;
 
 import org.safehaus.model.User;
 

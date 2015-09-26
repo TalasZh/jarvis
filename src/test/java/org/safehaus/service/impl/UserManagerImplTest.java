@@ -8,8 +8,8 @@ import org.safehaus.Constants;
 import org.safehaus.dao.UserDao;
 import org.safehaus.model.Role;
 import org.safehaus.model.User;
+import org.safehaus.service.PasswordTokenManager;
 import org.safehaus.service.UserExistsException;
-import org.safehaus.service.api.PasswordTokenManager;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
