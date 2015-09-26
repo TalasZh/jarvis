@@ -9,8 +9,8 @@ import org.safehaus.exceptions.JiraClientException;
 import org.safehaus.model.DataFormat;
 import org.safehaus.model.DocumentInfo;
 import org.safehaus.model.Session;
-import org.safehaus.service.DataStore;
-import org.safehaus.service.SessionManager;
+import org.safehaus.service.api.DataStore;
+import org.safehaus.service.api.SessionManager;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 

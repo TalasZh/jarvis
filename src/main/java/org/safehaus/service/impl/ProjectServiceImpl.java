@@ -9,12 +9,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
+import org.safehaus.dao.entities.jira.JarvisIssue;
 import org.safehaus.exceptions.JiraClientException;
 import org.safehaus.jira.JiraManager;
-import org.safehaus.jira.model.JarvisIssue;
 import org.safehaus.model.JarvisProject;
 import org.safehaus.model.Views;
-import org.safehaus.service.ProjectService;
+import org.safehaus.service.rest.ProjectService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ import net.rcarz.jiraclient.Transition;
 
 
 @Service( "projectManager" )
-@WebService( serviceName = "ProjectService", endpointInterface = "org.safehaus.service.ProjectService" )
+@WebService( serviceName = "ProjectService", endpointInterface = "org.safehaus.service.rest.ProjectService" )
 public class ProjectServiceImpl implements ProjectService
 {
     private static Logger logger = LoggerFactory.getLogger( ProjectServiceImpl.class );

@@ -7,10 +7,10 @@ import javax.jws.WebService;
 
 import org.codehaus.jackson.map.annotate.JsonView;
 import org.safehaus.dao.Dao;
+import org.safehaus.dao.entities.stash.StashMetricIssue;
 import org.safehaus.model.Views;
-import org.safehaus.service.StashMetricService;
+import org.safehaus.service.api.StashMetricService;
 import org.safehaus.service.rest.StashMetricsRestService;
-import org.safehaus.stash.model.StashMetricIssue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

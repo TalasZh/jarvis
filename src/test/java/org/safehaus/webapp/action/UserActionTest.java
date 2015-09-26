@@ -1,13 +1,19 @@
 package org.safehaus.webapp.action;
 
-import org.apache.struts2.ServletActionContext;
-import org.safehaus.model.User;
-import org.safehaus.service.UserManager;
+
 import org.junit.Test;
+import org.safehaus.model.User;
+import org.safehaus.service.api.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletRequest;
 
-import static org.junit.Assert.*;
+import org.apache.struts2.ServletActionContext;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class UserActionTest extends BaseActionTestCase {
     @Autowired

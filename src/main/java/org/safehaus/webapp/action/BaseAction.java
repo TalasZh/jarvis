@@ -1,28 +1,28 @@
 package org.safehaus.webapp.action;
 
 
-import com.opensymphony.xwork2.ActionSupport;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.struts2.ServletActionContext;
-
-import org.safehaus.Constants;
-import org.safehaus.model.User;
-import org.safehaus.service.MailEngine;
-import org.safehaus.service.RoleManager;
-import org.safehaus.service.UserManager;
-import org.springframework.mail.SimpleMailMessage;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.core.Cookie;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import org.safehaus.Constants;
+import org.safehaus.model.User;
+import org.safehaus.service.MailEngine;
+import org.safehaus.service.api.RoleManager;
+import org.safehaus.service.api.UserManager;
+import org.springframework.mail.SimpleMailMessage;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.struts2.ServletActionContext;
+
+import com.opensymphony.xwork2.ActionSupport;
 
 
 /**

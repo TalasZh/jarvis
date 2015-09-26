@@ -21,24 +21,24 @@
   <persistence-unit name="cassandra-pu">
     <provider>com.impetus.kundera.KunderaPersistence</provider>
     <class>org.safehaus.model.DocumentInfo</class>
-    <class>org.safehaus.jira.model.JarvisLink</class>
-    <class>org.safehaus.jira.model.JarvisIssueType</class>
-    <class>org.safehaus.jira.model.JarvisMember</class>
-    <class>org.safehaus.jira.model.JarvisIssue</class>
-    <class>org.safehaus.stash.model.Link</class>
-    <class>org.safehaus.stash.model.HibernateLinkMap</class>
-    <class>org.safehaus.stash.model.HibernateSetMap</class>
-    <class>org.safehaus.stash.model.StashUser</class>
-    <class>org.safehaus.stash.model.MinimalCommit</class>
-    <class>org.safehaus.stash.model.Commit</class>
-    <class>org.safehaus.stash.model.Path</class>
-    <class>org.safehaus.stash.model.StashMetricIssue</class>
-    <class>org.safehaus.analysis.JiraMetricIssue</class>
-    <class>org.safehaus.analysis.JiraIssueChangelog</class>
-    <class>org.safehaus.analysis.UserMetricInfo</class>
-    <class>org.safehaus.analysis.StashUserMetricInfo</class>
-    <class>org.safehaus.analysis.ConfluenceMetricInfo</class>
-    <class>org.safehaus.analysis.StashUserCollaborationMetricInfo</class>
+    <class>org.safehaus.dao.entities.jira.JarvisLink</class>
+    <class>org.safehaus.dao.entities.jira.JarvisIssueType</class>
+    <class>org.safehaus.dao.entities.jira.JarvisMember</class>
+    <class>org.safehaus.dao.entities.jira.JarvisIssue</class>
+    <class>org.safehaus.dao.entities.jira.JiraMetricIssue</class>
+    <class>org.safehaus.dao.entities.jira.JiraIssueChangelog</class>
+    <class>org.safehaus.dao.entities.stash.Link</class>
+    <class>org.safehaus.dao.entities.stash.HibernateLinkMap</class>
+    <class>org.safehaus.dao.entities.stash.HibernateSetMap</class>
+    <class>org.safehaus.dao.entities.stash.StashUser</class>
+    <class>org.safehaus.dao.entities.stash.MinimalCommit</class>
+    <class>org.safehaus.dao.entities.stash.Commit</class>
+    <class>org.safehaus.dao.entities.stash.Path</class>
+    <class>org.safehaus.dao.entities.stash.StashMetricIssue</class>
+    <class>org.safehaus.dao.entities.stash.StashUserMetricInfo</class>
+    <class>org.safehaus.dao.entities.stash.StashUserCollaborationMetricInfo</class>
+    <class>org.safehaus.dao.entities.UserMetricInfo</class>
+    <class>org.safehaus.dao.entities.ConfluenceMetricInfo</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="kundera.nodes" value="localhost" />
@@ -47,7 +47,7 @@
       <property name="kundera.dialect" value="cassandra" />
 
       <!-- TODO Don't forget to change to "update"  after tables schema created in production-->
-      <property name="kundera.ddl.auto.prepare" value="create" />
+      <!--<property name="kundera.ddl.auto.prepare" value="create" />-->
 
       <property name="kundera.client" value="thrift" />
       <property name="kundera.batch.size" value="5000" />

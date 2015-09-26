@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
+import org.safehaus.dao.entities.stash.StashUser;
+
 import com.google.common.base.Objects;
 
 

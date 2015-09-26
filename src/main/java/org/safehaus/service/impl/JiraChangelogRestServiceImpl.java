@@ -5,8 +5,8 @@ import java.util.List;
 
 import javax.jws.WebService;
 
-import org.safehaus.analysis.JiraIssueChangelog;
 import org.safehaus.dao.Dao;
+import org.safehaus.dao.entities.jira.JiraIssueChangelog;
 import org.safehaus.model.Views;
 import org.safehaus.service.rest.JiraChangelogRestService;
 import org.slf4j.Logger;

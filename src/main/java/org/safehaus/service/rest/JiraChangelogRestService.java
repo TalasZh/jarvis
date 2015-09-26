@@ -8,7 +8,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
-import org.safehaus.analysis.JiraIssueChangelog;
+import org.safehaus.dao.entities.jira.JiraIssueChangelog;
 
 
 /**

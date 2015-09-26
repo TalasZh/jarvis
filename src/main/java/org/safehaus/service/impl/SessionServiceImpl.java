@@ -17,16 +17,16 @@ import org.safehaus.confluence.client.ConfluenceManager;
 import org.safehaus.confluence.client.ConfluenceManagerException;
 import org.safehaus.confluence.model.Page;
 import org.safehaus.confluence.model.Space;
+import org.safehaus.dao.entities.jira.JarvisIssue;
+import org.safehaus.dao.entities.jira.JarvisLink;
 import org.safehaus.exceptions.JiraClientException;
 import org.safehaus.jira.JiraManager;
-import org.safehaus.jira.model.JarvisIssue;
-import org.safehaus.jira.model.JarvisLink;
 import org.safehaus.model.Capture;
 import org.safehaus.model.Session;
 import org.safehaus.model.SessionNotFoundException;
 import org.safehaus.model.Views;
-import org.safehaus.service.SessionManager;
-import org.safehaus.service.SessionService;
+import org.safehaus.service.api.SessionManager;
+import org.safehaus.service.rest.SessionService;
 import org.safehaus.util.JarvisContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +48,7 @@ import com.google.common.collect.ImmutableList;
  * Created by tzhamakeev on 5/27/15.
  */
 @Service( "sessionServiceImpl" )
-@WebService( serviceName = "SessionService", endpointInterface = "org.safehaus.service.SessionService" )
+@WebService( serviceName = "SessionService", endpointInterface = "org.safehaus.service.rest.SessionService" )
 public class SessionServiceImpl implements SessionService
 {
 	private static Logger logger = LoggerFactory.getLogger( SessionServiceImpl.class );

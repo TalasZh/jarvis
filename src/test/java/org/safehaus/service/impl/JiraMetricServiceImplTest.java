@@ -3,6 +3,7 @@ package org.safehaus.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,9 +12,9 @@ import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.safehaus.analysis.JiraMetricIssue;
 import org.safehaus.dao.Dao;
-import org.safehaus.service.JiraMetricService;
+import org.safehaus.dao.entities.jira.JiraMetricIssue;
+import org.safehaus.service.api.JiraMetricService;
 
 
 @RunWith( MockitoJUnitRunner.class )

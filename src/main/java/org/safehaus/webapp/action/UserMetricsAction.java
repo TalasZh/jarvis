@@ -5,9 +5,9 @@ import java.util.List;
 
 import javax.ws.rs.core.Cookie;
 
+import org.safehaus.dao.entities.jira.JarvisMember;
 import org.safehaus.exceptions.JiraClientException;
 import org.safehaus.jira.JiraManager;
-import org.safehaus.jira.model.JarvisMember;
 import org.safehaus.model.JarvisContext;
 import org.safehaus.model.JarvisProject;
 import org.safehaus.util.JarvisContextHolder;

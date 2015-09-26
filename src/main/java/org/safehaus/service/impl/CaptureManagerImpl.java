@@ -4,7 +4,7 @@ package org.safehaus.service.impl;
 import org.safehaus.dao.CaptureDao;
 import org.safehaus.model.Capture;
 import org.safehaus.model.CaptureNotFoundException;
-import org.safehaus.service.CaptureManager;
+import org.safehaus.service.api.CaptureManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

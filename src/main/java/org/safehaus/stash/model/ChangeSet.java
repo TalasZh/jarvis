@@ -4,6 +4,9 @@ package org.safehaus.stash.model;
 import java.util.Map;
 import java.util.Set;
 
+import org.safehaus.dao.entities.stash.Commit;
+import org.safehaus.dao.entities.stash.Link;
+import org.safehaus.dao.entities.stash.MinimalCommit;
 import org.safehaus.stash.client.Page;
 
 import com.google.common.base.Objects;

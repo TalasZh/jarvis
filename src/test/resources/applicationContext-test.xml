@@ -25,7 +25,7 @@
     </bean>
 
     <bean id="target" class="org.springframework.aop.framework.ProxyFactoryBean">
-        <property name="proxyInterfaces" value="org.safehaus.service.UserManager"/>
+        <property name="proxyInterfaces" value="org.safehaus.service.api.UserManager" />
         <property name="interceptorNames">
             <list>
                 <idref bean="userSecurityInterceptor"/>

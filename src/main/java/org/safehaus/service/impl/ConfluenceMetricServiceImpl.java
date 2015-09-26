@@ -1,13 +1,14 @@
 package org.safehaus.service.impl;
 
-import org.safehaus.analysis.ConfluenceMetricInfo;
+
+import java.util.List;
+
 import org.safehaus.dao.Dao;
-import org.safehaus.service.ConfluenceMetricService;
+import org.safehaus.dao.entities.ConfluenceMetricInfo;
+import org.safehaus.service.api.ConfluenceMetricService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
 
 /**
  * Created by kisik on 17.09.2015.

@@ -3,11 +3,11 @@ package org.safehaus.jira;
 
 import java.util.List;
 
+import org.safehaus.dao.entities.jira.JarvisIssue;
+import org.safehaus.dao.entities.jira.JarvisIssueType;
+import org.safehaus.dao.entities.jira.JarvisLink;
+import org.safehaus.dao.entities.jira.JarvisMember;
 import org.safehaus.exceptions.JiraClientException;
-import org.safehaus.jira.model.JarvisIssue;
-import org.safehaus.jira.model.JarvisIssueType;
-import org.safehaus.jira.model.JarvisLink;
-import org.safehaus.jira.model.JarvisMember;
 import org.safehaus.model.JarvisProject;
 import org.safehaus.util.JarvisContextHolder;
 import org.slf4j.Logger;
@@ -33,14 +33,6 @@ import net.rcarz.jiraclient.greenhopper.SprintReport;
 public class JiraManagerImpl implements JiraManager
 {
     private static Logger logger = LoggerFactory.getLogger( JiraManagerImpl.class );
-
-
-    @Override
-    public List<JarvisMember> getProjectMemebers( final String projectId ) throws JiraClientException
-    {
-        return getJiraClient() == null ? null : getJiraClient().getProjectMemebers( projectId );
-    }
-
 
     @Override
     public List<JarvisIssue> getIssues( final String projectId ) throws JiraClientException
@@ -74,9 +66,7 @@ public class JiraManagerImpl implements JiraManager
     @Override
     public List<JarvisMember> getProjectMembers( String projectId ) throws JiraClientException
     {
-        List<JarvisMember> members = getJiraClient().getProjectMemebers( projectId );
-
-        return members;
+        return getJiraClient() == null ? null : getJiraClient().getProjectMembers( projectId );
     }
 
 

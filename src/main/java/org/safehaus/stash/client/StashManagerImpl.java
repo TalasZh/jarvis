@@ -4,13 +4,13 @@ package org.safehaus.stash.client;
 import java.util.Date;
 import java.util.Set;
 
+import org.safehaus.dao.entities.stash.Commit;
 import org.safehaus.stash.model.Activity;
 import org.safehaus.stash.model.Branch;
 import org.safehaus.stash.model.BuildStats;
 import org.safehaus.stash.model.BuildStatus;
 import org.safehaus.stash.model.Change;
 import org.safehaus.stash.model.ChangeSet;
-import org.safehaus.stash.model.Commit;
 import org.safehaus.stash.model.Event;
 import org.safehaus.stash.model.Group;
 import org.safehaus.stash.model.JiraIssue;

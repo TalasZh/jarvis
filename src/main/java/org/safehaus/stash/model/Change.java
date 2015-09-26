@@ -1,9 +1,11 @@
 package org.safehaus.stash.model;
 
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.safehaus.dao.entities.stash.Link;
+import org.safehaus.dao.entities.stash.Path;
 
 import com.google.common.base.Objects;
 

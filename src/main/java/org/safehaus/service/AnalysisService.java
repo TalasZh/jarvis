@@ -10,10 +10,7 @@ import java.util.Set;
 import java.util.prefs.BackingStoreException;
 
 import org.joda.time.DateTime;
-import org.safehaus.analysis.ChangeCompositeKey;
 import org.safehaus.analysis.ConfluenceMetricKafkaProducer;
-import org.safehaus.analysis.JiraIssueChangelog;
-import org.safehaus.analysis.JiraMetricIssue;
 import org.safehaus.analysis.JiraMetricIssueKafkaProducer;
 import org.safehaus.analysis.SparkDirectKafkaStreamSuite;
 import org.safehaus.analysis.StashMetricIssueKafkaProducer;
@@ -25,19 +22,22 @@ import org.safehaus.confluence.client.ConfluenceManager;
 import org.safehaus.confluence.client.ConfluenceManagerException;
 import org.safehaus.confluence.model.ConfluenceMetric;
 import org.safehaus.confluence.model.Space;
+import org.safehaus.dao.entities.jira.JiraMetricIssue;
+import org.safehaus.dao.entities.stash.Commit;
+import org.safehaus.dao.entities.stash.StashMetricIssue;
 import org.safehaus.exceptions.JiraClientException;
 import org.safehaus.jira.JiraRestClient;
 import org.safehaus.persistence.CassandraConnector;
+import org.safehaus.service.api.JiraMetricService;
+import org.safehaus.service.api.StashMetricService;
 import org.safehaus.sonar.client.SonarManager;
 import org.safehaus.sonar.client.SonarManagerException;
 import org.safehaus.stash.client.Page;
 import org.safehaus.stash.client.StashManager;
 import org.safehaus.stash.client.StashManagerException;
 import org.safehaus.stash.model.Change;
-import org.safehaus.stash.model.Commit;
 import org.safehaus.stash.model.Project;
 import org.safehaus.stash.model.Repository;
-import org.safehaus.stash.model.StashMetricIssue;
 import org.safehaus.util.DateSave;
 import org.sonar.wsclient.services.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,9 +48,6 @@ import org.apache.commons.logging.LogFactory;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
-import net.rcarz.jiraclient.ChangeLog;
-import net.rcarz.jiraclient.ChangeLogEntry;
-import net.rcarz.jiraclient.ChangeLogItem;
 import net.rcarz.jiraclient.Issue;
 
 
@@ -352,87 +349,10 @@ public class AnalysisService
         for ( final Issue issue : jiraIssues )
         {
             JiraMetricIssue issueToAdd = new JiraMetricIssue();
-            if ( issue.getKey() != null )
-            {
-                issueToAdd.setIssueKey( issue.getKey() );
-            }
-            if ( issue.getId() != null )
-            {
-                issueToAdd.setIssueId( Long.valueOf( issue.getId() ) );
-            }
-            if ( issue.getStatus() != null && issue.getStatus().getName() != null )
-            {
-                issueToAdd.setStatus( issue.getStatus().getName() );
-            }
-            if ( issue.getProject() != null && issue.getProject().getKey() != null )
-            {
-                issueToAdd.setProjectKey( issue.getProject().getKey() );
-            }
-            if ( issue.getReporter() != null && issue.getReporter().getName() != null )
-            {
-                issueToAdd.setReporterName( issue.getReporter().getName() );
-            }
-            if ( issue.getAssignee() != null && issue.getAssignee().getName() != null )
-            {
-                issueToAdd.setAssigneeName( issue.getAssignee().getName() );
-            }
-            if ( issue.getResolution() != null && issue.getResolution().getName() != null )
-            {
-                issueToAdd.setResolution( issue.getResolution().getName() );
-            }
-            if ( issue.getCreatedDate() != null )
-            {
-                issueToAdd.setCreationDate( issue.getCreatedDate() );
-            }
-            if ( issue.getUpdatedDate() != null )
-            {
-                issueToAdd.setUpdateDate( issue.getUpdatedDate() );
-            }
-            if ( issue.getDueDate() != null )
-            {
-                issueToAdd.setDueDate( issue.getDueDate() );
-            }
-            if ( issue.getPriority() != null && issue.getPriority().getId() != null )
-            {
-                issueToAdd.setPriority( Long.valueOf( issue.getPriority().getId() ) );
-            }
-            if ( issue.getTimeTracking() != null )
-            {
-                issueToAdd.setOriginalEstimateMinutes( issue.getTimeTracking().getOriginalEstimateSeconds() / 60 );
-            }
-            if ( issue.getTimeTracking() != null )
-            {
-                issueToAdd.setRemainingEstimateMinutes( issue.getTimeTracking().getRemainingEstimateSeconds() / 60 );
-            }
-            if ( issue.getTimeTracking() != null )
-            {
-                issueToAdd.setTimeSpentMinutes( issue.getTimeTracking().getTimeSpentSeconds() / 60 );
-            }
-            if ( issue.getChangeLog() != null )
-            {
-                final List<JiraIssueChangelog> changelogList = Lists.newArrayList();
-                final ChangeLog changeLog = issue.getChangeLog();
 
-                for ( final ChangeLogEntry changeLogEntry : changeLog.getEntries() )
-                {
-                    for ( final ChangeLogItem changeLogItem : changeLogEntry.getItems() )
-                    {
-                        ChangeCompositeKey changeCompositeKey =
-                                new ChangeCompositeKey( changeLogEntry.getCreated().getTime() );
-                        JiraIssueChangelog jiraIssueChangelog =
-                                new JiraIssueChangelog( changeCompositeKey, issue.getKey(),
-                                        Long.valueOf( issue.getId() ), changeLogEntry.getAuthor().getDisplayName(),
-                                        changeLogItem.getFieldType(), changeLogItem.getField(),
-                                        changeLogItem.getFromString(), changeLogItem.getToString(),
-                                        changeLogItem.getTo(), changeLogItem.getToString() );
-                        changelogList.add( jiraIssueChangelog );
-                    }
-                }
-                issueToAdd.setChangelogList( changelogList );
-            }
 
             jiraMetricIssues.add( issueToAdd );
-            jiraMetricService.insertJiraMetricIssue( issueToAdd );
+//            jiraMetricService.insertJiraMetricIssue( issueToAdd );
             if ( lastGatheredJira != null )
             {
                 if ( issueToAdd.getUpdateDate().after( lastGatheredJira ) )

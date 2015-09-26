@@ -1,11 +1,13 @@
 package org.safehaus.analysis;
 
+
+import java.util.Properties;
+
+import org.safehaus.dao.entities.stash.StashMetricIssue;
+
 import kafka.javaapi.producer.Producer;
 import kafka.producer.KeyedMessage;
 import kafka.producer.ProducerConfig;
-import org.safehaus.stash.model.StashMetricIssue;
-
-import java.util.Properties;
 
 /**
  * Created by neslihan on 27.07.2015.

@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
+import org.safehaus.dao.entities.jira.JarvisIssue;
+import org.safehaus.dao.entities.jira.JarvisMember;
 import org.safehaus.exceptions.JiraClientException;
-import org.safehaus.jira.model.JarvisIssue;
-import org.safehaus.jira.model.JarvisMember;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -283,7 +283,7 @@ public class JiraRestClientImpl implements JiraRestClient
 
 
     @Override
-    public List<JarvisMember> getProjectMemebers( final String projectId ) throws JiraClientException
+    public List<JarvisMember> getProjectMembers( final String projectId ) throws JiraClientException
     {
         final Set<JarvisMember> result = new HashSet<>();
 

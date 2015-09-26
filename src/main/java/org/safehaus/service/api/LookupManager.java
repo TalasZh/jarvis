@@ -1,0 +1,20 @@
+package org.safehaus.service.api;
+
+
+import java.util.List;
+
+import org.safehaus.model.LabelValue;
+
+/**
+ * Business Service Interface to talk to persistence layer and
+ * retrieve values for drop-down choice lists.
+ *
+ * @author <a href="mailto:matt@raibledesigns.com">Matt Raible</a>
+ */
+public interface LookupManager {
+    /**
+     * Retrieves all possible roles from persistence layer
+     * @return List of LabelValue objects
+     */
+    List<LabelValue> getAllRoles();
+}

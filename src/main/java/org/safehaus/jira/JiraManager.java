@@ -3,9 +3,9 @@ package org.safehaus.jira;
 
 import java.util.List;
 
+import org.safehaus.dao.entities.jira.JarvisIssue;
+import org.safehaus.dao.entities.jira.JarvisMember;
 import org.safehaus.exceptions.JiraClientException;
-import org.safehaus.jira.model.JarvisIssue;
-import org.safehaus.jira.model.JarvisMember;
 import org.safehaus.model.JarvisProject;
 
 import net.rcarz.jiraclient.JiraException;
@@ -27,8 +27,6 @@ public interface JiraManager
     String STORY_APPROVE_ACTION_NAME = "Approve";
     String STORY_REJECT_ACTION_NAME = "Reject";
     String ISSUE_REOPEN_ACTION_NAME = "Reopen";
-
-    List<JarvisMember> getProjectMemebers( String projectId ) throws JiraClientException;
 
     List<JarvisIssue> getIssues( String projectId ) throws JiraClientException;
 

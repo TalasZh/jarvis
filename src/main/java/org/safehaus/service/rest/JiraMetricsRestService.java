@@ -8,7 +8,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 
-import org.safehaus.analysis.JiraMetricIssue;
+import org.safehaus.dao.entities.jira.JiraMetricIssue;
 
 
 /**

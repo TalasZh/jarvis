@@ -1,12 +1,20 @@
 package org.safehaus.service.impl;
 
-import org.apache.commons.lang.StringUtils;
+
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.jws.WebService;
+
 import org.safehaus.dao.UserDao;
 import org.safehaus.model.User;
 import org.safehaus.service.MailEngine;
 import org.safehaus.service.UserExistsException;
-import org.safehaus.service.UserManager;
-import org.safehaus.service.UserService;
+import org.safehaus.service.api.PasswordTokenManager;
+import org.safehaus.service.api.UserManager;
+import org.safehaus.service.rest.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.mail.SimpleMailMessage;
@@ -14,11 +22,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.jws.WebService;
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -27,7 +31,7 @@ import java.util.Map;
  * @author <a href="mailto:matt@raibledesigns.com">Matt Raible</a>
  */
 @Service("userManager")
-@WebService(serviceName = "UserService", endpointInterface = "org.safehaus.service.UserService")
+@WebService(serviceName = "UserService", endpointInterface = "org.safehaus.service.rest.UserService" )
 public class UserManagerImpl extends GenericManagerImpl<User, Long> implements UserManager, UserService {
     private PasswordEncoder passwordEncoder;
     private UserDao userDao;

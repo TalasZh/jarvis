@@ -4,7 +4,7 @@ package org.safehaus.service.impl;
 import java.util.List;
 
 import org.safehaus.model.JarvisSpace;
-import org.safehaus.service.ConfluenceManager;
+import org.safehaus.service.api.ConfluenceManager;
 import org.springframework.stereotype.Service;
 
 

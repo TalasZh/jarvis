@@ -1,14 +1,15 @@
 package org.safehaus.service.impl;
 
-import org.safehaus.analysis.UserMetricInfo;
+
+import java.util.List;
+
 import org.safehaus.dao.Dao;
-import org.safehaus.service.UserMetricService;
+import org.safehaus.dao.entities.UserMetricInfo;
+import org.safehaus.service.api.UserMetricService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * Created by kisik on 17.09.2015.

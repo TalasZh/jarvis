@@ -5,10 +5,10 @@ import java.util.List;
 
 import javax.jws.WebService;
 
-import org.safehaus.analysis.JiraMetricIssue;
 import org.safehaus.dao.Dao;
+import org.safehaus.dao.entities.jira.JiraMetricIssue;
 import org.safehaus.model.Views;
-import org.safehaus.service.JiraMetricService;
+import org.safehaus.service.api.JiraMetricService;
 import org.safehaus.service.rest.JiraMetricsRestService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

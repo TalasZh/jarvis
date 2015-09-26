@@ -1,6 +1,8 @@
 package org.safehaus.stash.model;
 
 
+import org.safehaus.dao.entities.stash.StashUser;
+
 import com.google.common.base.Objects;
 
 

@@ -1,7 +1,16 @@
 package org.safehaus.analysis;
 
-import com.google.common.base.Optional;
-import kafka.serializer.StringDecoder;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+
+import org.safehaus.dao.entities.UserMetricInfo;
+import org.safehaus.dao.entities.jira.JiraMetricIssue;
+
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.Function2;
@@ -12,12 +21,13 @@ import org.apache.spark.streaming.api.java.JavaPairDStream;
 import org.apache.spark.streaming.api.java.JavaPairInputDStream;
 import org.apache.spark.streaming.api.java.JavaStreamingContext;
 import org.apache.spark.streaming.kafka.KafkaUtils;
+
+import com.google.common.base.Optional;
+
+import kafka.serializer.StringDecoder;
 import scala.Tuple2;
 import scala.Tuple3;
 import scala.Tuple4;
-
-import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static com.datastax.spark.connector.japi.CassandraJavaUtil.mapToRow;
 import static com.datastax.spark.connector.japi.CassandraStreamingJavaUtil.javaFunctions;

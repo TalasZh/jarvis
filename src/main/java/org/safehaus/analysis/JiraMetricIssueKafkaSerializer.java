@@ -1,9 +1,18 @@
 package org.safehaus.analysis;
 
-import kafka.serializer.Encoder;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
+import org.safehaus.dao.entities.jira.JiraMetricIssue;
+
 import kafka.serializer.Decoder;
+import kafka.serializer.Encoder;
 import kafka.utils.VerifiableProperties;
-import java.io.*;
+
 
 /**
  * Created by neslihan on 21.07.2015.

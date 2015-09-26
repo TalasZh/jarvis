@@ -1,13 +1,18 @@
 package org.safehaus.webapp.action;
 
-import com.opensymphony.xwork2.Action;
-import org.safehaus.model.User;
-import org.safehaus.service.UserManager;
+
 import org.junit.Test;
+import org.safehaus.model.User;
+import org.safehaus.service.api.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.subethamail.wiser.Wiser;
 
-import static org.junit.Assert.*;
+import com.opensymphony.xwork2.Action;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class PasswordHintActionTest extends BaseActionTestCase {
     @Autowired

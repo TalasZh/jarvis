@@ -1,11 +1,6 @@
 package org.safehaus.service.impl;
 
-import org.safehaus.Constants;
-import org.safehaus.dao.UserDao;
-import org.safehaus.model.Role;
-import org.safehaus.model.User;
-import org.safehaus.service.UserManager;
-import org.safehaus.service.UserSecurityAdvice;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -13,6 +8,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.safehaus.Constants;
+import org.safehaus.dao.UserDao;
+import org.safehaus.model.Role;
+import org.safehaus.model.User;
+import org.safehaus.service.UserSecurityAdvice;
+import org.safehaus.service.api.UserManager;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.security.access.AccessDeniedException;
@@ -23,7 +24,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)

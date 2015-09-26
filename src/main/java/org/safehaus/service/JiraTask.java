@@ -1,6 +1,9 @@
 package org.safehaus.service;
 
 
+import org.safehaus.service.rest.ProjectService;
+
+
 /**
  * Created by tzhamakeev on 5/14/15.
  */

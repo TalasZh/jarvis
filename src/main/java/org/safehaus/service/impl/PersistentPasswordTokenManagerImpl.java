@@ -3,16 +3,19 @@
  */
 package org.safehaus.service.impl;
 
+
 import java.util.Date;
 
 import javax.sql.DataSource;
 
+import org.safehaus.model.User;
+import org.safehaus.service.api.PasswordTokenManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang.time.DateUtils;
-import org.safehaus.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
  * Provides {@link PasswordTokenManager} functionality generating and persisting
@@ -62,7 +65,7 @@ public class PersistentPasswordTokenManagerImpl implements PasswordTokenManager 
     }
 
     /**
-     * @see org.safehaus.service.impl.PasswordTokenManager#generateRecoveryToken(org.safehaus.model.User)
+     * @see PasswordTokenManager#generateRecoveryToken(org.safehaus.model.User)
      */
     @Override
     public String generateRecoveryToken(final User user) {
@@ -73,7 +76,7 @@ public class PersistentPasswordTokenManagerImpl implements PasswordTokenManager 
     }
 
     /**
-     * @see org.safehaus.service.impl.PasswordTokenManager#isRecoveryTokenValid(org.safehaus.model.User, java.lang.String)
+     * @see PasswordTokenManager#isRecoveryTokenValid(org.safehaus.model.User, java.lang.String)
      */
     @Override
     public boolean isRecoveryTokenValid(final User user, final String token) {
@@ -82,7 +85,7 @@ public class PersistentPasswordTokenManagerImpl implements PasswordTokenManager 
 
     /**
      * 
-     * @see org.safehaus.service.impl.PasswordTokenManager#invalidateRecoveryToken(User, String)
+     * @see PasswordTokenManager#invalidateRecoveryToken(User, String)
      */
     @Override
     public void invalidateRecoveryToken(User user, String token) {

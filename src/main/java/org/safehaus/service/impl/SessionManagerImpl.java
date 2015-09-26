@@ -4,15 +4,15 @@ package org.safehaus.service.impl;
 import java.util.List;
 
 import org.safehaus.dao.SessionDao;
+import org.safehaus.dao.entities.jira.JarvisIssue;
 import org.safehaus.exceptions.JiraClientException;
+import org.safehaus.jira.JiraManager;
 import org.safehaus.model.Capture;
-import org.safehaus.jira.model.JarvisIssue;
 import org.safehaus.model.JarvisSessionException;
 import org.safehaus.model.Session;
 import org.safehaus.model.SessionNotFoundException;
 import org.safehaus.model.SessionStatus;
-import org.safehaus.jira.JiraManager;
-import org.safehaus.service.SessionManager;
+import org.safehaus.service.api.SessionManager;
 import org.safehaus.util.SecurityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

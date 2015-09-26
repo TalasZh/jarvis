@@ -3,9 +3,9 @@ package org.safehaus.jira;
 
 import java.util.List;
 
+import org.safehaus.dao.entities.jira.JarvisIssue;
+import org.safehaus.dao.entities.jira.JarvisMember;
 import org.safehaus.exceptions.JiraClientException;
-import org.safehaus.jira.model.JarvisIssue;
-import org.safehaus.jira.model.JarvisMember;
 
 import net.rcarz.jiraclient.Component;
 import net.rcarz.jiraclient.Issue;
@@ -49,7 +49,7 @@ public interface JiraRestClient
 
     Issue createIssue( JarvisIssue jarvisIssue ) throws JiraClientException;
 
-    public List<JarvisMember> getProjectMemebers( String projectId ) throws JiraClientException;
+    public List<JarvisMember> getProjectMembers( String projectId ) throws JiraClientException;
 
     List<Issue> getIssues( String projectId );
 

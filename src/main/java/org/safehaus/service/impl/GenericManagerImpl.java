@@ -1,14 +1,14 @@
 package org.safehaus.service.impl;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.safehaus.dao.GenericDao;
-import org.safehaus.service.GenericManager;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
+
+import org.safehaus.dao.GenericDao;
+import org.safehaus.service.api.GenericManager;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * This class serves as the Base class for all other Managers - namely to hold

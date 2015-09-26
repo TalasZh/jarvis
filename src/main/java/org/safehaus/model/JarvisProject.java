@@ -7,7 +7,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.safehaus.jira.model.JarvisMember;
+import org.safehaus.dao.entities.jira.JarvisMember;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 

@@ -3,6 +3,8 @@ package org.safehaus.stash.model;
 
 import java.util.Set;
 
+import org.safehaus.dao.entities.stash.Commit;
+
 import com.google.common.base.Objects;
 
 

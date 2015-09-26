@@ -1,11 +1,17 @@
 package org.safehaus.analysis;
 
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
+import org.safehaus.dao.entities.stash.StashMetricIssue;
+
 import kafka.serializer.Decoder;
 import kafka.serializer.Encoder;
 import kafka.utils.VerifiableProperties;
-import org.safehaus.stash.model.StashMetricIssue;
-
-import java.io.*;
 
 /**
  * Created by neslihan on 27.07.2015.

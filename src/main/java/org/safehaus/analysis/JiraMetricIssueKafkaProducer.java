@@ -1,9 +1,14 @@
 package org.safehaus.analysis;
 
+
+import java.util.Properties;
+
+import org.safehaus.dao.entities.jira.JiraMetricIssue;
+
 import kafka.javaapi.producer.Producer;
 import kafka.producer.KeyedMessage;
 import kafka.producer.ProducerConfig;
-import java.util.Properties;
+
 
 /**
  * Created by neslihan on 22.07.2015.

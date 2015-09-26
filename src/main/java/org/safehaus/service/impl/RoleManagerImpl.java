@@ -1,12 +1,13 @@
 package org.safehaus.service.impl;
 
-import org.safehaus.dao.RoleDao;
-import org.safehaus.model.Role;
-import org.safehaus.service.RoleManager;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import org.safehaus.dao.RoleDao;
+import org.safehaus.model.Role;
+import org.safehaus.service.api.RoleManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Implementation of RoleManager interface.
