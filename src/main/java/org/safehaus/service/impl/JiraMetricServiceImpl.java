@@ -69,8 +69,7 @@ public class JiraMetricServiceImpl implements JiraMetricService, JiraMetricsRest
     public List<JiraMetricIssue> findJiraMetricIssuesByAssigneeName( final String assigneeName )
     {
         String query =
-                "Select j from " + JiraMetricIssue.class.getSimpleName() + " j where j.assigneeName =:assignee_name"
-                        + assigneeName;
+                "Select j from " + JiraMetricIssue.class.getSimpleName() + " j where j.assigneeName =:assignee_name";
 
         log.info( "Finding JiraMetricIssues by assigneeName: {}", assigneeName );
 

@@ -95,7 +95,7 @@ public class AnalysisService
     DateSave ds;
     private Page<Project> stashProjects;
     private static boolean streamingStarted = false;
-    private static boolean indexCreated = false;
+    private static boolean indexCreated = true;
 
     private static boolean resetLastGatheredJira;
     private static boolean resetLastGatheredStash;
@@ -178,13 +178,20 @@ public class AnalysisService
         */
         if ( indexCreated == false )
         {
-            CassandraConnector cassandraConnector = CassandraConnector.getInstance();
-            cassandraConnector.connect( "localhost" );
-            cassandraConnector.executeStatement( "use jarvis;" );
-            cassandraConnector
-                    .executeStatement( "CREATE INDEX jmi_assignee_idx ON jira_metric_issue (\"assignee_name\");" );
-            cassandraConnector.close();
-            indexCreated = true;
+            try
+            {
+                CassandraConnector cassandraConnector = CassandraConnector.getInstance();
+                cassandraConnector.connect( "localhost" );
+                cassandraConnector.executeStatement( "use jarvis;" );
+                cassandraConnector
+                        .executeStatement( "CREATE INDEX jmi_assignee_idx ON jira_metric_issue (\"assignee_name\");" );
+                cassandraConnector.close();
+                indexCreated = true;
+            }
+            catch ( Exception ex )
+            {
+                log.error( ex );
+            }
         }
 
 
@@ -230,7 +237,7 @@ public class AnalysisService
         {
             try
             {
-                getStashMetricIssues( stashMan );
+                //                getStashMetricIssues( stashMan );
             }
             catch ( Exception ex )
             {
@@ -250,7 +257,7 @@ public class AnalysisService
         }
         if ( sonarManager != null )
         {
-            getSonarMetricIssues( sonarManager );
+            //            getSonarMetricIssues( sonarManager );
         }
 
         //Get Confluence data
@@ -266,7 +273,7 @@ public class AnalysisService
         }
         if ( confluenceManager != null )
         {
-            getConfluenceMetric( confluenceManager );
+            //            getConfluenceMetric( confluenceManager );
         }
 
         // Set time.
@@ -348,11 +355,11 @@ public class AnalysisService
         log.info( "Preparing issues for jarvis format..." );
         for ( final Issue issue : jiraIssues )
         {
-            JiraMetricIssue issueToAdd = new JiraMetricIssue();
+            JiraMetricIssue issueToAdd = new JiraMetricIssue( issue );
 
 
             jiraMetricIssues.add( issueToAdd );
-//            jiraMetricService.insertJiraMetricIssue( issueToAdd );
+            jiraMetricService.insertJiraMetricIssue( issueToAdd );
             if ( lastGatheredJira != null )
             {
                 if ( issueToAdd.getUpdateDate().after( lastGatheredJira ) )
@@ -367,9 +374,6 @@ public class AnalysisService
                     {
                         log.error( "Error while sending message", ex );
                     }
-
-                    //            log.info( issueToAdd.toString() );
-                    //            log.info( "--------------------------------------" );
                 }
                 else
                 {
@@ -388,19 +392,6 @@ public class AnalysisService
             log.info( "Performing batch insert" );
 
             jiraMetricService.batchInsert( Lists.newArrayList( jiraMetricIssues ) );
-
-
-            //            for ( final JiraMetricIssue jiraIssue : jiraMetricIssues )
-            //            {
-            //                try
-            //                {
-            //                    jiraMetricService.insertJiraMetricIssue( jiraIssue );
-            //                }
-            //                catch ( Exception ex )
-            //                {
-            //                    log.error( "Error saving jiraMetricIssue to database", ex );
-            //                }
-            //            }
         }
 
         // No problem gathering new issues from Jira, which means it should update the last gathering date as of now.
@@ -531,10 +522,12 @@ public class AnalysisService
                         if ( stashMetricIssue.getAuthorTimestamp() > lastGatheredStash.getTime() )
                         {
                             stashMetricIssues.add( stashMetricIssue );
-                            stashMetricService.insertStashMetricIssue( stashMetricIssue );
+
                         }
                     }
+                    stashMetricService.insertStashMetricIssue( stashMetricIssue );
                 }
+
                 //                stashMetricService.batchInsert( stashMetricIssues );
             }
         }

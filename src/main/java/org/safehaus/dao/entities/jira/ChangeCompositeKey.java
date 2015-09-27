@@ -17,17 +17,14 @@ public class ChangeCompositeKey implements Serializable
     //    ItemCompoundKey itemKey;
 
     @Column( name = "change_item_id" )
-    String changeItemId;
+    Long changeItemId;
 
     @Column( name = "created" )
     private Long created;
 
 
-    public ChangeCompositeKey( String changeItemId, final Long created )
+    public ChangeCompositeKey( final Long changeItemId, final Long created )
     {
-        //        this.itemKey = new ItemCompoundKey( issueId, issueKey, UUID.randomUUID().toString() );
-        //        this.issueId = issueId;
-        //        this.issueKey = issueKey;
         this.changeItemId = changeItemId;
         this.created = created;
     }
@@ -50,64 +47,16 @@ public class ChangeCompositeKey implements Serializable
     }
 
 
-    //    public String getIssueKey()
-    //    {
-    //        return itemKey.getIssueKey();
-    //    }
-    //
-    //
-    //    public void setIssueKey( final String issueKey )
-    //    {
-    //        this.itemKey.setIssueKey( issueKey );
-    //    }
-    //
-    //
-    //    public String getChangeItemId()
-    //    {
-    //        return itemKey.getChangeItemId();
-    //    }
-    //
-    //
-    //    public void setChangeItemId( final String changeItemId )
-    //    {
-    //        this.itemKey.setChangeItemId( changeItemId );
-    //    }
-
-
-    public String getChangeItemId()
+    public Long getChangeItemId()
     {
         return changeItemId;
     }
 
 
-    public void setChangeItemId( final String changeItemId )
+    public void setChangeItemId( final Long changeItemId )
     {
         this.changeItemId = changeItemId;
     }
-
-    //
-    //    public Long getIssueId()
-    //    {
-    //        return issueId;
-    //    }
-    //
-    //
-    //    public void setIssueId( final Long issueId )
-    //    {
-    //        this.issueId = issueId;
-    //    }
-    //
-    //
-    //    public String getIssueKey()
-    //    {
-    //        return issueKey;
-    //    }
-    //
-    //
-    //    public void setIssueKey( final String issueKey )
-    //    {
-    //        this.issueKey = issueKey;
-    //    }
 
 
     @Override
@@ -140,8 +89,6 @@ public class ChangeCompositeKey implements Serializable
     {
         return "ChangeCompositeKey{" +
                 "changeItemId='" + changeItemId + '\'' +
-                //                ", issueId=" + issueId +
-                //                ", issueKey='" + issueKey + '\'' +
                 ", created=" + created +
                 '}';
     }

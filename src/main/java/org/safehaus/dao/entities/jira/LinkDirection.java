@@ -3,8 +3,6 @@ package org.safehaus.dao.entities.jira;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 
 
 /**
@@ -13,16 +11,6 @@ import javax.persistence.Enumerated;
 @Embeddable
 public class LinkDirection
 {
-    public enum Direction
-    {
-        INWARD, OUTWARD
-    }
-
-
-    @Column( name = "link_direction" )
-    @Enumerated( EnumType.STRING )
-    private Direction direction;
-
     @Column( name = "issue_key" )
     private String issueKey;
 
@@ -35,23 +23,10 @@ public class LinkDirection
     }
 
 
-    public LinkDirection( final Direction direction, final String issueKey, final Long issueId )
+    public LinkDirection( final String issueKey, final Long issueId )
     {
-        this.direction = direction;
         this.issueKey = issueKey;
         this.issueId = issueId;
-    }
-
-
-    public Direction getDirection()
-    {
-        return direction;
-    }
-
-
-    public void setDirection( final Direction direction )
-    {
-        this.direction = direction;
     }
 
 
@@ -108,7 +83,6 @@ public class LinkDirection
     public String toString()
     {
         return "LinkDirection{" +
-                "direction='" + direction + '\'' +
                 ", issueKey='" + issueKey + '\'' +
                 ", issueId=" + issueId +
                 '}';

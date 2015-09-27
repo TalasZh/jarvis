@@ -241,12 +241,12 @@ public class JiraManagerImpl implements JiraManager
 
             Issue i = link.getInwardIssue();
             LinkDirection jarvisLinkDirection = new LinkDirection();
-            jarvisLinkDirection.setDirection( LinkDirection.Direction.INWARD );
+            JarvisLink.Direction direction = JarvisLink.Direction.INWARD;
 
             if ( i == null )
             {
                 i = link.getOutwardIssue();
-                jarvisLinkDirection.setDirection( LinkDirection.Direction.OUTWARD );
+                direction = JarvisLink.Direction.OUTWARD;
             }
 
             if ( i != null )
@@ -254,7 +254,8 @@ public class JiraManagerImpl implements JiraManager
                 jarvisLinkDirection.setIssueId( Long.valueOf( i.getId() ) );
                 jarvisLinkDirection.setIssueKey( i.getKey() );
                 links.add( new JarvisLink( Long.valueOf( i.getId() ), jarvisLinkType, jarvisLinkDirection,
-                        new JarvisIssueType( Long.valueOf( i.getIssueType().getId() ), i.getIssueType().getName() ) ) );
+                        new JarvisIssueType( Long.valueOf( i.getIssueType().getId() ), i.getIssueType().getName() ),
+                        direction ) );
             }
         }
 
@@ -288,12 +289,12 @@ public class JiraManagerImpl implements JiraManager
 
             Issue i = link.getInwardIssue();
             LinkDirection jarvisLinkDirection = new LinkDirection();
-            jarvisLinkDirection.setDirection( LinkDirection.Direction.INWARD );
+            JarvisLink.Direction direction = JarvisLink.Direction.INWARD;
 
             if ( i == null )
             {
                 i = link.getOutwardIssue();
-                jarvisLinkDirection.setDirection( LinkDirection.Direction.OUTWARD );
+                direction = JarvisLink.Direction.OUTWARD;
             }
 
             if ( i != null )
@@ -301,10 +302,9 @@ public class JiraManagerImpl implements JiraManager
                 jarvisLinkDirection.setIssueId( Long.valueOf( i.getId() ) );
                 jarvisLinkDirection.setIssueKey( i.getKey() );
                 links.add( new JarvisLink( Long.valueOf( i.getId() ), jarvisLinkType, jarvisLinkDirection,
-                        new JarvisIssueType( Long.valueOf( i.getIssueType().getId() ), i.getIssueType().getName() ) ) );
+                        new JarvisIssueType( Long.valueOf( i.getIssueType().getId() ), i.getIssueType().getName() ),
+                        direction ) );
             }
-
-
         }
 
         issue.getSelf();

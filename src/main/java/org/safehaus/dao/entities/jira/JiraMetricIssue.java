@@ -36,7 +36,7 @@ import net.rcarz.jiraclient.IssueType;
 @Access( AccessType.FIELD )
 @Table( name = "jira_metric_issue", schema = "jarvis@cassandra-pu" )
 @IndexCollection( columns = {
-        @Index( name = "issue_id" ), @Index( name = "issue_key" )
+        @Index( name = "issueId" ), @Index( name = "issueKey" ), @Index( name = "assigneeName" )
 } )
 public class JiraMetricIssue implements Serializable
 {
@@ -108,68 +108,41 @@ public class JiraMetricIssue implements Serializable
 
     public JiraMetricIssue( final Issue issue )
     {
-        if ( issue.getKey() != null )
-        {
-            this.issueKey = issue.getKey();
-        }
-        if ( issue.getSummary() != null )
-        {
-            this.summary = issue.getSummary();
-        }
-        if ( issue.getDescription() != null )
-        {
-            this.description = issue.getDescription();
-        }
-        if ( issue.getId() != null )
-        {
-            this.issueId = Long.valueOf( issue.getId() );
-        }
-        if ( issue.getStatus() != null && issue.getStatus().getName() != null )
+        this.issueKey = issue.getKey();
+        this.summary = issue.getSummary();
+        this.description = issue.getDescription();
+        this.issueId = Long.valueOf( issue.getId() );
+        if ( issue.getStatus() != null )
         {
             this.status = issue.getStatus().getName();
         }
-        if ( issue.getProject() != null && issue.getProject().getKey() != null )
+        if ( issue.getProject() != null )
         {
             this.projectKey = issue.getProject().getKey();
         }
-        if ( issue.getReporter() != null && issue.getReporter().getName() != null )
+        if ( issue.getReporter() != null )
         {
             this.reporterName = issue.getReporter().getName();
         }
-        if ( issue.getAssignee() != null && issue.getAssignee().getName() != null )
+        if ( issue.getAssignee() != null )
         {
             this.assigneeName = issue.getAssignee().getName();
         }
-        if ( issue.getResolution() != null && issue.getResolution().getName() != null )
+        if ( issue.getResolution() != null )
         {
             this.resolution = issue.getResolution().getName();
         }
-        if ( issue.getCreatedDate() != null )
-        {
-            this.creationDate = issue.getCreatedDate();
-        }
-        if ( issue.getUpdatedDate() != null )
-        {
-            this.updateDate = issue.getUpdatedDate();
-        }
-        if ( issue.getDueDate() != null )
-        {
-            this.dueDate = issue.getDueDate();
-        }
-        if ( issue.getPriority() != null && issue.getPriority().getId() != null )
+        this.creationDate = issue.getCreatedDate();
+        this.updateDate = issue.getUpdatedDate();
+        this.dueDate = issue.getDueDate();
+        if ( issue.getPriority() != null )
         {
             this.priority = Long.valueOf( issue.getPriority().getId() );
         }
         if ( issue.getTimeTracking() != null )
         {
             this.originalEstimateMinutes = issue.getTimeTracking().getOriginalEstimateSeconds() / 60;
-        }
-        if ( issue.getTimeTracking() != null )
-        {
             this.remainingEstimateMinutes = issue.getTimeTracking().getRemainingEstimateSeconds() / 60;
-        }
-        if ( issue.getTimeTracking() != null )
-        {
             this.timeSpentMinutes = issue.getTimeTracking().getTimeSpentSeconds() / 60;
         }
         if ( issue.getIssueType() != null )
@@ -187,12 +160,13 @@ public class JiraMetricIssue implements Serializable
                 for ( final ChangeLogItem changeLogItem : changeLogEntry.getItems() )
                 {
                     ChangeCompositeKey changeCompositeKey =
-                            new ChangeCompositeKey( changeLogItem.getId(), changeLogEntry.getCreated().getTime() );
+                            new ChangeCompositeKey( Long.valueOf( changeLogEntry.getId() ),
+                                    changeLogEntry.getCreated().getTime() );
                     JiraIssueChangelog jiraIssueChangelog =
                             new JiraIssueChangelog( changeCompositeKey, issue.getKey(), Long.valueOf( issue.getId() ),
                                     changeLogEntry.getAuthor().getDisplayName(), changeLogItem.getFieldType(),
                                     changeLogItem.getField(), changeLogItem.getFromString(),
-                                    changeLogItem.getToString(), changeLogItem.getTo(), changeLogItem.getToString() );
+                                    changeLogItem.getToString(), changeLogItem.getFrom(), changeLogItem.getTo() );
                     changelogList.add( jiraIssueChangelog );
                 }
             }
@@ -210,11 +184,12 @@ public class JiraMetricIssue implements Serializable
 
                 LinkDirection linkDirection = new LinkDirection();
                 Issue linkedIssue = issueLink.getInwardIssue();
-                linkDirection.setDirection( LinkDirection.Direction.INWARD );
+                JarvisLink.Direction direction = JarvisLink.Direction.INWARD;
+
                 if ( linkedIssue == null )
                 {
                     linkedIssue = issueLink.getOutwardIssue();
-                    linkDirection.setDirection( LinkDirection.Direction.OUTWARD );
+                    direction = JarvisLink.Direction.OUTWARD;
                 }
 
                 linkDirection.setIssueId( Long.valueOf( linkedIssue.getId() ) );
@@ -225,8 +200,12 @@ public class JiraMetricIssue implements Serializable
                 {
                     JarvisIssueType jarvisIssueType =
                             new JarvisIssueType( Long.valueOf( linkedIssueType.getId() ), linkedIssueType.getName() );
-                    jarvisIssueLinks.add( new JarvisLink( Long.valueOf( issueLink.getId() ), linkType, linkDirection,
-                            jarvisIssueType ) );
+
+                    JarvisLink jarvisLink =
+                            new JarvisLink( Long.valueOf( issueLink.getId() ), linkType, linkDirection, jarvisIssueType,
+                                    direction );
+
+                    jarvisIssueLinks.add( jarvisLink );
                 }
             }
             this.issueLinks = jarvisIssueLinks;
@@ -414,6 +393,54 @@ public class JiraMetricIssue implements Serializable
     }
 
 
+    public String getSummary()
+    {
+        return summary;
+    }
+
+
+    public void setSummary( final String summary )
+    {
+        this.summary = summary;
+    }
+
+
+    public String getDescription()
+    {
+        return description;
+    }
+
+
+    public void setDescription( final String description )
+    {
+        this.description = description;
+    }
+
+
+    public JarvisIssueType getType()
+    {
+        return type;
+    }
+
+
+    public void setType( final JarvisIssueType type )
+    {
+        this.type = type;
+    }
+
+
+    public List<JarvisLink> getIssueLinks()
+    {
+        return issueLinks;
+    }
+
+
+    public void setIssueLinks( final List<JarvisLink> issueLinks )
+    {
+        this.issueLinks = issueLinks;
+    }
+
+
     @Override
     public String toString()
     {
@@ -450,13 +477,13 @@ public class JiraMetricIssue implements Serializable
 
         final JiraMetricIssue that = ( JiraMetricIssue ) o;
 
-        return issueId.equals( that.issueId );
+        return !( issueId != null ? !issueId.equals( that.issueId ) : that.issueId != null );
     }
 
 
     @Override
     public int hashCode()
     {
-        return issueId.hashCode();
+        return issueId != null ? issueId.hashCode() : 0;
     }
 }
