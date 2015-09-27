@@ -26,4 +26,14 @@ public abstract class Views
 
 
     public interface JarvisSessionLong extends JarvisSessionShort {}
+
+
+    public interface TimelineShort
+    {
+    }
+
+
+    public interface TimelineLong extends TimelineShort
+    {
+    }
 }

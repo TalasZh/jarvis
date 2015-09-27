@@ -66,20 +66,20 @@
 
     <bean id="cronTrigger2" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="analysisJob" />
-        <property name="cronExpression" value="* 30 * * * ?" />
+        <property name="cronExpression" value="* 45 * * * ?" />
     </bean>
 
-    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
-        <property name="jobDetails">
-            <list>
-                <ref bean="analysisJob" />
-            </list>
-        </property>
-        <!---->
-        <property name="triggers">
-            <list>
-                <ref bean="cronTrigger2" />
-            </list>
-        </property>
-    </bean>
+    <!--<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">-->
+    <!--<property name="jobDetails">-->
+    <!--<list>-->
+    <!--<ref bean="analysisJob" />-->
+    <!--</list>-->
+    <!--</property>-->
+    <!--&lt;!&ndash;&ndash;&gt;-->
+    <!--<property name="triggers">-->
+    <!--<list>-->
+    <!--<ref bean="cronTrigger2" />-->
+    <!--</list>-->
+    <!--</property>-->
+    <!--</bean>-->
 </beans>

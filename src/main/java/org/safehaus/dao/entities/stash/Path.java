@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -23,6 +25,7 @@ import com.impetus.kundera.index.IndexCollection;
  * Created by neslihan on 07.07.2015.
  */
 @Entity
+@Access( AccessType.FIELD )
 @Table( name = "stash_path", schema = "jarvis@cassandra-pu" )
 @IndexCollection( columns = {
         @com.impetus.kundera.index.Index( name = "id" ), @com.impetus.kundera.index.Index( name = "name" )
@@ -50,6 +53,11 @@ public class Path implements Serializable
 
     @Column
     private String toString;
+
+
+    public Path()
+    {
+    }
 
 
     public List<String> getComponents()

@@ -3,11 +3,12 @@ package org.safehaus.dao.entities.stash;
 
 import java.io.Serializable;
 
-import javax.persistence.AttributeOverride;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -42,13 +43,12 @@ public class StashMetricIssue implements Serializable
     @Column( name = "stash_metric_id" )
     private String id;
 
-    @OneToOne( targetEntity = Path.class )
-    @AttributeOverride( name = "id", column = @Column( name = "path" ) )
+    @Column( name = "path" )
+    @OneToOne( targetEntity = Path.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL )
     private Path path;
 
-    @OneToOne( targetEntity = Path.class )
-    @AttributeOverride( name = "id", column = @Column( name = "path" ) )
     @Column( name = "src_path" )
+    @OneToOne( targetEntity = Path.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL )
     private Path srcPath;
 
     @Column( name = "percent_unchanged" )
@@ -62,7 +62,7 @@ public class StashMetricIssue implements Serializable
     @Column( name = "node_type" )
     private Change.NodeType nodeType;
 
-    @OneToOne( targetEntity = StashUser.class )
+    @OneToOne( targetEntity = StashUser.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL )
     @JoinColumn( name = "associated_user_id" )
     private StashUser author;
 

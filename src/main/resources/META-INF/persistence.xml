@@ -47,7 +47,7 @@
       <property name="kundera.dialect" value="cassandra" />
 
       <!-- TODO Don't forget to change to "update"  after tables schema created in production-->
-      <property name="kundera.ddl.auto.prepare" value="create" />
+      <!--<property name="kundera.ddl.auto.prepare" value="create" />-->
 
       <property name="kundera.client" value="thrift" />
       <property name="kundera.batch.size" value="5000" />

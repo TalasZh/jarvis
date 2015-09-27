@@ -69,13 +69,13 @@ public class JiraMetricIssue implements Serializable
     private String resolution;
 
     @Column( name = "creation_date" )
-    private Date creationDate;
+    private Long creationDate;
 
     @Column( name = "update_date" )
-    private Date updateDate;
+    private Long updateDate;
 
     @Column( name = "due_date" )
-    private Date dueDate;
+    private Long dueDate;
 
     @Column( name = "priority" )
     private Long priority;
@@ -132,9 +132,9 @@ public class JiraMetricIssue implements Serializable
         {
             this.resolution = issue.getResolution().getName();
         }
-        this.creationDate = issue.getCreatedDate();
-        this.updateDate = issue.getUpdatedDate();
-        this.dueDate = issue.getDueDate();
+        this.creationDate = issue.getCreatedDate() != null ? issue.getCreatedDate().getTime() : 0;
+        this.updateDate = issue.getUpdatedDate() != null ? issue.getUpdatedDate().getTime() : 0;
+        this.dueDate = issue.getDueDate() != null ? issue.getDueDate().getTime() : 0;
         if ( issue.getPriority() != null )
         {
             this.priority = Long.valueOf( issue.getPriority().getId() );
@@ -299,37 +299,37 @@ public class JiraMetricIssue implements Serializable
 
     public Date getCreationDate()
     {
-        return creationDate;
+        return new Date( creationDate );
     }
 
 
     public void setCreationDate( Date creationDate )
     {
-        this.creationDate = creationDate;
+        this.creationDate = creationDate.getTime();
     }
 
 
     public Date getUpdateDate()
     {
-        return updateDate;
+        return new Date( updateDate );
     }
 
 
     public void setUpdateDate( Date updateDate )
     {
-        this.updateDate = updateDate;
+        this.updateDate = updateDate.getTime();
     }
 
 
     public Date getDueDate()
     {
-        return dueDate;
+        return new Date( dueDate );
     }
 
 
     public void setDueDate( Date dueDate )
     {
-        this.dueDate = dueDate;
+        this.dueDate = dueDate.getTime();
     }
 
 

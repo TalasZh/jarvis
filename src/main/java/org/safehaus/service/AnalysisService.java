@@ -95,7 +95,7 @@ public class AnalysisService
     DateSave ds;
     private Page<Project> stashProjects;
     private static boolean streamingStarted = false;
-    private static boolean indexCreated = true;
+    private static boolean indexCreated = false;
 
     private static boolean resetLastGatheredJira;
     private static boolean resetLastGatheredStash;
@@ -237,7 +237,7 @@ public class AnalysisService
         {
             try
             {
-                //                getStashMetricIssues( stashMan );
+                getStashMetricIssues( stashMan );
             }
             catch ( Exception ex )
             {
@@ -257,7 +257,7 @@ public class AnalysisService
         }
         if ( sonarManager != null )
         {
-            //            getSonarMetricIssues( sonarManager );
+            getSonarMetricIssues( sonarManager );
         }
 
         //Get Confluence data
@@ -273,7 +273,7 @@ public class AnalysisService
         }
         if ( confluenceManager != null )
         {
-            //            getConfluenceMetric( confluenceManager );
+            getConfluenceMetric( confluenceManager );
         }
 
         // Set time.
@@ -317,7 +317,6 @@ public class AnalysisService
         try
         {
             List<net.rcarz.jiraclient.Project> jiraProjects = jiraCl.getAllProjects();
-            log.info( "After getAllProjects" );
             log.info( "Printing all projects" );
             for ( net.rcarz.jiraclient.Project project : jiraProjects )
             {
@@ -522,7 +521,6 @@ public class AnalysisService
                         if ( stashMetricIssue.getAuthorTimestamp() > lastGatheredStash.getTime() )
                         {
                             stashMetricIssues.add( stashMetricIssue );
-
                         }
                     }
                     stashMetricService.insertStashMetricIssue( stashMetricIssue );

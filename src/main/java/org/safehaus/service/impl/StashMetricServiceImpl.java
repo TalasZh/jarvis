@@ -63,10 +63,11 @@ public class StashMetricServiceImpl implements StashMetricService, StashMetricsR
     public List<StashMetricIssue> getStashMetricsByProjectKey( String projectKey )
     {
         String query =
-                "Select s from " + StashMetricIssue.class.getSimpleName() + " s where s.projectKey = " + projectKey;
+                "Select s from " + StashMetricIssue.class.getSimpleName() + " s where s.projectKey = :projectKey";
 
         log.info( "Finding StashMetricIssue by projectName : {}", projectKey );
-        List<StashMetricIssue> stashMetricIssues = ( List<StashMetricIssue> ) dao.findByQuery( query );
+        List<StashMetricIssue> stashMetricIssues =
+                ( List<StashMetricIssue> ) dao.findByQuery( query, "projectKey", projectKey );
         return stashMetricIssues;
     }
 
