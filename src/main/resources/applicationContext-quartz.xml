@@ -69,17 +69,17 @@
         <property name="cronExpression" value="* 4 * * * ?" />
     </bean>
 
-    <!--<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">-->
-    <!--<property name="jobDetails">-->
-    <!--<list>-->
-    <!--<ref bean="analysisJob" />-->
-    <!--</list>-->
-    <!--</property>-->
-    <!--&lt;!&ndash;&ndash;&gt;-->
-    <!--<property name="triggers">-->
-    <!--<list>-->
-    <!--<ref bean="cronTrigger2" />-->
-    <!--</list>-->
-    <!--</property>-->
-    <!--</bean>-->
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="jobDetails">
+            <list>
+                <ref bean="analysisJob" />
+            </list>
+        </property>
+        <!---->
+        <property name="triggers">
+            <list>
+                <ref bean="cronTrigger2" />
+            </list>
+        </property>
+    </bean>
 </beans>
