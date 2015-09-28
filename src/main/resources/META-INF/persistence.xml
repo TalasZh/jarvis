@@ -26,6 +26,7 @@
     <class>org.safehaus.dao.entities.jira.JarvisMember</class>
     <class>org.safehaus.dao.entities.jira.JarvisIssue</class>
     <class>org.safehaus.dao.entities.jira.JiraMetricIssue</class>
+    <class>org.safehaus.dao.entities.jira.JiraProject</class>
     <class>org.safehaus.dao.entities.jira.JiraIssueChangelog</class>
     <class>org.safehaus.dao.entities.stash.Link</class>
     <class>org.safehaus.dao.entities.stash.HibernateLinkMap</class>

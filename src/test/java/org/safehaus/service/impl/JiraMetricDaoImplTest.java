@@ -14,17 +14,17 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.safehaus.dao.Dao;
 import org.safehaus.dao.entities.jira.JiraMetricIssue;
-import org.safehaus.service.api.JiraMetricService;
+import org.safehaus.service.api.JiraMetricDao;
 
 
 @RunWith( MockitoJUnitRunner.class )
-public class JiraMetricServiceImplTest
+public class JiraMetricDaoImplTest
 {
 	@Mock
 	private Dao dao;
 
 	@InjectMocks
-	private JiraMetricService jiraMetricService = new JiraMetricServiceImpl();
+	private JiraMetricDao jiraMetricDao = new JiraMetricDaoImpl();
 
 
 	@Test
@@ -33,7 +33,7 @@ public class JiraMetricServiceImplTest
 		JiraMetricIssue jiraMetricIssue = new JiraMetricIssue();
 		jiraMetricIssue.setIssueId( -2L );
 
-		jiraMetricService.insertJiraMetricIssue( jiraMetricIssue );
+		jiraMetricDao.insertJiraMetricIssue( jiraMetricIssue );
 
 		Mockito.verify( dao ).insert( jiraMetricIssue );
 	}
@@ -48,7 +48,7 @@ public class JiraMetricServiceImplTest
 
 		Mockito.when( dao.findById( JiraMetricIssue.class, -2L ) ).thenReturn( jiraMetricIssue );
 
-		JiraMetricIssue newIssue = jiraMetricService.findJiraMetricIssueById( -2L );
+		JiraMetricIssue newIssue = jiraMetricDao.findJiraMetricIssueById( -2L );
 
 		Assert.assertNotNull( newIssue );
 		Assert.assertEquals( (long) newIssue.getIssueId(), -2L );
@@ -66,7 +66,7 @@ public class JiraMetricServiceImplTest
 
 		Mockito.doReturn( issueList ).when( dao ).findByQuery( Matchers.anyString() );
 
-		List<JiraMetricIssue> newList = jiraMetricService.findJiraMetricIssuesByAssigneeName( "ttest" );
+		List<JiraMetricIssue> newList = jiraMetricDao.findJiraMetricIssuesByAssigneeName( "ttest" );
 
 		Assert.assertNotNull( newList );
 		Assert.assertTrue( newList.size() > 0 );
@@ -81,7 +81,7 @@ public class JiraMetricServiceImplTest
 	{
 		JiraMetricIssue issue = new JiraMetricIssue();
 		issue.setIssueId( -2L );
-		jiraMetricService.updateJiraMetricIssue( issue );
+		jiraMetricDao.updateJiraMetricIssue( issue );
 
 		Mockito.verify( dao ).merge( Matchers.any() );
 	}
@@ -90,7 +90,7 @@ public class JiraMetricServiceImplTest
 	@Test( expected = IllegalArgumentException.class )
 	public void testUpdateJiraMetricIssueException()
 	{
-		jiraMetricService.updateJiraMetricIssue( null );
+		jiraMetricDao.updateJiraMetricIssue( null );
 	}
 
 
@@ -100,7 +100,7 @@ public class JiraMetricServiceImplTest
 		JiraMetricIssue issue = new JiraMetricIssue();
 		issue.setIssueId( -2L );
 
-		jiraMetricService.deleteJiraMetricIssue( issue );
+		jiraMetricDao.deleteJiraMetricIssue( issue );
 
 		Mockito.verify( dao ).remove( issue );
 	}
@@ -109,7 +109,7 @@ public class JiraMetricServiceImplTest
 	@Test( expected = IllegalArgumentException.class )
 	public void testDeleteJiraMetricIssueException()
 	{
-		jiraMetricService.deleteJiraMetricIssue( new JiraMetricIssue() );
+		jiraMetricDao.deleteJiraMetricIssue( new JiraMetricIssue() );
 	}
 
 }

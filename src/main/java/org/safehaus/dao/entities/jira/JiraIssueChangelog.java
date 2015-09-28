@@ -9,12 +9,18 @@ import javax.persistence.Entity;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
+import com.impetus.kundera.index.Index;
+import com.impetus.kundera.index.IndexCollection;
+
 
 /**
  * Created by talas on 9/8/15.
  */
 @Entity
 @Table( name = "jira_issue_changelog", schema = "jarvis@cassandra-pu" )
+@IndexCollection( columns = {
+        @Index( name = "issueId" ), @Index( name = "issueKey" )
+} )
 public class JiraIssueChangelog implements Serializable
 {
     @EmbeddedId

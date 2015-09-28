@@ -1,11 +1,12 @@
 package org.safehaus.timeline;
 
 
+import java.util.Date;
 import java.util.List;
 
-import org.codehaus.jackson.map.annotate.JsonView;
 import org.safehaus.model.Views;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.collect.Lists;
 
 
@@ -18,7 +19,7 @@ public class StructuredIssue
     private String key;
 
     @JsonView( Views.TimelineShort.class )
-    private String id;
+    private Long id;
 
     @JsonView( Views.TimelineShort.class )
     private String issueType;
@@ -36,15 +37,14 @@ public class StructuredIssue
     private String assignee;
 
     @JsonView( Views.TimelineShort.class )
-    private String updated;
+    private Date updated;
 
     @JsonView( Views.TimelineLong.class )
     private List<StructuredIssue> issues = Lists.newArrayList();
 
 
-    public StructuredIssue( final String key, final String id, final String issueType, final String summary,
-                            final String reporter, final String creator, final String assignee, final String updated,
-                            final List<StructuredIssue> issues )
+    public StructuredIssue( final String key, final Long id, final String issueType, final String summary,
+                            final String reporter, final String creator, final String assignee, final Date updated )
     {
         this.key = key;
         this.id = id;
@@ -54,7 +54,18 @@ public class StructuredIssue
         this.creator = creator;
         this.assignee = assignee;
         this.updated = updated;
-        this.issues = issues;
+    }
+
+
+    public List<StructuredIssue> getIssues()
+    {
+        return issues;
+    }
+
+
+    public String getKey()
+    {
+        return key;
     }
 
 

@@ -43,11 +43,11 @@ public class StashMetricIssue implements Serializable
     @Column( name = "stash_metric_id" )
     private String id;
 
-    @Column( name = "path" )
+    //    @Column( name = "path" )
     @OneToOne( targetEntity = Path.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL )
     private Path path;
 
-    @Column( name = "src_path" )
+    //    @Column( name = "src_path" )
     @OneToOne( targetEntity = Path.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL )
     private Path srcPath;
 

@@ -56,7 +56,7 @@
     <property name="dao" ref="daoService" />
   </bean>
 
-  <bean id="jiraMetricService" class="org.safehaus.service.impl.JiraMetricServiceImpl"
+  <bean id="jiraMetricService" class="org.safehaus.service.impl.JiraMetricDaoImpl"
         scope="singleton">
     <property name="dao" ref="daoService" />
   </bean>

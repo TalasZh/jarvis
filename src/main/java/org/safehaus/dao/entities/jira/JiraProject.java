@@ -3,27 +3,30 @@ package org.safehaus.dao.entities.jira;
 
 import java.io.Serializable;
 
-import javax.persistence.Access;
-import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.impetus.kundera.index.Index;
+import com.impetus.kundera.index.IndexCollection;
 
 
 /**
  * Created by talas on 9/27/15.
  */
 @Entity
-@Access( AccessType.FIELD )
 @Table( name = "jira_project", schema = "jarvis@cassandra-pu" )
+@IndexCollection( columns = {
+        @Index( name = "projectId" ), @Index( name = "key" )
+} )
 public class JiraProject implements Serializable
 {
     @Id
     @Column( name = "project_id" )
-    private Long id;
+    private String projectId;
 
-    @Column( name = "key" )
+    @Column( name = "project_key" )
     private String key;
 
     @Column( name = "assignee_type" )
@@ -36,13 +39,78 @@ public class JiraProject implements Serializable
     private String name;
 
 
-    public JiraProject( final Long id, final String key, final String assigneeType, final String description,
+    public JiraProject()
+    {
+    }
+
+
+    public JiraProject( final String projectId, final String key, final String assigneeType, final String description,
                         final String name )
     {
-        this.id = id;
+        this.projectId = projectId;
         this.key = key;
         this.assigneeType = assigneeType;
         this.description = description;
+        this.name = name;
+    }
+
+
+    public String getProjectId()
+    {
+        return projectId;
+    }
+
+
+    public void setProjectId( final String projectId )
+    {
+        this.projectId = projectId;
+    }
+
+
+    public String getKey()
+    {
+        return key;
+    }
+
+
+    public void setKey( final String key )
+    {
+        this.key = key;
+    }
+
+
+    public String getAssigneeType()
+    {
+        return assigneeType;
+    }
+
+
+    public void setAssigneeType( final String assigneeType )
+    {
+        this.assigneeType = assigneeType;
+    }
+
+
+    public String getDescription()
+    {
+        return description;
+    }
+
+
+    public void setDescription( final String description )
+    {
+        this.description = description;
+    }
+
+
+    public String getName()
+    {
+        return name;
+    }
+
+
+    public void setName( final String name )
+    {
         this.name = name;
     }
 
@@ -61,14 +129,14 @@ public class JiraProject implements Serializable
 
         final JiraProject that = ( JiraProject ) o;
 
-        return !( id != null ? !id.equals( that.id ) : that.id != null );
+        return !( projectId != null ? !projectId.equals( that.projectId ) : that.projectId != null );
     }
 
 
     @Override
     public int hashCode()
     {
-        return id != null ? id.hashCode() : 0;
+        return projectId != null ? projectId.hashCode() : 0;
     }
 
 
@@ -76,7 +144,7 @@ public class JiraProject implements Serializable
     public String toString()
     {
         return "JiraProject{" +
-                "id=" + id +
+                "projectId='" + projectId + '\'' +
                 ", key='" + key + '\'' +
                 ", assigneeType='" + assigneeType + '\'' +
                 ", description='" + description + '\'' +

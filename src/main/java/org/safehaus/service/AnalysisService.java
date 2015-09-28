@@ -23,12 +23,13 @@ import org.safehaus.confluence.client.ConfluenceManagerException;
 import org.safehaus.confluence.model.ConfluenceMetric;
 import org.safehaus.confluence.model.Space;
 import org.safehaus.dao.entities.jira.JiraMetricIssue;
+import org.safehaus.dao.entities.jira.JiraProject;
 import org.safehaus.dao.entities.stash.Commit;
 import org.safehaus.dao.entities.stash.StashMetricIssue;
 import org.safehaus.exceptions.JiraClientException;
 import org.safehaus.jira.JiraRestClient;
 import org.safehaus.persistence.CassandraConnector;
-import org.safehaus.service.api.JiraMetricService;
+import org.safehaus.service.api.JiraMetricDao;
 import org.safehaus.service.api.StashMetricService;
 import org.safehaus.sonar.client.SonarManager;
 import org.safehaus.sonar.client.SonarManagerException;
@@ -79,7 +80,7 @@ public class AnalysisService
     @Autowired
     private ConfluenceConnector confluenceConnector;
     @Autowired
-    private JiraMetricService jiraMetricService;
+    private JiraMetricDao jiraMetricDao;
 
     @Autowired
     private StashMetricService stashMetricService;
@@ -321,6 +322,9 @@ public class AnalysisService
             for ( net.rcarz.jiraclient.Project project : jiraProjects )
             {
                 projectKeys.add( project.getKey() );
+                JiraProject jiraProject = new JiraProject( project.getId(), project.getKey(), project.getAssigneeType(),
+                        project.getDescription(), project.getName() );
+                jiraMetricDao.saveProject( jiraProject );
             }
         }
         catch ( Exception e )
@@ -358,7 +362,7 @@ public class AnalysisService
 
 
             jiraMetricIssues.add( issueToAdd );
-            jiraMetricService.insertJiraMetricIssue( issueToAdd );
+            jiraMetricDao.insertJiraMetricIssue( issueToAdd );
             if ( lastGatheredJira != null )
             {
                 if ( issueToAdd.getUpdateDate().after( lastGatheredJira ) )
@@ -384,13 +388,13 @@ public class AnalysisService
         kafkaProducer.close();
 
         log.info( "Getting jira metric service" );
-        //        JiraMetricService jiraMetricService = JiraMetricUtil.getService();
-        if ( jiraMetricService != null )
+        //        JiraMetricDao jiraMetricDao = JiraMetricUtil.getService();
+        if ( jiraMetricDao != null )
         {
             log.info( "Saving issues formatted for jarvis..." );
             log.info( "Performing batch insert" );
 
-            jiraMetricService.batchInsert( Lists.newArrayList( jiraMetricIssues ) );
+            jiraMetricDao.batchInsert( Lists.newArrayList( jiraMetricIssues ) );
         }
 
         // No problem gathering new issues from Jira, which means it should update the last gathering date as of now.

@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.safehaus.Constants;
 import org.safehaus.dao.Dao;
@@ -39,9 +40,30 @@ public class DaoServiceImpl implements Dao
 
 
     @Override
-    public EntityManager getEntityManager()
+    public <T> List<T> getAll( final Class<T> entityClass )
     {
-        return null;
+        List<T> result = Lists.newArrayList();
+
+        EntityManager em = emf.createEntityManager();
+        try
+        {
+            em.getTransaction().begin();
+            TypedQuery<T> query =
+                    em.createQuery( String.format( "select obj from %s obj", entityClass.getSimpleName() ),
+                            entityClass );
+            result = query.getResultList();
+            em.getTransaction().commit();
+        }
+        catch ( Exception ex )
+        {
+            LOGGER.error( "Error getting all records", ex );
+            if ( em.getTransaction().isActive() )
+            {
+                em.getTransaction().rollback();
+            }
+        }
+
+        return result;
     }
 
 

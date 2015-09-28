@@ -36,7 +36,8 @@ import net.rcarz.jiraclient.IssueType;
 @Access( AccessType.FIELD )
 @Table( name = "jira_metric_issue", schema = "jarvis@cassandra-pu" )
 @IndexCollection( columns = {
-        @Index( name = "issueId" ), @Index( name = "issueKey" ), @Index( name = "assigneeName" )
+        @Index( name = "issueId" ), @Index( name = "issueKey" ), @Index( name = "assigneeName" ),
+        @Index( name = "projectKey" )
 } )
 public class JiraMetricIssue implements Serializable
 {

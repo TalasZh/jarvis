@@ -7,29 +7,27 @@ import javax.jws.WebService;
 
 import org.safehaus.dao.Dao;
 import org.safehaus.dao.entities.jira.JiraMetricIssue;
-import org.safehaus.model.Views;
-import org.safehaus.service.api.JiraMetricService;
+import org.safehaus.dao.entities.jira.JiraProject;
+import org.safehaus.service.api.JiraMetricDao;
 import org.safehaus.service.rest.JiraMetricsRestService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.annotation.JsonView;
 
-
-@Service( "jiraMetricsManager" )
-@WebService( serviceName = "JiraMetricServiceImpl",
+@Service( "jiraMetricDao" )
+@WebService( serviceName = "JiraMetricDaoImpl",
         endpointInterface = "org.safehaus.service.rest.JiraMetricsRestService" )
-public class JiraMetricServiceImpl implements JiraMetricService, JiraMetricsRestService
+public class JiraMetricDaoImpl implements JiraMetricDao, JiraMetricsRestService
 {
-    private static final Logger log = LoggerFactory.getLogger( JiraMetricServiceImpl.class );
+    private static final Logger log = LoggerFactory.getLogger( JiraMetricDaoImpl.class );
 
     @Autowired
     private Dao dao;
 
 
-    public JiraMetricServiceImpl()
+    public JiraMetricDaoImpl()
     {
     }
 
@@ -49,8 +47,8 @@ public class JiraMetricServiceImpl implements JiraMetricService, JiraMetricsRest
         return dao.findById( JiraMetricIssue.class, id );
     }
 
+
     @Override
-    @JsonView( Views.CompleteView.class )
     public JiraMetricIssue findJiraMetricIssueById( final String id )
     {
         log.info( "Finding JiraMetricIssue with id {}", id );
@@ -65,7 +63,6 @@ public class JiraMetricServiceImpl implements JiraMetricService, JiraMetricsRest
 
 
     @Override
-    @JsonView( Views.CompleteView.class )
     public List<JiraMetricIssue> findJiraMetricIssuesByAssigneeName( final String assigneeName )
     {
         String query =
@@ -80,7 +77,6 @@ public class JiraMetricServiceImpl implements JiraMetricService, JiraMetricsRest
 
 
     @Override
-    @JsonView( Views.CompleteView.class )
     public List<JiraMetricIssue> findJiraMetricIssueByKeyId( final String keyId )
     {
         String query = "Select j from " + JiraMetricIssue.class.getSimpleName() + " j where j.issueKey =:issue_key";
@@ -119,6 +115,72 @@ public class JiraMetricServiceImpl implements JiraMetricService, JiraMetricsRest
     public void batchInsert( final List<JiraMetricIssue> issues )
     {
         dao.batchInsert( issues );
+    }
+
+
+    @Override
+    public List<JiraProject> getProjects()
+    {
+        String query = String.format( "select p from %s p", JiraProject.class.getSimpleName() );
+        List<JiraProject> projects = ( List<JiraProject> ) dao.findByQuery( query );
+        return dao.getAll( JiraProject.class );
+    }
+
+
+    @Override
+    public JiraProject getProject( final String projectKey )
+    {
+        String query = String.format( "select p from %s p where p.key = :key", JiraProject.class.getSimpleName() );
+        return ( JiraProject ) dao.findByQuery( query, "key", projectKey );
+    }
+
+
+    @Override
+    public List<JiraProject> getProjectByKey( final String key )
+    {
+        String query = String.format( "select p from %s p where p.key = :key", JiraProject.class.getSimpleName() );
+        return ( List<JiraProject> ) dao.findByQuery( query, "key", key );
+    }
+
+
+    @Override
+    public List<JiraProject> getProjectById( final Long projectId )
+    {
+        String query =
+                String.format( "select p from %s p where p.key = :projectId", JiraProject.class.getSimpleName() );
+        return ( List<JiraProject> ) dao.findByQuery( query, "projectId", projectId );
+    }
+
+
+    @Override
+    public void saveProject( final JiraProject project )
+    {
+        dao.insert( project );
+    }
+
+
+    @Override
+    public void updateProject( final JiraProject project )
+    {
+        dao.merge( project );
+    }
+
+
+    @Override
+    public void deleteProject( final JiraProject project )
+    {
+        dao.remove( project );
+    }
+
+
+    @Override
+    public List<JiraMetricIssue> getProjectIssues( final String projectKey )
+    {
+        String query = String.format( "select issue from %s issue where issue.projectKey = :projectKey",
+                JiraMetricIssue.class.getSimpleName() );
+        List<JiraMetricIssue> projectIssues =
+                ( List<JiraMetricIssue> ) dao.findByQuery( query, "projectKey", projectKey );
+        return projectIssues;
     }
 
 

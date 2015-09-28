@@ -173,7 +173,7 @@ public class JiraRestClientImpl implements JiraRestClient
     {
         //        List<JarvisIssue> result = new ArrayList<JarvisIssue>();
         String jql = String.format( "project = '%s' order by duedate", projectId );
-        return searchJira( jql, null, null );
+        return searchJira( jql, 100, null );
     }
 
 

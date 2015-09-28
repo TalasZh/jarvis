@@ -3,15 +3,13 @@ package org.safehaus.dao;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-
 
 /**
  * Created by tzhamakeev on 7/2/15.
  */
 public interface Dao
 {
-    EntityManager getEntityManager();
+    <T> List<T> getAll(Class<T> entityClass);
 
     void insert( Object entity );
 
