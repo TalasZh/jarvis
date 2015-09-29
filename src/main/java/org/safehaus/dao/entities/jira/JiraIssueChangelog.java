@@ -19,7 +19,7 @@ import com.impetus.kundera.index.IndexCollection;
 @Entity
 @Table( name = "jira_issue_changelog", schema = "jarvis@cassandra-pu" )
 @IndexCollection( columns = {
-        @Index( name = "issueId" ), @Index( name = "issueKey" )
+        @Index( name = "issueId" ), @Index( name = "issueKey" ), @Index( name = "field" )
 } )
 public class JiraIssueChangelog implements Serializable
 {

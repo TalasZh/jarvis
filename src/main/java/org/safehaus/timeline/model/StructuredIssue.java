@@ -1,50 +1,89 @@
-package org.safehaus.timeline;
+package org.safehaus.timeline.model;
 
 
-import java.util.Date;
+import java.io.Serializable;
 import java.util.Set;
+
+import javax.persistence.Access;
+import javax.persistence.AccessType;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import org.safehaus.model.Views;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.collect.Sets;
+import com.impetus.kundera.index.Index;
+import com.impetus.kundera.index.IndexCollection;
 
 
 /**
  * Created by talas on 9/27/15.
  */
-public class StructuredIssue
+@Entity
+@Access( AccessType.FIELD )
+@Table( name = "structured_issue", schema = "jarvis@cassandra-pu" )
+@IndexCollection( columns = {
+        @Index( name = "key" )
+} )
+public class StructuredIssue implements Serializable
 {
     @JsonView( Views.TimelineShort.class )
-    private String key;
-
-    @JsonView( Views.TimelineShort.class )
+    @Id
+    @Column( name = "structured_id" )
     private Long id;
 
     @JsonView( Views.TimelineShort.class )
+    @Column( name = "structured_key" )
+    private String key;
+
+    @JsonView( Views.TimelineShort.class )
+    @Column( name = "issue_type" )
     private String issueType;
 
     @JsonView( Views.TimelineShort.class )
+    @Column( name = "summary" )
     private String summary;
 
     @JsonView( Views.TimelineShort.class )
+    @Column( name = "reporter" )
     private String reporter;
 
     @JsonView( Views.TimelineShort.class )
+    @Column( name = "creator" )
     private String creator;
 
     @JsonView( Views.TimelineShort.class )
+    @Column( name = "assignee" )
     private String assignee;
 
     @JsonView( Views.TimelineShort.class )
-    private Date updated;
+    @Column( name = "updated" )
+    private Long updated;
 
     @JsonView( Views.TimelineLong.class )
+    @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER )
+    @JoinColumn( name = "parent_issue_id" )
     private Set<StructuredIssue> issues = Sets.newHashSet();
+
+    @Embedded
+    private ProgressStatus progressStatus;
+
+
+    public StructuredIssue()
+    {
+    }
 
 
     public StructuredIssue( final String key, final Long id, final String issueType, final String summary,
-                            final String reporter, final String creator, final String assignee, final Date updated )
+                            final String reporter, final String creator, final String assignee, final Long updated )
     {
         this.key = key;
         this.id = id;
@@ -60,6 +99,18 @@ public class StructuredIssue
     public Set<StructuredIssue> getIssues()
     {
         return issues;
+    }
+
+
+    public void setProgressStatus( final ProgressStatus progressStatus )
+    {
+        this.progressStatus = progressStatus;
+    }
+
+
+    public ProgressStatus getProgressStatus()
+    {
+        return progressStatus;
     }
 
 

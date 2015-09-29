@@ -28,6 +28,10 @@
     <class>org.safehaus.dao.entities.jira.JiraMetricIssue</class>
     <class>org.safehaus.dao.entities.jira.JiraProject</class>
     <class>org.safehaus.dao.entities.jira.JiraIssueChangelog</class>
+
+    <class>org.safehaus.timeline.model.StructuredIssue</class>
+    <class>org.safehaus.timeline.model.StructuredProject</class>
+
     <class>org.safehaus.dao.entities.stash.Link</class>
     <class>org.safehaus.dao.entities.stash.HibernateLinkMap</class>
     <class>org.safehaus.dao.entities.stash.HibernateSetMap</class>
@@ -38,6 +42,7 @@
     <class>org.safehaus.dao.entities.stash.StashMetricIssue</class>
     <class>org.safehaus.dao.entities.stash.StashUserMetricInfo</class>
     <class>org.safehaus.dao.entities.stash.StashUserCollaborationMetricInfo</class>
+
     <class>org.safehaus.dao.entities.UserMetricInfo</class>
     <class>org.safehaus.dao.entities.ConfluenceMetricInfo</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
@@ -48,7 +53,7 @@
       <property name="kundera.dialect" value="cassandra" />
 
       <!-- TODO Don't forget to change to "update"  after tables schema created in production-->
-      <property name="kundera.ddl.auto.prepare" value="create" />
+      <!--<property name="kundera.ddl.auto.prepare" value="create" />-->
 
       <property name="kundera.client" value="thrift" />
       <property name="kundera.batch.size" value="5000" />

@@ -10,8 +10,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
 import org.safehaus.model.Views;
-import org.safehaus.timeline.StoryTimeline;
-import org.safehaus.timeline.StructuredProject;
+import org.safehaus.timeline.model.StoryTimeline;
+import org.safehaus.timeline.model.StructuredProject;
 
 import com.fasterxml.jackson.annotation.JsonView;
 

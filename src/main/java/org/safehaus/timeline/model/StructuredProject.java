@@ -1,33 +1,57 @@
-package org.safehaus.timeline;
+package org.safehaus.timeline.model;
 
 
 import java.io.Serializable;
 import java.util.Set;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.safehaus.model.Views;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.collect.Sets;
+import com.impetus.kundera.index.Index;
+import com.impetus.kundera.index.IndexCollection;
 
 
 /**
  * Created by talas on 9/27/15.
  */
 @XmlRootElement
+@Entity
+@Access( AccessType.FIELD )
+@Table( name = "structured_project", schema = "jarvis@cassandra-pu" )
+@IndexCollection( columns = {
+        @Index( name = "id" ), @Index( name = "key" )
+} )
 public class StructuredProject implements Serializable
 {
     @JsonView( Views.TimelineShort.class )
+    @Id
+    @Column( name = "project_id" )
     private String id;
 
     @JsonView( Views.TimelineShort.class )
+    @Column( name = "project_name" )
     private String name;
 
     @JsonView( Views.TimelineShort.class )
+    @Column( name = "project_key" )
     private String key;
 
     @JsonView( Views.TimelineLong.class )
+    @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true )
+    @JoinColumn( name = "referenced_project_id" )
     private Set<StructuredIssue> issues = Sets.newHashSet();
 
 
