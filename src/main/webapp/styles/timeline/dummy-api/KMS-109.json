@@ -1,0 +1,2882 @@
+[
+    {
+        "id": "17105",
+        "issueName": "KMS-243",
+        "status": "Open",
+        "type": "Task",
+        "description": "Currently this causes multiple conflicting spark streaming end points",
+        "events": [
+            {
+                "id": "56516",
+                "eventName": "Epic Link",
+                "eventType": "custom",
+                "eventInfo": "null -> KMS-109",
+                "eventDate": "2015-09-11T18:33:27.110+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            }
+        ]
+    },
+    {
+        "id": "17091",
+        "issueName": "KMS-235",
+        "status": "Resolved",
+        "type": "Task",
+        "description": "CassandraConnection class is called to execute cql statements on cassandra jarvis table, this class need to be a singleton.",
+        "events": [
+            {
+                "id": "56390",
+                "eventName": "Epic Link",
+                "eventType": "custom",
+                "eventInfo": "null -> KMS-109",
+                "eventDate": "2015-09-09T21:03:18.515+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "56392",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "Open -> In Progress",
+                "eventDate": "2015-09-09T21:03:35.653+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "56421",
+                "eventName": "resolution",
+                "eventType": "jira",
+                "eventInfo": "null -> Fixed",
+                "eventDate": "2015-09-10T12:38:00.440+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            }
+        ]
+    },
+    {
+        "id": "17090",
+        "issueName": "KMS-234",
+        "status": "Resolved",
+        "type": "Task",
+        "description": "Each data source should have its own functions in a separate class",
+        "events": [
+            {
+                "id": "56358",
+                "eventName": "Epic Link",
+                "eventType": "custom",
+                "eventInfo": "null -> KMS-109",
+                "eventDate": "2015-09-09T14:00:07.959+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "56360",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "Open -> In Progress",
+                "eventDate": "2015-09-09T14:00:16.132+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "56420",
+                "eventName": "resolution",
+                "eventType": "jira",
+                "eventInfo": "null -> Fixed",
+                "eventDate": "2015-09-10T12:37:46.708+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            }
+        ]
+    },
+    {
+        "id": "17087",
+        "issueName": "KMS-232",
+        "status": "Resolved",
+        "type": "Bug",
+        "description": "JiraMetricServiceImplTest does not compile due to change in JiraMetricService class.",
+        "events": [
+            {
+                "id": "56314",
+                "eventName": "Epic Link",
+                "eventType": "custom",
+                "eventInfo": "null -> KMS-109",
+                "eventDate": "2015-09-08T20:56:53.328+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "56316",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "Open -> In Progress",
+                "eventDate": "2015-09-08T20:56:56.936+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "56317",
+                "eventName": "WorklogId",
+                "eventType": "jira",
+                "eventInfo": "15338 -> null",
+                "eventDate": "2015-09-08T21:02:31.904+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "56318",
+                "eventName": "resolution",
+                "eventType": "jira",
+                "eventInfo": "null -> Fixed",
+                "eventDate": "2015-09-08T21:02:48.210+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            }
+        ]
+    },
+    {
+        "id": "17084",
+        "issueName": "KMS-231",
+        "status": "Open",
+        "type": "Bug",
+        "description": "[~tjoldoshbekov] if I queried \"for-test\" but in logs I saw query string changed my criteria to \"for - test\"\r\n\r\n\r\nPlease check if this is a secondary index problem.",
+        "events": [
+            {
+                "id": "56263",
+                "eventName": "Epic Link",
+                "eventType": "custom",
+                "eventInfo": "null -> KMS-109",
+                "eventDate": "2015-09-08T13:02:07.532+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            }
+        ]
+    },
+    {
+        "id": "17081",
+        "issueName": "KMS-230",
+        "status": "Open",
+        "type": "Task",
+        "description": "JiraMetricIssue is passes into the message queues based on update date, please make sure a similar protocol is in place for confluence and stash objects.",
+        "events": [
+            {
+                "id": "56218",
+                "eventName": "Epic Link",
+                "eventType": "custom",
+                "eventInfo": "null -> KMS-109",
+                "eventDate": "2015-09-08T12:40:04.516+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            }
+        ]
+    },
+    {
+        "id": "17004",
+        "issueName": "KMS-206",
+        "status": "Resolved",
+        "type": "Task",
+        "description": "documentation for jira, stash and confluence related metrics.",
+        "events": [
+            {
+                "id": "55279",
+                "eventName": "Epic Link",
+                "eventType": "custom",
+                "eventInfo": "null -> KMS-109",
+                "eventDate": "2015-09-07T12:26:36.282+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "55281",
+                "eventName": "assignee",
+                "eventType": "jira",
+                "eventInfo": "null -> Neslihan Bulut",
+                "eventDate": "2015-09-07T12:26:47.473+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "55282",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "Open -> In Progress",
+                "eventDate": "2015-09-07T12:26:52.985+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "55300",
+                "eventName": "RemoteIssueLink",
+                "eventType": "jira",
+                "eventInfo": "null -> This issue links to \"Page (Subutai Confluence)\"",
+                "eventDate": "2015-09-07T12:56:58.893+0600",
+                "userId": "daralbaev",
+                "userName": "Damir Aralbaev"
+            },
+            {
+                "id": "55327",
+                "eventName": "RemoteIssueLink",
+                "eventType": "jira",
+                "eventInfo": "This issue links to \"Page (Subutai Confluence)\" -> This issue links to \"Page (Subutai Confluence)\"",
+                "eventDate": "2015-09-07T13:06:58.491+0600",
+                "userId": "daralbaev",
+                "userName": "Damir Aralbaev"
+            },
+            {
+                "id": "56176",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-09-08T12:30:25.668+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "56179",
+                "eventName": "resolution",
+                "eventType": "jira",
+                "eventInfo": "null -> Fixed",
+                "eventDate": "2015-09-08T12:30:46.083+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            }
+        ]
+    },
+    {
+        "id": "16975",
+        "issueName": "KMS-205",
+        "status": "Closed",
+        "type": "Task",
+        "description": "Get familiar with DAO classes of Jarvis project, particularly ConfluenceMetricInfo.java ",
+        "events": [
+            {
+                "id": "55055",
+                "eventName": "Epic Link",
+                "eventType": "custom",
+                "eventInfo": "null -> KMS-109",
+                "eventDate": "2015-09-02T16:03:58.743+0600",
+                "userId": "eric",
+                "userName": "Ermek Abyshev"
+            },
+            {
+                "id": "55057",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "Open -> In Progress",
+                "eventDate": "2015-09-02T16:04:06.814+0600",
+                "userId": "eric",
+                "userName": "Ermek Abyshev"
+            },
+            {
+                "id": "55268",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "In Progress -> Closed",
+                "eventDate": "2015-09-06T23:00:51.723+0600",
+                "userId": "eric",
+                "userName": "Ermek Abyshev"
+            },
+            {
+                "id": "55293",
+                "eventName": "RemoteIssueLink",
+                "eventType": "jira",
+                "eventInfo": "null -> This issue links to \"Page (Subutai Confluence)\"",
+                "eventDate": "2015-09-07T12:56:58.532+0600",
+                "userId": "daralbaev",
+                "userName": "Damir Aralbaev"
+            },
+            {
+                "id": "55319",
+                "eventName": "RemoteIssueLink",
+                "eventType": "jira",
+                "eventInfo": "This issue links to \"Page (Subutai Confluence)\" -> This issue links to \"Page (Subutai Confluence)\"",
+                "eventDate": "2015-09-07T13:06:58.068+0600",
+                "userId": "daralbaev",
+                "userName": "Damir Aralbaev"
+            }
+        ]
+    },
+    {
+        "id": "16973",
+        "issueName": "KMS-204",
+        "status": "Resolved",
+        "type": "Task",
+        "description": "Collaboration metric from number of different projects one worked on from stash commits needs to be computed",
+        "events": [
+            {
+                "id": "55030",
+                "eventName": "Epic Link",
+                "eventType": "custom",
+                "eventInfo": "null -> KMS-109",
+                "eventDate": "2015-09-02T12:36:51.039+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "55032",
+                "eventName": "Sprint",
+                "eventType": "custom",
+                "eventInfo": "Jarvis Sprint #6 -> ",
+                "eventDate": "2015-09-02T12:42:29.635+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "55044",
+                "eventName": "Sprint",
+                "eventType": "custom",
+                "eventInfo": "null -> Jarvis Sprint #7",
+                "eventDate": "2015-09-02T12:43:35.139+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "55277",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "Open -> In Progress",
+                "eventDate": "2015-09-07T11:50:56.163+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "55295",
+                "eventName": "RemoteIssueLink",
+                "eventType": "jira",
+                "eventInfo": "null -> This issue links to \"Page (Subutai Confluence)\"",
+                "eventDate": "2015-09-07T12:56:58.648+0600",
+                "userId": "daralbaev",
+                "userName": "Damir Aralbaev"
+            },
+            {
+                "id": "55322",
+                "eventName": "RemoteIssueLink",
+                "eventType": "jira",
+                "eventInfo": "This issue links to \"Page (Subutai Confluence)\" -> This issue links to \"Page (Subutai Confluence)\"",
+                "eventDate": "2015-09-07T13:06:58.211+0600",
+                "userId": "daralbaev",
+                "userName": "Damir Aralbaev"
+            },
+            {
+                "id": "56518",
+                "eventName": "resolution",
+                "eventType": "jira",
+                "eventInfo": "null -> Fixed",
+                "eventDate": "2015-09-11T20:09:07.285+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            }
+        ]
+    },
+    {
+        "id": "16961",
+        "issueName": "KMS-202",
+        "status": "In Progress",
+        "type": "Task",
+        "description": "Dao classes to query the following classes are needed;\r\n\r\n usermetricinfo, stashusermetricinfo and confluencemetricinfo",
+        "events": [
+            {
+                "id": "54625",
+                "eventName": "Epic Link",
+                "eventType": "custom",
+                "eventInfo": "null -> KMS-109",
+                "eventDate": "2015-08-31T18:44:27.467+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "55002",
+                "eventName": "Workflow",
+                "eventType": "jira",
+                "eventInfo": "KMS: Simple Issue Tracking Workflow -> KMS: Simple Issue Tracking Workflow new",
+                "eventDate": "2015-09-02T12:07:07.774+0600",
+                "userId": "vkim",
+                "userName": "Vyacheslav Kim"
+            },
+            {
+                "id": "55043",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-09-02T12:42:49.876+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "55074",
+                "eventName": "Sprint",
+                "eventType": "custom",
+                "eventInfo": "Jarvis Sprint #6 -> Jarvis Sprint #6, Jarvis Sprint #7",
+                "eventDate": "2015-09-02T21:57:10.967+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "55297",
+                "eventName": "RemoteIssueLink",
+                "eventType": "jira",
+                "eventInfo": "null -> This issue links to \"Page (Subutai Confluence)\"",
+                "eventDate": "2015-09-07T12:56:58.743+0600",
+                "userId": "daralbaev",
+                "userName": "Damir Aralbaev"
+            },
+            {
+                "id": "55324",
+                "eventName": "RemoteIssueLink",
+                "eventType": "jira",
+                "eventInfo": "This issue links to \"Page (Subutai Confluence)\" -> This issue links to \"Page (Subutai Confluence)\"",
+                "eventDate": "2015-09-07T13:06:58.345+0600",
+                "userId": "daralbaev",
+                "userName": "Damir Aralbaev"
+            },
+            {
+                "id": "56350",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "Open -> In Progress",
+                "eventDate": "2015-09-09T12:43:28.635+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            }
+        ]
+    },
+    {
+        "id": "16933",
+        "issueName": "KMS-200",
+        "status": "Resolved",
+        "type": "Task",
+        "description": "We need to add integrate kafka messaging with Kafka interface.",
+        "events": [
+            {
+                "id": "54117",
+                "eventName": "Epic Link",
+                "eventType": "custom",
+                "eventInfo": "null -> KMS-109",
+                "eventDate": "2015-08-28T19:33:34.761+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "54119",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "Open -> In Progress",
+                "eventDate": "2015-08-28T19:33:38.398+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "54120",
+                "eventName": "WorklogId",
+                "eventType": "jira",
+                "eventInfo": "15182 -> null",
+                "eventDate": "2015-08-28T19:37:42.486+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "54121",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "In Progress -> Resolved",
+                "eventDate": "2015-08-28T19:37:44.356+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "55015",
+                "eventName": "Workflow",
+                "eventType": "jira",
+                "eventInfo": "KMS: Simple Issue Tracking Workflow -> KMS: Simple Issue Tracking Workflow new",
+                "eventDate": "2015-09-02T12:07:07.849+0600",
+                "userId": "vkim",
+                "userName": "Vyacheslav Kim"
+            }
+        ]
+    },
+    {
+        "id": "16932",
+        "issueName": "KMS-199",
+        "status": "Resolved",
+        "type": "Task",
+        "description": "Database insert operations are not flushed until shutdown.",
+        "events": [
+            {
+                "id": "54110",
+                "eventName": "Epic Link",
+                "eventType": "custom",
+                "eventInfo": "null -> KMS-109",
+                "eventDate": "2015-08-28T18:15:41.031+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "54112",
+                "eventName": "Link",
+                "eventType": "jira",
+                "eventInfo": "null -> This issue blocks KMS-186",
+                "eventDate": "2015-08-28T18:15:41.137+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "54114",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "Open -> In Progress",
+                "eventDate": "2015-08-28T18:15:44.508+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "54115",
+                "eventName": "WorklogId",
+                "eventType": "jira",
+                "eventInfo": "15181 -> null",
+                "eventDate": "2015-08-28T18:25:48.356+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "54116",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "In Progress -> Resolved",
+                "eventDate": "2015-08-28T18:26:54.043+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "55006",
+                "eventName": "Workflow",
+                "eventType": "jira",
+                "eventInfo": "KMS: Simple Issue Tracking Workflow -> KMS: Simple Issue Tracking Workflow new",
+                "eventDate": "2015-09-02T12:07:07.796+0600",
+                "userId": "vkim",
+                "userName": "Vyacheslav Kim"
+            }
+        ]
+    },
+    {
+        "id": "16915",
+        "issueName": "KMS-190",
+        "status": "Resolved",
+        "type": "Task",
+        "description": "Please describe the architecture of cluster allocations of spark and kafka, add necessary connection details for jarvis application to connect with them",
+        "events": [
+            {
+                "id": "53804",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-08-27T13:49:20.946+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "54905",
+                "eventName": "Workflow",
+                "eventType": "jira",
+                "eventInfo": "KMS: Simple Issue Tracking Workflow -> KMS: Simple Issue Tracking Workflow new",
+                "eventDate": "2015-09-02T12:07:07.088+0600",
+                "userId": "vkim",
+                "userName": "Vyacheslav Kim"
+            },
+            {
+                "id": "56424",
+                "eventName": "Epic Link",
+                "eventType": "custom",
+                "eventInfo": "null -> KMS-109",
+                "eventDate": "2015-09-10T12:40:23.141+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "56426",
+                "eventName": "Sprint",
+                "eventType": "custom",
+                "eventInfo": "null -> Jarvis Sprint #7",
+                "eventDate": "2015-09-10T12:40:23.187+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "56504",
+                "eventName": "WorklogId",
+                "eventType": "jira",
+                "eventInfo": "15377 -> null",
+                "eventDate": "2015-09-11T12:40:27.427+0600",
+                "userId": "vkim",
+                "userName": "Vyacheslav Kim"
+            },
+            {
+                "id": "56505",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "Open -> Resolved",
+                "eventDate": "2015-09-11T12:41:15.526+0600",
+                "userId": "vkim",
+                "userName": "Vyacheslav Kim"
+            }
+        ]
+    },
+    {
+        "id": "16876",
+        "issueName": "KMS-186",
+        "status": "Resolved",
+        "type": "Bug",
+        "description": "Please fix this bug and make the necessary tests on Cassandra",
+        "events": [
+            {
+                "id": "54084",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "Open -> In Progress",
+                "eventDate": "2015-08-28T17:59:26.880+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "54113",
+                "eventName": "Link",
+                "eventType": "jira",
+                "eventInfo": "null -> This issue is blocked by KMS-199",
+                "eventDate": "2015-08-28T18:15:41.139+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "54481",
+                "eventName": "Epic Link",
+                "eventType": "custom",
+                "eventInfo": "null -> KMS-109",
+                "eventDate": "2015-08-31T14:18:09.569+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "54582",
+                "eventName": "Link",
+                "eventType": "jira",
+                "eventInfo": "null -> This issue blocks KMS-9",
+                "eventDate": "2015-08-31T17:42:12.230+0600",
+                "userId": "tjoldoshbekov",
+                "userName": "Talas Joldoshbekov"
+            },
+            {
+                "id": "54592",
+                "eventName": "Link",
+                "eventType": "jira",
+                "eventInfo": "This issue blocks KMS-9 -> null",
+                "eventDate": "2015-08-31T17:52:28.412+0600",
+                "userId": "tjoldoshbekov",
+                "userName": "Talas Joldoshbekov"
+            },
+            {
+                "id": "54594",
+                "eventName": "Link",
+                "eventType": "jira",
+                "eventInfo": "null -> This issue blocks KMS-201",
+                "eventDate": "2015-08-31T17:52:42.680+0600",
+                "userId": "tjoldoshbekov",
+                "userName": "Talas Joldoshbekov"
+            },
+            {
+                "id": "54641",
+                "eventName": "WorklogId",
+                "eventType": "jira",
+                "eventInfo": "15214 -> null",
+                "eventDate": "2015-08-31T20:30:53.615+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "55005",
+                "eventName": "Workflow",
+                "eventType": "jira",
+                "eventInfo": "KMS: Simple Issue Tracking Workflow -> KMS: Simple Issue Tracking Workflow new",
+                "eventDate": "2015-09-02T12:07:07.790+0600",
+                "userId": "vkim",
+                "userName": "Vyacheslav Kim"
+            },
+            {
+                "id": "55042",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-09-02T12:42:49.827+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "55077",
+                "eventName": "Sprint",
+                "eventType": "custom",
+                "eventInfo": "Jarvis Sprint #6 -> Jarvis Sprint #6, Jarvis Sprint #7",
+                "eventDate": "2015-09-02T21:57:46.867+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "55242",
+                "eventName": "WorklogId",
+                "eventType": "jira",
+                "eventInfo": "15305 -> null",
+                "eventDate": "2015-09-04T20:54:08.835+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "55243",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "In Progress -> Resolved",
+                "eventDate": "2015-09-04T20:56:45.308+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "55296",
+                "eventName": "RemoteIssueLink",
+                "eventType": "jira",
+                "eventInfo": "null -> This issue links to \"Page (Subutai Confluence)\"",
+                "eventDate": "2015-09-07T12:56:58.694+0600",
+                "userId": "daralbaev",
+                "userName": "Damir Aralbaev"
+            },
+            {
+                "id": "55323",
+                "eventName": "RemoteIssueLink",
+                "eventType": "jira",
+                "eventInfo": "This issue links to \"Page (Subutai Confluence)\" -> This issue links to \"Page (Subutai Confluence)\"",
+                "eventDate": "2015-09-07T13:06:58.289+0600",
+                "userId": "daralbaev",
+                "userName": "Damir Aralbaev"
+            }
+        ]
+    },
+    {
+        "id": "16865",
+        "issueName": "KMS-185",
+        "status": "Resolved",
+        "type": "Bug",
+        "description": "Resetting the lastGathered info for different data sources is necessary for the cases of resetting the database or any kind of fresh start scenarios.",
+        "events": [
+            {
+                "id": "53064",
+                "eventName": "Epic Link",
+                "eventType": "custom",
+                "eventInfo": "null -> KMS-109",
+                "eventDate": "2015-08-24T21:09:23.367+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "53066",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-08-24T21:09:23.953+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "53067",
+                "eventName": "Sprint",
+                "eventType": "custom",
+                "eventInfo": "null -> Jarvis Sprint #6",
+                "eventDate": "2015-08-24T21:09:29.576+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "53068",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked lower",
+                "eventDate": "2015-08-24T21:09:29.626+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "53069",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "Open -> In Progress",
+                "eventDate": "2015-08-24T21:09:41.972+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "54596",
+                "eventName": "Link",
+                "eventType": "jira",
+                "eventInfo": "null -> This issue blocks KMS-201",
+                "eventDate": "2015-08-31T17:53:04.097+0600",
+                "userId": "tjoldoshbekov",
+                "userName": "Talas Joldoshbekov"
+            },
+            {
+                "id": "54993",
+                "eventName": "Workflow",
+                "eventType": "jira",
+                "eventInfo": "KMS: Simple Issue Tracking Workflow -> KMS: Simple Issue Tracking Workflow new",
+                "eventDate": "2015-09-02T12:07:07.718+0600",
+                "userId": "vkim",
+                "userName": "Vyacheslav Kim"
+            },
+            {
+                "id": "55040",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-09-02T12:42:49.729+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "55075",
+                "eventName": "Sprint",
+                "eventType": "custom",
+                "eventInfo": "Jarvis Sprint #6 -> Jarvis Sprint #6, Jarvis Sprint #7",
+                "eventDate": "2015-09-02T21:57:19.632+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "55292",
+                "eventName": "RemoteIssueLink",
+                "eventType": "jira",
+                "eventInfo": "null -> This issue links to \"Page (Subutai Confluence)\"",
+                "eventDate": "2015-09-07T12:56:58.483+0600",
+                "userId": "daralbaev",
+                "userName": "Damir Aralbaev"
+            },
+            {
+                "id": "55318",
+                "eventName": "RemoteIssueLink",
+                "eventType": "jira",
+                "eventInfo": "This issue links to \"Page (Subutai Confluence)\" -> This issue links to \"Page (Subutai Confluence)\"",
+                "eventDate": "2015-09-07T13:06:58.021+0600",
+                "userId": "daralbaev",
+                "userName": "Damir Aralbaev"
+            },
+            {
+                "id": "56292",
+                "eventName": "WorklogId",
+                "eventType": "jira",
+                "eventInfo": "15330 -> null",
+                "eventDate": "2015-09-08T18:13:01.814+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "56293",
+                "eventName": "resolution",
+                "eventType": "jira",
+                "eventInfo": "null -> Fixed",
+                "eventDate": "2015-09-08T18:13:17.279+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            }
+        ]
+    },
+    {
+        "id": "16864",
+        "issueName": "KMS-184",
+        "status": "Resolved",
+        "type": "Bug",
+        "description": "Stash only gets project key, not project name. Adding the project name is necessary for listing.",
+        "events": [
+            {
+                "id": "53052",
+                "eventName": "Sprint",
+                "eventType": "custom",
+                "eventInfo": "null -> UI/UX Sprint 10",
+                "eventDate": "2015-08-24T20:57:20.534+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "53053",
+                "eventName": "Sprint",
+                "eventType": "custom",
+                "eventInfo": "UI/UX Sprint 10 -> Jarvis Sprint #6",
+                "eventDate": "2015-08-24T20:57:50.573+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "53054",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-08-24T20:57:50.624+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "53055",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "Open -> In Progress",
+                "eventDate": "2015-08-24T20:58:11.140+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "53056",
+                "eventName": "WorklogId",
+                "eventType": "jira",
+                "eventInfo": "15058 -> null",
+                "eventDate": "2015-08-24T20:59:09.438+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "53057",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "In Progress -> Resolved",
+                "eventDate": "2015-08-24T20:59:13.016+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "53058",
+                "eventName": "Epic Link",
+                "eventType": "custom",
+                "eventInfo": "null -> KMS-109",
+                "eventDate": "2015-08-24T21:00:04.573+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "53201",
+                "eventName": "summary",
+                "eventType": "jira",
+                "eventInfo": "Project Name for Stash -> Project Name for Stash needs to be collected",
+                "eventDate": "2015-08-25T17:12:23.639+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "54999",
+                "eventName": "Workflow",
+                "eventType": "jira",
+                "eventInfo": "KMS: Simple Issue Tracking Workflow -> KMS: Simple Issue Tracking Workflow new",
+                "eventDate": "2015-09-02T12:07:07.756+0600",
+                "userId": "vkim",
+                "userName": "Vyacheslav Kim"
+            }
+        ]
+    },
+    {
+        "id": "16806",
+        "issueName": "KMS-168",
+        "status": "Resolved",
+        "type": "Task",
+        "description": "Cassandra has a different interface to dump objects from spark streaming",
+        "events": [
+            {
+                "id": "52459",
+                "eventName": "Epic Link",
+                "eventType": "custom",
+                "eventInfo": "null -> KMS-109",
+                "eventDate": "2015-08-18T12:34:08.046+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "52461",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "Open -> In Progress",
+                "eventDate": "2015-08-18T12:34:22.357+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "52943",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "In Progress -> Resolved",
+                "eventDate": "2015-08-24T12:26:03.795+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "54989",
+                "eventName": "Workflow",
+                "eventType": "jira",
+                "eventInfo": "KMS: Simple Issue Tracking Workflow -> KMS: Simple Issue Tracking Workflow new",
+                "eventDate": "2015-09-02T12:07:07.693+0600",
+                "userId": "vkim",
+                "userName": "Vyacheslav Kim"
+            }
+        ]
+    },
+    {
+        "id": "16704",
+        "issueName": "KMS-166",
+        "status": "Open",
+        "type": "Task",
+        "description": "Currently sonar metrics couldn't be collected per developer, this task is to figure out if this is do-able.",
+        "events": [
+            {
+                "id": "52359",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-08-17T18:53:41.449+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "52360",
+                "eventName": "assignee",
+                "eventType": "jira",
+                "eventInfo": "null -> Neslihan Bulut",
+                "eventDate": "2015-08-17T18:58:21.068+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "54719",
+                "eventName": "Epic Link",
+                "eventType": "custom",
+                "eventInfo": "null -> KMS-109",
+                "eventDate": "2015-09-01T12:15:48.932+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "54960",
+                "eventName": "Workflow",
+                "eventType": "jira",
+                "eventInfo": "KMS: Simple Issue Tracking Workflow -> KMS: Simple Issue Tracking Workflow new",
+                "eventDate": "2015-09-02T12:07:07.471+0600",
+                "userId": "vkim",
+                "userName": "Vyacheslav Kim"
+            }
+        ]
+    },
+    {
+        "id": "16390",
+        "issueName": "KMS-160",
+        "status": "Resolved",
+        "type": "Task",
+        "description": "This is a quick task requiring just a call into the send() apis.",
+        "events": [
+            {
+                "id": "48201",
+                "eventName": "Link",
+                "eventType": "jira",
+                "eventInfo": "null -> This issue blocks KMS-159",
+                "eventDate": "2015-08-14T12:21:31.918+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "52725",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "Open -> In Progress",
+                "eventDate": "2015-08-21T18:44:32.717+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "52986",
+                "eventName": "Sprint",
+                "eventType": "custom",
+                "eventInfo": "Jarvis Sprint#5 -> Jarvis Sprint#5, UI/UX Sprint 10",
+                "eventDate": "2015-08-24T13:28:34.566+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "52992",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-08-24T13:28:34.948+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "52994",
+                "eventName": "Sprint",
+                "eventType": "custom",
+                "eventInfo": "Jarvis Sprint#5, UI/UX Sprint 10 -> Jarvis Sprint#5, Jarvis Sprint #6",
+                "eventDate": "2015-08-24T13:29:23.185+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "53050",
+                "eventName": "WorklogId",
+                "eventType": "jira",
+                "eventInfo": "15057 -> null",
+                "eventDate": "2015-08-24T20:55:56.511+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "53051",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "In Progress -> Resolved",
+                "eventDate": "2015-08-24T20:56:03.882+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "53060",
+                "eventName": "Epic Link",
+                "eventType": "custom",
+                "eventInfo": "null -> KMS-109",
+                "eventDate": "2015-08-24T21:00:19.660+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "54931",
+                "eventName": "Workflow",
+                "eventType": "jira",
+                "eventInfo": "KMS: Simple Issue Tracking Workflow -> KMS: Simple Issue Tracking Workflow new",
+                "eventDate": "2015-09-02T12:07:07.264+0600",
+                "userId": "vkim",
+                "userName": "Vyacheslav Kim"
+            }
+        ]
+    },
+    {
+        "id": "16389",
+        "issueName": "KMS-159",
+        "status": "Resolved",
+        "type": "Task",
+        "description": "Implement streams for computing the stashmetricissue related metrics",
+        "events": [
+            {
+                "id": "48199",
+                "eventName": "Epic Link",
+                "eventType": "custom",
+                "eventInfo": "null -> KMS-109",
+                "eventDate": "2015-08-14T12:21:31.870+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "48202",
+                "eventName": "Link",
+                "eventType": "jira",
+                "eventInfo": "null -> This issue is blocked by KMS-160",
+                "eventDate": "2015-08-14T12:21:31.921+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "48203",
+                "eventName": "Sprint",
+                "eventType": "custom",
+                "eventInfo": "null -> Jarvis Sprint#5",
+                "eventDate": "2015-08-14T12:21:31.967+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "52150",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "Open -> In Progress",
+                "eventDate": "2015-08-17T12:27:44.782+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "52978",
+                "eventName": "Sprint",
+                "eventType": "custom",
+                "eventInfo": "Jarvis Sprint#5 -> Jarvis Sprint #6",
+                "eventDate": "2015-08-24T13:25:59.672+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "53335",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "In Progress -> Resolved",
+                "eventDate": "2015-08-26T12:33:07.726+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "54932",
+                "eventName": "Workflow",
+                "eventType": "jira",
+                "eventInfo": "KMS: Simple Issue Tracking Workflow -> KMS: Simple Issue Tracking Workflow new",
+                "eventDate": "2015-09-02T12:07:07.271+0600",
+                "userId": "vkim",
+                "userName": "Vyacheslav Kim"
+            }
+        ]
+    },
+    {
+        "id": "16364",
+        "issueName": "KMS-149",
+        "status": "Resolved",
+        "type": "Task",
+        "description": "Confluence API does not get the author information on a Page query. This information is vital for the analysis.",
+        "events": [
+            {
+                "id": "47886",
+                "eventName": "Epic Link",
+                "eventType": "custom",
+                "eventInfo": "null -> KMS-109",
+                "eventDate": "2015-08-10T21:27:30.369+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "47888",
+                "eventName": "Link",
+                "eventType": "jira",
+                "eventInfo": "null -> This issue blocks KMS-134",
+                "eventDate": "2015-08-10T21:27:30.424+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "47895",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "Open -> In Progress",
+                "eventDate": "2015-08-10T21:30:20.165+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "48101",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-08-12T17:04:55.770+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "48121",
+                "eventName": "Sprint",
+                "eventType": "custom",
+                "eventInfo": "Jarvis sprint #4 -> Jarvis sprint #4, Jarvis Sprint#5",
+                "eventDate": "2015-08-12T17:25:24.718+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "48122",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-08-12T17:25:24.766+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "52596",
+                "eventName": "WorklogId",
+                "eventType": "jira",
+                "eventInfo": "15018 -> null",
+                "eventDate": "2015-08-19T18:18:40.483+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "52597",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "In Progress -> Resolved",
+                "eventDate": "2015-08-19T18:18:52.310+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "54958",
+                "eventName": "Workflow",
+                "eventType": "jira",
+                "eventInfo": "KMS: Simple Issue Tracking Workflow -> KMS: Simple Issue Tracking Workflow new",
+                "eventDate": "2015-09-02T12:07:07.458+0600",
+                "userId": "vkim",
+                "userName": "Vyacheslav Kim"
+            }
+        ]
+    },
+    {
+        "id": "16363",
+        "issueName": "KMS-148",
+        "status": "Resolved",
+        "type": "Task",
+        "description": "Using lastupdated information gather only the remaining issues from the api, not all of the data on each poll.",
+        "events": [
+            {
+                "id": "47890",
+                "eventName": "Sprint",
+                "eventType": "custom",
+                "eventInfo": "null -> Jarvis sprint #4",
+                "eventDate": "2015-08-10T21:28:10.435+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "47891",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked lower",
+                "eventDate": "2015-08-10T21:28:10.485+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "47892",
+                "eventName": "Epic Link",
+                "eventType": "custom",
+                "eventInfo": "null -> KMS-109",
+                "eventDate": "2015-08-10T21:28:24.717+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "48063",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "Open -> In Progress",
+                "eventDate": "2015-08-12T12:33:49.730+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "48064",
+                "eventName": "WorklogId",
+                "eventType": "jira",
+                "eventInfo": "14659 -> null",
+                "eventDate": "2015-08-12T12:34:32.144+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "48102",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-08-12T17:04:55.809+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "48123",
+                "eventName": "Sprint",
+                "eventType": "custom",
+                "eventInfo": "Jarvis sprint #4 -> Jarvis sprint #4, Jarvis Sprint#5",
+                "eventDate": "2015-08-12T17:25:28.646+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "48124",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-08-12T17:25:28.696+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "48176",
+                "eventName": "WorklogId",
+                "eventType": "jira",
+                "eventInfo": "14675 -> null",
+                "eventDate": "2015-08-13T14:54:40.263+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "48177",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "In Progress -> Resolved",
+                "eventDate": "2015-08-13T14:54:48.386+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "54912",
+                "eventName": "Workflow",
+                "eventType": "jira",
+                "eventInfo": "KMS: Simple Issue Tracking Workflow -> KMS: Simple Issue Tracking Workflow new",
+                "eventDate": "2015-09-02T12:07:07.136+0600",
+                "userId": "vkim",
+                "userName": "Vyacheslav Kim"
+            }
+        ]
+    },
+    {
+        "id": "16299",
+        "issueName": "KMS-134",
+        "status": "Closed",
+        "type": "Task",
+        "description": "Confluence metric object needs to be declared and populated",
+        "events": [
+            {
+                "id": "47352",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "Open -> In Progress",
+                "eventDate": "2015-08-04T12:32:44.411+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "47359",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "In Progress -> Open",
+                "eventDate": "2015-08-04T12:36:07.279+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "47537",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "Open -> In Progress",
+                "eventDate": "2015-08-06T12:00:59.673+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "47889",
+                "eventName": "Link",
+                "eventType": "jira",
+                "eventInfo": "null -> This issue is blocked by KMS-149",
+                "eventDate": "2015-08-10T21:27:30.427+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "47894",
+                "eventName": "WorklogId",
+                "eventType": "jira",
+                "eventInfo": "14627 -> null",
+                "eventDate": "2015-08-10T21:29:21.324+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "48097",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-08-12T17:04:55.597+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "48119",
+                "eventName": "Sprint",
+                "eventType": "custom",
+                "eventInfo": "Jarvis sprint #4 -> Jarvis sprint #4, Jarvis Sprint#5",
+                "eventDate": "2015-08-12T17:25:20.958+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "48120",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-08-12T17:25:21.002+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "48181",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "In Progress -> Closed",
+                "eventDate": "2015-08-13T16:15:21.714+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "52631",
+                "eventName": "WorklogId",
+                "eventType": "jira",
+                "eventInfo": "15023 -> null",
+                "eventDate": "2015-08-19T22:19:19.063+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "52662",
+                "eventName": "Epic Link",
+                "eventType": "custom",
+                "eventInfo": "null -> KMS-109",
+                "eventDate": "2015-08-20T12:34:21.709+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "54945",
+                "eventName": "Workflow",
+                "eventType": "jira",
+                "eventInfo": "KMS: Simple Issue Tracking Workflow -> KMS: Simple Issue Tracking Workflow new",
+                "eventDate": "2015-09-02T12:07:07.354+0600",
+                "userId": "vkim",
+                "userName": "Vyacheslav Kim"
+            }
+        ]
+    },
+    {
+        "id": "16296",
+        "issueName": "KMS-131",
+        "status": "Open",
+        "type": "Task",
+        "description": "Stashmetricissue currently is populated multiple times for only one commit, this task will help us track any possible need to update the class.",
+        "events": [
+            {
+                "id": "47255",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-08-03T16:45:59.326+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "47256",
+                "eventName": "labels",
+                "eventType": "jira",
+                "eventInfo": " -> jarvisanalysis",
+                "eventDate": "2015-08-03T16:46:15.017+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "47272",
+                "eventName": "summary",
+                "eventType": "jira",
+                "eventInfo": "Evaluate the stashmetricissue class against holding file change vs actual commit data -> Evaluate the stashmetricissue class against holding individual file change(s) vs actual commit data",
+                "eventDate": "2015-08-03T17:14:35.443+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "48089",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-08-12T17:04:55.198+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "48117",
+                "eventName": "Sprint",
+                "eventType": "custom",
+                "eventInfo": "Jarvis sprint #4 -> Jarvis sprint #4, Jarvis Sprint#5",
+                "eventDate": "2015-08-12T17:25:15.039+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "48118",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-08-12T17:25:15.084+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "52982",
+                "eventName": "Sprint",
+                "eventType": "custom",
+                "eventInfo": "Jarvis sprint #4, Jarvis Sprint#5 -> Jarvis sprint #4, Jarvis Sprint#5, UI/UX Sprint 10",
+                "eventDate": "2015-08-24T13:28:34.467+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "52988",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-08-24T13:28:34.737+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "52997",
+                "eventName": "Sprint",
+                "eventType": "custom",
+                "eventInfo": "Jarvis sprint #4, Jarvis Sprint#5, UI/UX Sprint 10 -> Jarvis sprint #4, Jarvis Sprint#5, Jarvis Sprint #6",
+                "eventDate": "2015-08-24T13:31:11.313+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "54567",
+                "eventName": "Epic Link",
+                "eventType": "custom",
+                "eventInfo": "null -> KMS-109",
+                "eventDate": "2015-08-31T17:14:22.547+0600",
+                "userId": "tjoldoshbekov",
+                "userName": "Talas Joldoshbekov"
+            },
+            {
+                "id": "54598",
+                "eventName": "Link",
+                "eventType": "jira",
+                "eventInfo": "null -> This issue blocks KMS-201",
+                "eventDate": "2015-08-31T17:53:18.554+0600",
+                "userId": "tjoldoshbekov",
+                "userName": "Talas Joldoshbekov"
+            },
+            {
+                "id": "54939",
+                "eventName": "Workflow",
+                "eventType": "jira",
+                "eventInfo": "KMS: Simple Issue Tracking Workflow -> KMS: Simple Issue Tracking Workflow new",
+                "eventDate": "2015-09-02T12:07:07.319+0600",
+                "userId": "vkim",
+                "userName": "Vyacheslav Kim"
+            },
+            {
+                "id": "55033",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-09-02T12:42:49.277+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "55078",
+                "eventName": "Sprint",
+                "eventType": "custom",
+                "eventInfo": "Jarvis sprint #4, Jarvis Sprint#5, Jarvis Sprint #6 -> Jarvis sprint #4, Jarvis Sprint#5, Jarvis Sprint #6, Jarvis Sprint #7",
+                "eventDate": "2015-09-02T21:58:02.802+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "55291",
+                "eventName": "RemoteIssueLink",
+                "eventType": "jira",
+                "eventInfo": "null -> This issue links to \"Page (Subutai Confluence)\"",
+                "eventDate": "2015-09-07T12:56:58.430+0600",
+                "userId": "daralbaev",
+                "userName": "Damir Aralbaev"
+            },
+            {
+                "id": "55317",
+                "eventName": "RemoteIssueLink",
+                "eventType": "jira",
+                "eventInfo": "This issue links to \"Page (Subutai Confluence)\" -> This issue links to \"Page (Subutai Confluence)\"",
+                "eventDate": "2015-09-07T13:06:57.974+0600",
+                "userId": "daralbaev",
+                "userName": "Damir Aralbaev"
+            }
+        ]
+    },
+    {
+        "id": "16267",
+        "issueName": "KMS-123",
+        "status": "Resolved",
+        "type": "Task",
+        "description": "Jarvis service should pull latest user Confluence activity (pages created/edited/likes/comments) and persist gathered data to data warehouse.",
+        "events": [
+            {
+                "id": "46989",
+                "eventName": "Epic Link",
+                "eventType": "custom",
+                "eventInfo": "null -> KMS-109",
+                "eventDate": "2015-07-31T18:38:26.383+0600",
+                "userId": "tjoldoshbekov",
+                "userName": "Talas Joldoshbekov"
+            },
+            {
+                "id": "46991",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-07-31T18:38:27.217+0600",
+                "userId": "tjoldoshbekov",
+                "userName": "Talas Joldoshbekov"
+            },
+            {
+                "id": "47237",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "Open -> Resolved",
+                "eventDate": "2015-08-03T16:37:23.808+0600",
+                "userId": "tjoldoshbekov",
+                "userName": "Talas Joldoshbekov"
+            },
+            {
+                "id": "54948",
+                "eventName": "Workflow",
+                "eventType": "jira",
+                "eventInfo": "KMS: Simple Issue Tracking Workflow -> KMS: Simple Issue Tracking Workflow new",
+                "eventDate": "2015-09-02T12:07:07.372+0600",
+                "userId": "vkim",
+                "userName": "Vyacheslav Kim"
+            }
+        ]
+    },
+    {
+        "id": "16265",
+        "issueName": "KMS-121",
+        "status": "Closed",
+        "type": "Task",
+        "description": "Jarvis service should pull latest user stash activity (commits, source code comments) and persist gathered data to data warehouse.",
+        "events": [
+            {
+                "id": "46979",
+                "eventName": "Epic Link",
+                "eventType": "custom",
+                "eventInfo": "null -> KMS-109",
+                "eventDate": "2015-07-31T18:31:10.440+0600",
+                "userId": "tjoldoshbekov",
+                "userName": "Talas Joldoshbekov"
+            },
+            {
+                "id": "46982",
+                "eventName": "Link",
+                "eventType": "jira",
+                "eventInfo": "null -> This issue relates to KMS-114",
+                "eventDate": "2015-07-31T18:31:10.509+0600",
+                "userId": "tjoldoshbekov",
+                "userName": "Talas Joldoshbekov"
+            },
+            {
+                "id": "46983",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-07-31T18:31:11.286+0600",
+                "userId": "tjoldoshbekov",
+                "userName": "Talas Joldoshbekov"
+            },
+            {
+                "id": "46988",
+                "eventName": "description",
+                "eventType": "jira",
+                "eventInfo": "Jarvis service should pull latest user stash activity and persist gathered data to data warehouse. -> Jarvis service should pull latest user stash activity (commits, source code comments) and persist gathered data to data warehouse.",
+                "eventDate": "2015-07-31T18:36:09.139+0600",
+                "userId": "tjoldoshbekov",
+                "userName": "Talas Joldoshbekov"
+            },
+            {
+                "id": "47245",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "Open -> Resolved",
+                "eventDate": "2015-08-03T16:39:52.687+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "47248",
+                "eventName": "assignee",
+                "eventType": "jira",
+                "eventInfo": "Kazim Isik -> Talas",
+                "eventDate": "2015-08-03T16:40:51.201+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "53527",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "Resolved -> Closed",
+                "eventDate": "2015-08-27T12:04:24.752+0600",
+                "userId": "tjoldoshbekov",
+                "userName": "Talas Joldoshbekov"
+            },
+            {
+                "id": "54885",
+                "eventName": "Workflow",
+                "eventType": "jira",
+                "eventInfo": "KMS: Simple Issue Tracking Workflow -> KMS: Simple Issue Tracking Workflow new",
+                "eventDate": "2015-09-02T12:07:06.099+0600",
+                "userId": "vkim",
+                "userName": "Vyacheslav Kim"
+            }
+        ]
+    },
+    {
+        "id": "16264",
+        "issueName": "KMS-120",
+        "status": "Resolved",
+        "type": "Task",
+        "description": "This work is to create the dao classes for jarvisissue, stashissue, confluenceissue and the metricissue classes. ",
+        "events": [
+            {
+                "id": "46974",
+                "eventName": "Epic Link",
+                "eventType": "custom",
+                "eventInfo": "null -> KMS-109",
+                "eventDate": "2015-07-31T18:26:57.121+0600",
+                "userId": "tjoldoshbekov",
+                "userName": "Talas Joldoshbekov"
+            },
+            {
+                "id": "46977",
+                "eventName": "Link",
+                "eventType": "jira",
+                "eventInfo": "null -> This issue is blocked by KMS-114",
+                "eventDate": "2015-07-31T18:26:57.186+0600",
+                "userId": "tjoldoshbekov",
+                "userName": "Talas Joldoshbekov"
+            },
+            {
+                "id": "46978",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-07-31T18:26:57.902+0600",
+                "userId": "tjoldoshbekov",
+                "userName": "Talas Joldoshbekov"
+            },
+            {
+                "id": "47262",
+                "eventName": "assignee",
+                "eventType": "jira",
+                "eventInfo": "Kazim Isik -> Neslihan Bulut",
+                "eventDate": "2015-08-03T16:48:05.662+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "47265",
+                "eventName": "Sprint",
+                "eventType": "custom",
+                "eventInfo": "null -> Jarvis sprint #4",
+                "eventDate": "2015-08-03T17:00:24.104+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "47266",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-08-03T17:00:24.155+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "47782",
+                "eventName": "assignee",
+                "eventType": "jira",
+                "eventInfo": "Neslihan Bulut -> Talas",
+                "eventDate": "2015-08-10T12:35:27.817+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "47808",
+                "eventName": "assignee",
+                "eventType": "jira",
+                "eventInfo": "Talas -> Kazim Isik",
+                "eventDate": "2015-08-10T12:57:10.371+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "48087",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-08-12T17:04:55.097+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "48115",
+                "eventName": "Sprint",
+                "eventType": "custom",
+                "eventInfo": "Jarvis sprint #4 -> Jarvis sprint #4, Jarvis Sprint#5",
+                "eventDate": "2015-08-12T17:25:12.593+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "48116",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-08-12T17:25:12.645+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "52703",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "Open -> In Progress",
+                "eventDate": "2015-08-21T12:36:10.248+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "52945",
+                "eventName": "description",
+                "eventType": "jira",
+                "eventInfo": "Generated LOC quality metrics should be persisted to database along with other metric info -> This work is to create the dao classes for jarvisissue, stashissue, confluenceissue and the metricissue classes. ",
+                "eventDate": "2015-08-24T12:36:42.096+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "52980",
+                "eventName": "Sprint",
+                "eventType": "custom",
+                "eventInfo": "Jarvis sprint #4, Jarvis Sprint#5 -> Jarvis sprint #4, Jarvis Sprint #6",
+                "eventDate": "2015-08-24T13:27:13.423+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "53049",
+                "eventName": "Link",
+                "eventType": "jira",
+                "eventInfo": "null -> This issue relates to KMS-171",
+                "eventDate": "2015-08-24T19:08:50.754+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "54600",
+                "eventName": "Link",
+                "eventType": "jira",
+                "eventInfo": "null -> This issue blocks KMS-201",
+                "eventDate": "2015-08-31T17:53:30.267+0600",
+                "userId": "tjoldoshbekov",
+                "userName": "Talas Joldoshbekov"
+            },
+            {
+                "id": "54914",
+                "eventName": "Workflow",
+                "eventType": "jira",
+                "eventInfo": "KMS: Simple Issue Tracking Workflow -> KMS: Simple Issue Tracking Workflow new",
+                "eventDate": "2015-09-02T12:07:07.151+0600",
+                "userId": "vkim",
+                "userName": "Vyacheslav Kim"
+            },
+            {
+                "id": "55038",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-09-02T12:42:49.617+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "55080",
+                "eventName": "Sprint",
+                "eventType": "custom",
+                "eventInfo": "Jarvis sprint #4, Jarvis Sprint #6 -> Jarvis sprint #4, Jarvis Sprint #6, Jarvis Sprint #7",
+                "eventDate": "2015-09-02T21:58:24.135+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "55203",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-09-03T18:21:11.403+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "55204",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked lower",
+                "eventDate": "2015-09-03T18:21:15.195+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "55299",
+                "eventName": "RemoteIssueLink",
+                "eventType": "jira",
+                "eventInfo": "null -> This issue links to \"Page (Subutai Confluence)\"",
+                "eventDate": "2015-09-07T12:56:58.843+0600",
+                "userId": "daralbaev",
+                "userName": "Damir Aralbaev"
+            },
+            {
+                "id": "55326",
+                "eventName": "RemoteIssueLink",
+                "eventType": "jira",
+                "eventInfo": "This issue links to \"Page (Subutai Confluence)\" -> This issue links to \"Page (Subutai Confluence)\"",
+                "eventDate": "2015-09-07T13:06:58.443+0600",
+                "userId": "daralbaev",
+                "userName": "Damir Aralbaev"
+            },
+            {
+                "id": "56351",
+                "eventName": "resolution",
+                "eventType": "jira",
+                "eventInfo": "null -> Duplicate",
+                "eventDate": "2015-09-09T12:44:47.777+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            }
+        ]
+    },
+    {
+        "id": "16258",
+        "issueName": "KMS-114",
+        "status": "Reopened",
+        "type": "Task",
+        "description": "For Jarvis analytical side we need to pull LOC (presented/updated/deleted) statistics and evaluate how efficient they are by associating them with project health statistics pulled from Sonar for per user perspective.  ",
+        "events": [
+            {
+                "id": "46937",
+                "eventName": "Epic Link",
+                "eventType": "custom",
+                "eventInfo": "null -> KMS-109",
+                "eventDate": "2015-07-31T17:47:19.346+0600",
+                "userId": "tjoldoshbekov",
+                "userName": "Talas Joldoshbekov"
+            },
+            {
+                "id": "46940",
+                "eventName": "Link",
+                "eventType": "jira",
+                "eventInfo": "null -> This issue is blocked by KMS-113",
+                "eventDate": "2015-07-31T17:47:19.407+0600",
+                "userId": "tjoldoshbekov",
+                "userName": "Talas Joldoshbekov"
+            },
+            {
+                "id": "46941",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-07-31T17:47:20.403+0600",
+                "userId": "tjoldoshbekov",
+                "userName": "Talas Joldoshbekov"
+            },
+            {
+                "id": "46976",
+                "eventName": "Link",
+                "eventType": "jira",
+                "eventInfo": "null -> This issue blocks KMS-120",
+                "eventDate": "2015-07-31T18:26:57.183+0600",
+                "userId": "tjoldoshbekov",
+                "userName": "Talas Joldoshbekov"
+            },
+            {
+                "id": "46981",
+                "eventName": "Link",
+                "eventType": "jira",
+                "eventInfo": "null -> This issue relates to KMS-121",
+                "eventDate": "2015-07-31T18:31:10.506+0600",
+                "userId": "tjoldoshbekov",
+                "userName": "Talas Joldoshbekov"
+            },
+            {
+                "id": "47263",
+                "eventName": "assignee",
+                "eventType": "jira",
+                "eventInfo": "Kazim Isik -> Talas",
+                "eventDate": "2015-08-03T16:49:27.219+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "47345",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "Open -> In Progress",
+                "eventDate": "2015-08-04T12:11:08.064+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "47346",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "In Progress -> Open",
+                "eventDate": "2015-08-04T12:11:20.613+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "47994",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "Open -> In Progress",
+                "eventDate": "2015-08-11T14:20:59.254+0600",
+                "userId": "tjoldoshbekov",
+                "userName": "Talas Joldoshbekov"
+            },
+            {
+                "id": "48091",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-08-12T17:04:55.322+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "48131",
+                "eventName": "Sprint",
+                "eventType": "custom",
+                "eventInfo": "Jarvis sprint #4 -> Jarvis sprint #4, Jarvis Sprint#5",
+                "eventDate": "2015-08-12T17:26:01.902+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "48132",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-08-12T17:26:01.952+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "52983",
+                "eventName": "Sprint",
+                "eventType": "custom",
+                "eventInfo": "Jarvis sprint #4, Jarvis Sprint#5 -> Jarvis sprint #4, Jarvis Sprint#5, UI/UX Sprint 10",
+                "eventDate": "2015-08-24T13:28:34.495+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "52989",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-08-24T13:28:34.792+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "52996",
+                "eventName": "Sprint",
+                "eventType": "custom",
+                "eventInfo": "Jarvis sprint #4, Jarvis Sprint#5, UI/UX Sprint 10 -> Jarvis sprint #4, Jarvis Sprint#5, Jarvis Sprint #6",
+                "eventDate": "2015-08-24T13:31:01.594+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "54856",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "In Progress -> Closed",
+                "eventDate": "2015-09-02T11:16:17.291+0600",
+                "userId": "dkasymkulov",
+                "userName": "Daniyar Kasymkulov"
+            },
+            {
+                "id": "54971",
+                "eventName": "Workflow",
+                "eventType": "jira",
+                "eventInfo": "KMS: Simple Issue Tracking Workflow -> KMS: Simple Issue Tracking Workflow new",
+                "eventDate": "2015-09-02T12:07:07.563+0600",
+                "userId": "vkim",
+                "userName": "Vyacheslav Kim"
+            },
+            {
+                "id": "55017",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "Closed -> Reopened",
+                "eventDate": "2015-09-02T12:07:22.783+0600",
+                "userId": "vkim",
+                "userName": "Vyacheslav Kim"
+            },
+            {
+                "id": "55034",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-09-02T12:42:49.330+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            }
+        ]
+    },
+    {
+        "id": "16257",
+        "issueName": "KMS-113",
+        "status": "In Progress",
+        "type": "Research",
+        "description": "For now there is no clear way how to get per user report from Sonar, which analyses certain project. Sonar analyses only one project on certain branch, and there is no definite way to view the same statistics to pull per user perspective. So need to research and look around to find a way to somehow generate Sonar reports (test coverage, bugs presented/resolved) per commit basis and associate them with committer.",
+        "events": [
+            {
+                "id": "46934",
+                "eventName": "Epic Link",
+                "eventType": "custom",
+                "eventInfo": "null -> KMS-109",
+                "eventDate": "2015-07-31T17:46:40.178+0600",
+                "userId": "tjoldoshbekov",
+                "userName": "Talas Joldoshbekov"
+            },
+            {
+                "id": "46936",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-07-31T17:46:41.023+0600",
+                "userId": "tjoldoshbekov",
+                "userName": "Talas Joldoshbekov"
+            },
+            {
+                "id": "46939",
+                "eventName": "Link",
+                "eventType": "jira",
+                "eventInfo": "null -> This issue blocks KMS-114",
+                "eventDate": "2015-07-31T17:47:19.404+0600",
+                "userId": "tjoldoshbekov",
+                "userName": "Talas Joldoshbekov"
+            },
+            {
+                "id": "47238",
+                "eventName": "Sprint",
+                "eventType": "custom",
+                "eventInfo": "null -> Jarvis sprint #4",
+                "eventDate": "2015-08-03T16:37:30.871+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "47239",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-08-03T16:37:30.928+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "47360",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "Open -> In Progress",
+                "eventDate": "2015-08-04T12:36:08.437+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "47538",
+                "eventName": "WorklogId",
+                "eventType": "jira",
+                "eventInfo": "14598 -> null",
+                "eventDate": "2015-08-06T12:01:16.818+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "48082",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-08-12T17:04:54.873+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "48105",
+                "eventName": "Sprint",
+                "eventType": "custom",
+                "eventInfo": "Jarvis sprint #4 -> Jarvis sprint #4, Jarvis Sprint#5",
+                "eventDate": "2015-08-12T17:24:46.638+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "48106",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-08-12T17:24:46.696+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "52979",
+                "eventName": "Sprint",
+                "eventType": "custom",
+                "eventInfo": "Jarvis sprint #4, Jarvis Sprint#5 -> Jarvis sprint #4, Jarvis Sprint #6",
+                "eventDate": "2015-08-24T13:26:26.071+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "54602",
+                "eventName": "Link",
+                "eventType": "jira",
+                "eventInfo": "null -> This issue blocks KMS-201",
+                "eventDate": "2015-08-31T17:53:41.671+0600",
+                "userId": "tjoldoshbekov",
+                "userName": "Talas Joldoshbekov"
+            },
+            {
+                "id": "54953",
+                "eventName": "Workflow",
+                "eventType": "jira",
+                "eventInfo": "KMS: Simple Issue Tracking Workflow -> KMS: Simple Issue Tracking Workflow new",
+                "eventDate": "2015-09-02T12:07:07.426+0600",
+                "userId": "vkim",
+                "userName": "Vyacheslav Kim"
+            },
+            {
+                "id": "55036",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-09-02T12:42:49.472+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "55079",
+                "eventName": "Sprint",
+                "eventType": "custom",
+                "eventInfo": "Jarvis sprint #4, Jarvis Sprint #6 -> Jarvis sprint #4, Jarvis Sprint #6, Jarvis Sprint #7",
+                "eventDate": "2015-09-02T21:58:13.202+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "55301",
+                "eventName": "RemoteIssueLink",
+                "eventType": "jira",
+                "eventInfo": "null -> This issue links to \"Page (Subutai Confluence)\"",
+                "eventDate": "2015-09-07T12:56:58.945+0600",
+                "userId": "daralbaev",
+                "userName": "Damir Aralbaev"
+            },
+            {
+                "id": "55329",
+                "eventName": "RemoteIssueLink",
+                "eventType": "jira",
+                "eventInfo": "This issue links to \"Page (Subutai Confluence)\" -> This issue links to \"Page (Subutai Confluence)\"",
+                "eventDate": "2015-09-07T13:06:58.633+0600",
+                "userId": "daralbaev",
+                "userName": "Damir Aralbaev"
+            }
+        ]
+    },
+    {
+        "id": "16254",
+        "issueName": "KMS-112",
+        "status": "Resolved",
+        "type": "Task",
+        "description": "The connector classes should be configured as spring beans in order to allow a modular and easy managable structure.",
+        "events": [
+            {
+                "id": "46879",
+                "eventName": "Epic Link",
+                "eventType": "custom",
+                "eventInfo": "null -> KMS-109",
+                "eventDate": "2015-07-30T12:47:32.597+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "46881",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "Open -> In Progress",
+                "eventDate": "2015-07-30T12:47:37.414+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "46908",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "In Progress -> Resolved",
+                "eventDate": "2015-07-30T22:59:53.083+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "46921",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "Resolved -> Reopened",
+                "eventDate": "2015-07-31T12:45:39.253+0600",
+                "userId": "aduishenov",
+                "userName": "Azamat Duishenov"
+            },
+            {
+                "id": "46926",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "Reopened -> In Progress",
+                "eventDate": "2015-07-31T14:04:53.600+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "46927",
+                "eventName": "WorklogId",
+                "eventType": "jira",
+                "eventInfo": "14547 -> null",
+                "eventDate": "2015-07-31T14:05:18.867+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "46928",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "In Progress -> Resolved",
+                "eventDate": "2015-07-31T14:05:30.977+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "54988",
+                "eventName": "Workflow",
+                "eventType": "jira",
+                "eventInfo": "KMS: Simple Issue Tracking Workflow -> KMS: Simple Issue Tracking Workflow new",
+                "eventDate": "2015-09-02T12:07:07.687+0600",
+                "userId": "vkim",
+                "userName": "Vyacheslav Kim"
+            }
+        ]
+    },
+    {
+        "id": "16244",
+        "issueName": "KMS-111",
+        "status": "Closed",
+        "type": "Task",
+        "description": "Kafka version should be the one compiled with scala 2.10",
+        "events": [
+            {
+                "id": "46749",
+                "eventName": "Epic Link",
+                "eventType": "custom",
+                "eventInfo": "null -> KMS-109",
+                "eventDate": "2015-07-28T12:40:27.797+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "47281",
+                "eventName": "Sprint",
+                "eventType": "custom",
+                "eventInfo": "null -> Jarvis sprint #4",
+                "eventDate": "2015-08-03T17:19:16.239+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "47282",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-08-03T17:19:16.293+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "48055",
+                "eventName": "WorklogId",
+                "eventType": "jira",
+                "eventInfo": "14658 -> null",
+                "eventDate": "2015-08-12T12:32:52.265+0600",
+                "userId": "vkim",
+                "userName": "Vyacheslav Kim"
+            },
+            {
+                "id": "48056",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "Open -> Closed",
+                "eventDate": "2015-08-12T12:32:56.950+0600",
+                "userId": "vkim",
+                "userName": "Vyacheslav Kim"
+            },
+            {
+                "id": "54980",
+                "eventName": "Workflow",
+                "eventType": "jira",
+                "eventInfo": "KMS: Simple Issue Tracking Workflow -> KMS: Simple Issue Tracking Workflow new",
+                "eventDate": "2015-09-02T12:07:07.626+0600",
+                "userId": "vkim",
+                "userName": "Vyacheslav Kim"
+            }
+        ]
+    },
+    {
+        "id": "16232",
+        "issueName": "KMS-110",
+        "status": "Closed",
+        "type": "Task",
+        "description": "We need to gather the commit data from stash.",
+        "events": [
+            {
+                "id": "46594",
+                "eventName": "Sprint",
+                "eventType": "custom",
+                "eventInfo": "null -> Jarvis sprint #3",
+                "eventDate": "2015-07-27T12:46:21.080+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "46595",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "Open -> In Progress",
+                "eventDate": "2015-07-27T12:46:49.905+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "46686",
+                "eventName": "Epic Link",
+                "eventType": "custom",
+                "eventInfo": "null -> KMS-109",
+                "eventDate": "2015-07-27T16:56:46.672+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "46872",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "In Progress -> Closed",
+                "eventDate": "2015-07-30T12:43:01.263+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "46873",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-07-30T12:43:36.890+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "46929",
+                "eventName": "WorklogId",
+                "eventType": "jira",
+                "eventInfo": "14548 -> null",
+                "eventDate": "2015-07-31T14:06:02.634+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "54979",
+                "eventName": "Workflow",
+                "eventType": "jira",
+                "eventInfo": "KMS: Simple Issue Tracking Workflow -> KMS: Simple Issue Tracking Workflow new",
+                "eventDate": "2015-09-02T12:07:07.619+0600",
+                "userId": "vkim",
+                "userName": "Vyacheslav Kim"
+            }
+        ]
+    },
+    {
+        "id": "16203",
+        "issueName": "KMS-107",
+        "status": "Resolved",
+        "type": "Task",
+        "description": "Create a jira metric issue type and fill the data using jira api.",
+        "events": [
+            {
+                "id": "46340",
+                "eventName": "Sprint",
+                "eventType": "custom",
+                "eventInfo": "null -> Jarvis sprint #3",
+                "eventDate": "2015-07-24T12:51:08.966+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "46341",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-07-24T12:51:09.025+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "46342",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "Open -> In Progress",
+                "eventDate": "2015-07-24T12:51:19.376+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "46404",
+                "eventName": "Epic Link",
+                "eventType": "custom",
+                "eventInfo": "null -> KMS-109",
+                "eventDate": "2015-07-24T18:59:16.150+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "46406",
+                "eventName": "labels",
+                "eventType": "jira",
+                "eventInfo": "jarvis -> jarvis jarvisanalysis",
+                "eventDate": "2015-07-24T18:59:16.185+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "46593",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "In Progress -> Resolved",
+                "eventDate": "2015-07-27T12:43:33.204+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "46930",
+                "eventName": "WorklogId",
+                "eventType": "jira",
+                "eventInfo": "14549 -> null",
+                "eventDate": "2015-07-31T14:07:09.357+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "54967",
+                "eventName": "Workflow",
+                "eventType": "jira",
+                "eventInfo": "KMS: Simple Issue Tracking Workflow -> KMS: Simple Issue Tracking Workflow new",
+                "eventDate": "2015-09-02T12:07:07.535+0600",
+                "userId": "vkim",
+                "userName": "Vyacheslav Kim"
+            }
+        ]
+    },
+    {
+        "id": "16202",
+        "issueName": "KMS-106",
+        "status": "Closed",
+        "type": "Bug",
+        "description": "Getcommits function is not working.",
+        "events": [
+            {
+                "id": "46320",
+                "eventName": "Sprint",
+                "eventType": "custom",
+                "eventInfo": "null -> Jarvis sprint #3",
+                "eventDate": "2015-07-23T21:59:53.488+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "46321",
+                "eventName": "Rank",
+                "eventType": "custom",
+                "eventInfo": " -> Ranked higher",
+                "eventDate": "2015-07-23T21:59:53.536+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "46322",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "Open -> In Progress",
+                "eventDate": "2015-07-23T22:00:03.504+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "46323",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "In Progress -> Closed",
+                "eventDate": "2015-07-23T22:02:32.288+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "46324",
+                "eventName": "WorklogId",
+                "eventType": "jira",
+                "eventInfo": "14503 -> null",
+                "eventDate": "2015-07-23T22:03:43.541+0600",
+                "userId": "kisik",
+                "userName": "Kazim Isik"
+            },
+            {
+                "id": "46416",
+                "eventName": "Epic Link",
+                "eventType": "custom",
+                "eventInfo": "null -> KMS-109",
+                "eventDate": "2015-07-24T19:42:14.743+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "46418",
+                "eventName": "labels",
+                "eventType": "jira",
+                "eventInfo": "jarvis -> jarvis jarvisanalysis",
+                "eventDate": "2015-07-24T19:42:14.784+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "54965",
+                "eventName": "Workflow",
+                "eventType": "jira",
+                "eventInfo": "KMS: Simple Issue Tracking Workflow -> KMS: Simple Issue Tracking Workflow new",
+                "eventDate": "2015-09-02T12:07:07.517+0600",
+                "userId": "vkim",
+                "userName": "Vyacheslav Kim"
+            }
+        ]
+    },
+    {
+        "id": "16201",
+        "issueName": "KMS-105",
+        "status": "Resolved",
+        "type": "Task",
+        "description": "Create producer beans, add serialization for stash object.",
+        "events": [
+            {
+                "id": "46314",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "Open -> In Progress",
+                "eventDate": "2015-07-23T17:04:14.061+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "46419",
+                "eventName": "Epic Link",
+                "eventType": "custom",
+                "eventInfo": "null -> KMS-109",
+                "eventDate": "2015-07-24T19:42:38.449+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "46421",
+                "eventName": "labels",
+                "eventType": "jira",
+                "eventInfo": "jarvis -> jarvis jarvisanalysis",
+                "eventDate": "2015-07-24T19:42:38.484+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "46787",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "In Progress -> Resolved",
+                "eventDate": "2015-07-28T18:02:59.477+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "54986",
+                "eventName": "Workflow",
+                "eventType": "jira",
+                "eventInfo": "KMS: Simple Issue Tracking Workflow -> KMS: Simple Issue Tracking Workflow new",
+                "eventDate": "2015-09-02T12:07:07.672+0600",
+                "userId": "vkim",
+                "userName": "Vyacheslav Kim"
+            }
+        ]
+    },
+    {
+        "id": "16102",
+        "issueName": "KMS-99",
+        "status": "Resolved",
+        "type": "Task",
+        "description": "Spark needs kafka message serialization for stream processing.",
+        "events": [
+            {
+                "id": "46159",
+                "eventName": "Sprint",
+                "eventType": "custom",
+                "eventInfo": "null -> Jarvis sprint #3",
+                "eventDate": "2015-07-21T12:58:53.359+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "46160",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "Open -> In Progress",
+                "eventDate": "2015-07-21T12:58:55.735+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "46313",
+                "eventName": "status",
+                "eventType": "jira",
+                "eventInfo": "In Progress -> Resolved",
+                "eventDate": "2015-07-23T16:59:28.611+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "46413",
+                "eventName": "Epic Link",
+                "eventType": "custom",
+                "eventInfo": "null -> KMS-109",
+                "eventDate": "2015-07-24T19:22:21.786+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "46415",
+                "eventName": "labels",
+                "eventType": "jira",
+                "eventInfo": " -> #jarvisanalysis",
+                "eventDate": "2015-07-24T19:22:21.827+0600",
+                "userId": "nbulut",
+                "userName": "Neslihan Bulut"
+            },
+            {
+                "id": "54964",
+                "eventName": "Workflow",
+                "eventType": "jira",
+                "eventInfo": "KMS: Simple Issue Tracking Workflow -> KMS: Simple Issue Tracking Workflow new",
+                "eventDate": "2015-09-02T12:07:07.509+0600",
+                "userId": "vkim",
+                "userName": "Vyacheslav Kim"
+            }
+        ]
+    }
+]
