@@ -1,170 +1,136 @@
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="s" uri="/struts-tags" %>
-<%@ taglib prefix="display" uri="http://displaytag.sf.net" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: ermek
-  Date: 7/27/15
-  Time: 4:10 PM
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-  <title><fmt:message key="userMetrics.title"/></title>
 
-  <!-- Loading Flat UI -->
-  <link href="../../styles/flat-ui.css" rel="stylesheet">
-
-  <link rel="stylesheet" type="text/css" href="../../styles/css/style1.css"/>
-  <script src="../../scripts/modernizr.custom.63321.js"></script>
-
-
-  <style>
-    canvas
-    {
-    }
-  </style>
+  <!--<%-- 3d timeline styles --%>-->
+  <link href="../../styles/timeline/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../../styles/timeline/css/style.css" rel="stylesheet">
+  <link href="../../styles/timeline/css/font-awesome.min.css" rel="stylesheet">
+  <link href="../../styles/timeline/css/animations.css" rel="stylesheet">
+  <link href="../../styles/timeline/css/daterangepicker.css" rel="stylesheet"/>
 
 </head>
 
 
-<body class="body-bg">
+<body>
 
-<h2><fmt:message key="userMetrics.heading"/></h2>
+<!--||||||SLIDER PROJECT FILTER BEGIN||||||-->
+<div class="slide-out-div">
 
 
-<div class="row">
-  <div class="col-md-4">
+  <a class="handle" href="#"></a>
 
-    <div class="panel panel-default">
-      <div class="panel-heading">Projects</div>
+  <div id="filter-by"></div>
 
-      <div class="panel-body">
-        <hr>
-
-        <div>
-          <label for="switch">User</label>
-          <input type="checkbox" checked data-toggle="toggle" id="switch">
-        </div>
-
-        <div class="fleft">
-          <select id="cd-dropdown" name="cd-dropdown" class="cd-select">
-            <option value="-1" selected>Choose Project</option>
-            <option value="1" class="icon-rocket">Subutai</option>
-            <option value="2" class="icon-diamond">Jarvis</option>
-            <option value="3" class="icon-star">HUB</option>
-            <option value="4" class="icon-sun">Tooling</option>
-          </select>
-        </div>
-
-        <s:submit type="button" key="button.upload" name="list" cssClass="btn btn-primary" theme="simple">
-          <i class="icon-upload icon-white"></i>
-          <fmt:message key="button.view"/>
-        </s:submit>
-
-      </div>
-    </div>
-  </div>
-
-  <div class="col-md-4">
-
-    <div class="panel panel-default">
-      <div class="panel-heading">Developers</div>
-      <div class="panel-body">
-
-        <hr>
-
-        <div class="list-group">
-          <a href="#" class="list-group-item ">
-            Eric
-            <span class="badge">5</span>
-          </a>
-          <a href="#" class="list-group-item">
-            Talas <span class="badge">9</span>
-          </a>
-          <a href="#" class="list-group-item">
-            Neslihan <span class="badge">6</span>
-          </a>
-          <a href="#" class="list-group-item">
-            Kazim <span class="badge">3</span>
-          </a>
-        </div>
-      </div>
-    </div>
+  <div class="btn-group">
+    <label for="project-dropdown">PROJECT
+      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="project-dropdown">
+        Select project<span class="caret" style="margin-left: 80px;"></span></button>
+      <ul class="dropdown-menu" role="menu">
+        <li><a href="#">Jarvis</a></li>
+        <li><a href="#">Tulpar</a></li>
+      </ul>
+    </label>
   </div>
 
 
-  <div class="col-md-4">
+  <div class="btn-group" style="margin-top: 20px">
+    <label for="member-dropdown" id="team-member"><span id="team-member-span">TEAM MEMBERS</span>
 
-    <div class="panel panel-default">
-      <div class="panel-heading">Metrics</div>
-      <div class="panel-body">
-
-        <hr>
-
-        <div style="width:100%">
-          <canvas id="canvas" height="100" width="100"></canvas>
-        </div>
-
+      <div id="content">
+        <input type="checkbox" class="check" id="one" name="check_one" checked/>
+        <label for="one">
+          <div id="thumb"></div>
+        </label>
       </div>
-    </div>
+
+      <select class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="member-dropdown">
+        <option value="0">Select member</option>
+      </select>
+    </label>
   </div>
 
+  <div class="btn-group" data-toggle="buttons" id="btn-group-slider">
+    <label for="radio-slider-id">EPIC STATUS &nbsp;&nbsp;&nbsp;
+      <label class="radio-slider" id="radio-slider-id">
+        <input type="radio" name="" value="1"/>&nbsp;&nbsp;Open&nbsp;&nbsp;&nbsp;
+      </label>
+      <label class="radio-slider">
+        <input type="radio" name="" value="2"/>&nbsp;&nbsp;Closed
+      </label>
+    </label>
+  </div>
+
+
+  <div class="text-center" style="margin-top: 20px">
+    <div class="btn btn-default" id="btn-apply">APPLY</div>
+  </div>
 
 </div>
-
-<script>
-  var radarChartData = {
-    labels: ["Productivity", "Collaboration", "Velocity"],
-    datasets: [
-      {
-        label: "My Second dataset",
-        fillColor: "rgba(151,187,205,0.2)",
-        strokeColor: "rgba(151,187,205,1)",
-        pointColor: "rgba(151,187,205,1)",
-        pointStrokeColor: "#fff",
-        pointHighlightFill: "#fff",
-        pointHighlightStroke: "rgba(151,187,205,1)",
-        data: [28, 48, 40]
-      }
-    ]
-  };
-
-  window.onload = function () {
-    window.myRadar = new Chart(document.getElementById("canvas").getContext("2d")).Radar(radarChartData, {
-      responsive: true
-    });
-  }
-
-</script>
+<!--||||||SLIDER PROJECT FILTER END||||||-->
 
 
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="../../scripts/jquery.min.js"></script>
-<!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="../../scripts/flat-ui.min.js"></script>
 
-<script src="../../scripts/application.js"></script>
+<!--||||||POP-UP MODAL BEGIN||||||-->
+<div id="popup">
+  <div id="popup-part"></div>
+  <div id="popup-carrot"></div>
+  <div class="text-center popup-contents">
+    <div class="blocker">Blocker</div>
+    <h1>#152</h1><span class="popup-contents-name">Nataly Ivanova</span>
+    <hr/><span class="popup-contents-finish">Did not finish <br/>#54</span>
+  </div>
+</div>
+<!--||||||POP-UP MODAL END||||||-->
 
-<script src="../../scripts/Chart.js"></script>
-<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.0/css/bootstrap-toggle.min.css" rel="stylesheet">
-<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.0/js/bootstrap-toggle.min.js"></script>
+<div id="position" style="position:fixed;background: blue; width: 5px; height: 5px;"></div>
 
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-<script type="text/javascript" src="../../scripts/jquery.dropdown.js"></script>
+<canvas id="renderCanvas"></canvas>
+
+<!--<%-- 3d timeline scripts --%>-->
+<script src="../../styles/timeline/js/libs/date-format.js"></script>
+<script src="../../styles/timeline/js/libs/jquery-2.1.4.min.js"></script>
+<script src="../../styles/timeline/js/libs/bootstrap.min.js"></script>--%>
+
+
+<script src="../../styles/timeline/js/libs/moment.min.js"></script>
+<script src="../../styles/timeline/js/libs/daterangepicker.js"></script>
+<script src="../../styles/timeline/js/libs/jquery.tabSlideOut.v1.3.js"></script>
+
+<!--SlideBar-->
 <script type="text/javascript">
-
   $(function () {
-
-    $('#cd-dropdown').dropdown({
-      gutter: 5
+    $('.slide-out-div').tabSlideOut({
+      tabHandle: '.handle',                     //class of the element that will become your tab
+      pathToTabImage: '../../styles/timeline/assets/img/slidebar-tag.svg', //path to the image for the tab //Optionally can be set using css
+      imageHeight: '100px',                     //height of tab image           //Optionally can be set using css
+      imageWidth: '20px',                       //width of tab image            //Optionally can be set using css
+      tabLocation: 'left',                      //side of screen where tab lives, top, right, bottom, or left
+      speed: 300,                               //speed of animation
+      action: 'click',                          //options: 'click' or 'hover', action to trigger animation
+      topPos: '400px',                          //position from the top/ use if tabLocation is left or right
+      leftPos: '15px',                          //position from left/ use if tabLocation is bottom or top
+      fixedPosition: false                      //options: true makes it stick(fixed position) on scroll
     });
 
   });
 
+  $(function () {
+    $('input[name="daterange"]').daterangepicker();
+  });
 </script>
+
+<!--<script src="js/leapCursor/leapcursor-with-dependencies.min.js"></script>-->
+
+<!--<script src="js/babylon/babylon.max.js"></script>-->
+<script src="../../styles/timeline/js/babylon/babylon.2.1.debug.js"></script>
+<script src="../../styles/timeline/js/libs/leap-0.6.4.min.js"></script>
+<script src="../../styles/timeline/js/libs/leap-plugins-0.1.6.js"></script>
+
+<script src="../../styles/timeline/js/builder-timeline.js"></script>
+<!--<script src="js/app.js"></script>-->
+
+<script src="../../styles/timeline/js/newApp.js"></script>
+
 
 </body>
 </html>

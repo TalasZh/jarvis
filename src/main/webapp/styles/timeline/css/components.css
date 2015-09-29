@@ -1,0 +1,428 @@
+@import url(https://fonts.googleapis.com/css?family=Lato:400,700,700italic,400italic);
+
+/*-GENERAL-*/
+
+html, body {
+    background: #00091c;
+    color: #fff;
+    font-family: 'Lato', sans-serif;
+}
+
+/*.container-fluid .container {
+    height: 100%;
+    padding-right: 0;
+    padding-left: 0;
+}*/
+
+/*-LEFT SIDEBAR-*/
+
+.left-nav {
+    position: fixed;
+    width: 110px;
+    height: 100%;
+    background: #0a2341;
+}
+
+/*Profile begin*/
+.profile {
+    padding: 20px 30px;
+    background: #001937;
+}
+
+.profile a {
+    text-align: center;
+    display: block;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.profile a:hover, a:focus {
+
+}
+
+/*Avatar*/
+.circle-avatar {
+    line-height: 0; /* remove line-height */
+    display: inline-block; /* circle wraps image */
+    border: 2px solid rgba(255, 255, 255, 1);
+    border-radius: 50%; /* relative value */
+    /*box-shadow: 0px 0px 5px rgba(0,0,0,0.4);*/
+    transition: linear 0.25s;
+}
+
+.circle-avatar img {
+    border-radius: 50%;
+    /* relative value for
+                     adjustable image size */
+}
+
+.circle-avatar:hover {
+    transition: ease-out 0.2s;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    -webkit-transition: ease-out 0.2s;
+}
+
+a.circle-avatar {
+    color: transparent;
+}
+
+/*Profile end*/
+
+/*Services buttons begin*/
+.services-buttons ul {
+    list-style: none;
+    padding-left: inherit;
+}
+
+.services-buttons li a {
+    text-align: center;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    display: block;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    border-left: 5px solid #001937;
+    border-bottom: 1px solid #001937;
+
+}
+
+.services-buttons li a:hover {
+    text-decoration: none;
+    color: #fff;
+    background: #142d4b;
+}
+
+.services-buttons li a:active,
+.services-buttons li a:focus {
+    text-decoration: none;
+    border-left: 5px solid #c1272d;
+}
+
+/*Services buttons end*/
+
+/*-RIGHT SIDEBAR-*/
+.right-nav {
+    position: fixed;
+    right: 0;
+    width: 302px;
+    height: 100%;
+    overflow: auto;
+    background: #001937;
+    padding: 15px 15px 15px 15px;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+.right-nav h1 {
+    font-size: 14px;
+}
+
+.right-nav .box {
+    margin-bottom: 20px;
+    background-color: #0a2341;
+    border: 1px solid #00142d;
+    border-radius: 2px;
+    padding: 15px 15px 15px 15px;
+}
+
+.right-nav .box td {
+    width: 110px;
+}
+
+.right-nav .box td + td {
+    border-left: 1px solid #00142d;
+}
+
+.right-nav .box .numbers {
+    font-weight: 700;
+    font-size: 21px;
+}
+
+/*Scroll style*/
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #000f2d;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #142d4b;
+}
+
+/*Radio customize*/
+
+.radio {
+    vertical-align: top;
+    width: 17px;
+    height: 17px;
+    margin: 0 3px 0 0;
+}
+
+.radio + label {
+    cursor: pointer;
+}
+
+.radio:not(checked) {
+    position: absolute;
+    opacity: 0;
+}
+
+.radio:not(checked) + label {
+    position: relative;
+    padding: 0 0 30px 0;
+    margin-top: 10px;
+    margin-left: 9px;
+    margin-right: 9px;
+}
+
+.radio:not(checked) + label:before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 0;
+    width: 21px;
+    height: 21px;
+    border: 1px solid #001937;
+    border-radius: 50%;
+    background: #001937;
+}
+
+.radio:not(checked) + label:after {
+    content: '';
+    position: absolute;
+    top: 27px;
+    left: 7px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #666666; /* Old browsers */
+    background: -moz-linear-gradient(left, #666666 0%, #b3b3b3 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, right top, color-stop(0%, #666666), color-stop(100%, #b3b3b3)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(left, #666666 0%, #b3b3b3 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(left, #666666 0%, #b3b3b3 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(left, #666666 0%, #b3b3b3 100%); /* IE10+ */
+    background: linear-gradient(to right, #666666 0%, #b3b3b3 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#666666', endColorstr='#b3b3b3', GradientType=1); /* IE6-9 */
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .5);
+    opacity: 1;
+    transition: all .2s;
+}
+
+.radio:checked + label:after {
+    background: #00ffff;
+    box-shadow: 0 0 5px #00ffff;
+    opacity: 1;
+}
+
+.radio:focus + label:before {
+    box-shadow: 0 0 0 3px rgba(193, 39, 45, .5);
+}
+
+/*Total score*/
+.score {
+    display: inline-block;
+    margin-top: 10px;
+    margin-right: 10px;
+    background: #001937;
+    border-radius: 10px;
+    padding: 5px 10px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.excellent {
+    box-shadow: 0 0 5px #00ff6c;
+}
+
+.good {
+    box-shadow: 0 0 5px #ffff00;
+}
+
+.bad {
+    box-shadow: 0 0 5px #c1272d;
+}
+
+.box .diagram {
+    position: relative;
+    left: 18px;
+    background: url("../assets/img/diagram-1.svg") no-repeat;
+    height: 215px;
+}
+
+.box .diagram h1 {
+    position: absolute;
+    top: 62px;
+    left: 62px;
+    font-size: 14px;
+}
+
+.box .diagram .big {
+    font-size: 25px;
+    font-weight: 700;
+}
+
+/*Progress*/
+.legend .open {
+    display: inline-block;
+    width: 25%;
+}
+
+.legend .inprogress {
+    display: inline-block;
+    width: 45%;
+}
+
+.box .progress {
+    height: 17px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    overflow: visible;
+    background-color: #00142d;
+    border-radius: 15px;
+    border: 5px solid #001937;
+    -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1);
+}
+
+.box .progress span {
+    position: relative;
+    top: -25px;
+    font-size: 10px;
+}
+
+.box .progress-text td {
+    width: 140px;
+}
+
+.box .progress-text td + td {
+    border-left: none;
+}
+
+.progress-bar-success {
+    background-color: #00ffff;
+}
+
+.progress-bar-warning {
+    background-color: #fcee21;
+}
+
+.progress-bar-danger {
+    background-color: #00ff6c;
+}
+
+.box .story table {
+    margin-left: 70px;
+}
+
+.box .story td {
+    width: 30px;
+}
+
+.box .story td + td {
+    border-left: none;
+}
+
+/*Description*/
+
+.description-text {
+    overflow: hidden;
+    height: 157px;
+}
+
+.box .button a {
+    display: block;
+    margin: 10px auto auto;
+    padding: 5px 10px;
+    background-color: #001937;
+    border: 1px solid #00142d;
+    border-radius: 2px;
+    color: #fff;
+    width: 60px;
+}
+
+.box .button a:hover, a:focus {
+    text-decoration: none;
+    background-color: #00142d;
+}
+
+.requirements {
+    border-top: 1px solid #00142d;
+    margin-top: 30px;
+    padding-top: 30px;
+}
+
+/*Story details*/
+.story-details {
+    overflow: auto;
+    height: 315px;
+}
+
+.story-details ul {
+    list-style: none;
+    padding-left: inherit;
+}
+
+.story-details li a {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 15px;
+    display: block;
+    text-decoration: underline;
+    font-size: 12px;
+    color: #fff;
+    border-bottom: 1px solid #001937;
+
+}
+
+.story-details li a:hover {
+    text-decoration: underline;
+    color: #fff;
+    background: #142d4b;
+}
+
+.story-details li a:active,
+.story-details li a:focus {
+    text-decoration: none;
+    background: #142d4b;
+}
+
+/*projectInfoPopup CUSTOMIZATION*/
+.projectInfoPopup-tree {
+    position: absolute;
+    height: 34px;
+    background: rgba(0, 0, 0, 0.25);
+    padding: 7px 15px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+.projectInfoPopup-tree:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    display: block;
+    background: url("../assets/img/img-angle-before.svg");
+    height: 34px;
+    width: 5px;
+}
+
+.projectInfoPopup-tree:after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    display: block;
+    background: url("../assets/img/img-angle-after.svg");
+    height: 34px;
+    width: 5px;
+}
