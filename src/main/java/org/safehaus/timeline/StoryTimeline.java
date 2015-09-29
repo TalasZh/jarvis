@@ -1,15 +1,15 @@
 package org.safehaus.timeline;
 
 
-import java.util.List;
+import java.util.Set;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.safehaus.dao.entities.jira.JiraIssueChangelog;
+import org.safehaus.dao.entities.jira.JiraMetricIssue;
 import org.safehaus.model.Views;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 
 /**
@@ -19,7 +19,7 @@ import com.google.common.collect.Lists;
 public class StoryTimeline
 {
     @JsonView( Views.CompleteView.class )
-    private List<JiraIssueChangelog> issuesEvents = Lists.newArrayList();
+    private Set<JiraMetricIssue> issues = Sets.newHashSet();
 
 
     public StoryTimeline()
@@ -27,14 +27,14 @@ public class StoryTimeline
     }
 
 
-    public List<JiraIssueChangelog> getIssuesEvents()
+    public Set<JiraMetricIssue> getIssues()
     {
-        return issuesEvents;
+        return issues;
     }
 
 
-    public void setIssuesEvents( final List<JiraIssueChangelog> issuesEvents )
+    public void setIssues( final Set<JiraMetricIssue> issues )
     {
-        this.issuesEvents = issuesEvents;
+        this.issues = issues;
     }
 }

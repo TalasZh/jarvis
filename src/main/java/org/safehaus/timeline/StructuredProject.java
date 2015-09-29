@@ -2,14 +2,14 @@ package org.safehaus.timeline;
 
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.safehaus.model.Views;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 
 /**
@@ -28,7 +28,7 @@ public class StructuredProject implements Serializable
     private String key;
 
     @JsonView( Views.TimelineLong.class )
-    private List<StructuredIssue> issues = Lists.newArrayList();
+    private Set<StructuredIssue> issues = Sets.newHashSet();
 
 
     public StructuredProject()
@@ -44,13 +44,13 @@ public class StructuredProject implements Serializable
     }
 
 
-    public List<StructuredIssue> getIssues()
+    public Set<StructuredIssue> getIssues()
     {
         return issues;
     }
 
 
-    public void setIssues( final List<StructuredIssue> issues )
+    public void setIssues( final Set<StructuredIssue> issues )
     {
         this.issues = issues;
     }

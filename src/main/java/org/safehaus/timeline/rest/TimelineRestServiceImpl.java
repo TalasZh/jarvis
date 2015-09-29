@@ -15,6 +15,8 @@ import org.safehaus.service.api.JiraMetricDao;
 import org.safehaus.timeline.StoryTimeline;
 import org.safehaus.timeline.StructuredIssue;
 import org.safehaus.timeline.StructuredProject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,23 +33,20 @@ import com.google.common.collect.Sets;
         endpointInterface = "org.safehaus.timeline.rest.TimelineRestService" )
 public class TimelineRestServiceImpl implements TimelineRestService
 {
+
+    private static final Logger logger = LoggerFactory.getLogger( TimelineRestServiceImpl.class );
     @Autowired
     private JiraMetricDao jiraMetricDao;
 
     private Map<String, StructuredProject> structuredProjects = Maps.newHashMap();
 
-    private Map<String, JiraMetricIssue> jiraMetricIssues = Maps.newHashMap();
-
 
     @Override
     public StructuredProject getProject( final String projectKey )
     {
-        List<JiraMetricIssue> issues = jiraMetricDao.getProjectIssues( projectKey );
-        for ( final JiraMetricIssue issue : issues )
-        {
-            jiraMetricIssues.put( issue.getIssueKey(), issue );
-        }
-        List<StructuredIssue> structuredEpics = Lists.newArrayList( getProjectEpics( projectKey ) );
+        Map<String, JiraMetricIssue> jiraMetricIssues = getJiraProjectIssues( projectKey );
+
+        Set<StructuredIssue> structuredEpics = getProjectEpics( projectKey, jiraMetricIssues );
 
         getProjects();
 
@@ -77,7 +76,21 @@ public class TimelineRestServiceImpl implements TimelineRestService
     }
 
 
-    private Set<StructuredIssue> getProjectEpics( String projectKey )
+    private Map<String, JiraMetricIssue> getJiraProjectIssues( String projectKey )
+    {
+        Map<String, JiraMetricIssue> jiraMetricIssues = Maps.newHashMap();
+
+        List<JiraMetricIssue> issues = jiraMetricDao.getProjectIssues( projectKey );
+        for ( final JiraMetricIssue issue : issues )
+        {
+            jiraMetricIssues.put( issue.getIssueKey(), issue );
+        }
+        return jiraMetricIssues;
+    }
+
+
+    private Set<StructuredIssue> getProjectEpics( String projectKey,
+                                                  final Map<String, JiraMetricIssue> jiraMetricIssues )
     {
         Set<StructuredIssue> epics = Sets.newHashSet();
         for ( final Map.Entry<String, JiraMetricIssue> entry : jiraMetricIssues.entrySet() )
@@ -94,7 +107,7 @@ public class TimelineRestServiceImpl implements TimelineRestService
                 List<String> epicStories = getChildIssues( jiraMetricIssue );
                 for ( final String story : epicStories )
                 {
-                    buildStructureIssue( story, epic );
+                    buildStructureIssue( story, epic, jiraMetricIssues );
                 }
 
                 epics.add( epic );
@@ -111,17 +124,23 @@ public class TimelineRestServiceImpl implements TimelineRestService
         if ( storyKey != null )
         {
             String projectKey = storyKey.split( "-" )[0];
+
+            Map<String, JiraMetricIssue> jiraMetricIssues = getJiraProjectIssues( projectKey );
+
             StructuredProject project = getProject( projectKey );
             StructuredIssue story = findIssueInStructure( project.getIssues(), storyKey );
+
             Long from = Long.valueOf( fromDate );
             Long to = Long.valueOf( toDate );
-            populateEvents( story, storyTimeline, from, to );
+
+            populateEvents( story, storyTimeline, from, to, jiraMetricIssues );
         }
         return storyTimeline;
     }
 
 
-    private void populateEvents( StructuredIssue issue, StoryTimeline storyTimeline, Long fromDate, Long toDate )
+    private void populateEvents( StructuredIssue issue, StoryTimeline storyTimeline, Long fromDate, Long toDate,
+                                 final Map<String, JiraMetricIssue> jiraMetricIssues )
     {
         JiraMetricIssue jiraMetricIssue = jiraMetricIssues.get( issue.getKey() );
         if ( jiraMetricIssue != null )
@@ -131,18 +150,19 @@ public class TimelineRestServiceImpl implements TimelineRestService
                 Long eventDate = changelog.getChangeKey().getCreated();
                 if ( fromDate < eventDate && eventDate < toDate )
                 {
-                    storyTimeline.getIssuesEvents().add( changelog );
+                    storyTimeline.getIssues().add( jiraMetricIssue );
+                    break;
                 }
             }
         }
         for ( final StructuredIssue structuredIssue : issue.getIssues() )
         {
-            populateEvents( structuredIssue, storyTimeline, fromDate, toDate );
+            populateEvents( structuredIssue, storyTimeline, fromDate, toDate, jiraMetricIssues );
         }
     }
 
 
-    private StructuredIssue findIssueInStructure( List<StructuredIssue> issues, String issueKey )
+    private StructuredIssue findIssueInStructure( Set<StructuredIssue> issues, String issueKey )
     {
         for ( final StructuredIssue structuredIssue : issues )
         {
@@ -163,7 +183,8 @@ public class TimelineRestServiceImpl implements TimelineRestService
     }
 
 
-    private void buildStructureIssue( String issueKey, StructuredIssue structuredParent )
+    private void buildStructureIssue( String issueKey, StructuredIssue structuredParent,
+                                      final Map<String, JiraMetricIssue> jiraMetricIssues )
     {
         JiraMetricIssue issue = jiraMetricIssues.get( issueKey );
         StructuredIssue structuredIssue =
@@ -173,13 +194,10 @@ public class TimelineRestServiceImpl implements TimelineRestService
 
         structuredParent.getIssues().add( structuredIssue );
 
-        for ( final JarvisLink link : issue.getIssueLinks() )
+        List<String> linkedIssues = getChildIssues( issue );
+        for ( final String linkedIssue : linkedIssues )
         {
-            List<String> linkedIssues = getChildIssues( issue );
-            for ( final String linkedIssue : linkedIssues )
-            {
-                buildStructureIssue( linkedIssue, structuredIssue );
-            }
+            buildStructureIssue( linkedIssue, structuredIssue, jiraMetricIssues );
         }
     }
 

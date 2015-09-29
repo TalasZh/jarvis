@@ -2,12 +2,12 @@ package org.safehaus.timeline;
 
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 import org.safehaus.model.Views;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 
 /**
@@ -40,7 +40,7 @@ public class StructuredIssue
     private Date updated;
 
     @JsonView( Views.TimelineLong.class )
-    private List<StructuredIssue> issues = Lists.newArrayList();
+    private Set<StructuredIssue> issues = Sets.newHashSet();
 
 
     public StructuredIssue( final String key, final Long id, final String issueType, final String summary,
@@ -57,7 +57,7 @@ public class StructuredIssue
     }
 
 
-    public List<StructuredIssue> getIssues()
+    public Set<StructuredIssue> getIssues()
     {
         return issues;
     }
