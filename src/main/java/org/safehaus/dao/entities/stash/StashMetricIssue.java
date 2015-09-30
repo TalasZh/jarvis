@@ -75,6 +75,10 @@ public class StashMetricIssue implements Serializable
     @Column( name = "project_key" )
     private String projectKey;
 
+    @Column( name = "commit_message" )
+    private String commitMessage;
+
+
 
     public StashMetricIssue()
     {
@@ -227,5 +231,17 @@ public class StashMetricIssue implements Serializable
                 ", projectName='" + projectName + '\'' +
                 ", projectKey='" + projectKey + '\'' +
                 '}';
+    }
+
+
+    public String getCommitMessage()
+    {
+        return commitMessage;
+    }
+
+
+    public void setCommitMessage( final String commitMessage )
+    {
+        this.commitMessage = commitMessage;
     }
 }

@@ -7,6 +7,7 @@ import javax.jws.WebService;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 
 import org.safehaus.dao.entities.stash.StashMetricIssue;
 
@@ -33,4 +34,10 @@ public interface StashMetricsRestService
     @GET
     @Path( "timestamp/{timestamp}" )
     public List<StashMetricIssue> getStashMetricIssuesByAuthorTimestamp( @PathParam( "timestamp" ) String timestamp );
+
+
+    @GET
+    @Path( "commits" )
+    public List<StashMetricIssue> getStashMetricIssueByTimePeriod( @QueryParam( "from" ) String fromDate,
+                                                                   @QueryParam( "to" ) String toDate );
 }

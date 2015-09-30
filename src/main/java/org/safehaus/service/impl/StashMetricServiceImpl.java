@@ -98,6 +98,21 @@ public class StashMetricServiceImpl implements StashMetricService, StashMetricsR
 
 
     @Override
+    @JsonView( Views.CompleteView.class )
+    public List<StashMetricIssue> getStashMetricIssueByTimePeriod( final String fromDate, final String toDate )
+    {
+        String query = "Select j from " + StashMetricIssue.class.getSimpleName()
+                + " j where (j.authorTimestamp > :fromDate) and (j.authorTimestamp < :toDate)";
+
+        log.info( "Get list of StashmetricIssue by time period : {} {}", fromDate, toDate );
+
+        List<StashMetricIssue> issues =
+                ( List<StashMetricIssue> ) dao.findByQuery( query, "fromDate", fromDate, "toDate", toDate );
+        return issues;
+    }
+
+
+    @Override
     public void updateStashMetricIssue( StashMetricIssue stashMetricIssue )
     {
         if ( stashMetricIssue == null )

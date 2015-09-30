@@ -517,6 +517,7 @@ public class AnalysisService
                     stashMetricIssue.setProjectKey( projectKeyNameSlugTriples.get( i ).getL() );
                     stashMetricIssue.setSrcPath( change.getSrcPath() );
                     stashMetricIssue.setType( change.getType() );
+                    stashMetricIssue.setCommitMessage( commit.getMessage() );
 
                     //                    log.info( stashMetricIssue.toString() );
                     // if the commit is made after lastGathered date put it in the qualified changes.
