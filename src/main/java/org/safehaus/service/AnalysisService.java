@@ -39,6 +39,7 @@ import org.safehaus.stash.client.StashManagerException;
 import org.safehaus.stash.model.Change;
 import org.safehaus.stash.model.Project;
 import org.safehaus.stash.model.Repository;
+import org.safehaus.timeline.TimelineManager;
 import org.safehaus.util.DateSave;
 import org.sonar.wsclient.services.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,17 +74,24 @@ public class AnalysisService
 
     @Autowired
     private JiraConnector jiraConnector;
+
     @Autowired
     private StashConnector stashConnector;
+
     @Autowired
     private SonarConnector sonarConnector;
+
     @Autowired
     private ConfluenceConnector confluenceConnector;
+
     @Autowired
     private JiraMetricDao jiraMetricDao;
 
     @Autowired
     private StashMetricService stashMetricService;
+
+    @Autowired
+    private TimelineManager timelineManager;
 
     Set<JiraMetricIssue> jiraMetricIssues;
     List<StashMetricIssue> stashMetricIssues;
@@ -402,6 +410,8 @@ public class AnalysisService
         {
             lastGatheredJira = new Date( System.currentTimeMillis() );
         }
+
+        timelineManager.init();
     }
 
 

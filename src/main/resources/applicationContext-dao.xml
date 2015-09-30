@@ -42,24 +42,15 @@
   <!-- Activates scanning of @Repository -->
   <context:component-scan base-package="org.safehaus" />
 
-  <!--<bean id="cassandraEntityManagerFactory"-->
-  <!--class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">-->
-  <!--<property name="persistenceUnitName" value="cassandra-pu" />-->
-  <!--<property name="loadTimeWeaver">-->
-  <!--<bean-->
-  <!--class="org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver" />-->
-  <!--</property>-->
-  <!--</bean>-->
-
   <bean id="dataStore" class="org.safehaus.service.impl.DataStoreImpl"
         scope="singleton">
     <property name="dao" ref="daoService" />
   </bean>
 
-  <bean id="jiraMetricService" class="org.safehaus.service.impl.JiraMetricDaoImpl"
-        scope="singleton">
-    <property name="dao" ref="daoService" />
-  </bean>
+  <!--<bean id="jiraMetricService" class="org.safehaus.service.impl.JiraMetricDaoImpl"-->
+  <!--scope="singleton">-->
+  <!--<property name="dao" ref="daoService" />-->
+  <!--</bean>-->
 
   <bean id="stashMetricService" class="org.safehaus.service.impl.StashMetricServiceImpl"
         scope="singleton">
@@ -68,6 +59,16 @@
   <bean id="stashUserMetricService" class="org.safehaus.service.impl.StashUserMetricServiceImpl"
         scope="singleton">
     <property name="dao" ref="daoService" />
+  </bean>
+
+  <!--<bean id="timelineDaoImpl" class="org.safehaus.timeline.dao.TimelineDaoImpl"-->
+  <!--scope="singleton">-->
+  <!--<property name="daoManager" ref="daoService" />-->
+  <!--</bean>-->
+
+  <bean id="timelineManager" class="org.safehaus.timeline.TimelineManager">
+    <constructor-arg ref="jiraMetricDao" />
+    <constructor-arg ref="timelineService" />
   </bean>
 
   <bean id="userMetricService" class="org.safehaus.service.impl.UserMetricServiceImpl"
@@ -80,9 +81,10 @@
     <property name="dao" ref="daoService" />
   </bean>
 
-  <bean id="confluenceConnector" class="org.safehaus.timeline.rest.TimelineRestServiceImpl" init-method="getProjects">
+  <!--<bean id="confluenceConnector" class="org.safehaus.timeline.rest.TimelineRestServiceImpl" init-method="getProjects">-->
     <!--<constructor-arg value="${confluence.analysisPass}" />-->
-  </bean>
+  <!--</bean> -->
+
   <!--<bean id="dao" class="org.safehaus.dao.kundera.DaoImpl"-->
   <!--scope="singleton">-->
   <!--</bean>-->
