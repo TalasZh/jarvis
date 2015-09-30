@@ -159,6 +159,9 @@ public class StructuredProject implements Serializable, Structure
                 ", name='" + name + '\'' +
                 ", key='" + key + '\'' +
                 ", issues=" + issues +
+                ", openStatus=" + openStatus +
+                ", inProgressStatus=" + inProgressStatus +
+                ", doneStatus=" + doneStatus +
                 '}';
     }
 }
