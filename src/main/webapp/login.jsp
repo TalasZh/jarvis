@@ -1,49 +1,74 @@
 <%@ include file="/common/taglibs.jsp" %>
 
+
+<!DOCTYPE html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <title></title>
   <title><fmt:message key="login.title"/></title>
   <meta name="menu" content="Login"/>
-  <!-- Loading Flat UI -->
-  <link href="../../styles/flat-ui.css" rel="stylesheet">
-  <link href="../../styles/css/style1.css" rel="stylesheet" type="text/css"/>
+
+  <!--Stylesheets-->
+  <link href="styles/timeline/css/bootstrap.min.css" rel="stylesheet">
+  <link href="styles/timeline/css/login.css" rel="stylesheet">
+
 </head>
-<body id="login">
+<body>
+<div class="container-fluid">
+  <div class="container vcenter">
+    <div class="row text-center">
+      <div class="col-lg-offset-4 col-lg-4 col-md-offset-4 col-md-4 col-sm-12 col-xs-12 fixed-size">
+        <div class="logo"></div>
+        <div class="welcome">New way of project management in Open Source</div>
+        <div class="form text-left">
+          <form method="post" id="loginForm" action="<c:url value='/j_security_check'/>"
+                onsubmit="saveUsername(this);return validateForm(this)" autocomplete="off">
 
-<form method="post" id="loginForm" action="<c:url value='/j_security_check'/>"
-      onsubmit="saveUsername(this);return validateForm(this)" class="form-signin" autocomplete="off">
-  <h2 class="form-signin-heading">
-    <fmt:message key="login.heading"/>
-  </h2>
-  <c:if test="${param.error != null}">
-    <div class="alert alert-danger alert-dismissable">
-      <fmt:message key="errors.password.mismatch"/>
+            <c:if test="${param.error != null}">
+              <div class="alert alert-danger alert-dismissable">
+                <fmt:message key="errors.password.mismatch"/>
+              </div>
+            </c:if>
+
+            <div class="form-group">
+              <input type="text" name="j_username" id="j_username" class="form-control"
+                     placeholder="<fmt:message key="label.name"/>" required tabindex="1" placeholder="Username">
+            </div>
+            <div class="form-group">
+              <input type="password" class="form-control" name="j_password" id="j_password" tabindex="2"
+                     placeholder="<fmt:message key="label.password"/>" required>
+            </div>
+
+
+            <c:if test="${appConfig['rememberMeEnabled']}">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" name="_spring_security_remember_me" id="rememberMe" tabindex="3"/> Keep me logged in.
+                </label>
+              </div>
+            </c:if>
+
+
+            <div class="login text-center"><button type="submit" class="btn btn-default" name="login">LOGIN</button></div>
+
+            <div class="signup text-center">
+              <p>
+                <fmt:message key="login.signup">
+                  <fmt:param><c:url value="/signup"/></fmt:param>
+                </fmt:message>
+              </p>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
-  </c:if>
-  <input type="text" name="j_username" id="j_username" class="form-control"
-         placeholder="<fmt:message key="label.name"/>" required tabindex="1">
-  <input type="password" class="form-control" name="j_password" id="j_password" tabindex="2"
-         placeholder="<fmt:message key="label.password"/>" required>
-
-  <c:if test="${appConfig['rememberMeEnabled']}">
-    <label for="rememberMe" class="checkbox">
-      <input type="checkbox" name="_spring_security_remember_me" id="rememberMe" tabindex="3"/>
-      <fmt:message key="login.rememberMe"/></label>
-  </c:if>
-
-  <button type="submit" class="btn btn-lg btn-primary btn-block" name="login" tabindex="4">
-    <fmt:message key='button.login'/>
-  </button>
-</form>
-
-<p>
-  <fmt:message key="login.signup">
-    <fmt:param><c:url value="/signup"/></fmt:param>
-  </fmt:message>
-</p>
+  </div>
+</div>
 
 <c:set var="scripts" scope="request">
   <%@ include file="/scripts/login.js" %>
 </c:set>
 
-<p><fmt:message key="login.passwordHint"/></p>
 </body>
+</html>
