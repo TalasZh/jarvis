@@ -33,7 +33,7 @@ import static org.safehaus.Constants.DATABASE_SCHEMA;
 @Access( AccessType.FIELD )
 @Table( name = "stash_metric_issue", schema = DATABASE_SCHEMA )
 @IndexCollection( columns = {
-        @Index( name = "author.name" ), @Index( name = "projectKey" )
+        @Index( name = "author" ), @Index( name = "projectKey" )
 } )
 public class StashMetricIssue implements Serializable
 {
@@ -90,6 +90,42 @@ public class StashMetricIssue implements Serializable
     }
 
 
+    public StashMetricPK getStashMetricPK()
+    {
+        return stashMetricPK;
+    }
+
+
+    public void setStashMetricPK( final StashMetricPK stashMetricPK )
+    {
+        this.stashMetricPK = stashMetricPK;
+    }
+
+
+    public long getAuthorTimestamp()
+    {
+        return stashMetricPK.getAuthorTs();
+    }
+
+
+    public String getId()
+    {
+        return stashMetricPK.getContentId();
+    }
+
+
+    public void setAuthorTimestamp( long authorTimestamp )
+    {
+        this.stashMetricPK.setAuthorTs( authorTimestamp );
+    }
+
+
+    public void setId( String id )
+    {
+        this.stashMetricPK.setContentId( id );
+    }
+
+
     public Path getPath()
     {
         return path;
@@ -126,21 +162,9 @@ public class StashMetricIssue implements Serializable
     }
 
 
-    public long getAuthorTimestamp()
-    {
-        return stashMetricPK.getAuthorTs();
-    }
-
-
     public StashUser getAuthor()
     {
         return author;
-    }
-
-
-    public String getId()
-    {
-        return stashMetricPK.getContentId();
     }
 
 
@@ -174,21 +198,9 @@ public class StashMetricIssue implements Serializable
     }
 
 
-    public void setId( String id )
-    {
-        this.stashMetricPK.setContentId( id );
-    }
-
-
     public void setAuthor( StashUser author )
     {
         this.author = author;
-    }
-
-
-    public void setAuthorTimestamp( long authorTimestamp )
-    {
-        this.stashMetricPK.setAuthorTs( authorTimestamp );
     }
 
 

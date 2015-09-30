@@ -52,14 +52,14 @@
   <!--<property name="dao" ref="daoService" />-->
   <!--</bean>-->
 
-  <bean id="stashMetricService" class="org.safehaus.service.impl.StashMetricServiceImpl"
-        scope="singleton">
-  </bean>
+  <!--<bean id="stashMetricService" class="org.safehaus.service.impl.StashMetricServiceImpl"-->
+  <!--scope="singleton">-->
+  <!--</bean>-->
 
-  <bean id="stashUserMetricService" class="org.safehaus.service.impl.StashUserMetricServiceImpl"
-        scope="singleton">
-    <property name="dao" ref="daoService" />
-  </bean>
+  <!--<bean id="stashUserMetricService" class="org.safehaus.service.impl.StashUserMetricServiceImpl"-->
+  <!--scope="singleton">-->
+  <!--<property name="dao" ref="daoService" />-->
+  <!--</bean>-->
 
   <!--<bean id="timelineDaoImpl" class="org.safehaus.timeline.dao.TimelineDaoImpl"-->
   <!--scope="singleton">-->
@@ -71,10 +71,10 @@
     <constructor-arg ref="timelineService" />
   </bean>
 
-  <bean id="userMetricService" class="org.safehaus.service.impl.UserMetricServiceImpl"
-        scope="singleton">
-    <property name="dao" ref="daoService" />
-  </bean>
+  <!--<bean id="userMetricService" class="org.safehaus.service.impl.UserMetricServiceImpl"-->
+  <!--scope="singleton">-->
+  <!--<property name="dao" ref="daoService" />-->
+  <!--</bean>-->
 
   <bean id="confluenceUserMetricService" class="org.safehaus.service.impl.ConfluenceMetricServiceImpl"
         scope="singleton">
@@ -91,10 +91,10 @@
 
   <bean id="daoService" class="org.safehaus.dao.kundera.DaoServiceImpl"
         scope="singleton">
-    <property name="emf" ref="emf-cassandra" />
+    <property name="emf" ref="emfCassandra" />
   </bean>
 
-  <bean id="emf-cassandra" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+  <bean id="emfCassandra" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
     <property name="persistenceUnitName" value="cassandra-pu" />
     <property name="jpaProperties">
       <props>

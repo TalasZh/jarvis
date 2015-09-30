@@ -2,6 +2,7 @@ package org.safehaus.dao.kundera;
 
 
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -157,6 +158,36 @@ public class DaoServiceImpl implements Dao
         catch ( Exception ex )
         {
             LOGGER.error( "Error retrieving by id", ex );
+            if ( em.getTransaction().isActive() )
+            {
+                em.getTransaction().rollback();
+            }
+        }
+        return result;
+    }
+
+
+    @Override
+    public <T> List<T> findByQuery( final Class<T> entityClass, final String query,
+                                    final Map<String, Object> parameters )
+    {
+        EntityManager em = emf.createEntityManager();
+        List<T> result = Lists.newArrayList();
+        try
+        {
+            em.getTransaction().begin();
+            TypedQuery<T> typedQuery = em.createQuery( query, entityClass );
+
+            for ( final Map.Entry<String, Object> entry : parameters.entrySet() )
+            {
+                typedQuery.setParameter( entry.getKey(), entry.getValue() );
+            }
+            result = typedQuery.getResultList();
+            em.getTransaction().commit();
+        }
+        catch ( Exception ex )
+        {
+            LOGGER.error( "Error executing query", ex );
             if ( em.getTransaction().isActive() )
             {
                 em.getTransaction().rollback();

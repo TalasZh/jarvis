@@ -2,6 +2,7 @@ package org.safehaus.dao;
 
 
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -18,6 +19,8 @@ public interface Dao
     void remove( Object entity );
 
     <T> T findById( Class<T> entityClazz, Object id );
+
+    <T> List<T> findByQuery( Class<T> entityClass, String query, Map<String, Object> parameters );
 
     List<?> findByQuery( String Query );
 
