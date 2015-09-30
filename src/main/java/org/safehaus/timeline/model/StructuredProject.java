@@ -8,6 +8,7 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -34,7 +35,7 @@ import com.impetus.kundera.index.IndexCollection;
 @IndexCollection( columns = {
         @Index( name = "id" ), @Index( name = "key" )
 } )
-public class StructuredProject implements Serializable
+public class StructuredProject implements Serializable, Structure
 {
     @JsonView( Views.TimelineShort.class )
     @Id
@@ -54,6 +55,15 @@ public class StructuredProject implements Serializable
     @JoinColumn( name = "referenced_project_id" )
     private Set<StructuredIssue> issues = Sets.newHashSet();
 
+    @Embedded
+    private ProgressStatus openStatus;
+
+    @Embedded
+    private ProgressStatus inProgressStatus;
+
+    @Embedded
+    private ProgressStatus doneStatus;
+
 
     public StructuredProject()
     {
@@ -65,6 +75,42 @@ public class StructuredProject implements Serializable
         this.id = id;
         this.name = name;
         this.key = key;
+    }
+
+
+    public ProgressStatus getOpenStatus()
+    {
+        return openStatus;
+    }
+
+
+    public void setOpenStatus( final ProgressStatus openStatus )
+    {
+        this.openStatus = openStatus;
+    }
+
+
+    public ProgressStatus getInProgressStatus()
+    {
+        return inProgressStatus;
+    }
+
+
+    public void setInProgressStatus( final ProgressStatus inProgressStatus )
+    {
+        this.inProgressStatus = inProgressStatus;
+    }
+
+
+    public ProgressStatus getDoneStatus()
+    {
+        return doneStatus;
+    }
+
+
+    public void setDoneStatus( final ProgressStatus doneStatus )
+    {
+        this.doneStatus = doneStatus;
     }
 
 

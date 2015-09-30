@@ -13,7 +13,9 @@ import org.safehaus.dao.entities.jira.JiraMetricIssue;
 import org.safehaus.dao.entities.jira.JiraProject;
 import org.safehaus.service.api.JiraMetricDao;
 import org.safehaus.timeline.dao.TimelineDaoImpl;
+import org.safehaus.timeline.model.ProgressStatus;
 import org.safehaus.timeline.model.StoryTimeline;
+import org.safehaus.timeline.model.Structure;
 import org.safehaus.timeline.model.StructuredIssue;
 import org.safehaus.timeline.model.StructuredProject;
 import org.slf4j.Logger;
@@ -50,16 +52,24 @@ public class TimelineManager
     @PostConstruct
     public void init()
     {
-        logger.info( "Timeline service initilized." );
+        logger.info( "Timeline service initialized." );
         List<JiraProject> jiraProjects = jiraMetricDao.getProjects();
         for ( final JiraProject jiraProject : jiraProjects )
         {
             StructuredProject project =
                     new StructuredProject( jiraProject.getProjectId(), jiraProject.getName(), jiraProject.getKey() );
+            project.setDoneStatus( new ProgressStatus() );
+            project.setInProgressStatus( new ProgressStatus() );
+            project.setOpenStatus( new ProgressStatus() );
 
             Map<String, JiraMetricIssue> jiraMetricIssues = getJiraProjectIssues( jiraProject.getKey() );
 
             Set<StructuredIssue> structuredEpics = getProjectEpics( jiraProject.getKey(), jiraMetricIssues );
+
+            for ( final StructuredIssue structuredEpic : structuredEpics )
+            {
+                sumUpEstimates( structuredEpic, project );
+            }
 
             project.setIssues( structuredEpics );
             structuredProjects.put( jiraProject.getKey(), project );
@@ -127,7 +137,13 @@ public class TimelineManager
                 StructuredIssue epic = new StructuredIssue( jiraMetricIssue.getIssueKey(), jiraMetricIssue.getIssueId(),
                         jiraMetricIssue.getType().getName(), jiraMetricIssue.getSummary(),
                         jiraMetricIssue.getReporterName(), jiraMetricIssue.getReporterName(),
-                        jiraMetricIssue.getAssigneeName(), jiraMetricIssue.getUpdateDate().getTime() );
+                        jiraMetricIssue.getAssigneeName(), jiraMetricIssue.getUpdateDate().getTime(),
+                        jiraMetricIssue.getCreationDate().getTime(), jiraMetricIssue.getStatus() );
+
+                epic.setOpenStatus( new ProgressStatus() );
+                epic.setInProgressStatus( new ProgressStatus() );
+                epic.setDoneStatus( new ProgressStatus() );
+                assignIssueEstimate( epic, jiraMetricIssue );
 
                 List<String> epicStories = getChildIssues( jiraMetricIssue );
                 for ( final String story : epicStories )
@@ -139,6 +155,58 @@ public class TimelineManager
             }
         }
         return epics;
+    }
+
+
+    private void assignIssueEstimate( StructuredIssue structuredIssue, JiraMetricIssue issue )
+    {
+        ProgressStatus progressStatus = null;
+        switch ( issue.getStatus() )
+        {
+            case "Open":
+                progressStatus = structuredIssue.getOpenStatus();
+                break;
+            case "In Progress":
+                progressStatus = structuredIssue.getInProgressStatus();
+                break;
+            case "Done":
+                progressStatus = structuredIssue.getDoneStatus();
+                break;
+        }
+        if ( progressStatus != null )
+        {
+            progressStatus
+                    .setOriginalEstimate( progressStatus.getOriginalEstimate() + issue.getOriginalEstimateMinutes() );
+            progressStatus.setRemainingRestimate(
+                    progressStatus.getRemainingRestimate() + issue.getRemainingEstimateMinutes() );
+            progressStatus.setTimeSpent( progressStatus.getTimeSpent() + issue.getTimeSpentMinutes() );
+        }
+    }
+
+
+    private void sumUpEstimates( Structure structuredIssue, Structure parent )
+    {
+        // Assign open statuses
+        sumUpProgresses( structuredIssue.getOpenStatus(), parent.getOpenStatus() );
+
+        // Assign in progress statuses
+        sumUpProgresses( structuredIssue.getInProgressStatus(), parent.getInProgressStatus() );
+
+        // Assign done statuses
+        sumUpProgresses( structuredIssue.getDoneStatus(), parent.getDoneStatus() );
+    }
+
+
+    private void sumUpProgresses( ProgressStatus progressStatus, ProgressStatus parentProgress )
+    {
+        if ( progressStatus != null && parentProgress != null )
+        {
+            parentProgress
+                    .setOriginalEstimate( progressStatus.getOriginalEstimate() + parentProgress.getOriginalEstimate() );
+            parentProgress.setRemainingRestimate(
+                    progressStatus.getRemainingRestimate() + parentProgress.getRemainingRestimate() );
+            parentProgress.setTimeSpent( progressStatus.getTimeSpent() + parentProgress.getTimeSpent() );
+        }
     }
 
 
@@ -196,30 +264,6 @@ public class TimelineManager
 
 
     /**
-     * retrieves target structuredIssue in current dependency tree structure
-     */
-    private StructuredIssue findIssueInStructure( Set<StructuredIssue> issues, String issueKey )
-    {
-        for ( final StructuredIssue structuredIssue : issues )
-        {
-            if ( issueKey.equals( structuredIssue.getKey() ) )
-            {
-                return structuredIssue;
-            }
-            else
-            {
-                StructuredIssue result = findIssueInStructure( structuredIssue.getIssues(), issueKey );
-                if ( result != null )
-                {
-                    return result;
-                }
-            }
-        }
-        return null;
-    }
-
-
-    /**
      * Constructs dependency tree view for target issue
      */
     private void buildStructureIssue( String issueKey, StructuredIssue structuredParent,
@@ -229,16 +273,26 @@ public class TimelineManager
         StructuredIssue structuredIssue =
                 new StructuredIssue( issue.getIssueKey(), issue.getIssueId(), issue.getType().getName(),
                         issue.getSummary(), issue.getReporterName(), issue.getReporterName(), issue.getAssigneeName(),
-                        issue.getUpdateDate().getTime() );
+                        issue.getUpdateDate().getTime(), issue.getCreationDate().getTime(), issue.getStatus() );
+
+        structuredIssue.setDoneStatus( new ProgressStatus() );
+        structuredIssue.setInProgressStatus( new ProgressStatus() );
+        structuredIssue.setOpenStatus( new ProgressStatus() );
+        // Set values for current issue progress
+        assignIssueEstimate( structuredIssue, issue );
 
         structuredParent.getIssues().add( structuredIssue );
-        structuredParent.getProgressStatus();
+
 
         List<String> linkedIssues = getChildIssues( issue );
         for ( final String linkedIssue : linkedIssues )
         {
             buildStructureIssue( linkedIssue, structuredIssue, jiraMetricIssues );
         }
+
+
+        // Sum up overall progress for parent issue overall progress
+        sumUpEstimates( structuredIssue, structuredParent );
     }
 
 

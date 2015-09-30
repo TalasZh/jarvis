@@ -14,13 +14,13 @@ import javax.persistence.Embeddable;
 public class ProgressStatus implements Serializable
 {
     @Column( name = "original_estimate" )
-    private Long originalEstimate;
+    private Integer originalEstimate = 0;
 
     @Column( name = "remaining_estimate" )
-    private Long remainingRestimate;
+    private Integer remainingRestimate = 0;
 
     @Column( name = "time_spent" )
-    private Long timeSpent;
+    private Integer timeSpent = 0;
 
 
     public ProgressStatus()
@@ -28,7 +28,7 @@ public class ProgressStatus implements Serializable
     }
 
 
-    public ProgressStatus( final Long originalEstimate, final Long remainingRestimate, final Long timeSpent )
+    public ProgressStatus( final Integer originalEstimate, final Integer remainingRestimate, final Integer timeSpent )
     {
         this.originalEstimate = originalEstimate;
         this.remainingRestimate = remainingRestimate;
@@ -36,37 +36,37 @@ public class ProgressStatus implements Serializable
     }
 
 
-    public Long getOriginalEstimate()
+    public Integer getOriginalEstimate()
     {
         return originalEstimate;
     }
 
 
-    public void setOriginalEstimate( final Long originalEstimate )
+    public void setOriginalEstimate( final Integer originalEstimate )
     {
         this.originalEstimate = originalEstimate;
     }
 
 
-    public Long getRemainingRestimate()
+    public Integer getRemainingRestimate()
     {
         return remainingRestimate;
     }
 
 
-    public void setRemainingRestimate( final Long remainingRestimate )
+    public void setRemainingRestimate( final Integer remainingRestimate )
     {
         this.remainingRestimate = remainingRestimate;
     }
 
 
-    public Long getTimeSpent()
+    public Integer getTimeSpent()
     {
         return timeSpent;
     }
 
 
-    public void setTimeSpent( final Long timeSpent )
+    public void setTimeSpent( final Integer timeSpent )
     {
         this.timeSpent = timeSpent;
     }

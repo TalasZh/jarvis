@@ -33,7 +33,7 @@ import com.impetus.kundera.index.IndexCollection;
 @IndexCollection( columns = {
         @Index( name = "key" )
 } )
-public class StructuredIssue implements Serializable
+public class StructuredIssue implements Serializable, Structure
 {
     @JsonView( Views.TimelineShort.class )
     @Id
@@ -68,13 +68,27 @@ public class StructuredIssue implements Serializable
     @Column( name = "updated" )
     private Long updated;
 
+    @JsonView( Views.TimelineShort.class )
+    @Column( name = "created" )
+    private Long created;
+
+    @JsonView( Views.TimelineShort.class )
+    @Column( name = "status" )
+    private String status;
+
     @JsonView( Views.TimelineLong.class )
     @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER )
     @JoinColumn( name = "parent_issue_id" )
     private Set<StructuredIssue> issues = Sets.newHashSet();
 
     @Embedded
-    private ProgressStatus progressStatus;
+    private ProgressStatus openStatus;
+
+    @Embedded
+    private ProgressStatus inProgressStatus;
+
+    @Embedded
+    private ProgressStatus doneStatus;
 
 
     public StructuredIssue()
@@ -83,7 +97,8 @@ public class StructuredIssue implements Serializable
 
 
     public StructuredIssue( final String key, final Long id, final String issueType, final String summary,
-                            final String reporter, final String creator, final String assignee, final Long updated )
+                            final String reporter, final String creator, final String assignee, final Long updated,
+                            final Long created, final String status )
     {
         this.key = key;
         this.id = id;
@@ -93,6 +108,8 @@ public class StructuredIssue implements Serializable
         this.creator = creator;
         this.assignee = assignee;
         this.updated = updated;
+        this.created = created;
+        this.status = status;
     }
 
 
@@ -102,21 +119,51 @@ public class StructuredIssue implements Serializable
     }
 
 
-    public void setProgressStatus( final ProgressStatus progressStatus )
+    public ProgressStatus getOpenStatus()
     {
-        this.progressStatus = progressStatus;
+        return openStatus;
     }
 
 
-    public ProgressStatus getProgressStatus()
+    public void setOpenStatus( final ProgressStatus openStatus )
     {
-        return progressStatus;
+        this.openStatus = openStatus;
+    }
+
+
+    public ProgressStatus getInProgressStatus()
+    {
+        return inProgressStatus;
+    }
+
+
+    public void setInProgressStatus( final ProgressStatus inProgressStatus )
+    {
+        this.inProgressStatus = inProgressStatus;
+    }
+
+
+    public ProgressStatus getDoneStatus()
+    {
+        return doneStatus;
+    }
+
+
+    public void setDoneStatus( final ProgressStatus doneStatus )
+    {
+        this.doneStatus = doneStatus;
     }
 
 
     public String getKey()
     {
         return key;
+    }
+
+
+    public String getStatus()
+    {
+        return status;
     }
 
 
@@ -149,15 +196,20 @@ public class StructuredIssue implements Serializable
     public String toString()
     {
         return "StructuredIssue{" +
-                "key='" + key + '\'' +
-                ", id='" + id + '\'' +
+                "id=" + id +
+                ", key='" + key + '\'' +
                 ", issueType='" + issueType + '\'' +
                 ", summary='" + summary + '\'' +
                 ", reporter='" + reporter + '\'' +
                 ", creator='" + creator + '\'' +
                 ", assignee='" + assignee + '\'' +
-                ", updated='" + updated + '\'' +
+                ", updated=" + updated +
+                ", created=" + created +
+                ", status='" + status + '\'' +
                 ", issues=" + issues +
+                ", openStatus=" + openStatus +
+                ", inProgressStatus=" + inProgressStatus +
+                ", doneStatus=" + doneStatus +
                 '}';
     }
 }
