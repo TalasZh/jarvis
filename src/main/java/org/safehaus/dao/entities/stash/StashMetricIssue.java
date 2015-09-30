@@ -5,17 +5,15 @@ import java.io.Serializable;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
-import javax.persistence.TableGenerator;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.safehaus.stash.model.Change;
@@ -31,23 +29,18 @@ import com.impetus.kundera.index.IndexCollection;
 @Entity
 @Table( name = "stash_metric_issue", schema = "jarvis@cassandra-pu" )
 @IndexCollection( columns = {
-        @Index( name = "id" ), @Index( name = "author" ), @Index( name = "authorTimestamp" ),
-        @Index( name = "projectName" ), @Index( name = "projectKey" )
+        @Index( name = "author" ), @Index( name = "projectKey" )
 } )
 public class StashMetricIssue implements Serializable
 {
 
-    @Id
-    @TableGenerator( name = "id_gen", allocationSize = 30, initialValue = 100 )
-    @GeneratedValue( generator = "id_gen", strategy = GenerationType.TABLE )
-    @Column( name = "stash_metric_id" )
-    private String id;
+    @EmbeddedId
+    @OrderBy( "stashMetricPK.authorTs DESC" )
+    private StashMetricPK stashMetricPK = new StashMetricPK();
 
-    //    @Column( name = "path" )
     @OneToOne( targetEntity = Path.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL )
     private Path path;
 
-    //    @Column( name = "src_path" )
     @OneToOne( targetEntity = Path.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL )
     private Path srcPath;
 
@@ -66,8 +59,6 @@ public class StashMetricIssue implements Serializable
     @JoinColumn( name = "associated_user_id" )
     private StashUser author;
 
-    @Column( name = "author_ts" )
-    private long authorTimestamp;
 
     @Column( name = "project_name" )
     private String projectName;
@@ -77,7 +68,6 @@ public class StashMetricIssue implements Serializable
 
     @Column( name = "commit_message" )
     private String commitMessage;
-
 
 
     public StashMetricIssue()
@@ -108,6 +98,18 @@ public class StashMetricIssue implements Serializable
     }
 
 
+    public StashMetricPK getStashMetricPK()
+    {
+        return stashMetricPK;
+    }
+
+
+    public void setStashMetricPK( final StashMetricPK stashMetricPK )
+    {
+        this.stashMetricPK = stashMetricPK;
+    }
+
+
     public int getPercentUnchanged()
     {
         return percentUnchanged;
@@ -134,7 +136,7 @@ public class StashMetricIssue implements Serializable
 
     public long getAuthorTimestamp()
     {
-        return authorTimestamp;
+        return stashMetricPK.getAuthorTs();
     }
 
 
@@ -146,7 +148,7 @@ public class StashMetricIssue implements Serializable
 
     public String getId()
     {
-        return id;
+        return stashMetricPK.getContentId();
     }
 
 
@@ -182,7 +184,7 @@ public class StashMetricIssue implements Serializable
 
     public void setId( String id )
     {
-        this.id = id;
+        this.stashMetricPK.setContentId( id );
     }
 
 
@@ -194,7 +196,7 @@ public class StashMetricIssue implements Serializable
 
     public void setAuthorTimestamp( long authorTimestamp )
     {
-        this.authorTimestamp = authorTimestamp;
+        this.stashMetricPK.setAuthorTs( authorTimestamp );
     }
 
 
@@ -216,24 +218,6 @@ public class StashMetricIssue implements Serializable
     }
 
 
-    @Override
-    public String toString()
-    {
-        return "StashMetricIssue{" +
-                "id='" + id + '\'' +
-                ", path=" + path +
-                ", srcPath=" + srcPath +
-                ", percentUnchanged=" + percentUnchanged +
-                ", type=" + type +
-                ", nodeType=" + nodeType +
-                ", author=" + author +
-                ", authorTimestamp=" + authorTimestamp +
-                ", projectName='" + projectName + '\'' +
-                ", projectKey='" + projectKey + '\'' +
-                '}';
-    }
-
-
     public String getCommitMessage()
     {
         return commitMessage;
@@ -243,5 +227,23 @@ public class StashMetricIssue implements Serializable
     public void setCommitMessage( final String commitMessage )
     {
         this.commitMessage = commitMessage;
+    }
+
+
+    @Override
+    public String toString()
+    {
+        return "StashMetricIssue{" +
+                "stashMetricPK=" + stashMetricPK +
+                ", path=" + path +
+                ", srcPath=" + srcPath +
+                ", percentUnchanged=" + percentUnchanged +
+                ", type=" + type +
+                ", nodeType=" + nodeType +
+                ", author=" + author +
+                ", projectName='" + projectName + '\'' +
+                ", projectKey='" + projectKey + '\'' +
+                ", commitMessage='" + commitMessage + '\'' +
+                '}';
     }
 }

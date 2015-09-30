@@ -519,8 +519,10 @@ public class AnalysisService
                     StashMetricIssue stashMetricIssue = new StashMetricIssue();
                     stashMetricIssue.setPath( change.getPath() );
                     stashMetricIssue.setAuthor( commit.getAuthor() );
+
                     stashMetricIssue.setAuthorTimestamp( commit.getAuthorTimestamp() );
                     stashMetricIssue.setId( change.getContentId() );
+
                     stashMetricIssue.setNodeType( change.getNodeType() );
                     stashMetricIssue.setPercentUnchanged( change.getPercentUnchanged() );
                     stashMetricIssue.setProjectName( projectKeyNameSlugTriples.get( i ).getM() );

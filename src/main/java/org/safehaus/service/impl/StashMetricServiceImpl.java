@@ -102,9 +102,9 @@ public class StashMetricServiceImpl implements StashMetricService, StashMetricsR
     public List<StashMetricIssue> getStashMetricIssueByTimePeriod( final String fromDate, final String toDate )
     {
         String query = "Select j from " + StashMetricIssue.class.getSimpleName()
-                + " j where (j.authorTimestamp > :fromDate) and (j.authorTimestamp < :toDate)";
+                + " j where (j.stashMetricPK.authorTs > :fromDate) and (j.stashMetricPK.authorTs < :toDate)";
 
-        log.info( "Get list of StashmetricIssue by time period : {} {}", fromDate, toDate );
+        log.info( "Get list of StashMetricIssue by time period : {} {}", fromDate, toDate );
 
         List<StashMetricIssue> issues =
                 ( List<StashMetricIssue> ) dao.findByQuery( query, "fromDate", fromDate, "toDate", toDate );
