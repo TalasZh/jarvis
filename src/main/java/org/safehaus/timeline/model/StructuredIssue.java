@@ -23,13 +23,14 @@ import com.google.common.collect.Sets;
 import com.impetus.kundera.index.Index;
 import com.impetus.kundera.index.IndexCollection;
 
+import static org.safehaus.Constants.DATABASE_SCHEMA;
 
 /**
  * Created by talas on 9/27/15.
  */
 @Entity
 @Access( AccessType.FIELD )
-@Table( name = "structured_issue", schema = "jarvis@cassandra-pu" )
+@Table( name = "structured_issue", schema = DATABASE_SCHEMA )
 @IndexCollection( columns = {
         @Index( name = "key" )
 } )

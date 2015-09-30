@@ -12,14 +12,14 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import static org.safehaus.Constants.DATABASE_SCHEMA;
 
 /**
  * Created by tzhamakeev on 5/22/15.
  */
 @XmlRootElement
-//@Embeddable
 @Entity
-@Table( name = "jarvis_link", schema = "jarvis@cassandra-pu" )
+@Table( name = "jarvis_link", schema = DATABASE_SCHEMA )
 @Access( AccessType.FIELD )
 public class JarvisLink
 {

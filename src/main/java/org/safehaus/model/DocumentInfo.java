@@ -13,9 +13,11 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import com.impetus.kundera.index.Index;
 import com.impetus.kundera.index.IndexCollection;
 
+import static org.safehaus.Constants.DATABASE_SCHEMA;
+
 
 @Entity
-@Table( name = "document", schema = "jarvis@cassandra-pu" )
+@Table( name = "document", schema = DATABASE_SCHEMA )
 @IndexCollection( columns = {
         @Index( name = "ownerName" ), @Index( name = "ownerId" ), @Index( name = "documentName" )
 } )

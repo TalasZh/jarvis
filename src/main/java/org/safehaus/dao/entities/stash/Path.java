@@ -20,13 +20,14 @@ import javax.persistence.TableGenerator;
 import com.google.common.base.Objects;
 import com.impetus.kundera.index.IndexCollection;
 
+import static org.safehaus.Constants.DATABASE_SCHEMA;
 
 /**
  * Created by neslihan on 07.07.2015.
  */
 @Entity
 @Access( AccessType.FIELD )
-@Table( name = "stash_path", schema = "jarvis@cassandra-pu" )
+@Table( name = "stash_path", schema = DATABASE_SCHEMA )
 @IndexCollection( columns = {
         @com.impetus.kundera.index.Index( name = "id" ), @com.impetus.kundera.index.Index( name = "name" )
 } )

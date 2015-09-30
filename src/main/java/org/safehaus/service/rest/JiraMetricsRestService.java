@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 /**
  * Created by ermek on 9/16/15.
  */
-@Path( "/jira/metrics" )
+@Path( "/jira" )
 @WebService
 public interface JiraMetricsRestService
 {

@@ -99,7 +99,7 @@ public class StashMetricServiceImpl implements StashMetricService, StashMetricsR
 
     @Override
     @JsonView( Views.CompleteView.class )
-    public List<StashMetricIssue> getStashMetricIssueByTimePeriod( final String fromDate, final String toDate )
+    public List<StashMetricIssue> getStashMetricIssueForTimeFrame( final String fromDate, final String toDate )
     {
         String query = "Select j from " + StashMetricIssue.class.getSimpleName()
                 + " j where (j.stashMetricPK.authorTs > :fromDate) and (j.stashMetricPK.authorTs < :toDate)";

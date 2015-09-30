@@ -3,6 +3,8 @@ package org.safehaus.dao.entities.stash;
 
 import java.io.Serializable;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -21,15 +23,17 @@ import org.safehaus.stash.model.Change;
 import com.impetus.kundera.index.Index;
 import com.impetus.kundera.index.IndexCollection;
 
+import static org.safehaus.Constants.DATABASE_SCHEMA;
 
 /**
  * Created by neslihan on 08.07.2015.
  */
 @XmlRootElement
 @Entity
-@Table( name = "stash_metric_issue", schema = "jarvis@cassandra-pu" )
+@Access( AccessType.FIELD )
+@Table( name = "stash_metric_issue", schema = DATABASE_SCHEMA )
 @IndexCollection( columns = {
-        @Index( name = "author" ), @Index( name = "projectKey" )
+        @Index( name = "author.name" ), @Index( name = "projectKey" )
 } )
 public class StashMetricIssue implements Serializable
 {
@@ -95,18 +99,6 @@ public class StashMetricIssue implements Serializable
     public Path getSrcPath()
     {
         return srcPath;
-    }
-
-
-    public StashMetricPK getStashMetricPK()
-    {
-        return stashMetricPK;
-    }
-
-
-    public void setStashMetricPK( final StashMetricPK stashMetricPK )
-    {
-        this.stashMetricPK = stashMetricPK;
     }
 
 

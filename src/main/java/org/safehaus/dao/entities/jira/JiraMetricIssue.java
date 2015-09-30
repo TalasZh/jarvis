@@ -28,13 +28,14 @@ import net.rcarz.jiraclient.Issue;
 import net.rcarz.jiraclient.IssueLink;
 import net.rcarz.jiraclient.IssueType;
 
+import static org.safehaus.Constants.DATABASE_SCHEMA;
 
 /**
  * Created by kisik on 06.07.2015.
  */
 @Entity
 @Access( AccessType.FIELD )
-@Table( name = "jira_metric_issue", schema = "jarvis@cassandra-pu" )
+@Table( name = "jira_metric_issue", schema = DATABASE_SCHEMA )
 @IndexCollection( columns = {
         @Index( name = "issueId" ), @Index( name = "issueKey" ), @Index( name = "assigneeName" ),
         @Index( name = "projectKey" )

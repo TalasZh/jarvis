@@ -16,7 +16,7 @@ import org.safehaus.dao.entities.stash.StashMetricIssue;
  * Created by talas on 9/8/15.
  */
 @WebService
-@Path( "/metrics" )
+@Path( "/stash" )
 public interface StashMetricsRestService
 {
     @GET
@@ -38,6 +38,6 @@ public interface StashMetricsRestService
 
     @GET
     @Path( "commits" )
-    public List<StashMetricIssue> getStashMetricIssueByTimePeriod( @QueryParam( "from" ) String fromDate,
+    public List<StashMetricIssue> getStashMetricIssueForTimeFrame( @QueryParam( "from" ) String fromDate,
                                                                    @QueryParam( "to" ) String toDate );
 }

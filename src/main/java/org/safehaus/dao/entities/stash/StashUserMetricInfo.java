@@ -13,12 +13,13 @@ import org.safehaus.dao.entities.UserMetricInfo.UserMonthInfo;
 import com.impetus.kundera.index.Index;
 import com.impetus.kundera.index.IndexCollection;
 
+import static org.safehaus.Constants.DATABASE_SCHEMA;
 
 /**
  * Created by neslihan on 25.08.2015.
  */
 @Entity
-@Table( name = "user_stash_metric_info", schema = "jarvis@cassandra-pu" )
+@Table( name = "user_stash_metric_info", schema = DATABASE_SCHEMA )
 @IndexCollection( columns = {
         @Index( name = "developer_month_info" )})
 public class StashUserMetricInfo implements Serializable{
