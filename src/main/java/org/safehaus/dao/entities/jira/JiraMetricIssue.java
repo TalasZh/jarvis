@@ -38,7 +38,7 @@ import static org.safehaus.Constants.DATABASE_SCHEMA;
 @Table( name = "jira_metric_issue", schema = DATABASE_SCHEMA )
 @IndexCollection( columns = {
         @Index( name = "issueId" ), @Index( name = "issueKey" ), @Index( name = "assigneeName" ),
-        @Index( name = "projectKey" )
+        @Index( name = "projectKey" ), @Index( name = "status" )
 } )
 public class JiraMetricIssue implements Serializable
 {

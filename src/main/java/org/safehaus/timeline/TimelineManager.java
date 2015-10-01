@@ -131,8 +131,7 @@ public class TimelineManager
         for ( final Map.Entry<String, JiraMetricIssue> entry : jiraMetricIssues.entrySet() )
         {
             final JiraMetricIssue jiraMetricIssue = entry.getValue();
-            if ( "Epic".equals( jiraMetricIssue.getType().getName() ) && projectKey
-                    .equals( jiraMetricIssue.getProjectKey() ) )
+            if ( projectKey.equals( jiraMetricIssue.getProjectKey() ) )
             {
                 StructuredIssue epic = new StructuredIssue( jiraMetricIssue.getIssueKey(), jiraMetricIssue.getIssueId(),
                         jiraMetricIssue.getType().getName(), jiraMetricIssue.getSummary(),
@@ -180,6 +179,14 @@ public class TimelineManager
             progressStatus.setRemainingRestimate(
                     progressStatus.getRemainingRestimate() + issue.getRemainingEstimateMinutes() );
             progressStatus.setTimeSpent( progressStatus.getTimeSpent() + issue.getTimeSpentMinutes() );
+
+            //            String type = issue.getType().getName();
+            //            Long totalSolved = structuredIssue.getTotalIssuesSolved().get( type );
+            //            if ( totalSolved == null ) {
+            //                totalSolved = 0L;
+            //            }
+            //            totalSolved += issue.getTimeSpentMinutes();
+            //            structuredIssue.getTotalIssuesSolved().put( type, totalSolved );
         }
     }
 
@@ -308,32 +315,33 @@ public class TimelineManager
             if ( "Parent".equals( link.getLinkType().getName() )
                     && link.getDirection() == JarvisLink.Direction.OUTWARD )
             {
-                switch ( issue.getType().getName() )
-                {
-                    case "Epic":
-                        if ( "Story".equals( link.getType().getName() ) )
-                        {
-                            linkedIssues.add( link.getLinkDirection().getIssueKey() );
-                        }
-                        break;
-                    case "Story":
-                        if ( "Requirement".equals( link.getType().getName() ) )
-                        {
-                            linkedIssues.add( link.getLinkDirection().getIssueKey() );
-                        }
-                        break;
-                    case "Requirement":
-                        if ( "Design".equals( link.getType().getName() ) || "Research"
-                                .equals( link.getType().getName() ) )
-                        {
-                            linkedIssues.add( link.getLinkDirection().getIssueKey() );
-                        }
-                        break;
-                    case "Design":
-                    case "Playbook":
-                        linkedIssues.add( link.getLinkDirection().getIssueKey() );
-                        break;
-                }
+                linkedIssues.add( link.getLinkDirection().getIssueKey() );
+                //                switch ( issue.getType().getName() )
+                //                {
+                //                    case "Epic":
+                //                        if ( "Story".equals( link.getType().getName() ) )
+                //                        {
+                //                            linkedIssues.add( link.getLinkDirection().getIssueKey() );
+                //                        }
+                //                        break;
+                //                    case "Story":
+                //                        if ( "Requirement".equals( link.getType().getName() ) )
+                //                        {
+                //                            linkedIssues.add( link.getLinkDirection().getIssueKey() );
+                //                        }
+                //                        break;
+                //                    case "Requirement":
+                //                        if ( "Design".equals( link.getType().getName() ) || "Research"
+                //                                .equals( link.getType().getName() ) )
+                //                        {
+                //                            linkedIssues.add( link.getLinkDirection().getIssueKey() );
+                //                        }
+                //                        break;
+                //                    case "Design":
+                //                    case "Playbook":
+                //                        linkedIssues.add( link.getLinkDirection().getIssueKey() );
+                //                        break;
+                //                }
             }
         }
         return linkedIssues;

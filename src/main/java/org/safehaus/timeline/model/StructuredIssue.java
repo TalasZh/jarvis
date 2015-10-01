@@ -91,6 +91,13 @@ public class StructuredIssue implements Serializable, Structure
     @Embedded
     private ProgressStatus doneStatus;
 
+    //    @ElementCollection
+    //    @MapKeyColumn(name="issuesSolved")
+    //    @Column(name="totalSolved")
+    //    @CollectionTable(name="resolvedIssues", joinColumns=@JoinColumn(name="solved_id"))
+    //    Map<String, Long> totalIssuesSolved = Maps.newHashMap(); // maps from attribute name to value
+
+
 
     public StructuredIssue()
     {
@@ -166,6 +173,18 @@ public class StructuredIssue implements Serializable, Structure
     {
         return status;
     }
+
+
+    //    public Map<String, Long> getTotalIssuesSolved()
+    //    {
+    //        return totalIssuesSolved;
+    //    }
+    //
+    //
+    //    public void setTotalIssuesSolved( final Map<String, Long> totalIssuesSolved )
+    //    {
+    //        this.totalIssuesSolved = totalIssuesSolved;
+    //    }
 
 
     @Override
