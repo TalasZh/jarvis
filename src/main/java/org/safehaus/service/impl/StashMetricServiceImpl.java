@@ -2,12 +2,14 @@ package org.safehaus.service.impl;
 
 
 import java.util.List;
+import java.util.Map;
 
 import javax.jws.WebService;
 
 import org.codehaus.jackson.map.annotate.JsonView;
 import org.safehaus.dao.Dao;
 import org.safehaus.dao.entities.stash.StashMetricIssue;
+import org.safehaus.dao.entities.stash.StashUser;
 import org.safehaus.model.Views;
 import org.safehaus.service.api.StashMetricService;
 import org.safehaus.service.rest.StashMetricsRestService;
@@ -15,6 +17,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 
 @Service( "stashMetricsManager" )
@@ -46,7 +51,6 @@ public class StashMetricServiceImpl implements StashMetricService, StashMetricsR
 
 
     @Override
-    @JsonView( Views.CompleteView.class )
     public List<StashMetricIssue> findStashMetricIssuesByProjectName( String projectName )
     {
         String query =
@@ -59,7 +63,6 @@ public class StashMetricServiceImpl implements StashMetricService, StashMetricsR
 
 
     @Override
-    @JsonView( Views.CompleteView.class )
     public List<StashMetricIssue> getStashMetricsByProjectKey( String projectKey )
     {
         String query =
@@ -73,10 +76,9 @@ public class StashMetricServiceImpl implements StashMetricService, StashMetricsR
 
 
     @Override
-    @JsonView( Views.CompleteView.class )
     public List<StashMetricIssue> getStashMetricIssuesByAuthor( final String authorId )
     {
-        String query = "Select s from " + StashMetricIssue.class.getSimpleName() + " s where s.author.id = " + authorId;
+        String query = "Select s from " + StashMetricIssue.class.getSimpleName() + " s where s.author = " + authorId;
 
         log.info( "Finding StashMetricIssue by projectName : {}", authorId );
         List<StashMetricIssue> stashMetricIssues = ( List<StashMetricIssue> ) dao.findByQuery( query );
@@ -85,7 +87,6 @@ public class StashMetricServiceImpl implements StashMetricService, StashMetricsR
 
 
     @Override
-    @JsonView( Views.CompleteView.class )
     public List<StashMetricIssue> getStashMetricIssuesByAuthorTimestamp( final String timestamp )
     {
         String query =
@@ -93,6 +94,50 @@ public class StashMetricServiceImpl implements StashMetricService, StashMetricsR
 
         log.info( "Finding StashMetricIssue by projectName : {}", timestamp );
         List<StashMetricIssue> stashMetricIssues = ( List<StashMetricIssue> ) dao.findByQuery( query );
+        return stashMetricIssues;
+    }
+
+
+    @Override
+    public List<StashMetricIssue> getStashMetricIssueForTimeFrame( final String fromDate, final String toDate )
+    {
+        String query = "Select j from " + StashMetricIssue.class.getSimpleName()
+                + " j where (j.stashMetricPK.authorTs > :fromDate) and (j.stashMetricPK.authorTs < :toDate)";
+
+        log.info( "Get list of StashMetricIssue by time period : {} {}", fromDate, toDate );
+
+        List<StashMetricIssue> issues =
+                ( List<StashMetricIssue> ) dao.findByQuery( query, "fromDate", fromDate, "toDate", toDate );
+        return issues;
+    }
+
+
+    @Override
+    public List<StashMetricIssue> getStashMetricIssuesByAuthorForTimeFrame( final String author, final String fromDate,
+                                                                            final String toDate )
+    {
+        String authorQuery =
+                String.format( "SELECT u FROM %s u WHERE u.name = :author", StashUser.class.getSimpleName() );
+        Map<String, Object> authorParameters = Maps.newHashMap();
+        authorParameters.put( "author", author );
+
+        List<StashUser> stashUser = dao.findByQuery( StashUser.class, authorQuery, authorParameters );
+        List<StashMetricIssue> stashMetricIssues = Lists.newArrayList();
+        if ( stashUser.size() > 0 )
+        {
+            String query = String.format(
+                    "Select j from %s j where j.stashMetricPK.authorTs > :fromDate and j.stashMetricPK.authorTs < "
+                            + ":toDate and j.author = :author", StashMetricIssue.class.getSimpleName() );
+            Map<String, Object> parameters = Maps.newHashMap();
+            parameters.put( "fromDate", fromDate );
+            parameters.put( "toDate", toDate );
+            //            parameters.put( "author", author );
+            parameters.put( "author", stashUser.iterator().next().getId() );
+
+            log.info( "Get list of StashMetricIssue by time period : {} {}", fromDate, toDate );
+
+            stashMetricIssues = dao.findByQuery( StashMetricIssue.class, query, parameters );
+        }
         return stashMetricIssues;
     }
 

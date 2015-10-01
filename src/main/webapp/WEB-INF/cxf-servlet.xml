@@ -81,7 +81,7 @@
   <jaxws:endpoint id="stashMetricService" implementor="#stashMetricsManager" address="/StashMetricServiceImpl" />
   <jaxws:endpoint id="jiraMetricService" implementor="#jiraMetricDao" address="/JiraMetricDaoImpl" />
   <jaxws:endpoint id="jiraChangelogService" implementor="#jiraChangelogManager" address="/JiraChangelogServiceImpl" />
-  <jaxws:endpoint id="timelineService" implementor="#timelineManager" address="/TimelineManagerImpl" />
+  <jaxws:endpoint id="timelineRestService" implementor="#timelineRestServiceImpl" address="/TimelineRestServiceImpl" />
 
   <!--<jaxws:endpoint id="issueService" implementor="#issueManager" address="/IssueService"/>-->
   <!-- Add new endpoints for additional services you'd like to expose -->
@@ -97,7 +97,7 @@
       <ref bean="stashMetricsManager" />
       <ref bean="jiraMetricDao" />
       <ref bean="jiraChangelogManager" />
-      <ref bean="timelineManager" />
+      <ref bean="timelineRestServiceImpl" />
       <!--<ref bean="issueManager"/>-->
     </jaxrs:serviceBeans>
     <jaxrs:providers>

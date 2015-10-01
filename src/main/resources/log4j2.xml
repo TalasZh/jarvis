@@ -25,7 +25,7 @@
         <!-- Uncomment if you want to see Hibernate's SQL -->
         <!--<Logger name="org.hibernate.SQL" level="debug"/>-->
         <Logger name="org.springframework" level="warn"/>
-        <Logger name="org.safehaus" level="debug"/>
+        <Logger name="org.safehaus" level="info" />
         <Logger name="com.atlassian.jira" level="warn"/>
 <!--
         <Logger name="org.apache.struts2" level="debug"/>

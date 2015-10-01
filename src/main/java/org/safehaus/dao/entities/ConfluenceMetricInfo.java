@@ -11,12 +11,13 @@ import javax.persistence.Table;
 import com.impetus.kundera.index.Index;
 import com.impetus.kundera.index.IndexCollection;
 
+import static org.safehaus.Constants.DATABASE_SCHEMA;
 
 /**
  * Created by neslihan on 28.08.2015.
  */
 @Entity
-@Table( name = "user_confluence_metric_info", schema = "jarvis@cassandra-pu" )
+@Table( name = "user_confluence_metric_info", schema = DATABASE_SCHEMA )
 @IndexCollection( columns = {
         @Index( name = "developer_month_info" )})
 public class ConfluenceMetricInfo implements Serializable{

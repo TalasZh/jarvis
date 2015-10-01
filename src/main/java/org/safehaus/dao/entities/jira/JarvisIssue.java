@@ -25,10 +25,11 @@ import com.impetus.kundera.index.IndexCollection;
 
 import net.rcarz.jiraclient.Transition;
 
+import static org.safehaus.Constants.DATABASE_SCHEMA;
 
 @XmlRootElement
 @Entity
-@Table( name = "jarvis_issue", schema = "jarvis@cassandra-pu" )
+@Table( name = "jarvis_issue", schema = DATABASE_SCHEMA )
 @IndexCollection( columns = {
         @Index( name = "id" ), @Index( name = "key" )
 } )

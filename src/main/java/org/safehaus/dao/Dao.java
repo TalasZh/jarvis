@@ -2,6 +2,7 @@ package org.safehaus.dao;
 
 
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -9,7 +10,7 @@ import java.util.List;
  */
 public interface Dao
 {
-    <T> List<T> getAll(Class<T> entityClass);
+    <T> List<T> getAll( Class<T> entityClass );
 
     void insert( Object entity );
 
@@ -19,12 +20,17 @@ public interface Dao
 
     <T> T findById( Class<T> entityClazz, Object id );
 
+    <T> List<T> findByQuery( Class<T> entityClass, String query, Map<String, Object> parameters );
+
     List<?> findByQuery( String Query );
 
     List<?> findByQuery( String queryString, String paramater, Object parameterValue );
 
     List<?> findByQuery( String queryString, String parameter1, Object parameterValue1, String parameter2,
                          Object parameterValue2, String parameter3, Object parameterValue3 );
+
+    List<?> findByQuery( String queryString, String parameter1, Object parameterValue1, String parameter2,
+                         Object parameterValue2 );
 
     <T> int batchInsert( List<T> entities );
 }

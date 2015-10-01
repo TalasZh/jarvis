@@ -17,9 +17,10 @@ import com.google.common.base.Objects;
 import com.impetus.kundera.index.Index;
 import com.impetus.kundera.index.IndexCollection;
 
+import static org.safehaus.Constants.DATABASE_SCHEMA;
 
 @Entity
-@Table( name = "stash_user", schema = "jarvis@cassandra-pu" )
+@Table( name = "stash_user", schema = DATABASE_SCHEMA )
 @IndexCollection( columns = {
         @Index( name = "name" ), @Index( name = "emailAddress" ), @Index( name = "authorTimestamp" )} )
 public class StashUser implements Serializable

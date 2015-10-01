@@ -11,12 +11,13 @@ import javax.persistence.Table;
 import com.impetus.kundera.index.Index;
 import com.impetus.kundera.index.IndexCollection;
 
+import static org.safehaus.Constants.DATABASE_SCHEMA;
 
 /**
  * Created by talas on 9/27/15.
  */
 @Entity
-@Table( name = "jira_project", schema = "jarvis@cassandra-pu" )
+@Table( name = "jira_project", schema = DATABASE_SCHEMA )
 @IndexCollection( columns = {
         @Index( name = "projectId" ), @Index( name = "key" )
 } )

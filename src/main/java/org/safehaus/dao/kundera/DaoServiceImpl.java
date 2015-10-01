@@ -2,6 +2,7 @@ package org.safehaus.dao.kundera;
 
 
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -167,6 +168,36 @@ public class DaoServiceImpl implements Dao
 
 
     @Override
+    public <T> List<T> findByQuery( final Class<T> entityClass, final String query,
+                                    final Map<String, Object> parameters )
+    {
+        EntityManager em = emf.createEntityManager();
+        List<T> result = Lists.newArrayList();
+        try
+        {
+            em.getTransaction().begin();
+            TypedQuery<T> typedQuery = em.createQuery( query, entityClass );
+
+            for ( final Map.Entry<String, Object> entry : parameters.entrySet() )
+            {
+                typedQuery.setParameter( entry.getKey(), entry.getValue() );
+            }
+            result = typedQuery.getResultList();
+            em.getTransaction().commit();
+        }
+        catch ( Exception ex )
+        {
+            LOGGER.error( "Error executing query", ex );
+            if ( em.getTransaction().isActive() )
+            {
+                em.getTransaction().rollback();
+            }
+        }
+        return result;
+    }
+
+
+    @Override
     public List<?> findByQuery( final String queryString )
     {
         EntityManager em = emf.createEntityManager();
@@ -229,6 +260,33 @@ public class DaoServiceImpl implements Dao
             query.setParameter( parameter1, parameterValue1 );
             query.setParameter( parameter2, parameterValue2 );
             query.setParameter( parameter3, parameterValue3 );
+            result = query.getResultList();
+            em.getTransaction().commit();
+        }
+        catch ( Exception ex )
+        {
+            LOGGER.error( "Error executing query", ex );
+            if ( em.getTransaction().isActive() )
+            {
+                em.getTransaction().rollback();
+            }
+        }
+        return result;
+    }
+
+
+    @Override
+    public List<?> findByQuery( final String queryString, final String parameter1, final Object parameterValue1,
+                                final String parameter2, final Object parameterValue2 )
+    {
+        EntityManager em = emf.createEntityManager();
+        List<?> result = Lists.newArrayList();
+        try
+        {
+            em.getTransaction().begin();
+            Query query = em.createQuery( queryString );
+            query.setParameter( parameter1, parameterValue1 );
+            query.setParameter( parameter2, parameterValue2 );
             result = query.getResultList();
             em.getTransaction().commit();
         }

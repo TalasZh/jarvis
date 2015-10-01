@@ -1,8 +1,6 @@
 package org.safehaus.dao.entities.stash;
 
 
-
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,12 +16,13 @@ import javax.persistence.TableGenerator;
 import com.impetus.kundera.index.Index;
 import com.impetus.kundera.index.IndexCollection;
 
+import static org.safehaus.Constants.DATABASE_SCHEMA;
 
 /**
  * Created by neslihan on 03.07.2015.
  */
 @Entity
-@Table( name = "hibernate_link_map", schema = "jarvis@cassandra-pu" )
+@Table( name = "hibernate_link_map", schema = DATABASE_SCHEMA )
 @IndexCollection( columns = {
         @Index( name = "id" )
 } )
