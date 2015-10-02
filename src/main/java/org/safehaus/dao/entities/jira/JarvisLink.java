@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import java.io.Serializable;
+
 import static org.safehaus.Constants.DATABASE_SCHEMA;
 
 /**
@@ -21,14 +23,12 @@ import static org.safehaus.Constants.DATABASE_SCHEMA;
 @Entity
 @Table( name = "jarvis_link", schema = DATABASE_SCHEMA )
 @Access( AccessType.FIELD )
-public class JarvisLink
+public class JarvisLink implements Serializable
 {
-
     public enum Direction
     {
         INWARD, OUTWARD
     }
-
 
     @Id
     @Column( name = "link_id" )
