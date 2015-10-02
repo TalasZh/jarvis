@@ -10,6 +10,7 @@ import org.safehaus.model.SessionNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import org.apache.commons.validator.GenericValidator;
 
@@ -64,6 +65,7 @@ public class SessionDaoHibernate extends GenericDaoHibernate<Session, Long> impl
      * {@inheritDoc}
      */
     @Override
+    @Transactional
     public List<Session> getSessionsByUsername( String username )
     {
         return getSession().createCriteria( Session.class ).add( Restrictions.eq( "username", username ) ).list();
@@ -81,6 +83,7 @@ public class SessionDaoHibernate extends GenericDaoHibernate<Session, Long> impl
      * {@inheritDoc}
      */
     @Override
+    @Transactional
     public Session getSession( String id ) throws SessionNotFoundException
     {
         if ( GenericValidator.isLong( id ) )

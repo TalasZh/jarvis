@@ -7,12 +7,17 @@ import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
+import org.safehaus.dao.entities.jira.ChangeCompositeKey;
 import org.safehaus.dao.entities.jira.JarvisLink;
 import org.safehaus.dao.entities.jira.JiraIssueChangelog;
 import org.safehaus.dao.entities.jira.JiraMetricIssue;
 import org.safehaus.dao.entities.jira.JiraProject;
+import org.safehaus.model.Capture;
+import org.safehaus.model.Session;
+import org.safehaus.model.SessionNotFoundException;
 import org.safehaus.service.api.JiraMetricDao;
-import org.safehaus.timeline.dao.TimelineDaoImpl;
+import org.safehaus.service.api.SessionManager;
+import org.safehaus.timeline.dao.TimelineDao;
 import org.safehaus.timeline.model.ProgressStatus;
 import org.safehaus.timeline.model.StoryTimeline;
 import org.safehaus.timeline.model.Structure;
@@ -20,6 +25,7 @@ import org.safehaus.timeline.model.StructuredIssue;
 import org.safehaus.timeline.model.StructuredProject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -36,16 +42,25 @@ public class TimelineManager
 
     private JiraMetricDao jiraMetricDao;
 
-    private TimelineDaoImpl timelineDaoImpl;
+    private TimelineDao timelineDaoImpl;
+
+    private SessionManager sessionManager;
 
     private Map<String, StructuredProject> structuredProjects = Maps.newHashMap();
 
 
-    public TimelineManager( final JiraMetricDao jiraMetricDao, final TimelineDaoImpl timelineDaoImpl )
+    public TimelineManager( final JiraMetricDao jiraMetricDao, final TimelineDao timelineDaoImpl )
     {
         logger.error( "Timeline manager initialized" );
         this.jiraMetricDao = jiraMetricDao;
         this.timelineDaoImpl = timelineDaoImpl;
+    }
+
+
+    @Autowired
+    public void setSessionManager( final SessionManager sessionManager )
+    {
+        this.sessionManager = sessionManager;
     }
 
 
@@ -272,11 +287,43 @@ public class TimelineManager
         JiraMetricIssue jiraMetricIssue = jiraMetricIssues.get( issue.getKey() );
         if ( jiraMetricIssue != null )
         {
+
+
             for ( final JiraIssueChangelog changelog : jiraMetricIssue.getChangelogList() )
             {
                 Long eventDate = changelog.getChangeKey().getCreated();
                 if ( fromDate < eventDate && eventDate < toDate )
                 {
+                    try
+                    {
+                        Session researchSession = sessionManager.getSession( jiraMetricIssue.getIssueKey() );
+                        //TODO temporal workaround to serve session captures
+                        for ( final Capture capture : researchSession.getCaptures() )
+                        {
+                            ChangeCompositeKey changeKey =
+                                    new ChangeCompositeKey( capture.getId(), capture.getCreated().getTime() );
+
+                            String captureSample =
+                                    String.format( "{url:%s,quote:%s,comment:%s}", capture.getUri(), capture.getQuote(),
+                                            capture.getText() );
+
+                            JiraIssueChangelog issueChangelog =
+                                    new JiraIssueChangelog( changeKey, jiraMetricIssue.getIssueKey(),
+                                            jiraMetricIssue.getIssueId(), jiraMetricIssue.getAssigneeName(),
+                                            jiraMetricIssue.getType().getName(), "Research Session",
+                                            "Annotation Created", captureSample, "", "" );
+                            jiraMetricIssue.getChangelogList().add( issueChangelog );
+                        }
+                    }
+                    catch ( SessionNotFoundException e )
+                    {
+                        logger.error( "No Research Session for issue {}", jiraMetricIssue.getIssueKey() );
+                    }
+                    catch ( Exception e )
+                    {
+                        logger.error( "Couldn't retrieve research session for key " + jiraMetricIssue.getIssueKey(),
+                                e );
+                    }
                     storyTimeline.getIssues().add( jiraMetricIssue );
                     break;
                 }
@@ -304,18 +351,17 @@ public class TimelineManager
         structuredIssue.setDoneStatus( new ProgressStatus() );
         structuredIssue.setInProgressStatus( new ProgressStatus() );
         structuredIssue.setOpenStatus( new ProgressStatus() );
+
         // Set values for current issue progress
         assignIssueEstimate( structuredIssue, issue );
 
         structuredParent.getIssues().add( structuredIssue );
-
 
         List<String> linkedIssues = getChildIssues( issue );
         for ( final String linkedIssue : linkedIssues )
         {
             buildStructureIssue( linkedIssue, structuredIssue, jiraMetricIssues );
         }
-
 
         // Sum up overall progress for parent issue overall progress
         sumUpEstimates( structuredIssue, structuredParent );
@@ -335,32 +381,6 @@ public class TimelineManager
                     && link.getDirection() == JarvisLink.Direction.OUTWARD )
             {
                 linkedIssues.add( link.getLinkDirection().getIssueKey() );
-                //                switch ( issue.getType().getName() )
-                //                {
-                //                    case "Epic":
-                //                        if ( "Story".equals( link.getType().getName() ) )
-                //                        {
-                //                            linkedIssues.add( link.getLinkDirection().getIssueKey() );
-                //                        }
-                //                        break;
-                //                    case "Story":
-                //                        if ( "Requirement".equals( link.getType().getName() ) )
-                //                        {
-                //                            linkedIssues.add( link.getLinkDirection().getIssueKey() );
-                //                        }
-                //                        break;
-                //                    case "Requirement":
-                //                        if ( "Design".equals( link.getType().getName() ) || "Research"
-                //                                .equals( link.getType().getName() ) )
-                //                        {
-                //                            linkedIssues.add( link.getLinkDirection().getIssueKey() );
-                //                        }
-                //                        break;
-                //                    case "Design":
-                //                    case "Playbook":
-                //                        linkedIssues.add( link.getLinkDirection().getIssueKey() );
-                //                        break;
-                //                }
             }
         }
         return linkedIssues;
