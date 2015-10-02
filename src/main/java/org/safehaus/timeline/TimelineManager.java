@@ -179,16 +179,19 @@ public class TimelineManager
             progressStatus.setRemainingRestimate(
                     progressStatus.getRemainingRestimate() + issue.getRemainingEstimateMinutes() );
             progressStatus.setTimeSpent( progressStatus.getTimeSpent() + issue.getTimeSpentMinutes() );
-
         }
-        String type = issue.getType().getName();
-        Long totalSolved = structuredIssue.getTotalIssuesSolved().get( type );
-        if ( totalSolved == null )
+        if ( "Resolved".equals( issue.getStatus() ) || "Closed".equals( issue.getStatus() ) ||
+                "Done".equals( issue.getStatus() ) )
         {
-            totalSolved = 0L;
+            String type = issue.getType().getName();
+            Long totalSolved = structuredIssue.getTotalIssuesSolved().get( type );
+            if ( totalSolved == null )
+            {
+                totalSolved = 0L;
+            }
+            totalSolved += issue.getTimeSpentMinutes();
+            structuredIssue.getTotalIssuesSolved().put( type, totalSolved );
         }
-        totalSolved += issue.getTimeSpentMinutes();
-        structuredIssue.getTotalIssuesSolved().put( type, totalSolved );
     }
 
 
