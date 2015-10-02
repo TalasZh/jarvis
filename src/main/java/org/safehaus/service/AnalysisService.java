@@ -35,6 +35,9 @@ import org.safehaus.service.api.SonarMetricService;
 import org.safehaus.service.api.StashMetricService;
 import org.safehaus.sonar.client.SonarManager;
 import org.safehaus.sonar.client.SonarManagerException;
+import org.safehaus.sonar.model.ComplexityStats;
+import org.safehaus.sonar.model.UnitTestStats;
+import org.safehaus.sonar.model.ViolationStats;
 import org.safehaus.stash.client.Page;
 import org.safehaus.stash.client.StashManager;
 import org.safehaus.stash.client.StashManagerException;
@@ -584,17 +587,21 @@ public class AnalysisService
                     String projectKey = r.getKey();
                     String projectName = r.getName();
 
-                    double successPercent = sonarManager.getUnitTestStats( projectKey ).getSuccessPercent();
-                    double failures = sonarManager.getUnitTestStats( projectKey ).getFailures();
-                    double errors = sonarManager.getUnitTestStats( projectKey ).getErrors();
-                    double testCounts = sonarManager.getUnitTestStats( projectKey ).getFailures();
-                    double coveragePercent = sonarManager.getUnitTestStats( projectKey ).getCoveragePercent();
-                    double allIssues = sonarManager.getViolationStats( projectKey ).getAllIssues();
-                    double blockerIssues = sonarManager.getViolationStats( projectKey ).getBlockerIssues();
-                    double criticalIssues = sonarManager.getViolationStats( projectKey ).getCriticalIssues();
-                    double classesCount = sonarManager.getComplexityStats( projectKey ).getClassComplexity();
-                    double functionsCount = sonarManager.getComplexityStats( projectKey ).getFunctionComplexity();
-                    double filesCount = sonarManager.getComplexityStats( projectKey ).getFileComplexity();
+                    UnitTestStats unitTestStats = sonarManager.getUnitTestStats( projectKey );
+                    ViolationStats violationStats = sonarManager.getViolationStats( projectKey );
+                    ComplexityStats complexityStats = sonarManager.getComplexityStats( projectKey );
+
+                    double successPercent = unitTestStats.getSuccessPercent();
+                    double failures = unitTestStats.getFailures();
+                    double errors = unitTestStats.getErrors();
+                    double testCounts = unitTestStats.getFailures();
+                    double coveragePercent = unitTestStats.getCoveragePercent();
+                    double allIssues = violationStats.getAllIssues();
+                    double blockerIssues = violationStats.getBlockerIssues();
+                    double criticalIssues = violationStats.getCriticalIssues();
+                    double classesCount = complexityStats.getClassComplexity();
+                    double functionsCount = complexityStats.getFunctionComplexity();
+                    double filesCount = complexityStats.getFileComplexity();
 
 
                     sonarMetricIssue.setProjectId( projectId );
