@@ -7,13 +7,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import java.io.Serializable;
+
 
 /**
  * Created by tzhamakeev on 5/25/15.
  */
 @XmlRootElement
 @Embeddable
-public class JarvisIssueType
+public class JarvisIssueType implements Serializable
 {
     @Column(name = "jarvis_issue_type_id")
     private Long id;

@@ -3,13 +3,14 @@ package org.safehaus.dao.entities.jira;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import java.io.Serializable;
 
 
 /**
  * Created by talas on 9/26/15.
  */
 @Embeddable
-public class LinkType
+public class LinkType implements Serializable
 {
     @Column( name = "link_type_id" )
     private Long id;
