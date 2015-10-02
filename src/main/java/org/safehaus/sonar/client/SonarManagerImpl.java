@@ -15,6 +15,7 @@ import org.safehaus.sonar.model.TimeViolationStats;
 import org.safehaus.sonar.model.UnitTestStats;
 import org.safehaus.sonar.model.ViolationStats;
 import org.sonar.wsclient.Sonar;
+import org.sonar.wsclient.services.Measure;
 import org.sonar.wsclient.services.Resource;
 import org.sonar.wsclient.services.ResourceQuery;
 import org.sonar.wsclient.services.TimeMachine;
@@ -30,6 +31,14 @@ import com.google.common.collect.Sets;
 public class SonarManagerImpl implements SonarManager
 {
     protected Sonar sonarClient;
+    private double coveragePercent;
+    private double successPercent;
+    private double failures;
+    private double errors;
+    private double testsCount;
+    private double executionTimeMs;
+    private double lineCoveragePercent;
+    private double branchCoveragePercent;
 
 
     public SonarManagerImpl( final String baseUrl, final String username, final String password )
@@ -53,15 +62,107 @@ public class SonarManagerImpl implements SonarManager
                             UnitTestStats.EXEC_TIME_METRIC, UnitTestStats.COVERAGE_METRIC,
                             UnitTestStats.LINE_COVERAGE_METRIC, UnitTestStats.BRANCH_COVERAGE_METRIC ) );
 
+            Measure measureCoveragePercent = resource.getMeasure( UnitTestStats.COVERAGE_METRIC );
+            Measure measureSuccessPercent = resource.getMeasure( UnitTestStats.SUCCESS_PERCENT_METRIC );
+            Measure measureFailures = resource.getMeasure( UnitTestStats.FAILURES_METRIC );
+            Measure measureErrors = resource.getMeasure( UnitTestStats.ERRORS_METRIC );
+            Measure measureTestCounts = resource.getMeasure( UnitTestStats.TESTS_COUNT_METRIC );
+            Measure measureExecutionTimeMs = resource.getMeasure( UnitTestStats.EXEC_TIME_METRIC );
+            Measure measureLineCoveragePercent = resource.getMeasure( UnitTestStats.LINE_COVERAGE_METRIC );
+            Measure measureBranchCoveragePercent = resource.getMeasure( UnitTestStats.BRANCH_COVERAGE_METRIC );
 
-            return new UnitTestStats( resource.getMeasure( UnitTestStats.SUCCESS_PERCENT_METRIC ).getValue(),
-                    resource.getMeasure( UnitTestStats.FAILURES_METRIC ).getValue(),
-                    resource.getMeasure( UnitTestStats.ERRORS_METRIC ).getValue(),
-                    resource.getMeasure( UnitTestStats.TESTS_COUNT_METRIC ).getValue(),
-                    resource.getMeasure( UnitTestStats.EXEC_TIME_METRIC ).getValue(),
-                    resource.getMeasure( UnitTestStats.COVERAGE_METRIC ).getValue(),
-                    resource.getMeasure( UnitTestStats.LINE_COVERAGE_METRIC ).getValue(),
-                    resource.getMeasure( UnitTestStats.BRANCH_COVERAGE_METRIC ).getValue() );
+            if ( measureCoveragePercent == null )
+            {
+                coveragePercent = 0;
+            }
+            else
+            {
+                coveragePercent = measureCoveragePercent.getValue();
+            }
+
+
+            if ( measureSuccessPercent == null )
+            {
+                successPercent = 0;
+            }
+            else
+            {
+                successPercent = measureSuccessPercent.getValue();
+            }
+
+
+            if ( measureFailures == null )
+            {
+                failures = 0;
+            }
+            else
+            {
+                failures = measureFailures.getValue();
+            }
+
+
+            if ( measureErrors == null )
+            {
+                errors = 0;
+            }
+            else
+            {
+                errors = measureErrors.getValue();
+            }
+
+
+            if ( measureSuccessPercent == null )
+            {
+                successPercent = 0;
+            }
+            else
+            {
+                successPercent = measureSuccessPercent.getValue();
+            }
+
+
+            if ( measureTestCounts == null )
+            {
+                testsCount = 0;
+            }
+            else
+            {
+                testsCount = measureTestCounts.getValue();
+            }
+
+
+            if ( measureExecutionTimeMs == null )
+            {
+                executionTimeMs = 0;
+            }
+            else
+            {
+                executionTimeMs = measureExecutionTimeMs.getValue();
+            }
+
+
+            if ( measureLineCoveragePercent == null )
+            {
+                lineCoveragePercent = 0;
+            }
+            else
+            {
+                lineCoveragePercent = measureLineCoveragePercent.getValue();
+            }
+
+
+            if ( measureBranchCoveragePercent == null )
+            {
+                branchCoveragePercent = 0;
+            }
+            else
+            {
+                branchCoveragePercent = measureBranchCoveragePercent.getValue();
+            }
+
+
+            return new UnitTestStats( successPercent, failures, errors, testsCount, executionTimeMs, coveragePercent,
+                    lineCoveragePercent, branchCoveragePercent );
         }
         catch ( Exception e )
         {

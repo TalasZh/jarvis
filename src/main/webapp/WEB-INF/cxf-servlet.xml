@@ -79,6 +79,7 @@
   <jaxws:endpoint id="sessionService" implementor="#sessionServiceImpl" address="/SessionService" />
   <jaxws:endpoint id="projectService" implementor="#projectManager" address="/ProjectService" />
   <jaxws:endpoint id="stashMetricService" implementor="#stashMetricsManager" address="/StashMetricServiceImpl" />
+  <jaxws:endpoint id="sonarMetricService" implementor="#sonarMetricsManager" address="/SonarMetricServiceImpl" />
   <jaxws:endpoint id="jiraMetricService" implementor="#jiraMetricDao" address="/JiraMetricDaoImpl" />
   <jaxws:endpoint id="jiraChangelogService" implementor="#jiraChangelogManager" address="/JiraChangelogServiceImpl" />
   <jaxws:endpoint id="timelineRestService" implementor="#timelineRestServiceImpl" address="/TimelineRestServiceImpl" />
@@ -95,6 +96,7 @@
       <ref bean="projectManager" />
       <ref bean="sessionServiceImpl" />
       <ref bean="stashMetricsManager" />
+      <ref bean="sonarMetricsManager" />
       <ref bean="jiraMetricDao" />
       <ref bean="jiraChangelogManager" />
       <ref bean="timelineRestServiceImpl" />
