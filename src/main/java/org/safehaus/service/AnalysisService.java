@@ -24,15 +24,20 @@ import org.safehaus.confluence.model.ConfluenceMetric;
 import org.safehaus.confluence.model.Space;
 import org.safehaus.dao.entities.jira.JiraMetricIssue;
 import org.safehaus.dao.entities.jira.JiraProject;
+import org.safehaus.dao.entities.sonar.SonarMetricIssue;
 import org.safehaus.dao.entities.stash.Commit;
 import org.safehaus.dao.entities.stash.StashMetricIssue;
 import org.safehaus.exceptions.JiraClientException;
 import org.safehaus.jira.JiraRestClient;
 import org.safehaus.persistence.CassandraConnector;
 import org.safehaus.service.api.JiraMetricDao;
+import org.safehaus.service.api.SonarMetricService;
 import org.safehaus.service.api.StashMetricService;
 import org.safehaus.sonar.client.SonarManager;
 import org.safehaus.sonar.client.SonarManagerException;
+import org.safehaus.sonar.model.ComplexityStats;
+import org.safehaus.sonar.model.UnitTestStats;
+import org.safehaus.sonar.model.ViolationStats;
 import org.safehaus.stash.client.Page;
 import org.safehaus.stash.client.StashManager;
 import org.safehaus.stash.client.StashManagerException;
@@ -92,6 +97,10 @@ public class AnalysisService
 
     @Autowired
     private TimelineManager timelineManager;
+
+    @Autowired
+    private SonarMetricService sonarMetricService;
+
 
     Set<JiraMetricIssue> jiraMetricIssues;
     List<StashMetricIssue> stashMetricIssues;
@@ -565,40 +574,58 @@ public class AnalysisService
     private void getSonarMetricIssues( SonarManager sonarManager )
     {
         Set<Resource> resources = null;
-        List<String> resourceKeys = new ArrayList<>();
-        List<Integer> resourceIDs = new ArrayList<>();
-
-
         log.info( "Get Sonar Metric Issues ici." );
         try
         {
             resources = sonarManager.getResources();
+            if ( resources != null )
+            {
+                for ( Resource r : resources )
+                {
+                    SonarMetricIssue sonarMetricIssue = new SonarMetricIssue();
+                    int projectId = r.getId();
+                    String projectKey = r.getKey();
+                    String projectName = r.getName();
+
+                    UnitTestStats unitTestStats = sonarManager.getUnitTestStats( projectKey );
+                    ViolationStats violationStats = sonarManager.getViolationStats( projectKey );
+                    ComplexityStats complexityStats = sonarManager.getComplexityStats( projectKey );
+
+                    double successPercent = unitTestStats.getSuccessPercent();
+                    double failures = unitTestStats.getFailures();
+                    double errors = unitTestStats.getErrors();
+                    double testCounts = unitTestStats.getFailures();
+                    double coveragePercent = unitTestStats.getCoveragePercent();
+                    double allIssues = violationStats.getAllIssues();
+                    double blockerIssues = violationStats.getBlockerIssues();
+                    double criticalIssues = violationStats.getCriticalIssues();
+                    double classesCount = complexityStats.getClassComplexity();
+                    double functionsCount = complexityStats.getFunctionComplexity();
+                    double filesCount = complexityStats.getFileComplexity();
+
+
+                    sonarMetricIssue.setProjectId( projectId );
+                    sonarMetricIssue.setProjectName( projectName );
+                    sonarMetricIssue.setSuccessPercent( successPercent );
+                    sonarMetricIssue.setFailures( failures );
+                    sonarMetricIssue.setErrors( errors );
+                    sonarMetricIssue.setTestCount( testCounts );
+                    sonarMetricIssue.setCoveragePercent( coveragePercent );
+                    sonarMetricIssue.setAllIssues( allIssues );
+                    sonarMetricIssue.setBlockerIssues( blockerIssues );
+                    sonarMetricIssue.setCriticalIssues( criticalIssues );
+                    sonarMetricIssue.setClassesCount( classesCount );
+                    sonarMetricIssue.setFunctionsCount( functionsCount );
+                    sonarMetricIssue.setFilesCount( filesCount );
+
+                    sonarMetricService.insertSonarMetricIssue( sonarMetricIssue );
+                }
+            }
         }
         catch ( SonarManagerException e )
         {
             e.printStackTrace();
         }
-        if ( resources != null )
-        {
-            for ( Resource r : resources )
-            {
-                log.info( "Resource:" );
-                log.info( r.getName() );
-                log.info( r.getId() );
-                log.info( r.getKey() );
-                resourceKeys.add( r.getKey() );
-                resourceIDs.add( r.getId() );
-            }
-        }
-/*
-        try {
-            QuantitativeStats quantitativeStats = sonarManager.getQuantitativeStats(resourceKeys.get(resourceKeys
-            .size() - 1).toString());
-            log.info("LOC: " + quantitativeStats.getLinesOfCode());
-        } catch (SonarManagerException e) {
-            e.printStackTrace();
-        }
-*/
     }
 
 
