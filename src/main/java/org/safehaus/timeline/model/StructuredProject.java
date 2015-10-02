@@ -2,17 +2,21 @@ package org.safehaus.timeline.model;
 
 
 import java.io.Serializable;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.MapKeyColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -20,6 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.safehaus.model.Views;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.impetus.kundera.index.Index;
 import com.impetus.kundera.index.IndexCollection;
@@ -64,6 +69,12 @@ public class StructuredProject implements Serializable, Structure
 
     @Embedded
     private ProgressStatus doneStatus;
+
+    @ElementCollection
+    @MapKeyColumn( name = "issuesSolved" )
+    @Column( name = "totalSolved" )
+    @CollectionTable( name = "resolvedIssues", joinColumns = @JoinColumn( name = "solved_id" ) )
+    Map<String, Long> totalIssuesSolved = Maps.newHashMap(); // maps from attribute name to value
 
 
     public StructuredProject()
@@ -124,6 +135,20 @@ public class StructuredProject implements Serializable, Structure
     public void setIssues( final Set<StructuredIssue> issues )
     {
         this.issues = issues;
+    }
+
+
+    @Override
+    public Map<String, Long> getTotalIssuesSolved()
+    {
+        return totalIssuesSolved;
+    }
+
+
+    @Override
+    public void setTotalIssuesSolved( final Map<String, Long> totalIssuesSolved )
+    {
+        this.totalIssuesSolved = totalIssuesSolved;
     }
 
 

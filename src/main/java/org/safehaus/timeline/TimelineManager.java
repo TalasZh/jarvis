@@ -180,14 +180,15 @@ public class TimelineManager
                     progressStatus.getRemainingRestimate() + issue.getRemainingEstimateMinutes() );
             progressStatus.setTimeSpent( progressStatus.getTimeSpent() + issue.getTimeSpentMinutes() );
 
-            //            String type = issue.getType().getName();
-            //            Long totalSolved = structuredIssue.getTotalIssuesSolved().get( type );
-            //            if ( totalSolved == null ) {
-            //                totalSolved = 0L;
-            //            }
-            //            totalSolved += issue.getTimeSpentMinutes();
-            //            structuredIssue.getTotalIssuesSolved().put( type, totalSolved );
         }
+        String type = issue.getType().getName();
+        Long totalSolved = structuredIssue.getTotalIssuesSolved().get( type );
+        if ( totalSolved == null )
+        {
+            totalSolved = 0L;
+        }
+        totalSolved += issue.getTimeSpentMinutes();
+        structuredIssue.getTotalIssuesSolved().put( type, totalSolved );
     }
 
 
@@ -201,6 +202,21 @@ public class TimelineManager
 
         // Assign done statuses
         sumUpProgresses( structuredIssue.getDoneStatus(), parent.getDoneStatus() );
+
+        for ( final Map.Entry<String, Long> entry : structuredIssue.getTotalIssuesSolved().entrySet() )
+        {
+            String key = entry.getKey();
+            Long value = entry.getValue();
+
+            Long parentValue = parent.getTotalIssuesSolved().get( key );
+            if ( parentValue == null )
+            {
+                parentValue = 0L;
+            }
+            parentValue += value;
+
+            parent.getTotalIssuesSolved().put( key, parentValue );
+        }
     }
 
 

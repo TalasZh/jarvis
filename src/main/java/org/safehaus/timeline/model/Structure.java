@@ -1,6 +1,9 @@
 package org.safehaus.timeline.model;
 
 
+import java.util.Map;
+
+
 /**
  * Created by talas on 9/30/15.
  */
@@ -22,4 +25,10 @@ public interface Structure
 
 
     public void setDoneStatus( final ProgressStatus doneStatus );
+
+
+    public Map<String, Long> getTotalIssuesSolved();
+
+
+    public void setTotalIssuesSolved( final Map<String, Long> totalIssuesSolved );
 }
