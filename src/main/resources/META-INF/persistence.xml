@@ -27,6 +27,7 @@
     <class>org.safehaus.dao.entities.jira.JarvisIssue</class>
     <class>org.safehaus.dao.entities.jira.JiraMetricIssue</class>
     <class>org.safehaus.dao.entities.jira.JiraProject</class>
+    <class>org.safehaus.dao.entities.jira.ProjectVersion</class>
     <class>org.safehaus.dao.entities.jira.JiraIssueChangelog</class>
 
     <class>org.safehaus.timeline.model.StructuredIssue</class>

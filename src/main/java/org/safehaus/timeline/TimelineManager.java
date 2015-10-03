@@ -90,7 +90,7 @@ public class TimelineManager
             {
                 StructuredProject project =
                         new StructuredProject( jiraProject.getProjectId(), jiraProject.getName(), jiraProject.getKey(),
-                                jiraProject.getDescription() );
+                                jiraProject.getDescription(), jiraProject.getProjectVersions() );
 
                 project.setDoneStatus( new ProgressStatus() );
                 project.setInProgressStatus( new ProgressStatus() );
