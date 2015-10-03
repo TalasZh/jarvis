@@ -22,6 +22,7 @@
     <provider>com.impetus.kundera.KunderaPersistence</provider>
     <class>org.safehaus.model.DocumentInfo</class>
     <class>org.safehaus.dao.entities.jira.JarvisLink</class>
+    <class>org.safehaus.dao.entities.jira.JiraUser</class>
     <class>org.safehaus.dao.entities.jira.JarvisIssueType</class>
     <class>org.safehaus.dao.entities.jira.JarvisMember</class>
     <class>org.safehaus.dao.entities.jira.JarvisIssue</class>
@@ -59,7 +60,7 @@
       <property name="kundera.dialect" value="cassandra" />
 
       <!-- TODO Don't forget to change to "update"  after tables schema created in production-->
-      <property name="kundera.ddl.auto.prepare" value="create" />
+      <!--<property name="kundera.ddl.auto.prepare" value="create" />-->
 
       <property name="kundera.client" value="thrift" />
       <property name="kundera.batch.size" value="5000" />

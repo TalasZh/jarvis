@@ -67,7 +67,7 @@ public class StructuredProject implements Serializable, Structure
     private Set<StructuredIssue> issues = Sets.newHashSet();
 
     @JsonView( Views.TimelineShort.class )
-    @Column( name = "project_key" )
+    @Column( name = "project_description" )
     private String description;
 
     @JsonIgnore
@@ -78,6 +78,7 @@ public class StructuredProject implements Serializable, Structure
     @Column( name = "epics_count" )
     private long epicsCount;
 
+    @JsonView( Views.TimelineShort.class )
     @ElementCollection
     @Column( name = "usernames" )
     private Set<String> users = Sets.newHashSet();

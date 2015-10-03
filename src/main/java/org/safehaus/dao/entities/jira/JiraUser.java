@@ -25,6 +25,10 @@ import static org.safehaus.Constants.DATABASE_SCHEMA;
 public class JiraUser implements Serializable
 {
     @Id
+    @Column( name = "username" )
+    private String username;
+
+
     @Column( name = "user_id" )
     private String userId;
 
@@ -33,9 +37,6 @@ public class JiraUser implements Serializable
 
     @Column( name = "email" )
     private String email;
-
-    @Column( name = "username" )
-    private String username;
 
 
     public JiraUser()
