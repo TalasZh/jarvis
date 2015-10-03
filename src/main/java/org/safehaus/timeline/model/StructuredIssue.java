@@ -2,26 +2,27 @@ package org.safehaus.timeline.model;
 
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
-import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapKeyColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.safehaus.model.Views;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -83,10 +84,19 @@ public class StructuredIssue implements Serializable, Structure
     @Column( name = "status" )
     private String status;
 
+    @Transient
+    @JsonProperty( "issues" )
     @JsonView( Views.TimelineLong.class )
-    @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER )
-    @JoinColumn( name = "parent_issue_id" )
     private Set<StructuredIssue> issues = Sets.newHashSet();
+
+    @JsonIgnore
+    @ElementCollection
+    @Column( name = "issues" )
+    private Set<String> issuesKeys = Sets.newHashSet();
+
+    @ElementCollection
+    @Column( name = "usernames" )
+    private Set<String> users = Sets.newHashSet();
 
     @Embedded
     private ProgressStatus openStatus;
@@ -102,6 +112,9 @@ public class StructuredIssue implements Serializable, Structure
     @Column( name = "totalSolved" )
     @CollectionTable( name = "resolvedIssues", joinColumns = @JoinColumn( name = "solved_id" ) )
     Map<String, Long> totalIssuesSolved = Maps.newHashMap(); // maps from attribute name to value
+
+    @Embedded
+    private StoryPoints storyPoints;
 
 
     public StructuredIssue()
@@ -126,42 +139,101 @@ public class StructuredIssue implements Serializable, Structure
     }
 
 
-    public Set<StructuredIssue> getIssues()
+    public String getIssueType()
     {
-        return issues;
+        return issueType;
     }
 
 
+    public String getReporter()
+    {
+        return reporter;
+    }
+
+
+    @Override
+    public Set<String> getUsers()
+    {
+        return users;
+    }
+
+
+    @Override
+    public void setUsers( final Set<String> usernames )
+    {
+        this.users = usernames;
+    }
+
+
+    @Override
+    public StoryPoints getStoryPoints()
+    {
+        return storyPoints;
+    }
+
+
+    @Override
+    public void setStoryPoints( final StoryPoints storyPoints )
+    {
+        this.storyPoints = storyPoints;
+    }
+
+
+    public Set<String> getIssuesKeys()
+    {
+        return issuesKeys;
+    }
+
+
+    public Set<StructuredIssue> getIssues()
+    {
+        return Collections.unmodifiableSet( issues );
+    }
+
+
+    public void addIssue( StructuredIssue structuredIssue )
+    {
+        this.issues.add( structuredIssue );
+        this.issuesKeys.add( structuredIssue.getKey() );
+    }
+
+
+    @Override
     public ProgressStatus getOpenStatus()
     {
         return openStatus;
     }
 
 
+    @Override
     public void setOpenStatus( final ProgressStatus openStatus )
     {
         this.openStatus = openStatus;
     }
 
 
+    @Override
     public ProgressStatus getInProgressStatus()
     {
         return inProgressStatus;
     }
 
 
+    @Override
     public void setInProgressStatus( final ProgressStatus inProgressStatus )
     {
         this.inProgressStatus = inProgressStatus;
     }
 
 
+    @Override
     public ProgressStatus getDoneStatus()
     {
         return doneStatus;
     }
 
 
+    @Override
     public void setDoneStatus( final ProgressStatus doneStatus )
     {
         this.doneStatus = doneStatus;

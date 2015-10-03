@@ -2,6 +2,7 @@ package org.safehaus.timeline.model;
 
 
 import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -31,4 +32,15 @@ public interface Structure
 
 
     public void setTotalIssuesSolved( final Map<String, Long> totalIssuesSolved );
+
+    public Set<String> getUsers();
+
+
+    public void setUsers( final Set<String> usernames );
+
+
+    public StoryPoints getStoryPoints();
+
+
+    public void setStoryPoints( final StoryPoints storyPoints );
 }

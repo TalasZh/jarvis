@@ -2,12 +2,15 @@ package org.safehaus.timeline.dao;
 
 
 import java.util.List;
+import java.util.Map;
 
 import org.safehaus.dao.Dao;
 import org.safehaus.timeline.model.StructuredIssue;
 import org.safehaus.timeline.model.StructuredProject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.google.common.collect.Maps;
 
 
 /**
@@ -35,6 +38,10 @@ public class TimelineDaoImpl implements TimelineDao
     public void updateProject( StructuredProject project )
     {
         daoManager.merge( project );
+        for ( final StructuredIssue structuredIssue : project.getIssues() )
+        {
+            updateStructuredIssue( structuredIssue );
+        }
     }
 
 
@@ -82,6 +89,10 @@ public class TimelineDaoImpl implements TimelineDao
     public void updateStructuredIssue( StructuredIssue issue )
     {
         daoManager.merge( issue );
+        for ( final StructuredIssue structuredIssue : issue.getIssues() )
+        {
+            updateStructuredIssue( structuredIssue );
+        }
     }
 
 
@@ -102,14 +113,23 @@ public class TimelineDaoImpl implements TimelineDao
         String parameter = "key";
         String query = String.format( "select s from %s s where s.key = :%s", StructuredIssue.class.getSimpleName(),
                 parameter );
-        List<StructuredIssue> results = ( List<StructuredIssue> ) daoManager.findByQuery( query, parameter, key );
+        Map<String, Object> params = Maps.newHashMap();
+        params.put( parameter, key );
+
+        List<StructuredIssue> results = daoManager.findByQuery( StructuredIssue.class, query, params );
         if ( results.size() == 0 )
         {
             return null;
         }
         else
         {
-            return results.iterator().next();
+            StructuredIssue issue = results.iterator().next();
+            for ( final String issueKey : issue.getIssuesKeys() )
+            {
+                StructuredIssue structuredIssue = getStructuredIssueByKey( issueKey );
+                issue.addIssue( structuredIssue );
+            }
+            return issue;
         }
     }
 
