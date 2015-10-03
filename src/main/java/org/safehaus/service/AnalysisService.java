@@ -35,7 +35,7 @@ import org.safehaus.service.api.SonarMetricService;
 import org.safehaus.service.api.StashMetricService;
 import org.safehaus.sonar.client.SonarManager;
 import org.safehaus.sonar.client.SonarManagerException;
-import org.safehaus.sonar.model.ComplexityStats;
+import org.safehaus.sonar.model.QuantitativeStats;
 import org.safehaus.sonar.model.UnitTestStats;
 import org.safehaus.sonar.model.ViolationStats;
 import org.safehaus.stash.client.Page;
@@ -589,7 +589,7 @@ public class AnalysisService
 
                     UnitTestStats unitTestStats = sonarManager.getUnitTestStats( projectKey );
                     ViolationStats violationStats = sonarManager.getViolationStats( projectKey );
-                    ComplexityStats complexityStats = sonarManager.getComplexityStats( projectKey );
+                    QuantitativeStats quantitativeStats = sonarManager.getQuantitativeStats( projectKey );
 
                     double successPercent = unitTestStats.getSuccessPercent();
                     double failures = unitTestStats.getFailures();
@@ -599,10 +599,11 @@ public class AnalysisService
                     double allIssues = violationStats.getAllIssues();
                     double blockerIssues = violationStats.getBlockerIssues();
                     double criticalIssues = violationStats.getCriticalIssues();
-                    double classesCount = complexityStats.getClassComplexity();
-                    double functionsCount = complexityStats.getFunctionComplexity();
-                    double filesCount = complexityStats.getFileComplexity();
-
+                    double majorIssues = violationStats.getMajorIssues();
+                    double classesCount = quantitativeStats.getClasses();
+                    double functionsCount = quantitativeStats.getFunctions();
+                    double filesCount = quantitativeStats.getFiles();
+                    double linesOfCode = quantitativeStats.getLinesOfCode();
 
                     sonarMetricIssue.setProjectId( projectId );
                     sonarMetricIssue.setProjectName( projectName );
@@ -617,6 +618,8 @@ public class AnalysisService
                     sonarMetricIssue.setClassesCount( classesCount );
                     sonarMetricIssue.setFunctionsCount( functionsCount );
                     sonarMetricIssue.setFilesCount( filesCount );
+                    sonarMetricIssue.setMajorIssues( majorIssues );
+                    sonarMetricIssue.setLinesOfCode( linesOfCode );
 
                     sonarMetricService.insertSonarMetricIssue( sonarMetricIssue );
                 }
