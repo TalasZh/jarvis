@@ -13,13 +13,16 @@ import org.safehaus.dao.entities.jira.JarvisLink;
 import org.safehaus.dao.entities.jira.JiraIssueChangelog;
 import org.safehaus.dao.entities.jira.JiraMetricIssue;
 import org.safehaus.dao.entities.jira.JiraProject;
+import org.safehaus.dao.entities.sonar.SonarMetricIssue;
 import org.safehaus.model.Capture;
 import org.safehaus.model.Session;
 import org.safehaus.model.SessionNotFoundException;
 import org.safehaus.service.api.JiraMetricDao;
 import org.safehaus.service.api.SessionManager;
+import org.safehaus.service.api.SonarMetricService;
 import org.safehaus.timeline.dao.TimelineDao;
 import org.safehaus.timeline.model.ProgressStatus;
+import org.safehaus.timeline.model.ProjectStats;
 import org.safehaus.timeline.model.StoryPoints;
 import org.safehaus.timeline.model.StoryTimeline;
 import org.safehaus.timeline.model.Structure;
@@ -47,6 +50,9 @@ public class TimelineManager
     private TimelineDao timelineDaoImpl;
 
     private SessionManager sessionManager;
+
+    @Autowired
+    private SonarMetricService sonarMetricService;
 
     private Map<String, StructuredProject> structuredProjects = Maps.newHashMap();
 
@@ -79,6 +85,12 @@ public class TimelineManager
             project.setInProgressStatus( new ProgressStatus() );
             project.setOpenStatus( new ProgressStatus() );
 
+            SonarMetricIssue sonarMetricIssue = sonarMetricService.findSonarMetricIssueByProjectId( "5855" );
+
+
+            ProjectStats projectStats = new ProjectStats( sonarMetricIssue );
+            project.setProjectStats( projectStats );
+
             Map<String, JiraMetricIssue> jiraMetricIssues = getJiraProjectIssues( jiraProject.getKey() );
 
             Set<StructuredIssue> structuredEpics = getProjectEpics( jiraProject.getKey(), jiraMetricIssues );
@@ -107,10 +119,13 @@ public class TimelineManager
     public StructuredProject getProject( final String projectKey )
     {
         StructuredProject structuredProject = timelineDaoImpl.getProjectByKey( projectKey );
-        for ( final String issueKey : structuredProject.getIssuesKeys() )
+        if ( structuredProject != null )
         {
-            StructuredIssue issue = timelineDaoImpl.getStructuredIssueByKey( issueKey );
-            structuredProject.addIssue( issue );
+            for ( final String issueKey : structuredProject.getIssuesKeys() )
+            {
+                StructuredIssue issue = timelineDaoImpl.getStructuredIssueByKey( issueKey );
+                structuredProject.addIssue( issue );
+            }
         }
         return structuredProject;
     }

@@ -10,4 +10,8 @@ import org.safehaus.dao.entities.sonar.SonarMetricIssue;
 public interface SonarMetricService
 {
     void insertSonarMetricIssue( SonarMetricIssue sonarMetricIssue );
+
+    public SonarMetricIssue findSonarMetricIssueByProjectId( String id );
+
+    public SonarMetricIssue getSonarMetricIssueByName( String projectName );
 }

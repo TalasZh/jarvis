@@ -1,6 +1,9 @@
 package org.safehaus.service.impl;
 
 
+import java.util.List;
+import java.util.Map;
+
 import javax.jws.WebService;
 
 import org.codehaus.jackson.map.annotate.JsonView;
@@ -13,6 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.google.common.collect.Maps;
 
 
 /**
@@ -35,6 +40,30 @@ public class SonarMetricServiceImpl implements SonarMetricService, SonarMetricsR
     {
         log.info( "Inserting new StashMetricIssue" );
         dao.insert( sonarMetricIssue );
+    }
+
+
+    @Override
+    public SonarMetricIssue getSonarMetricIssueByName( final String projectName )
+    {
+
+        String parameter = "projectName";
+        String query = String.format( "SELECT sp FROM %s sp WHERE sp.projectName = :%s",
+                SonarMetricIssue.class.getSimpleName(), projectName );
+
+        Map<String, Object> params = Maps.newHashMap();
+        params.put( parameter, projectName );
+
+        List<SonarMetricIssue> results = dao.findByQuery( SonarMetricIssue.class, query, params );
+
+        if ( results.size() == 0 )
+        {
+            return null;
+        }
+        else
+        {
+            return results.iterator().next();
+        }
     }
 
 
