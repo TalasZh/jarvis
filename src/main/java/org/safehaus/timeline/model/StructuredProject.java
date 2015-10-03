@@ -76,7 +76,7 @@ public class StructuredProject implements Serializable, Structure
     private Set<String> users = Sets.newHashSet();
 
     @Embedded
-    private StoryPoints storyPoints = new StoryPoints();
+    private StoryPoints storyPoints;
 
     @Embedded
     private ProgressStatus openStatus;
