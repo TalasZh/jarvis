@@ -146,7 +146,8 @@ public class TimelineManager
         for ( final Map.Entry<String, JiraMetricIssue> entry : jiraMetricIssues.entrySet() )
         {
             final JiraMetricIssue jiraMetricIssue = entry.getValue();
-            if ( projectKey.equals( jiraMetricIssue.getProjectKey() ) )
+            if ( "Epic".equals( jiraMetricIssue.getType().getName() ) && projectKey
+                    .equals( jiraMetricIssue.getProjectKey() ) )
             {
                 StructuredIssue epic = new StructuredIssue( jiraMetricIssue.getIssueKey(), jiraMetricIssue.getIssueId(),
                         jiraMetricIssue.getType().getName(), jiraMetricIssue.getSummary(),
@@ -377,8 +378,7 @@ public class TimelineManager
         List<String> linkedIssues = Lists.newArrayList();
         for ( final JarvisLink link : issue.getIssueLinks() )
         {
-            if ( "Parent".equals( link.getLinkType().getName() )
-                    && link.getDirection() == JarvisLink.Direction.OUTWARD )
+            if ( link.getDirection() == JarvisLink.Direction.OUTWARD )
             {
                 linkedIssues.add( link.getLinkDirection().getIssueKey() );
             }
