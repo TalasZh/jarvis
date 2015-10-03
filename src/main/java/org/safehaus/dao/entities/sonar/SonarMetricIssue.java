@@ -56,6 +56,9 @@ public class SonarMetricIssue implements Serializable
     @Column( name = "critical_issues" )
     private double criticalIssues;
 
+    @Column( name = "major_issues" )
+    private double majorIssues;
+
     @Column( name = "classes_count" )
     private double classesCount;
 
@@ -64,6 +67,9 @@ public class SonarMetricIssue implements Serializable
 
     @Column( name = "files_count" )
     private double filesCount;
+
+    @Column( name = "lines_of_code" )
+    private double linesOfCode;
 
 
     public int getProjectId()
@@ -249,5 +255,29 @@ public class SonarMetricIssue implements Serializable
     public void setProjectName( final String projectName )
     {
         this.projectName = projectName;
+    }
+
+
+    public double getLinesOfCode()
+    {
+        return linesOfCode;
+    }
+
+
+    public void setLinesOfCode( final double linesOfCode )
+    {
+        this.linesOfCode = linesOfCode;
+    }
+
+
+    public double getMajorIssues()
+    {
+        return majorIssues;
+    }
+
+
+    public void setMajorIssues( final double majorIssues )
+    {
+        this.majorIssues = majorIssues;
     }
 }
