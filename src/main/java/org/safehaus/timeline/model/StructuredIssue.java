@@ -114,7 +114,7 @@ public class StructuredIssue implements Serializable, Structure
     Map<String, Long> totalIssuesSolved = Maps.newHashMap(); // maps from attribute name to value
 
     @Embedded
-    private StoryPoints storyPoints;
+    private StoryPoints storyPoints = new StoryPoints();
 
 
     public StructuredIssue()

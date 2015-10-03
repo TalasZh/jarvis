@@ -76,7 +76,7 @@ public class StructuredProject implements Serializable, Structure
     private Set<String> users = Sets.newHashSet();
 
     @Embedded
-    private StoryPoints storyPoints;
+    private StoryPoints storyPoints = new StoryPoints();
 
     @Embedded
     private ProgressStatus openStatus;
@@ -87,11 +87,16 @@ public class StructuredProject implements Serializable, Structure
     @Embedded
     private ProgressStatus doneStatus;
 
+
     @ElementCollection
     @MapKeyColumn( name = "issuesSolved" )
     @Column( name = "totalSolved" )
     @CollectionTable( name = "resolvedIssues", joinColumns = @JoinColumn( name = "solved_id" ) )
     Map<String, Long> totalIssuesSolved = Maps.newHashMap(); // maps from attribute name to value
+
+
+    @Embedded
+    private ProjectStats projectStats;
 
 
     public StructuredProject()
@@ -104,6 +109,18 @@ public class StructuredProject implements Serializable, Structure
         this.id = id;
         this.name = name;
         this.key = key;
+    }
+
+
+    public ProjectStats getProjectStats()
+    {
+        return projectStats;
+    }
+
+
+    public void setProjectStats( final ProjectStats projectStats )
+    {
+        this.projectStats = projectStats;
     }
 
 

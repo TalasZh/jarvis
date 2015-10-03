@@ -275,7 +275,7 @@ public class AnalysisService
         }
         if ( sonarManager != null )
         {
-            //            getSonarMetricIssues( sonarManager );
+            getSonarMetricIssues( sonarManager );
         }
 
         //Get Confluence data
