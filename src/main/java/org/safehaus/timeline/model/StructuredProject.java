@@ -2,27 +2,28 @@ package org.safehaus.timeline.model;
 
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
-import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapKeyColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.safehaus.model.Views;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -30,6 +31,7 @@ import com.impetus.kundera.index.Index;
 import com.impetus.kundera.index.IndexCollection;
 
 import static org.safehaus.Constants.DATABASE_SCHEMA;
+
 
 /**
  * Created by talas on 9/27/15.
@@ -56,10 +58,25 @@ public class StructuredProject implements Serializable, Structure
     @Column( name = "project_key" )
     private String key;
 
+    @Transient
+    @JsonProperty( "issues" )
     @JsonView( Views.TimelineLong.class )
-    @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true )
-    @JoinColumn( name = "referenced_project_id" )
     private Set<StructuredIssue> issues = Sets.newHashSet();
+
+    @JsonIgnore
+    @ElementCollection
+    @Column( name = "issues" )
+    private Set<String> issuesKeys = Sets.newHashSet();
+
+    @Column( name = "epics_count" )
+    private long epicsCount;
+
+    @ElementCollection
+    @Column( name = "usernames" )
+    private Set<String> users = Sets.newHashSet();
+
+    @Embedded
+    private StoryPoints storyPoints;
 
     @Embedded
     private ProgressStatus openStatus;
@@ -87,6 +104,59 @@ public class StructuredProject implements Serializable, Structure
         this.id = id;
         this.name = name;
         this.key = key;
+    }
+
+
+    @Override
+    public Set<String> getUsers()
+    {
+        return users;
+    }
+
+
+    @Override
+    public void setUsers( final Set<String> usernames )
+    {
+        this.users = usernames;
+    }
+
+
+    @Override
+    public StoryPoints getStoryPoints()
+    {
+        return storyPoints;
+    }
+
+
+    @Override
+    public void setStoryPoints( final StoryPoints storyPoints )
+    {
+        this.storyPoints = storyPoints;
+    }
+
+
+    public long getEpicsCount()
+    {
+        return epicsCount;
+    }
+
+
+    public void setEpicsCount( final long epicsCount )
+    {
+        this.epicsCount = epicsCount;
+    }
+
+
+    public void addIssue( StructuredIssue structuredIssue )
+    {
+        this.issues.add( structuredIssue );
+        this.issuesKeys.add( structuredIssue.getKey() );
+    }
+
+
+    public Set<String> getIssuesKeys()
+    {
+        return issuesKeys;
     }
 
 
@@ -128,13 +198,17 @@ public class StructuredProject implements Serializable, Structure
 
     public Set<StructuredIssue> getIssues()
     {
-        return issues;
+        return Collections.unmodifiableSet( issues );
     }
 
 
     public void setIssues( final Set<StructuredIssue> issues )
     {
         this.issues = issues;
+        for ( final StructuredIssue issue : issues )
+        {
+            issuesKeys.add( issue.getKey() );
+        }
     }
 
 

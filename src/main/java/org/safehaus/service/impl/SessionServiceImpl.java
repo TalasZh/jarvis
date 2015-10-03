@@ -409,7 +409,8 @@ public class SessionServiceImpl implements SessionService
 
 			for ( JarvisLink jarvisLink : jarvisIssue.getLinks() )
 			{
-				if ( jarvisLink.getLinkType().equals( "Blocks" ) && jarvisLink.getLinkDirection().equals( "INBOUND" ) )
+				if ( jarvisLink.getLinkType().getName().equals( "Blocks" )
+						&& jarvisLink.getDirection() == JarvisLink.Direction.INWARD )
 				{
 					Page subPage = generateSubPage( credentails, storyPage.getId(),
 							jarvisLink.getLinkDirection().getIssueKey() );
@@ -489,7 +490,8 @@ public class SessionServiceImpl implements SessionService
 			StringBuilder sb = new StringBuilder( "<h4>Links:</h4><ul>" );
 			for ( JarvisLink jarvisLink : jarvisIssue.getLinks() )
 			{
-				if ( jarvisLink.getLinkType().equals( "Blocks" ) && jarvisLink.getLinkDirection().equals( "INBOUND" ) )
+				if ( jarvisLink.getLinkType().getName().equals( "Blocks" )
+						&& jarvisLink.getDirection() == JarvisLink.Direction.INWARD )
 				{
 					Page subPage = generateSubPage( credentails, storyPage.getId(),
 							jarvisLink.getLinkDirection().getIssueKey() );

@@ -1,15 +1,14 @@
 package org.safehaus.dao.entities.jira;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -20,6 +19,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.google.common.collect.Lists;
 import com.impetus.kundera.index.Index;
 import com.impetus.kundera.index.IndexCollection;
 
@@ -27,13 +27,14 @@ import net.rcarz.jiraclient.Transition;
 
 import static org.safehaus.Constants.DATABASE_SCHEMA;
 
+
 @XmlRootElement
 @Entity
 @Table( name = "jarvis_issue", schema = DATABASE_SCHEMA )
 @IndexCollection( columns = {
         @Index( name = "id" ), @Index( name = "key" )
 } )
-public class JarvisIssue
+public class JarvisIssue implements Serializable
 {
     private static final long serialVersionUID = 3832626162173359411L;
 
@@ -106,10 +107,10 @@ public class JarvisIssue
     @Column( name = "date_created" )
     protected String dateCreated;
 
-    @JsonView( Views.JarvisIssueLong.class )
-    @OneToMany( fetch = FetchType.EAGER )
-    @Column( name = "links" )
-    protected List<JarvisLink> links = new ArrayList<>();
+    //    @JsonView( Views.JarvisIssueLong.class )
+    //    @OneToMany( fetch = FetchType.EAGER )
+    //    @Column( name = "links" )
+    //    protected List<JarvisLink> links = new ArrayList<>();
 
     @JsonView( Views.JarvisIssueLong.class )
     @Transient
@@ -153,7 +154,7 @@ public class JarvisIssue
         this.resolution = resolution;
         this.fixVersion = fixVersion;
         this.dateCreated = dateCreated;
-        this.links = links;
+        //        this.links = links;
         this.projectKey = projectKey;
         this.transitions = transitions;
     }
@@ -347,13 +348,13 @@ public class JarvisIssue
 
     public List<JarvisLink> getLinks()
     {
-        return links;
+        return Lists.newArrayList();
     }
 
 
     public void setLinks( final List<JarvisLink> links )
     {
-        this.links = links;
+        //        this.links = links;
     }
 
 
@@ -361,13 +362,13 @@ public class JarvisIssue
     public JarvisLink getLink( String linkType, String linkDirection )
     {
         JarvisLink result = null;
-        for ( JarvisLink link : links )
-        {
-            if ( linkType.equals( link.getLinkType() ) && linkDirection.equals( link.getLinkDirection() ) )
-            {
-                result = link;
-            }
-        }
+        //        for ( JarvisLink link : links )
+        //        {
+        //            if ( linkType.equals( link.getLinkType() ) && linkDirection.equals( link.getLinkDirection() ) )
+        //            {
+        //                result = link;
+        //            }
+        //        }
         return result;
     }
 
@@ -427,6 +428,6 @@ public class JarvisIssue
                                           .append( "reporter", reporter ).append( "components", components )
                                           .append( "labels", labels ).append( "status", status )
                                           .append( "resolution", resolution ).append( "fixVersion", fixVersion )
-                                          .append( "dateCreated", dateCreated ).append( "links", links ).toString();
+                                          .append( "dateCreated", dateCreated ).toString();
     }
 }

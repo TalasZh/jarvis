@@ -255,7 +255,7 @@ public class AnalysisService
         {
             try
             {
-                getStashMetricIssues( stashMan );
+                //                getStashMetricIssues( stashMan );
             }
             catch ( Exception ex )
             {
@@ -275,7 +275,7 @@ public class AnalysisService
         }
         if ( sonarManager != null )
         {
-            getSonarMetricIssues( sonarManager );
+            //            getSonarMetricIssues( sonarManager );
         }
 
         //Get Confluence data
@@ -291,7 +291,7 @@ public class AnalysisService
         }
         if ( confluenceManager != null )
         {
-            getConfluenceMetric( confluenceManager );
+            //            getConfluenceMetric( confluenceManager );
         }
 
         // Set time.
