@@ -22,6 +22,7 @@
     <provider>com.impetus.kundera.KunderaPersistence</provider>
     <class>org.safehaus.model.DocumentInfo</class>
     <class>org.safehaus.dao.entities.jira.JarvisLink</class>
+    <class>org.safehaus.dao.entities.jira.JiraUser</class>
     <class>org.safehaus.dao.entities.jira.JarvisIssueType</class>
     <class>org.safehaus.dao.entities.jira.JarvisMember</class>
     <class>org.safehaus.dao.entities.jira.JarvisIssue</class>

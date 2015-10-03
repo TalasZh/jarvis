@@ -59,10 +59,14 @@ public class TimelineDaoImpl implements TimelineDao
 
     public StructuredProject getProjectByKey( String projectKey )
     {
-        String query = String.format( "select t from %s t where t.key = :projectKey",
-                StructuredProject.class.getSimpleName() );
-        List<StructuredProject> results =
-                ( List<StructuredProject> ) daoManager.findByQuery( query, "projectKey", projectKey );
+        String parameter = "projectKey";
+        String query = String.format( "select t from %s t where t.key = :%s", StructuredProject.class.getSimpleName(),
+                parameter );
+
+        Map<String, Object> params = Maps.newHashMap();
+        params.put( parameter, projectKey );
+
+        List<StructuredProject> results = daoManager.findByQuery( StructuredProject.class, query, params );
         if ( results.size() == 0 )
         {
             return null;
