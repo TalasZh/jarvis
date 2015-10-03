@@ -2,16 +2,21 @@ package org.safehaus.dao.entities.jira;
 
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.google.common.collect.Lists;
 import com.impetus.kundera.index.Index;
 import com.impetus.kundera.index.IndexCollection;
 
 import static org.safehaus.Constants.DATABASE_SCHEMA;
+
 
 /**
  * Created by talas on 9/27/15.
@@ -39,6 +44,10 @@ public class JiraProject implements Serializable
     @Column( name = "name" )
     private String name;
 
+    @ElementCollection
+    @CollectionTable( name = "project_version" )
+    private List<ProjectVersion> projectVersions = Lists.newArrayList();
+
 
     public JiraProject()
     {
@@ -46,13 +55,26 @@ public class JiraProject implements Serializable
 
 
     public JiraProject( final String projectId, final String key, final String assigneeType, final String description,
-                        final String name )
+                        final String name, final List<ProjectVersion> projectVersions )
     {
         this.projectId = projectId;
         this.key = key;
         this.assigneeType = assigneeType;
         this.description = description;
         this.name = name;
+        this.projectVersions = projectVersions;
+    }
+
+
+    public List<ProjectVersion> getProjectVersions()
+    {
+        return projectVersions;
+    }
+
+
+    public void setProjectVersions( final List<ProjectVersion> projectVersions )
+    {
+        this.projectVersions = projectVersions;
     }
 
 
@@ -150,6 +172,7 @@ public class JiraProject implements Serializable
                 ", assigneeType='" + assigneeType + '\'' +
                 ", description='" + description + '\'' +
                 ", name='" + name + '\'' +
+                ", projectVersions=" + projectVersions +
                 '}';
     }
 }

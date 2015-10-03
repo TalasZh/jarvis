@@ -12,13 +12,13 @@ import javax.persistence.Embeddable;
 public class StoryPoints
 {
     @Column( name = "in_progress" )
-    private long inProgress;
+    private long inProgress = 0L;
 
     @Column( name = "done" )
-    private long done;
+    private long done = 0L;
 
     @Column( name = "open" )
-    private long open;
+    private long open = 0L;
 
 
     public StoryPoints( final long inProgress, final long done, final long open )
