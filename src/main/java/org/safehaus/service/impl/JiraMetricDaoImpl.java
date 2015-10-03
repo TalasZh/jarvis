@@ -2,18 +2,22 @@ package org.safehaus.service.impl;
 
 
 import java.util.List;
+import java.util.Map;
 
 import javax.jws.WebService;
 
 import org.safehaus.dao.Dao;
 import org.safehaus.dao.entities.jira.JiraMetricIssue;
 import org.safehaus.dao.entities.jira.JiraProject;
+import org.safehaus.dao.entities.jira.JiraUser;
 import org.safehaus.service.api.JiraMetricDao;
 import org.safehaus.service.rest.JiraMetricsRestService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.google.common.collect.Maps;
 
 
 @Service( "jiraMetricDao" )
@@ -29,6 +33,51 @@ public class JiraMetricDaoImpl implements JiraMetricDao, JiraMetricsRestService
 
     public JiraMetricDaoImpl()
     {
+    }
+
+
+    @Override
+    public void insertUser( final JiraUser jiraUser )
+    {
+        dao.insert( jiraUser );
+    }
+
+
+    @Override
+    public JiraUser getJiraUser( final String userId )
+    {
+        String parameter = "userId";
+        String query =
+                String.format( "SELECT u FROM %s u WHERE u.userId = :%s", JiraUser.class.getSimpleName(), parameter );
+
+        Map<String, Object> params = Maps.newHashMap();
+        params.put( parameter, userId );
+
+        List<JiraUser> users = dao.findByQuery( JiraUser.class, query, params );
+        if ( users.size() > 0 )
+        {
+            return users.get( 0 );
+        }
+        return null;
+    }
+
+
+    @Override
+    public JiraUser getJiraUserByUsername( final String username )
+    {
+        String parameter = "username";
+        String query =
+                String.format( "SELECT u FROM %s u WHERE u.username = :%s", JiraUser.class.getSimpleName(), parameter );
+
+        Map<String, Object> params = Maps.newHashMap();
+        params.put( parameter, username );
+
+        List<JiraUser> users = dao.findByQuery( JiraUser.class, query, params );
+        if ( users.size() > 0 )
+        {
+            return users.get( 0 );
+        }
+        return null;
     }
 
 

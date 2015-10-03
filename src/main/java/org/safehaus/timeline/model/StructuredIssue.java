@@ -39,7 +39,7 @@ import static org.safehaus.Constants.DATABASE_SCHEMA;
 @Access( AccessType.FIELD )
 @Table( name = "structured_issue", schema = DATABASE_SCHEMA )
 @IndexCollection( columns = {
-        @Index( name = "key" )
+        @Index( name = "key" ), @Index( name = "assignee" ), @Index( name = "reporter" )
 } )
 public class StructuredIssue implements Serializable, Structure
 {
@@ -84,6 +84,10 @@ public class StructuredIssue implements Serializable, Structure
     @Column( name = "status" )
     private String status;
 
+    @JsonView( Views.TimelineShort.class )
+    @Column( name = "project_key" )
+    private String projectKey;
+
     @Transient
     @JsonProperty( "issues" )
     @JsonView( Views.TimelineLong.class )
@@ -124,7 +128,7 @@ public class StructuredIssue implements Serializable, Structure
 
     public StructuredIssue( final String key, final Long id, final String issueType, final String summary,
                             final String reporter, final String creator, final String assignee, final Long updated,
-                            final Long created, final String status )
+                            final Long created, final String status, final String projectKey )
     {
         this.key = key;
         this.id = id;
@@ -136,6 +140,19 @@ public class StructuredIssue implements Serializable, Structure
         this.updated = updated;
         this.created = created;
         this.status = status;
+        this.projectKey = projectKey;
+    }
+
+
+    public String getProjectKey()
+    {
+        return projectKey;
+    }
+
+
+    public void setProjectKey( final String projectKey )
+    {
+        this.projectKey = projectKey;
     }
 
 

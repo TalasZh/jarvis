@@ -82,37 +82,50 @@ public class TimelineManager
         //        ServiceIdentity jiraIdentity = new ServiceIdentity(  )
         //        ServicePack servicePack = new ServicePack( "Keshig",  )
         logger.info( "Timeline service initialized." );
-        List<JiraProject> jiraProjects = jiraMetricDao.getProjects();
-        for ( final JiraProject jiraProject : jiraProjects )
+
+        try
         {
-            StructuredProject project =
-                    new StructuredProject( jiraProject.getProjectId(), jiraProject.getName(), jiraProject.getKey() );
-            project.setDoneStatus( new ProgressStatus() );
-            project.setInProgressStatus( new ProgressStatus() );
-            project.setOpenStatus( new ProgressStatus() );
-
-            //TODO replace with more precise project services association
-            if ( "AS".equals( jiraProject.getKey() ) )
+            List<JiraProject> jiraProjects = jiraMetricDao.getProjects();
+            for ( final JiraProject jiraProject : jiraProjects )
             {
-                SonarMetricIssue sonarMetricIssue = sonarMetricService.findSonarMetricIssueByProjectId( "5855" );
-                ProjectStats projectStats = new ProjectStats( sonarMetricIssue );
-                project.setProjectStats( projectStats );
+                StructuredProject project =
+                        new StructuredProject( jiraProject.getProjectId(), jiraProject.getName(), jiraProject.getKey(),
+                                jiraProject.getDescription() );
+
+                project.setDoneStatus( new ProgressStatus() );
+                project.setInProgressStatus( new ProgressStatus() );
+                project.setOpenStatus( new ProgressStatus() );
+
+                //TODO replace with more precise project services association
+                if ( "AS".equals( jiraProject.getKey() ) )
+                {
+                    SonarMetricIssue sonarMetricIssue = sonarMetricService.findSonarMetricIssueByProjectId( "5855" );
+                    if ( sonarMetricIssue != null )
+                    {
+                        ProjectStats projectStats = new ProjectStats( sonarMetricIssue );
+                        project.setProjectStats( projectStats );
+                    }
+                }
+
+                Map<String, JiraMetricIssue> jiraMetricIssues = getJiraProjectIssues( jiraProject.getKey() );
+
+                Set<StructuredIssue> structuredEpics = getProjectEpics( jiraProject.getKey(), jiraMetricIssues );
+                project.setEpicsCount( structuredEpics.size() );
+
+                for ( final StructuredIssue structuredEpic : structuredEpics )
+                {
+                    sumUpEstimates( structuredEpic, project );
+                }
+
+                project.setIssues( structuredEpics );
+                structuredProjects.put( jiraProject.getKey(), project );
+
+                timelineDaoImpl.updateProject( project );
             }
-
-            Map<String, JiraMetricIssue> jiraMetricIssues = getJiraProjectIssues( jiraProject.getKey() );
-
-            Set<StructuredIssue> structuredEpics = getProjectEpics( jiraProject.getKey(), jiraMetricIssues );
-            project.setEpicsCount( structuredEpics.size() );
-
-            for ( final StructuredIssue structuredEpic : structuredEpics )
-            {
-                sumUpEstimates( structuredEpic, project );
-            }
-
-            project.setIssues( structuredEpics );
-            structuredProjects.put( jiraProject.getKey(), project );
-
-            timelineDaoImpl.updateProject( project );
+        }
+        catch ( Exception ex )
+        {
+            logger.error( "Error initializing timelineManager", ex );
         }
     }
 
@@ -185,7 +198,8 @@ public class TimelineManager
                         jiraMetricIssue.getType().getName(), jiraMetricIssue.getSummary(),
                         jiraMetricIssue.getReporterName(), jiraMetricIssue.getReporterName(),
                         jiraMetricIssue.getAssigneeName(), jiraMetricIssue.getUpdateDate().getTime(),
-                        jiraMetricIssue.getCreationDate().getTime(), jiraMetricIssue.getStatus() );
+                        jiraMetricIssue.getCreationDate().getTime(), jiraMetricIssue.getStatus(),
+                        jiraMetricIssue.getProjectKey() );
 
                 assignIssueEstimate( epic, jiraMetricIssue );
 
@@ -209,7 +223,14 @@ public class TimelineManager
         structuredIssue.setInProgressStatus( new ProgressStatus() );
         structuredIssue.setDoneStatus( new ProgressStatus() );
 
-        structuredIssue.getUsers().add( structuredIssue.getReporter() );
+        if ( issue.getAssigneeName() != null )
+        {
+            structuredIssue.getUsers().add( issue.getAssigneeName() );
+        }
+        if ( issue.getReporterName() != null )
+        {
+            structuredIssue.getUsers().add( issue.getReporterName() );
+        }
 
         ProgressStatus progressStatus = null;
         switch ( issue.getStatus() )
@@ -417,7 +438,7 @@ public class TimelineManager
                     new StructuredIssue( issue.getIssueKey(), issue.getIssueId(), issue.getType().getName(),
                             issue.getSummary(), issue.getReporterName(), issue.getReporterName(),
                             issue.getAssigneeName(), issue.getUpdateDate().getTime(), issue.getCreationDate().getTime(),
-                            issue.getStatus() );
+                            issue.getStatus(), issue.getProjectKey() );
 
             // Set values for current issue progress
             assignIssueEstimate( structuredIssue, issue );

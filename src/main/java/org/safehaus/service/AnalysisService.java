@@ -24,6 +24,8 @@ import org.safehaus.confluence.model.ConfluenceMetric;
 import org.safehaus.confluence.model.Space;
 import org.safehaus.dao.entities.jira.JiraMetricIssue;
 import org.safehaus.dao.entities.jira.JiraProject;
+import org.safehaus.dao.entities.jira.JiraUser;
+import org.safehaus.dao.entities.jira.ProjectVersion;
 import org.safehaus.dao.entities.sonar.SonarMetricIssue;
 import org.safehaus.dao.entities.stash.Commit;
 import org.safehaus.dao.entities.stash.StashMetricIssue;
@@ -56,6 +58,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import net.rcarz.jiraclient.Issue;
+import net.rcarz.jiraclient.User;
+import net.rcarz.jiraclient.Version;
 
 
 /**
@@ -64,6 +68,7 @@ import net.rcarz.jiraclient.Issue;
 public class AnalysisService
 {
     private final Log log = LogFactory.getLog( AnalysisService.class );
+    private static final int MAX_RESULT = 50;
 
 
     public AnalysisService( boolean jira, boolean stash, boolean sonar, boolean confluence )
@@ -325,7 +330,6 @@ public class AnalysisService
     {
         log.info( "getJiraMetricIssues" );
         List<String> projectKeys = new ArrayList<String>();
-        List<Issue> jiraIssues = new ArrayList<Issue>();
         JiraMetricIssueKafkaProducer kafkaProducer = new JiraMetricIssueKafkaProducer();
 
         jiraMetricIssues = Sets.newHashSet();
@@ -338,9 +342,22 @@ public class AnalysisService
             log.info( "Printing all projects" );
             for ( net.rcarz.jiraclient.Project project : jiraProjects )
             {
+                //TODO add here versions
                 projectKeys.add( project.getKey() );
+
+                List<ProjectVersion> projectVersionList = Lists.newArrayList();
+                for ( final Version version : project.getVersions() )
+                {
+                    ProjectVersion projectVersion =
+                            new ProjectVersion( version.getId(), version.getDescription(), version.getName(),
+                                    version.getReleaseDate() );
+
+                    projectVersionList.add( projectVersion );
+                }
+
                 JiraProject jiraProject = new JiraProject( project.getId(), project.getKey(), project.getAssigneeType(),
-                        project.getDescription(), project.getName() );
+                        project.getDescription(), project.getName(), projectVersionList );
+
                 jiraMetricDao.saveProject( jiraProject );
             }
         }
@@ -354,14 +371,46 @@ public class AnalysisService
             log.info( "Printing issues" );
             for ( String projectKey : projectKeys )
             {
-                List<Issue> issues = jiraCl.getIssues( projectKey );
-                for ( final Issue issue : issues )
+                for ( int i = 0; i < MAX_RESULT; i += MAX_RESULT )
                 {
-                    //                    Issue tmp = jiraCl.getIssue( issue.getKey() );
-                    jiraIssues.add( issue );
-                }
+                    List<Issue> issues = jiraCl.getIssues( projectKey, MAX_RESULT, i );
+                    if ( issues.size() == 0 )
+                    {
+                        break;
+                    }
+                    for ( final Issue issue : issues )
+                    {
+                        saveUser( issue.getAssignee() );
+                        saveUser( issue.getReporter() );
 
-                //                jiraIssues.addAll( jiraCl.getIssues( "'" + projectKey + "'" ) );
+                        log.info( "Preparing issues for jarvis format..." );
+                        JiraMetricIssue issueToAdd = new JiraMetricIssue( issue );
+
+                        jiraMetricIssues.add( issueToAdd );
+                        jiraMetricDao.insertJiraMetricIssue( issueToAdd );
+                        if ( lastGatheredJira != null && issueToAdd.getUpdateDate().after( lastGatheredJira ) )
+                        {
+
+                            // New issue, get it into database.
+                            log.info( "Complies, ID:" + issueToAdd.getIssueId() + " UpDate:" + issueToAdd
+                                    .getUpdateDate() );
+                            try
+                            {
+                                kafkaProducer.send( issueToAdd );
+                            }
+                            catch ( Exception ex )
+                            {
+                                log.error( "Error while sending message", ex );
+                            }
+                        }
+                        else
+                        {
+                            // Discard changes because it is already in our database.
+                            log.info( "Does not, ID:" + issueToAdd.getIssueId() + " UpDate:" + issueToAdd
+                                    .getUpdateDate() );
+                        }
+                    }
+                }
             }
         }
         catch ( Exception e )
@@ -369,39 +418,8 @@ public class AnalysisService
             log.error( "Error getting full issue information", e );
         }
 
-        log.info( jiraIssues.size() );
+        log.info( jiraMetricIssues.size() );
 
-
-        log.info( "Preparing issues for jarvis format..." );
-        for ( final Issue issue : jiraIssues )
-        {
-            JiraMetricIssue issueToAdd = new JiraMetricIssue( issue );
-
-
-            jiraMetricIssues.add( issueToAdd );
-            jiraMetricDao.insertJiraMetricIssue( issueToAdd );
-            if ( lastGatheredJira != null )
-            {
-                if ( issueToAdd.getUpdateDate().after( lastGatheredJira ) )
-                {
-                    // New issue, get it in the database.
-                    log.info( "Complies, ID:" + issueToAdd.getIssueId() + " UpDate:" + issueToAdd.getUpdateDate() );
-                    try
-                    {
-                        kafkaProducer.send( issueToAdd );
-                    }
-                    catch ( Exception ex )
-                    {
-                        log.error( "Error while sending message", ex );
-                    }
-                }
-                else
-                {
-                    // Discard changes because it is already in our database.
-                    log.info( "Does not, ID:" + issueToAdd.getIssueId() + " UpDate:" + issueToAdd.getUpdateDate() );
-                }
-            }
-        }
         kafkaProducer.close();
 
         log.info( "Getting jira metric service" );
@@ -411,16 +429,30 @@ public class AnalysisService
             log.info( "Saving issues formatted for jarvis..." );
             log.info( "Performing batch insert" );
 
+            //fixme Error about ArrayOutOfBoundsException was probably produced by persisting the same entity for
+            // different super entities, the cause might come from jarvis link, which is being attached to jira
+            // metric issue, possible solutions for this is to set composite key for child entities
             jiraMetricDao.batchInsert( Lists.newArrayList( jiraMetricIssues ) );
         }
 
         // No problem gathering new issues from Jira, which means it should update the last gathering date as of now.
-        if ( jiraIssues.size() > 0 )
+        if ( jiraMetricIssues.size() > 0 )
         {
             lastGatheredJira = new Date( System.currentTimeMillis() );
         }
 
         timelineManager.init();
+    }
+
+
+    private void saveUser( final User user )
+    {
+        if ( user != null )
+        {
+            JiraUser assigneeUser =
+                    new JiraUser( user.getId(), user.getDisplayName(), user.getEmail(), user.getName() );
+            jiraMetricDao.insertUser( assigneeUser );
+        }
     }
 
 
@@ -465,52 +497,79 @@ public class AnalysisService
             try
             {
                 reposList.add( stashMan.getRepos( stashProjectKeys.get( i ), 100, 0 ) );
+
+                reposSetList.add( reposList.get( i ).getValues() );
+                for ( Repository repo : reposSetList.get( i ) )
+                {
+                    log.info( repo.getSlug() );
+                    projectKeyNameSlugTriples.add( new Triple<String, String, String>( stashProjectKeys.get( i ),
+                            repo.getProject().getName(), repo.getSlug() ) );
+                }
             }
             catch ( StashManagerException e )
             {
-                e.printStackTrace();
-            }
-            reposSetList.add( reposList.get( i ).getValues() );
-            for ( Repository r : reposSetList.get( i ) )
-            {
-                log.info( r.getSlug() );
-                projectKeyNameSlugTriples
-                        .add( new Triple<String, String, String>( stashProjectKeys.get( i ), r.getProject().getName(),
-                                r.getSlug() ) );
+                log.error( "StashManagerException exception while pulling repository list" );
             }
         }
 
         Page<Commit> commitPage = null;
         Set<Commit> commitSet = new HashSet<>();
-        Set<Change> changeSet = new HashSet<>();
+
         for ( int i = 0; i < projectKeyNameSlugTriples.size(); i++ )
         {
-            try
-            {
-                commitPage = stashMan.getCommits( projectKeyNameSlugTriples.get( i ).getL(),
-                        projectKeyNameSlugTriples.get( i ).getR(), 1000, 0 );
-            }
-            catch ( StashManagerException e )
-            {
-                log.error( "Stash error", e );
-            }
-            catch ( Exception e )
-            {
-                log.error( "Unexpected error occurred.", e );
-            }
-            if ( commitPage != null )
-            {
-                commitSet = commitPage.getValues();
-            }
-
-            Page<Change> commitChanges = null;
-
-            for ( Commit commit : commitSet )
+            for ( int j = 0; j < 1000000; j += MAX_RESULT )
             {
                 try
                 {
-                    commitChanges = stashMan.getCommitChanges( projectKeyNameSlugTriples.get( i ).getL(),
-                            projectKeyNameSlugTriples.get( i ).getR(), commit.getId(), 1000, 0 );
+                    commitPage = stashMan.getCommits( projectKeyNameSlugTriples.get( i ).getL(),
+                            projectKeyNameSlugTriples.get( i ).getR(), MAX_RESULT, j );
+                }
+                catch ( StashManagerException e )
+                {
+                    log.error( "Stash error", e );
+                }
+                catch ( Exception e )
+                {
+                    log.error( "Unexpected error occurred.", e );
+                }
+                if ( commitPage != null )
+                {
+                    commitSet = commitPage.getValues();
+                }
+
+                collectCommitChanges( stashMan, commitSet, projectKeyNameSlugTriples, i );
+            }
+        }
+        for ( StashMetricIssue smi : stashMetricIssues )
+        {
+            kafkaProducer.send( smi );
+        }
+
+        //        stashMetricService.batchInsert( stashMetricIssues );
+
+        if ( stashMetricIssues.size() > 0 )
+        {
+            lastGatheredStash = new Date( System.currentTimeMillis() );
+        }
+        kafkaProducer.close();
+    }
+
+
+    private void collectCommitChanges( final StashManager stashMan, final Set<Commit> commitSet,
+                                       final List<Triple<String, String, String>> projectKeyNameSlugTriples,
+                                       final int index )
+    {
+        Set<Change> changeSet = new HashSet<>();
+        for ( Commit commit : commitSet )
+        {
+            int max = 100;
+            for ( int i = 0; i < 1000000; i++ )
+            {
+                Page<Change> commitChanges = null;
+                try
+                {
+                    commitChanges = stashMan.getCommitChanges( projectKeyNameSlugTriples.get( index ).getL(),
+                            projectKeyNameSlugTriples.get( index ).getR(), commit.getId(), max, i );
                 }
                 catch ( StashManagerException e )
                 {
@@ -521,8 +580,11 @@ public class AnalysisService
                 {
                     changeSet = commitChanges.getValues();
                 }
-                commitChanges = null;
 
+                if ( changeSet.size() == 0 )
+                {
+                    break;
+                }
                 for ( Change change : changeSet )
                 {
                     StashMetricIssue stashMetricIssue = new StashMetricIssue();
@@ -534,13 +596,12 @@ public class AnalysisService
 
                     stashMetricIssue.setNodeType( change.getNodeType() );
                     stashMetricIssue.setPercentUnchanged( change.getPercentUnchanged() );
-                    stashMetricIssue.setProjectName( projectKeyNameSlugTriples.get( i ).getM() );
-                    stashMetricIssue.setProjectKey( projectKeyNameSlugTriples.get( i ).getL() );
+                    stashMetricIssue.setProjectName( projectKeyNameSlugTriples.get( index ).getM() );
+                    stashMetricIssue.setProjectKey( projectKeyNameSlugTriples.get( index ).getL() );
                     stashMetricIssue.setSrcPath( change.getSrcPath() );
                     stashMetricIssue.setType( change.getType() );
                     stashMetricIssue.setCommitMessage( commit.getMessage() );
 
-                    //                    log.info( stashMetricIssue.toString() );
                     // if the commit is made after lastGathered date put it in the qualified changes.
                     if ( lastGatheredStash != null )
                     {
@@ -551,23 +612,8 @@ public class AnalysisService
                     }
                     stashMetricService.insertStashMetricIssue( stashMetricIssue );
                 }
-
-                //                stashMetricService.batchInsert( stashMetricIssues );
             }
         }
-        for ( StashMetricIssue smi : stashMetricIssues )
-        {
-            kafkaProducer.send( smi );
-        }
-
-
-        //        stashMetricService.batchInsert( stashMetricIssues );
-
-        if ( stashMetricIssues.size() > 0 )
-        {
-            lastGatheredStash = new Date( System.currentTimeMillis() );
-        }
-        kafkaProducer.close();
     }
 
 

@@ -3,6 +3,7 @@ package org.safehaus.timeline.model;
 
 import java.io.Serializable;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -20,11 +21,13 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.safehaus.dao.entities.jira.ProjectVersion;
 import org.safehaus.model.Views;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.impetus.kundera.index.Index;
@@ -63,6 +66,10 @@ public class StructuredProject implements Serializable, Structure
     @JsonView( Views.TimelineLong.class )
     private Set<StructuredIssue> issues = Sets.newHashSet();
 
+    @JsonView( Views.TimelineShort.class )
+    @Column( name = "project_key" )
+    private String description;
+
     @JsonIgnore
     @ElementCollection
     @Column( name = "issues" )
@@ -76,7 +83,7 @@ public class StructuredProject implements Serializable, Structure
     private Set<String> users = Sets.newHashSet();
 
     @Embedded
-    private StoryPoints storyPoints;
+    private StoryPoints storyPoints = new StoryPoints();
 
     @Embedded
     private ProgressStatus openStatus;
@@ -87,28 +94,58 @@ public class StructuredProject implements Serializable, Structure
     @Embedded
     private ProgressStatus doneStatus;
 
+    @ElementCollection
+    @CollectionTable( name = "project_versions", joinColumns = @JoinColumn( name = "project_id" ) )
+    private List<ProjectVersion> projectVersions = Lists.newArrayList();
+
 
     @ElementCollection
     @MapKeyColumn( name = "issuesSolved" )
     @Column( name = "totalSolved" )
     @CollectionTable( name = "resolvedIssues", joinColumns = @JoinColumn( name = "solved_id" ) )
-    Map<String, Long> totalIssuesSolved = Maps.newHashMap(); // maps from attribute name to value
+    private Map<String, Long> totalIssuesSolved = Maps.newHashMap(); // maps from attribute name to value
 
 
     @Embedded
     private ProjectStats projectStats;
 
 
-    public StructuredProject()
+    public StructuredProject( final String projectId, final String name, final String key, final String description )
     {
+        this.id = projectId;
+        this.name = name;
+        this.key = key;
+        this.description = description;
     }
 
 
-    public StructuredProject( final String id, final String name, final String key )
+    public StructuredProject()
     {
-        this.id = id;
-        this.name = name;
-        this.key = key;
+
+    }
+
+
+    public String getDescription()
+    {
+        return description;
+    }
+
+
+    public void setDescription( final String description )
+    {
+        this.description = description;
+    }
+
+
+    public List<ProjectVersion> getProjectVersions()
+    {
+        return projectVersions;
+    }
+
+
+    public void setProjectVersions( final List<ProjectVersion> projectVersions )
+    {
+        this.projectVersions = projectVersions;
     }
 
 

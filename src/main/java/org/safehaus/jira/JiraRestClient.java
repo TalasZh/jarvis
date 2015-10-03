@@ -53,6 +53,8 @@ public interface JiraRestClient
 
     List<Issue> getIssues( String projectId );
 
+    List<Issue> getIssues( String projectId, int max, int startIndex );
+
 //    Status storyStart( String issueIdOrKey ) throws JiraClientException;
 
     Status changeStatus( String issueIdOrKey, String actionName ) throws JiraClientException;

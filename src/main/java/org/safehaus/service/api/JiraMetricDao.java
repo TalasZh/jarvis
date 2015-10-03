@@ -5,10 +5,17 @@ import java.util.List;
 
 import org.safehaus.dao.entities.jira.JiraMetricIssue;
 import org.safehaus.dao.entities.jira.JiraProject;
+import org.safehaus.dao.entities.jira.JiraUser;
 
 
 public interface JiraMetricDao
 {
+    void insertUser( JiraUser jiraUser );
+
+    JiraUser getJiraUser( String userId );
+
+    JiraUser getJiraUserByUsername( String username );
+
     void insertJiraMetricIssue( JiraMetricIssue jiraMetricIssue );
 
     JiraMetricIssue findJiraMetricIssueById( Long id );
