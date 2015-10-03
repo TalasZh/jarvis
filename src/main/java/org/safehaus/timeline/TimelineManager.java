@@ -18,6 +18,7 @@ import org.safehaus.model.Capture;
 import org.safehaus.model.Session;
 import org.safehaus.model.SessionNotFoundException;
 import org.safehaus.service.api.JiraMetricDao;
+import org.safehaus.service.api.ServicePackDao;
 import org.safehaus.service.api.SessionManager;
 import org.safehaus.service.api.SonarMetricService;
 import org.safehaus.timeline.dao.TimelineDao;
@@ -54,6 +55,9 @@ public class TimelineManager
     @Autowired
     private SonarMetricService sonarMetricService;
 
+    @Autowired
+    private ServicePackDao servicePackDao;
+
     private Map<String, StructuredProject> structuredProjects = Maps.newHashMap();
 
 
@@ -75,6 +79,8 @@ public class TimelineManager
     @PostConstruct
     public void init()
     {
+        //        ServiceIdentity jiraIdentity = new ServiceIdentity(  )
+        //        ServicePack servicePack = new ServicePack( "Keshig",  )
         logger.info( "Timeline service initialized." );
         List<JiraProject> jiraProjects = jiraMetricDao.getProjects();
         for ( final JiraProject jiraProject : jiraProjects )
@@ -85,11 +91,13 @@ public class TimelineManager
             project.setInProgressStatus( new ProgressStatus() );
             project.setOpenStatus( new ProgressStatus() );
 
-            SonarMetricIssue sonarMetricIssue = sonarMetricService.findSonarMetricIssueByProjectId( "5855" );
-
-
-            ProjectStats projectStats = new ProjectStats( sonarMetricIssue );
-            project.setProjectStats( projectStats );
+            //TODO replace with more precise project services association
+            if ( "AS".equals( jiraProject.getKey() ) )
+            {
+                SonarMetricIssue sonarMetricIssue = sonarMetricService.findSonarMetricIssueByProjectId( "5855" );
+                ProjectStats projectStats = new ProjectStats( sonarMetricIssue );
+                project.setProjectStats( projectStats );
+            }
 
             Map<String, JiraMetricIssue> jiraMetricIssues = getJiraProjectIssues( jiraProject.getKey() );
 
