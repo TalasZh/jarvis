@@ -4,15 +4,27 @@ package org.safehaus.dao.entities.jira;
 import java.io.Serializable;
 
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import com.impetus.kundera.index.Index;
+import com.impetus.kundera.index.IndexCollection;
+
+import static org.safehaus.Constants.DATABASE_SCHEMA;
 
 
 /**
  * Created by talas on 10/3/15.
  */
-@Embeddable
+@Entity
+@Table( name = "project_version", schema = DATABASE_SCHEMA )
+@IndexCollection( columns = {
+        @Index( name = "name" )
+} )
 public class ProjectVersion implements Serializable
 {
+    @Id
     @Column( name = "version_id" )
     private String id;
 

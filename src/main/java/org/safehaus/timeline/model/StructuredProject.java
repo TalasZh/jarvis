@@ -94,8 +94,7 @@ public class StructuredProject implements Serializable, Structure
     @Embedded
     private ProgressStatus doneStatus;
 
-    @ElementCollection
-    @CollectionTable( name = "project_versions", joinColumns = @JoinColumn( name = "project_id" ) )
+    @Transient
     private List<ProjectVersion> projectVersions = Lists.newArrayList();
 
 
@@ -110,18 +109,20 @@ public class StructuredProject implements Serializable, Structure
     private ProjectStats projectStats;
 
 
-    public StructuredProject( final String projectId, final String name, final String key, final String description )
+    public StructuredProject()
+    {
+
+    }
+
+
+    public StructuredProject( final String projectId, final String name, final String key, final String description,
+                              final List<ProjectVersion> projectVersions )
     {
         this.id = projectId;
         this.name = name;
         this.key = key;
         this.description = description;
-    }
-
-
-    public StructuredProject()
-    {
-
+        this.projectVersions = projectVersions;
     }
 
 
