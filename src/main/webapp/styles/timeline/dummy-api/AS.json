@@ -1,0 +1,449 @@
+{
+  "key": "AS",
+  "issues": [
+    {
+      "key": "AS-68",
+      "id": "17202",
+      "issueType": "Epic",
+      "summary": "As a user I should be able to deploy SS using Keshig",
+      "reporter": "admin admin",
+      "creator": "admin admin",
+      "assignee": "Kylych Tynybekov",
+      "updated": "2015-09-22T22:33:41.424+0600",
+      "issues": [
+        {
+          "key": "AS-60",
+          "id": "14105",
+          "issueType": "Story",
+          "summary": "Prepare and run tests for every possible configuration",
+          "reporter": "Mikhail Savochkin",
+          "creator": "Mikhail Savochkin",
+          "assignee": "Mikhail Savochkin",
+          "updated": "2015-09-22T22:05:45.427+0600",
+          "issues": [
+            {
+              "key": "AS-69",
+              "id": "17203",
+              "issueType": "Requirement",
+              "summary": "As a user I should be able to install Keshig",
+              "reporter": "admin admin",
+              "creator": "admin admin",
+              "assignee": "Talas Zholdoshbekov",
+              "updated": "2015-09-22T21:17:53.980+0600",
+              "issues": []
+            }
+          ]
+        },
+        {
+          "key": "AS-12",
+          "id": "13130",
+          "issueType": "Story",
+          "summary": "Tulparas deployment cleanup and refactoring",
+          "reporter": "Yigit Sapli",
+          "creator": "Yigit Sapli",
+          "assignee": "Yigit Sapli",
+          "updated": "2015-09-22T22:06:09.231+0600",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "key": "AS-66",
+      "id": "17200",
+      "issueType": "Epic",
+      "summary": "As a user I should be able to use Keshig to conduct automated acceptance tests",
+      "reporter": "admin admin",
+      "creator": "admin admin",
+      "assignee": "Dilshat Aliev",
+      "updated": "2015-09-22T22:31:03.075+0600",
+      "issues": [
+        {
+          "key": "AS-8",
+          "id": "13552",
+          "issueType": "Story",
+          "summary": "Integrate Hadoop benchmarking scripts with Tulparas",
+          "reporter": "Yigit Sapli",
+          "creator": "Yigit Sapli",
+          "assignee": "Yigit Sapli",
+          "updated": "2015-09-22T22:07:13.786+0600",
+          "issues": [
+            {
+              "key": "AS-75",
+              "id": "17209",
+              "issueType": "Requirement",
+              "summary": "As a user I should be able to use benchmarking scripts in Keshig",
+              "reporter": "admin admin",
+              "creator": "admin admin",
+              "assignee": "Ermek Abyshev",
+              "updated": "2015-09-22T21:54:09.077+0600",
+              "issues": [
+                {
+                  "key": "AS-76",
+                  "id": "17210",
+                  "issueType": "Design",
+                  "summary": "Keshig scripts development and implementation",
+                  "reporter": "admin admin",
+                  "creator": "admin admin",
+                  "assignee": "Beishen Nuriddin uulu",
+                  "updated": "2015-09-22T21:43:20.378+0600",
+                  "issues": [
+                    {
+                      "key": "AS-89",
+                      "id": "17223",
+                      "issueType": "Playbook",
+                      "summary": "Test Keshig scripts for automation",
+                      "reporter": "admin admin",
+                      "creator": "admin admin",
+                      "assignee": "Ermek Abyshev",
+                      "updated": "2015-09-22T21:43:20.385+0600",
+                      "issues": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "AS-10",
+          "id": "12142",
+          "issueType": "Story",
+          "summary": "Create Tulparas Java application and maven plugin to cover all automation phases",
+          "reporter": "Yigit Sapli",
+          "creator": "Yigit Sapli",
+          "assignee": "Yigit Sapli",
+          "updated": "2015-09-22T22:06:51.364+0600",
+          "issues": [
+            {
+              "key": "AS-73",
+              "id": "17207",
+              "issueType": "Requirement",
+              "summary": "As a user I should be able to use maven on Keshig",
+              "reporter": "admin admin",
+              "creator": "admin admin",
+              "assignee": "Eldar Ismailov",
+              "updated": "2015-09-22T21:48:48.244+0600",
+              "issues": [
+                {
+                  "key": "AS-78",
+                  "id": "17212",
+                  "issueType": "Design",
+                  "summary": "Maven plugin research and implementation",
+                  "reporter": "admin admin",
+                  "creator": "admin admin",
+                  "assignee": "Ermek Abyshev",
+                  "updated": "2015-09-22T21:42:14.915+0600",
+                  "issues": [
+                    {
+                      "key": "AS-87",
+                      "id": "17221",
+                      "issueType": "Playbook",
+                      "summary": "Test Maven implementation on Keshig",
+                      "reporter": "admin admin",
+                      "creator": "admin admin",
+                      "assignee": "Ermek Abyshev",
+                      "updated": "2015-09-22T21:42:14.932+0600",
+                      "issues": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "AS-67",
+      "id": "17201",
+      "issueType": "Epic",
+      "summary": "As a user I should be able to build SS using Keshig",
+      "reporter": "admin admin",
+      "creator": "admin admin",
+      "assignee": "Beishen Nuriddin uulu",
+      "updated": "2015-09-22T22:38:33.910+0600",
+      "issues": [
+        {
+          "key": "AS-11",
+          "id": "12131",
+          "issueType": "Story",
+          "summary": "Automate Hadoop cluster set-up and benchmarking",
+          "reporter": "Yigit Sapli",
+          "creator": "ubayaliev",
+          "assignee": "Almaz Abdyldaev",
+          "updated": "2015-09-22T22:06:25.987+0600",
+          "issues": [
+            {
+              "key": "AS-71",
+              "id": "17205",
+              "issueType": "Requirement",
+              "summary": "As a user I should be able to user Hadoop on Keshig",
+              "reporter": "admin admin",
+              "creator": "admin admin",
+              "assignee": "Beishen Nuriddin uulu",
+              "updated": "2015-09-22T21:18:16.056+0600",
+              "issues": [
+                {
+                  "key": "AS-80",
+                  "id": "17214",
+                  "issueType": "Design",
+                  "summary": "Hadoop research and implementation on Keshig",
+                  "reporter": "admin admin",
+                  "creator": "admin admin",
+                  "assignee": "Talas Zholdoshbekov",
+                  "updated": "2015-09-22T22:02:31.344+0600",
+                  "issues": [
+                    {
+                      "key": "AS-25",
+                      "id": "13132",
+                      "issueType": "Task",
+                      "summary": "Layout proper serialization for deployment jobs in Tulparas",
+                      "reporter": "Yigit Sapli",
+                      "creator": "Yigit Sapli",
+                      "assignee": "Timur Zununbekov",
+                      "updated": "2015-09-22T22:38:06.746+0600",
+                      "issues": []
+                    },
+                    {
+                      "key": "AS-32",
+                      "id": "13190",
+                      "issueType": "Task",
+                      "summary": "Create a Debian Package of Tulparas Server for easy deployment",
+                      "reporter": "Yigit Sapli",
+                      "creator": "Yigit Sapli",
+                      "assignee": "Mikhail Savochkin",
+                      "updated": "2015-09-22T22:37:14.148+0600",
+                      "issues": []
+                    },
+                    {
+                      "key": "AS-28",
+                      "id": "13181",
+                      "issueType": "Task",
+                      "summary": "Handle Hadoop Data Ingress/Egress mechanisms for benchmarking tests",
+                      "reporter": "Yigit Sapli",
+                      "creator": "Yigit Sapli",
+                      "assignee": "Almaz Abdyldaev",
+                      "updated": "2015-09-22T22:37:26.664+0600",
+                      "issues": []
+                    },
+                    {
+                      "key": "AS-33",
+                      "id": "11997",
+                      "issueType": "Task",
+                      "summary": "Create jobs in Jenkins to run modules, test fixtures in simulation environment.",
+                      "reporter": "Said Mavlyanov [X]",
+                      "creator": "Said Mavlyanov [X]",
+                      "assignee": "Yigit Sapli",
+                      "updated": "2015-09-22T22:02:21.341+0600",
+                      "issues": []
+                    },
+                    {
+                      "key": "AS-47",
+                      "id": "11135",
+                      "issueType": "Task",
+                      "summary": "Document proper ways of interacting with our repositories",
+                      "reporter": "Yigit Sapli",
+                      "creator": "Yigit Sapli",
+                      "assignee": "Yigit Sapli",
+                      "updated": "2015-09-22T22:34:14.543+0600",
+                      "issues": []
+                    },
+                    {
+                      "key": "AS-36",
+                      "id": "13179",
+                      "issueType": "Task",
+                      "summary": "Refactor Tulparas Server and SSH modules for safe concurrency",
+                      "reporter": "Yigit Sapli",
+                      "creator": "Yigit Sapli",
+                      "assignee": "Timur Jamakeev",
+                      "updated": "2015-09-22T22:37:56.228+0600",
+                      "issues": []
+                    },
+                    {
+                      "key": "AS-22",
+                      "id": "12144",
+                      "issueType": "Task",
+                      "summary": "Implement tulparas-persistence maven module",
+                      "reporter": "Yigit Sapli",
+                      "creator": "Yigit Sapli",
+                      "assignee": "Beishen Nuriddin uulu",
+                      "updated": "2015-09-22T22:38:20.130+0600",
+                      "issues": []
+                    },
+                    {
+                      "key": "AS-37",
+                      "id": "13193",
+                      "issueType": "Task",
+                      "summary": "Update our automation server with Subutai 3.0",
+                      "reporter": "Yigit Sapli",
+                      "creator": "Yigit Sapli",
+                      "assignee": "Yigit Sapli",
+                      "updated": "2015-09-22T22:37:04.403+0600",
+                      "issues": []
+                    },
+                    {
+                      "key": "AS-85",
+                      "id": "17219",
+                      "issueType": "Playbook",
+                      "summary": "Test Hadoop on Keshig",
+                      "reporter": "admin admin",
+                      "creator": "admin admin",
+                      "assignee": "Ermek Abyshev",
+                      "updated": "2015-09-22T21:40:57.542+0600",
+                      "issues": []
+                    },
+                    {
+                      "key": "AS-41",
+                      "id": "12141",
+                      "issueType": "Task",
+                      "summary": "Create script set for running Map Reduce jobs based on description file",
+                      "reporter": "Yigit Sapli",
+                      "creator": "ubayaliev",
+                      "assignee": "Almaz Abdyldaev",
+                      "updated": "2015-09-22T22:38:33.903+0600",
+                      "issues": []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "key": "AS-75",
+              "id": "17205",
+              "issueType": "Requirement",
+              "summary": "As a user I should be able to user Hadoop on Keshig",
+              "reporter": "admin admin",
+              "creator": "admin admin",
+              "assignee": "Beishen Nuriddin uulu",
+              "updated": "2015-09-22T21:18:16.056+0600",
+              "issues": [
+                {
+                  "key": "AS-81",
+                  "id": "17214",
+                  "issueType": "Design",
+                  "summary": "Hadoop research and implementation on Keshig",
+                  "reporter": "admin admin",
+                  "creator": "admin admin",
+                  "assignee": "Talas Zholdoshbekov",
+                  "updated": "2015-09-22T22:02:31.344+0600",
+                  "issues": [
+                    {
+                      "key": "AS-251",
+                      "id": "13132",
+                      "issueType": "Task",
+                      "summary": "Layout proper serialization for deployment jobs in Tulparas",
+                      "reporter": "Yigit Sapli",
+                      "creator": "Yigit Sapli",
+                      "assignee": "Timur Zununbekov",
+                      "updated": "2015-09-22T22:38:06.746+0600",
+                      "issues": []
+                    },
+                    {
+                      "key": "AS-321",
+                      "id": "13190",
+                      "issueType": "Task",
+                      "summary": "Create a Debian Package of Tulparas Server for easy deployment",
+                      "reporter": "Yigit Sapli",
+                      "creator": "Yigit Sapli",
+                      "assignee": "Mikhail Savochkin",
+                      "updated": "2015-09-22T22:37:14.148+0600",
+                      "issues": []
+                    },
+                    {
+                      "key": "AS-281",
+                      "id": "13181",
+                      "issueType": "Task",
+                      "summary": "Handle Hadoop Data Ingress/Egress mechanisms for benchmarking tests",
+                      "reporter": "Yigit Sapli",
+                      "creator": "Yigit Sapli",
+                      "assignee": "Almaz Abdyldaev",
+                      "updated": "2015-09-22T22:37:26.664+0600",
+                      "issues": []
+                    },
+                    {
+                      "key": "AS-331",
+                      "id": "11997",
+                      "issueType": "Task",
+                      "summary": "Create jobs in Jenkins to run modules, test fixtures in simulation environment.",
+                      "reporter": "Said Mavlyanov [X]",
+                      "creator": "Said Mavlyanov [X]",
+                      "assignee": "Yigit Sapli",
+                      "updated": "2015-09-22T22:02:21.341+0600",
+                      "issues": []
+                    },
+                    {
+                      "key": "AS-471",
+                      "id": "11135",
+                      "issueType": "Task",
+                      "summary": "Document proper ways of interacting with our repositories",
+                      "reporter": "Yigit Sapli",
+                      "creator": "Yigit Sapli",
+                      "assignee": "Yigit Sapli",
+                      "updated": "2015-09-22T22:34:14.543+0600",
+                      "issues": []
+                    },
+                    {
+                      "key": "AS-361",
+                      "id": "13179",
+                      "issueType": "Task",
+                      "summary": "Refactor Tulparas Server and SSH modules for safe concurrency",
+                      "reporter": "Yigit Sapli",
+                      "creator": "Yigit Sapli",
+                      "assignee": "Timur Jamakeev",
+                      "updated": "2015-09-22T22:37:56.228+0600",
+                      "issues": []
+                    },
+                    {
+                      "key": "AS-221",
+                      "id": "12144",
+                      "issueType": "Task",
+                      "summary": "Implement tulparas-persistence maven module",
+                      "reporter": "Yigit Sapli",
+                      "creator": "Yigit Sapli",
+                      "assignee": "Beishen Nuriddin uulu",
+                      "updated": "2015-09-22T22:38:20.130+0600",
+                      "issues": []
+                    },
+                    {
+                      "key": "AS-371",
+                      "id": "13193",
+                      "issueType": "Task",
+                      "summary": "Update our automation server with Subutai 3.0",
+                      "reporter": "Yigit Sapli",
+                      "creator": "Yigit Sapli",
+                      "assignee": "Yigit Sapli",
+                      "updated": "2015-09-22T22:37:04.403+0600",
+                      "issues": []
+                    },
+                    {
+                      "key": "AS-851",
+                      "id": "17219",
+                      "issueType": "Playbook",
+                      "summary": "Test Hadoop on Keshig",
+                      "reporter": "admin admin",
+                      "creator": "admin admin",
+                      "assignee": "Ermek Abyshev",
+                      "updated": "2015-09-22T21:40:57.542+0600",
+                      "issues": []
+                    },
+                    {
+                      "key": "AS-411",
+                      "id": "12141",
+                      "issueType": "Task",
+                      "summary": "Create script set for running Map Reduce jobs based on description file",
+                      "reporter": "Yigit Sapli",
+                      "creator": "ubayaliev",
+                      "assignee": "Almaz Abdyldaev",
+                      "updated": "2015-09-22T22:38:33.903+0600",
+                      "issues": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

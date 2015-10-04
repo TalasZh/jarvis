@@ -1,0 +1,1809 @@
+{
+    "issueId": 12142,
+    "issueKey": "AS-10",
+    "status": "Open",
+    "projectKey": "AS",
+    "summary": "Create Tulparas Java application and maven plugin to cover all automation phases",
+    "description": "Tulparas (short for Tulpar Automation System) is a Java application that manages and executes all automation phases for Tulpar; build, deployment, application and environment verification tests, cluster provisioning and performance testing. It will reside on the management host, which we use as our automation server for Tulpar, as a service; and it will serve via its exposed REST interfaces. It will also have a maven plugin, which will be used on the client side (by Tulpar developers) to interface with Tulparas in a structured way.\n\nIt will consist of the following maven modules, whose details are covered in more detail here: https://confluence.critical-factor.com/display/~ysapli/Tulparas\n- tulparas-api\n- tulparas-server\n- tulparas-persistence\n- tulparas-ssh\n- tulparas-plugin",
+    "reporterName": "ysapli",
+    "assigneeName": "ysapli",
+    "resolution": "Unresolved",
+    "creationDate": "2014-12-09T14:49:42.000+0600",
+    "updateDate": "2015-09-30T14:30:16.000+0600",
+    "dueDate": "1970-01-01T06:00:00.000+0600",
+    "priority": 3,
+    "originalEstimateMinutes": 480,
+    "remainingEstimateMinutes": 480,
+    "timeSpentMinutes": 0,
+    "type": {
+        "id": 10001,
+        "name": "Story"
+    },
+    "changelogList": [
+        {
+            "changeKey": {
+                "changeItemId": 33075,
+                "created": 1423652351033
+            },
+            "issueId": 12142,
+            "issueKey": "AS-10",
+            "author": "Yigit Sapli",
+            "type": "jira",
+            "field": "Link",
+            "fromString": null,
+            "toString": "This issue is blocked by TULPAR-472",
+            "from": null,
+            "to": "TULPAR-472"
+        },
+        {
+            "changeKey": {
+                "changeItemId": 27010,
+                "created": 1418114982921
+            },
+            "issueId": 12142,
+            "issueKey": "AS-10",
+            "author": "Yigit Sapli",
+            "type": "custom",
+            "field": "Epic Link",
+            "fromString": null,
+            "toString": "TULPAR-25",
+            "from": null,
+            "to": "10291"
+        },
+        {
+            "changeKey": {
+                "changeItemId": 33167,
+                "created": 1423657513588
+            },
+            "issueId": 12142,
+            "issueKey": "AS-10",
+            "author": "Yigit Sapli",
+            "type": "custom",
+            "field": "Sprint",
+            "fromString": "hw-s13, hw-s14, hw-s15, hw-s16, hw-s17, hw-s18",
+            "toString": "hw-s13, hw-s14, hw-s15, hw-s16, hw-s17, hw-s18, hw-s19",
+            "from": "53, 56, 59, 62, 74, 76",
+            "to": "53, 56, 59, 62, 74, 76, 79"
+        },
+        {
+            "changeKey": {
+                "changeItemId": 27040,
+                "created": 1418115476451
+            },
+            "issueId": 12142,
+            "issueKey": "AS-10",
+            "author": "Yigit Sapli",
+            "type": "custom",
+            "field": "Rank",
+            "fromString": "",
+            "toString": "Ranked lower",
+            "from": "",
+            "to": ""
+        },
+        {
+            "changeKey": {
+                "changeItemId": 28535,
+                "created": 1420445778753
+            },
+            "issueId": 12142,
+            "issueKey": "AS-10",
+            "author": "Azamat Duishenov",
+            "type": "custom",
+            "field": "Rank",
+            "fromString": "",
+            "toString": "Ranked higher",
+            "from": "",
+            "to": ""
+        },
+        {
+            "changeKey": {
+                "changeItemId": 41094,
+                "created": 1426487059314
+            },
+            "issueId": 12142,
+            "issueKey": "AS-10",
+            "author": "Yigit Sapli",
+            "type": "jira",
+            "field": "Workflow",
+            "fromString": "Tulpar custom workflow",
+            "toString": "jira",
+            "from": "14351",
+            "to": "16153"
+        },
+        {
+            "changeKey": {
+                "changeItemId": 28175,
+                "created": 1419401534527
+            },
+            "issueId": 12142,
+            "issueKey": "AS-10",
+            "author": "Azamat Duishenov",
+            "type": "custom",
+            "field": "Rank",
+            "fromString": "",
+            "toString": "Ranked higher",
+            "from": "",
+            "to": ""
+        },
+        {
+            "changeKey": {
+                "changeItemId": 27013,
+                "created": 1418114991039
+            },
+            "issueId": 12142,
+            "issueKey": "AS-10",
+            "author": "Yigit Sapli",
+            "type": "custom",
+            "field": "Rank",
+            "fromString": "",
+            "toString": "Ranked higher",
+            "from": "",
+            "to": ""
+        },
+        {
+            "changeKey": {
+                "changeItemId": 45808,
+                "created": 1442925820899
+            },
+            "issueId": 12142,
+            "issueKey": "AS-10",
+            "author": "admin admin",
+            "type": "custom",
+            "field": "Epic Link",
+            "fromString": null,
+            "toString": "AS-66",
+            "from": null,
+            "to": "17200"
+        },
+        {
+            "changeKey": {
+                "changeItemId": 33184,
+                "created": 1423657515635
+            },
+            "issueId": 12142,
+            "issueKey": "AS-10",
+            "author": "Yigit Sapli",
+            "type": "custom",
+            "field": "Rank",
+            "fromString": "",
+            "toString": "Ranked higher",
+            "from": "",
+            "to": ""
+        },
+        {
+            "changeKey": {
+                "changeItemId": 34063,
+                "created": 1424169984799
+            },
+            "issueId": 12142,
+            "issueKey": "AS-10",
+            "author": "Kok Tonyuquq",
+            "type": "custom",
+            "field": "Sprint",
+            "fromString": "hw-s13, hw-s14, hw-s15, hw-s16, hw-s17, hw-s18, hw-s19",
+            "toString": "hw-s13, hw-s14, hw-s15, hw-s16, hw-s17, hw-s18, hw-s19, hw-s20",
+            "from": "53, 56, 59, 62, 74, 76, 79",
+            "to": "53, 56, 59, 62, 74, 76, 79, 84"
+        },
+        {
+            "changeKey": {
+                "changeItemId": 28546,
+                "created": 1420446487061
+            },
+            "issueId": 12142,
+            "issueKey": "AS-10",
+            "author": "Yigit Sapli",
+            "type": "custom",
+            "field": "Sprint",
+            "fromString": "hw-s13, hw-s14, hw-s15",
+            "toString": "hw-s13, hw-s14, hw-s15, hw-s16",
+            "from": "53, 56, 59",
+            "to": "53, 56, 59, 62"
+        },
+        {
+            "changeKey": {
+                "changeItemId": 46003,
+                "created": 1442938011366
+            },
+            "issueId": 12142,
+            "issueKey": "AS-10",
+            "author": "admin admin",
+            "type": "jira",
+            "field": "Link",
+            "fromString": null,
+            "toString": "This issue is child of AS-66",
+            "from": null,
+            "to": "AS-66"
+        },
+        {
+            "changeKey": {
+                "changeItemId": 27025,
+                "created": 1418115349323
+            },
+            "issueId": 12142,
+            "issueKey": "AS-10",
+            "author": "Yigit Sapli",
+            "type": "jira",
+            "field": "Link",
+            "fromString": null,
+            "toString": "This issue is blocked by TULPAR-393",
+            "from": null,
+            "to": "TULPAR-393"
+        },
+        {
+            "changeKey": {
+                "changeItemId": 27012,
+                "created": 1418114983767
+            },
+            "issueId": 12142,
+            "issueKey": "AS-10",
+            "author": "Yigit Sapli",
+            "type": "custom",
+            "field": "Rank",
+            "fromString": "",
+            "toString": "Ranked higher",
+            "from": "",
+            "to": ""
+        },
+        {
+            "changeKey": {
+                "changeItemId": 28190,
+                "created": 1419401594390
+            },
+            "issueId": 12142,
+            "issueKey": "AS-10",
+            "author": "Azamat Duishenov",
+            "type": "custom",
+            "field": "Sprint",
+            "fromString": "hw-s13, hw-s14",
+            "toString": "hw-s13, hw-s14, hw-s15",
+            "from": "53, 56",
+            "to": "53, 56, 59"
+        },
+        {
+            "changeKey": {
+                "changeItemId": 32446,
+                "created": 1422966011204
+            },
+            "issueId": 12142,
+            "issueKey": "AS-10",
+            "author": "Azamat Duishenov",
+            "type": "custom",
+            "field": "Sprint",
+            "fromString": "hw-s13, hw-s14, hw-s15, hw-s16, hw-s17",
+            "toString": "hw-s13, hw-s14, hw-s15, hw-s16, hw-s17, hw-s18",
+            "from": "53, 56, 59, 62, 74",
+            "to": "53, 56, 59, 62, 74, 76"
+        },
+        {
+            "changeKey": {
+                "changeItemId": 32402,
+                "created": 1422965662084
+            },
+            "issueId": 12142,
+            "issueKey": "AS-10",
+            "author": "Azamat Duishenov",
+            "type": "custom",
+            "field": "Rank",
+            "fromString": "",
+            "toString": "Ranked higher",
+            "from": "",
+            "to": ""
+        },
+        {
+            "changeKey": {
+                "changeItemId": 33066,
+                "created": 1423650663942
+            },
+            "issueId": 12142,
+            "issueKey": "AS-10",
+            "author": "Yigit Sapli",
+            "type": "custom",
+            "field": "Rank",
+            "fromString": "",
+            "toString": "Ranked higher",
+            "from": "",
+            "to": ""
+        },
+        {
+            "changeKey": {
+                "changeItemId": 27029,
+                "created": 1418115426578
+            },
+            "issueId": 12142,
+            "issueKey": "AS-10",
+            "author": "Yigit Sapli",
+            "type": "jira",
+            "field": "Link",
+            "fromString": null,
+            "toString": "This issue is blocked by TULPAR-394",
+            "from": null,
+            "to": "TULPAR-394"
+        },
+        {
+            "changeKey": {
+                "changeItemId": 46147,
+                "created": 1443601816523
+            },
+            "issueId": 12142,
+            "issueKey": "AS-10",
+            "author": "Talas Zholdoshbekov",
+            "type": "jira",
+            "field": "timeestimate",
+            "fromString": null,
+            "toString": "28800",
+            "from": null,
+            "to": "28800"
+        },
+        {
+            "changeKey": {
+                "changeItemId": 45856,
+                "created": 1442934952666
+            },
+            "issueId": 12142,
+            "issueKey": "AS-10",
+            "author": "admin admin",
+            "type": "jira",
+            "field": "Link",
+            "fromString": null,
+            "toString": "This issue is parent of AS-74",
+            "from": null,
+            "to": "AS-74"
+        },
+        {
+            "changeKey": {
+                "changeItemId": 45910,
+                "created": 1442936811680
+            },
+            "issueId": 12142,
+            "issueKey": "AS-10",
+            "author": "admin admin",
+            "type": "jira",
+            "field": "Link",
+            "fromString": null,
+            "toString": "This issue relates to AS-58",
+            "from": null,
+            "to": "AS-58"
+        },
+        {
+            "changeKey": {
+                "changeItemId": 27017,
+                "created": 1418115078607
+            },
+            "issueId": 12142,
+            "issueKey": "AS-10",
+            "author": "Yigit Sapli",
+            "type": "jira",
+            "field": "Link",
+            "fromString": null,
+            "toString": "This issue is blocked by TULPAR-391",
+            "from": null,
+            "to": "TULPAR-391"
+        },
+        {
+            "changeKey": {
+                "changeItemId": 45919,
+                "created": 1442936915278
+            },
+            "issueId": 12142,
+            "issueKey": "AS-10",
+            "author": "admin admin",
+            "type": "jira",
+            "field": "Link",
+            "fromString": null,
+            "toString": "This issue relates to AS-56",
+            "from": null,
+            "to": "AS-56"
+        },
+        {
+            "changeKey": {
+                "changeItemId": 34009,
+                "created": 1424169478274
+            },
+            "issueId": 12142,
+            "issueKey": "AS-10",
+            "author": "Kok Tonyuquq",
+            "type": "custom",
+            "field": "Rank",
+            "fromString": "",
+            "toString": "Ranked higher",
+            "from": "",
+            "to": ""
+        },
+        {
+            "changeKey": {
+                "changeItemId": 31767,
+                "created": 1422359176513
+            },
+            "issueId": 12142,
+            "issueKey": "AS-10",
+            "author": "Azamat Duishenov",
+            "type": "custom",
+            "field": "Rank",
+            "fromString": "",
+            "toString": "Ranked higher",
+            "from": "",
+            "to": ""
+        },
+        {
+            "changeKey": {
+                "changeItemId": 31813,
+                "created": 1422359577364
+            },
+            "issueId": 12142,
+            "issueKey": "AS-10",
+            "author": "Azamat Duishenov",
+            "type": "custom",
+            "field": "Sprint",
+            "fromString": "hw-s13, hw-s14, hw-s15, hw-s16",
+            "toString": "hw-s13, hw-s14, hw-s15, hw-s16, hw-s17",
+            "from": "53, 56, 59, 62",
+            "to": "53, 56, 59, 62, 74"
+        },
+        {
+            "changeKey": {
+                "changeItemId": 27033,
+                "created": 1418115467938
+            },
+            "issueId": 12142,
+            "issueKey": "AS-10",
+            "author": "Yigit Sapli",
+            "type": "jira",
+            "field": "Link",
+            "fromString": null,
+            "toString": "This issue is blocked by TULPAR-395",
+            "from": null,
+            "to": "TULPAR-395"
+        },
+        {
+            "changeKey": {
+                "changeItemId": 27021,
+                "created": 1418115174148
+            },
+            "issueId": 12142,
+            "issueKey": "AS-10",
+            "author": "Yigit Sapli",
+            "type": "jira",
+            "field": "Link",
+            "fromString": null,
+            "toString": "This issue is blocked by TULPAR-392",
+            "from": null,
+            "to": "TULPAR-392"
+        },
+        {
+            "changeKey": {
+                "changeItemId": 27695,
+                "created": 1418733142590
+            },
+            "issueId": 12142,
+            "issueKey": "AS-10",
+            "author": "Yigit Sapli",
+            "type": "custom",
+            "field": "Sprint",
+            "fromString": "hw-s13",
+            "toString": "hw-s13, hw-s14",
+            "from": "53",
+            "to": "53, 56"
+        },
+        {
+            "changeKey": {
+                "changeItemId": 33064,
+                "created": 1423650649159
+            },
+            "issueId": 12142,
+            "issueKey": "AS-10",
+            "author": "Yigit Sapli",
+            "type": "jira",
+            "field": "status",
+            "fromString": "In Progress",
+            "toString": "Open",
+            "from": "3",
+            "to": "1"
+        },
+        {
+            "changeKey": {
+                "changeItemId": 27076,
+                "created": 1418117856785
+            },
+            "issueId": 12142,
+            "issueKey": "AS-10",
+            "author": "Yigit Sapli",
+            "type": "jira",
+            "field": "status",
+            "fromString": "Open",
+            "toString": "In Progress",
+            "from": "1",
+            "to": "3"
+        },
+        {
+            "changeKey": {
+                "changeItemId": 27039,
+                "created": 1418115476320
+            },
+            "issueId": 12142,
+            "issueKey": "AS-10",
+            "author": "Yigit Sapli",
+            "type": "custom",
+            "field": "Sprint",
+            "fromString": null,
+            "toString": "hw-s13",
+            "from": null,
+            "to": "53"
+        },
+        {
+            "changeKey": {
+                "changeItemId": 35120,
+                "created": 1424675752380
+            },
+            "issueId": 12142,
+            "issueKey": "AS-10",
+            "author": "Damir Aralbaev",
+            "type": "custom",
+            "field": "Rank",
+            "fromString": "",
+            "toString": "Ranked higher",
+            "from": "",
+            "to": ""
+        },
+        {
+            "changeKey": {
+                "changeItemId": 45858,
+                "created": 1442934986092
+            },
+            "issueId": 12142,
+            "issueKey": "AS-10",
+            "author": "admin admin",
+            "type": "jira",
+            "field": "Link",
+            "fromString": null,
+            "toString": "This issue is parent of AS-73",
+            "from": null,
+            "to": "AS-73"
+        },
+        {
+            "changeKey": {
+                "changeItemId": 33082,
+                "created": 1423652597668
+            },
+            "issueId": 12142,
+            "issueKey": "AS-10",
+            "author": "Yigit Sapli",
+            "type": "jira",
+            "field": "Link",
+            "fromString": null,
+            "toString": "This issue is blocked by TULPAR-473",
+            "from": null,
+            "to": "TULPAR-473"
+        },
+        {
+            "changeKey": {
+                "changeItemId": 45810,
+                "created": 1442925821025
+            },
+            "issueId": 12142,
+            "issueKey": "AS-10",
+            "author": "admin admin",
+            "type": "jira",
+            "field": "resolution",
+            "fromString": null,
+            "toString": "Unresolved",
+            "from": null,
+            "to": "10200"
+        },
+        {
+            "changeKey": {
+                "changeItemId": 45917,
+                "created": 1442936866957
+            },
+            "issueId": 12142,
+            "issueKey": "AS-10",
+            "author": "admin admin",
+            "type": "jira",
+            "field": "Link",
+            "fromString": null,
+            "toString": "This issue relates to AS-57",
+            "from": null,
+            "to": "AS-57"
+        },
+        {
+            "changeKey": {
+                "changeItemId": 27639,
+                "created": 1418728071330
+            },
+            "issueId": 12142,
+            "issueKey": "AS-10",
+            "author": "Azamat Duishenov",
+            "type": "custom",
+            "field": "Rank",
+            "fromString": "",
+            "toString": "Ranked higher",
+            "from": "",
+            "to": ""
+        }
+    ],
+    "issueLinks": [
+        {
+            "id": 14151,
+            "linkType": {
+                "id": 10003,
+                "name": "Relates",
+                "inward": "relates to",
+                "outward": "relates to"
+            },
+            "linkDirection": {
+                "issueKey": "AS-58",
+                "issueId": 14059
+            },
+            "direction": "OUTWARD",
+            "type": {
+                "id": 10100,
+                "name": "Research"
+            }
+        },
+        {
+            "id": 12079,
+            "linkType": {
+                "id": 10000,
+                "name": "Blocks",
+                "inward": "is blocked by",
+                "outward": "blocks"
+            },
+            "linkDirection": {
+                "issueKey": "DD-40",
+                "issueId": 13129
+            },
+            "direction": "INWARD",
+            "type": {
+                "id": 4,
+                "name": "Improvement"
+            }
+        },
+        {
+            "id": 12077,
+            "linkType": {
+                "id": 10000,
+                "name": "Blocks",
+                "inward": "is blocked by",
+                "outward": "blocks"
+            },
+            "linkDirection": {
+                "issueKey": "DD-12",
+                "issueId": 13128
+            },
+            "direction": "INWARD",
+            "type": {
+                "id": 1,
+                "name": "Bug"
+            }
+        },
+        {
+            "id": 11631,
+            "linkType": {
+                "id": 10000,
+                "name": "Blocks",
+                "inward": "is blocked by",
+                "outward": "blocks"
+            },
+            "linkDirection": {
+                "issueKey": "DD-39",
+                "issueId": 12147
+            },
+            "direction": "INWARD",
+            "type": {
+                "id": 3,
+                "name": "Task"
+            }
+        },
+        {
+            "id": 14125,
+            "linkType": {
+                "id": 10300,
+                "name": "Parent",
+                "inward": "is child of",
+                "outward": "is parent of"
+            },
+            "linkDirection": {
+                "issueKey": "AS-73",
+                "issueId": 17207
+            },
+            "direction": "OUTWARD",
+            "type": {
+                "id": 10601,
+                "name": "Requirement"
+            }
+        },
+        {
+            "id": 11627,
+            "linkType": {
+                "id": 10000,
+                "name": "Blocks",
+                "inward": "is blocked by",
+                "outward": "blocks"
+            },
+            "linkDirection": {
+                "issueKey": "DD-37",
+                "issueId": 12145
+            },
+            "direction": "INWARD",
+            "type": {
+                "id": 3,
+                "name": "Task"
+            }
+        },
+        {
+            "id": 14154,
+            "linkType": {
+                "id": 10003,
+                "name": "Relates",
+                "inward": "relates to",
+                "outward": "relates to"
+            },
+            "linkDirection": {
+                "issueKey": "AS-57",
+                "issueId": 14058
+            },
+            "direction": "INWARD",
+            "type": {
+                "id": 10100,
+                "name": "Research"
+            }
+        },
+        {
+            "id": 11623,
+            "linkType": {
+                "id": 10000,
+                "name": "Blocks",
+                "inward": "is blocked by",
+                "outward": "blocks"
+            },
+            "linkDirection": {
+                "issueKey": "DD-30",
+                "issueId": 12143
+            },
+            "direction": "INWARD",
+            "type": {
+                "id": 3,
+                "name": "Task"
+            }
+        },
+        {
+            "id": 11629,
+            "linkType": {
+                "id": 10000,
+                "name": "Blocks",
+                "inward": "is blocked by",
+                "outward": "blocks"
+            },
+            "linkDirection": {
+                "issueKey": "DD-28",
+                "issueId": 12146
+            },
+            "direction": "INWARD",
+            "type": {
+                "id": 3,
+                "name": "Task"
+            }
+        },
+        {
+            "id": 11625,
+            "linkType": {
+                "id": 10000,
+                "name": "Blocks",
+                "inward": "is blocked by",
+                "outward": "blocks"
+            },
+            "linkDirection": {
+                "issueKey": "AS-22",
+                "issueId": 12144
+            },
+            "direction": "INWARD",
+            "type": {
+                "id": 3,
+                "name": "Task"
+            }
+        },
+        {
+            "id": 14124,
+            "linkType": {
+                "id": 10300,
+                "name": "Parent",
+                "inward": "is child of",
+                "outward": "is parent of"
+            },
+            "linkDirection": {
+                "issueKey": "AS-74",
+                "issueId": 17208
+            },
+            "direction": "OUTWARD",
+            "type": {
+                "id": 10601,
+                "name": "Requirement"
+            }
+        },
+        {
+            "id": 14155,
+            "linkType": {
+                "id": 10003,
+                "name": "Relates",
+                "inward": "relates to",
+                "outward": "relates to"
+            },
+            "linkDirection": {
+                "issueKey": "AS-56",
+                "issueId": 14056
+            },
+            "direction": "INWARD",
+            "type": {
+                "id": 10100,
+                "name": "Research"
+            }
+        }
+    ],
+    "issues": [
+        {
+            "issueId": 13332,
+            "issueKey": "AS-6",
+            "status": "Open",
+            "projectKey": "AS",
+            "summary": "Fix the ethernet port instability in a compiled u-boot",
+            "description": "The u-boot compiled using custom config is very unstable in downloading something using tftp or dhcp commands. Even ping is unstable. In my case i used parallella.h file from official parallella-uboot git repository. Needed to define the correct configs to make a true Giga ethernet connection :)",
+            "reporterName": "vblagodatskih",
+            "assigneeName": null,
+            "resolution": "Unresolved",
+            "creationDate": "2015-02-22T20:39:25.000+0600",
+            "updateDate": "2015-09-30T14:30:28.000+0600",
+            "dueDate": "1970-01-01T06:00:00.000+0600",
+            "priority": 1,
+            "originalEstimateMinutes": 480,
+            "remainingEstimateMinutes": 480,
+            "timeSpentMinutes": 0,
+            "type": {
+                "id": 1,
+                "name": "Bug"
+            },
+            "changelogList": [
+                {
+                    "changeKey": {
+                        "changeItemId": 45931,
+                        "created": 1442937163655
+                    },
+                    "issueId": 13332,
+                    "issueKey": "AS-6",
+                    "author": "admin admin",
+                    "type": "jira",
+                    "field": "Link",
+                    "fromString": null,
+                    "toString": "This issue is child of AS-74",
+                    "from": null,
+                    "to": "AS-74"
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 34818,
+                        "created": 1424617710291
+                    },
+                    "issueId": 13332,
+                    "issueKey": "AS-6",
+                    "author": "Vladislav Blagodatskih [X]",
+                    "type": "jira",
+                    "field": "Link",
+                    "fromString": null,
+                    "toString": "This issue blocks TULPAR-507",
+                    "from": null,
+                    "to": "TULPAR-507"
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 46011,
+                        "created": 1442939283528
+                    },
+                    "issueId": 13332,
+                    "issueKey": "AS-6",
+                    "author": "admin admin",
+                    "type": "jira",
+                    "field": "resolution",
+                    "fromString": null,
+                    "toString": "Unresolved",
+                    "from": null,
+                    "to": "10200"
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 34817,
+                        "created": 1424617498737
+                    },
+                    "issueId": 13332,
+                    "issueKey": "AS-6",
+                    "author": "Vladislav Blagodatskih [X]",
+                    "type": "jira",
+                    "field": "description",
+                    "fromString": "The u-boot compiled using custom config is very unstable while downloading something using tftp or dhcp or even ping commands. In my ",
+                    "toString": "The u-boot compiled using custom config is very unstable in downloading something using tftp or dhcp commands. Even ping is unstable. In my case i used parallella.h file from official parallella-uboot git repository. Needed to define the correct configs to make a true Giga ethernet connection :)",
+                    "from": null,
+                    "to": null
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 46009,
+                        "created": 1442939283463
+                    },
+                    "issueId": 13332,
+                    "issueKey": "AS-6",
+                    "author": "admin admin",
+                    "type": "custom",
+                    "field": "Epic Link",
+                    "fromString": null,
+                    "toString": "AS-66",
+                    "from": null,
+                    "to": "17200"
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 34820,
+                        "created": 1424617710397
+                    },
+                    "issueId": 13332,
+                    "issueKey": "AS-6",
+                    "author": "Vladislav Blagodatskih [X]",
+                    "type": "jira",
+                    "field": "Link",
+                    "fromString": null,
+                    "toString": "This issue blocks TULPAR-480",
+                    "from": null,
+                    "to": "TULPAR-480"
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 34822,
+                        "created": 1424617710484
+                    },
+                    "issueId": 13332,
+                    "issueKey": "AS-6",
+                    "author": "Vladislav Blagodatskih [X]",
+                    "type": "jira",
+                    "field": "Link",
+                    "fromString": null,
+                    "toString": "This issue blocks TULPAR-509",
+                    "from": null,
+                    "to": "TULPAR-509"
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 34824,
+                        "created": 1424617730828
+                    },
+                    "issueId": 13332,
+                    "issueKey": "AS-6",
+                    "author": "Vladislav Blagodatskih [X]",
+                    "type": "jira",
+                    "field": "priority",
+                    "fromString": "Major",
+                    "toString": "Blocker",
+                    "from": "3",
+                    "to": "1"
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 46149,
+                        "created": 1443601828485
+                    },
+                    "issueId": 13332,
+                    "issueKey": "AS-6",
+                    "author": "Talas Zholdoshbekov",
+                    "type": "jira",
+                    "field": "timeestimate",
+                    "fromString": null,
+                    "toString": "28800",
+                    "from": null,
+                    "to": "28800"
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 41090,
+                        "created": 1426487059133
+                    },
+                    "issueId": 13332,
+                    "issueKey": "AS-6",
+                    "author": "Yigit Sapli",
+                    "type": "jira",
+                    "field": "Workflow",
+                    "fromString": "Tulpar custom workflow",
+                    "toString": "jira",
+                    "from": "15638",
+                    "to": "16149"
+                }
+            ],
+            "issueLinks": [
+                {
+                    "id": 14158,
+                    "linkType": {
+                        "id": 10300,
+                        "name": "Parent",
+                        "inward": "is child of",
+                        "outward": "is parent of"
+                    },
+                    "linkDirection": {
+                        "issueKey": "AS-74",
+                        "issueId": 17208
+                    },
+                    "direction": "INWARD",
+                    "type": {
+                        "id": 10601,
+                        "name": "Requirement"
+                    }
+                },
+                {
+                    "id": 12301,
+                    "linkType": {
+                        "id": 10000,
+                        "name": "Blocks",
+                        "inward": "is blocked by",
+                        "outward": "blocks"
+                    },
+                    "linkDirection": {
+                        "issueKey": "DD-31",
+                        "issueId": 13323
+                    },
+                    "direction": "OUTWARD",
+                    "type": {
+                        "id": 3,
+                        "name": "Task"
+                    }
+                },
+                {
+                    "id": 12299,
+                    "linkType": {
+                        "id": 10000,
+                        "name": "Blocks",
+                        "inward": "is blocked by",
+                        "outward": "blocks"
+                    },
+                    "linkDirection": {
+                        "issueKey": "DD-24",
+                        "issueId": 13300
+                    },
+                    "direction": "OUTWARD",
+                    "type": {
+                        "id": 2,
+                        "name": "New Feature"
+                    }
+                }
+            ]
+        },
+        {
+            "issueId": 17221,
+            "issueKey": "AS-87",
+            "status": "Open",
+            "projectKey": "AS",
+            "summary": "Test Maven implementation on Keshig",
+            "description": null,
+            "reporterName": "admin",
+            "assigneeName": "eabyshev",
+            "resolution": "Unresolved",
+            "creationDate": "2015-09-22T21:42:14.000+0600",
+            "updateDate": "2015-09-30T14:25:47.000+0600",
+            "dueDate": "1970-01-01T06:00:00.000+0600",
+            "priority": 3,
+            "originalEstimateMinutes": 960,
+            "remainingEstimateMinutes": 960,
+            "timeSpentMinutes": 0,
+            "type": {
+                "id": 10602,
+                "name": "Playbook"
+            },
+            "changelogList": [
+                {
+                    "changeKey": {
+                        "changeItemId": 46125,
+                        "created": 1443601547124
+                    },
+                    "issueId": 17221,
+                    "issueKey": "AS-87",
+                    "author": "Talas Zholdoshbekov",
+                    "type": "jira",
+                    "field": "timeestimate",
+                    "fromString": null,
+                    "toString": "57600",
+                    "from": null,
+                    "to": "57600"
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 45897,
+                        "created": 1442936534933
+                    },
+                    "issueId": 17221,
+                    "issueKey": "AS-87",
+                    "author": "admin admin",
+                    "type": "jira",
+                    "field": "Link",
+                    "fromString": null,
+                    "toString": "This issue is child of AS-78",
+                    "from": null,
+                    "to": "AS-78"
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 45894,
+                        "created": 1442936534809
+                    },
+                    "issueId": 17221,
+                    "issueKey": "AS-87",
+                    "author": "admin admin",
+                    "type": "custom",
+                    "field": "Epic Link",
+                    "fromString": null,
+                    "toString": "AS-66",
+                    "from": null,
+                    "to": "17200"
+                }
+            ],
+            "issueLinks": []
+        },
+        {
+            "issueId": 17222,
+            "issueKey": "AS-88",
+            "status": "Open",
+            "projectKey": "AS",
+            "summary": "Test automation phases in Keshig",
+            "description": null,
+            "reporterName": "admin",
+            "assigneeName": "eabyshev",
+            "resolution": "Unresolved",
+            "creationDate": "2015-09-22T21:42:43.000+0600",
+            "updateDate": "2015-09-30T14:25:36.000+0600",
+            "dueDate": "1970-01-01T06:00:00.000+0600",
+            "priority": 3,
+            "originalEstimateMinutes": 960,
+            "remainingEstimateMinutes": 960,
+            "timeSpentMinutes": 0,
+            "type": {
+                "id": 10602,
+                "name": "Playbook"
+            },
+            "changelogList": [
+                {
+                    "changeKey": {
+                        "changeItemId": 45898,
+                        "created": 1442936563412
+                    },
+                    "issueId": 17222,
+                    "issueKey": "AS-88",
+                    "author": "admin admin",
+                    "type": "custom",
+                    "field": "Epic Link",
+                    "fromString": null,
+                    "toString": "AS-66",
+                    "from": null,
+                    "to": "17200"
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 45901,
+                        "created": 1442936563521
+                    },
+                    "issueId": 17222,
+                    "issueKey": "AS-88",
+                    "author": "admin admin",
+                    "type": "jira",
+                    "field": "Link",
+                    "fromString": null,
+                    "toString": "This issue is child of AS-77",
+                    "from": null,
+                    "to": "AS-77"
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 46124,
+                        "created": 1443601536688
+                    },
+                    "issueId": 17222,
+                    "issueKey": "AS-88",
+                    "author": "Talas Zholdoshbekov",
+                    "type": "jira",
+                    "field": "timeestimate",
+                    "fromString": null,
+                    "toString": "57600",
+                    "from": null,
+                    "to": "57600"
+                }
+            ],
+            "issueLinks": []
+        },
+        {
+            "issueId": 17207,
+            "issueKey": "AS-73",
+            "status": "Open",
+            "projectKey": "AS",
+            "summary": "As a user I should be able to use maven on Keshig",
+            "description": null,
+            "reporterName": "admin",
+            "assigneeName": "eismailov",
+            "resolution": "Unresolved",
+            "creationDate": "2015-09-22T18:57:24.000+0600",
+            "updateDate": "2015-09-30T14:28:01.000+0600",
+            "dueDate": "1970-01-01T06:00:00.000+0600",
+            "priority": 3,
+            "originalEstimateMinutes": 480,
+            "remainingEstimateMinutes": 480,
+            "timeSpentMinutes": 0,
+            "type": {
+                "id": 10601,
+                "name": "Requirement"
+            },
+            "changelogList": [
+                {
+                    "changeKey": {
+                        "changeItemId": 45876,
+                        "created": 1442935117545
+                    },
+                    "issueId": 17207,
+                    "issueKey": "AS-73",
+                    "author": "admin admin",
+                    "type": "jira",
+                    "field": "Link",
+                    "fromString": null,
+                    "toString": "This issue is parent of AS-78",
+                    "from": null,
+                    "to": "AS-78"
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 45859,
+                        "created": 1442934986099
+                    },
+                    "issueId": 17207,
+                    "issueKey": "AS-73",
+                    "author": "admin admin",
+                    "type": "jira",
+                    "field": "Link",
+                    "fromString": null,
+                    "toString": "This issue is child of AS-10",
+                    "from": null,
+                    "to": "AS-10"
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 46137,
+                        "created": 1443601681119
+                    },
+                    "issueId": 17207,
+                    "issueKey": "AS-73",
+                    "author": "Talas Zholdoshbekov",
+                    "type": "jira",
+                    "field": "timeestimate",
+                    "fromString": null,
+                    "toString": "28800",
+                    "from": null,
+                    "to": "28800"
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 45914,
+                        "created": 1442936844855
+                    },
+                    "issueId": 17207,
+                    "issueKey": "AS-73",
+                    "author": "admin admin",
+                    "type": "jira",
+                    "field": "Link",
+                    "fromString": null,
+                    "toString": "This issue is parent of AS-57",
+                    "from": null,
+                    "to": "AS-57"
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 45830,
+                        "created": 1442926644668
+                    },
+                    "issueId": 17207,
+                    "issueKey": "AS-73",
+                    "author": "admin admin",
+                    "type": "custom",
+                    "field": "Epic Link",
+                    "fromString": null,
+                    "toString": "AS-66",
+                    "from": null,
+                    "to": "17200"
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 45920,
+                        "created": 1442936928246
+                    },
+                    "issueId": 17207,
+                    "issueKey": "AS-73",
+                    "author": "admin admin",
+                    "type": "jira",
+                    "field": "Link",
+                    "fromString": null,
+                    "toString": "This issue is parent of AS-56",
+                    "from": null,
+                    "to": "AS-56"
+                }
+            ],
+            "issueLinks": [
+                {
+                    "id": 14134,
+                    "linkType": {
+                        "id": 10300,
+                        "name": "Parent",
+                        "inward": "is child of",
+                        "outward": "is parent of"
+                    },
+                    "linkDirection": {
+                        "issueKey": "AS-78",
+                        "issueId": 17212
+                    },
+                    "direction": "OUTWARD",
+                    "type": {
+                        "id": 10600,
+                        "name": "Design"
+                    }
+                }
+            ]
+        },
+        {
+            "issueId": 17208,
+            "issueKey": "AS-74",
+            "status": "Open",
+            "projectKey": "AS",
+            "summary": "As a user I should be able to cover all automation phases",
+            "description": null,
+            "reporterName": "admin",
+            "assigneeName": "tjoldoshbekov",
+            "resolution": "Unresolved",
+            "creationDate": "2015-09-22T18:58:13.000+0600",
+            "updateDate": "2015-09-30T14:27:54.000+0600",
+            "dueDate": "1970-01-01T06:00:00.000+0600",
+            "priority": 3,
+            "originalEstimateMinutes": 480,
+            "remainingEstimateMinutes": 480,
+            "timeSpentMinutes": 0,
+            "type": {
+                "id": 10601,
+                "name": "Requirement"
+            },
+            "changelogList": [
+                {
+                    "changeKey": {
+                        "changeItemId": 45857,
+                        "created": 1442934952673
+                    },
+                    "issueId": 17208,
+                    "issueKey": "AS-74",
+                    "author": "admin admin",
+                    "type": "jira",
+                    "field": "Link",
+                    "fromString": null,
+                    "toString": "This issue is child of AS-10",
+                    "from": null,
+                    "to": "AS-10"
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 45878,
+                        "created": 1442935130038
+                    },
+                    "issueId": 17208,
+                    "issueKey": "AS-74",
+                    "author": "admin admin",
+                    "type": "jira",
+                    "field": "Link",
+                    "fromString": null,
+                    "toString": "This issue is parent of AS-77",
+                    "from": null,
+                    "to": "AS-77"
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 45930,
+                        "created": 1442937163647
+                    },
+                    "issueId": 17208,
+                    "issueKey": "AS-74",
+                    "author": "admin admin",
+                    "type": "jira",
+                    "field": "Link",
+                    "fromString": null,
+                    "toString": "This issue is parent of AS-6",
+                    "from": null,
+                    "to": "AS-6"
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 46136,
+                        "created": 1443601674655
+                    },
+                    "issueId": 17208,
+                    "issueKey": "AS-74",
+                    "author": "Talas Zholdoshbekov",
+                    "type": "jira",
+                    "field": "timeestimate",
+                    "fromString": null,
+                    "toString": "28800",
+                    "from": null,
+                    "to": "28800"
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 45912,
+                        "created": 1442936826018
+                    },
+                    "issueId": 17208,
+                    "issueKey": "AS-74",
+                    "author": "admin admin",
+                    "type": "jira",
+                    "field": "Link",
+                    "fromString": null,
+                    "toString": "This issue is parent of AS-58",
+                    "from": null,
+                    "to": "AS-58"
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 45832,
+                        "created": 1442926693042
+                    },
+                    "issueId": 17208,
+                    "issueKey": "AS-74",
+                    "author": "admin admin",
+                    "type": "custom",
+                    "field": "Epic Link",
+                    "fromString": null,
+                    "toString": "AS-66",
+                    "from": null,
+                    "to": "17200"
+                }
+            ],
+            "issueLinks": [
+                {
+                    "id": 14135,
+                    "linkType": {
+                        "id": 10300,
+                        "name": "Parent",
+                        "inward": "is child of",
+                        "outward": "is parent of"
+                    },
+                    "linkDirection": {
+                        "issueKey": "AS-77",
+                        "issueId": 17211
+                    },
+                    "direction": "OUTWARD",
+                    "type": {
+                        "id": 10600,
+                        "name": "Design"
+                    }
+                }
+            ]
+        },
+        {
+            "issueId": 14059,
+            "issueKey": "AS-58",
+            "status": "Open",
+            "projectKey": "AS",
+            "summary": "we can speed up ubuntu OS with tools like zram-config",
+            "description": "https://sites.google.com/site/easylinuxtipsproject/speed",
+            "reporterName": "aabdyldaev",
+            "assigneeName": null,
+            "resolution": "Unresolved",
+            "creationDate": "2015-04-02T17:33:00.000+0600",
+            "updateDate": "2015-09-30T14:29:21.000+0600",
+            "dueDate": "1970-01-01T06:00:00.000+0600",
+            "priority": 3,
+            "originalEstimateMinutes": 480,
+            "remainingEstimateMinutes": 480,
+            "timeSpentMinutes": 0,
+            "type": {
+                "id": 10100,
+                "name": "Research"
+            },
+            "changelogList": [
+                {
+                    "changeKey": {
+                        "changeItemId": 46143,
+                        "created": 1443601761414
+                    },
+                    "issueId": 14059,
+                    "issueKey": "AS-58",
+                    "author": "Talas Zholdoshbekov",
+                    "type": "jira",
+                    "field": "timeestimate",
+                    "fromString": null,
+                    "toString": "28800",
+                    "from": null,
+                    "to": "28800"
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 46020,
+                        "created": 1442939433791
+                    },
+                    "issueId": 14059,
+                    "issueKey": "AS-58",
+                    "author": "admin admin",
+                    "type": "custom",
+                    "field": "Epic Link",
+                    "fromString": null,
+                    "toString": "AS-66",
+                    "from": null,
+                    "to": "17200"
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 45851,
+                        "created": 1442934449882
+                    },
+                    "issueId": 14059,
+                    "issueKey": "AS-58",
+                    "author": "admin admin",
+                    "type": "custom",
+                    "field": "IssuePicker",
+                    "fromString": null,
+                    "toString": "[AS-74]",
+                    "from": null,
+                    "to": null
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 45911,
+                        "created": 1442936811687
+                    },
+                    "issueId": 14059,
+                    "issueKey": "AS-58",
+                    "author": "admin admin",
+                    "type": "jira",
+                    "field": "Link",
+                    "fromString": null,
+                    "toString": "This issue relates to AS-10",
+                    "from": null,
+                    "to": "AS-10"
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 45913,
+                        "created": 1442936826025
+                    },
+                    "issueId": 14059,
+                    "issueKey": "AS-58",
+                    "author": "admin admin",
+                    "type": "jira",
+                    "field": "Link",
+                    "fromString": null,
+                    "toString": "This issue is child of AS-74",
+                    "from": null,
+                    "to": "AS-74"
+                }
+            ],
+            "issueLinks": [
+                {
+                    "id": 14152,
+                    "linkType": {
+                        "id": 10300,
+                        "name": "Parent",
+                        "inward": "is child of",
+                        "outward": "is parent of"
+                    },
+                    "linkDirection": {
+                        "issueKey": "AS-74",
+                        "issueId": 17208
+                    },
+                    "direction": "INWARD",
+                    "type": {
+                        "id": 10601,
+                        "name": "Requirement"
+                    }
+                }
+            ]
+        },
+        {
+            "issueId": 17211,
+            "issueKey": "AS-77",
+            "status": "Open",
+            "projectKey": "AS",
+            "summary": "Automation phases development and implementation",
+            "description": null,
+            "reporterName": "admin",
+            "assigneeName": "bnuriddin",
+            "resolution": "Unresolved",
+            "creationDate": "2015-09-22T19:08:36.000+0600",
+            "updateDate": "2015-09-30T14:27:18.000+0600",
+            "dueDate": "1970-01-01T06:00:00.000+0600",
+            "priority": 3,
+            "originalEstimateMinutes": 480,
+            "remainingEstimateMinutes": 480,
+            "timeSpentMinutes": 0,
+            "type": {
+                "id": 10600,
+                "name": "Design"
+            },
+            "changelogList": [
+                {
+                    "changeKey": {
+                        "changeItemId": 46133,
+                        "created": 1443601638264
+                    },
+                    "issueId": 17211,
+                    "issueKey": "AS-77",
+                    "author": "Talas Zholdoshbekov",
+                    "type": "jira",
+                    "field": "timeestimate",
+                    "fromString": null,
+                    "toString": "28800",
+                    "from": null,
+                    "to": "28800"
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 45879,
+                        "created": 1442935130046
+                    },
+                    "issueId": 17211,
+                    "issueKey": "AS-77",
+                    "author": "admin admin",
+                    "type": "jira",
+                    "field": "Link",
+                    "fromString": null,
+                    "toString": "This issue is child of AS-74",
+                    "from": null,
+                    "to": "AS-74"
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 45900,
+                        "created": 1442936563504
+                    },
+                    "issueId": 17211,
+                    "issueKey": "AS-77",
+                    "author": "admin admin",
+                    "type": "jira",
+                    "field": "Link",
+                    "fromString": null,
+                    "toString": "This issue is parent of AS-88",
+                    "from": null,
+                    "to": "AS-88"
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 45838,
+                        "created": 1442927316372
+                    },
+                    "issueId": 17211,
+                    "issueKey": "AS-77",
+                    "author": "admin admin",
+                    "type": "custom",
+                    "field": "Epic Link",
+                    "fromString": null,
+                    "toString": "AS-66",
+                    "from": null,
+                    "to": "17200"
+                }
+            ],
+            "issueLinks": [
+                {
+                    "id": 14146,
+                    "linkType": {
+                        "id": 10300,
+                        "name": "Parent",
+                        "inward": "is child of",
+                        "outward": "is parent of"
+                    },
+                    "linkDirection": {
+                        "issueKey": "AS-88",
+                        "issueId": 17222
+                    },
+                    "direction": "OUTWARD",
+                    "type": {
+                        "id": 10602,
+                        "name": "Playbook"
+                    }
+                }
+            ]
+        },
+        {
+            "issueId": 17212,
+            "issueKey": "AS-78",
+            "status": "Open",
+            "projectKey": "AS",
+            "summary": "Maven plugin research and implementation",
+            "description": null,
+            "reporterName": "admin",
+            "assigneeName": "eabyshev",
+            "resolution": "Unresolved",
+            "creationDate": "2015-09-22T19:09:34.000+0600",
+            "updateDate": "2015-09-30T14:27:12.000+0600",
+            "dueDate": "1970-01-01T06:00:00.000+0600",
+            "priority": 3,
+            "originalEstimateMinutes": 480,
+            "remainingEstimateMinutes": 480,
+            "timeSpentMinutes": 0,
+            "type": {
+                "id": 10600,
+                "name": "Design"
+            },
+            "changelogList": [
+                {
+                    "changeKey": {
+                        "changeItemId": 45896,
+                        "created": 1442936534916
+                    },
+                    "issueId": 17212,
+                    "issueKey": "AS-78",
+                    "author": "admin admin",
+                    "type": "jira",
+                    "field": "Link",
+                    "fromString": null,
+                    "toString": "This issue is parent of AS-87",
+                    "from": null,
+                    "to": "AS-87"
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 46132,
+                        "created": 1443601632750
+                    },
+                    "issueId": 17212,
+                    "issueKey": "AS-78",
+                    "author": "Talas Zholdoshbekov",
+                    "type": "jira",
+                    "field": "timeestimate",
+                    "fromString": null,
+                    "toString": "28800",
+                    "from": null,
+                    "to": "28800"
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 45840,
+                        "created": 1442927374766
+                    },
+                    "issueId": 17212,
+                    "issueKey": "AS-78",
+                    "author": "admin admin",
+                    "type": "custom",
+                    "field": "Epic Link",
+                    "fromString": null,
+                    "toString": "AS-66",
+                    "from": null,
+                    "to": "17200"
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 45877,
+                        "created": 1442935117555
+                    },
+                    "issueId": 17212,
+                    "issueKey": "AS-78",
+                    "author": "admin admin",
+                    "type": "jira",
+                    "field": "Link",
+                    "fromString": null,
+                    "toString": "This issue is child of AS-73",
+                    "from": null,
+                    "to": "AS-73"
+                }
+            ],
+            "issueLinks": [
+                {
+                    "id": 14144,
+                    "linkType": {
+                        "id": 10300,
+                        "name": "Parent",
+                        "inward": "is child of",
+                        "outward": "is parent of"
+                    },
+                    "linkDirection": {
+                        "issueKey": "AS-87",
+                        "issueId": 17221
+                    },
+                    "direction": "OUTWARD",
+                    "type": {
+                        "id": 10602,
+                        "name": "Playbook"
+                    }
+                }
+            ]
+        }
+    ]
+}
