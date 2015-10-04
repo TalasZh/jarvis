@@ -13,8 +13,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import java.io.Serializable;
-
 import static org.safehaus.Constants.DATABASE_SCHEMA;
 
 /**
