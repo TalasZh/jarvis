@@ -186,17 +186,15 @@ public class JiraMetricIssue implements Serializable
             this.changelogList = changelogList;
         }
 
-        for ( final WorkLog workLog : issue.getWorkLogs() )
-        {
-            IssueWorkLog issueWorkLog =
-                    new IssueWorkLog( workLog.getId(), workLog.getComment(), workLog.getAuthor().getName(),
-                            workLog.getCreatedDate().getTime(), workLog.getTimeSpentSeconds(),
-                            workLog.getUpdateAuthor().getName(), workLog.getUpdatedDate().getTime() );
-            this.issueWorkLogs.add( issueWorkLog );
-        }
-
         try
         {
+            for ( final WorkLog workLog : issue.getWorkLogs() )
+            {
+                IssueWorkLog issueWorkLog = new IssueWorkLog( workLog );
+                this.issueWorkLogs.add( issueWorkLog );
+            }
+
+
             for ( final RemoteLink remoteLink : issue.getRemoteLinks() )
             {
                 IssueRemoteLink issueRemoteLink = new IssueRemoteLink( remoteLink.getTitle(), remoteLink.getRemoteUrl(),
@@ -207,6 +205,7 @@ public class JiraMetricIssue implements Serializable
         catch ( Exception e )
         {
             //ignore
+            e.printStackTrace();
         }
 
         if ( issue.getIssueLinks() != null )

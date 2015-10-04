@@ -12,7 +12,6 @@ import java.util.prefs.BackingStoreException;
 import org.joda.time.DateTime;
 import org.safehaus.analysis.ConfluenceMetricKafkaProducer;
 import org.safehaus.analysis.JiraMetricIssueKafkaProducer;
-import org.safehaus.analysis.SparkDirectKafkaStreamSuite;
 import org.safehaus.analysis.StashMetricIssueKafkaProducer;
 import org.safehaus.analysis.service.ConfluenceConnector;
 import org.safehaus.analysis.service.JiraConnector;
@@ -323,7 +322,7 @@ public class AnalysisService
             if ( !ds.getIsSparkStarted() )
             {
                 System.out.println( "Starting Sparkkk Streaming" );
-                SparkDirectKafkaStreamSuite.startStreams();
+                //                SparkDirectKafkaStreamSuite.startStreams();
                 ds.saveIsSparkStarted( true );
             }
         }
