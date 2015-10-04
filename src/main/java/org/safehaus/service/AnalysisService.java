@@ -36,10 +36,14 @@ import org.safehaus.service.api.StashMetricService;
 import org.safehaus.sonar.client.SonarManager;
 import org.safehaus.sonar.client.SonarManagerException;
 <<<<<<< HEAD
+<<<<<<< HEAD
 import org.safehaus.sonar.model.QuantitativeStats;
 =======
 import org.safehaus.sonar.model.ComplexityStats;
 >>>>>>> f5274b2... KMS-326, KMS-327 created SonarMetricIssue table and insert sonar related data implemented. (minor fix)
+=======
+import org.safehaus.sonar.model.QuantitativeStats;
+>>>>>>> ecbfb3e... KMS-326 added line of code data
 import org.safehaus.sonar.model.UnitTestStats;
 import org.safehaus.sonar.model.ViolationStats;
 import org.safehaus.stash.client.Page;
@@ -599,8 +603,12 @@ public class AnalysisService
 =======
                     UnitTestStats unitTestStats = sonarManager.getUnitTestStats( projectKey );
                     ViolationStats violationStats = sonarManager.getViolationStats( projectKey );
+<<<<<<< HEAD
                     ComplexityStats complexityStats = sonarManager.getComplexityStats( projectKey );
 >>>>>>> f5274b2... KMS-326, KMS-327 created SonarMetricIssue table and insert sonar related data implemented. (minor fix)
+=======
+                    QuantitativeStats quantitativeStats = sonarManager.getQuantitativeStats( projectKey );
+>>>>>>> ecbfb3e... KMS-326 added line of code data
 
                     double successPercent = unitTestStats.getSuccessPercent();
                     double failures = unitTestStats.getFailures();
@@ -611,11 +619,15 @@ public class AnalysisService
                     double blockerIssues = violationStats.getBlockerIssues();
                     double criticalIssues = violationStats.getCriticalIssues();
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> ecbfb3e... KMS-326 added line of code data
                     double majorIssues = violationStats.getMajorIssues();
                     double classesCount = quantitativeStats.getClasses();
                     double functionsCount = quantitativeStats.getFunctions();
                     double filesCount = quantitativeStats.getFiles();
                     double linesOfCode = quantitativeStats.getLinesOfCode();
+<<<<<<< HEAD
 =======
                     double successPercent = sonarManager.getUnitTestStats( projectKey ).getSuccessPercent();
                     double failures = sonarManager.getUnitTestStats( projectKey ).getFailures();
@@ -635,6 +647,8 @@ public class AnalysisService
 >>>>>>> f5274b2... KMS-326, KMS-327 created SonarMetricIssue table and insert sonar related data implemented. (minor fix)
 
 >>>>>>> 496e826... KMS-326, KMS-327 created SonarMetricIssue table and insert sonar related data implemented.
+=======
+>>>>>>> ecbfb3e... KMS-326 added line of code data
 
                     sonarMetricIssue.setProjectId( projectId );
                     sonarMetricIssue.setProjectName( projectName );
@@ -650,10 +664,15 @@ public class AnalysisService
                     sonarMetricIssue.setFunctionsCount( functionsCount );
                     sonarMetricIssue.setFilesCount( filesCount );
 <<<<<<< HEAD
+<<<<<<< HEAD
                     sonarMetricIssue.setMajorIssues( majorIssues );
                     sonarMetricIssue.setLinesOfCode( linesOfCode );
 =======
 >>>>>>> 496e826... KMS-326, KMS-327 created SonarMetricIssue table and insert sonar related data implemented.
+=======
+                    sonarMetricIssue.setMajorIssues( majorIssues );
+                    sonarMetricIssue.setLinesOfCode( linesOfCode );
+>>>>>>> ecbfb3e... KMS-326 added line of code data
 
                     sonarMetricService.insertSonarMetricIssue( sonarMetricIssue );
                 }
