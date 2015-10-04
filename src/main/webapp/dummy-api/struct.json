@@ -1,0 +1,211 @@
+[
+  {
+    "project": "SS",
+    "issues": [
+      {
+        "name": "SS-01",
+        "type": "epic",
+        "issues": [
+          {
+            "name": "SS-03",
+            "type": "story",
+            "issues": [
+              {
+                "name": "SS-07",
+                "type": "issue",
+                "issues": [
+                  {
+                    "name": "SS-08",
+                    "type": "blocker"
+                  }
+                ]
+              },
+              {
+                "name": "SS-08",
+                "type": "issue",
+                "issues": [
+                  {
+                    "name": "SS-07",
+                    "type": "blocker"
+                  }
+                ]
+              },
+              {
+                "name": "SS-09",
+                "type": "issue",
+                "issues": [
+                ]
+              },
+              {
+                "name": "SS-10",
+                "type": "issue",
+                "issues": [
+                ]
+              }
+            ]
+          },
+          {
+            "name": "SS-04",
+            "type": "story",
+            "issues": [
+              {
+                "name": "SS-11",
+                "type": "issue",
+                "issues": [
+                ]
+              }
+            ]
+          },
+          {
+            "name": "SS-05",
+            "type": "story",
+            "issues": [
+              {
+                "name": "SS-12",
+                "type": "issue",
+                "issues": [
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "SS-02",
+        "type": "epic",
+        "issues": [
+          {
+            "name": "SS-06",
+            "type": "story",
+            "issues": [
+              {
+                "name": "SS-13",
+                "type": "issue",
+                "issues": [
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "project": "SSF",
+    "issues": [
+      {
+        "name": "SSF-01",
+        "type": "epic",
+        "issues": [
+          {
+            "name": "SSF-04",
+            "type": "story",
+            "issues": [
+              {
+                "name": "SSF-09",
+                "type": "issue",
+                "issues": [
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "SSF-02",
+        "type": "epic",
+        "issues": [
+          {
+            "name": "SSF-05",
+            "type": "story",
+            "issues": [
+              {
+                "name": "SSF-10",
+                "type": "issue",
+                "issues": [
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "SSF-03",
+        "type": "epic",
+        "issues": [
+          {
+            "name": "SSF-06",
+            "type": "story",
+            "issues": [
+              {
+                "name": "SSF-11",
+                "type": "issue",
+                "issues": [
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "project": "Jarvis",
+    "issues": [
+      {
+        "name": "KMS-01",
+        "type": "epic",
+        "issues": [
+          {
+            "name": "KMS-03",
+            "type": "story",
+            "issues": [
+              {
+                "name": "KMS-06",
+                "type": "issue",
+                "issues": [
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "KMS-02",
+        "type": "epic",
+        "issues": [
+          {
+            "name": "KMS-04",
+            "type": "story",
+            "issues": [
+              {
+                "name": "KMS-07",
+                "type": "issue",
+                "issues": [
+                ]
+              }
+            ]
+          },
+          {
+            "name": "KMS-05",
+            "type": "story",
+            "issues": [
+              {
+                "name": "KMS-08",
+                "type": "issue",
+                "issues": [
+                ]
+              },
+              {
+                "name": "KMS-09",
+                "type": "issue",
+                "issues": [
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

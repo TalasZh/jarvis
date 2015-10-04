@@ -1,19 +1,21 @@
 'use strict';
 
 angular.module('jarvis.structure.ctrl', [
-    'jarvis.structure.srv'
 ])
     .controller('CanvasCtrl', CanvasCtrl);
 
-CanvasCtrl.$inject = ['$rootScope', 'structureSrv'];
+CanvasCtrl.$inject = ['$rootScope', '$location', 'structureSrv'];
 
-function CanvasCtrl($rootScope, structureSrv)
+function CanvasCtrl($rootScope, $location, structureSrv)
 {
     var vm = this;
+
+    vm.structureSrv = structureSrv;
 
     // data from api
     vm.projects = [];
     vm.activeNode;
+    vm.activeNodeData;
 
     // hud vars
     vm.title;
@@ -25,10 +27,49 @@ function CanvasCtrl($rootScope, structureSrv)
     vm.inProgressStatusHours;
     vm.doneStatusHours;
     vm.storyList;
-    vm.currentNodeDataPath;
+
+    vm.issuesSolved = {
+        research : 0,
+        task : 0,
+        bug : 0
+    };
+
+    vm.requirements = {
+        opened : 0,
+        closed : 0
+    };
+
+    vm.borderColor = {
+        coverage : "border-green",
+        test : "border-green",
+        issues : "border-green"
+    };
+
+
+	vm.knobBigOptions = {
+		width: "214",
+		height: "220",
+		displayPrevious: false,
+		fgColor: "#ffff00",
+		bgColor: "#001937",
+		thickness: ".125",
+		displayInput: "false",
+		readOnly: true
+	};
+
+	vm.knobSmallOptions = {
+		width: "155",
+		displayPrevious: false,
+		fgColor: "#ffff00",
+		bgColor: "#001937",
+		thickness: ".08",
+		displayInput: "false",
+		readOnly: true
+	};
 
 	//functions
-	vm.simulateClick;
+	vm.simulateClick = simulateClick;
+    vm.toTimeline = toTimeline;
 
     // arbor variables
     vm.sys = arbor.ParticleSystem(500, 300, 0.2, false, 20);
@@ -39,9 +80,10 @@ function CanvasCtrl($rootScope, structureSrv)
         vm.projects = data;
         //for( var i = 0; i < vm.projects.length; i++ ) { @todo enhance critical
 
-        structureSrv.getIssues("AS.json").success(function (data2) {
+        structureSrv.getIssues("project.json").success(function (data2) {
             for (var i = 0; i < vm.projects.length; i++) {
-                vm.projects[i].issues = data2.issues;
+                vm.projects[i] = data2;
+                vm.projects[i].issueType = "Project";
             }
         });
 
@@ -51,9 +93,14 @@ function CanvasCtrl($rootScope, structureSrv)
     });
 
 	//click on story from list
-    vm.simulateClick = function(key) {
+    function simulateClick(key) {
 		click(vm.sys.getNode(key), vm.sys, false);
 	}
+
+    function toTimeline() {
+        $location.path('/timeline');
+        // vm.activeNode.key
+    }
 
     /***************
      * canvas related functions
@@ -66,7 +113,7 @@ function CanvasCtrl($rootScope, structureSrv)
      * creates a base structure
      */
     function drawFromSSF(node) {
-        var foundationNode = vm.sys.addNode('ssf', {weight: 3, type: "Foundation", title: "SSF"});
+        var foundationNode = vm.sys.addNode('ssf', {weight: 5, type: "Foundation", title: "SSF"});
 
         for (var i = 0; i < vm.projects.length; i++) {
             if (!vm.projects[i].issueType) {
@@ -76,7 +123,7 @@ function CanvasCtrl($rootScope, structureSrv)
             if (!node || vm.projects[i].key !== node.name) {
 
                 vm.sys.addNode(vm.projects[i].key, {
-                    weight: 2,
+                    weight: 4,
                     type: vm.projects[i].issueType,
                     title: vm.projects[i].key,
                     path: i
@@ -118,17 +165,44 @@ function CanvasCtrl($rootScope, structureSrv)
     }
 
 
+    function calculateRequirements(currentNode)
+    {
+        var opened = 0;
+        var closed = 0;
+
+        for( var i = 0; i < currentNode.issues.length; i++ )
+        {
+            if( currentNode.issues[i].issueType == "Requirement" ) {
+                if( currentNode.issues[i].status == "Open" ) {
+                    opened++;
+                }
+                else {
+                    closed++;
+                }
+            }
+        }
+
+        vm.requirements.opened = Math.round( opened * 100 / ( opened + closed ) );
+        vm.requirements.closed = Math.round( closed * 100 / ( opened + closed ) );
+    }
+
+
     /**************
-     *
+     * @todo improve
      * @param node - clicked node
      * @param particleSystem - drawing system
      */
     function click(node, particleSystem, clickFromCanvas) {
         if (node != null) {
-            if (node.data.type.toLowerCase() == "requirement" || node.data.type.toLowerCase() == "design" ||
-                node.data.type.toLowerCase() == "task" || node.data.type.toLowerCase() == "playbook")
+			var currentNode = getNodeDataByPath(node.data.path);
 
+            if (node.data.type.toLowerCase() == "requirement" || node.data.type.toLowerCase() == "design" ||
+                node.data.type.toLowerCase() == "task" || node.data.type.toLowerCase() == "playbook") {
+
+				var popup = new Popup();
+				popup.getIssuePopup(false, currentNode);
                 return;
+			}
 
             if( node.data.type.toLowerCase() == "foundation" ) {
                 if( $('#viewport').attr("side-bar-toggled") == "true" ) {
@@ -140,28 +214,29 @@ function CanvasCtrl($rootScope, structureSrv)
                 return;
             }
 
-			var currentNode = getNodeDataByPath(node.data.path);
-
-			if(currentNode.openStatus.originalEstimate !== undefined){
+			if(currentNode.openStatus !== undefined){
 				var openStatus = currentNode.openStatus.originalEstimate;
-				var inProgressStatus = currentNode.inProgressStatus.originalEstimate;
-				var doneStatus = currentNode.doneStatus.originalEstimate;
+				var inProgressStatus = currentNode.inProgressStatus.remainingRestimate;
+				var doneStatus = currentNode.doneStatus.timeSpent;
 				var progressPersent = (openStatus + inProgressStatus + doneStatus) / 100;
 
-				vm.openStatus = openStatus / progressPersent;
-				vm.inProgressStatus = inProgressStatus / progressPersent;
-				vm.doneStatus = doneStatus / progressPersent;
+				vm.openStatus = Math.round( openStatus / progressPersent, -1 );
+				vm.inProgressStatus = Math.round( inProgressStatus / progressPersent, -1 );
+				vm.doneStatus = Math.round( doneStatus / progressPersent, -1 );
 
-				vm.openStatusHours = (openStatus / 3600).toFixed(2);
-				vm.inProgressStatusHours = (inProgressStatus / 3600).toFixed(2);
-				vm.doneStatusHours = (doneStatus / 3600).toFixed(2);			
+				vm.openStatusHours = (openStatus / 3600).toFixed(1);
+				vm.inProgressStatusHours = (inProgressStatus / 3600).toFixed(1);
+				vm.doneStatusHours = (doneStatus / 3600).toFixed(1);
 			}
 			
             if (node.data.type.toLowerCase() == "story") {
+
 				if( clickFromCanvas ) {
 					$rootScope.$apply(function () {
-						vm.title = node.data.title;
-						vm.descr = node.data.title;
+						vm.title = currentNode.key;
+						vm.descr = currentNode.summary;
+                        vm.activeNodeData = currentNode;
+                        calculateRequirements( currentNode );
 
 						self.value += 1;
 					});
@@ -169,6 +244,8 @@ function CanvasCtrl($rootScope, structureSrv)
                     vm.title = node.data.title;
                     vm.descr = node.data.title;
 					node.data.selected = true;
+
+                    calculateRequirements(currentNode);
 				}
 
                 if ($('#v3').css('display') == 'none') {
@@ -186,8 +263,55 @@ function CanvasCtrl($rootScope, structureSrv)
                 $rootScope.$apply(function () {
                     vm.title = node.data.title;
                     vm.descr = currentNode.summary;
-                    vm.currentNodeDataPath = node.data.path;
+                    vm.activeNodeData = currentNode;
+
 					vm.storyList = currentNode.issues;
+
+
+                    var total = 0;
+
+                    vm.issuesSolved.task = 0;
+                    vm.issuesSolved.bug = 0;
+                    vm.issuesSolved.research = 0;
+
+
+                    vm.structureSrv.stories = [];
+
+                    for( var i = 0; i < currentNode.issues.length; i++ )
+                    {
+                        console.log( currentNode.issues[i] )
+                        vm.structureSrv.stories.push( currentNode.issues[i] );
+                    }
+
+                    for (var name in currentNode.totalIssuesSolved) {
+                        if( name == "Story" ) {
+                            vm.structureSrv.stories.push( currentNode.totalIssuesSolved['name'] );
+                            continue;
+                        }
+
+                        var value = currentNode.totalIssuesSolved[name];
+                        total += value;
+
+                        // @todo hardcoded need types
+                        if( name == "Task" || name == "New Feature" || name == "Improvement" ) {
+                            vm.issuesSolved.task += value;
+                        }
+
+                        if( name == "Bug" ) {
+                            vm.issuesSolved.bug += value;
+                        }
+
+                        if( name == "Research" ) {
+                            vm.issuesSolved.research += value;
+                        }
+                    }
+
+                    if( total == 0 ) total = 100;
+
+                    vm.issuesSolved.task = Math.round( vm.issuesSolved.task / total * 100, -1 );
+                    vm.issuesSolved.bug = Math.round( vm.issuesSolved.bug / total * 100, -1 );
+                    vm.issuesSolved.research = Math.round( vm.issuesSolved.research / total * 100, -1 );
+
                     self.value += 1;
                 });
 
@@ -206,7 +330,66 @@ function CanvasCtrl($rootScope, structureSrv)
 
                 $rootScope.$apply(function () {
                     vm.title = node.data.title;
-                    vm.descr = node.data.title;
+                    vm.descr = "NO PROJECT DESCRIPTION!!!!!!!!!!!!!!!!!!!!!";
+
+                    vm.activeNodeData = currentNode;
+
+
+                    if( currentNode.projectStats.coveragePercent >= 80 ) {
+                        vm.borderColor.coverage = "border-green";
+                        vm.knobBigOptions.fgColor = "#00ff6c";
+
+                    }
+                    else if( currentNode.projectStats.coveragePercent >= 40 ) {
+                        vm.borderColor.coverage = "border-yellow";
+                        vm.knobBigOptions.fgColor = "#ffff00";
+
+                    }
+                    else {
+                        vm.borderColor.coverage = "border-red";
+                        vm.knobBigOptions.fgColor = "#c1272d;";
+
+                    }
+
+                    $('.circle-diagram [knob-options="vm.knobBigOptions"]').trigger(
+                        'configure',
+                        {
+                            "fgColor": vm.knobBigOptions.fgColor
+                        }
+                    );
+
+
+                    if( currentNode.projectStats.successPercent >= 90 ) {
+                        vm.borderColor.test = "border-green";
+                        vm.knobSmallOptions.fgColor = "#00ff6c";
+                    }
+                    else if( currentNode.projectStats.successPercent >= 80 ) {
+                        vm.borderColor.test = "border-yellow";
+                        vm.knobSmallOptions.fgColor = "#ffff00";
+                    }
+                    else {
+                        vm.borderColor.test = "border-red";
+                        vm.knobSmallOptions.fgColor = "#c1272d;";
+                    }
+
+                    $('.circle-diagram [knob-options="vm.knobSmallOptions"]').trigger(
+                        'configure',
+                        {
+                            "fgColor": vm.knobSmallOptions.fgColor
+                        }
+                    );
+
+
+                    if( 0 < currentNode.projectStats.criticalIssues && currentNode.projectStats.criticalIssues < 4 ) {
+                        vm.borderColor.issues = "border-yellow";
+                    }
+                    else if( currentNode.projectStats.criticalIssues > 3 || currentNode.projectStats.blockerIssues > 0 ) {
+                        vm.borderColor.issues = "border-red";
+                    }
+                    else {
+                        vm.borderColor.issues = "border-green";
+                    }
+
 
                     self.value += 1;
                 });
@@ -267,12 +450,12 @@ function CanvasCtrl($rootScope, structureSrv)
         var path = node.data.path.substring(0, idx);
         var data = getNodeDataByPath(path);
 
-        particleSystem.addNode(data.key, {weight: 3, type: data.issueType, title: data.key, path: path});
+        particleSystem.addNode(data.key, {weight: 5, type: data.issueType, title: data.key, path: path});
 
         for (var i = 0; i < data.issues.length; i++) {
             if (data.issues[i].key != node.name)
                 particleSystem.addNode(data.issues[i].key, {
-                    weight: 2,
+                    weight: 4,
                     type: data.issues[i].issueType,
                     title: data.issues[i].key,
                     path: path + "," + i
@@ -307,7 +490,7 @@ function CanvasCtrl($rootScope, structureSrv)
         for (var i = 0; i < data.issues.length; i++) {
 
             particleSystem.addNode(data.issues[i].key, {
-                weight: 2,
+                weight: 3,
                 type: data.issues[i].issueType,
                 title: data.issues[i].key,
                 path: node.data.path + "," + i
@@ -315,7 +498,7 @@ function CanvasCtrl($rootScope, structureSrv)
             particleSystem.addEdge(node.name, data.issues[i].key);
 
             if (recursively)
-                levelDown(particleSystem.getNode(data.issues[i].key), particleSystem, recursively, weight - 1);
+                levelDown(particleSystem.getNode(data.issues[i].key), particleSystem, recursively, weight);
         }
     }
 
@@ -377,8 +560,8 @@ function CanvasCtrl($rootScope, structureSrv)
         var canvas = $(canvas).get(0);
         var ctx = canvas.getContext("2d");
 		var particleSystem;
-        var w = 25;
-        var wDiff = 15;
+        var w = 10;
+        var wDiff = 10;
 
         var _mouseP;
 
@@ -409,16 +592,16 @@ function CanvasCtrl($rootScope, structureSrv)
 
             initImg: function() {
 
-                selectedObjects['research'] = loadSphere('/styles/timeline/assets/img/img-task-sphere-selected.png');
-                sphereObjects['research'] = loadSphere('/styles/timeline/assets/img/img-task-sphere.png');
+                selectedObjects['research'] = loadSphere('/styles/timeline/assets/img/img-research-sphere-selected.png');
+                sphereObjects['research'] = loadSphere('/styles/timeline/assets/img/img-research-sphere.png');
 
-                selectedObjects['bug'] = loadSphere('/styles/timeline/assets/img/img-task-sphere-selected.png');
-                sphereObjects['bug'] = loadSphere('/styles/timeline/assets/img/img-task-sphere.png');
+                selectedObjects['bug'] = loadSphere('/styles/timeline/assets/img/img-bug-sphere-selected.png');
+                sphereObjects['bug'] = loadSphere('/styles/timeline/assets/img/img-bug-sphere.png');
 
                 selectedObjects['task'] = loadSphere('/styles/timeline/assets/img/img-task-sphere-selected.png');
                 sphereObjects['task'] = loadSphere('/styles/timeline/assets/img/img-task-sphere.png');
 
-                selectedObjects['design'] = loadSphere('/styles/timeline/assets/img/img-design-sphere_selected.png');
+                selectedObjects['design'] = loadSphere('/styles/timeline/assets/img/img-design-sphere-selected.png');
                 sphereObjects['design'] = loadSphere('/styles/timeline/assets/img/img-design-sphere.png');
 
                 selectedObjects['playbook'] = loadSphere('/styles/timeline/assets/img/img-playbook-sphere-selected.png');
@@ -436,8 +619,8 @@ function CanvasCtrl($rootScope, structureSrv)
                 selectedObjects['project'] = loadSphere('/styles/timeline/assets/img/img-project-sphere-selected.png');
                 sphereObjects['project'] = loadSphere('/styles/timeline/assets/img/img-project-sphere.png');
 
-                selectedObjects['foundation'] = loadSphere('/styles/timeline/assets/img/img-project-sphere-selected.png');
-                sphereObjects['foundation'] = loadSphere('/styles/timeline/assets/img/img-project-sphere.png');
+                selectedObjects['foundation'] = loadSphere('/styles/timeline/assets/img/img-foundation-sphere-selected.png');
+                sphereObjects['foundation'] = loadSphere('/styles/timeline/assets/img/img-foundation-sphere.png');
 
                 sphereObjects['background'] = loadSphere('/styles/timeline/assets/img/img-bg-1.jpg');
             },
@@ -563,7 +746,7 @@ function CanvasCtrl($rootScope, structureSrv)
                 $(canvas).mousedown(handler.clicked);
                 $(canvas).mousemove(handler.hover);
 
-            }
+            },
 
         }
         return that
@@ -607,5 +790,23 @@ function CanvasCtrl($rootScope, structureSrv)
 
             $("#viewport").attr('width', parseInt($("#viewport").attr('width')) + val);
         });
+
+
+
+        // @todo enhance
+        setTimeout(function() {
+            var circle = $('.diagram:visible:last');
+
+            var index = $('.diagram').index( circle[0] );
+            circle.hide();
+            var newCircle = $('.diagram')[ (index + 1) % 3 ];
+
+            // @todo doesn't work
+            //newCircle.css('right', '-300px');
+            //newCircle.show();
+            //newCircle.animate({``
+            //    right: '+=300px'
+            //});
+        }, 5000 );
     }
 }

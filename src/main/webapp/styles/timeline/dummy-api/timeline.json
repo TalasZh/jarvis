@@ -623,187 +623,6 @@
     ],
     "issueLinks": [
         {
-            "id": 14151,
-            "linkType": {
-                "id": 10003,
-                "name": "Relates",
-                "inward": "relates to",
-                "outward": "relates to"
-            },
-            "linkDirection": {
-                "issueKey": "AS-58",
-                "issueId": 14059
-            },
-            "direction": "OUTWARD",
-            "type": {
-                "id": 10100,
-                "name": "Research"
-            }
-        },
-        {
-            "id": 12079,
-            "linkType": {
-                "id": 10000,
-                "name": "Blocks",
-                "inward": "is blocked by",
-                "outward": "blocks"
-            },
-            "linkDirection": {
-                "issueKey": "DD-40",
-                "issueId": 13129
-            },
-            "direction": "INWARD",
-            "type": {
-                "id": 4,
-                "name": "Improvement"
-            }
-        },
-        {
-            "id": 12077,
-            "linkType": {
-                "id": 10000,
-                "name": "Blocks",
-                "inward": "is blocked by",
-                "outward": "blocks"
-            },
-            "linkDirection": {
-                "issueKey": "DD-12",
-                "issueId": 13128
-            },
-            "direction": "INWARD",
-            "type": {
-                "id": 1,
-                "name": "Bug"
-            }
-        },
-        {
-            "id": 11631,
-            "linkType": {
-                "id": 10000,
-                "name": "Blocks",
-                "inward": "is blocked by",
-                "outward": "blocks"
-            },
-            "linkDirection": {
-                "issueKey": "DD-39",
-                "issueId": 12147
-            },
-            "direction": "INWARD",
-            "type": {
-                "id": 3,
-                "name": "Task"
-            }
-        },
-        {
-            "id": 14125,
-            "linkType": {
-                "id": 10300,
-                "name": "Parent",
-                "inward": "is child of",
-                "outward": "is parent of"
-            },
-            "linkDirection": {
-                "issueKey": "AS-73",
-                "issueId": 17207
-            },
-            "direction": "OUTWARD",
-            "type": {
-                "id": 10601,
-                "name": "Requirement"
-            }
-        },
-        {
-            "id": 11627,
-            "linkType": {
-                "id": 10000,
-                "name": "Blocks",
-                "inward": "is blocked by",
-                "outward": "blocks"
-            },
-            "linkDirection": {
-                "issueKey": "DD-37",
-                "issueId": 12145
-            },
-            "direction": "INWARD",
-            "type": {
-                "id": 3,
-                "name": "Task"
-            }
-        },
-        {
-            "id": 14154,
-            "linkType": {
-                "id": 10003,
-                "name": "Relates",
-                "inward": "relates to",
-                "outward": "relates to"
-            },
-            "linkDirection": {
-                "issueKey": "AS-57",
-                "issueId": 14058
-            },
-            "direction": "INWARD",
-            "type": {
-                "id": 10100,
-                "name": "Research"
-            }
-        },
-        {
-            "id": 11623,
-            "linkType": {
-                "id": 10000,
-                "name": "Blocks",
-                "inward": "is blocked by",
-                "outward": "blocks"
-            },
-            "linkDirection": {
-                "issueKey": "DD-30",
-                "issueId": 12143
-            },
-            "direction": "INWARD",
-            "type": {
-                "id": 3,
-                "name": "Task"
-            }
-        },
-        {
-            "id": 11629,
-            "linkType": {
-                "id": 10000,
-                "name": "Blocks",
-                "inward": "is blocked by",
-                "outward": "blocks"
-            },
-            "linkDirection": {
-                "issueKey": "DD-28",
-                "issueId": 12146
-            },
-            "direction": "INWARD",
-            "type": {
-                "id": 3,
-                "name": "Task"
-            }
-        },
-        {
-            "id": 11625,
-            "linkType": {
-                "id": 10000,
-                "name": "Blocks",
-                "inward": "is blocked by",
-                "outward": "blocks"
-            },
-            "linkDirection": {
-                "issueKey": "AS-22",
-                "issueId": 12144
-            },
-            "direction": "INWARD",
-            "type": {
-                "id": 3,
-                "name": "Task"
-            }
-        },
-        {
-            "id": 14124,
             "linkType": {
                 "id": 10300,
                 "name": "Parent",
@@ -821,7 +640,57 @@
             }
         },
         {
-            "id": 14155,
+            "linkType": {
+                "id": 10000,
+                "name": "Blocks",
+                "inward": "is blocked by",
+                "outward": "blocks"
+            },
+            "linkDirection": {
+                "issueKey": "DD-40",
+                "issueId": 13129
+            },
+            "direction": "INWARD",
+            "type": {
+                "id": 4,
+                "name": "Improvement"
+            }
+        },
+        {
+            "linkType": {
+                "id": 10000,
+                "name": "Blocks",
+                "inward": "is blocked by",
+                "outward": "blocks"
+            },
+            "linkDirection": {
+                "issueKey": "AS-22",
+                "issueId": 12144
+            },
+            "direction": "INWARD",
+            "type": {
+                "id": 3,
+                "name": "Task"
+            }
+        },
+        {
+            "linkType": {
+                "id": 10003,
+                "name": "Relates",
+                "inward": "relates to",
+                "outward": "relates to"
+            },
+            "linkDirection": {
+                "issueKey": "AS-57",
+                "issueId": 14058
+            },
+            "direction": "INWARD",
+            "type": {
+                "id": 10100,
+                "name": "Research"
+            }
+        },
+        {
             "linkType": {
                 "id": 10003,
                 "name": "Relates",
@@ -833,6 +702,142 @@
                 "issueId": 14056
             },
             "direction": "INWARD",
+            "type": {
+                "id": 10100,
+                "name": "Research"
+            }
+        },
+        {
+            "linkType": {
+                "id": 10000,
+                "name": "Blocks",
+                "inward": "is blocked by",
+                "outward": "blocks"
+            },
+            "linkDirection": {
+                "issueKey": "DD-39",
+                "issueId": 12147
+            },
+            "direction": "INWARD",
+            "type": {
+                "id": 3,
+                "name": "Task"
+            }
+        },
+        {
+            "linkType": {
+                "id": 10000,
+                "name": "Blocks",
+                "inward": "is blocked by",
+                "outward": "blocks"
+            },
+            "linkDirection": {
+                "issueKey": "DD-12",
+                "issueId": 13128
+            },
+            "direction": "INWARD",
+            "type": {
+                "id": 1,
+                "name": "Bug"
+            }
+        },
+        {
+            "linkType": {
+                "id": 10000,
+                "name": "Blocks",
+                "inward": "is blocked by",
+                "outward": "blocks"
+            },
+            "linkDirection": {
+                "issueKey": "DD-28",
+                "issueId": 12146
+            },
+            "direction": "INWARD",
+            "type": {
+                "id": 3,
+                "name": "Task"
+            }
+        },
+        {
+            "linkType": {
+                "id": 10000,
+                "name": "Blocks",
+                "inward": "is blocked by",
+                "outward": "blocks"
+            },
+            "linkDirection": {
+                "issueKey": "DD-30",
+                "issueId": 12143
+            },
+            "direction": "INWARD",
+            "type": {
+                "id": 3,
+                "name": "Task"
+            }
+        },
+        {
+            "linkType": {
+                "id": 10000,
+                "name": "Blocks",
+                "inward": "is blocked by",
+                "outward": "blocks"
+            },
+            "linkDirection": {
+                "issueKey": "DD-37",
+                "issueId": 12145
+            },
+            "direction": "INWARD",
+            "type": {
+                "id": 3,
+                "name": "Task"
+            }
+        },
+        {
+            "linkType": {
+                "id": 10300,
+                "name": "Parent",
+                "inward": "is child of",
+                "outward": "is parent of"
+            },
+            "linkDirection": {
+                "issueKey": "AS-66",
+                "issueId": 17200
+            },
+            "direction": "INWARD",
+            "type": {
+                "id": 10000,
+                "name": "Epic"
+            }
+        },
+        {
+            "linkType": {
+                "id": 10300,
+                "name": "Parent",
+                "inward": "is child of",
+                "outward": "is parent of"
+            },
+            "linkDirection": {
+                "issueKey": "AS-73",
+                "issueId": 17207
+            },
+            "direction": "OUTWARD",
+            "type": {
+                "id": 10601,
+                "name": "Requirement"
+            }
+        },
+        {
+            "linkType": {
+                "id": 10003,
+                "name": "Relates",
+                "inward": "relates to",
+                "outward": "relates to"
+            },
+            "linkDirection": {
+                "issueKey": "AS-58",
+                "issueId": 14059
+            },
+            "direction": "OUTWARD",
             "type": {
                 "id": 10100,
                 "name": "Research"
@@ -1015,25 +1020,6 @@
             ],
             "issueLinks": [
                 {
-                    "id": 14158,
-                    "linkType": {
-                        "id": 10300,
-                        "name": "Parent",
-                        "inward": "is child of",
-                        "outward": "is parent of"
-                    },
-                    "linkDirection": {
-                        "issueKey": "AS-74",
-                        "issueId": 17208
-                    },
-                    "direction": "INWARD",
-                    "type": {
-                        "id": 10601,
-                        "name": "Requirement"
-                    }
-                },
-                {
-                    "id": 12301,
                     "linkType": {
                         "id": 10000,
                         "name": "Blocks",
@@ -1051,7 +1037,6 @@
                     }
                 },
                 {
-                    "id": 12299,
                     "linkType": {
                         "id": 10000,
                         "name": "Blocks",
@@ -1066,6 +1051,23 @@
                     "type": {
                         "id": 2,
                         "name": "New Feature"
+                    }
+                },
+                {
+                    "linkType": {
+                        "id": 10300,
+                        "name": "Parent",
+                        "inward": "is child of",
+                        "outward": "is parent of"
+                    },
+                    "linkDirection": {
+                        "issueKey": "AS-74",
+                        "issueId": 17208
+                    },
+                    "direction": "INWARD",
+                    "type": {
+                        "id": 10601,
+                        "name": "Requirement"
                     }
                 }
             ]
@@ -1138,7 +1140,25 @@
                     "to": "17200"
                 }
             ],
-            "issueLinks": []
+            "issueLinks": [
+                {
+                    "linkType": {
+                        "id": 10300,
+                        "name": "Parent",
+                        "inward": "is child of",
+                        "outward": "is parent of"
+                    },
+                    "linkDirection": {
+                        "issueKey": "AS-78",
+                        "issueId": 17212
+                    },
+                    "direction": "INWARD",
+                    "type": {
+                        "id": 10600,
+                        "name": "Design"
+                    }
+                }
+            ]
         },
         {
             "issueId": 17222,
@@ -1208,7 +1228,25 @@
                     "to": "57600"
                 }
             ],
-            "issueLinks": []
+            "issueLinks": [
+                {
+                    "linkType": {
+                        "id": 10300,
+                        "name": "Parent",
+                        "inward": "is child of",
+                        "outward": "is parent of"
+                    },
+                    "linkDirection": {
+                        "issueKey": "AS-77",
+                        "issueId": 17211
+                    },
+                    "direction": "INWARD",
+                    "type": {
+                        "id": 10600,
+                        "name": "Design"
+                    }
+                }
+            ]
         },
         {
             "issueId": 17207,
@@ -1325,7 +1363,23 @@
             ],
             "issueLinks": [
                 {
-                    "id": 14134,
+                    "linkType": {
+                        "id": 10300,
+                        "name": "Parent",
+                        "inward": "is child of",
+                        "outward": "is parent of"
+                    },
+                    "linkDirection": {
+                        "issueKey": "AS-57",
+                        "issueId": 14058
+                    },
+                    "direction": "OUTWARD",
+                    "type": {
+                        "id": 10100,
+                        "name": "Research"
+                    }
+                },
+                {
                     "linkType": {
                         "id": 10300,
                         "name": "Parent",
@@ -1340,6 +1394,175 @@
                     "type": {
                         "id": 10600,
                         "name": "Design"
+                    }
+                },
+                {
+                    "linkType": {
+                        "id": 10300,
+                        "name": "Parent",
+                        "inward": "is child of",
+                        "outward": "is parent of"
+                    },
+                    "linkDirection": {
+                        "issueKey": "AS-56",
+                        "issueId": 14056
+                    },
+                    "direction": "OUTWARD",
+                    "type": {
+                        "id": 10100,
+                        "name": "Research"
+                    }
+                },
+                {
+                    "linkType": {
+                        "id": 10300,
+                        "name": "Parent",
+                        "inward": "is child of",
+                        "outward": "is parent of"
+                    },
+                    "linkDirection": {
+                        "issueKey": "AS-10",
+                        "issueId": 12142
+                    },
+                    "direction": "INWARD",
+                    "type": {
+                        "id": 10001,
+                        "name": "Story"
+                    }
+                }
+            ]
+        },
+        {
+            "issueId": 14056,
+            "issueKey": "AS-56",
+            "status": "Open",
+            "projectKey": "AS",
+            "summary": "java kill process ocuured when  %CPU usage above 120% on Parallella",
+            "description": "During Hadoop test on Parallella I got  messages about java kill process when %CPU usage become higher than 120%.\n",
+            "reporterName": "aabdyldaev",
+            "assigneeName": null,
+            "resolution": "Unresolved",
+            "creationDate": "2015-04-02T17:25:28.000+0600",
+            "updateDate": "2015-09-30T14:29:31.000+0600",
+            "dueDate": "1970-01-01T06:00:00.000+0600",
+            "priority": 2,
+            "originalEstimateMinutes": 480,
+            "remainingEstimateMinutes": 480,
+            "timeSpentMinutes": 0,
+            "type": {
+                "id": 10100,
+                "name": "Research"
+            },
+            "changelogList": [
+                {
+                    "changeKey": {
+                        "changeItemId": 46024,
+                        "created": 1442939463070
+                    },
+                    "issueId": 14056,
+                    "issueKey": "AS-56",
+                    "author": "admin admin",
+                    "type": "custom",
+                    "field": "Epic Link",
+                    "fromString": null,
+                    "toString": "AS-66",
+                    "from": null,
+                    "to": "17200"
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 45853,
+                        "created": 1442934491027
+                    },
+                    "issueId": 14056,
+                    "issueKey": "AS-56",
+                    "author": "admin admin",
+                    "type": "custom",
+                    "field": "IssuePicker",
+                    "fromString": null,
+                    "toString": "[AS-73]",
+                    "from": null,
+                    "to": null
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 45918,
+                        "created": 1442936915271
+                    },
+                    "issueId": 14056,
+                    "issueKey": "AS-56",
+                    "author": "admin admin",
+                    "type": "jira",
+                    "field": "Link",
+                    "fromString": null,
+                    "toString": "This issue relates to AS-10",
+                    "from": null,
+                    "to": "AS-10"
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 46145,
+                        "created": 1443601771681
+                    },
+                    "issueId": 14056,
+                    "issueKey": "AS-56",
+                    "author": "Talas Zholdoshbekov",
+                    "type": "jira",
+                    "field": "timeestimate",
+                    "fromString": null,
+                    "toString": "28800",
+                    "from": null,
+                    "to": "28800"
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 45921,
+                        "created": 1442936928269
+                    },
+                    "issueId": 14056,
+                    "issueKey": "AS-56",
+                    "author": "admin admin",
+                    "type": "jira",
+                    "field": "Link",
+                    "fromString": null,
+                    "toString": "This issue is child of AS-73",
+                    "from": null,
+                    "to": "AS-73"
+                }
+            ],
+            "issueLinks": [
+                {
+                    "linkType": {
+                        "id": 10300,
+                        "name": "Parent",
+                        "inward": "is child of",
+                        "outward": "is parent of"
+                    },
+                    "linkDirection": {
+                        "issueKey": "AS-73",
+                        "issueId": 17207
+                    },
+                    "direction": "INWARD",
+                    "type": {
+                        "id": 10601,
+                        "name": "Requirement"
+                    }
+                },
+                {
+                    "linkType": {
+                        "id": 10003,
+                        "name": "Relates",
+                        "inward": "relates to",
+                        "outward": "relates to"
+                    },
+                    "linkDirection": {
+                        "issueKey": "AS-10",
+                        "issueId": 12142
+                    },
+                    "direction": "OUTWARD",
+                    "type": {
+                        "id": 10001,
+                        "name": "Story"
                     }
                 }
             ]
@@ -1459,7 +1682,57 @@
             ],
             "issueLinks": [
                 {
-                    "id": 14135,
+                    "linkType": {
+                        "id": 10300,
+                        "name": "Parent",
+                        "inward": "is child of",
+                        "outward": "is parent of"
+                    },
+                    "linkDirection": {
+                        "issueKey": "AS-6",
+                        "issueId": 13332
+                    },
+                    "direction": "OUTWARD",
+                    "type": {
+                        "id": 1,
+                        "name": "Bug"
+                    }
+                },
+                {
+                    "linkType": {
+                        "id": 10300,
+                        "name": "Parent",
+                        "inward": "is child of",
+                        "outward": "is parent of"
+                    },
+                    "linkDirection": {
+                        "issueKey": "AS-58",
+                        "issueId": 14059
+                    },
+                    "direction": "OUTWARD",
+                    "type": {
+                        "id": 10100,
+                        "name": "Research"
+                    }
+                },
+                {
+                    "linkType": {
+                        "id": 10300,
+                        "name": "Parent",
+                        "inward": "is child of",
+                        "outward": "is parent of"
+                    },
+                    "linkDirection": {
+                        "issueKey": "AS-10",
+                        "issueId": 12142
+                    },
+                    "direction": "INWARD",
+                    "type": {
+                        "id": 10001,
+                        "name": "Story"
+                    }
+                },
+                {
                     "linkType": {
                         "id": 10300,
                         "name": "Parent",
@@ -1474,6 +1747,261 @@
                     "type": {
                         "id": 10600,
                         "name": "Design"
+                    }
+                }
+            ]
+        },
+        {
+            "issueId": 14058,
+            "issueKey": "AS-57",
+            "status": "Open",
+            "projectKey": "AS",
+            "summary": "Sometimes linaro OS set name of Network interface as eth1 instead of eth0",
+            "description": "Sometimes linaro OS set name of Network interface as eth1 instead of eth0.\nIt is critical for bridge creating, because we automatically assign brifge interface to eth0",
+            "reporterName": "aabdyldaev",
+            "assigneeName": null,
+            "resolution": "Unresolved",
+            "creationDate": "2015-04-02T17:28:34.000+0600",
+            "updateDate": "2015-09-30T14:29:26.000+0600",
+            "dueDate": "1970-01-01T06:00:00.000+0600",
+            "priority": 3,
+            "originalEstimateMinutes": 480,
+            "remainingEstimateMinutes": 480,
+            "timeSpentMinutes": 0,
+            "type": {
+                "id": 10100,
+                "name": "Research"
+            },
+            "changelogList": [
+                {
+                    "changeKey": {
+                        "changeItemId": 46022,
+                        "created": 1442939447499
+                    },
+                    "issueId": 14058,
+                    "issueKey": "AS-57",
+                    "author": "admin admin",
+                    "type": "custom",
+                    "field": "Epic Link",
+                    "fromString": null,
+                    "toString": "AS-66",
+                    "from": null,
+                    "to": "17200"
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 45915,
+                        "created": 1442936844863
+                    },
+                    "issueId": 14058,
+                    "issueKey": "AS-57",
+                    "author": "admin admin",
+                    "type": "jira",
+                    "field": "Link",
+                    "fromString": null,
+                    "toString": "This issue is child of AS-73",
+                    "from": null,
+                    "to": "AS-73"
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 46144,
+                        "created": 1443601766058
+                    },
+                    "issueId": 14058,
+                    "issueKey": "AS-57",
+                    "author": "Talas Zholdoshbekov",
+                    "type": "jira",
+                    "field": "timeestimate",
+                    "fromString": null,
+                    "toString": "28800",
+                    "from": null,
+                    "to": "28800"
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 45852,
+                        "created": 1442934474860
+                    },
+                    "issueId": 14058,
+                    "issueKey": "AS-57",
+                    "author": "admin admin",
+                    "type": "custom",
+                    "field": "IssuePicker",
+                    "fromString": null,
+                    "toString": "[AS-73]",
+                    "from": null,
+                    "to": null
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 45916,
+                        "created": 1442936866950
+                    },
+                    "issueId": 14058,
+                    "issueKey": "AS-57",
+                    "author": "admin admin",
+                    "type": "jira",
+                    "field": "Link",
+                    "fromString": null,
+                    "toString": "This issue relates to AS-10",
+                    "from": null,
+                    "to": "AS-10"
+                }
+            ],
+            "issueLinks": [
+                {
+                    "linkType": {
+                        "id": 10003,
+                        "name": "Relates",
+                        "inward": "relates to",
+                        "outward": "relates to"
+                    },
+                    "linkDirection": {
+                        "issueKey": "AS-10",
+                        "issueId": 12142
+                    },
+                    "direction": "OUTWARD",
+                    "type": {
+                        "id": 10001,
+                        "name": "Story"
+                    }
+                },
+                {
+                    "linkType": {
+                        "id": 10300,
+                        "name": "Parent",
+                        "inward": "is child of",
+                        "outward": "is parent of"
+                    },
+                    "linkDirection": {
+                        "issueKey": "AS-73",
+                        "issueId": 17207
+                    },
+                    "direction": "INWARD",
+                    "type": {
+                        "id": 10601,
+                        "name": "Requirement"
+                    }
+                }
+            ]
+        },
+        {
+            "issueId": 17211,
+            "issueKey": "AS-77",
+            "status": "Open",
+            "projectKey": "AS",
+            "summary": "Automation phases development and implementation",
+            "description": null,
+            "reporterName": "admin",
+            "assigneeName": "bnuriddin",
+            "resolution": "Unresolved",
+            "creationDate": "2015-09-22T19:08:36.000+0600",
+            "updateDate": "2015-09-30T14:27:18.000+0600",
+            "dueDate": "1970-01-01T06:00:00.000+0600",
+            "priority": 3,
+            "originalEstimateMinutes": 480,
+            "remainingEstimateMinutes": 480,
+            "timeSpentMinutes": 0,
+            "type": {
+                "id": 10600,
+                "name": "Design"
+            },
+            "changelogList": [
+                {
+                    "changeKey": {
+                        "changeItemId": 46133,
+                        "created": 1443601638264
+                    },
+                    "issueId": 17211,
+                    "issueKey": "AS-77",
+                    "author": "Talas Zholdoshbekov",
+                    "type": "jira",
+                    "field": "timeestimate",
+                    "fromString": null,
+                    "toString": "28800",
+                    "from": null,
+                    "to": "28800"
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 45879,
+                        "created": 1442935130046
+                    },
+                    "issueId": 17211,
+                    "issueKey": "AS-77",
+                    "author": "admin admin",
+                    "type": "jira",
+                    "field": "Link",
+                    "fromString": null,
+                    "toString": "This issue is child of AS-74",
+                    "from": null,
+                    "to": "AS-74"
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 45900,
+                        "created": 1442936563504
+                    },
+                    "issueId": 17211,
+                    "issueKey": "AS-77",
+                    "author": "admin admin",
+                    "type": "jira",
+                    "field": "Link",
+                    "fromString": null,
+                    "toString": "This issue is parent of AS-88",
+                    "from": null,
+                    "to": "AS-88"
+                },
+                {
+                    "changeKey": {
+                        "changeItemId": 45838,
+                        "created": 1442927316372
+                    },
+                    "issueId": 17211,
+                    "issueKey": "AS-77",
+                    "author": "admin admin",
+                    "type": "custom",
+                    "field": "Epic Link",
+                    "fromString": null,
+                    "toString": "AS-66",
+                    "from": null,
+                    "to": "17200"
+                }
+            ],
+            "issueLinks": [
+                {
+                    "linkType": {
+                        "id": 10300,
+                        "name": "Parent",
+                        "inward": "is child of",
+                        "outward": "is parent of"
+                    },
+                    "linkDirection": {
+                        "issueKey": "AS-88",
+                        "issueId": 17222
+                    },
+                    "direction": "OUTWARD",
+                    "type": {
+                        "id": 10602,
+                        "name": "Playbook"
+                    }
+                },
+                {
+                    "linkType": {
+                        "id": 10300,
+                        "name": "Parent",
+                        "inward": "is child of",
+                        "outward": "is parent of"
+                    },
+                    "linkDirection": {
+                        "issueKey": "AS-74",
+                        "issueId": 17208
+                    },
+                    "direction": "INWARD",
+                    "type": {
+                        "id": 10601,
+                        "name": "Requirement"
                     }
                 }
             ]
@@ -1578,7 +2106,6 @@
             ],
             "issueLinks": [
                 {
-                    "id": 14152,
                     "linkType": {
                         "id": 10300,
                         "name": "Parent",
@@ -1594,109 +2121,22 @@
                         "id": 10601,
                         "name": "Requirement"
                     }
-                }
-            ]
-        },
-        {
-            "issueId": 17211,
-            "issueKey": "AS-77",
-            "status": "Open",
-            "projectKey": "AS",
-            "summary": "Automation phases development and implementation",
-            "description": null,
-            "reporterName": "admin",
-            "assigneeName": "bnuriddin",
-            "resolution": "Unresolved",
-            "creationDate": "2015-09-22T19:08:36.000+0600",
-            "updateDate": "2015-09-30T14:27:18.000+0600",
-            "dueDate": "1970-01-01T06:00:00.000+0600",
-            "priority": 3,
-            "originalEstimateMinutes": 480,
-            "remainingEstimateMinutes": 480,
-            "timeSpentMinutes": 0,
-            "type": {
-                "id": 10600,
-                "name": "Design"
-            },
-            "changelogList": [
-                {
-                    "changeKey": {
-                        "changeItemId": 46133,
-                        "created": 1443601638264
-                    },
-                    "issueId": 17211,
-                    "issueKey": "AS-77",
-                    "author": "Talas Zholdoshbekov",
-                    "type": "jira",
-                    "field": "timeestimate",
-                    "fromString": null,
-                    "toString": "28800",
-                    "from": null,
-                    "to": "28800"
                 },
                 {
-                    "changeKey": {
-                        "changeItemId": 45879,
-                        "created": 1442935130046
-                    },
-                    "issueId": 17211,
-                    "issueKey": "AS-77",
-                    "author": "admin admin",
-                    "type": "jira",
-                    "field": "Link",
-                    "fromString": null,
-                    "toString": "This issue is child of AS-74",
-                    "from": null,
-                    "to": "AS-74"
-                },
-                {
-                    "changeKey": {
-                        "changeItemId": 45900,
-                        "created": 1442936563504
-                    },
-                    "issueId": 17211,
-                    "issueKey": "AS-77",
-                    "author": "admin admin",
-                    "type": "jira",
-                    "field": "Link",
-                    "fromString": null,
-                    "toString": "This issue is parent of AS-88",
-                    "from": null,
-                    "to": "AS-88"
-                },
-                {
-                    "changeKey": {
-                        "changeItemId": 45838,
-                        "created": 1442927316372
-                    },
-                    "issueId": 17211,
-                    "issueKey": "AS-77",
-                    "author": "admin admin",
-                    "type": "custom",
-                    "field": "Epic Link",
-                    "fromString": null,
-                    "toString": "AS-66",
-                    "from": null,
-                    "to": "17200"
-                }
-            ],
-            "issueLinks": [
-                {
-                    "id": 14146,
                     "linkType": {
-                        "id": 10300,
-                        "name": "Parent",
-                        "inward": "is child of",
-                        "outward": "is parent of"
+                        "id": 10003,
+                        "name": "Relates",
+                        "inward": "relates to",
+                        "outward": "relates to"
                     },
                     "linkDirection": {
-                        "issueKey": "AS-88",
-                        "issueId": 17222
+                        "issueKey": "AS-10",
+                        "issueId": 12142
                     },
-                    "direction": "OUTWARD",
+                    "direction": "INWARD",
                     "type": {
-                        "id": 10602,
-                        "name": "Playbook"
+                        "id": 10001,
+                        "name": "Story"
                     }
                 }
             ]
@@ -1786,7 +2226,6 @@
             ],
             "issueLinks": [
                 {
-                    "id": 14144,
                     "linkType": {
                         "id": 10300,
                         "name": "Parent",
@@ -1801,6 +2240,23 @@
                     "type": {
                         "id": 10602,
                         "name": "Playbook"
+                    }
+                },
+                {
+                    "linkType": {
+                        "id": 10300,
+                        "name": "Parent",
+                        "inward": "is child of",
+                        "outward": "is parent of"
+                    },
+                    "linkDirection": {
+                        "issueKey": "AS-73",
+                        "issueId": 17207
+                    },
+                    "direction": "INWARD",
+                    "type": {
+                        "id": 10601,
+                        "name": "Requirement"
                     }
                 }
             ]

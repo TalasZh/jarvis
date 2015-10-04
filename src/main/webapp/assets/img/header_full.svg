@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 17.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 1170 195.6" enable-background="new 0 0 1170 195.6" xml:space="preserve">
+<g>
+	<g>
+		<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="585.0003" y1="195.0494" x2="585.0003" y2="55.2058">
+			<stop  offset="0" style="stop-color:#000924"/>
+			<stop  offset="1" style="stop-color:#000000;stop-opacity:0"/>
+		</linearGradient>
+		<path fill="url(#SVGID_1_)" d="M881.5,55.2l-12,13.2h-58.6l-90.9,38l-21,26.5l0.2,0.2H642l-7.7,8.6h-98.6l-7.8-8.6h-57.1l0.2-0.2
+			l-21-26.5l-90.9-38h-58.6l-12-13.2H0L0,195h154.4l15.1-15.6h106.2l17.8-16.3v-18.9h91.3l19.8,19.8h60.2v-11.3c0-2.7,1.7-5,4-6
+			l1.4-0.6h225.8v0.1h2c3.6,0,6.5,2.9,6.5,6.5v11.3h60.8l19.8-19.8h91.3v18.9l17.8,16.3h106.2l15.1,15.6H1170l0-139.8H881.5z"/>
+		<g>
+			<circle fill="#FFFFFF" cx="359.2" cy="68.4" r="2.8"/>
+			<polyline fill="none" stroke="#FFFFFF" stroke-miterlimit="10" points="0,195 154.5,195 169.6,179.4 275.8,179.4 293.6,163.2 
+				293.6,128.4 308.3,113.3 			"/>
+			<polyline fill="none" stroke="#FFFFFF" stroke-miterlimit="10" points="0,55.2 288.5,55.2 300.6,68.4 359.2,68.4 			"/>
+			<g>
+				<polyline fill="none" stroke="#FFFFFF" stroke-miterlimit="10" points="300.1,144.2 384.9,144.2 404.7,164.1 460.8,164.1 				
+					"/>
+				<circle fill="#FFFFFF" cx="460.8" cy="164.1" r="2.8"/>
+				<circle fill="#FFFFFF" cx="300.1" cy="144.2" r="2.8"/>
+			</g>
+		</g>
+		<g>
+			<circle fill="#FFFFFF" cx="810.8" cy="68.4" r="2.8"/>
+			<polyline fill="none" stroke="#FFFFFF" stroke-miterlimit="10" points="861.6,113.3 876.4,128.4 876.4,163.2 894.2,179.4 
+				1000.4,179.4 1015.5,195 1170,195 			"/>
+			<polyline fill="none" stroke="#FFFFFF" stroke-miterlimit="10" points="1170,55.2 881.5,55.2 869.4,68.4 810.8,68.4 			"/>
+			<g>
+				<polyline fill="none" stroke="#FFFFFF" stroke-miterlimit="10" points="869.9,144.2 785.1,144.2 765.3,164.1 709.2,164.1 				
+					"/>
+				<circle fill="#FFFFFF" cx="709.2" cy="164.1" r="2.8"/>
+				<circle fill="#FFFFFF" cx="869.9" cy="144.2" r="2.8"/>
+			</g>
+		</g>
+		<circle fill="#FFFFFF" cx="309" cy="113.3" r="2.8"/>
+		<circle fill="#FFFFFF" cx="861.2" cy="113.3" r="2.8"/>
+	</g>
+	<polygon fill="none" stroke="#FFFFFF" points="701,86.4 469,86.4 450.5,102.4 365,66.5 323.5,-2.6 847.2,-2.6 805.7,66.5 
+		719.5,102.4 	"/>
+	<g>
+		<linearGradient id="SVGID_2_" gradientUnits="userSpaceOnUse" x1="585.0192" y1="99.6309" x2="585.0192" y2="-1.152148e-008">
+			<stop  offset="0" style="stop-color:#000000;stop-opacity:0"/>
+			<stop  offset="1" style="stop-color:#000924"/>
+		</linearGradient>
+		<polygon fill="url(#SVGID_2_)" points="702,83.8 468,83.8 449.7,99.6 366.9,64.2 328.4,0 841.6,0 803.2,64.2 720.3,99.6 		"/>
+	</g>
+	<g>
+		
+			<image overflow="visible" opacity="0.75" width="274" height="60" xlink:href="BC25E734.png"  transform="matrix(1 0 0 1 447.5797 84.0812)">
+		</image>
+		<g>
+			<g>
+				<polygon fill="none" stroke="#FFFFFF" points="714.8,105.2 699.6,91.5 470.5,91.5 455.1,105.2 474.4,129 529,129 536.9,137.6 
+					633.1,137.6 640.9,129 695.7,129 				"/>
+			</g>
+			<defs>
+				<filter id="Adobe_OpacityMaskFilter" filterUnits="userSpaceOnUse" x="454.4" y="91" width="261.1" height="47.1">
+					
+						<feColorMatrix  type="matrix" values="-1 0 0 0 1  0 -1 0 0 1  0 0 -1 0 1  0 0 0 1 0" color-interpolation-filters="sRGB" result="source"/>
+				</filter>
+			</defs>
+			<mask maskUnits="userSpaceOnUse" x="454.4" y="91" width="261.1" height="47.1" id="SVGID_3_">
+				<g filter="url(#Adobe_OpacityMaskFilter)">
+					<image overflow="visible" width="266" height="52" xlink:href="BC25E736.jpg"  transform="matrix(1 0 0 1 451.5797 88.0812)">
+					</image>
+				</g>
+			</mask>
+			<g mask="url(#SVGID_3_)">
+				<polygon fill="none" stroke="#FFFFFF" points="714.8,105.2 699.6,91.5 470.5,91.5 455.1,105.2 474.4,129 529,129 536.9,137.6 
+					633.1,137.6 640.9,129 695.7,129 				"/>
+			</g>
+		</g>
+	</g>
+	<g>
+		
+			<image overflow="visible" opacity="0.75" width="257" height="54" xlink:href="BC25E73C.png"  transform="matrix(1 0 0 1 456.5797 19.0812)">
+		</image>
+		<g>
+			<g>
+				<path fill="#FFFFFF" d="M480.8,49.6c0,0.8-0.2,1.6-0.5,2.2c-0.3,0.7-0.8,1.3-1.4,1.8c-1,0.8-2.2,1.2-3.6,1.3
+					c-0.2,0-0.3-0.2-0.3-0.4v-2.3c0-0.2,0.1-0.4,0.3-0.4l0.1,0c0.8-0.1,2.3-0.5,2.3-2.2V41h-2.3c-0.2,0-0.4-0.2-0.4-0.4v-2.3
+					c0-0.2,0.2-0.4,0.4-0.4h4.9c0.2,0,0.4,0.1,0.5,0.3v0c0,0,0,0,0,0.1V49.6z"/>
+				<path fill="#FFFFFF" d="M523.4,50.6c0,0.2-0.2,0.4-0.4,0.4h-0.5l0.8,3.3l0,0.1v0c0,0.2-0.2,0.4-0.4,0.4h-2.4
+					c-0.2,0-0.3-0.1-0.4-0.3l0-0.1l-0.9-3.5h-3.4l-0.9,3.5c0,0,0,0,0,0c0,0.2-0.2,0.3-0.4,0.3h-2.4c-0.2,0-0.4-0.2-0.4-0.4v-0.1
+					c0,0,0,0,0,0l4-16.1l0-0.1c0.1-0.1,0.2-0.2,0.4-0.2h2.6c0.2,0,0.3,0.1,0.4,0.2l0,0.1l2.4,9.7h1.3c0.2,0,0.4,0.2,0.4,0.4V50.6z
+					 M518.5,47.9l-0.9-3.7l-0.9,3.7H518.5z"/>
+				<path fill="#FFFFFF" d="M567.4,54.3c0,0.1,0,0.1,0,0.2c0,0.2-0.2,0.4-0.4,0.4h-2.7c-0.1,0-0.3-0.1-0.3-0.2l0-0.1l-3.4-6
+					l-0.4-0.8h-1.5v6.6c0,0.2-0.2,0.4-0.4,0.4H556c-0.2,0-0.4-0.2-0.4-0.4v-9.7h2.8l-2.6-4.6v0l-0.2-0.4v-1.6c0-0.2,0.2-0.4,0.4-0.4
+					h5.8c1.8,0,3.4,0.5,4.5,1.4c1.1,0.9,1.7,2.2,1.7,3.6c0,2.1-1.5,4.2-4.4,4.8l0.1,0.2l0.4,0.8L567.4,54.3L567.4,54.3z M562,44.8
+					c0.2,0,0.4,0,0.6,0c1.6-0.2,2.3-1.1,2.3-1.9c0-0.9-1-1.9-3.1-1.9h-2l1.8,3.1L562,44.8z"/>
+				<path fill="#FFFFFF" d="M611,38.3c0,0,0,0.1,0,0.1l-4.1,16.2c0,0,0,0,0,0.1c0,0.2-0.2,0.3-0.4,0.3H604c-0.2,0-0.3-0.1-0.4-0.3
+					l-4.1-16.2c0,0,0,0,0,0v-0.1c0-0.2,0.2-0.4,0.4-0.4h2.4c0.2,0,0.3,0.1,0.4,0.3v0l2.6,10.3l2.6-10.3v0c0.1-0.2,0.2-0.3,0.4-0.3
+					h2.4C610.8,37.9,611,38,611,38.3z"/>
+				<path fill="#FFFFFF" d="M648.7,40.9v10.8h2.6c0.3,0,0.5,0.2,0.5,0.4v2.3c0,0.2-0.2,0.4-0.5,0.4h-8.4c-0.2,0-0.4-0.2-0.4-0.4
+					v-2.3c0-0.2,0.2-0.4,0.4-0.4h2.7V40.9h-2.7c-0.2,0-0.4-0.2-0.4-0.4v-2.3c0-0.2,0.2-0.4,0.4-0.4h8.4c0.3,0,0.5,0.2,0.5,0.4v2.3
+					c0,0.2-0.2,0.4-0.5,0.4H648.7z"/>
+				<path fill="#FFFFFF" d="M695,49.9c0,0.1,0,1.3-0.8,2.5c-0.7,1.1-2.1,2.5-5,2.5c-2.3,0-4.1-1-5.1-2.7c-0.5-0.8-0.6-1.6-0.7-2.2
+					c0,0,0-0.1,0-0.1c0-0.2,0.2-0.4,0.4-0.4h2.4c0.2,0,0.3,0.1,0.3,0.3v0c0,0,0,0,0,0.1c0,0.2,0.1,0.6,0.3,0.9c0.4,0.7,1.2,1,2.3,1
+					c1.2,0,2-0.3,2.4-1c0.3-0.5,0.3-1,0.3-1c0-0.6-0.1-1.2-1.2-1.6c-0.8-0.3-1.5-0.3-1.5-0.3c-0.1,0-1.4,0-2.7-0.5
+					c-2-0.8-3.1-2.4-3.1-4.5c0-0.2,0-2,1.5-3.5c1-1.1,2.5-1.6,4.3-1.6c1.2,0,2.9,0.3,4.1,1.6c1.2,1.3,1.6,2.9,1.6,3.7v0
+					c0,0.2-0.2,0.4-0.4,0.4h-2.4c-0.2,0-0.3-0.2-0.3-0.3v-0.1c-0.1-0.3-0.2-0.7-0.4-1.1c-0.3-0.5-0.8-1.1-2.3-1.1
+					c-1,0-1.7,0.2-2.1,0.7c-0.5,0.5-0.6,1.3-0.6,1.3c0,0.6,0.1,1.2,1.2,1.6c0.8,0.3,1.5,0.3,1.5,0.3c0.1,0,1.4,0,2.7,0.6
+					C693.9,46.2,695,47.8,695,49.9z"/>
+			</g>
+		</g>
+	</g>
+	<g>
+		<g>
+			<circle fill="#FFFFFF" cx="359.2" cy="68.4" r="2.8"/>
+			<polyline fill="none" stroke="#FFFFFF" stroke-miterlimit="10" points="154.5,195 169.6,179.4 275.8,179.4 293.6,163.2 
+				293.6,128.4 308.3,113.3 			"/>
+			<polyline fill="none" stroke="#FFFFFF" stroke-miterlimit="10" points="288.5,55.2 300.6,68.4 359.2,68.4 			"/>
+			<g>
+				<polyline fill="none" stroke="#FFFFFF" stroke-miterlimit="10" points="300.1,144.2 384.9,144.2 404.7,164.1 460.8,164.1 				
+					"/>
+				<circle fill="#FFFFFF" cx="460.8" cy="164.1" r="2.8"/>
+				<circle fill="#FFFFFF" cx="300.1" cy="144.2" r="2.8"/>
+			</g>
+		</g>
+		<g>
+			<circle fill="#FFFFFF" cx="810.8" cy="68.4" r="2.8"/>
+			<polyline fill="none" stroke="#FFFFFF" stroke-miterlimit="10" points="861.6,113.3 876.4,128.4 876.4,163.2 894.2,179.4 
+				1000.4,179.4 1015.5,195 			"/>
+			<polyline fill="none" stroke="#FFFFFF" stroke-miterlimit="10" points="881.5,55.2 869.4,68.4 810.8,68.4 			"/>
+			<g>
+				<polyline fill="none" stroke="#FFFFFF" stroke-miterlimit="10" points="869.9,144.2 785.1,144.2 765.3,164.1 709.2,164.1 				
+					"/>
+				<circle fill="#FFFFFF" cx="709.2" cy="164.1" r="2.8"/>
+				<circle fill="#FFFFFF" cx="869.9" cy="144.2" r="2.8"/>
+			</g>
+		</g>
+		<circle fill="#FFFFFF" cx="309" cy="113.3" r="2.8"/>
+		<circle fill="#FFFFFF" cx="861.2" cy="113.3" r="2.8"/>
+	</g>
+</g>
+</svg>

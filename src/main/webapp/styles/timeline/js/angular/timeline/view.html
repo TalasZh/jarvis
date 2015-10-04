@@ -1,54 +1,47 @@
+
 <div ng-controller="TimelineCtrl as timelineCtrl">
-<header>
-  <!--Left-sidebar begin -->
-  <div class="left-nav" id="wrapper-left">
-    <div class="profile">
-      <!--Toggle-button-collapse-->
-      <div class="toggle-left">
-        <a class="si-icons si-icons-default" id="menu-toggle" href="#">
-          <span class="si-icon si-icon-hamburger" data-icon-name="hamburger"></span>
-        </a>
-      </div>
-      <a href="#" class="circle-avatar"><img src="/styles/timeline/assets/img/img-profile-plane.svg"></a>
-      <span class="show-text"><a href="#" style="margin-top: 10px">PROFILE</a><a href="#">LOG OUT</a></span>
-    </div>
-    <div class="services-buttons">
-      <ul>
-        <li class="active"><a href=""><img src="/styles/timeline/assets/img/icon-jira.png" alt=""
-                                           class="icons-service"/><br><span class="show-text">JIRA</span></a>
-        </li>
-        <li><a href=""><img src="/styles/timeline/assets/img/icon-confluence.png" alt="" class="icons-service"/><br><span
-            class="show-text">CONFLUENCE</span></a></li>
-        <li><a href=""><img src="/styles/timeline/assets/img/icon-stash.png" alt="" class="icons-service"/><br><span
-            class="show-text">STASH</span></a></li>
-        <li><a href=""><img src="/styles/timeline/assets/img/icon-hipchat.png" alt="" class="icons-service"/><br><span
-            class="show-text">HIPCHAT</span></a></li>
-        <li><a href=""><img src="/styles/timeline/assets/img/icon-zimbra.png" alt="" class="icons-service"/><br><span
-            class="show-text">ZIBRA</span></a></li>
-      </ul>
-    </div>
-  </div>
-  <!--Left-sidebar end -->
+	<header class="b-no-info-header">
+		<!--Left-sidebar begin -->
+		<div class="left-nav" id="wrapper-left">
+			<div class="profile">
+				<!--Toggle-button-collapse-->
+				<div class="toggle-left">
+					<a class="si-icons si-icons-default" id="menu-toggle" href="#">
+						<span class="si-icon si-icon-hamburger" data-icon-name="hamburger"></span>
+					</a>
+				</div>
+				<a href="#" class="circle-avatar"><img src="/styles/timeline/assets/img/img-profile-plane.svg"></a>
+				<span class="show-text"><a href="#" style="margin-top: 10px">PROFILE</a><a href="#">LOG OUT</a></span>
+			</div>
+			<div class="services-buttons">
+				<ul>
+					<li class="active"><a href=""><img src="/styles/timeline/assets/img/icon-jira.png" alt=""
+						class="icons-service"/><br><span class="show-text">JIRA</span></a>
+					</li>
+					<li><a href=""><img src="/styles/timeline/assets/img/icon-confluence.png" alt="" class="icons-service"/><br><span
+							class="show-text">CONFLUENCE</span></a></li>
+					<li><a href=""><img src="/styles/timeline/assets/img/icon-stash.png" alt="" class="icons-service"/><br><span
+							class="show-text">STASH</span></a></li>
+					<li><a href=""><img src="/styles/timeline/assets/img/icon-hipchat.png" alt="" class="icons-service"/><br><span
+							class="show-text">HIPCHAT</span></a></li>
+					<li><a href=""><img src="/styles/timeline/assets/img/icon-zimbra.png" alt="" class="icons-service"/><br><span
+							class="show-text">ZIBRA</span></a></li>
+				</ul>
+			</div>
+		</div>
+		<!--Left-sidebar end -->
 
-  <!--Right sidebar begin-->
-  <div class="right-nav">
-    <!--Toggle-button-collapse-->
-    <div class="toggle-right">
-      <a class="menu-toggle-right" href="#">
-        <img src="/styles/timeline/assets/img/icon-collapse-out.svg" alt="" height="8px" class="icon-collapse-right"/>
-        <img src="/styles/timeline/assets/img/icon-collapse-info.svg" alt="" height="8px" class="hide-icon"/>
-      </a>
-    </div>
-
-    <!--Tabs-button-->
-    <ul class="nav nav-tabs wrapper-right" id="tabs">
-      <li class="active"><a data-toggle="tab" href="#taber-1">HUD</a></li>
-      <li><a data-toggle="tab" href="#taber-2">FILTERS</a></li>
-    </ul>
-    <!--Tabs-content-->
-    <div class="tab-content taber">
-      <!--Tab1-->
-      <div class="tab-pane fade in active" id="taber-1">
+		<!--Right sidebar begin-->
+		<div class="right-nav">
+			<!--Toggle-button-collapse-->
+			<div class="toggle-right">
+				<a class="menu-toggle-right" href="#">
+					<img src="/styles/timeline/assets/img/icon-collapse-out.svg" alt="" height="8px" class="icon-collapse-right"/>
+					<img src="/styles/timeline/assets/img/icon-collapse-info.svg" alt="" height="8px" class="hide-icon"/>
+				</a>
+			</div>
+    <tabset>
+      <tab heading="Description">
         <!--Structure canvas small-view @todo-->
         <div class="canvas-small"></div>
         <div class="chart-buttons">
@@ -61,35 +54,13 @@
 
           <div class="box">
             <div class="description-text">
-              Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
-              been the
-              industry's standard dummy text ever since the 1500s, when an unknown printer took a galley
-              of type
-              and
-              scrambled it to make a type specimen book. It has survived not only five centuries, but also
-              the
-              leap
-              into electronic typesetting, remaining essentially unchanged. It was popularised in the
-              1960s with
-              the
-              release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop
-              publishing
-              software like Aldus PageMaker including versions of Lorem Ipsum.
-              It is a long established fact that a reader will be distracted by the readable content of a
-              page
-              when
-              looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal
-              distribution
-              of letters, as opposed to using 'Content here, content here', making it look like readable
-              English.
-              predefined chunks as...
+              {{ vm.FILTERED_DATA.description }}
             </div>
             <div class="button text-center"><a href="#">MORE</a></div>
           </div>
         </div>
-      </div>
-      <!--Tab2-->
-      <div class="tab-pane fade" id="taber-2">
+      </tab>
+      <tab heading="Filters">
         <div>
           <div class="box" style="padding-right: 0">
             <div class="filters-row">
@@ -178,40 +149,137 @@
 
           <div class="box story-details" style="padding-left: 0">
             <ul>
-              <li><a href="#">Issue name</a></li>
-              <li><a href="#">Issue name</a></li>
-              <li><a href="#">Issue name</a></li>
-              <li><a href="#">Issue name</a></li>
-              <li><a href="#">Issue name</a></li>
-              <li><a href="#">Issue name</a></li>
-              <li><a href="#">Issue name</a></li>
+              <li ng-repeat="x in vm.FILTERED_DATA.issues"><a ng-href="https://jira.subutai.io/issue/{{ x.issueKey }}">{{ x.issueKey }}</a></li>
             </ul>
 
           </div>
         </div>
-      </div>
-    </div>
+      </tab>
+    </tabset>
   </div>
   <!--Right-sidebar end -->
 </header>
 
-<!--New pop-up-->
-<div class="hover-small">some text need to change</div>
+	<!--New pop-up-->
+	<div class="hover-small">some text need to change</div>
 
-<!--||||||POP-UP MODAL BEGIN||||||-->
-<div id="popup">
-  <div id="popup-part"></div>
-  <div id="popup-carrot"></div>
-  <div class="text-center popup-contents">
-    <div class="blocker">Blocker</div>
-    <h1>#152</h1><span class="popup-contents-name">Nataly Ivanova</span>
-    <hr/>
-    <span class="popup-contents-finish">Did not finish <br/>#54</span>
-  </div>
-</div>
-<!--||||||POP-UP MODAL END||||||-->
+	<!--||||||POP-UP MODAL BEGIN||||||-->
+	<div id="popup">
+		<div class="b-popop-angle b-popop-angle_left-top"></div>
+		<div class="b-popop-angle b-popop-angle_left-bottom"></div>
+		<div class="b-popop-angle b-popop-angle_right-top"></div>
+		<div class="b-popop-angle b-popop-angle_right-bottom"></div>
+		<div class="b-popup-text"></div>
+	</div>
+	<!--||||||POP-UP MODAL END||||||-->
 
-<div id="position" style="position:fixed;background: blue; width: 5px; height: 5px;"></div>
+	<!-- Issue line popup -->
+	<div class="b-issue-popup">
+		<div class="b-issue-popup__close"></div>
+		<table>
+			<tr>
+				<td style="width: 40px">
+					<img src="/styles/timeline/assets/img/
+					icon-task.svg" alt="" height="28px"/>
+				</td>
+				<td style="font-size: 12px"> <span id="js-issue-projectKey">Jarvis</span> / <span id="js-issue-issueKey">KMS-272</span><br>
+					<span style="font-size: 15px; opacity: 0.6;" id="js-issue-summary">Implement 3d Timeline animations</span>
+				</td>
+			</tr>
+		</table>
+		<div style="margin-top: 25px" id="js-issue-description" class="js-text-to-span">
+			<div style="width: 40px; display: inline-block"><img src="/styles/timeline/assets/img/icon-01.svg" alt="" height="28px"/></div>
+			<span style="opacity: 0.6;">Pull all jira events, for specified time-frame with records limit. Need to implement animations... </span>
+		</div>
+		<div style="margin-top: 25px">
+			<div style="width: 45%; display: inline-block" id="js-issue-status" class="js-text-to-span">
+				<div style="width: 40px; display: inline-block"><img src="/styles/timeline/assets/img/icon-02.svg" alt="" height="28px"/>
+				</div>
+				<span style="opacity: 0.6;">Open</span>
+			</div>
+			<div style="width: 45%; display: inline-block" id="js-issue-reporterName" class="js-text-to-span">
+				<div style="width: 40px; display: inline-block"><img src="/styles/timeline/assets/img/icon-06.svg" alt="" height="28px"/>
+				</div>
+				<span style="opacity: 0.6;">Ilarion Stus </span>
+			</div>
+		</div>
+		<div style="margin-top: 10px">
+			<div style="width: 45%; display: inline-block">
+				<div style="width: 40px; display: inline-block"><img src="/styles/timeline/assets/img/icon-03.svg" alt="" height="28px"/>
+				</div>
+				<span style="opacity: 0.6;">uiux</span>
+			</div>
+			<div style="width: 45%; display: inline-block" id="js-issue-assigneeName" class="js-text-to-span">
+				<div style="width: 40px; display: inline-block"><img src="/styles/timeline/assets/img/icon-07.svg" alt="" height="28px"/>
+				</div>
+				<span style="opacity: 0.6;">Ilarion Stus </span>
+			</div>
+		</div>
+		<div style="margin-top: 10px">
+			<div style="width: 45%; display: inline-block">
+				<div style="width: 40px; display: inline-block"><img src="/styles/timeline/assets/img/icon-04.svg" alt="" height="28px"/>
+				</div>
+				<span style="opacity: 0.6;">uiux</span>
+			</div>
+			<div style="width: 45%; display: inline-block" id="js-issue-originalEstimateMinutes" class="js-text-to-span">
+				<div style="width: 40px; display: inline-block"><img src="/styles/timeline/assets/img/icon-08.svg" alt="" height="28px"/>
+				</div>
+				<span style="opacity: 0.6;">3d</span>
+			</div>
+		</div>
+		<div style="margin-top: 10px">
+			<div style="width: 45%; display: inline-block">
+				<div style="width: 40px; display: inline-block"><img src="/styles/timeline/assets/img/icon-05.svg" alt="" height="28px"/>
+				</div>
+				<span style="opacity: 0.6;">uiux</span>
+			</div>
+			<div style="width: 45%; display: inline-block">
+				<div style="width: 40px; display: inline-block"><img src="/styles/timeline/assets/img/icon-09.svg" alt="" height="28px"/>
+				</div>
+				<span style="opacity: 0.6;">JarvisSprint #8</span>
+			</div>
+		</div>
+		<!--
+		<div style="margin-top: 25px">
+			<div style="width: 40px; display: inline-block"><img src="assets/img/icon-10.svg" alt="" height="28px"/></div>
+			<span style="opacity: 0.6;">Time Spent:	3 hours</span>
+			<span style="opacity: 0.6; display: block; margin-left: 40px">To make multi tag filtering in jekyll requires to generate new pages which are
+				permutation of all tags - it is complex and also consumes generation time.</span>
+		</div>
+		<div style="margin-top: 25px">
+			<div style="width: 40px; display: inline-block"><img src="assets/img/icon-11.svg" alt="" height="28px"/></div>
+			<span style="opacity: 0.6;">SS-3330 prepared database tables design for resource host connect mechanism</span>
+		</div>
+		<div style="margin-top: 25px">
+			<div style="width: 40px; display: inline-block"><img src="assets/img/icon-12.svg" alt="" height="28px"/></div>
+			<span style="opacity: 0.6;">is blocked by  KMS-177 Implement UI template</span>
+		</div>
+		-->
+		<div id="js-issue-changelog-list" style="border-top: 1px solid #00142d; margin-top: 25px;"></div>
+	</div>
+	<!-- END Issue line popup -->
 
-<canvas id="renderCanvas"></canvas>
+	<div id="index_tip" class="hand_parts" style="position:fixed;"></div>
+	<div id="index_mid" class="hand_parts" style="position:fixed;"></div>
+	<div id="index_bot" class="hand_parts" style="position:fixed;"></div>
+
+	<div id="middle_tip" class="hand_parts" style="position:fixed;"></div>
+	<div id="middle_mid" class="hand_parts" style="position:fixed;"></div>
+	<div id="middle_bot" class="hand_parts" style="position:fixed;"></div>
+
+	<div id="ring_tip" class="hand_parts" style="position:fixed;"></div>
+	<div id="ring_mid" class="hand_parts" style="position:fixed;"></div>
+	<div id="ring_bot" class="hand_parts" style="position:fixed;"></div>
+
+	<div id="pinky_tip" class="hand_parts" style="position:fixed;"></div>
+	<div id="pinky_mid" class="hand_parts" style="position:fixed;"></div>
+	<div id="pinky_bot" class="hand_parts" style="position:fixed;"></div>
+
+	<div id="thumb_tip" class="hand_parts" style="position:fixed;"></div>
+	<div id="thumb_bot" class="hand_parts" style="position:fixed;"></div>
+
+
+	<div id="palm" style="position:fixed;"></div>
+
+	<canvas id="renderCanvas"></canvas>
 </div>

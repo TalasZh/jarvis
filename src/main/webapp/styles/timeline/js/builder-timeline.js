@@ -1,6 +1,6 @@
-var Builder = function (engine, scene, startDate, currentDate, getDataFunction) {
+var Builder = function (engine, startDate, currentDate, getDataFunction) {
     this.engine = engine;
-    this.scene = scene;
+
     this.getDataFunction = getDataFunction;
 
     // grid vars
@@ -40,7 +40,6 @@ var Builder = function (engine, scene, startDate, currentDate, getDataFunction) 
     this.CAMERA_POS = new BABYLON.Vector3(0, 50, -50);
     this.CAMERA_TARGET = new BABYLON.Vector3(0, 0, this.CAMERA_POS.z + 140);
 
-
     this.zPos = 0;
     this.startDate = startDate;
     this.activeDate = currentDate;
@@ -56,6 +55,11 @@ var Builder = function (engine, scene, startDate, currentDate, getDataFunction) 
 		"Aug", "Sept", "Oct",
 		"Nov", "Dec"
 	];
+
+    this.scene = new BABYLON.Scene(engine);
+
+    this.audioClick = new Audio('assets/audio/Click.wav');
+    this.audioOpen = new Audio('assets/audio/openSound.wav');
 };
 
 /*********************************
@@ -69,74 +73,74 @@ var Builder = function (engine, scene, startDate, currentDate, getDataFunction) 
  * @param z
  */
 Builder.prototype.loadMeshes = function (texture, x, z) {
-    BABYLON.SceneLoader.ImportMesh("", "/styles/timeline/assets/", "mesh.babylon", this.scene, function (meshes) {
+    BABYLON.SceneLoader.ImportMesh("", "assets/", "mesh.babylon", this.scene, function (meshes) {
 
-        meshes[0].position.x = x;
-        meshes[0].position.z = z;
-        meshes[0].rotation.x = -Math.PI / 2;
-
-        meshes[1].position.x = x;
-        meshes[1].position.z = z;
-        meshes[1].rotation.x = -Math.PI / 2;
-
-        meshes[2].position.x = x;
-        meshes[2].position.z = z;
-        meshes[2].rotation.x = -Math.PI / 2;
-
-        meshes[3].position.x = x;
-        meshes[3].position.z = z;
-        meshes[3].rotation.x = -Math.PI / 2;
-
-        meshes[4].position.x = x;
-        meshes[4].position.z = z;
-        meshes[4].rotation.x = -Math.PI / 2;
-
-        meshes[5].position.x = x;
-        meshes[5].position.z = z;
-        meshes[5].rotation.x = -Math.PI / 2;
-
-
-        var material = new BABYLON.StandardMaterial("texture", this.scene);
-        material.specularColor = new BABYLON.Color3.Black;
-        material.diffuseTexture = new BABYLON.Texture(texture, this.scene);
-        material.diffuseTexture.hasAlpha = true;
-        meshes[5].material = material;
-
-
-        for (var i = 0; i < meshes.length; ++i) {
-            if (i == 0) {
-                setAnimation(meshes[i], -0.5, -0.5, 0);//3
-            }
-            else if (i == 1) {
-                setAnimation(meshes[i], 0.5, -0.5, 0);//4
-            }
-            else if (i == 2) {
-                setAnimation(meshes[i], 0.5, 0.5, 0);//2
-            }
-            else if (i == 3) {
-                setAnimation(meshes[i], -0.5, 0.5, 0);//1
-            }
-            else if (i == 4) {
-                var animation;
-                var keys = [];
-                animation = new BABYLON.Animation("Animation", "rotation", 30,
-                    BABYLON.Animation.ANIMATIONTYPE_VECTOR3, BABYLON.Animation.ANIMATIONLOOPMODE_RELATIVE);
-                var Rotation = new BABYLON.Vector3(-Math.PI / 2, 0, 0);
-                var nextRotation = new BABYLON.Vector3(-Math.PI / 2, 0, -Math.PI / 2);
-                keys.push({frame: 0, value: Rotation});
-                keys.push({frame: 36, value: nextRotation});
-                animation.setKeys(keys);
-                meshes[4].animations.push(animation);
-
-
-                this.scene.beginAnimation(meshes[4], 0, 36, true, 1);
-            }
-            else if (i == 5) {
-                setAnimation(meshes[i], 0, 0, -0.5);
-            }
-        }
-
-        prepareButton(meshes);
+        //meshes[0].position.x = x;
+        //meshes[0].position.z = z;
+        //meshes[0].rotation.x = -Math.PI / 2;
+        //
+        //meshes[1].position.x = x;
+        //meshes[1].position.z = z;
+        //meshes[1].rotation.x = -Math.PI / 2;
+        //
+        //meshes[2].position.x = x;
+        //meshes[2].position.z = z;
+        //meshes[2].rotation.x   = -Math.PI / 2;
+        //
+        //meshes[3].position.x = x;
+        //meshes[3].position.z = z;
+        //meshes[3].rotation.x = -Math.PI / 2;
+        //
+        //meshes[4].position.x = x;
+        //meshes[4].position.z = z;
+        //meshes[4].rotation.x = -Math.PI / 2;
+        //
+        //meshes[5].position.x = x;
+        //meshes[5].position.z = z;
+        //meshes[5].rotation.x = -Math.PI / 2;
+        //
+        //
+        //var material = new BABYLON.StandardMaterial("texture", this.scene);
+        //material.specularColor = new BABYLON.Color3.Black;
+        //material.diffuseTexture = new BABYLON.Texture(texture, this.scene);
+        //material.diffuseTexture.hasAlpha = true;
+        //meshes[5].material = material;
+        //
+        //
+        //for (var i = 0; i < meshes.length; ++i) {
+        //    if (i == 0) {
+        //        setAnimation(meshes[i], -0.5, -0.5, 0);//3
+        //    }
+        //    else if (i == 1) {
+        //        setAnimation(meshes[i], 0.5, -0.5, 0);//4
+        //    }
+        //    else if (i == 2) {
+        //        setAnimation(meshes[i], 0.5, 0.5, 0);//2
+        //    }
+        //    else if (i == 3) {
+        //        setAnimation(meshes[i], -0.5, 0.5, 0);//1
+        //    }
+        //    else if (i == 4) {
+        //        var animation;
+        //        var keys = [];
+        //        animation = new BABYLON.Animation("Animation", "rotation", 30,
+        //            BABYLON.Animation.ANIMATIONTYPE_VECTOR3, BABYLON.Animation.ANIMATIONLOOPMODE_RELATIVE);
+        //        var Rotation = new BABYLON.Vector3(-Math.PI / 2, 0, 0);
+        //        var nextRotation = new BABYLON.Vector3(-Math.PI / 2, 0, -Math.PI / 2);
+        //        keys.push({frame: 0, value: Rotation});
+        //        keys.push({frame: 36, value: nextRotation});
+        //        animation.setKeys(keys);
+        //        meshes[4].animations.push(animation);
+        //
+        //
+        //        this.scene.beginAnimation(meshes[4], 0, 36, true, 1);
+        //    }
+        //    else if (i == 5) {
+        //        setAnimation(meshes[i], 0, 0, -0.5);
+        //    }
+        //}
+        //
+        //prepareButton(meshes);
     });
 
     var setAnimation = function (mesh, x, y, z) {
@@ -187,14 +191,14 @@ Builder.prototype.loadMeshes = function (texture, x, z) {
 Builder.prototype.createMaterials = function () {
     var scene = this.scene;
 
-    var backgroundTexture = new BABYLON.Texture("/styles/timeline/assets/skybox/BACKGR_SQUARE.png", scene);
+    var backgroundTexture = new BABYLON.Texture("assets/skybox/BACKGR_SQUARE.png", scene);
 
     var background = new BABYLON.StandardMaterial("background", scene);
     background.specularColor = new BABYLON.Color3(0, 0, 0);
     background.ambientTexture = backgroundTexture;
 
 
-    var overlayTexture = new BABYLON.Texture("/styles/timeline/assets/skybox/skybox_nx.jpg", scene);
+    var overlayTexture = new BABYLON.Texture("assets/skybox/skybox_nx.jpg", scene);
 
     var overlay = new BABYLON.StandardMaterial("overlay", scene);
     overlay.ambientTexture = overlayTexture;
@@ -202,7 +206,7 @@ Builder.prototype.createMaterials = function () {
     overlay.alpha = 0.2;
 
 
-    var datesBackgroundT = new BABYLON.Texture("/styles/timeline/assets/img/textBackground.png", scene);
+    var datesBackgroundT = new BABYLON.Texture("assets/img/textBackground.png", scene);
     datesBackgroundT.hasAlpha = true;
     datesBackgroundT.opacityTexture = datesBackgroundT.diffuseTexture;
 
@@ -354,7 +358,7 @@ Builder.prototype.createVLane = function (id, xPos, zPos) {
 
     this.vlanes.push(lane);
 
-    //this.fadeIn(lane);
+    this.fadeIn(lane);
 };
 
 /**
@@ -376,6 +380,7 @@ Builder.prototype.createHLanes = function (width, parentObj) {
 
 		lane.color = this.materials['gridcolor'];
 
+        this.fadeIn(lane);
 		this.hlanes.push(lane);
     }	
 };
@@ -391,7 +396,7 @@ Builder.prototype.createHLanes = function (width, parentObj) {
 Builder.prototype.createArc = function(xPos, zPos, width, type) {
     var arcPoints = BABYLON.Curve3.CreateQuadraticBezier(
         new BABYLON.Vector3( xPos * this.hlaneInterval, 0, zPos ),
-        new BABYLON.Vector3( xPos * this.hlaneInterval + width * this.hlaneInterval / 2, width * this.hlaneInterval * .5, zPos ),
+        new BABYLON.Vector3( xPos * this.hlaneInterval + width * this.hlaneInterval / 2, Math.abs( width ) * this.hlaneInterval * .5, zPos ),
         new BABYLON.Vector3( xPos * this.hlaneInterval + width * this.hlaneInterval, 0, zPos ),
         100
     );
@@ -400,6 +405,8 @@ Builder.prototype.createArc = function(xPos, zPos, width, type) {
     //var curve = BABYLON.Mesh.CreateDashedLines('arc', arcPoints.getPoints(), 10, 10, 200, this.scene);
 
     curve.color = this.materials[ type ];
+
+    this.fadeIn(curve);
 };
 
 /**
@@ -411,13 +418,18 @@ Builder.prototype.createArc = function(xPos, zPos, width, type) {
  * @param length
  * @param type
  */
-Builder.prototype.createIssue = function (id, name, xPos, zPos, length, type) {
+Builder.prototype.createIssue = function (id, name, xPos, zPos, length, type, popup) {
     var lane = BABYLON.Mesh.CreateCylinder("issue_" + id, length, 0.3, 0.3, 8, this.scene, false);
     lane.rotation.x = Math.PI / 2;
     lane.position.x = xPos  * this.hlaneInterval;
     lane.position.z = length / 2 + zPos;
 
     lane.material = this.materials[type.toLowerCase()];
+
+    lane.actionManager = new BABYLON.ActionManager(this.scene);
+    lane.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickTrigger, function () {
+        popup.getIssuePopup(id);
+    }));
 
     if (this.scene.getMeshByID(name) == null) {
         var issueName = BABYLON.Mesh.CreatePlane(name, 10, this.scene, false);
@@ -440,6 +452,7 @@ Builder.prototype.createIssue = function (id, name, xPos, zPos, length, type) {
 
         issueNameTexture.drawText(name, null, 150, "bold 70px GothamPro", "white", null);
 
+        this.fadeIn(lane);
         this.lanesName.push(issueName);
     }
 };
@@ -454,7 +467,7 @@ Builder.prototype.createIssue = function (id, name, xPos, zPos, length, type) {
  * @param issueType
  * @param text
  */
-Builder.prototype.createEvent = function (id, pId, position, timePoint, eventType, issueType, text) {
+Builder.prototype.createEvent = function (id, pId, position, timePoint, eventType, issueType, popup) {
 
 	var radius = 5;
 
@@ -463,7 +476,7 @@ Builder.prototype.createEvent = function (id, pId, position, timePoint, eventTyp
 	object.position.z = timePoint;
 
 	var workLogM = new BABYLON.StandardMaterial("workLogM", this.scene);
-	workLogM.diffuseTexture = new BABYLON.Texture("/styles/timeline/assets/img/Icon2.svg", this.scene);
+	workLogM.diffuseTexture = new BABYLON.Texture("assets/img/Icon2.svg", this.scene);
 	workLogM.diffuseTexture.hasAlpha = true;
 	workLogM.diffuseTexture.uScale = 1;
 	workLogM.diffuseTexture.vScale = 1;
@@ -476,7 +489,7 @@ Builder.prototype.createEvent = function (id, pId, position, timePoint, eventTyp
 
 	//this.loadMeshes("assets/work.png", position, timePoint);
 
-	this.addPopup(pId, id, object, text);
+	this.addPopup(pId, id, object, popup);
 };
 
 /**
@@ -544,7 +557,7 @@ Builder.prototype.updateGrid = function (laneNum) {
     this.subPlane.scaling.x = this.hlaneInterval * laneNum;
     this.subPlane.position.x = this.hlaneInterval * laneNum / 2;
 
-    //this.fadeIn(this.subPlane);
+    this.fadeIn(this.subPlane);
 
 	this.currentPoint = this.createParentPointParent(0);
 	this.dateCurrentPoint = this.createParentPointParent(0);
@@ -589,7 +602,7 @@ Builder.prototype.setRelatedToCamPos = function (mesh) {
 };
 
 Builder.prototype.initClick = function() {
-    // @todo add click
+    this.audioClick.play();
 };
 
 /**
@@ -639,17 +652,16 @@ Date.prototype.addDays = function(days) {
  Action functions
  */
 
-Builder.prototype.addPopup = function (id, eventid, mesh, text) {
+Builder.prototype.addPopup = function (id, eventid, mesh, popup) {
     mesh.actionManager = new BABYLON.ActionManager(this.scene);
-    /*mesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, function () {
-        popup(mesh, text)
-    }));*/
-    mesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, function () {
-        popupHide(mesh)
+    mesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, function () {
+        popup.mouseOverPopup(eventid);
     }));
-
+    mesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, function () {
+        popup.popupHide();
+    }));
     mesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickTrigger, function () {
-        showMinimap(id, eventid)
+        popup.showMinimap(id, eventid)
     }));
 };
 
