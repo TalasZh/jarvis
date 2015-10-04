@@ -884,10 +884,118 @@ label:before,
     display: inline-block;
 }
 
-.document-lister {
-    background: #FFF;
+.document-lister
+{
+    padding: 30px;
+    background-color: #001937;
+    border: 1px solid #00142d;
+    border-top: 3px #0a2341;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
     position: fixed;
-    color: black;
-    border: 2px solid darkseagreen;
-    margin-top: 20px;
+}
+
+.document-lister:before
+{
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    display: block;
+    background: url("../assets/img/img-fill-angle-before.svg");
+    height: 100px;
+    width: 16px;
+}
+
+.document-lister:after
+{
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    display: block;
+    background: url("../assets/img/img-fill-angle-after.svg");
+    height: 100px;
+    width: 16px;
+}
+
+.document-lister td
+{
+    width: 100px;
+}
+
+.task
+{
+    font-size: 14px;
+}
+
+.task-name
+{
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.divider
+{
+    border-bottom: 1px solid #fff;
+    width: 100%;
+    height: 10px;
+}
+
+.task-info
+{
+    margin-top: 10px;
+    height: 20px;
+    width: 100%;
+    overflow: auto;
+    font-size: 14px;
+}
+
+.btn-close
+{
+    position: absolute;
+    right: -7px;
+    top: 4px;
+    background: url("../assets/img/button-close.svg") no-repeat;
+    width: 8px;
+    height: 8px;
+    border: none;
+}
+
+.btn-close:hover,
+.btn-close:focus, {
+    background-color: #000f2d;
+}
+/*HOVER SMALL*/
+.hover-small {
+    display: none;
+    position: absolute;
+    height: 60px;
+    background: rgba(0, 0, 0, 0.25);
+    padding: 7px 15px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+.hover-small:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    display: block;
+    background: url("../assets/img/img-angle-before.svg") no-repeat;
+    height: 60px;
+    width: 9px;
+}
+
+.hover-small:after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    display: block;
+    background: url("../assets/img/img-angle-after.svg") no-repeat;
+    height: 60px;
+    width: 9px;
 }
