@@ -84,16 +84,19 @@ public class StructuredProject implements Serializable, Structure
     private Set<String> users = Sets.newHashSet();
 
     @Embedded
-    private StoryPoints storyPoints = new StoryPoints();
+    private IssueProgress storyPoints = new IssueProgress();
 
     @Embedded
-    private ProgressStatus openStatus;
+    private IssueProgress storyProgress = new IssueProgress();
 
     @Embedded
-    private ProgressStatus inProgressStatus;
+    private ProgressStatus openStatus = new ProgressStatus();
 
     @Embedded
-    private ProgressStatus doneStatus;
+    private ProgressStatus inProgressStatus = new ProgressStatus();
+
+    @Embedded
+    private ProgressStatus doneStatus = new ProgressStatus();
 
     @Transient
     private List<ProjectVersion> projectVersions = Lists.newArrayList();
@@ -106,8 +109,15 @@ public class StructuredProject implements Serializable, Structure
     private Map<String, Long> totalIssuesSolved = Maps.newHashMap(); // maps from attribute name to value
 
 
+    @ElementCollection
+    @MapKeyColumn( name = "epicsCompleted" )
+    @Column( name = "epicsSolved" )
+    @CollectionTable( name = "epics_completion", joinColumns = @JoinColumn( name = "project_id" ) )
+    private Map<String, Long> epicCompletion = Maps.newHashMap(); // maps from attribute name to value
+
+
     @Embedded
-    private ProjectStats projectStats;
+    private ProjectStats projectStats = new ProjectStats();
 
 
     public StructuredProject()
@@ -124,6 +134,32 @@ public class StructuredProject implements Serializable, Structure
         this.key = key;
         this.description = description;
         this.projectVersions = projectVersions;
+    }
+
+
+    @Override
+    public IssueProgress getStoryProgress()
+    {
+        return storyProgress;
+    }
+
+
+    @Override
+    public void setStoryProgress( final IssueProgress storyProgress )
+    {
+        this.storyProgress = storyProgress;
+    }
+
+
+    public Map<String, Long> getEpicCompletion()
+    {
+        return epicCompletion;
+    }
+
+
+    public void setEpicCompletion( final Map<String, Long> epicCompletion )
+    {
+        this.epicCompletion = epicCompletion;
     }
 
 
@@ -178,14 +214,14 @@ public class StructuredProject implements Serializable, Structure
 
 
     @Override
-    public StoryPoints getStoryPoints()
+    public IssueProgress getStoryPoints()
     {
         return storyPoints;
     }
 
 
     @Override
-    public void setStoryPoints( final StoryPoints storyPoints )
+    public void setStoryPoints( final IssueProgress storyPoints )
     {
         this.storyPoints = storyPoints;
     }

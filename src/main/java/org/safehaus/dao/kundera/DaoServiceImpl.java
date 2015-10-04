@@ -171,6 +171,14 @@ public class DaoServiceImpl implements Dao
     public <T> List<T> findByQuery( final Class<T> entityClass, final String query,
                                     final Map<String, Object> parameters )
     {
+        return findByQueryWithLimit( entityClass, query, parameters, 100 );
+    }
+
+
+    @Override
+    public <T> List<T> findByQueryWithLimit( final Class<T> entityClass, final String query,
+                                             final Map<String, Object> parameters, final int limit )
+    {
         EntityManager em = emf.createEntityManager();
         List<T> result = Lists.newArrayList();
         try
@@ -182,6 +190,7 @@ public class DaoServiceImpl implements Dao
             {
                 typedQuery.setParameter( entry.getKey(), entry.getValue() );
             }
+            typedQuery.setMaxResults( limit );
             result = typedQuery.getResultList();
             em.getTransaction().commit();
         }

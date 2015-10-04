@@ -374,10 +374,7 @@ public class AnalysisService
                 for ( int i = 0; i < MAX_RESULT; i += MAX_RESULT )
                 {
                     List<Issue> issues = jiraCl.getIssues( projectKey, MAX_RESULT, i );
-                    if ( issues.size() == 0 )
-                    {
-                        break;
-                    }
+
                     for ( final Issue issue : issues )
                     {
                         saveUser( issue.getAssignee() );
@@ -409,6 +406,10 @@ public class AnalysisService
                             log.info( "Does not, ID:" + issueToAdd.getIssueId() + " UpDate:" + issueToAdd
                                     .getUpdateDate() );
                         }
+                    }
+                    if ( issues.size() < MAX_RESULT )
+                    {
+                        break;
                     }
                 }
             }
@@ -538,6 +539,10 @@ public class AnalysisService
                 }
 
                 collectCommitChanges( stashMan, commitSet, projectKeyNameSlugTriples, i );
+                if ( commitSet.size() < MAX_RESULT )
+                {
+                    break;
+                }
             }
         }
         for ( StashMetricIssue smi : stashMetricIssues )
@@ -562,14 +567,13 @@ public class AnalysisService
         Set<Change> changeSet = new HashSet<>();
         for ( Commit commit : commitSet )
         {
-            int max = 100;
-            for ( int i = 0; i < 1000000; i++ )
+            for ( int i = 0; i < 1000000; i += MAX_RESULT )
             {
                 Page<Change> commitChanges = null;
                 try
                 {
                     commitChanges = stashMan.getCommitChanges( projectKeyNameSlugTriples.get( index ).getL(),
-                            projectKeyNameSlugTriples.get( index ).getR(), commit.getId(), max, i );
+                            projectKeyNameSlugTriples.get( index ).getR(), commit.getId(), MAX_RESULT, i );
                 }
                 catch ( StashManagerException e )
                 {
@@ -581,10 +585,7 @@ public class AnalysisService
                     changeSet = commitChanges.getValues();
                 }
 
-                if ( changeSet.size() == 0 )
-                {
-                    break;
-                }
+
                 for ( Change change : changeSet )
                 {
                     StashMetricIssue stashMetricIssue = new StashMetricIssue();
@@ -611,6 +612,10 @@ public class AnalysisService
                         }
                     }
                     stashMetricService.insertStashMetricIssue( stashMetricIssue );
+                }
+                if ( changeSet.size() < MAX_RESULT )
+                {
+                    break;
                 }
             }
         }

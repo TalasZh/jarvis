@@ -3,27 +3,33 @@ package org.safehaus.timeline.model;
 
 import java.io.Serializable;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapKeyColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.safehaus.dao.entities.jira.IssueRemoteLink;
 import org.safehaus.model.Views;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.impetus.kundera.index.Index;
@@ -88,6 +94,10 @@ public class StructuredIssue implements Serializable, Structure
     @Column( name = "project_key" )
     private String projectKey;
 
+    @JsonView( Views.TimelineShort.class )
+    @Column( name = "due_date" )
+    private String dueDate;
+
     @Transient
     @JsonProperty( "issues" )
     @JsonView( Views.TimelineLong.class )
@@ -103,13 +113,13 @@ public class StructuredIssue implements Serializable, Structure
     private Set<String> users = Sets.newHashSet();
 
     @Embedded
-    private ProgressStatus openStatus;
+    private ProgressStatus openStatus = new ProgressStatus();
 
     @Embedded
-    private ProgressStatus inProgressStatus;
+    private ProgressStatus inProgressStatus = new ProgressStatus();
 
     @Embedded
-    private ProgressStatus doneStatus;
+    private ProgressStatus doneStatus = new ProgressStatus();
 
     @ElementCollection
     @MapKeyColumn( name = "issuesSolved" )
@@ -118,7 +128,14 @@ public class StructuredIssue implements Serializable, Structure
     Map<String, Long> totalIssuesSolved = Maps.newHashMap(); // maps from attribute name to value
 
     @Embedded
-    private StoryPoints storyPoints = new StoryPoints();
+    private IssueProgress storyPoints = new IssueProgress();
+
+    @Embedded
+    private IssueProgress storyProgress = new IssueProgress();
+
+    @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER )
+    @JoinColumn( name = "issue_id" )
+    private List<StructuredIssueLink> remoteLinks = Lists.newArrayList();
 
 
     public StructuredIssue()
@@ -128,7 +145,8 @@ public class StructuredIssue implements Serializable, Structure
 
     public StructuredIssue( final String key, final Long id, final String issueType, final String summary,
                             final String reporter, final String creator, final String assignee, final Long updated,
-                            final Long created, final String status, final String projectKey )
+                            final Long created, final String status, final String projectKey, final String dueDate,
+                            final List<IssueRemoteLink> remoteLinks )
     {
         this.key = key;
         this.id = id;
@@ -141,6 +159,38 @@ public class StructuredIssue implements Serializable, Structure
         this.created = created;
         this.status = status;
         this.projectKey = projectKey;
+        this.dueDate = dueDate;
+        for ( final IssueRemoteLink remoteLink : remoteLinks )
+        {
+            this.remoteLinks.add( new StructuredIssueLink( remoteLink.getTitle(), remoteLink.getRemoteUrl(),
+                    String.format( "%s-%s", remoteLink.getId(), this.id ), remoteLink.getUrl() ) );
+        }
+    }
+
+
+    @Override
+    public IssueProgress getStoryProgress()
+    {
+        return storyProgress;
+    }
+
+
+    @Override
+    public void setStoryProgress( final IssueProgress storyProgress )
+    {
+        this.storyProgress = storyProgress;
+    }
+
+
+    public String getDueDate()
+    {
+        return dueDate;
+    }
+
+
+    public void setDueDate( final String dueDate )
+    {
+        this.dueDate = dueDate;
     }
 
 
@@ -183,14 +233,14 @@ public class StructuredIssue implements Serializable, Structure
 
 
     @Override
-    public StoryPoints getStoryPoints()
+    public IssueProgress getStoryPoints()
     {
         return storyPoints;
     }
 
 
     @Override
-    public void setStoryPoints( final StoryPoints storyPoints )
+    public void setStoryPoints( final IssueProgress storyPoints )
     {
         this.storyPoints = storyPoints;
     }

@@ -13,22 +13,25 @@ import org.safehaus.dao.entities.jira.JarvisLink;
 import org.safehaus.dao.entities.jira.JiraIssueChangelog;
 import org.safehaus.dao.entities.jira.JiraMetricIssue;
 import org.safehaus.dao.entities.jira.JiraProject;
+import org.safehaus.dao.entities.jira.JiraUser;
 import org.safehaus.dao.entities.sonar.SonarMetricIssue;
 import org.safehaus.model.Capture;
 import org.safehaus.model.Session;
 import org.safehaus.model.SessionNotFoundException;
+import org.safehaus.service.api.IssueChangelogDao;
 import org.safehaus.service.api.JiraMetricDao;
 import org.safehaus.service.api.ServicePackDao;
 import org.safehaus.service.api.SessionManager;
 import org.safehaus.service.api.SonarMetricService;
 import org.safehaus.timeline.dao.TimelineDao;
+import org.safehaus.timeline.model.IssueProgress;
 import org.safehaus.timeline.model.ProgressStatus;
 import org.safehaus.timeline.model.ProjectStats;
-import org.safehaus.timeline.model.StoryPoints;
 import org.safehaus.timeline.model.StoryTimeline;
 import org.safehaus.timeline.model.Structure;
 import org.safehaus.timeline.model.StructuredIssue;
 import org.safehaus.timeline.model.StructuredProject;
+import org.safehaus.timeline.model.UserInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +60,9 @@ public class TimelineManager
 
     @Autowired
     private ServicePackDao servicePackDao;
+
+    @Autowired
+    private IssueChangelogDao issueChangelogDao;
 
     private Map<String, StructuredProject> structuredProjects = Maps.newHashMap();
 
@@ -115,6 +121,28 @@ public class TimelineManager
                 for ( final StructuredIssue structuredEpic : structuredEpics )
                 {
                     sumUpEstimates( structuredEpic, project );
+                    String statusKey;
+                    switch ( structuredEpic.getStatus() )
+                    {
+                        case "Open":
+                            statusKey = "Open";
+                            break;
+                        case "Closed":
+                        case "Resolved":
+                        case "Done":
+                            statusKey = "Done";
+                            break;
+                        default:
+                            statusKey = "In Progress";
+                            break;
+                    }
+                    Long count = project.getEpicCompletion().get( statusKey );
+                    if ( count == null )
+                    {
+                        count = 0L;
+                    }
+                    count++;
+                    project.getEpicCompletion().put( statusKey, count );
                 }
 
                 project.setIssues( structuredEpics );
@@ -199,7 +227,8 @@ public class TimelineManager
                         jiraMetricIssue.getReporterName(), jiraMetricIssue.getReporterName(),
                         jiraMetricIssue.getAssigneeName(), jiraMetricIssue.getUpdateDate().getTime(),
                         jiraMetricIssue.getCreationDate().getTime(), jiraMetricIssue.getStatus(),
-                        jiraMetricIssue.getProjectKey() );
+                        jiraMetricIssue.getProjectKey(), jiraMetricIssue.getDueDate().toString(),
+                        jiraMetricIssue.getRemoteLinks() );
 
                 assignIssueEstimate( epic, jiraMetricIssue );
 
@@ -248,19 +277,23 @@ public class TimelineManager
 
         if ( "Story".equals( structuredIssue.getIssueType() ) )
         {
-            StoryPoints storyPoints = new StoryPoints();
+            IssueProgress storyPoints = new IssueProgress();
+            IssueProgress storyProgress = new IssueProgress();
             Random random = new Random();
             long val = ( random.nextInt( 4 ) + 1 ) * 2;
             switch ( issue.getStatus() )
             {
                 case "Open":
                     storyPoints.setOpen( val );
+                    storyProgress.setOpen( 1 );
                     break;
                 case "In Progress":
                     storyPoints.setInProgress( val );
+                    storyProgress.setInProgress( 1 );
                     break;
                 case "Done":
                     storyPoints.setDone( val );
+                    storyProgress.setDone( 1 );
                     break;
             }
             structuredIssue.setStoryPoints( storyPoints );
@@ -300,8 +333,16 @@ public class TimelineManager
         // Assign done statuses
         sumUpProgresses( structuredIssue.getDoneStatus(), parent.getDoneStatus() );
 
-        StoryPoints childStoryPoints = parent.getStoryPoints();
-        StoryPoints parentStoryPoints = structuredIssue.getStoryPoints();
+        IssueProgress childStoryProgress = parent.getStoryProgress();
+        IssueProgress parentStoryProgress = structuredIssue.getStoryProgress();
+
+        parentStoryProgress.setDone( parentStoryProgress.getDone() + childStoryProgress.getDone() );
+        parentStoryProgress.setInProgress( parentStoryProgress.getInProgress() + childStoryProgress.getInProgress() );
+        parentStoryProgress.setOpen( parentStoryProgress.getOpen() + childStoryProgress.getOpen() );
+
+
+        IssueProgress childStoryPoints = parent.getStoryPoints();
+        IssueProgress parentStoryPoints = structuredIssue.getStoryPoints();
 
         parentStoryPoints.setDone( parentStoryPoints.getDone() + childStoryPoints.getDone() );
         parentStoryPoints.setInProgress( parentStoryPoints.getInProgress() + childStoryPoints.getInProgress() );
@@ -397,7 +438,7 @@ public class TimelineManager
 
                             JiraIssueChangelog issueChangelog =
                                     new JiraIssueChangelog( changeKey, jiraMetricIssue.getIssueKey(),
-                                            jiraMetricIssue.getIssueId(), jiraMetricIssue.getAssigneeName(),
+                                            jiraMetricIssue.getIssueId(), researchSession.getUsername(),
                                             jiraMetricIssue.getType().getName(), "Research Session",
                                             "Annotation Created", captureSample, "", "" );
                             jiraMetricIssue.getChangelogList().add( issueChangelog );
@@ -438,7 +479,8 @@ public class TimelineManager
                     new StructuredIssue( issue.getIssueKey(), issue.getIssueId(), issue.getType().getName(),
                             issue.getSummary(), issue.getReporterName(), issue.getReporterName(),
                             issue.getAssigneeName(), issue.getUpdateDate().getTime(), issue.getCreationDate().getTime(),
-                            issue.getStatus(), issue.getProjectKey() );
+                            issue.getStatus(), issue.getProjectKey(), issue.getDueDate().toString(),
+                            issue.getRemoteLinks() );
 
             // Set values for current issue progress
             assignIssueEstimate( structuredIssue, issue );
@@ -472,5 +514,113 @@ public class TimelineManager
             }
         }
         return linkedIssues;
+    }
+
+
+    public UserInfo getUserInfo( String username )
+    {
+        Map<String, StructuredProject> projectMap = Maps.newHashMap();
+        getProjectStatsByUser( projectMap, username );
+
+        UserInfo userInfo = new UserInfo();
+        JiraUser jiraUser = jiraMetricDao.getJiraUserByUsername( username );
+
+        userInfo.setUserId( jiraUser.getUserId() );
+        userInfo.setDisplayName( jiraUser.getDisplayName() );
+        userInfo.setEmail( jiraUser.getEmail() );
+        userInfo.setUsername( jiraUser.getUsername() );
+        userInfo.getProjects().addAll( projectMap.values() );
+        userInfo.setRecentActivity( issueChangelogDao.getChangelogByUsername( userInfo.getDisplayName(), 10 ) );
+
+        for ( final StructuredProject structuredProject : projectMap.values() )
+        {
+            sumUpProgresses( structuredProject.getInProgressStatus(), userInfo.getInProgressStatus() );
+            sumUpProgresses( structuredProject.getDoneStatus(), userInfo.getDoneStatus() );
+            sumUpProgresses( structuredProject.getOpenStatus(), userInfo.getOpenStatus() );
+
+            for ( final Map.Entry<String, Long> entry : structuredProject.getTotalIssuesSolved().entrySet() )
+            {
+                Long val = userInfo.getTotalIssuesSolved().get( entry.getKey() );
+                if ( val == null )
+                {
+                    val = 0L;
+                }
+                val += entry.getValue();
+                userInfo.getTotalIssuesSolved().put( entry.getKey(), val );
+            }
+
+            IssueProgress projectPoints = structuredProject.getStoryPoints();
+            IssueProgress userPoints = userInfo.getStoryPoints();
+
+            userPoints.setDone( userPoints.getDone() + projectPoints.getDone() );
+            userPoints.setInProgress( userPoints.getInProgress() + projectPoints.getInProgress() );
+            userPoints.setDone( userPoints.getOpen() + projectPoints.getOpen() );
+        }
+
+        return userInfo;
+    }
+
+
+    private void getProjectStatsByUser( Map<String, StructuredProject> projectMap, String username )
+    {
+        List<JiraMetricIssue> assigneeIssues = jiraMetricDao.findJiraMetricIssuesByAssigneeName( username );
+        for ( final JiraMetricIssue jiraMetricIssue : assigneeIssues )
+        {
+            StructuredProject structuredProject = projectMap.get( jiraMetricIssue.getProjectKey() );
+            if ( structuredProject == null )
+            {
+                JiraProject jiraProject = jiraMetricDao.getProject( jiraMetricIssue.getProjectKey() );
+                structuredProject =
+                        new StructuredProject( jiraProject.getProjectId(), jiraProject.getName(), jiraProject.getKey(),
+                                jiraProject.getDescription(), jiraProject.getProjectVersions() );
+            }
+
+
+            ProgressStatus progressStatus = new ProgressStatus( jiraMetricIssue.getOriginalEstimateMinutes(),
+                    jiraMetricIssue.getRemainingEstimateMinutes(), jiraMetricIssue.getTimeSpentMinutes() );
+
+            switch ( jiraMetricIssue.getStatus() )
+            {
+                case "Open":
+                    sumUpProgresses( progressStatus, structuredProject.getOpenStatus() );
+                    break;
+                case "In Progress":
+                    sumUpProgresses( progressStatus, structuredProject.getInProgressStatus() );
+                    break;
+                case "Done":
+                    sumUpProgresses( progressStatus, structuredProject.getDoneStatus() );
+                case "Closed":
+                case "Resolved":
+                    Long val = structuredProject.getTotalIssuesSolved().get( jiraMetricIssue.getType().getName() );
+                    if ( val == null )
+                    {
+                        val = 0L;
+                    }
+                    val += jiraMetricIssue.getTimeSpentMinutes();
+                    structuredProject.getTotalIssuesSolved().put( jiraMetricIssue.getType().getName(), val );
+                    break;
+            }
+
+            if ( "Story".equals( jiraMetricIssue.getType().getName() ) )
+            {
+                IssueProgress storyPoints = structuredProject.getStoryPoints();
+                Random random = new Random();
+                long val = ( random.nextInt( 4 ) + 1 ) * 2;
+                switch ( jiraMetricIssue.getStatus() )
+                {
+                    case "Open":
+                        storyPoints.setOpen( val + storyPoints.getOpen() );
+                        break;
+                    case "In Progress":
+                        storyPoints.setInProgress( val + storyPoints.getInProgress() );
+                        break;
+                    case "Done":
+                        storyPoints.setDone( val + storyPoints.getDone() );
+                        break;
+                }
+            }
+
+            projectMap.put( jiraMetricIssue.getProjectKey(), structuredProject );
+        }
     }
 }

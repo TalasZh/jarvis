@@ -8,8 +8,14 @@ import javax.persistence.Embeddable;
 /**
  * Created by talas on 10/3/15.
  */
+
+
+/**
+ * This class used for various purposes like continue with counter for different issue types, according to issue status
+ * state
+ */
 @Embeddable
-public class StoryPoints
+public class IssueProgress
 {
     @Column( name = "in_progress" )
     private long inProgress = 0L;
@@ -21,7 +27,7 @@ public class StoryPoints
     private long open = 0L;
 
 
-    public StoryPoints( final long inProgress, final long done, final long open )
+    public IssueProgress( final long inProgress, final long done, final long open )
     {
         this.inProgress = inProgress;
         this.done = done;
@@ -29,7 +35,7 @@ public class StoryPoints
     }
 
 
-    public StoryPoints()
+    public IssueProgress()
     {
     }
 
@@ -73,7 +79,7 @@ public class StoryPoints
     @Override
     public String toString()
     {
-        return "StoryPoints{" +
+        return "IssueProgress{" +
                 "inProgress=" + inProgress +
                 ", done=" + done +
                 ", open=" + open +

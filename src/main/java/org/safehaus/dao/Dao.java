@@ -22,6 +22,8 @@ public interface Dao
 
     <T> List<T> findByQuery( Class<T> entityClass, String query, Map<String, Object> parameters );
 
+    <T> List<T> findByQueryWithLimit( Class<T> entityClass, String query, Map<String, Object> parameters, int limit );
+
     List<?> findByQuery( String Query );
 
     List<?> findByQuery( String queryString, String paramater, Object parameterValue );

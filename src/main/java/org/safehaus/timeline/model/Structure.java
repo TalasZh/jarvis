@@ -39,8 +39,14 @@ public interface Structure
     public void setUsers( final Set<String> usernames );
 
 
-    public StoryPoints getStoryPoints();
+    public IssueProgress getStoryPoints();
 
 
-    public void setStoryPoints( final StoryPoints storyPoints );
+    public void setStoryPoints( final IssueProgress storyPoints );
+
+
+    public IssueProgress getStoryProgress();
+
+
+    public void setStoryProgress( final IssueProgress storyProgress );
 }

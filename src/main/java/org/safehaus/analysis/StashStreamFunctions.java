@@ -327,20 +327,31 @@ public class StashStreamFunctions {
     public static void startStashStreaming(JavaStreamingContext jssc, HashSet<String> topicsSet, HashMap<String,
             String> kafkaParams)
     {
-        JavaPairInputDStream<String, StashMetricIssue> stashLogDStream = KafkaUtils.createDirectStream(jssc,
-                String.class, StashMetricIssue.class, StringDecoder.class, StashMetricIssueKafkaSerializer.class,
-                kafkaParams, topicsSet);
+        try
+        {
+            JavaPairInputDStream<String, StashMetricIssue> stashLogDStream = KafkaUtils
+                    .createDirectStream( jssc, String.class, StashMetricIssue.class, StringDecoder.class,
+                            StashMetricIssueKafkaSerializer.class, kafkaParams, topicsSet );
 
-        stashLogDStream.print();
+            stashLogDStream.print();
 
-        JavaDStream<StashMetricIssue> stashIssuesDStream = stashLogDStream.map(new Function<Tuple2<String, StashMetricIssue>, StashMetricIssue>() {
-            @Override
-            public StashMetricIssue call(Tuple2<String, StashMetricIssue> stringStashMetricIssueTuple2) throws Exception {
-                return stringStashMetricIssueTuple2._2();
-            }
-        });
+            JavaDStream<StashMetricIssue> stashIssuesDStream =
+                    stashLogDStream.map( new Function<Tuple2<String, StashMetricIssue>, StashMetricIssue>()
+                    {
+                        @Override
+                        public StashMetricIssue call( Tuple2<String, StashMetricIssue> stringStashMetricIssueTuple2 )
+                                throws Exception
+                        {
+                            return stringStashMetricIssueTuple2._2();
+                        }
+                    } );
 
-        computeStashProductivityMetric(stashIssuesDStream);
+            computeStashProductivityMetric( stashIssuesDStream );
+        }
+        catch ( Exception ex )
+        {
+            //ignore
+        }
     }
 
 

@@ -8,6 +8,7 @@ import javax.jws.WebService;
 import org.safehaus.timeline.TimelineManager;
 import org.safehaus.timeline.model.StoryTimeline;
 import org.safehaus.timeline.model.StructuredProject;
+import org.safehaus.timeline.model.UserInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,13 @@ public class TimelineRestServiceImpl implements TimelineRestService
     public List<StructuredProject> getProjects()
     {
         return timelineManager.getProjects();
+    }
+
+
+    @Override
+    public UserInfo getUserInfo( final String username )
+    {
+        return timelineManager.getUserInfo( username );
     }
 
 

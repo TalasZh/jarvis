@@ -180,7 +180,12 @@ public class JiraMetricDaoImpl implements JiraMetricDao, JiraMetricsRestService
     public JiraProject getProject( final String projectKey )
     {
         String query = String.format( "select p from %s p where p.key = :key", JiraProject.class.getSimpleName() );
-        return ( JiraProject ) dao.findByQuery( query, "key", projectKey );
+        List<JiraProject> projects = ( List<JiraProject> ) dao.findByQuery( query, "key", projectKey );
+        if ( projects.size() > 0 )
+        {
+            return projects.get( 0 );
+        }
+        return null;
     }
 
 
