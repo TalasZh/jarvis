@@ -199,6 +199,42 @@ public class StructuredIssue implements Serializable, Structure
     }
 
 
+    public List<StructuredWorkLog> getIssueWorkLogs()
+    {
+        return issueWorkLogs;
+    }
+
+
+    public void setIssueWorkLogs( final List<StructuredWorkLog> issueWorkLogs )
+    {
+        this.issueWorkLogs = issueWorkLogs;
+    }
+
+
+    public String getDescription()
+    {
+        return description;
+    }
+
+
+    public void setDescription( final String description )
+    {
+        this.description = description;
+    }
+
+
+    public int getOriginalEstimateMinutes()
+    {
+        return originalEstimateMinutes;
+    }
+
+
+    public void setOriginalEstimateMinutes( final int originalEstimateMinutes )
+    {
+        this.originalEstimateMinutes = originalEstimateMinutes;
+    }
+
+
     public Set<String> getComponents()
     {
         return components;
