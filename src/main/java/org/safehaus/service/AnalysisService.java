@@ -587,6 +587,7 @@ public class AnalysisService
                     String projectKey = r.getKey();
                     String projectName = r.getName();
 
+<<<<<<< HEAD
                     UnitTestStats unitTestStats = sonarManager.getUnitTestStats( projectKey );
                     ViolationStats violationStats = sonarManager.getViolationStats( projectKey );
                     QuantitativeStats quantitativeStats = sonarManager.getQuantitativeStats( projectKey );
@@ -604,6 +605,20 @@ public class AnalysisService
                     double functionsCount = quantitativeStats.getFunctions();
                     double filesCount = quantitativeStats.getFiles();
                     double linesOfCode = quantitativeStats.getLinesOfCode();
+=======
+                    double successPercent = sonarManager.getUnitTestStats( projectKey ).getSuccessPercent();
+                    double failures = sonarManager.getUnitTestStats( projectKey ).getFailures();
+                    double errors = sonarManager.getUnitTestStats( projectKey ).getErrors();
+                    double testCounts = sonarManager.getUnitTestStats( projectKey ).getFailures();
+                    double coveragePercent = sonarManager.getUnitTestStats( projectKey ).getCoveragePercent();
+                    double allIssues = sonarManager.getViolationStats( projectKey ).getAllIssues();
+                    double blockerIssues = sonarManager.getViolationStats( projectKey ).getBlockerIssues();
+                    double criticalIssues = sonarManager.getViolationStats( projectKey ).getCriticalIssues();
+                    double classesCount = sonarManager.getComplexityStats( projectKey ).getClassComplexity();
+                    double functionsCount = sonarManager.getComplexityStats( projectKey ).getFunctionComplexity();
+                    double filesCount = sonarManager.getComplexityStats( projectKey ).getFileComplexity();
+
+>>>>>>> 496e826... KMS-326, KMS-327 created SonarMetricIssue table and insert sonar related data implemented.
 
                     sonarMetricIssue.setProjectId( projectId );
                     sonarMetricIssue.setProjectName( projectName );
@@ -618,8 +633,11 @@ public class AnalysisService
                     sonarMetricIssue.setClassesCount( classesCount );
                     sonarMetricIssue.setFunctionsCount( functionsCount );
                     sonarMetricIssue.setFilesCount( filesCount );
+<<<<<<< HEAD
                     sonarMetricIssue.setMajorIssues( majorIssues );
                     sonarMetricIssue.setLinesOfCode( linesOfCode );
+=======
+>>>>>>> 496e826... KMS-326, KMS-327 created SonarMetricIssue table and insert sonar related data implemented.
 
                     sonarMetricService.insertSonarMetricIssue( sonarMetricIssue );
                 }

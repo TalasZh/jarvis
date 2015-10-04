@@ -56,9 +56,12 @@ public class SonarMetricIssue implements Serializable
     @Column( name = "critical_issues" )
     private double criticalIssues;
 
+<<<<<<< HEAD
     @Column( name = "major_issues" )
     private double majorIssues;
 
+=======
+>>>>>>> 496e826... KMS-326, KMS-327 created SonarMetricIssue table and insert sonar related data implemented.
     @Column( name = "classes_count" )
     private double classesCount;
 
@@ -68,9 +71,12 @@ public class SonarMetricIssue implements Serializable
     @Column( name = "files_count" )
     private double filesCount;
 
+<<<<<<< HEAD
     @Column( name = "lines_of_code" )
     private double linesOfCode;
 
+=======
+>>>>>>> 496e826... KMS-326, KMS-327 created SonarMetricIssue table and insert sonar related data implemented.
 
     public int getProjectId()
     {
@@ -256,6 +262,7 @@ public class SonarMetricIssue implements Serializable
     {
         this.projectName = projectName;
     }
+<<<<<<< HEAD
 
 
     public double getLinesOfCode()
@@ -280,4 +287,6 @@ public class SonarMetricIssue implements Serializable
     {
         this.majorIssues = majorIssues;
     }
+=======
+>>>>>>> 496e826... KMS-326, KMS-327 created SonarMetricIssue table and insert sonar related data implemented.
 }
