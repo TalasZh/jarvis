@@ -68,8 +68,8 @@ public class AnalysisService
 {
     private final Log log = LogFactory.getLog( AnalysisService.class );
     private static final int MAX_RESULT = 50;
-    //    private static final int OVERALL_RESULT_COUNT = 5000000;
-    private static final int OVERALL_RESULT_COUNT = 50;
+    private static final int OVERALL_RESULT_COUNT = 5000000;
+    //    private static final int OVERALL_RESULT_COUNT = 50;
 
 
     public AnalysisService( boolean jira, boolean stash, boolean sonar, boolean confluence )
