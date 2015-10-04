@@ -50,6 +50,9 @@ public class StoryTimeline extends JiraMetricIssue
         setTimeSpentMinutes( jiraMetricIssue.getTimeSpentMinutes() );
         setType( jiraMetricIssue.getType() );
         setUpdateDate( jiraMetricIssue.getUpdateDate() );
+        setComponents( jiraMetricIssue.getComponents() );
+        setIssueWorkLogs( jiraMetricIssue.getIssueWorkLogs() );
+        setLabels( jiraMetricIssue.getLabels() );
     }
 
 

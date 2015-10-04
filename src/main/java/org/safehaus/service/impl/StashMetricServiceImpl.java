@@ -87,6 +87,31 @@ public class StashMetricServiceImpl implements StashMetricService, StashMetricsR
 
 
     @Override
+    public List<StashMetricIssue> getStashMetricIssuesByUsername( final String username, int limit )
+    {
+        String parameter = "author";
+        String authorQuery =
+                String.format( "SELECT u FROM %s u WHERE u.slug = :%s", StashUser.class.getSimpleName(), parameter );
+        Map<String, Object> authorParameters = Maps.newHashMap();
+        authorParameters.put( parameter, username );
+
+        List<StashUser> stashUser = dao.findByQuery( StashUser.class, authorQuery, authorParameters );
+        List<StashMetricIssue> stashMetricIssues = Lists.newArrayList();
+        if ( stashUser.size() > 0 )
+        {
+            String query =
+                    String.format( "Select j from %s j where j.author = :%s", StashMetricIssue.class.getSimpleName(),
+                            parameter );
+            Map<String, Object> parameters = Maps.newHashMap();
+            parameters.put( parameter, stashUser.get( 0 ).getId() );
+
+            stashMetricIssues = dao.findByQueryWithLimit( StashMetricIssue.class, query, parameters, limit );
+        }
+        return stashMetricIssues;
+    }
+
+
+    @Override
     public List<StashMetricIssue> getStashMetricIssuesByAuthorTimestamp( final String timestamp )
     {
         String query =

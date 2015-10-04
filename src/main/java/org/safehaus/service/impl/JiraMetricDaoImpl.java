@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.jws.WebService;
 
 import org.safehaus.dao.Dao;
+import org.safehaus.dao.entities.jira.IssueWorkLog;
 import org.safehaus.dao.entities.jira.JiraMetricIssue;
 import org.safehaus.dao.entities.jira.JiraProject;
 import org.safehaus.dao.entities.jira.JiraUser;
@@ -235,6 +236,19 @@ public class JiraMetricDaoImpl implements JiraMetricDao, JiraMetricsRestService
         List<JiraMetricIssue> projectIssues =
                 ( List<JiraMetricIssue> ) dao.findByQuery( query, "projectKey", projectKey );
         return projectIssues;
+    }
+
+
+    @Override
+    public List<IssueWorkLog> getUserWorkLogs( final String username, int limit )
+    {
+        String parameter = "author";
+        String query = String.format( "SELECT wl FROM %s wl WHERE wl.author = :%s", IssueWorkLog.class.getSimpleName(),
+                parameter );
+        Map<String, Object> params = Maps.newHashMap();
+        params.put( parameter, username );
+
+        return dao.findByQueryWithLimit( IssueWorkLog.class, query, params, limit );
     }
 
 

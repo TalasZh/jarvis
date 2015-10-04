@@ -36,9 +36,9 @@
     <class>org.safehaus.timeline.model.StructuredIssue</class>
     <class>org.safehaus.timeline.model.StructuredProject</class>
     <class>org.safehaus.timeline.model.StructuredIssueLink</class>
+    <class>org.safehaus.timeline.model.StructuredWorkLog</class>
 
     <class>org.safehaus.dao.entities.ServicePack</class>
-
     <class>org.safehaus.dao.entities.sonar.SonarMetricIssue</class>
 
     <class>org.safehaus.dao.entities.stash.Link</class>

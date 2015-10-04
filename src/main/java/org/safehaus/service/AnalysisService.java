@@ -68,6 +68,8 @@ public class AnalysisService
 {
     private final Log log = LogFactory.getLog( AnalysisService.class );
     private static final int MAX_RESULT = 50;
+    private static final int OVERALL_RESULT_COUNT = 5000000;
+    //    private static final int OVERALL_RESULT_COUNT = 50;
 
 
     public AnalysisService( boolean jira, boolean stash, boolean sonar, boolean confluence )
@@ -370,7 +372,7 @@ public class AnalysisService
             log.info( "Printing issues" );
             for ( String projectKey : projectKeys )
             {
-                for ( int i = 0; i < MAX_RESULT; i += MAX_RESULT )
+                for ( int i = 0; i < OVERALL_RESULT_COUNT; i += MAX_RESULT )
                 {
                     List<Issue> issues = jiraCl.getIssues( projectKey, MAX_RESULT, i );
 
@@ -392,7 +394,7 @@ public class AnalysisService
                                     .getUpdateDate() );
                             try
                             {
-                                kafkaProducer.send( issueToAdd );
+                                //                                kafkaProducer.send( issueToAdd );
                             }
                             catch ( Exception ex )
                             {
@@ -517,7 +519,7 @@ public class AnalysisService
 
         for ( int i = 0; i < projectKeyNameSlugTriples.size(); i++ )
         {
-            for ( int j = 0; j < 1000000; j += MAX_RESULT )
+            for ( int j = 0; j < OVERALL_RESULT_COUNT; j += MAX_RESULT )
             {
                 try
                 {
@@ -566,7 +568,7 @@ public class AnalysisService
         Set<Change> changeSet = new HashSet<>();
         for ( Commit commit : commitSet )
         {
-            for ( int i = 0; i < 1000000; i += MAX_RESULT )
+            for ( int i = 0; i < OVERALL_RESULT_COUNT; i += MAX_RESULT )
             {
                 Page<Change> commitChanges = null;
                 try

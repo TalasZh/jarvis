@@ -3,6 +3,7 @@ package org.safehaus.service.api;
 
 import java.util.List;
 
+import org.safehaus.dao.entities.jira.IssueWorkLog;
 import org.safehaus.dao.entities.jira.JiraMetricIssue;
 import org.safehaus.dao.entities.jira.JiraProject;
 import org.safehaus.dao.entities.jira.JiraUser;
@@ -39,4 +40,6 @@ public interface JiraMetricDao
     void deleteProject( JiraProject project );
 
     List<JiraMetricIssue> getProjectIssues( String projectKey );
+
+    List<IssueWorkLog> getUserWorkLogs( String username, int limit );
 }

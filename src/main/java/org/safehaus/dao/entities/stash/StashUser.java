@@ -22,7 +22,8 @@ import static org.safehaus.Constants.DATABASE_SCHEMA;
 @Entity
 @Table( name = "stash_user", schema = DATABASE_SCHEMA )
 @IndexCollection( columns = {
-        @Index( name = "name" ), @Index( name = "emailAddress" ), @Index( name = "authorTimestamp" )} )
+        @Index( name = "name" ), @Index( name = "emailAddress" ), @Index( name = "slug" )
+} )
 public class StashUser implements Serializable
 {
     @Column(name = "stash_user_name")
