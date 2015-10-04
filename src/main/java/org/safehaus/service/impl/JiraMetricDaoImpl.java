@@ -233,8 +233,10 @@ public class JiraMetricDaoImpl implements JiraMetricDao, JiraMetricsRestService
     {
         String query = String.format( "select issue from %s issue where issue.projectKey = :projectKey",
                 JiraMetricIssue.class.getSimpleName() );
-        List<JiraMetricIssue> projectIssues =
-                ( List<JiraMetricIssue> ) dao.findByQuery( query, "projectKey", projectKey );
+
+        Map<String, Object> params = Maps.newHashMap();
+        params.put( "projectKey", projectKey );
+        List<JiraMetricIssue> projectIssues = dao.findByQueryWithLimit( JiraMetricIssue.class, query, params, 10000 );
         return projectIssues;
     }
 

@@ -180,7 +180,7 @@ public class JiraRestClientImpl implements JiraRestClient
     @Override
     public List<Issue> getIssues( final String projectId, final int max, final int startIndex )
     {
-        String jql = String.format( "project = '%s' ORDER BY updated DESC", projectId );
+        String jql = String.format( "project = '%s' ORDER BY updated ASC", projectId );
         return searchJira( jql, max, startIndex );
     }
 

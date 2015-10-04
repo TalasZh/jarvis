@@ -110,9 +110,27 @@ public class TimelineManager
                 project.setOpenStatus( new ProgressStatus() );
 
                 //TODO replace with more precise project services association
-                if ( "AS".equals( jiraProject.getKey() ) )
+                if ( "SS".equals( jiraProject.getKey() ) )
                 {
                     SonarMetricIssue sonarMetricIssue = sonarMetricService.findSonarMetricIssueByProjectId( "5855" );
+                    if ( sonarMetricIssue != null )
+                    {
+                        ProjectStats projectStats = new ProjectStats( sonarMetricIssue );
+                        project.setProjectStats( projectStats );
+                    }
+                }
+                else if ( "GFIG".equals( jiraProject.getKey() ) )
+                {
+                    SonarMetricIssue sonarMetricIssue = sonarMetricService.findSonarMetricIssueByProjectId( "2999" );
+                    if ( sonarMetricIssue != null )
+                    {
+                        ProjectStats projectStats = new ProjectStats( sonarMetricIssue );
+                        project.setProjectStats( projectStats );
+                    }
+                }
+                else if ( "JETTYJAM".equals( jiraProject.getKey() ) )
+                {
+                    SonarMetricIssue sonarMetricIssue = sonarMetricService.findSonarMetricIssueByProjectId( "3040" );
                     if ( sonarMetricIssue != null )
                     {
                         ProjectStats projectStats = new ProjectStats( sonarMetricIssue );
