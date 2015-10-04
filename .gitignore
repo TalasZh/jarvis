@@ -1,3 +1,6 @@
+/jarvis_production.properties
+/deploy.sh
+/crowd_production.properties
 # Created by .ignore support plugin (hsz.mobi)
 jarvis.iml
 .idea

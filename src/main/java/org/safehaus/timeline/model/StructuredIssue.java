@@ -2,6 +2,8 @@ package org.safehaus.timeline.model;
 
 
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -19,10 +21,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.MapKeyColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
+import org.safehaus.dao.entities.jira.IssueRemoteLink;
 import org.safehaus.model.Views;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.impetus.kundera.index.Index;
@@ -38,7 +45,7 @@ import static org.safehaus.Constants.DATABASE_SCHEMA;
 @Access( AccessType.FIELD )
 @Table( name = "structured_issue", schema = DATABASE_SCHEMA )
 @IndexCollection( columns = {
-        @Index( name = "key" )
+        @Index( name = "key" ), @Index( name = "assignee" ), @Index( name = "reporter" )
 } )
 public class StructuredIssue implements Serializable, Structure
 {
@@ -83,25 +90,52 @@ public class StructuredIssue implements Serializable, Structure
     @Column( name = "status" )
     private String status;
 
+    @JsonView( Views.TimelineShort.class )
+    @Column( name = "project_key" )
+    private String projectKey;
+
+    @JsonView( Views.TimelineShort.class )
+    @Column( name = "due_date" )
+    private String dueDate;
+
+    @Transient
+    @JsonProperty( "issues" )
     @JsonView( Views.TimelineLong.class )
-    @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER )
-    @JoinColumn( name = "parent_issue_id" )
     private Set<StructuredIssue> issues = Sets.newHashSet();
 
-    @Embedded
-    private ProgressStatus openStatus;
+    @JsonIgnore
+    @ElementCollection
+    @Column( name = "issues" )
+    private Set<String> issuesKeys = Sets.newHashSet();
+
+    @ElementCollection
+    @Column( name = "usernames" )
+    private Set<String> users = Sets.newHashSet();
 
     @Embedded
-    private ProgressStatus inProgressStatus;
+    private ProgressStatus openStatus = new ProgressStatus();
 
     @Embedded
-    private ProgressStatus doneStatus;
+    private ProgressStatus inProgressStatus = new ProgressStatus();
+
+    @Embedded
+    private ProgressStatus doneStatus = new ProgressStatus();
 
     @ElementCollection
     @MapKeyColumn( name = "issuesSolved" )
     @Column( name = "totalSolved" )
     @CollectionTable( name = "resolvedIssues", joinColumns = @JoinColumn( name = "solved_id" ) )
     Map<String, Long> totalIssuesSolved = Maps.newHashMap(); // maps from attribute name to value
+
+    @Embedded
+    private IssueProgress storyPoints = new IssueProgress();
+
+    @Embedded
+    private IssueProgress storyProgress = new IssueProgress();
+
+    @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER )
+    @JoinColumn( name = "issue_id" )
+    private List<StructuredIssueLink> remoteLinks = Lists.newArrayList();
 
 
     public StructuredIssue()
@@ -111,7 +145,8 @@ public class StructuredIssue implements Serializable, Structure
 
     public StructuredIssue( final String key, final Long id, final String issueType, final String summary,
                             final String reporter, final String creator, final String assignee, final Long updated,
-                            final Long created, final String status )
+                            final Long created, final String status, final String projectKey, final String dueDate,
+                            final List<IssueRemoteLink> remoteLinks )
     {
         this.key = key;
         this.id = id;
@@ -123,45 +158,149 @@ public class StructuredIssue implements Serializable, Structure
         this.updated = updated;
         this.created = created;
         this.status = status;
+        this.projectKey = projectKey;
+        this.dueDate = dueDate;
+        for ( final IssueRemoteLink remoteLink : remoteLinks )
+        {
+            this.remoteLinks.add( new StructuredIssueLink( remoteLink.getTitle(), remoteLink.getRemoteUrl(),
+                    String.format( "%s-%s", remoteLink.getId(), this.id ), remoteLink.getUrl() ) );
+        }
+    }
+
+
+    @Override
+    public IssueProgress getStoryProgress()
+    {
+        return storyProgress;
+    }
+
+
+    @Override
+    public void setStoryProgress( final IssueProgress storyProgress )
+    {
+        this.storyProgress = storyProgress;
+    }
+
+
+    public String getDueDate()
+    {
+        return dueDate;
+    }
+
+
+    public void setDueDate( final String dueDate )
+    {
+        this.dueDate = dueDate;
+    }
+
+
+    public String getProjectKey()
+    {
+        return projectKey;
+    }
+
+
+    public void setProjectKey( final String projectKey )
+    {
+        this.projectKey = projectKey;
+    }
+
+
+    public String getIssueType()
+    {
+        return issueType;
+    }
+
+
+    public String getReporter()
+    {
+        return reporter;
+    }
+
+
+    @Override
+    public Set<String> getUsers()
+    {
+        return users;
+    }
+
+
+    @Override
+    public void setUsers( final Set<String> usernames )
+    {
+        this.users = usernames;
+    }
+
+
+    @Override
+    public IssueProgress getStoryPoints()
+    {
+        return storyPoints;
+    }
+
+
+    @Override
+    public void setStoryPoints( final IssueProgress storyPoints )
+    {
+        this.storyPoints = storyPoints;
+    }
+
+
+    public Set<String> getIssuesKeys()
+    {
+        return issuesKeys;
     }
 
 
     public Set<StructuredIssue> getIssues()
     {
-        return issues;
+        return Collections.unmodifiableSet( issues );
     }
 
 
+    public void addIssue( StructuredIssue structuredIssue )
+    {
+        this.issues.add( structuredIssue );
+        this.issuesKeys.add( structuredIssue.getKey() );
+    }
+
+
+    @Override
     public ProgressStatus getOpenStatus()
     {
         return openStatus;
     }
 
 
+    @Override
     public void setOpenStatus( final ProgressStatus openStatus )
     {
         this.openStatus = openStatus;
     }
 
 
+    @Override
     public ProgressStatus getInProgressStatus()
     {
         return inProgressStatus;
     }
 
 
+    @Override
     public void setInProgressStatus( final ProgressStatus inProgressStatus )
     {
         this.inProgressStatus = inProgressStatus;
     }
 
 
+    @Override
     public ProgressStatus getDoneStatus()
     {
         return doneStatus;
     }
 
 
+    @Override
     public void setDoneStatus( final ProgressStatus doneStatus )
     {
         this.doneStatus = doneStatus;

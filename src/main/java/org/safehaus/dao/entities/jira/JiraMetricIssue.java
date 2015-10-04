@@ -27,8 +27,11 @@ import net.rcarz.jiraclient.ChangeLogItem;
 import net.rcarz.jiraclient.Issue;
 import net.rcarz.jiraclient.IssueLink;
 import net.rcarz.jiraclient.IssueType;
+import net.rcarz.jiraclient.RemoteLink;
+import net.rcarz.jiraclient.WorkLog;
 
 import static org.safehaus.Constants.DATABASE_SCHEMA;
+
 
 /**
  * Created by kisik on 06.07.2015.
@@ -101,6 +104,14 @@ public class JiraMetricIssue implements Serializable
     @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER )
     @JoinColumn( name = "issue_link_id" )
     private List<JarvisLink> issueLinks = Lists.newArrayList();
+
+    @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER )
+    @JoinColumn( name = "issue_id" )
+    private List<IssueWorkLog> issueWorkLogs = Lists.newArrayList();
+
+    @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER )
+    @JoinColumn( name = "issue_id" )
+    private List<IssueRemoteLink> remoteLinks = Lists.newArrayList();
 
 
     public JiraMetricIssue()
@@ -175,6 +186,28 @@ public class JiraMetricIssue implements Serializable
             this.changelogList = changelogList;
         }
 
+        try
+        {
+            for ( final WorkLog workLog : issue.getWorkLogs() )
+            {
+                IssueWorkLog issueWorkLog = new IssueWorkLog( workLog );
+                this.issueWorkLogs.add( issueWorkLog );
+            }
+
+
+            for ( final RemoteLink remoteLink : issue.getRemoteLinks() )
+            {
+                IssueRemoteLink issueRemoteLink = new IssueRemoteLink( remoteLink.getTitle(), remoteLink.getRemoteUrl(),
+                        String.format( "%s-%s", remoteLink.getId(), this.issueId ), remoteLink.getUrl() );
+                remoteLinks.add( issueRemoteLink );
+            }
+        }
+        catch ( Exception e )
+        {
+            //ignore
+            e.printStackTrace();
+        }
+
         if ( issue.getIssueLinks() != null )
         {
             List<JarvisLink> jarvisIssueLinks = Lists.newArrayList();
@@ -212,6 +245,30 @@ public class JiraMetricIssue implements Serializable
             }
             this.issueLinks = jarvisIssueLinks;
         }
+    }
+
+
+    public List<IssueRemoteLink> getRemoteLinks()
+    {
+        return remoteLinks;
+    }
+
+
+    public void setRemoteLinks( final List<IssueRemoteLink> remoteLinks )
+    {
+        this.remoteLinks = remoteLinks;
+    }
+
+
+    public List<IssueWorkLog> getIssueWorkLogs()
+    {
+        return issueWorkLogs;
+    }
+
+
+    public void setIssueWorkLogs( final List<IssueWorkLog> issueWorkLogs )
+    {
+        this.issueWorkLogs = issueWorkLogs;
     }
 
 
@@ -449,18 +506,6 @@ public class JiraMetricIssue implements Serializable
         return "JiraMetricIssue{" +
                 "issueKey='" + issueKey + '\'' +
                 ", issueId=" + issueId +
-                ", status='" + status + '\'' +
-                ", projectKey='" + projectKey + '\'' +
-                ", reporterName='" + reporterName + '\'' +
-                ", assigneeName='" + assigneeName + '\'' +
-                ", resolution='" + resolution + '\'' +
-                ", creationDate=" + creationDate +
-                ", updateDate=" + updateDate +
-                ", dueDate=" + dueDate +
-                ", priority=" + priority +
-                ", originalEstimateMinutes=" + originalEstimateMinutes +
-                ", remainingEstimateMinutes=" + remainingEstimateMinutes +
-                ", timeSpentMinutes=" + timeSpentMinutes +
                 '}';
     }
 
