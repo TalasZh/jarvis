@@ -12,6 +12,7 @@ import javax.ws.rs.QueryParam;
 import org.safehaus.model.Views;
 import org.safehaus.timeline.model.StoryTimeline;
 import org.safehaus.timeline.model.StructuredProject;
+import org.safehaus.timeline.model.UserInfo;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
@@ -33,6 +34,12 @@ public interface TimelineRestService
     @Path( "project" )
     @JsonView( Views.TimelineShort.class )
     public List<StructuredProject> getProjects();
+
+
+    @GET
+    @Path( "user/{username}" )
+    @JsonView( Views.TimelineShort.class )
+    public UserInfo getUserInfo( @PathParam( "username" ) String username );
 
 
     @GET

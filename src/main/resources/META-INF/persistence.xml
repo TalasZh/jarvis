@@ -22,17 +22,20 @@
     <provider>com.impetus.kundera.KunderaPersistence</provider>
     <class>org.safehaus.model.DocumentInfo</class>
     <class>org.safehaus.dao.entities.jira.JarvisLink</class>
+    <class>org.safehaus.dao.entities.jira.IssueRemoteLink</class>
     <class>org.safehaus.dao.entities.jira.JiraUser</class>
     <class>org.safehaus.dao.entities.jira.JarvisIssueType</class>
     <class>org.safehaus.dao.entities.jira.JarvisMember</class>
     <class>org.safehaus.dao.entities.jira.JarvisIssue</class>
     <class>org.safehaus.dao.entities.jira.JiraMetricIssue</class>
+    <class>org.safehaus.dao.entities.jira.IssueWorkLog</class>
     <class>org.safehaus.dao.entities.jira.JiraProject</class>
     <class>org.safehaus.dao.entities.jira.ProjectVersion</class>
     <class>org.safehaus.dao.entities.jira.JiraIssueChangelog</class>
 
     <class>org.safehaus.timeline.model.StructuredIssue</class>
     <class>org.safehaus.timeline.model.StructuredProject</class>
+    <class>org.safehaus.timeline.model.StructuredIssueLink</class>
 
     <class>org.safehaus.dao.entities.ServicePack</class>
 

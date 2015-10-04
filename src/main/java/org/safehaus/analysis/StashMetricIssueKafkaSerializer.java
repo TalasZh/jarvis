@@ -29,7 +29,11 @@ public class StashMetricIssueKafkaSerializer implements Encoder<StashMetricIssue
         {
             bais = new ByteArrayInputStream(bytes);
             ois = new ObjectInputStream(bais);
-            obj = (StashMetricIssue) ois.readObject();
+            Object tmp = ois.readObject();
+            if ( tmp instanceof StashMetricIssue )
+            {
+                obj = ( StashMetricIssue ) tmp;
+            }
         }
         catch (Exception e)
         {

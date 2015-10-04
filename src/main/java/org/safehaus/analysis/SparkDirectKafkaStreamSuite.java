@@ -25,40 +25,48 @@ public class SparkDirectKafkaStreamSuite implements Serializable
 
     public static void startStreams()
     {
-        JavaStreamingContext jssc;
-        SparkConf conf;
-        HashSet<String> topicsSet;
-        HashMap<String, String> kafkaParams;
+        try
+        {
+            JavaStreamingContext jssc;
+            SparkConf conf;
+            HashSet<String> topicsSet;
+            HashMap<String, String> kafkaParams;
 
-        topicsSet = new HashSet<String>();
+            topicsSet = new HashSet<String>();
 
-        kafkaParams = new HashMap<String, String>();
-        kafkaParams.put( "metadata.broker.list", brokerList );
-        kafkaParams.put("auto.offset.reset", "smallest");
+            kafkaParams = new HashMap<String, String>();
+            kafkaParams.put( "metadata.broker.list", brokerList );
+            kafkaParams.put( "auto.offset.reset", "smallest" );
 
-        conf = new SparkConf().setAppName( appName );
-        conf.setMaster( sparkMaster ).set("spark.cassandra.connection.host", "localhost").set("spark.driver.allowMultipleContexts", "true");
-        jssc = new JavaStreamingContext( conf, Durations.seconds( 60 ) );
+            conf = new SparkConf().setAppName( appName );
+            conf.setMaster( sparkMaster ).set( "spark.cassandra.connection.host", "localhost" )
+                .set( "spark.driver.allowMultipleContexts", "true" );
+            jssc = new JavaStreamingContext( conf, Durations.seconds( 60 ) );
 
-        //Create the stream for jira-logs
-        topicsSet.add(JiraMetricIssueKafkaProducer.getTopic());
+            //Create the stream for jira-logs
+            topicsSet.add( JiraMetricIssueKafkaProducer.getTopic() );
 
-        JiraStreamFunctions.startJiraStream(jssc, topicsSet, kafkaParams);
+            JiraStreamFunctions.startJiraStream( jssc, topicsSet, kafkaParams );
 
-        //Create the stream for stash-logs
-        topicsSet.clear();
-        topicsSet.add(StashMetricIssueKafkaProducer.getTopic());
+            //Create the stream for stash-logs
+            topicsSet.clear();
+            topicsSet.add( StashMetricIssueKafkaProducer.getTopic() );
 
-        StashStreamFunctions.startStashStreaming(jssc, topicsSet, kafkaParams);
+            StashStreamFunctions.startStashStreaming( jssc, topicsSet, kafkaParams );
 
-        //Create the stream for confluence-logs
-        topicsSet.clear();
-        topicsSet.add(ConfluenceMetricKafkaProducer.getTopic());
+            //Create the stream for confluence-logs
+            topicsSet.clear();
+            topicsSet.add( ConfluenceMetricKafkaProducer.getTopic() );
 
-        ConfluenceStreamFunctions.startConfluenceStreaming(jssc, topicsSet, kafkaParams);
+            ConfluenceStreamFunctions.startConfluenceStreaming( jssc, topicsSet, kafkaParams );
 
-        jssc.checkpoint( "/tmp/spark_checkpoint_dir/" );
-        jssc.start();
-        jssc.awaitTermination();
+            jssc.checkpoint( "/tmp/spark_checkpoint_dir/" );
+            jssc.start();
+            jssc.awaitTermination();
+        }
+        catch ( Exception ex )
+        {
+            //ignore
+        }
     }
 }
