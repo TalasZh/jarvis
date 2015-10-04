@@ -235,7 +235,9 @@ public class TimelineManager
                         jiraMetricIssue.getAssigneeName(), jiraMetricIssue.getUpdateDate().getTime(),
                         jiraMetricIssue.getCreationDate().getTime(), jiraMetricIssue.getStatus(),
                         jiraMetricIssue.getProjectKey(), jiraMetricIssue.getDueDate().toString(),
-                        jiraMetricIssue.getRemoteLinks() );
+                        jiraMetricIssue.getRemoteLinks(), jiraMetricIssue.getComponents(), jiraMetricIssue.getLabels(),
+                        jiraMetricIssue.getDescription(), jiraMetricIssue.getOriginalEstimateMinutes(),
+                        jiraMetricIssue.getIssueWorkLogs() );
 
                 assignIssueEstimate( epic, jiraMetricIssue );
 
@@ -487,7 +489,8 @@ public class TimelineManager
                             issue.getSummary(), issue.getReporterName(), issue.getReporterName(),
                             issue.getAssigneeName(), issue.getUpdateDate().getTime(), issue.getCreationDate().getTime(),
                             issue.getStatus(), issue.getProjectKey(), issue.getDueDate().toString(),
-                            issue.getRemoteLinks() );
+                            issue.getRemoteLinks(), issue.getComponents(), issue.getLabels(), issue.getDescription(),
+                            issue.getOriginalEstimateMinutes(), issue.getIssueWorkLogs() );
 
             // Set values for current issue progress
             assignIssueEstimate( structuredIssue, issue );

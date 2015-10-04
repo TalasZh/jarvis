@@ -24,6 +24,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.safehaus.dao.entities.jira.IssueRemoteLink;
+import org.safehaus.dao.entities.jira.IssueWorkLog;
 import org.safehaus.model.Views;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -67,6 +68,10 @@ public class StructuredIssue implements Serializable, Structure
     private String summary;
 
     @JsonView( Views.TimelineShort.class )
+    @Column( name = "description" )
+    private String description;
+
+    @JsonView( Views.TimelineShort.class )
     @Column( name = "reporter" )
     private String reporter;
 
@@ -81,6 +86,10 @@ public class StructuredIssue implements Serializable, Structure
     @JsonView( Views.TimelineShort.class )
     @Column( name = "updated" )
     private Long updated;
+
+    @JsonView( Views.TimelineShort.class )
+    @Column( name = "original_estimate_min" )
+    private int originalEstimateMinutes;
 
     @JsonView( Views.TimelineShort.class )
     @Column( name = "created" )
@@ -112,6 +121,14 @@ public class StructuredIssue implements Serializable, Structure
     @Column( name = "usernames" )
     private Set<String> users = Sets.newHashSet();
 
+    @ElementCollection
+    @Column( name = "components" )
+    private Set<String> components = Sets.newHashSet();
+
+    @ElementCollection
+    @Column( name = "labels" )
+    private Set<String> labels = Sets.newHashSet();
+
     @Embedded
     private ProgressStatus openStatus = new ProgressStatus();
 
@@ -137,6 +154,10 @@ public class StructuredIssue implements Serializable, Structure
     @JoinColumn( name = "issue_id" )
     private List<StructuredIssueLink> remoteLinks = Lists.newArrayList();
 
+    @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER )
+    @JoinColumn( name = "issue_id" )
+    private List<StructuredWorkLog> issueWorkLogs = Lists.newArrayList();
+
 
     public StructuredIssue()
     {
@@ -146,7 +167,9 @@ public class StructuredIssue implements Serializable, Structure
     public StructuredIssue( final String key, final Long id, final String issueType, final String summary,
                             final String reporter, final String creator, final String assignee, final Long updated,
                             final Long created, final String status, final String projectKey, final String dueDate,
-                            final List<IssueRemoteLink> remoteLinks )
+                            final List<IssueRemoteLink> remoteLinks, final Set<String> components,
+                            final Set<String> labels, final String description, final int originalEstimateMinutes,
+                            final List<IssueWorkLog> issueWorkLogs )
     {
         this.key = key;
         this.id = id;
@@ -160,11 +183,55 @@ public class StructuredIssue implements Serializable, Structure
         this.status = status;
         this.projectKey = projectKey;
         this.dueDate = dueDate;
+        this.components = components;
+        this.labels = labels;
+        this.description = description;
+        this.originalEstimateMinutes = originalEstimateMinutes;
+        for ( final IssueWorkLog workLog : issueWorkLogs )
+        {
+            this.issueWorkLogs.add( new StructuredWorkLog( workLog ) );
+        }
         for ( final IssueRemoteLink remoteLink : remoteLinks )
         {
             this.remoteLinks.add( new StructuredIssueLink( remoteLink.getTitle(), remoteLink.getRemoteUrl(),
                     String.format( "%s-%s", remoteLink.getId(), this.id ), remoteLink.getUrl() ) );
         }
+    }
+
+
+    public Set<String> getComponents()
+    {
+        return components;
+    }
+
+
+    public void setComponents( final Set<String> components )
+    {
+        this.components = components;
+    }
+
+
+    public Set<String> getLabels()
+    {
+        return labels;
+    }
+
+
+    public void setLabels( final Set<String> labels )
+    {
+        this.labels = labels;
+    }
+
+
+    public List<StructuredIssueLink> getRemoteLinks()
+    {
+        return remoteLinks;
+    }
+
+
+    public void setRemoteLinks( final List<StructuredIssueLink> remoteLinks )
+    {
+        this.remoteLinks = remoteLinks;
     }
 
 

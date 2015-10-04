@@ -4,11 +4,13 @@ package org.safehaus.dao.entities.jira;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -18,12 +20,14 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.impetus.kundera.index.Index;
 import com.impetus.kundera.index.IndexCollection;
 
 import net.rcarz.jiraclient.ChangeLog;
 import net.rcarz.jiraclient.ChangeLogEntry;
 import net.rcarz.jiraclient.ChangeLogItem;
+import net.rcarz.jiraclient.Component;
 import net.rcarz.jiraclient.Issue;
 import net.rcarz.jiraclient.IssueLink;
 import net.rcarz.jiraclient.IssueType;
@@ -113,6 +117,14 @@ public class JiraMetricIssue implements Serializable
     @JoinColumn( name = "issue_id" )
     private List<IssueRemoteLink> remoteLinks = Lists.newArrayList();
 
+    @ElementCollection
+    @Column( name = "components" )
+    private Set<String> components = Sets.newHashSet();
+
+    @ElementCollection
+    @Column( name = "labels" )
+    private Set<String> labels = Sets.newHashSet();
+
 
     public JiraMetricIssue()
     {
@@ -201,6 +213,13 @@ public class JiraMetricIssue implements Serializable
                         String.format( "%s-%s", remoteLink.getId(), this.issueId ), remoteLink.getUrl() );
                 remoteLinks.add( issueRemoteLink );
             }
+
+            for ( final Component component : issue.getComponents() )
+            {
+                this.components.add( component.getName() );
+            }
+
+            this.labels.addAll( issue.getLabels() );
         }
         catch ( Exception e )
         {
@@ -245,6 +264,30 @@ public class JiraMetricIssue implements Serializable
             }
             this.issueLinks = jarvisIssueLinks;
         }
+    }
+
+
+    public Set<String> getComponents()
+    {
+        return components;
+    }
+
+
+    public void setComponents( final Set<String> components )
+    {
+        this.components = components;
+    }
+
+
+    public Set<String> getLabels()
+    {
+        return labels;
+    }
+
+
+    public void setLabels( final Set<String> labels )
+    {
+        this.labels = labels;
     }
 
 
