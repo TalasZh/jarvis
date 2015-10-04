@@ -246,6 +246,7 @@ public class JiraMetricDaoImpl implements JiraMetricDao, JiraMetricsRestService
         String query = String.format( "SELECT wl FROM %s wl WHERE wl.author = :%s", IssueWorkLog.class.getSimpleName(),
                 parameter );
         Map<String, Object> params = Maps.newHashMap();
+        params.put( parameter, username );
 
         return dao.findByQueryWithLimit( IssueWorkLog.class, query, params, limit );
     }
