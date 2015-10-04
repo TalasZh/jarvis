@@ -2,6 +2,7 @@ package org.safehaus.dao.entities.jira;
 
 
 import java.io.Serializable;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +12,8 @@ import javax.persistence.Table;
 
 import com.impetus.kundera.index.Index;
 import com.impetus.kundera.index.IndexCollection;
+
+import net.rcarz.jiraclient.WorkLog;
 
 import static org.safehaus.Constants.DATABASE_SCHEMA;
 
@@ -54,16 +57,37 @@ public class IssueWorkLog implements Serializable
     }
 
 
-    public IssueWorkLog( final String workLogId, final String comment, final String author, final Long createDate,
-                         final int timeSpentSeconds, final String updateAuthor, final Long updateDate )
+    public IssueWorkLog( final WorkLog workLog )
     {
-        this.workLogId = workLogId;
-        this.comment = comment;
-        this.author = author;
-        this.createDate = createDate;
-        this.timeSpentSeconds = timeSpentSeconds;
-        this.updateAuthor = updateAuthor;
-        this.updateDate = updateDate;
+        if ( workLog.getAuthor() != null )
+        {
+            this.author = workLog.getAuthor().getName();
+        }
+        if ( workLog.getComment() != null )
+        {
+            this.comment = workLog.getComment();
+        }
+        if ( workLog.getCreatedDate() != null )
+        {
+            this.createDate = workLog.getCreatedDate().getTime();
+        }
+        this.timeSpentSeconds = workLog.getTimeSpentSeconds();
+        if ( workLog.getUpdateAuthor() != null )
+        {
+            this.updateAuthor = workLog.getUpdateAuthor().getName();
+        }
+        if ( workLog.getUpdatedDate() != null )
+        {
+            this.updateDate = workLog.getUpdatedDate().getTime();
+        }
+        if ( workLog.getId() != null )
+        {
+            this.workLogId = workLog.getId();
+        }
+        else
+        {
+            this.workLogId = UUID.randomUUID().toString();
+        }
     }
 
 
