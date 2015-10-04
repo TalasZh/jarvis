@@ -1,95 +1,72 @@
 'use strict';
 
 angular.module('jarvis.timeline.ctrl', [
-    'jarvis.timeline.srv'
 ])
     .controller('TimelineCtrl', TimelineCtrl);
 
-TimelineCtrl.$inject = ['$rootScope', 'timelineSrv'];
+TimelineCtrl.$inject = ['$rootScope', 'timelineSrv', 'structureSrv'];
 
-function TimelineCtrl($rootScope, timelineSrv)
+function TimelineCtrl($rootScope, timelineSrv, structureSrv)
 {
     var vm = this;
+    vm.structureSrv = structureSrv;
+    vm.step = 24 * 3600;
+
+    //vm.structureSrv.stories
 
     var canvas, engine, scene;
-
-    var GET_API = 'styles/timeline/dummy-api/timeline.json';
-//var GET_API = 'http://jarvis-test.critical-factor.com:8080/services/api/timeline/story/';
+    var popup;
 
     var DATA = [];
-    var FILTERED_DATA = [];
-
-    var appX = 0;
-    var appY = 0;
-
-    var objX = -1;
-    var objY = -1;
+    vm.FILTERED_DATA = [];
 
     var builder;
     var eventListener;
-
-    var addedToMenu = [];
 
     var STATUS_OPENED = "OPENED";
     var STATUS_CLOSED = "CLOSED";
 
     var leapCtrl = new Leap.Controller();
 
-    var i = 0;
 
+    timelineSrv.getEvents('timeline.json').success(function (data) {
+        var issues = data.issues;
 
-    if (BABYLON.Engine.isSupported()) {
-        initScene();
+        if (issues == undefined) return;
 
-        engine.runRenderLoop(function () {
-            scene.render();
-            eventListener.update();
-        });
-
-        var key = window.location.search.substring(1);
-
-        getData( key, updateView );
-    }
-
-
-    function getData(key, callback) {
-        $.ajax({
-            url: GET_API, //  + key + "?from=1411891890000&to=1443427890000"
-            async: false,
-            dataType: 'json',
-            xhrFields: {
-                withCredentials: true
-            },
-            success: function (data) {
-                var issues = data.issues;
-
-                if (issues == undefined) return;
-
-                for (var i = 0; i < issues.length; i++) {
-                    var result = $.grep(DATA, function (e) {
-                        if(undefined !== e) {
-                            return e.issueId == issues[i].issueId;
-                        }
-                    });
-
-                    if (result.length > 0) {
-                        mergeEvents(issues[i].issueId, issues[i].changelogList)
-                    }
-                    else {
-                        DATA.push(issues[i]);
-                    }
-
-                    updateStatuses(issues[i]);
+        for (var i = 0; i < issues.length; i++) {
+            var result = $.grep(DATA, function (e) {
+                if(undefined !== e) {
+                    return e.issueId == issues[i].issueId;
                 }
-                console.log(DATA);
+            });
 
-                callback();
-            },
-            error: function (data) {
-                console.log("ERROR" + data.statusText);
+            if (result.length > 0) {
+                mergeEvents(issues[i].issueId, issues[i].changelogList)
             }
-        });
-    }
+            else {
+                DATA.push(issues[i]);
+            }
+
+            updateStatuses(issues[i]);
+        }
+
+        for( var i = 0; i < DATA.length; i++ )
+        {
+            DATA[i].changelogList.sort(function(a, b){return a.changeKey.created - b.changeKey.created});
+        }
+
+        if (BABYLON.Engine.isSupported()) {
+            initScene();
+
+            engine.runRenderLoop(function () {
+                builder.scene.render();
+                eventListener.update();
+            });
+
+            updateView();
+        }
+    });
 
     function mergeEvents(id, data) {
         for (var i = 0; i < data.length; i++) {
@@ -134,71 +111,15 @@ function TimelineCtrl($rootScope, timelineSrv)
             }
         }
     }
-    function modifyFilteredData(DATA) {
-        var slices = [];
-        var dateSlices = [];
-        var eventSlice = [];
-        for (var d = 0; d < 10; d++) {
-            dateSlices[d] = 24 * 3600 / 10 * d;
-        }
-        for (var i = 0; i < DATA.length; i++) {
-            slices[i] = DATA[i].changelogList;
-            for (var w = 0; w < slices[i].length; w++) {
-                if (slices[i][w].eventDate) {
-                    var array = slices[i][w].eventDate.split("T")
-                    var times = array[1].split(":");
-                    var hours = times[0];
-                    var minutes = times[1];
-                    var seconds = times[2];
-                    seconds = parseInt(seconds, 10) + (parseInt(minutes, 10) * 60 + (parseInt(hours, 10) * 3600));
-                    for (var f = 0; f < 9; f++) {
-                        if (seconds > dateSlices[f] && seconds < dateSlices[f + 1]) {
-                            if (!eventSlice[array[0] + "T" + convertHMS(dateSlices[f]) + "id" + DATA[i].id]) {
-                                eventSlice[array[0] + "T" + convertHMS(dateSlices[f]) + "id" + DATA[i].id] = [];
-                            }
-                            eventSlice[array[0] + "T" + convertHMS(dateSlices[f]) + "id" + DATA[i].id].push((convertHMS(seconds)));
-                        }
-                    }
-
-                }
-            }
-            DATA[i].changelogList = eventSlice;
-            eventSlice = [];
-        }
-        console.log(DATA);
-        return DATA;
-    }
 
 // @todo rewrite
     function filterData() {
-        //var value = $('#member-dropdown ').val();
-        FILTERED_DATA = cloneArray(DATA);
-        /*for (var i = 0; i < DATA.length; i++) {
+        vm.FILTERED_DATA = cloneArray(DATA);
 
-         for (var j = 0; j < DATA[i].changelogList.length; j++) {
-
-         if (DATA[i].changelogList[j].author == value) {
-         var result = $.grep(FILTERED_DATA, function (e) {
-         return e.id == DATA[i].id;
-         });
-
-         if (result.length == 0) {
-         var obj = jQuery.extend({}, DATA[i]);
-         obj.changelogList = [];
-         obj.lane = null;
-         FILTERED_DATA.push(obj);
-
-         result = $.grep(FILTERED_DATA, function (e) {
-         return e.id == DATA[i].id;
-         });
-         }
-
-         result = result[0];
-
-         result.changelogList.push(DATA[i].changelogList[j]);
-         }
-         }
-         }*/
+        //var obj = jQuery.extend({}, DATA[i]);
+        //obj.changelogList = [];
+        //obj.lane = null;
+        //vm.FILTERED_DATA.push(obj);
     }
 
     function getZCoordinate(date) {
@@ -224,52 +145,61 @@ function TimelineCtrl($rootScope, timelineSrv)
 
     function updateView() {
 
+
         filterData();
-        builder.updateGrid(FILTERED_DATA.length + 1);
+        builder.updateGrid(vm.FILTERED_DATA.length + 1);
 
         var issuePosition = 1;
 
         // @todo sorting
-        for (var i = FILTERED_DATA.length - 1; i >= 0; i--) {
-            if (FILTERED_DATA[i].lane == null) {
-                FILTERED_DATA[i].lane = issuePosition++;
+        for (var i = vm.FILTERED_DATA.length - 1; i >= 0; i--) {
+            if (vm.FILTERED_DATA[i].lane == null) {
+                vm.FILTERED_DATA[i].lane = issuePosition++;
             }
         }
 
-        for (var i = 0; i < FILTERED_DATA.length; i++) {
-            createIssueLanes(FILTERED_DATA[i]);
-            for (var j = 0; j < FILTERED_DATA[i].changelogList.length; j++) {
-                if( FILTERED_DATA[i].changelogList[j].field == "Link" ) {
+        for (var i = 0; i < vm.FILTERED_DATA.length; i++) {
+            createIssueLanes(vm.FILTERED_DATA[i]);
+            for (var j = 0; j < vm.FILTERED_DATA[i].changelogList.length; j++) {
+
+                var date = new Date(parseInt( vm.FILTERED_DATA[i].changelogList[j].changeKey.created / 1000 / vm.step) * vm.step * 1000);
+                var position = parseInt( ((vm.FILTERED_DATA[i].changelogList[j].changeKey.created / 1000) % vm.step) / ( vm.step / 10 ) );
+
+                if( vm.FILTERED_DATA[i].changelogList[j].field == "Link" ) {
 
                     var result = $.grep(DATA, function (e) {
-                        return e.issueKey == FILTERED_DATA[i].changelogList[j].to;
+                        return e.issueKey == vm.FILTERED_DATA[i].changelogList[j].to;
                     });
 
                     if( !result[0] ) continue;
 
-                    var type = "child";
-                    console.log(result.toString);
-                    //if( result['toString'].indexOf( "blocker" ) > 0 ) {
-                    //    type = "blocker"
-                    //}
 
-                    console.log( FILTERED_DATA[i].issueKey, FILTERED_DATA[i].lane, builder.vlanes[FILTERED_DATA[i].lane].position.x );
+                    // @todo build progress
+                    var type = "child";
+
+                    if( vm.FILTERED_DATA[i].changelogList[j].toString.indexOf( "blocker" ) > 0 )
+                        type = "blocker";
+
+                    if( vm.FILTERED_DATA[i].changelogList[j].toString.indexOf( "child" ) > 0 )
+                        continue;
 
                     builder.createArc(
-                        FILTERED_DATA[i].lane,
-                        getZCoordinate(new Date(FILTERED_DATA[i].changelogList[j].changeKey.created)) * builder.vlaneInterval,
-                        (result[0].lane - FILTERED_DATA[i].lane),
+                        vm.FILTERED_DATA[i].lane,
+                        getZCoordinate(new Date(vm.FILTERED_DATA[i].changelogList[j].changeKey.created)) * builder.vlaneInterval,
+                        (result[0].lane - vm.FILTERED_DATA[i].lane),
                         type
                     );
                 }
                 else {
+                    //@todo
                     builder.createEvent(
-                        FILTERED_DATA[i].changelogList[j].changeKey.changeItemId,
-                        FILTERED_DATA[i].issueId,
-                        builder.vlanes[FILTERED_DATA[i].lane].position.x,
-                        getZCoordinate(new Date(FILTERED_DATA[i].changelogList[j].changeKey.created)) * builder.vlaneInterval,
-                        FILTERED_DATA[i].changelogList[j].eventType,
-                        FILTERED_DATA[i].type, FILTERED_DATA[i].changelogList[j].eventInfo
+                        vm.FILTERED_DATA[i].changelogList[j].changeKey.changeItemId,
+                        vm.FILTERED_DATA[i].issueId,
+                        builder.vlanes[vm.FILTERED_DATA[i].lane].position.x,
+                        getZCoordinate(new Date(vm.FILTERED_DATA[i].changelogList[j].changeKey.created)) * builder.vlaneInterval,
+                        vm.FILTERED_DATA[i].changelogList[j].eventType,
+                        vm.FILTERED_DATA[i].type,
+                        popup
                     );
                 }
             }
@@ -304,7 +234,8 @@ function TimelineCtrl($rootScope, timelineSrv)
                     data.lane,
                     zPos,
                     length,
-                    data.type
+                    data.type,
+					popup
                 );
 
                 hasIssues = true;
@@ -329,11 +260,37 @@ function TimelineCtrl($rootScope, timelineSrv)
                 data.lane,
                 firstEventClosed,
                 daysToNow * builder.vlaneInterval - firstEventClosed,
-                data.type.name
+                data.type.name,
+				popup
             );
         }
     }
 
+    var fetchDataRange = function( from, to ) {
+        var buildData;
+        for( var i = 0; i < vm.FILTERED_DATA.length; i++ )
+        {
+            var dev = {};
+            for( var j = 0; j < vm.FILTERED_DATA[i].issueStatuses.length; j++ )
+            {
+                var cmpDate = vm.FILTERED_DATA[i].issueStatuses[j].date;
+                if( from <= cmpDate && cmpDate <= to )
+                {
+
+                }
+            }
+
+
+            for( var j = 0; j < vm.FILTERED_DATA[i].changelogList.length; j++ )
+            {
+                var cmpDate = vm.FILTERED_DATA[i].changelogList[j].changeKey.created;
+                if( from <= cmpDate && cmpDate <= to )
+                {
+
+                }
+            }
+        }
+    };
 
     function initScene() {
         canvas = document.getElementById("renderCanvas");
@@ -343,10 +300,10 @@ function TimelineCtrl($rootScope, timelineSrv)
         }
 
         engine = new BABYLON.Engine(canvas, true);
-        scene = new BABYLON.Scene(engine);
 
-        builder = new Builder(engine, scene, new Date("2015-09-22"), new Date("2015-09-22"));
+        builder = new Builder(engine, new Date("2015-09-22"), new Date("2015-09-22"), fetchDataRange);
         eventListener = new EventListener(builder, drawPointer);
+        popup = new Popup(DATA, eventListener);
 
 
         builder.createMaterials();
@@ -359,335 +316,164 @@ function TimelineCtrl($rootScope, timelineSrv)
         builder.camera.attachControl(canvas, false);
     }
 
-    function drawPointer(appX, appY) {
-        $('#position').css("left", appX);
-        $('#position').css("top", appY);
-    }
+    function drawPointer(frame) {
 
-    function convertHMS(sec) {
-        Number.prototype.toDecimals = function (n) {
-            n = (isNaN(n)) ?
-                2 :
-                n;
-            var
-                nT = Math.pow(10, n);
-
-            function pad(s) {
-                s = s || '.';
-                return (s.length > n) ?
-                    s :
-                    pad(s + '0');
-            }
-
-            return (isNaN(this)) ?
-                this :
-                (new String(
-                    Math.round(this * nT) / nT
-                )).replace(/(\.\d*)?$/, pad);
-        };
-        if (sec > 59) {
-            var hrs = sec / 3600;
-            if (hrs < 0) {
-                hrs = "00";
-                var min = hrs * 60;
-                min = min.toDecimals(8);
-                var snd = min.substring(min.indexOf('.'), min.length);
-                min = min.substring('0', min.indexOf('.'));
-
-                if (min < 10) {
-                    min = '0' + min
-                }
-                snd = Math.round(snd * 60);
-                if (snd < 10) {
-                    snd = '0' + snd;
-                }
-                var tm = hrs + ':' + min + ':' + snd;
-            }
-            else {
-
-                hrs = hrs.toDecimals(8);
-                var min = hrs.substring(hrs.indexOf('.'), hrs.length)
-
-                hrs = hrs.substring('0', hrs.indexOf('.'));
-
-                if (hrs < 10) {
-                    hrs = '0' + hrs;
-                }
-                min = min * 60
-                min = min.toDecimals(8);
-                var snd = min.substring(min.indexOf('.'), min.length);
-                min = min.substring('0', min.indexOf('.'));
-
-                if (min < 10) {
-                    min = '0' + min
-                }
-                snd = Math.round(snd * 60);
-                if (snd < 10) {
-                    snd = '0' + snd;
-                }
-                var tm = hrs + ':' + min + ':' + snd;
-            }
-        }
-        else {
-            if (sec < 10) {
-                sec = "0" + sec;
-            }
-            var tm = "00:00:" + sec
-        }
-        return tm;
-    }
-
-
-
-    function popup(mesh, text) {
-        if (!MOVE_CAMERA) {
-            mesh.material.alpha = 1;
-            $('#popup').text(text);
-            $('#popup').show();
-            $('#popup').css("top", ( window.event.clientY - 110 ) + "px");
-            $('#popup').css("left", (window.event.clientX - 125) + "px");
-            doMouseUp();
-        }
-    }
-
-    function popupHide(mesh) {
-        mesh.material.alpha = 0.5;
-        $('#popup').hide();
-    }
-
-    var SCREEN_WIDTH = window.innerWidth;
-    var SCREEN_HEIGHT = window.innerHeight;
-    var Z_INDEX = 10000;
-
-
-    var selectedData;
-    var selected_doc = 0;
-
-    var left = parseInt(SCREEN_WIDTH / 6);
-    var top_offset = parseInt(SCREEN_HEIGHT / 6);
-    var width_diff = 15;
-    var height_diff = 30;
-
-    function getHighlightedStringInText(url, searchText, id) {
-        var readabilityUrl = 'https://www.readability.com/api/content/v1/parser?url=' + url + '&token=0626cdbea9b15ece0ad7d9ee4af00c7a6fd13b40&callback=?'
-        return $.getJSON(readabilityUrl).then(function(data){
-            var contentText = data.content.replace(searchText, '<span class="b-highlight-string">'+searchText+'</span>');
-            contentText = contentText.replace(/<img[^>]*>/g, "");
-            contentText = contentText.replace('id="content"', '');
-            var responseContentDiv = $('.js-content-for-' + id);
-            responseContentDiv.html(contentText);
-            var topScroll = responseContentDiv.find('.b-highlight-string').offset().top - responseContentDiv.offset().top;
-            console.log(topScroll);
-            responseContentDiv.scrollTop(topScroll);
-        });
-    }
-
-    function showMinimap(id, eventId) {
-
-        left = parseInt(SCREEN_WIDTH / 6);
-        top_offset = parseInt(SCREEN_HEIGHT / 6);
-
-        var popupLimit = 4;
-
-
-        doMouseUp();
-        var strBuilder;
-
-        var utmost = false;
-
-        var data = $.grep(DATA, function (e) {
-            return e.issueId == id;
-        });
-        data = data[0];
-
-        selectedData = data;
-
-        for (var i = 0; i < data.changelogList.length && popupLimit > 0; i++) {
-            var width_diff = ( 5 - popupLimit ) * 15;
-            var height_diff = ( 5 - popupLimit ) * 30;
-
-            /*var dateToDateFormat = new Date(data.changelogList[i].changeKey.created);
-             var showDate = dateToDateFormat.getDay() + '.' + dateToDateFormat.getMonth() + '.' dateToDateFormat.getYear();*/
-
-            if (data.changelogList[i].changeKey.changeItemId == eventId) {
-                var popupData = [
-                    (left * 4), (top_offset * 4), left, top_offset, Z_INDEX--,
-                    data.issueKey, data.changelogList[i].changeKey.created, data.changelogList[i].issueKey, i, i
-                ];
-                strBuilder = vsprintf('<div style="width: %dpx; height: %dpx;  left: %d' +
-                    'px; top: %dpx; z-index: %d;" class="document-lister">' +
-                    '<table><tr class="task"><td style="width: 25px"><img src="styles/timeline/assets/img/icon-task.svg" alt=""height="25px" style="position: absolute; top: 18px"/></td>' +
-                    '<td>TASK</td><td style="width: 30px"><img src="styles/timeline/assets/img/icon-time.svg" alt=""height="25px" style="position: absolute; top: 18px"/></td>' +
-                    '<td>DATE</td></tr><tr class="task-name"><td style="width: 25px"></td>' +
-                    '<td>%s</td><td style="width: 30px"></td><td>%s</td></tr></table><div class="divider"></div>' +
-                    '<div class="task-info">%s</div>' +
-                    '<div class="b-request-text js-content-for-%d"></div>' +
-                    '<script>getHighlightedStringInText(' +
-                    '"https://paul.kinlan.me/rise-of-the-meta-platforms/",' +
-                    '"Every single platform", %d);' +
-                    '</script>' +
-                    '<button type="button" class="btn btn-default btn-close"></button></div>', popupData);
-
-                $('body').append(strBuilder);
-                utmost = true;
-            }
-            else if (utmost && popupLimit-- >= 0) {
-                var popupData = [
-                    (left * 4 - width_diff * 2), (top_offset * 4), (left + width_diff), ( top_offset - height_diff ), Z_INDEX--,
-                    data.issueKey, data.changelogList[i].changeKey.created, data.changelogList[i].issueKey, i, i
-                ];
-                strBuilder = vsprintf('<div style="width: %dpx; height: %dpx;  left: ' +
-                    '%dpx; top: %dpx; z-index: %d;" class="document-lister">' +
-                    '<table><tr class="task"><td style="width: 25px"><img src="styles/timeline/assets/img/icon-task.svg" alt=""height="25px" style="position: absolute; top: 18px"/></td>' +
-                    '<td>TASK</td><td style="width: 30px"><img src="styles/timeline/assets/img/icon-time.svg" alt=""height="25px" style="position: absolute; top: 18px"/></td>' +
-                    '<td>DATE</td></tr><tr class="task-name"><td style="width: 25px"></td>' +
-                    '<td>%s</td><td style="width: 30px"></td><td>%s</td></tr></table><div class="divider"></div>' +
-                    '<div class="task-info">%s</div>' +
-                    '<div class="b-request-text js-content-for-%d"></div>' +
-                    '<script>getHighlightedStringInText(' +
-                    '"https://paul.kinlan.me/rise-of-the-meta-platforms/",' +
-                    '"Every single platform", %d);' +
-                    '</script>' +
-                    '<button type="button" class="btn btn-default btn-close"></button></div>', popupData);
-
-                $('body').append(strBuilder);
-            }
-        }
-    }
-
-    function scrollResearch(mvmnt) {
-        if ($('.document-lister').length == 0) {
-            return;
+        if( frame == null ) {
+            $('.hand_parts').css( 'display', 'none' );
+            $('#palm').css( 'display', 'none' );
         }
 
-        var index_lowest = 1000000;
-        var index_highest = 0;
-        var top_doc;
-        var bottom_doc;
+        $('.hand_parts').css( 'display', 'block' );
+        $('#palm').css( 'display', 'block' );
 
-        $('.document-lister').each(function () {
-            var index_current = parseInt($(this).css("zIndex"));
+        var hand = frame.hands[0];
 
-            if (index_current > index_highest) {
-                index_highest = index_current;
-                top_doc = $(this);
-            }
+        var appWidth = window.innerWidth;
+        var appHeight = window.innerHeight;
 
-            if (index_current < index_lowest) {
-                index_lowest = index_current;
-                bottom_doc = $(this);
-            }
-        });
+        var iBox = frame.interactionBox;
+        var normalizedPoint = iBox.normalizePoint(hand.indexFinger.stabilizedTipPosition, true);
 
-        if (mvmnt > 0) {
+        var appX = normalizedPoint[0] * appWidth;
+        var appY = (1 - normalizedPoint[1]) * appHeight;
 
-            if (selected_doc + 1 == selectedData.changelogList.length) {
-                return;
-            }
-            selected_doc++;
 
-            top_doc.remove();
+        $('#index_tip').css("left", appX);
+        $('#index_tip').css("top", appY);
 
-            $('.document-lister').animate({
-                top: '+=' + height_diff + 'px',
-                left: '-=' + width_diff + 'px',
-                width: '+=' + width_diff * 2 + 'px'
-            });
 
-            Z_INDEX = index_lowest - 1;
+        normalizedPoint = iBox.normalizePoint(hand.indexFinger.bones[1].nextJoint, true);
 
-            if (selected_doc + 4 < selectedData.changelogList.length) {
-                var popupData = [
-                    (left * 4 - width_diff * 2), (top_offset * 4), (left + width_diff), ( top_offset - height_diff ), Z_INDEX--,
-                    selectedData.issueKey, selectedData.changelogList[i].changeKey.created, selectedData.changelogList[i].issueKey, i, i
-                ];
-                var strBuilder = vsprintf('<div style="width: %dpx; height: %dpx;  left: ' +
-                    '%dpx; top: %dpx; z-index: %d;" class="document-lister">' +
-                    '<table><tr class="task"><td style="width: 25px"><img src="styles/timeline/assets/img/icon-task.svg" alt=""height="25px" style="position: absolute; top: 18px"/></td>' +
-                    '<td>TASK</td><td style="width: 30px"><img src="styles/timeline/assets/img/icon-time.svg" alt=""height="25px" style="position: absolute; top: 18px"/></td>' +
-                    '<td>DATE</td></tr><tr class="task-name"><td style="width: 25px"></td>' +
-                    '<td>%s</td><td style="width: 30px"></td><td>%s</td></tr></table><div class="divider"></div>' +
-                    '<div class="task-info">%s</div>' +
-                    '<div class="b-request-text js-content-for-%d"></div>' +
-                    '<script>getHighlightedStringInText(' +
-                    '"https://paul.kinlan.me/rise-of-the-meta-platforms/",' +
-                    '"Every single platform", %d);' +
-                    '</script>' +
-                    '<button type="button" class="btn btn-default btn-close"></button></div>', popupData);
+        appX = normalizedPoint[0] * appWidth;
+        appY = (1 - normalizedPoint[1]) * appHeight;
 
-                $('body').append(strBuilder);
-            }
-        }
-        else {
-            if (selected_doc - 1 < 0) {
-                return;
-            }
-            selected_doc--;
 
-            if ($('.document-lister').length >= 5) {
-                bottom_doc.remove();
-            }
+        $('#index_mid').css("left", appX);
+        $('#index_mid').css("top", appY);
 
-            $('.document-lister').animate({
-                top: '-=' + height_diff + 'px',
-                left: '+=' + width_diff + 'px',
-                width: '-=' + width_diff * 2 + 'px'
-            });
 
-            Z_INDEX = index_highest + 1;
+        normalizedPoint = iBox.normalizePoint(hand.indexFinger.bones[2].nextJoint, true);
 
-            var popupData = [
-                (left * 4), (top_offset * 4), left, top_offset, Z_INDEX--,
-                selectedData.issueKey, selectedData.changelogList[i].changeKey.created, selectedData.changelogList[i].issueKey, i, i
-            ];
-            var strBuilder = vsprintf('<div style="width: %dpx; height: %dpx;  left: %d' +
-                'px; top: %dpx; z-index: %d;" class="document-lister">' +
-                '<table><tr class="task"><td style="width: 25px"><img src="styles/timeline/assets/img/icon-task.svg" alt=""height="25px" style="position: absolute; top: 18px"/></td>' +
-                '<td>TASK</td><td style="width: 30px"><img src="styles/timeline/assets/img/icon-time.svg" alt=""height="25px" style="position: absolute; top: 18px"/></td>' +
-                '<td>DATE</td></tr><tr class="task-name"><td style="width: 25px"></td>' +
-                '<td>%s</td><td style="width: 30px"></td><td>%s</td></tr></table><div class="divider"></div>' +
-                '<div class="task-info">%s</div>' +
-                '<div class="b-request-text js-content-for-%d"></div>' +
-                '<script>getHighlightedStringInText(' +
-                '"https://paul.kinlan.me/rise-of-the-meta-platforms/",' +
-                '"Every single platform", %d);' +
-                '</script>' +
-                '<button type="button" class="btn btn-default btn-close"></button></div>', popupData);
+        appX = normalizedPoint[0] * appWidth;
+        appY = (1 - normalizedPoint[1]) * appHeight;
 
-            $('body').append(strBuilder);
-        }
+        $('#index_bot').css("left", appX);
+        $('#index_bot').css("top", appY);
+
+
+        normalizedPoint = iBox.normalizePoint(hand.middleFinger.bones[1].nextJoint, true);
+
+        appX = normalizedPoint[0] * appWidth;
+        appY = (1 - normalizedPoint[1]) * appHeight;
+
+
+        $('#middle_tip').css("left", appX);
+        $('#middle_tip').css("top", appY);
+
+
+        normalizedPoint = iBox.normalizePoint(hand.middleFinger.bones[2].nextJoint, true);
+
+        appX = normalizedPoint[0] * appWidth;
+        appY = (1 - normalizedPoint[1]) * appHeight;
+
+
+        $('#middle_mid').css("left", appX);
+        $('#middle_mid').css("top", appY);
+
+
+        normalizedPoint = iBox.normalizePoint(hand.middleFinger.bones[3].nextJoint, true);
+
+        appX = normalizedPoint[0] * appWidth;
+        appY = (1 - normalizedPoint[1]) * appHeight;
+
+        $('#middle_bot').css("left", appX);
+        $('#middle_bot').css("top", appY);
+
+
+        normalizedPoint = iBox.normalizePoint(hand.ringFinger.bones[1].nextJoint, true);
+
+        appX = normalizedPoint[0] * appWidth;
+        appY = (1 - normalizedPoint[1]) * appHeight;
+
+
+        $('#ring_tip').css("left", appX);
+        $('#ring_tip').css("top", appY);
+
+
+        normalizedPoint = iBox.normalizePoint(hand.ringFinger.bones[2].nextJoint, true);
+
+        appX = normalizedPoint[0] * appWidth;
+        appY = (1 - normalizedPoint[1]) * appHeight;
+
+
+        $('#ring_mid').css("left", appX);
+        $('#ring_mid').css("top", appY);
+
+
+        normalizedPoint = iBox.normalizePoint(hand.ringFinger.bones[3].nextJoint, true);
+
+        appX = normalizedPoint[0] * appWidth;
+        appY = (1 - normalizedPoint[1]) * appHeight;
+
+        $('#ring_bot').css("left", appX);
+        $('#ring_bot').css("top", appY);
+
+
+        normalizedPoint = iBox.normalizePoint(hand.pinky.bones[1].nextJoint, true);
+
+        appX = normalizedPoint[0] * appWidth;
+        appY = (1 - normalizedPoint[1]) * appHeight;
+
+
+        $('#pinky_tip').css("left", appX);
+        $('#pinky_tip').css("top", appY);
+
+
+        normalizedPoint = iBox.normalizePoint(hand.pinky.bones[2].nextJoint, true);
+
+        appX = normalizedPoint[0] * appWidth;
+        appY = (1 - normalizedPoint[1]) * appHeight;
+
+
+        $('#pinky_mid').css("left", appX);
+        $('#pinky_mid').css("top", appY);
+
+
+        normalizedPoint = iBox.normalizePoint(hand.pinky.bones[3].nextJoint, true);
+
+        appX = normalizedPoint[0] * appWidth;
+        appY = (1 - normalizedPoint[1]) * appHeight;
+
+        $('#pinky_bot').css("left", appX);
+        $('#pinky_bot').css("top", appY);
+
+
+        normalizedPoint = iBox.normalizePoint(hand.thumb.bones[1].nextJoint, true);
+
+        appX = normalizedPoint[0] * appWidth;
+        appY = (1 - normalizedPoint[1]) * appHeight;
+
+
+        $('#thumb_tip').css("left", appX);
+        $('#thumb_tip').css("top", appY);
+
+
+        normalizedPoint = iBox.normalizePoint(hand.thumb.bones[2].nextJoint, true);
+
+        appX = normalizedPoint[0] * appWidth;
+        appY = (1 - normalizedPoint[1]) * appHeight;
+
+
+        $('#thumb_bot').css("left", appX);
+        $('#thumb_bot').css("top", appY);
+
+
+        normalizedPoint = iBox.normalizePoint(hand.palmPosition, true);
+        appX = normalizedPoint[0] * appWidth;
+        appY = (1 - normalizedPoint[1]) * appHeight;
+
+
+        $('#palm').css("left", appX);
+        $('#palm').css("top", appY);
     }
-
-    $(document).on('click', 'button.btn-close', function () {
-        Z_INDEX = 10000;
-        $('.document-lister').remove();
-    });
-
-    var elem = document;
-    if (elem.addEventListener) {
-        if ('onwheel' in document) {
-            elem.addEventListener("wheel", onWheel);
-        }
-    }
-
-    function onWheel(e) {
-        e = e || window.event;
-
-        var delta = e.deltaY || e.detail || e.wheelDelta;
-
-        if ($(event.target).closest('.document-lister').length > 0 && $(event.target).closest('.b-request-text').length === 0) {
-            if(delta > 0) {
-                scrollResearch(-1);
-            } else {
-                scrollResearch(1);
-            }
-            e.preventDefault ? e.preventDefault() : (e.returnValue = false);
-        }
-    }
-
-    var MOVE_CAMERA = true;
-
-    function doMouseUp(e) {
-        MOVE_CAMERA = false;
-    };
 }

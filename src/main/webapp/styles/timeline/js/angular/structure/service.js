@@ -3,13 +3,14 @@
 angular.module('jarvis.structure.srv', [])
     .factory('structureSrv', structureSrv);
 
-
 structureSrv.$inject = ['$http'];
 
 function structureSrv($http) {
 	//var PROJECT_API ="http://jarvis-test.critical-factor.com:8080/services/api/timeline/project.json";
     var PROJECT_API = "/styles/timeline/dummy-api/P.json";
     var STRUCTURE_API = "/styles/timeline/dummy-api/";
+
+    this.stories = [];
     //var STRUCTURE_API = "http://jarvis-test.critical-factor.com:8080/services/api/timeline/project/";
 
 

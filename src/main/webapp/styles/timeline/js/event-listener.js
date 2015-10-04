@@ -7,6 +7,10 @@ var EventListener = function (builder, drawPointer) {
     this.mouseX;
     this.mouseY;
 
+    this.appX;
+    this.appY;
+
+    this.MOVE_CAMERA = false;
 
     this.camSpeed = {x: 0, z: 0};
     this.movementSpeed = 0.5;
@@ -18,8 +22,17 @@ var EventListener = function (builder, drawPointer) {
 EventListener.prototype.addLeapMotion = function ( leapCtrl ) {
     this.leapCtrl = leapCtrl;
     var self = this;
-    this.leapCtrl.on( 'frame', function(frame) {
-        self.leapMovement(frame);
+    this.leapCtrl.on( 'connect', function() {
+        setInterval(function() {
+            if( self.leapCtrl.frame() != null )
+            {
+                self.leapMovement(self.leapCtrl.frame());
+            }
+            else
+            {
+                self.drawPointer(null);
+            }
+        }, 50);
     } );
 };
 
@@ -33,12 +46,16 @@ EventListener.prototype.addMouseListener = function ( object ) {
         self.mouseY = e.pageY - pos.top;
 
         canvas.onmousemove = mouseMove;
+
+        this.MOVE_CAMERA = true;
     };
 
     object.onmouseup = function(e){
         canvas.onmousemove = null;
         self.camSpeed.x = 0;
         self.camSpeed.y = 0;
+
+        this.MOVE_CAMERA = false;
     };
 
     function mouseMove(e)
@@ -57,6 +74,7 @@ EventListener.prototype.addMouseListener = function ( object ) {
 EventListener.prototype.movePointer = function (frame, finger)
 {
     if (Math.abs(finger.direction[0]) > 0.5 || Math.abs(finger.direction[1]) > 0.5) {
+        this.drawPointer(frame);
         return;
     }
 
@@ -64,18 +82,18 @@ EventListener.prototype.movePointer = function (frame, finger)
         this.builder.initClick();
     }
 
-    var appWidth = canvas.width;
-    var appHeight = canvas.height;
+    var appWidth = window.innerWidth;
+    var appHeight = window.innerHeight;
 
     var iBox = frame.interactionBox;
 
 
     var normalizedPoint = iBox.normalizePoint(finger.stabilizedTipPosition, true);
 
-    appX = normalizedPoint[0] * appWidth;
-    appY = (1 - normalizedPoint[1]) * appHeight;
+    this.appX = normalizedPoint[0] * appWidth;
+    this.appY = (1 - normalizedPoint[1]) * appHeight;
 
-    this.drawPointer(appX, appY);
+    this.drawPointer(frame);
 };
 
 EventListener.prototype.leapMovement = function (frame) {

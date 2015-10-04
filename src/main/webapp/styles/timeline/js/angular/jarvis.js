@@ -1,7 +1,8 @@
 var app = angular.module("jarvis", [
     'ui.router',
     'ui.bootstrap',
-    'oc.lazyLoad'
+    'oc.lazyLoad',
+    'ngAnimate'
 ])
     .config(routesConf)
     .run(startup);
@@ -25,7 +26,11 @@ function routesConf($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                 loadPlugin: ['$ocLazyLoad', function ($ocLazyLoad) {
                     return $ocLazyLoad.load([
                         {
-                            files: ['/styles/timeline/js/arbor/arbor.js']
+                            files: ['/styles/timeline/js/arbor/arbor.js', '/styles/timeline/js/builder-popup.js']
+                        },
+                        {
+                            name: 'ui.knob',
+                            files: ['/styles/timeline/js/libs/addons/jquery.knob.min.js', '/styles/timeline/js/libs/angular-knob.js']
                         },
                         {
                             name: 'jarvis.structure.srv',
@@ -49,8 +54,13 @@ function routesConf($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                             files: [
                                 '/styles/timeline/js/babylon/babylon.2.1.debug.js',
                                 '/styles/timeline/js/event-listener.js',
+                                '/styles/timeline/js/builder-popup.js',
                                 '/styles/timeline/js/builder-timeline.js'
                             ]
+                        },
+                        {
+                            name: 'jarvis.structure.srv',
+                            files: ['/styles/timeline/js/angular/structure/service.js']
                         },
                         {
                             name: 'jarvis.timeline.srv',
