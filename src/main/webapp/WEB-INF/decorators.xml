@@ -4,6 +4,7 @@
     <pattern>/*ajax=true*</pattern>
     <pattern>/struts/*</pattern>
     <pattern>/resources/*</pattern>
+    <pattern>/userMetrics#/*</pattern>
     <pattern>/userMetrics*</pattern>
     <pattern>/login*</pattern>
   </excludes>
