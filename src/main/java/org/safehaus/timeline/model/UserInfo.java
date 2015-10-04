@@ -41,9 +41,37 @@ public class UserInfo implements Serializable
 
     private List<JiraIssueChangelog> recentActivity = Lists.newArrayList();
 
+    private Map<String, Long> workLogsByWeeks = Maps.newHashMap();
+
+    private Map<String, Long> commitsByWeeks = Maps.newHashMap();
+
 
     public UserInfo()
     {
+    }
+
+
+    public Map<String, Long> getCommitsByWeeks()
+    {
+        return commitsByWeeks;
+    }
+
+
+    public void setCommitsByWeeks( final Map<String, Long> commitsByWeeks )
+    {
+        this.commitsByWeeks = commitsByWeeks;
+    }
+
+
+    public Map<String, Long> getWorkLogsByWeeks()
+    {
+        return workLogsByWeeks;
+    }
+
+
+    public void setWorkLogsByWeeks( final Map<String, Long> workLogsByWeeks )
+    {
+        this.workLogsByWeeks = workLogsByWeeks;
     }
 
 

@@ -18,6 +18,8 @@ public interface StashMetricService
 
 	List<StashMetricIssue> getStashMetricIssuesByAuthor( String authorId );
 
+	List<StashMetricIssue> getStashMetricIssuesByUsername( String username, int limit );
+
 	List<StashMetricIssue> getStashMetricIssuesByAuthorTimestamp( String timestamp );
 
 	void updateStashMetricIssue( StashMetricIssue stashMetricIssue );

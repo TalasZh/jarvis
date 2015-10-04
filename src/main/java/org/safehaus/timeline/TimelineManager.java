@@ -1,6 +1,7 @@
 package org.safehaus.timeline;
 
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -9,12 +10,14 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 
 import org.safehaus.dao.entities.jira.ChangeCompositeKey;
+import org.safehaus.dao.entities.jira.IssueWorkLog;
 import org.safehaus.dao.entities.jira.JarvisLink;
 import org.safehaus.dao.entities.jira.JiraIssueChangelog;
 import org.safehaus.dao.entities.jira.JiraMetricIssue;
 import org.safehaus.dao.entities.jira.JiraProject;
 import org.safehaus.dao.entities.jira.JiraUser;
 import org.safehaus.dao.entities.sonar.SonarMetricIssue;
+import org.safehaus.dao.entities.stash.StashMetricIssue;
 import org.safehaus.model.Capture;
 import org.safehaus.model.Session;
 import org.safehaus.model.SessionNotFoundException;
@@ -23,6 +26,7 @@ import org.safehaus.service.api.JiraMetricDao;
 import org.safehaus.service.api.ServicePackDao;
 import org.safehaus.service.api.SessionManager;
 import org.safehaus.service.api.SonarMetricService;
+import org.safehaus.service.api.StashMetricService;
 import org.safehaus.timeline.dao.TimelineDao;
 import org.safehaus.timeline.model.IssueProgress;
 import org.safehaus.timeline.model.ProgressStatus;
@@ -57,6 +61,9 @@ public class TimelineManager
 
     @Autowired
     private SonarMetricService sonarMetricService;
+
+    @Autowired
+    private StashMetricService stashMetricService;
 
     @Autowired
     private ServicePackDao servicePackDao;
@@ -531,6 +538,8 @@ public class TimelineManager
         userInfo.setUsername( jiraUser.getUsername() );
         userInfo.getProjects().addAll( projectMap.values() );
         userInfo.setRecentActivity( issueChangelogDao.getChangelogByUsername( userInfo.getDisplayName(), 10 ) );
+        userInfo.setWorkLogsByWeeks( getWorkLogsByWeeks( username ) );
+        userInfo.setCommitsByWeeks( getCommitsByWeeks( username ) );
 
         for ( final StructuredProject structuredProject : projectMap.values() )
         {
@@ -558,6 +567,44 @@ public class TimelineManager
         }
 
         return userInfo;
+    }
+
+
+    private Map<String, Long> getCommitsByWeeks( String username )
+    {
+        List<StashMetricIssue> stashMetricIssues = stashMetricService.getStashMetricIssuesByUsername( username, 10000 );
+        Map<String, Long> commitsByWeeks = Maps.newHashMap();
+        for ( final StashMetricIssue metricIssue : stashMetricIssues )
+        {
+            String week = new SimpleDateFormat( "w" ).format( new java.util.Date( metricIssue.getAuthorTimestamp() ) );
+            Long commitCount = commitsByWeeks.get( week );
+            if ( commitCount == null )
+            {
+                commitCount = 0L;
+            }
+            commitCount++;
+            commitsByWeeks.put( week, commitCount );
+        }
+        return commitsByWeeks;
+    }
+
+
+    private Map<String, Long> getWorkLogsByWeeks( String username )
+    {
+        List<IssueWorkLog> jiraMetricIssues = jiraMetricDao.getUserWorkLogs( username, 10000 );
+        Map<String, Long> workLogsByWeeks = Maps.newHashMap();
+        for ( final IssueWorkLog metricIssue : jiraMetricIssues )
+        {
+            String week = new SimpleDateFormat( "w" ).format( new java.util.Date( metricIssue.getCreateDate() ) );
+            Long loggedHours = workLogsByWeeks.get( week );
+            if ( loggedHours == null )
+            {
+                loggedHours = 0L;
+            }
+            loggedHours += metricIssue.getTimeSpentSeconds() / 60;
+            workLogsByWeeks.put( week, loggedHours );
+        }
+        return workLogsByWeeks;
     }
 
 

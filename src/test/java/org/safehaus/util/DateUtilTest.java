@@ -1,15 +1,19 @@
 package org.safehaus.util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.junit.Test;
-import org.springframework.context.i18n.LocaleContextHolder;
 
 import java.text.ParseException;
 import java.util.Date;
 import java.util.Locale;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
+import org.springframework.context.i18n.LocaleContextHolder;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class DateUtilTest {
     //~ Instance fields ========================================================
@@ -64,7 +68,7 @@ public class DateUtilTest {
     @Test
     public void testGetDateWithNull() {
         final String date = DateUtil.getDate(null);
-        assertEquals("", date);
+        assertEquals( "", date );
     }
 
     @Test

@@ -370,7 +370,7 @@ public class AnalysisService
             log.info( "Printing issues" );
             for ( String projectKey : projectKeys )
             {
-                for ( int i = 0; i < MAX_RESULT; i += MAX_RESULT )
+                for ( int i = 0; i < 5000; i += MAX_RESULT )
                 {
                     List<Issue> issues = jiraCl.getIssues( projectKey, MAX_RESULT, i );
 
@@ -392,7 +392,7 @@ public class AnalysisService
                                     .getUpdateDate() );
                             try
                             {
-                                kafkaProducer.send( issueToAdd );
+                                //                                kafkaProducer.send( issueToAdd );
                             }
                             catch ( Exception ex )
                             {
