@@ -1,3 +1,3 @@
 <%@ include file="/common/taglibs.jsp"%>
 
-<c:redirect url="/usermetrics"/>
+<c:redirect url="/structure"/>

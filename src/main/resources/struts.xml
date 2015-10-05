@@ -71,26 +71,6 @@
       <exception-mapping exception="org.springframework.dao.DataAccessException" result="dataAccessFailure" />
     </global-exception-mappings>
 
-    <action name="home">
-      <result name="success">/WEB-INF/pages/home.jsp</result>
-    </action>
-
-    <action name="jira" class="jiraAction" method="list">
-      <result name="success">/WEB-INF/pages/jira.jsp</result>
-    </action>
-
-    <action name="stash" class="stashAction" method="list">
-      <result name="success">/WEB-INF/pages/stash.jsp</result>
-    </action>
-
-    <action name="sonar" class="sonarAction" method="list">
-      <result name="success">/WEB-INF/pages/sonar.jsp</result>
-    </action>
-    
-    <action name="confluence" class="confluenceAction" method="list">
-      <result name="success">/WEB-INF/pages/confluence.jsp</result>
-    </action>
-
     <action name="signup">
       <result>/WEB-INF/pages/signup.jsp</result>
     </action>
@@ -134,11 +114,11 @@
       <result name="success">/</result>
     </action>
 
-    <action name="sessions" class="sessionAction" method="list">
-      <result name="success">/WEB-INF/pages/sessionList.jsp</result>
-    </action>
+    <!--<action name="sessions" class="sessionAction" method="list">-->
+    <!--<result name="success">/WEB-INF/pages/sessionList.jsp</result>-->
+    <!--</action>-->
 
-    <action name="usermetrics" class="userMetricsAction" method="list">
+    <action name="structure" class="userMetricsAction" method="list">
       <result name="success">/WEB-INF/pages/userMetrics.jsp</result>
     </action>
 
