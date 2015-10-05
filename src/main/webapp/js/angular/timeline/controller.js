@@ -23,6 +23,8 @@ function TimelineCtrl($stateParams, timelineSrv, $scope, $sessionStorage)
     var DATA = [];
     vm.FILTERED_DATA = [];
     vm.description;
+    vm.creationDate
+
     vm.activeNodeData = $scope.$storage.metrics;
     vm.storyList = [];
     vm.members = $scope.$storage.project.users;
@@ -43,6 +45,7 @@ function TimelineCtrl($stateParams, timelineSrv, $scope, $sessionStorage)
     timelineSrv.getEvents('timeline.json').success(function (data) {
         var issues = data.issues;
 		vm.description = data.description;
+        vm.creationDate = data.creationDate;
 
 		var currentIssue;
 		for(var i = 0; i < $scope.$storage.project.issues.length; i++){
@@ -349,10 +352,13 @@ function TimelineCtrl($stateParams, timelineSrv, $scope, $sessionStorage)
 
         engine = new BABYLON.Engine(canvas, true);
 
-        builder = new Builder(engine, new Date("2015-09-22"), new Date("2015-09-22"), fetchDataRange);
+        builder = new Builder(engine, new Date( vm.creationDate ), new Date( vm.creationDate ), fetchDataRange);
         eventListener = new EventListener(builder, drawPointer);
         popup = new Popup(DATA, eventListener);
 
+		canvas.addEventListener("PopupOpened", function(e) {
+			eventListener.mouseUp();
+		});		
 
         builder.createMaterials();
         builder.loadMeshes();

@@ -53,14 +53,7 @@ EventListener.prototype.addMouseListener = function ( object ) {
     };
 
     function mouseUp(e){
-
-        canvas.onmousemove = null;
-        self.camSpeed.x = 0;
-        self.camSpeed.y = 0;
-		self.camSpeed.z = 0;
-
-
-        this.MOVE_CAMERA = false;
+		self.mouseUp();
     };
 
     function mouseMove(e)
@@ -75,6 +68,16 @@ EventListener.prototype.addMouseListener = function ( object ) {
         return false;
     }
 };
+
+EventListener.prototype.mouseUp = function() {
+    var canvas = document.getElementById("renderCanvas");
+	canvas.onmousemove = null;
+	this.camSpeed.x = 0;
+	this.camSpeed.y = 0;
+	this.camSpeed.z = 0;
+
+	this.MOVE_CAMERA = false;
+}
 
 EventListener.prototype.movePointer = function (frame, finger)
 {

@@ -641,6 +641,12 @@ function CanvasCtrl($rootScope, $location, $scope, $sessionStorage, structureSrv
                 selectedObjects['requirement'] = loadSphere('assets/img/img-requirement-sphere-selected.png');
                 sphereObjects['requirement'] = loadSphere('assets/img/img-requirement-sphere.png');
 
+                selectedObjects['improvement'] = loadSphere('assets/img/img-requirement-sphere-selected.png');
+                sphereObjects['improvement'] = loadSphere('assets/img/img-requirement-sphere.png');
+
+                selectedObjects['feature'] = loadSphere('assets/img/img-requirement-sphere-selected.png');
+                sphereObjects['feature'] = loadSphere('assets/img/img-requirement-sphere.png');
+
                 selectedObjects['story'] = loadSphere('assets/img/img-story-sphere-selected.png');
                 sphereObjects['story'] = loadSphere('assets/img/img-story-sphere.png');
 
