@@ -309,7 +309,7 @@
             "storyPoints": {
                 "inProgress": 0,
                 "done": 0,
-                "open": 10
+                "open": 8
             },
             "storyProgress": {
                 "inProgress": 0,
@@ -380,7 +380,7 @@
                     "storyPoints": {
                         "inProgress": 0,
                         "done": 0,
-                        "open": 8
+                        "open": 2
                     },
                     "storyProgress": {
                         "inProgress": 0,
@@ -2794,7 +2794,7 @@
                     "storyPoints": {
                         "inProgress": 0,
                         "done": 0,
-                        "open": 2
+                        "open": 6
                     },
                     "storyProgress": {
                         "inProgress": 0,

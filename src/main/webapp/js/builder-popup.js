@@ -1,7 +1,9 @@
+var animateNotActive = true;
+
 var Popup = function (data, eventListener) {
     this.DATA = data;
     this.selectedData;
-    this.eventListener = eventListener
+    this.eventListener = eventListener;
 
     this.SCREEN_WIDTH = window.innerWidth;
     this.SCREEN_HEIGHT = window.innerHeight;
@@ -21,15 +23,33 @@ var Popup = function (data, eventListener) {
 
 Popup.prototype.init = function () {
     var self = this;
-
+    /*$(document).on('click', function (event) {
+        if ($(event.target).closest('.b-issue-popup').length == 0 && $(event.target).closest('canvas').length == 0) {
+            $('.b-issue-popup').fadeOut(300);
+        }
+    });*/
     $(document).on('click', 'button.btn-close', function () {
         this.Z_INDEX = 10000;
         $('.document-lister').remove();
     });
 
     $(document).on('click', '.b-issue-popup__close', function (event) {
-        $('.b-issue-popup').hide();
+        $('.b-issue-popup').fadeOut();
     });
+
+	$('.b-issue-popup').hover(function(){
+		var popupEvent = new CustomEvent("PopupOpened", {});
+		document.getElementById("renderCanvas").dispatchEvent(popupEvent);
+	});
+
+	$(document).on({
+		mouseenter: function () {
+			var popupEvent = new CustomEvent("PopupOpened", {});
+			document.getElementById("renderCanvas").dispatchEvent(popupEvent);
+		},
+		mouseleave: function () {
+		}
+	}, '.document-lister');
 
     var elem = document;
     if (elem.addEventListener) {
@@ -58,6 +78,14 @@ Popup.prototype.showMinimap = function (id, eventId) {
     this.audioPopup.play();
     var popupLimit = 4;
 
+	var popupEvent = new CustomEvent("PopupOpened", {
+		detail: {
+			"id": id,
+			"eventId": eventId
+		}
+	});
+	document.getElementById("renderCanvas").dispatchEvent(popupEvent);	
+
     var utmost = false;
 
     var data = $.grep(this.DATA, function (e) {
@@ -68,8 +96,8 @@ Popup.prototype.showMinimap = function (id, eventId) {
     this.selectedData = data;
 
     for (var i = 0; i < data.changelogList.length && popupLimit > 0; i++) {
-        var width_diff = ( 5 - popupLimit ) * 15;
-        var height_diff = ( 5 - popupLimit ) * 30;
+        var currentWidthDiff = ( 5 - popupLimit ) * 15;
+        var currentHeightDiff = ( 5 - popupLimit ) * 30;
 
         if (data.changelogList[i].changeKey.changeItemId == eventId) {
 
@@ -82,10 +110,10 @@ Popup.prototype.showMinimap = function (id, eventId) {
         } else if (utmost && popupLimit-- >= 0) {
 
             var popupData = this.getPopupData(i, data, false);
-            popupData.width = (this.left * 4 - width_diff * 2);
+            popupData.width = (this.left * 4 - currentWidthDiff * 2);
             popupData.height = (this.top_offset * 4);
-            popupData.left = (this.left + width_diff);
-            popupData.top = (this.top_offset - height_diff);
+            popupData.left = (this.left + currentWidthDiff);
+            popupData.top = (this.top_offset - currentHeightDiff);
 
             this.createPopupWindow(popupData);
         }
@@ -97,74 +125,84 @@ Popup.prototype.scrollResearch = function (mvmnt) {
         return;
     }
 
-    var index_lowest = 1000000;
-    var index_highest = 0;
-    var top_doc;
-    var bottom_doc;
+	if(animateNotActive){
+		var index_lowest = 1000000;
+		var index_highest = 0;
+		var top_doc;
+		var bottom_doc;
+		animateNotActive = false;
 
-    $('.document-lister').each(function () {
-        var index_current = parseInt($(this).css("zIndex"));
+		$('.document-lister').each(function () {
+			var index_current = parseInt($(this).css("zIndex"));
 
-        if (index_current > index_highest) {
-            index_highest = index_current;
-            top_doc = $(this);
-        }
+			if (index_current > index_highest) {
+				index_highest = index_current;
+				top_doc = $(this);
+			}
 
-        if (index_current < index_lowest) {
-            index_lowest = index_current;
-            bottom_doc = $(this);
-        }
-    });
+			if (index_current < index_lowest) {
+				index_lowest = index_current;
+				bottom_doc = $(this);
+			}
+		});
 
-    if (mvmnt > 0) {
+		if (mvmnt > 0) {
 
-        if (this.selected_doc + 1 == this.selectedData.changelogList.length) {
-            return;
-        }
-        this.selected_doc++;
+			if (this.selected_doc + 1 == this.selectedData.changelogList.length) {
+				animateNotActive = true;
+				return;
+			}
+			this.selected_doc++;
 
-        top_doc.remove();
+			top_doc.remove();
 
-        $('.document-lister').animate({
-            top: '+=' + this.height_diff + 'px',
-            left: '-=' + this.width_diff + 'px',
-            width: '+=' + this.width_diff * 2 + 'px'
-        });
+			$('.document-lister').animate({
+				top: '+=' + this.height_diff + 'px',
+				left: '-=' + this.width_diff + 'px',
+				width: '+=' + this.width_diff * 2 + 'px'
+			}, function(){
+				animateNotActive = true;
+			});
 
-        this.Z_INDEX = index_lowest - 1;
+			this.Z_INDEX = index_lowest - 1;
 
-        if (this.selected_doc + 4 < this.selectedData.changelogList.length) {
+			if (this.selected_doc + 4 < this.selectedData.changelogList.length) {
 
-            var popupData = this.getPopupData(this.selected_doc, this.selectedData, false);
-            popupData.width = (this.left * 4 - this.width_diff * 2);
-            popupData.height = (this.top_offset * 4);
-            popupData.left = (this.left + this.width_diff);
-            popupData.top = (this.top_offset - this.height_diff );
+				var popupData = this.getPopupData(this.selected_doc, this.selectedData, false);
+				popupData.width = (this.left * 4 - this.width_diff * 4 * 2);
+				popupData.height = (this.top_offset * 4);
+				popupData.left = (this.left + this.width_diff * 4);
+				popupData.top = (this.top_offset - this.height_diff  * 4);
 
-            this.createPopupWindow(popupData);
-        }
-    } else {
-        if (this.selected_doc - 1 < 0) {
-            return;
-        }
-        this.selected_doc--;
+				this.createPopupWindow(popupData);
+			}
+		} else {
+			if (this.selected_doc - 1 < 0) {
+				animateNotActive = true;
+				return;
+			}
+			this.selected_doc--;
 
-        if ($('.document-lister').length >= 5) {
-            bottom_doc.remove();
-        }
+			if ($('.document-lister').length >= 5) {
+				bottom_doc.remove();
+			}
 
-        $('.document-lister').animate({
-            top: '-=' + this.height_diff + 'px',
-            left: '+=' + this.width_diff + 'px',
-            width: '-=' + this.width_diff * 2 + 'px'
-        });
+			$('.document-lister').animate({
+				top: '-=' + this.height_diff + 'px',
+				left: '+=' + this.width_diff + 'px',
+				width: '-=' + this.width_diff * 2 + 'px'
+			}, function(){
+				animateNotActive = true;
+			});
 
-        this.Z_INDEX = index_highest + 1;
+			this.Z_INDEX = index_highest + 1;
 
-        var popupData = this.getPopupData(this.selected_doc, this.selectedData, true);
+			var popupData = this.getPopupData(this.selected_doc, this.selectedData, true);
 
-        this.createPopupWindow(popupData);
-    }
+			this.createPopupWindow(popupData);
+		}
+		highlightTextToTop();
+	}
 }
 
 Popup.prototype.getPopupData = function (i, fromData, mainPosition) {
@@ -172,12 +210,21 @@ Popup.prototype.getPopupData = function (i, fromData, mainPosition) {
     var dateToDateFormat = new Date(fromData.changelogList[i].changeKey.created);
     var showDate = dateToDateFormat.getDate() + '.' + dateToDateFormat.getMonth() + '.' + dateToDateFormat.getFullYear();
 
+	var popupText = fromData.changelogList[i].toString;
+
+	if(fromData.changelogList[i].fromString !== undefined){
+		popupText = fromData.changelogList[i].fromString + ' &rarr; ' + popupText;
+	}
+
+	if(fromData.changelogList[i].field !== undefined){
+		popupText = 'field: ' + fromData.changelogList[i].field + '<br>' + popupText;
+	}	
 
     var popupData = {
         "zIndex": this.Z_INDEX--,
         "issueKey": fromData.issueKey,
         "taskDate": showDate,
-        "taskText": fromData.changelogList[i].toString,
+        "taskText": popupText,
         "taskId": i
     };
 
@@ -186,7 +233,7 @@ Popup.prototype.getPopupData = function (i, fromData, mainPosition) {
         popupData.url = fromData.changelogList[i].url;
 
         popupData.quote = fromData.changelogList[i].quote;
-        popupData.taskText = fromData.changelogList[i].url + "<br>Quote: " + fromData.changelogList[i].quote + "<br>Comments: " + fromData.changelogList[i].comment;
+        popupData.taskText = fromData.changelogList[i].url + "<br>Quote: " + fromData.changelogList[i].quote + "<br>Comments: " + fromData.changelogList[i].comments;
     }
 
     if (mainPosition) {
@@ -225,18 +272,27 @@ function getHighlightedStringInText(url, searchText, id) {
     var readabilityUrl = 'https://www.readability.com/api/content/v1/parser?url=' + url + '&token=0626cdbea9b15ece0ad7d9ee4af00c7a6fd13b40&callback=?'
     return $.getJSON(readabilityUrl).then(function (data) {
         var contentText = data.content.replace(searchText, '<span class="b-highlight-string">' + searchText + '</span>');
-        contentText = contentText.replace(/<img[^>]*>/g, "");
-        contentText = contentText.replace('id="content"', '');
+        contentText = contentText
+			.replace(/<img[^>]*>/g, "")
+			.replace(/<\s*(\w+).*?>/, '<$1>');
         var responseContentDiv = $('.js-content-for-' + id);
 
         responseContentDiv.html(responseContentDiv.html() + '<div class="b-request-text">' + contentText + '</div>');
+		responseContentDiv.find('header').remove();
+		responseContentDiv.find('footer').remove();
         responseContentDiv.css('max-height', responseContentDiv.parent().height() - 52);
 
-        var highlightOffsetTop = responseContentDiv.find('.b-highlight-string').offset().top;
-        var responseDiv = responseContentDiv.find('.b-request-text').css('max-height', responseContentDiv.parent().height() - 52);
-        var topScroll = highlightOffsetTop - responseDiv.offset().top;
-        responseDiv.scrollTop(topScroll);
+		highlightTextToTop();
     });
+}
+
+function highlightTextToTop() {
+	$('.b-request-text').each(function(){
+		var highlightOffsetTop = $(this).find('.b-highlight-string').offset().top;
+		$(this).css('max-height', $(this).parents('.document-lister').height() - 52);		
+		var topScroll = highlightOffsetTop - $(this).offset().top;
+		$(this).scrollTop(topScroll);
+	});
 }
 
 Popup.prototype.mouseOverPopup = function (text) {
@@ -269,9 +325,8 @@ Popup.prototype.getIssuePopup = function (issueId, issue)
     var popupBlock = $('.b-issue-popup');
     var currentField = false;
     for (var key in data) {
-        if( key == '$$hashKey' ) continue;
+		if( key.indexOf("$") > -1 ) continue;
         if (popupBlock.find('#js-issue-' + key).length > 0) {
-
             currentField = popupBlock.find('#js-issue-' + key);
             var text = data[key];
             if (data[key] === null || data[key].length == 0) {
@@ -307,6 +362,8 @@ Popup.prototype.getIssuePopup = function (issueId, issue)
 
         changelogList.html(changelogListHtml);
     }
-    popupBlock.show();
+    if ( popupBlock.is(":hidden")){
+        popupBlock.fadeIn();
+    }
 };
 
