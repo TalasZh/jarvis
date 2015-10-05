@@ -19,6 +19,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.impetus.kundera.index.Index;
@@ -133,6 +134,7 @@ public class JiraMetricIssue implements Serializable
 
     public JiraMetricIssue( final Issue issue )
     {
+        Preconditions.checkNotNull(issue, "Issue cannot be null...");
         this.issueKey = issue.getKey();
         this.summary = issue.getSummary();
         this.description = issue.getDescription();

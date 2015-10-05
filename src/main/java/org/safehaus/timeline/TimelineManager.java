@@ -493,8 +493,8 @@ public class TimelineManager
                                     new ChangeCompositeKey( capture.getId(), capture.getCreated().getTime() );
 
                             String captureSample =
-                                    String.format( "{url:%s,quote:%s,comment:%s}", capture.getUri(), capture.getQuote(),
-                                            capture.getText() );
+                                    String.format( "{\"url\":\"%s\",\"quote\":\"%s\",\"comment\":\"%s\"}",
+                                            capture.getUri(), capture.getQuote(), capture.getText() );
 
                             JiraIssueChangelog issueChangelog =
                                     new JiraIssueChangelog( changeKey, jiraMetricIssue.getIssueKey(),

@@ -6,6 +6,9 @@
     <pattern>/resources/*</pattern>
     <pattern>/userMetrics#/*</pattern>
     <pattern>/userMetrics*</pattern>
+    <pattern>/structure*</pattern>
+    <pattern>/structure#/*</pattern>
+
     <pattern>/login*</pattern>
   </excludes>
   <decorator name="default" page="default.jsp">

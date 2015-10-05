@@ -233,7 +233,8 @@ public class AnalysisService
         {
             try
             {
-                getJiraMetricIssues( jiraCl );
+//                pullData( jiraCl );
+                //                getJiraMetricIssues( jiraCl );
             }
             catch ( Exception ex )
             {
@@ -324,6 +325,57 @@ public class AnalysisService
         {
             e.printStackTrace();
         }
+    }
+
+
+    private void pullData( JiraRestClient jiraCl )
+    {
+        Issue jIssue = jiraCl.getIssue( "SS-3296" );
+        JiraMetricIssue issueToAdd = new JiraMetricIssue( jIssue );
+
+        jiraMetricIssues.add( issueToAdd );
+
+        //        for ( int i = 0; i < OVERALL_RESULT_COUNT; i += MAX_RESULT )
+        //        {
+        //            List<Issue> issues = jiraCl.getIssues( "SS", MAX_RESULT, i );
+        //
+        //            for ( final Issue issue : issues )
+        //            {
+        //                saveUser( issue.getAssignee() );
+        //                saveUser( issue.getReporter() );
+        //
+        //                log.info( "Preparing issues for jarvis format..." );
+        //                JiraMetricIssue issueToAdd = new JiraMetricIssue( issue );
+        //
+        //                jiraMetricIssues.add( issueToAdd );
+        //                jiraMetricDao.insertJiraMetricIssue( issueToAdd );
+        //                if ( lastGatheredJira != null && issueToAdd.getUpdateDate().after( lastGatheredJira ) )
+        //                {
+        //
+        //                    // New issue, get it into database.
+        //                    log.info( "Complies, ID:" + issueToAdd.getIssueId() + " UpDate:" + issueToAdd
+        //                            .getUpdateDate() );
+        //                    try
+        //                    {
+        //                        //                                kafkaProducer.send( issueToAdd );
+        //                    }
+        //                    catch ( Exception ex )
+        //                    {
+        //                        log.error( "Error while sending message", ex );
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    // Discard changes because it is already in our database.
+        //                    log.info( "Does not, ID:" + issueToAdd.getIssueId() + " UpDate:" + issueToAdd
+        //                            .getUpdateDate() );
+        //                }
+        //            }
+        //            if ( issues.size() < MAX_RESULT )
+        //            {
+        //                break;
+        //            }
+        //        }
     }
 
 
