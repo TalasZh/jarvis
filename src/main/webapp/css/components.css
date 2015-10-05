@@ -1263,7 +1263,7 @@ input[type=checkbox] {
 	margin-left:auto;
 	margin-right:auto;
 	margin-top: -250px;
-	background-color: #001937;
+	background: rgba(0, 10, 40, 0.5);;
 	border: 1px solid #00142d;
 	border-top: 3px #0a2341;
 	width: 800px;
@@ -1307,5 +1307,9 @@ input[type=checkbox] {
 	background-image: url(../assets/img/select-arrow.png);
 	background-repeat: no-repeat;
 	background-position: 93% 50%;
+}
+
+.document-lister {
+	opacity: 0.9;
 }
 
