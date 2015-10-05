@@ -57,6 +57,7 @@ EventListener.prototype.addMouseListener = function ( object ) {
         canvas.onmousemove = null;
         self.camSpeed.x = 0;
         self.camSpeed.y = 0;
+		self.camSpeed.z = 0;
 
 
         this.MOVE_CAMERA = false;
