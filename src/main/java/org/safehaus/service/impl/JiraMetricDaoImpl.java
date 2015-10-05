@@ -99,6 +99,28 @@ public class JiraMetricDaoImpl implements JiraMetricDao, JiraMetricsRestService
 
 
     @Override
+    public JiraMetricIssue findJiraMetricIssueByKey( final String issueKey )
+    {
+        String parameter = "issueKey";
+        String query =
+                String.format( "SELECT i FROM %s i WHERE i.issueKey = :%s", JiraMetricIssue.class.getSimpleName(),
+                        parameter );
+        Map<String, Object> params = Maps.newHashMap();
+        params.put( parameter, issueKey );
+
+        List<JiraMetricIssue> results = dao.findByQueryWithLimit( JiraMetricIssue.class, query, params, 1 );
+        if ( results.size() > 0 )
+        {
+            return results.get( 0 );
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+
+    @Override
     public JiraMetricIssue findJiraMetricIssueById( final String id )
     {
         log.info( "Finding JiraMetricIssue with id {}", id );

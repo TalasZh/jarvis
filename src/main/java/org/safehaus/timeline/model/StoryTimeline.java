@@ -9,6 +9,7 @@ import org.safehaus.dao.entities.jira.JiraMetricIssue;
 import org.safehaus.model.Views;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
 
 
@@ -31,6 +32,7 @@ public class StoryTimeline extends JiraMetricIssue
     public StoryTimeline( JiraMetricIssue jiraMetricIssue )
     {
         super();
+        Preconditions.checkNotNull( jiraMetricIssue, "Passed jiraMetricIssue shouldn't be null" );
         setAssigneeName( jiraMetricIssue.getAssigneeName() );
         setChangelogList( jiraMetricIssue.getChangelogList() );
         setCreationDate( jiraMetricIssue.getCreationDate() );

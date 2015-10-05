@@ -21,6 +21,8 @@ public interface JiraMetricDao
 
     JiraMetricIssue findJiraMetricIssueById( Long id );
 
+    JiraMetricIssue findJiraMetricIssueByKey( String issueKey );
+
     List<JiraMetricIssue> findJiraMetricIssuesByAssigneeName( String assigneeName );
 
     void updateJiraMetricIssue( JiraMetricIssue jiraMetricIssue );

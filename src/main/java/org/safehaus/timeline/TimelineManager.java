@@ -445,15 +445,15 @@ public class TimelineManager
         {
             String projectKey = storyKey.split( "-" )[0];
 
-            Map<String, JiraMetricIssue> jiraMetricIssues = getJiraProjectIssues( projectKey );
+            JiraMetricIssue storyIssue = jiraMetricDao.findJiraMetricIssueByKey( storyKey );
 
-            storyTimeline = new StoryTimeline( jiraMetricIssues.get( storyKey ) );
+            storyTimeline = new StoryTimeline( storyIssue );
             StructuredIssue story = timelineDaoImpl.getStructuredIssueByKey( storyKey );
 
             Long from = Long.valueOf( fromDate );
             Long to = Long.valueOf( toDate );
 
-            populateEvents( story, storyTimeline, from, to, jiraMetricIssues );
+            populateEvents( story, storyTimeline, from, to );
 
             //            story.getIssues().remove( (JiraMetricIssue)story );
             storyTimeline.getIssues().remove( storyTimeline );
@@ -465,14 +465,11 @@ public class TimelineManager
     /**
      * populating events for story which are pulled from child issues for selected story
      */
-    private void populateEvents( StructuredIssue issue, StoryTimeline storyTimeline, Long fromDate, Long toDate,
-                                 final Map<String, JiraMetricIssue> jiraMetricIssues )
+    private void populateEvents( StructuredIssue issue, StoryTimeline storyTimeline, Long fromDate, Long toDate )
     {
-        JiraMetricIssue jiraMetricIssue = jiraMetricIssues.get( issue.getKey() );
+        JiraMetricIssue jiraMetricIssue = jiraMetricDao.findJiraMetricIssueByKey( issue.getKey() );
         if ( jiraMetricIssue != null )
         {
-
-
             for ( final JiraIssueChangelog changelog : jiraMetricIssue.getChangelogList() )
             {
                 Long eventDate = changelog.getChangeKey().getCreated();
@@ -515,7 +512,7 @@ public class TimelineManager
         }
         for ( final StructuredIssue structuredIssue : issue.getIssues() )
         {
-            populateEvents( structuredIssue, storyTimeline, fromDate, toDate, jiraMetricIssues );
+            populateEvents( structuredIssue, storyTimeline, fromDate, toDate );
         }
     }
 
