@@ -4,7 +4,7 @@
 
 html, body
 {
-    background: url("../assets/img/img-background-login-page.png") no-repeat #00091c;
+    background: url("/assets/img/img-background-login-page.png") no-repeat #00091c;
     background-size: cover;
     color: #fff;
     font-family: 'Lato', sans-serif;
@@ -22,7 +22,7 @@ html, body
 
 .logo
 {
-    background: url("../assets/img/img-logo-login-page.png") no-repeat;
+    background: url("/assets/img/img-logo-login-page.png") no-repeat;
     background-size: cover;
     width: 100%;
     height: 41px;

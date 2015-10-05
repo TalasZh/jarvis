@@ -25,35 +25,10 @@
     <property name="templateName" value="accountCreated.vm" />
   </bean>
 
-  <bean id="jiraAction" class="org.safehaus.webapp.action.JiraAction" scope="prototype">
-    <property name="jiraManager" ref="jiraManager" />
-    <property name="jiraUrl" value="${jira.url}" />
-    <property name="securityCookieName" value="${security.cookieName}" />
-  </bean>
-
   <bean id="userMetricsAction" class="org.safehaus.webapp.action.UserMetricsAction" scope="prototype">
     <property name="jiraManager" ref="jiraManager" />
     <property name="jiraUrl" value="${jira.url}" />
     <property name="securityCookieName" value="${security.cookieName}" />
-  </bean>
-
-  <bean id="stashAction" class="org.safehaus.webapp.action.StashAction" scope="prototype">
-    <property name="stashManager" ref="stashManager" />
-    <property name="securityCookieName" value="${security.cookieName}" />
-  </bean>
-
-  <bean id="confluenceAction" class="org.safehaus.webapp.action.ConfluenceAction" scope="prototype">
-    <property name="securityCookieName" value="${security.cookieName}" />
-  </bean>
-
-  <bean id="sonarAction" class="org.safehaus.webapp.action.SonarAction" scope="prototype">
-    <property name="sonarManager" ref="sonarManager" />
-    <property name="securityCookieName" value="${security.cookieName}" />
-  </bean>
-
-  <bean id="sessionAction" class="org.safehaus.webapp.action.SessionAction" scope="prototype">
-    <property name="sessionManager" ref="sessionManager" />
-    <property name="dataStore" ref="dataStore" />
   </bean>
 
   <bean id="passwordHintAction" class="org.safehaus.webapp.action.PasswordHintAction" scope="prototype">
