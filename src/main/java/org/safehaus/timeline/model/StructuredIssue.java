@@ -150,6 +150,9 @@ public class StructuredIssue implements Serializable, Structure
     @Embedded
     private IssueProgress storyProgress = new IssueProgress();
 
+    @Embedded
+    private IssueProgress requirementProgress = new IssueProgress();
+
     @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER )
     @JoinColumn( name = "issue_id" )
     private List<StructuredIssueLink> remoteLinks = Lists.newArrayList();
@@ -196,6 +199,20 @@ public class StructuredIssue implements Serializable, Structure
             this.remoteLinks.add( new StructuredIssueLink( remoteLink.getTitle(), remoteLink.getRemoteUrl(),
                     String.format( "%s-%s", remoteLink.getId(), this.id ), remoteLink.getUrl() ) );
         }
+    }
+
+
+    @Override
+    public IssueProgress getRequirementProgress()
+    {
+        return requirementProgress;
+    }
+
+
+    @Override
+    public void setRequirementProgress( final IssueProgress requirementProgress )
+    {
+        this.requirementProgress = requirementProgress;
     }
 
 

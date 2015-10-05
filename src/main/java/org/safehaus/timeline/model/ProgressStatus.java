@@ -10,6 +10,11 @@ import javax.persistence.Embeddable;
 /**
  * Created by talas on 9/30/15.
  */
+
+
+/**
+ * Issues estimates counter
+ */
 @Embeddable
 public class ProgressStatus implements Serializable
 {

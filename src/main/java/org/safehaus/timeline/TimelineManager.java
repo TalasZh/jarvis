@@ -289,16 +289,21 @@ public class TimelineManager
         }
 
         ProgressStatus progressStatus = null;
+        //TODO Simplify value assigment by switch cases
+        String status = "Open";
         switch ( issue.getStatus() )
         {
             case "Open":
+                status = "Open";
                 progressStatus = structuredIssue.getOpenStatus();
                 break;
-            case "In Progress":
-                progressStatus = structuredIssue.getInProgressStatus();
-                break;
             case "Done":
+                status = "Done";
                 progressStatus = structuredIssue.getDoneStatus();
+                break;
+            default:
+                status = "In Progress";
+                progressStatus = structuredIssue.getInProgressStatus();
                 break;
         }
 
@@ -314,16 +319,34 @@ public class TimelineManager
                     storyPoints.setOpen( val );
                     storyProgress.setOpen( 1 );
                     break;
-                case "In Progress":
-                    storyPoints.setInProgress( val );
-                    storyProgress.setInProgress( 1 );
-                    break;
                 case "Done":
                     storyPoints.setDone( val );
                     storyProgress.setDone( 1 );
                     break;
+                default:
+                    storyPoints.setInProgress( val );
+                    storyProgress.setInProgress( 1 );
+                    break;
             }
             structuredIssue.setStoryPoints( storyPoints );
+        }
+
+        if ( "Requirement".equals( structuredIssue.getIssueType() ) )
+        {
+            IssueProgress requirementProgress = new IssueProgress();
+            switch ( issue.getStatus() )
+            {
+                case "Open":
+                    requirementProgress.setOpen( 1 );
+                    break;
+                case "Done":
+                    requirementProgress.setDone( 1 );
+                    break;
+                default:
+                    requirementProgress.setInProgress( 1 );
+                    break;
+            }
+            structuredIssue.setRequirementProgress( requirementProgress );
         }
 
         if ( progressStatus != null )
@@ -352,28 +375,22 @@ public class TimelineManager
     private void sumUpEstimates( Structure structuredIssue, Structure parent )
     {
         // Assign open statuses
-        sumUpProgresses( structuredIssue.getOpenStatus(), parent.getOpenStatus() );
+        sumUpProgressByStatus( structuredIssue.getOpenStatus(), parent.getOpenStatus() );
 
         // Assign in progress statuses
-        sumUpProgresses( structuredIssue.getInProgressStatus(), parent.getInProgressStatus() );
+        sumUpProgressByStatus( structuredIssue.getInProgressStatus(), parent.getInProgressStatus() );
 
         // Assign done statuses
-        sumUpProgresses( structuredIssue.getDoneStatus(), parent.getDoneStatus() );
+        sumUpProgressByStatus( structuredIssue.getDoneStatus(), parent.getDoneStatus() );
 
-        IssueProgress childStoryProgress = parent.getStoryProgress();
-        IssueProgress parentStoryProgress = structuredIssue.getStoryProgress();
+        // Sum up stories according to statuses
+        sumUpProgressByType( structuredIssue.getStoryProgress(), parent.getStoryProgress() );
 
-        parentStoryProgress.setDone( parentStoryProgress.getDone() + childStoryProgress.getDone() );
-        parentStoryProgress.setInProgress( parentStoryProgress.getInProgress() + childStoryProgress.getInProgress() );
-        parentStoryProgress.setOpen( parentStoryProgress.getOpen() + childStoryProgress.getOpen() );
+        // Sum up Story points according to status
+        sumUpProgressByType( structuredIssue.getStoryPoints(), parent.getStoryPoints() );
 
-
-        IssueProgress childStoryPoints = parent.getStoryPoints();
-        IssueProgress parentStoryPoints = structuredIssue.getStoryPoints();
-
-        parentStoryPoints.setDone( parentStoryPoints.getDone() + childStoryPoints.getDone() );
-        parentStoryPoints.setInProgress( parentStoryPoints.getInProgress() + childStoryPoints.getInProgress() );
-        parentStoryPoints.setOpen( parentStoryPoints.getOpen() + childStoryPoints.getOpen() );
+        // Sum up Requirements according to status
+        sumUpProgressByType( structuredIssue.getRequirementProgress(), parent.getRequirementProgress() );
 
         parent.getUsers().addAll( structuredIssue.getUsers() );
 
@@ -394,7 +411,18 @@ public class TimelineManager
     }
 
 
-    private void sumUpProgresses( ProgressStatus progressStatus, ProgressStatus parentProgress )
+    private void sumUpProgressByType( IssueProgress child, IssueProgress parent )
+    {
+        if ( child != null && parent != null )
+        {
+            parent.setDone( parent.getDone() + child.getDone() );
+            parent.setInProgress( parent.getInProgress() + child.getInProgress() );
+            parent.setOpen( parent.getOpen() + child.getOpen() );
+        }
+    }
+
+
+    private void sumUpProgressByStatus( ProgressStatus progressStatus, ProgressStatus parentProgress )
     {
         if ( progressStatus != null && parentProgress != null )
         {
@@ -536,7 +564,7 @@ public class TimelineManager
         List<String> linkedIssues = Lists.newArrayList();
         for ( final JarvisLink link : issue.getIssueLinks() )
         {
-            if ( link.getDirection() == JarvisLink.Direction.OUTWARD )
+            if ( link.getDirection() == JarvisLink.Direction.INWARD )
             {
                 linkedIssues.add( link.getLinkDirection().getIssueKey() );
             }
@@ -564,9 +592,9 @@ public class TimelineManager
 
         for ( final StructuredProject structuredProject : projectMap.values() )
         {
-            sumUpProgresses( structuredProject.getInProgressStatus(), userInfo.getInProgressStatus() );
-            sumUpProgresses( structuredProject.getDoneStatus(), userInfo.getDoneStatus() );
-            sumUpProgresses( structuredProject.getOpenStatus(), userInfo.getOpenStatus() );
+            sumUpProgressByStatus( structuredProject.getInProgressStatus(), userInfo.getInProgressStatus() );
+            sumUpProgressByStatus( structuredProject.getDoneStatus(), userInfo.getDoneStatus() );
+            sumUpProgressByStatus( structuredProject.getOpenStatus(), userInfo.getOpenStatus() );
 
             for ( final Map.Entry<String, Long> entry : structuredProject.getTotalIssuesSolved().entrySet() )
             {
@@ -650,13 +678,13 @@ public class TimelineManager
             switch ( jiraMetricIssue.getStatus() )
             {
                 case "Open":
-                    sumUpProgresses( progressStatus, structuredProject.getOpenStatus() );
+                    sumUpProgressByStatus( progressStatus, structuredProject.getOpenStatus() );
                     break;
                 case "In Progress":
-                    sumUpProgresses( progressStatus, structuredProject.getInProgressStatus() );
+                    sumUpProgressByStatus( progressStatus, structuredProject.getInProgressStatus() );
                     break;
                 case "Done":
-                    sumUpProgresses( progressStatus, structuredProject.getDoneStatus() );
+                    sumUpProgressByStatus( progressStatus, structuredProject.getDoneStatus() );
                 case "Closed":
                 case "Resolved":
                     Long val = structuredProject.getTotalIssuesSolved().get( jiraMetricIssue.getType().getName() );

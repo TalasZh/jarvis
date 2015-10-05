@@ -10,24 +10,39 @@ import java.util.Set;
  */
 public interface Structure
 {
+    /**
+     * Overall Open issues estimates
+     *
+     * @return - open issues progress status
+     */
     public ProgressStatus getOpenStatus();
 
 
     public void setOpenStatus( final ProgressStatus openStatus );
 
-
+    /**
+     * Overall In Progress issues estimates
+     *
+     * @return - open issues progress status
+     */
     public ProgressStatus getInProgressStatus();
 
 
     public void setInProgressStatus( final ProgressStatus inProgressStatus );
 
-
+    /**
+     * Overall Done issues estimates
+     * @return - open issues progress status
+     */
     public ProgressStatus getDoneStatus();
 
 
     public void setDoneStatus( final ProgressStatus doneStatus );
 
-
+    /**
+     * Solved issues counter by type
+     * @return - map mapped type to counter
+     */
     public Map<String, Long> getTotalIssuesSolved();
 
 
@@ -49,4 +64,10 @@ public interface Structure
 
 
     public void setStoryProgress( final IssueProgress storyProgress );
+
+
+    public IssueProgress getRequirementProgress();
+
+
+    public void setRequirementProgress( final IssueProgress requirementProgress );
 }

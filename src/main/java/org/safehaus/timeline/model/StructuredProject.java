@@ -61,6 +61,9 @@ public class StructuredProject implements Serializable, Structure
     @Column( name = "project_key" )
     private String key;
 
+    /**
+     * Issues in project with structured representation
+     */
     @Transient
     @JsonProperty( "issues" )
     @JsonView( Views.TimelineLong.class )
@@ -70,6 +73,9 @@ public class StructuredProject implements Serializable, Structure
     @Column( name = "project_description" )
     private String description;
 
+    /**
+     * Issue keys to store structure in database
+     */
     @JsonIgnore
     @ElementCollection
     @Column( name = "issues" )
@@ -78,6 +84,9 @@ public class StructuredProject implements Serializable, Structure
     @Column( name = "epics_count" )
     private long epicsCount;
 
+    /**
+     * List of users participated in project
+     */
     @JsonView( Views.TimelineShort.class )
     @ElementCollection
     @Column( name = "usernames" )
@@ -120,6 +129,10 @@ public class StructuredProject implements Serializable, Structure
     private ProjectStats projectStats = new ProjectStats();
 
 
+    @Embedded
+    private IssueProgress requirementProgress = new IssueProgress();
+
+
     public StructuredProject()
     {
 
@@ -134,6 +147,20 @@ public class StructuredProject implements Serializable, Structure
         this.key = key;
         this.description = description;
         this.projectVersions = projectVersions;
+    }
+
+
+    @Override
+    public IssueProgress getRequirementProgress()
+    {
+        return requirementProgress;
+    }
+
+
+    @Override
+    public void setRequirementProgress( final IssueProgress requirementProgress )
+    {
+        this.requirementProgress = requirementProgress;
     }
 
 
