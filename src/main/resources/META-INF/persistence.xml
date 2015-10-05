@@ -41,6 +41,8 @@
     <class>org.safehaus.dao.entities.ServicePack</class>
     <class>org.safehaus.dao.entities.sonar.SonarMetricIssue</class>
 
+    <class>org.safehaus.dao.entities.Annotation</class>
+
     <class>org.safehaus.dao.entities.stash.Link</class>
     <class>org.safehaus.dao.entities.stash.HibernateLinkMap</class>
     <class>org.safehaus.dao.entities.stash.HibernateSetMap</class>

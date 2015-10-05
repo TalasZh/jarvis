@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import javax.jws.WebService;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.WebApplicationException;
@@ -32,7 +31,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.cxf.jaxrs.impl.ResponseBuilderImpl;
@@ -47,8 +45,8 @@ import com.google.common.collect.ImmutableList;
 /**
  * Created by tzhamakeev on 5/27/15.
  */
-@Service( "sessionServiceImpl" )
-@WebService( serviceName = "SessionService", endpointInterface = "org.safehaus.service.rest.SessionService" )
+//@Service( "sessionServiceImpl" )
+//@WebService( serviceName = "SessionService", endpointInterface = "org.safehaus.service.rest.SessionService" )
 public class SessionServiceImpl implements SessionService
 {
 	private static Logger logger = LoggerFactory.getLogger( SessionServiceImpl.class );

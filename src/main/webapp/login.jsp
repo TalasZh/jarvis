@@ -10,7 +10,7 @@
   <meta name="menu" content="Login"/>
 
   <!--Stylesheets-->
-  <link href="styles/timeline/css/bootstrap.min.css" rel="stylesheet">
+  <link href="styles/timeline/css/libs/bootstrap.min.css" rel="stylesheet">
   <link href="styles/timeline/css/login.css" rel="stylesheet">
 
 </head>

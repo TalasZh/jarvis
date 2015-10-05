@@ -17,6 +17,8 @@ public interface AnnotatorDao
 
     public List<Annotation> getAnnotations();
 
+    public List<Annotation> getAnnotationsByUsername( String username );
+
     public void deleteAnnotation( Annotation annotation );
 
     public void updateAnnotation( Annotation annotation );

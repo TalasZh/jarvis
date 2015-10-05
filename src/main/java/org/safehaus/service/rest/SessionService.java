@@ -14,6 +14,9 @@ import javax.ws.rs.core.Response;
 
 import org.safehaus.model.Capture;
 import org.safehaus.model.Session;
+import org.safehaus.model.Views;
+
+import com.fasterxml.jackson.annotation.JsonView;
 
 
 /**
@@ -32,6 +35,7 @@ public interface SessionService
      */
     @GET
     @Path( "{id}" )
+    @JsonView( Views.JarvisSessionLong.class )
     Session getSession( @PathParam( "id" ) String sessionId );
 
     /**
@@ -40,6 +44,7 @@ public interface SessionService
      * @return List
      */
     @GET
+    @JsonView( Views.JarvisSessionShort.class )
     List<Session> getSessions();
 
     /**
@@ -49,6 +54,7 @@ public interface SessionService
      */
     @GET
     @Path( "captures" )
+    @JsonView( Views.CompleteView.class )
     List<Capture> getAllCaptures();
 
     /**
@@ -67,6 +73,7 @@ public interface SessionService
      */
     @PUT
     @Path( "{sessionId}/pause" )
+    @JsonView( Views.JarvisSessionShort.class )
     Session pauseSession( @PathParam( "sessionId" ) String sessionId );
 
     /**
@@ -76,6 +83,7 @@ public interface SessionService
      */
     @PUT
     @Path( "{sessionId}/stop" )
+    @JsonView( Views.JarvisSessionShort.class )
     Session closeSession( @PathParam( "sessionId" ) String sessionId );
 
     /**

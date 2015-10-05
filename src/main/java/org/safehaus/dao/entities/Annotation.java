@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.impetus.kundera.index.Index;
 import com.impetus.kundera.index.IndexCollection;
 
@@ -23,6 +24,7 @@ import static org.safehaus.Constants.DATABASE_SCHEMA;
 @IndexCollection( columns = {
         @Index( name = "author" ), @Index( name = "created" ), @Index( name = "issueKey" ), @Index( name = "issueId" )
 } )
+@JsonIgnoreProperties( ignoreUnknown = true )
 public class Annotation implements Serializable
 {
     @Id
@@ -36,7 +38,7 @@ public class Annotation implements Serializable
     private String issueId;
 
     @Column( name = "issue_key" )
-    private String issueKey;
+    private String researchSession;
 
     @Column( name = "annotator_schema_version" )
     private String annotatorSchemaVersion;
@@ -66,14 +68,14 @@ public class Annotation implements Serializable
     }
 
 
-    public Annotation( final Long id, final String author, final String issueId, final String issueKey,
+    public Annotation( final Long id, final String author, final String issueId, final String researchSession,
                        final String annotatorSchemaVersion, final Long created, final String quote, final String ranges,
                        final String text, final String uri, final String offlineId )
     {
         this.id = id;
         this.author = author;
         this.issueId = issueId;
-        this.issueKey = issueKey;
+        this.researchSession = researchSession;
         this.annotatorSchemaVersion = annotatorSchemaVersion;
         this.created = created;
         this.quote = quote;
@@ -120,15 +122,15 @@ public class Annotation implements Serializable
     }
 
 
-    public String getIssueKey()
+    public String getResearchSession()
     {
-        return issueKey;
+        return researchSession;
     }
 
 
-    public void setIssueKey( final String issueKey )
+    public void setResearchSession( final String issueKey )
     {
-        this.issueKey = issueKey;
+        this.researchSession = issueKey;
     }
 
 
