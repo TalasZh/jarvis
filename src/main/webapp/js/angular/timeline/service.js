@@ -1,12 +1,12 @@
 'use strict';
 
 angular.module('jarvis.timeline.srv', [])
-    .factory('timelineSrv', structureSrv);
+    .factory('timelineSrv', timelineSrv);
 
 
-structureSrv.$inject = ['$http'];
+timelineSrv.$inject = ['$http'];
 
-function structureSrv($http) {
+function timelineSrv($http) {
     var EVENT_API = 'dummy-api/';
     //var GET_API = 'http://jarvis-test.critical-factor.com:8080/services/api/timeline/story/';
 
