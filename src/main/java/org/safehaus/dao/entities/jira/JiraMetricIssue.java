@@ -401,6 +401,10 @@ public class JiraMetricIssue implements Serializable
 
     public Date getCreationDate()
     {
+        if ( creationDate == null )
+        {
+            return new Date();
+        }
         return new Date( creationDate );
     }
 
@@ -413,6 +417,10 @@ public class JiraMetricIssue implements Serializable
 
     public Date getUpdateDate()
     {
+        if ( updateDate == null )
+        {
+            return new Date();
+        }
         return new Date( updateDate );
     }
 
@@ -425,6 +433,10 @@ public class JiraMetricIssue implements Serializable
 
     public Date getDueDate()
     {
+        if ( dueDate == null )
+        {
+            return new Date();
+        }
         return new Date( dueDate );
     }
 

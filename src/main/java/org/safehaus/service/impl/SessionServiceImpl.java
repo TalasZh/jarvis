@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import javax.jws.WebService;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.WebApplicationException;
@@ -24,6 +25,7 @@ import org.safehaus.model.Capture;
 import org.safehaus.model.Session;
 import org.safehaus.model.SessionNotFoundException;
 import org.safehaus.model.Views;
+import org.safehaus.service.api.CaptureManager;
 import org.safehaus.service.api.SessionManager;
 import org.safehaus.service.rest.SessionService;
 import org.safehaus.util.JarvisContextHolder;
@@ -31,6 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.cxf.jaxrs.impl.ResponseBuilderImpl;
@@ -45,8 +48,8 @@ import com.google.common.collect.ImmutableList;
 /**
  * Created by tzhamakeev on 5/27/15.
  */
-//@Service( "sessionServiceImpl" )
-//@WebService( serviceName = "SessionService", endpointInterface = "org.safehaus.service.rest.SessionService" )
+@Service( "sessionServiceImpl" )
+@WebService( serviceName = "SessionService", endpointInterface = "org.safehaus.service.rest.SessionService" )
 public class SessionServiceImpl implements SessionService
 {
 	private static Logger logger = LoggerFactory.getLogger( SessionServiceImpl.class );
@@ -55,6 +58,9 @@ public class SessionServiceImpl implements SessionService
 	private SessionManager sessionManager;
 	private JiraManager jiraManager;
 	// private PhaseManager phaseManager;
+
+	@Autowired
+	private CaptureManager captureManager;
 
 	@Autowired
 	private ConfluenceManager confluenceManager;
@@ -85,14 +91,15 @@ public class SessionServiceImpl implements SessionService
 	@JsonView( Views.JarvisSessionLong.class )
 	public Session getSession( final String sessionId )
 	{
-		try
-		{
-			return sessionManager.getSession( sessionId );
-		}
-		catch ( SessionNotFoundException e )
-		{
-			throw new WebApplicationException( Response.Status.NOT_FOUND );
-		}
+		return new Session();
+		//		try
+		//		{
+		//			return sessionManager.getSession( sessionId );
+		//		}
+		//		catch ( SessionNotFoundException e )
+		//		{
+		//			throw new WebApplicationException( Response.Status.NOT_FOUND );
+		//		}
 	}
 
 
@@ -118,52 +125,54 @@ public class SessionServiceImpl implements SessionService
 	@JsonView( Views.CompleteView.class )
 	public List<Capture> getAllCaptures()
 	{
-		List<Capture> captures = new ArrayList<>();
-		List<Session> sessions = getSessions();
-		for ( final Session session : sessions )
-		{
-			captures.addAll( session.getCaptures() );
-		}
+		//		List<Capture> captures = new ArrayList<>();
+		//		List<Session> sessions = getSessions();
+		//		for ( final Session session : sessions )
+		//		{
+		//			captures.addAll( session.getCaptures() );
+		//		}
 
-		return captures;
+		return captureManager.getAll();
 	}
 
 
 	@Override
 	public Session startSession( final String issueId )
 	{
-		UserDetails userDetails = JarvisContextHolder.getContext().getUserDetails();
+		return new Session();
 
-		if ( userDetails == null )
-		{
-			logger.error( "User details not found." );
-			ResponseBuilderImpl builder = new ResponseBuilderImpl();
-			builder.status( Response.Status.CONFLICT );
-			builder.entity( "The requested resource is conflicted." );
-			Response response = builder.build();
-			throw new WebApplicationException( response );
-		}
-
-		// for ( Iterator i = userDetails.getAuthorities().iterator();
-		// i.hasNext(); )
-		// {
-		// Object o = i.next();
-		// logger.debug( "========> " + o.toString() );
-		// }
-
-		try
-		{
-			return sessionManager.startSession( issueId, userDetails.getUsername() );
-		}
-		catch ( Exception | JiraClientException e )
-		{
-			logger.error( e.toString(), e );
-			ResponseBuilderImpl builder = new ResponseBuilderImpl();
-			builder.status( Response.Status.CONFLICT );
-			builder.entity( e.toString() );
-			Response response = builder.build();
-			throw new WebApplicationException( response );
-		}
+		//		UserDetails userDetails = JarvisContextHolder.getContext().getUserDetails();
+		//
+		//		if ( userDetails == null )
+		//		{
+		//			logger.error( "User details not found." );
+		//			ResponseBuilderImpl builder = new ResponseBuilderImpl();
+		//			builder.status( Response.Status.CONFLICT );
+		//			builder.entity( "The requested resource is conflicted." );
+		//			Response response = builder.build();
+		//			throw new WebApplicationException( response );
+		//		}
+		//
+		//		// for ( Iterator i = userDetails.getAuthorities().iterator();
+		//		// i.hasNext(); )
+		//		// {
+		//		// Object o = i.next();
+		//		// logger.debug( "========> " + o.toString() );
+		//		// }
+		//
+		//		try
+		//		{
+		//			return sessionManager.startSession( issueId, userDetails.getUsername() );
+		//		}
+		//		catch ( Exception | JiraClientException e )
+		//		{
+		//			logger.error( e.toString(), e );
+		//			ResponseBuilderImpl builder = new ResponseBuilderImpl();
+		//			builder.status( Response.Status.CONFLICT );
+		//			builder.entity( e.toString() );
+		//			Response response = builder.build();
+		//			throw new WebApplicationException( response );
+		//		}
 	}
 
 
@@ -220,7 +229,8 @@ public class SessionServiceImpl implements SessionService
 	{
 		try
 		{
-			return sessionManager.addCapture( sessionId, capture );
+			return captureManager.saveCapture( capture );
+			//			return sessionManager.addCapture( sessionId, capture );
 		}
 		catch ( Exception e )
 		{
@@ -231,10 +241,6 @@ public class SessionServiceImpl implements SessionService
 			Response response = builder.build();
 			throw new WebApplicationException( response );
 		}
-		catch ( SessionNotFoundException e )
-		{
-			throw new WebApplicationException( Response.Status.NOT_FOUND );
-		}
 	}
 
 
@@ -243,9 +249,10 @@ public class SessionServiceImpl implements SessionService
 	{
 		try
 		{
-			return sessionManager.updateCapture( sessionId, captureId, capture );
+			return captureManager.saveCapture( capture );
+			//			return sessionManager.updateCapture( sessionId, captureId, capture );
 		}
-		catch ( SessionNotFoundException e )
+		catch ( Exception e )
 		{
 			throw new WebApplicationException( Response.Status.NOT_FOUND );
 		}
@@ -257,10 +264,11 @@ public class SessionServiceImpl implements SessionService
 	{
 		try
 		{
-			sessionManager.deleteCapture( sessionId, captureId );
+			captureManager.remove( Long.valueOf( captureId ) );
+			//			sessionManager.deleteCapture( sessionId, captureId );
 			return Response.ok().build();
 		}
-		catch ( SessionNotFoundException e )
+		catch ( Exception e )
 		{
 			throw new WebApplicationException( Response.Status.NOT_FOUND );
 		}

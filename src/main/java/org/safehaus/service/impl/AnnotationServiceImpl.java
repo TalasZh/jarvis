@@ -4,7 +4,6 @@ package org.safehaus.service.impl;
 import java.util.Date;
 import java.util.List;
 
-import javax.jws.WebService;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
@@ -12,11 +11,8 @@ import org.safehaus.dao.entities.Annotation;
 import org.safehaus.model.Capture;
 import org.safehaus.model.Session;
 import org.safehaus.service.api.AnnotatorDao;
-import org.safehaus.service.rest.SessionService;
 import org.safehaus.util.JarvisContextHolder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
 
 import org.apache.cxf.jaxrs.impl.ResponseBuilderImpl;
 
@@ -26,30 +22,30 @@ import com.google.common.collect.Lists;
 /**
  * Created by talas on 10/5/15.
  */
-@Service( "sessionServiceImpl" )
-@WebService( serviceName = "SessionService", endpointInterface = "org.safehaus.service.rest.SessionService" )
-public class AnnotationServiceImpl implements SessionService
+//@Service( "sessionServiceImpl" )
+//@WebService( serviceName = "SessionService", endpointInterface = "org.safehaus.service.rest.SessionService" )
+public class AnnotationServiceImpl //implements SessionService
 {
 
-    @Autowired
+//    @Autowired
     private AnnotatorDao annotatorDao;
 
 
-    @Override
+//    @Override
     public Session getSession( final String sessionId )
     {
         return new Session();
     }
 
 
-    @Override
+//    @Override
     public List<Session> getSessions()
     {
         return Lists.newArrayList();
     }
 
 
-    @Override
+//    @Override
     public List<Capture> getAllCaptures()
     {
         UserDetails userDetails = JarvisContextHolder.getContext().getUserDetails();
@@ -80,42 +76,42 @@ public class AnnotationServiceImpl implements SessionService
     }
 
 
-    @Override
+//    @Override
     public Session startSession( final String issueId )
     {
         return new Session();
     }
 
 
-    @Override
+//    @Override
     public Session pauseSession( final String sessionId )
     {
         return new Session();
     }
 
 
-    @Override
+//    @Override
     public Session closeSession( final String sessionId )
     {
         return new Session();
     }
 
 
-    @Override
+//    @Override
     public Response resolveIssue( final String issueId )
     {
         return Response.ok().build();
     }
 
 
-    @Override
+//    @Override
     public Response generate( final String issueId )
     {
         return Response.ok().build();
     }
 
 
-    @Override
+//    @Override
     public Capture updateCapture( final String sessionId, final String captureId, final Capture capture )
     {
         if ( captureId != null )
@@ -128,7 +124,7 @@ public class AnnotationServiceImpl implements SessionService
     }
 
 
-    @Override
+//    @Override
     public Response deleteCapture( final String sessionId, final String captureId )
     {
         if ( captureId != null )
@@ -145,7 +141,7 @@ public class AnnotationServiceImpl implements SessionService
     }
 
 
-    @Override
+//    @Override
     public Capture saveCapture( final String sessionId, final Capture capture )
     {
         UserDetails userDetails = JarvisContextHolder.getContext().getUserDetails();
@@ -177,7 +173,7 @@ public class AnnotationServiceImpl implements SessionService
     }
 
 
-    @Override
+//    @Override
     public List<Capture> getCaptures( final String sessionId )
     {
         return Lists.newArrayList();

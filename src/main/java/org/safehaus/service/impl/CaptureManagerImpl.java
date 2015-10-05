@@ -1,6 +1,8 @@
 package org.safehaus.service.impl;
 
 
+import java.util.List;
+
 import org.safehaus.dao.CaptureDao;
 import org.safehaus.model.Capture;
 import org.safehaus.model.CaptureNotFoundException;
@@ -26,6 +28,13 @@ public class CaptureManagerImpl extends GenericManagerImpl<Capture, Long> implem
     }
 
 
+    @Override
+    public List<Capture> getCapturesByUsername( final String username )
+    {
+        return captureDao.getCapturesByUsername( username );
+    }
+
+
     /**
      * {@inheritDoc}
      */
@@ -43,5 +52,12 @@ public class CaptureManagerImpl extends GenericManagerImpl<Capture, Long> implem
     public Capture saveCapture( final Capture capture )
     {
         return captureDao.saveCapture( capture );
+    }
+
+
+    @Override
+    public void removeCapture( final Capture capture )
+    {
+        captureDao.remove( capture );
     }
 }

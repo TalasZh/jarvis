@@ -245,7 +245,8 @@ public class TimelineManager
         {
             final JiraMetricIssue jiraMetricIssue = entry.getValue();
             if ( "Epic".equals( jiraMetricIssue.getType().getName() ) && projectKey
-                    .equals( jiraMetricIssue.getProjectKey() ) )
+                    .equals( jiraMetricIssue.getProjectKey() ) && jiraMetricIssue.getLabels()
+                                                                                 .contains( "requirements_december" ) )
             {
                 StructuredIssue epic = new StructuredIssue( jiraMetricIssue.getIssueKey(), jiraMetricIssue.getIssueId(),
                         jiraMetricIssue.getType().getName(), jiraMetricIssue.getSummary(),
@@ -441,22 +442,29 @@ public class TimelineManager
     public StoryTimeline getStoryTimeline( final String storyKey, final String fromDate, final String toDate )
     {
         StoryTimeline storyTimeline = new StoryTimeline();
-        if ( storyKey != null )
+        try
         {
-            String projectKey = storyKey.split( "-" )[0];
+            if ( storyKey != null )
+            {
+                String projectKey = storyKey.split( "-" )[0];
 
-            JiraMetricIssue storyIssue = jiraMetricDao.findJiraMetricIssueByKey( storyKey );
+                JiraMetricIssue storyIssue = jiraMetricDao.findJiraMetricIssueByKey( storyKey );
 
-            storyTimeline = new StoryTimeline( storyIssue );
-            StructuredIssue story = timelineDaoImpl.getStructuredIssueByKey( storyKey );
+                storyTimeline = new StoryTimeline( storyIssue );
+                StructuredIssue story = timelineDaoImpl.getStructuredIssueByKey( storyKey );
 
-            Long from = Long.valueOf( fromDate );
-            Long to = Long.valueOf( toDate );
+                Long from = Long.valueOf( fromDate );
+                Long to = Long.valueOf( toDate );
 
-            populateEvents( story, storyTimeline, from, to );
+                populateEvents( story, storyTimeline, from, to );
 
-            //            story.getIssues().remove( (JiraMetricIssue)story );
-            storyTimeline.getIssues().remove( storyTimeline );
+                //            story.getIssues().remove( (JiraMetricIssue)story );
+                storyTimeline.getIssues().remove( storyTimeline );
+            }
+        }
+        catch ( Exception e )
+        {
+            logger.error( "Error generating story timeline..." );
         }
         return storyTimeline;
     }
@@ -561,7 +569,7 @@ public class TimelineManager
         List<String> linkedIssues = Lists.newArrayList();
         for ( final JarvisLink link : issue.getIssueLinks() )
         {
-            if ( link.getDirection() == JarvisLink.Direction.INWARD )
+            if ( "Child".equals( link.getLinkType().getName() ) )
             {
                 linkedIssues.add( link.getLinkDirection().getIssueKey() );
             }
