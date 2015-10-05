@@ -233,7 +233,7 @@ public class AnalysisService
         {
             try
             {
-                //                getJiraMetricIssues( jiraCl );
+                getJiraMetricIssues( jiraCl );
             }
             catch ( Exception ex )
             {
@@ -261,7 +261,7 @@ public class AnalysisService
         {
             try
             {
-                getStashMetricIssues( stashMan );
+                //                getStashMetricIssues( stashMan );
             }
             catch ( Exception ex )
             {
@@ -346,20 +346,29 @@ public class AnalysisService
                 //TODO add here versions
                 projectKeys.add( project.getKey() );
 
-                List<ProjectVersion> projectVersionList = Lists.newArrayList();
-                for ( final Version version : project.getVersions() )
+                try
                 {
-                    ProjectVersion projectVersion =
-                            new ProjectVersion( version.getId(), version.getDescription(), version.getName(),
-                                    version.getReleaseDate() );
+                    net.rcarz.jiraclient.Project projectDetails = jiraCl.getProject( project.getKey() );
+                    List<ProjectVersion> projectVersionList = Lists.newArrayList();
+                    for ( final Version version : projectDetails.getVersions() )
+                    {
+                        ProjectVersion projectVersion =
+                                new ProjectVersion( version.getId(), version.getDescription(), version.getName(),
+                                        version.getReleaseDate() );
 
-                    projectVersionList.add( projectVersion );
+                        projectVersionList.add( projectVersion );
+                    }
+
+                    JiraProject jiraProject = new JiraProject( projectDetails.getId(), projectDetails.getKey(),
+                            projectDetails.getAssigneeType(), projectDetails.getDescription(), projectDetails.getName(),
+                            projectVersionList );
+
+                    jiraMetricDao.saveProject( jiraProject );
                 }
-
-                JiraProject jiraProject = new JiraProject( project.getId(), project.getKey(), project.getAssigneeType(),
-                        project.getDescription(), project.getName(), projectVersionList );
-
-                jiraMetricDao.saveProject( jiraProject );
+                catch ( JiraClientException e )
+                {
+                    log.error( "Error fetching project information." );
+                }
             }
         }
         catch ( Exception e )
