@@ -165,28 +165,28 @@ public class Capture extends BaseObject implements Serializable {
     }
 
 
-    /**
-     * {@inheritDoc}
-     */
-    public boolean equals( Object o ) {
-        if ( this == o ) {
+    @Override
+    public boolean equals( final Object o )
+    {
+        if ( this == o )
+        {
             return true;
         }
-        if ( !( o instanceof Capture ) ) {
+        if ( !( o instanceof Capture ) )
+        {
             return false;
         }
 
         final Capture capture = ( Capture ) o;
 
-        return !( capture != null ? !capture.equals( capture.getId() ) : capture.getId() != null );
+        return !( id != null ? !id.equals( capture.id ) : capture.id != null );
     }
 
 
-    /**
-     * {@inheritDoc}
-     */
-    public int hashCode() {
-        return ( id != null ? id.hashCode() : 0 );
+    @Override
+    public int hashCode()
+    {
+        return id != null ? id.hashCode() : 0;
     }
 
 

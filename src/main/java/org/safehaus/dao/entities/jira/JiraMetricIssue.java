@@ -134,7 +134,7 @@ public class JiraMetricIssue implements Serializable
 
     public JiraMetricIssue( final Issue issue )
     {
-        Preconditions.checkNotNull(issue, "Issue cannot be null...");
+        Preconditions.checkNotNull( issue, "Issue cannot be null..." );
         this.issueKey = issue.getKey();
         this.summary = issue.getSummary();
         this.description = issue.getDescription();
@@ -164,7 +164,7 @@ public class JiraMetricIssue implements Serializable
         this.dueDate = issue.getDueDate() != null ? issue.getDueDate().getTime() : 0;
         if ( issue.getPriority() != null )
         {
-            this.priority = Long.valueOf( issue.getPriority().getId() );
+            this.priority = issue.getPriority().getId() != null ? Long.valueOf( issue.getPriority().getId() ) : 0L;
         }
         if ( issue.getTimeTracking() != null )
         {
@@ -189,11 +189,16 @@ public class JiraMetricIssue implements Serializable
                     ChangeCompositeKey changeCompositeKey =
                             new ChangeCompositeKey( Long.valueOf( changeLogEntry.getId() ),
                                     changeLogEntry.getCreated().getTime() );
+                    String issueKey = issue.getKey();
+                    Long issueId = Long.valueOf( issue.getId() );
+                    String author = changeLogEntry.getAuthor() != null ? changeLogEntry.getAuthor().getDisplayName() :
+                                    "Unknown";
+
                     JiraIssueChangelog jiraIssueChangelog =
-                            new JiraIssueChangelog( changeCompositeKey, issue.getKey(), Long.valueOf( issue.getId() ),
-                                    changeLogEntry.getAuthor().getDisplayName(), changeLogItem.getFieldType(),
-                                    changeLogItem.getField(), changeLogItem.getFromString(),
-                                    changeLogItem.getToString(), changeLogItem.getFrom(), changeLogItem.getTo() );
+                            new JiraIssueChangelog( changeCompositeKey, issueKey, issueId, author,
+                                    changeLogItem.getFieldType(), changeLogItem.getField(),
+                                    changeLogItem.getFromString(), changeLogItem.getToString(), changeLogItem.getFrom(),
+                                    changeLogItem.getTo() );
                     changelogList.add( jiraIssueChangelog );
                 }
             }
@@ -234,10 +239,6 @@ public class JiraMetricIssue implements Serializable
             List<JarvisLink> jarvisIssueLinks = Lists.newArrayList();
             for ( final IssueLink issueLink : issue.getIssueLinks() )
             {
-                net.rcarz.jiraclient.LinkType jiraLinkType = issueLink.getType();
-                LinkType linkType = new LinkType( Long.valueOf( jiraLinkType.getId() ), jiraLinkType.getName(),
-                        jiraLinkType.getInward(), jiraLinkType.getOutward() );
-
                 LinkDirection linkDirection = new LinkDirection();
                 Issue linkedIssue = issueLink.getInwardIssue();
                 JarvisLink.Direction direction = JarvisLink.Direction.INWARD;
@@ -252,8 +253,15 @@ public class JiraMetricIssue implements Serializable
                 linkDirection.setIssueKey( linkedIssue.getKey() );
 
                 IssueType linkedIssueType = linkedIssue.getIssueType();
-                if ( linkedIssueType != null )
+
+                net.rcarz.jiraclient.LinkType jiraLinkType = issueLink.getType();
+
+
+                if ( linkedIssueType != null && linkedIssueType != null )
                 {
+                    LinkType linkType = new LinkType( Long.valueOf( jiraLinkType.getId() ), jiraLinkType.getName(),
+                            jiraLinkType.getInward(), jiraLinkType.getOutward() );
+
                     JarvisIssueType jarvisIssueType =
                             new JarvisIssueType( Long.valueOf( linkedIssueType.getId() ), linkedIssueType.getName() );
 

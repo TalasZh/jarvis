@@ -10,6 +10,7 @@
 
   <link href="css/style.css" rel="stylesheet">
   <link href="css/components.css" rel="stylesheet">
+  <link href="css/slick.css" rel="stylesheet">
   <style>
     html, body
     {
@@ -45,15 +46,6 @@
 <script src="js/libs/addons/date-format.js"></script>
 <script src="js/libs/sprintf.js"></script>
 
-<script src="js/angular/timeline/controller.js"></script>
-
-
-<!--Knob charts-->
-<script src="js/libs/addons/jquery.knob.min.js"></script>
-
-<!--[if IE]>
-<script type="text/javascript" src="js/excanvas.js"></script>
-<![endif]-->
 
 </body>
 </html>

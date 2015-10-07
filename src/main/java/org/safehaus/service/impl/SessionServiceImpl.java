@@ -59,11 +59,17 @@ public class SessionServiceImpl implements SessionService
 	private JiraManager jiraManager;
 	// private PhaseManager phaseManager;
 
-	@Autowired
 	private CaptureManager captureManager;
 
 	@Autowired
 	private ConfluenceManager confluenceManager;
+
+
+	@Autowired
+	public void setCaptureManager( final CaptureManager captureManager )
+	{
+		this.captureManager = captureManager;
+	}
 
 
 	@Autowired
@@ -234,7 +240,7 @@ public class SessionServiceImpl implements SessionService
 		}
 		catch ( Exception e )
 		{
-			logger.error( e.toString() );
+			logger.error( "The requested resource is conflicted.", e );
 			ResponseBuilderImpl builder = new ResponseBuilderImpl();
 			builder.status( Response.Status.CONFLICT );
 			builder.entity( "The requested resource is conflicted." );

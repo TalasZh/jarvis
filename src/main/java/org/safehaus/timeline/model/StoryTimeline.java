@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.safehaus.dao.entities.jira.JiraMetricIssue;
+import org.safehaus.model.Capture;
 import org.safehaus.model.Views;
 
 import com.fasterxml.jackson.annotation.JsonView;
@@ -20,7 +21,9 @@ import com.google.common.collect.Sets;
 public class StoryTimeline extends JiraMetricIssue
 {
     @JsonView( Views.CompleteView.class )
-    private Set<JiraMetricIssue> issues = Sets.newHashSet();
+    private Set<StoryTimeline> issues = Sets.newHashSet();
+
+    private Set<Capture> annotations = Sets.newHashSet();
 
 
     public StoryTimeline()
@@ -55,17 +58,54 @@ public class StoryTimeline extends JiraMetricIssue
         setComponents( jiraMetricIssue.getComponents() );
         setIssueWorkLogs( jiraMetricIssue.getIssueWorkLogs() );
         setLabels( jiraMetricIssue.getLabels() );
+        setRemoteLinks( jiraMetricIssue.getRemoteLinks() );
+
+        //        jiraMetricIssue.getAssigneeName();
+        //        jiraMetricIssue.getChangelogList();
+        //        jiraMetricIssue.getComponents();
+        //        jiraMetricIssue.getCreationDate();
+        //        jiraMetricIssue.getDescription();
+        //        jiraMetricIssue.getDueDate();
+        //        jiraMetricIssue.getIssueId();
+        //        jiraMetricIssue.getIssueKey();
+        //        jiraMetricIssue.getIssueLinks();
+        //        jiraMetricIssue.getIssueWorkLogs();
+        //        jiraMetricIssue.getLabels();
+        //        jiraMetricIssue.getOriginalEstimateMinutes();
+        //        jiraMetricIssue.getPriority();
+        //        jiraMetricIssue.getProjectKey();
+        //        jiraMetricIssue.getRemainingEstimateMinutes();
+        //        jiraMetricIssue.getReporterName();
+        //        jiraMetricIssue.getRemoteLinks();
+        //        jiraMetricIssue.getResolution();
+        //        jiraMetricIssue.getStatus();
+        //        jiraMetricIssue.getSummary();
+        //        jiraMetricIssue.getTimeSpentMinutes();
+        //        jiraMetricIssue.getType();
+        //        jiraMetricIssue.getUpdateDate();
     }
 
 
-    public Set<JiraMetricIssue> getIssues()
+    public Set<StoryTimeline> getIssues()
     {
         return issues;
     }
 
 
-    public void setIssues( final Set<JiraMetricIssue> issues )
+    public void setIssues( final Set<StoryTimeline> issues )
     {
         this.issues = issues;
+    }
+
+
+    public Set<Capture> getAnnotations()
+    {
+        return annotations;
+    }
+
+
+    public void setAnnotations( final Set<Capture> annotations )
+    {
+        this.annotations = annotations;
     }
 }

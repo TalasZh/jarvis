@@ -17,20 +17,42 @@
             </div>
             <div class="services-buttons">
                 <ul>
-                    <li><a href=""><img src="assets/img/icon-home.png" alt="" class="icons-service"/><br><span
-                            class="show-text">HOME</span></a></li>
-                    <li class="active"><a href=""><img src="assets/img/icon-jira.png" alt=""
-                                                       class="icons-service"/><br><span
-                            class="show-text">JIRA</span></a>
+                    <li>
+                        <a href="#">
+                            <img src="assets/img/icon-home.png" alt="" class="icons-service"/><br>
+                            <span class="show-text">HOME</span>
+                        </a>
                     </li>
-                    <li><a href=""><img src="assets/img/icon-confluence.png" alt="" class="icons-service"/><br><span
-                            class="show-text">CONFLUENCE</span></a></li>
-                    <li><a href=""><img src="assets/img/icon-stash.png" alt="" class="icons-service"/><br><span
-                            class="show-text">STASH</span></a></li>
-                    <li><a href=""><img src="assets/img/icon-hipchat.png" alt="" class="icons-service"/><br><span
-                            class="show-text">HIPCHAT</span></a></li>
-                    <li><a href=""><img src="assets/img/icon-zimbra.png" alt="" class="icons-service"/><br><span
-                            class="show-text">ZIBRA</span></a></li>
+                    <li class="active">
+                        <a href="https://jira.{{ vm.baseUrl }}" target="_blank">
+                            <img src="assets/img/icon-jira.png" alt="" class="icons-service"/><br>
+                            <span class="show-text">JIRA</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://confluence.{{ vm.baseUrl }}" target="_blank">
+                            <img src="assets/img/icon-confluence.png" alt="" class="icons-service"/><br>
+                            <span class="show-text">CONFLUENCE</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://stash.{{ vm.baseUrl }}" target="_blank">
+                            <img src="assets/img/icon-stash.png" alt="" class="icons-service"/><br>
+                            <span class="show-text">STASH</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://hipchat.{{ vm.baseUrl }}" target="_blank">
+                            <img src="assets/img/icon-hipchat.png" alt="" class="icons-service"/><br>
+                            <span class="show-text">HIPCHAT</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://zibra.{{ vm.baseUrl }}" target="_blank">
+                            <img src="assets/img/icon-zimbra.png" alt="" class="icons-service"/><br>
+                            <span class="show-text">ZIMBRA</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -45,8 +67,12 @@
                 </a>
             </div>
 
-            <tabset>
-                <tab heading="Description">
+            <div class="tab-content">
+                <div>
+                    <h1>Description</h1>
+                    <!--                <accordion close-others="oneAtATime">
+                                        <accordion-group heading="Static Header, initially expanded" is-open="status.isFirstOpen"
+                                                         is-disabled="status.isFirstDisabled">-->
                     <div class="box">
                         <div class="description-text">
                             <div>{{ vm.title }}</div>
@@ -54,180 +80,205 @@
                         </div>
                         <div class="button text-center"><a href="#">MORE</a></div>
                     </div>
-                </tab>
-                <tab heading="HUD">
-                    <div>
-                        <h1>Information</h1>
+                </div>
+                <!--                    </accordion-group>
+                                </accordion>-->
+                <div>
+                    <h1>Information</h1>
 
-                        <div class="box">
+                    <div class="box">
+                        <table>
+                            <tr>
+                                <td style="width: 90px">DEVELOPERS</td>
+                                <td style="padding-left: 15px">LINES OF CODE</td>
+                            </tr>
+                            <tr class="numbers">
+                                <td style="text-decoration: underline; width: 90px">{{
+                                    vm.activeNodeData.users.length }}
+                                </td>
+                                <td style="padding-left: 15px">{{ vm.activeNodeData.projectStats.linesOfCode }}
+                                    <!--@todo-->
+                                    <!--<span style="display: block; font-size: 10px">(+13570)</span>-->
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div>
+                    <h1>RELEASING</h1>
+
+                    <div class="box">
+                        <div class="text-center">CURRENT VERSION: 1.4</div>
+                        <div class="versions">
+                            <div class="line"></div>
+                            <div class="bg"><span>1.1</span>
+
+                                <div class="past" alt="28.03"></div>
+                            </div>
+                            <div class="bg"><span>1.2</span>
+
+                                <div class="past"></div>
+                            </div>
+                            <div class="bg"><span>1.3</span>
+
+                                <div class="past"></div>
+                            </div>
+                            <div class="bg"><span>1.4</span>
+
+                                <div class="past"></div>
+                            </div>
+                            <div class="bg"><span>1.5</span>
+
+                                <div class="now"></div>
+                            </div>
+                            <div class="bg"><span>1.6</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h1>PROGRESS</h1>
+
+                    <div class="box">
+                        <div class="legend" style="margin-bottom: 30px">
+                            <div class="open">
+                                <div class="marker blue"></div>
+                                OPEN
+                            </div>
+                            <div class="inprogress">
+                                <div class="marker yellow"></div>
+                                IN PROGRESS
+                            </div>
+                            <div class="open">
+                                <div class="marker green"></div>
+                                DONE
+                            </div>
+                        </div>
+                        <div class="progress">
+                            <div ng-if="vm.openStatus > 0" class="progress-bar progress-bar-blue"
+                                 style="width: {{vm.openStatus}}%; position: relative">
+                                <span>{{vm.openStatus}}%</span>
+                                <span
+                                    style="position: absolute; top: 10px; left:8px">{{vm.openStatusHours}} h (est.)</span>
+                            </div>
+                            <div ng-if="vm.inProgressStatus > 0" class="progress-bar progress-bar-yellow"
+                                 style="width: {{vm.inProgressStatus}}%; position: relative">
+                                <span>{{vm.inProgressStatus}}%</span>
+                                <span style="position: absolute; top: 10px; left:8px">{{vm.inProgressStatusHours}} h (est.)</span>
+                            </div>
+                            <div ng-if="vm.doneStatus > 0" class="progress-bar progress-bar-green"
+                                 style="width: {{vm.doneStatus}}%; position: relative">
+                                <span>{{vm.doneStatus}}%</span>
+                                <span
+                                    style="position: absolute; top: 10px; left:8px">{{vm.doneStatusHours}} h (logged)</span>
+                            </div>
+                        </div>
+                        <div class="text-center" style="margin-top: 30px">
+                            STORY POINTS
+                        </div>
+                        <div class="story text-center">
                             <table>
                                 <tr>
-                                    <td style="width: 90px">DEVELOPERS</td>
-                                    <td style="padding-left: 15px">LINES OF CODE</td>
-                                </tr>
-                                <tr class="numbers">
-                                    <td style="text-decoration: underline; width: 90px">{{ vm.activeNodeData.users.length }}</td>
-                                    <td style="padding-left: 15px">{{ vm.activeNodeData.projectStats.linesOfCode }}
-                                        <!--@todo-->
-                                        <!--<span style="display: block; font-size: 10px">(+13570)</span>-->
+                                    <td>
+                                        <div class="marker blue"></div>
                                     </td>
+                                    <td>
+                                        <div class="marker yellow"></div>
+                                    </td>
+                                    <td>
+                                        <div class="marker green"></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>{{ vm.activeNodeData.storyPoints.open }}</td>
+                                    <td>{{ vm.activeNodeData.storyPoints.inProgress }}</td>
+                                    <td>{{ vm.activeNodeData.storyPoints.done }}</td>
                                 </tr>
                             </table>
                         </div>
                     </div>
-                    <div>
-                        <h1>RELEASING</h1>
 
-                        <div class="box">
-                            <div class="text-center">CURRENT VERSION: 1.4</div>
-                            <div class="versions">
-                                <div class="line"></div>
-                                <div class="bg"><span>1.1</span><div class="past" alt="28.03"></div></div>
-                                <div class="bg"><span>1.2</span><div class="past"></div></div>
-                                <div class="bg"><span>1.3</span><div class="past"></div></div>
-                                <div class="bg"><span>1.4</span><div class="past"></div></div>
-                                <div class="bg"><span>1.5</span><div class="now"></div></div>
-                                <div class="bg"><span>1.6</span></div>
+                    <div>
+                        <h1>QUALITY</h1>
+
+                        <div class="box slider js-fade">
+
+                            <div class="diagram">
+                                <div class="circle-diagram">
+                                    <div class="mask-big"></div>
+                                    <knob knob-data="vm.activeNodeData.projectStats.coveragePercent"
+                                          knob-options="vm.knobBigOptions"></knob>
+
+                                    <div class="circle-divider">
+                                        <div class="circle-diagram-small">
+                                            <div class="mask-small"></div>
+                                            <knob knob-data="0" knob-options="vm.knobSmallOptions"></knob>
+
+                                            <div class="circle-sonar">
+                                                <div class="circle-unit {{ vm.borderColor.coverage }}">
+                                                    <h1>UNIT TEST<br>
+                                                        COVERAGE<br>
+                                                        <span class="big">{{ vm.activeNodeData.projectStats.coveragePercent }}%</span>
+                                                    </h1>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+
+                            <div class="diagram">
+                                <div class="circle-diagram">
+                                    <div class="mask-big"></div>
+                                    <knob knob-data="0" knob-options="vm.knobBigOptions"></knob>
+
+                                    <div class="circle-divider">
+                                        <div class="circle-diagram-small">
+                                            <div class="mask-small"></div>
+                                            <knob knob-data="vm.activeNodeData.projectStats.successPercent"
+                                                  knob-options="vm.knobSmallOptions"></knob>
+
+                                            <div class="circle-sonar">
+                                                <div class="circle-unit {{ vm.borderColor.test }}">
+                                                    <h1>UNIT TEST<br>
+                                                        SUCCESS<br>
+                                                        <span class="big">{{ vm.activeNodeData.projectStats.successPercent }}%</span>
+                                                    </h1>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="diagram">
+                                <div class="circle-diagram">
+                                    <div class="mask-big"></div>
+                                    <knob knob-data="0" knob-options="vm.knobBigOptions"></knob>
+
+                                    <div class="circle-divider">
+                                        <div class="circle-diagram-small">
+                                            <div class="mask-small"></div>
+                                            <knob knob-data="0" knob-options="vm.knobSmallOptions"></knob>
+
+                                            <div class="circle-sonar">
+                                                <div class="circle-unit {{ vm.borderColor.issues }}">
+                                                    <h1>SONAR<br>
+                                                        ISSUES<br>
+                                                        <span class="small">critical: {{ vm.activeNodeData.projectStats.criticalIssues }}</span><br>
+                                                        <span class="small">blockers: {{ vm.activeNodeData.projectStats.blockerIssues }}</span>
+                                                    </h1>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
-                    <div>
-                        <h1>PROGRESS</h1>
-
-                        <div class="box">
-                            <div class="legend" style="margin-bottom: 30px">
-                                <div class="open">
-                                    <div class="marker blue"></div>
-                                    OPEN
-                                </div>
-                                <div class="inprogress">
-                                    <div class="marker yellow"></div>
-                                    IN PROGRESS
-                                </div>
-                                <div class="open">
-                                    <div class="marker green"></div>
-                                    DONE
-                                </div>
-                            </div>
-                            <div class="progress">
-                                <div ng-if="vm.openStatus > 0" class="progress-bar progress-bar-blue"
-                                     style="width: {{vm.openStatus}}%; position: relative">
-                                    <span>{{vm.openStatus}}%</span>
-                                    <span style="position: absolute; top: 10px; left:8px">{{vm.openStatusHours}} h (est.)</span>
-                                </div>
-                                <div ng-if="vm.inProgressStatus > 0" class="progress-bar progress-bar-yellow"
-                                     style="width: {{vm.inProgressStatus}}%; position: relative">
-                                    <span>{{vm.inProgressStatus}}%</span>
-                                    <span style="position: absolute; top: 10px; left:8px">{{vm.inProgressStatusHours}} h (est.)</span>
-                                </div>
-                                <div ng-if="vm.doneStatus > 0" class="progress-bar progress-bar-green"
-                                     style="width: {{vm.doneStatus}}%; position: relative">
-                                    <span>{{vm.doneStatus}}%</span>
-                                    <span style="position: absolute; top: 10px; left:8px">{{vm.doneStatusHours}} h (logged)</span>
-                                </div>
-                            </div>
-                            <div class="text-center" style="margin-top: 30px">
-                                STORY POINTS
-                            </div>
-                            <div class="story text-center">
-                                <table>
-                                    <tr>
-                                        <td>
-                                            <div class="marker blue"></div>
-                                        </td>
-                                        <td>
-                                            <div class="marker yellow"></div>
-                                        </td>
-                                        <td>
-                                            <div class="marker green"></div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>{{ vm.activeNodeData.storyPoints.open }}</td>
-                                        <td>{{ vm.activeNodeData.storyPoints.inProgress }}</td>
-                                        <td>{{ vm.activeNodeData.storyPoints.done }}</td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-
-                        <div>
-                            <h1>QUALITY</h1>
-
-                            <div class="box">
-                                <div class="diagram">
-                                    <div class="circle-diagram">
-                                        <div class="mask-big"></div>
-                                        <knob knob-data="vm.activeNodeData.projectStats.coveragePercent" knob-options="vm.knobBigOptions"></knob>
-
-                                        <div class="circle-divider">
-                                            <div class="circle-diagram-small">
-                                                <div class="mask-small"></div>
-                                                <knob knob-data="0" knob-options="vm.knobSmallOptions"></knob>
-
-                                                <div class="circle-sonar">
-                                                    <div class="circle-unit {{ vm.borderColor.coverage }}">
-                                                        <h1>UNIT TEST<br>
-                                                            COVERAGE<br>
-                                                            <span class="big">{{ vm.activeNodeData.projectStats.coveragePercent }}%</span></h1>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="diagram">
-                                    <div class="circle-diagram">
-                                        <div class="mask-big"></div>
-                                        <knob knob-data="0" knob-options="vm.knobBigOptions"></knob>
-
-                                        <div class="circle-divider">
-                                            <div class="circle-diagram-small">
-                                                <div class="mask-small"></div>
-                                                <knob knob-data="vm.activeNodeData.projectStats.successPercent" knob-options="vm.knobSmallOptions"></knob>
-
-                                                <div class="circle-sonar">
-                                                    <div class="circle-unit {{ vm.borderColor.test }}">
-                                                        <h1>UNIT TEST<br>
-                                                            SUCCESS<br>
-                                                            <span class="big">{{ vm.activeNodeData.projectStats.successPercent }}%</span></h1>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <div class="diagram">
-                                    <div class="circle-diagram">
-                                        <div class="mask-big"></div>
-                                        <knob knob-data="0" knob-options="vm.knobBigOptions"></knob>
-
-                                        <div class="circle-divider">
-                                            <div class="circle-diagram-small">
-                                                <div class="mask-small"></div>
-                                                <knob knob-data="0" knob-options="vm.knobSmallOptions"></knob>
-
-                                                <div class="circle-sonar">
-                                                    <div class="circle-unit {{ vm.borderColor.issues }}">
-                                                        <h1>SONAR<br>
-                                                            ISSUES<br>
-                                                            <span class="small">critical: {{ vm.activeNodeData.projectStats.criticalIssues }}</span><br>
-                                                            <span class="small">blockers: {{ vm.activeNodeData.projectStats.blockerIssues }}</span>
-                                                        </h1>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </tab>
-            </tabset>
+                </div>
+            </div>
         </div>
         <!--right nav 1-->
 
@@ -262,12 +313,17 @@
                                     <td style="padding-left: 15px; width: 150px">TOTAL ISSUES SOLVED</td>
                                 </tr>
                                 <tr class="numbers">
-                                    <td style="text-decoration: underline; width: 90px">{{ vm.activeNodeData.users.length }}</td>
+                                    <td style="text-decoration: underline; width: 90px">{{
+                                        vm.activeNodeData.users.length }}
+                                    </td>
                                     <td style="padding-left: 15px; width: 120px">
                                         <div class="progress">
-                                            <div class="progress-bar progress-bar-blue" style="width: {{ vm.issuesSolved.task }}%"></div>
-                                            <div class="progress-bar progress-bar-green" style="width: {{ vm.issuesSolved.research }}%"></div>
-                                            <div class="progress-bar progress-bar-red" style="width: {{ vm.issuesSolved.bug }}%"></div>
+                                            <div class="progress-bar progress-bar-blue"
+                                                 style="width: {{ vm.issuesSolved.task }}%"></div>
+                                            <div class="progress-bar progress-bar-green"
+                                                 style="width: {{ vm.issuesSolved.research }}%"></div>
+                                            <div class="progress-bar progress-bar-red"
+                                                 style="width: {{ vm.issuesSolved.bug }}%"></div>
                                         </div>
                                         <div class="legend" style="font-size: 12px; font-weight: normal">
                                             <div class="co-legend" style="width: auto">
@@ -382,7 +438,6 @@
                             <div>{{ vm.title }}</div>
                             {{ vm.descr }}
                         </div>
-						<div class="button text-center"><a href="">MORE</a><br/><a href ng-click="vm.toTimeline()">TIMELINE</a></div>
                     </div>
                 </tab>
                 <tab heading="HUD">
@@ -452,9 +507,13 @@
                             <div class="requirements text-center">
                                 REQUIREMENTS
                                 <div class="progress" style="margin-top: 25px">
-                                    <div class="progress-bar progress-bar-blue" style="width: {{ vm.requirements.opened }}%"><span ng-if="vm.requirements.opened > 0">{{ vm.requirements.opened }}%</span>
+                                    <div class="progress-bar progress-bar-blue"
+                                         style="width: {{ vm.requirements.opened }}%"><span
+                                        ng-if="vm.requirements.opened > 0">{{ vm.requirements.opened }}%</span>
                                     </div>
-                                    <div class="progress-bar progress-bar-green" style="width: {{ vm.requirements.closed }}%"><span ng-if="vm.requirements.closed > 0">{{ vm.requirements.closed }}%</span>
+                                    <div class="progress-bar progress-bar-green"
+                                         style="width: {{ vm.requirements.closed }}%"><span
+                                        ng-if="vm.requirements.closed > 0">{{ vm.requirements.closed }}%</span>
                                     </div>
                                 </div>
                                 DUE DATE<br>12 Oct 2015
@@ -466,61 +525,78 @@
         </div>
         <!--right nav 3-->
 
+        <div class="b-breadcrumbs">
+            <ul>
+                <li class="b-breadcrumbs__item">
+                    <img src="assets/img/img-foundation-sphere.png" alt="SSF"/>
+                </li>
+            </ul>
+        </div>
+
     </header>
 
-	<!-- Issue line popup -->
-	<div class="b-issue-popup">
-		<div class="b-issue-popup__close"></div>
-		<table>
-			<tr>
-				<td style="width: 40px">
-					<img src="assets/img/
+    <!-- Issue line popup -->
+    <div class="b-issue-popup">
+        <div class="b-issue-popup__close"></div>
+        <table>
+            <tr>
+                <td style="width: 40px">
+                    <img src="assets/img/
 					icon-task.svg" alt="" height="28px"/>
-				</td>
-				<td style="font-size: 12px"> <span id="js-issue-key">KMS-272</span><br>
-					<span style="font-size: 15px; opacity: 0.6;" id="js-issue-summary">Implement 3d Timeline animations</span>
-				</td>
-			</tr>
-		</table>
-		<div style="margin-top: 25px">
-			<div style="width: 45%; display: inline-block" id="js-issue-status" class="js-text-to-span">
-				<div style="width: 40px; display: inline-block"><img src="assets/img/icon-02.svg" alt="" height="28px"/>
-				</div>
-				<span style="opacity: 0.6;">Open</span>
-			</div>
-			<div style="width: 45%; display: inline-block" id="js-issue-creator" class="js-text-to-span">
-				<div style="width: 40px; display: inline-block"><img src="assets/img/icon-06.svg" alt="" height="28px"/>
-				</div>
-				<span style="opacity: 0.6;">Ilarion Stus </span>
-			</div>
-		</div>
-		<div style="margin-top: 10px">
-			<div style="width: 45%; display: inline-block">
-				<div style="width: 40px; display: inline-block"><img src="assets/img/icon-03.svg" alt="" height="28px"/>
-				</div>
-				<span style="opacity: 0.6;">uiux</span>
-			</div>
-			<div style="width: 45%; display: inline-block" id="js-issue-assignee" class="js-text-to-span">
-				<div style="width: 40px; display: inline-block"><img src="assets/img/icon-07.svg" alt="" height="28px"/>
-				</div>
-				<span style="opacity: 0.6;">Ilarion Stus </span>
-			</div>
-		</div>
-		<div style="margin-top: 10px">
-			<div style="width: 45%; display: inline-block">
-				<div style="width: 40px; display: inline-block"><img src="assets/img/icon-04.svg" alt="" height="28px"/>
-				</div>
-				<span style="opacity: 0.6;">uiux</span>
-			</div>
-			<div style="width: 45%; display: inline-block">
-				<div style="width: 40px; display: inline-block"><img src="assets/img/icon-05.svg" alt="" height="28px"/>
-				</div>
-				<span style="opacity: 0.6;">uiux</span>
-			</div>
-		</div>
-		<div id="js-issue-changelog-list" style="border-top: 1px solid #00142d; margin-top: 25px;"></div>
-	</div>
-	<!-- END Issue line popup -->	
+                </td>
+                <td style="font-size: 12px"><span id="js-issue-key">KMS-272</span><br>
+                    <span style="font-size: 15px; opacity: 0.6;"
+                          id="js-issue-summary">Implement 3d Timeline animations</span>
+                </td>
+            </tr>
+        </table>
+        <div style="margin-top: 25px">
+            <div style="width: 45%; display: inline-block" id="js-issue-status" class="js-text-to-span">
+                <div style="width: 40px; display: inline-block"><img src="assets/img/icon-02.svg" alt="" height="28px"/>
+                </div>
+                <span style="opacity: 0.6;">Open</span>
+            </div>
+            <div style="width: 45%; display: inline-block" id="js-issue-creator" class="js-text-to-span">
+                <div style="width: 40px; display: inline-block"><img src="assets/img/icon-06.svg" alt="" height="28px"/>
+                </div>
+                <span style="opacity: 0.6;">Ilarion Stus </span>
+            </div>
+        </div>
+        <div style="margin-top: 10px">
+            <div style="width: 45%; display: inline-block">
+                <div style="width: 40px; display: inline-block"><img src="assets/img/icon-03.svg" alt="" height="28px"/>
+                </div>
+                <span style="opacity: 0.6;">uiux</span>
+            </div>
+            <div style="width: 45%; display: inline-block" id="js-issue-assignee" class="js-text-to-span">
+                <div style="width: 40px; display: inline-block"><img src="assets/img/icon-07.svg" alt="" height="28px"/>
+                </div>
+                <span style="opacity: 0.6;">Ilarion Stus </span>
+            </div>
+        </div>
+        <div style="margin-top: 10px">
+            <div style="width: 45%; display: inline-block">
+                <div style="width: 40px; display: inline-block"><img src="assets/img/icon-04.svg" alt="" height="28px"/>
+                </div>
+                <span style="opacity: 0.6;">uiux</span>
+            </div>
+            <div style="width: 45%; display: inline-block">
+                <div style="width: 40px; display: inline-block"><img src="assets/img/icon-05.svg" alt="" height="28px"/>
+                </div>
+                <span style="opacity: 0.6;">uiux</span>
+            </div>
+        </div>
+        <div class="b-issue-popup__buttons">
+            <a class="b-button js-issue-popup-show-more" href="#">More</a>
+            <a ng-show="vm.reserchIssueId > 0" href="#" class="b-button"
+               ng-click="vm.showReserchPopups(vm.reserchIssueId)">
+                Reserch
+            </a>
+        </div>
+        <div id="js-issue-changelog-list" style="border-top: 1px solid #00142d; margin-top: 15px; display: none;">
+        </div>
+    </div>
+    <!-- END Issue line popup -->
 
     <section>
         <div id="projectInfoPopup" class="popup-tree"></div>

@@ -9,6 +9,12 @@ CanvasCtrl.$inject = ['$rootScope', '$location', '$scope', '$sessionStorage', 's
 function CanvasCtrl($rootScope, $location, $scope, $sessionStorage, structureSrv)
 {
     var vm = this;
+    var DATA = [];
+    var currentStory;
+    var popup = new Popup();
+    var selectedObjects = [];
+
+    vm.baseUrl = 'subutai.io';
     $scope.$storage = $sessionStorage;
 
 
@@ -27,6 +33,7 @@ function CanvasCtrl($rootScope, $location, $scope, $sessionStorage, structureSrv
     vm.inProgressStatusHours;
     vm.doneStatusHours;
     vm.storyList;
+    vm.reserchIssueId = 0;
 
     vm.issuesSolved = {
         research : 0,
@@ -70,6 +77,7 @@ function CanvasCtrl($rootScope, $location, $scope, $sessionStorage, structureSrv
 	//functions
 	vm.simulateClick = simulateClick;
     vm.toTimeline = toTimeline;
+    vm.showReserchPopups = showReserchPopups;
 
     // arbor variables
     vm.sys = arbor.ParticleSystem(500, 300, 0.2, false, 20);
@@ -86,7 +94,7 @@ function CanvasCtrl($rootScope, $location, $scope, $sessionStorage, structureSrv
 
     function recursivePromises( i, length ) {
         if( i < length ) {
-            var j = structureSrv.getIssues("project.json").success(function (data)
+            var j = structureSrv.getIssues(vm.projects[i].key).success(function (data)
             {
                 console.log( "Inserting", i );
                 vm.projects[i] = data;
@@ -110,6 +118,10 @@ function CanvasCtrl($rootScope, $location, $scope, $sessionStorage, structureSrv
 
     function toTimeline() {
         $location.path('/timeline/' + vm.activeNode.data.title);
+    }
+
+    function showReserchPopups(issueId) {
+        popup.showMinimap(issueId);
     }
 
     /***************
@@ -159,21 +171,74 @@ function CanvasCtrl($rootScope, $location, $scope, $sessionStorage, structureSrv
      * returns the data received from api
      */
     function getNodeDataByPath(path) {
-        var path = path.toString().split(",");
+        if (path !== undefined) {
+            var path = path.toString().split(",");
 
-        var workingDataNode = vm.projects;
-        for (var i = 0; i < path.length; i++) {
-            if (workingDataNode.issues) {
-                workingDataNode = workingDataNode.issues[path[i]];
+            var workingDataNode = vm.projects;
+            for (var i = 0; i < path.length; i++) {
+                if (workingDataNode.issues) {
+                    workingDataNode = workingDataNode.issues[path[i]];
+                }
+                else {
+                    workingDataNode = workingDataNode[path[i]];
+                }
             }
-            else {
-                workingDataNode = workingDataNode[path[i]];
-            }
+
+            return workingDataNode;
         }
-
-        return workingDataNode;
     }
 
+    function getStoryesData(key) {
+        if (currentStory != key) {
+            currentStory = key;
+            DATA = [];
+            structureSrv.getEvents('timeline.json').success(function (data) {
+                var issues = data.issues;
+
+                if (issues == undefined) return;
+
+                for (var i = 0; i < issues.length; i++) {
+                    var result = $.grep(DATA, function (e) {
+                        if (undefined !== e) {
+                            return e.issueId == issues[i].issueId;
+                        }
+                    });
+                    if (result.length > 0) {
+                        mergeEvents(issues[i].issueId, issues[i].changelogList)
+                    }
+                    else {
+                        DATA.push(issues[i]);
+                    }
+                }
+
+                for (var i = 0; i < DATA.length; i++) {
+                    DATA[i].changelogList.sort(function (a, b) {
+                        return a.changeKey.created - b.changeKey.created
+                    });
+                }
+                popup.setData(DATA);
+            });
+        }
+    }
+
+    function mergeEvents(id, data) {
+        for (var i = 0; i < data.length; i++) {
+            var result = $.grep(DATA, function (e) {
+                return e.changeKey.changeItemId == id;
+            });
+
+            if (result.length > 0) {
+                result = result[0];
+
+                for (var j = 0; j < result.changelogList.length; j++) {
+
+                    if (data[i].changelogList[j].changeKey.changeItemId != result.changelogList[j].changeKey.changeItemId) {
+                        result.changelogList.push(data[i]);
+                    }
+                }
+            }
+        }
+    }
 
     function calculateRequirements(currentNode)
     {
@@ -212,15 +277,25 @@ function CanvasCtrl($rootScope, $location, $scope, $sessionStorage, structureSrv
      */
     function click(node, particleSystem, clickFromCanvas) {
         if (node != null) {
+            $rootScope.$apply(function () {
+                vm.reserchIssueId = 0;
+            });
 			var currentNode = getNodeDataByPath(node.data.path);
 
             if (node.data.type.toLowerCase() == "requirement" || node.data.type.toLowerCase() == "design" ||
                 node.data.type.toLowerCase() == "task" || node.data.type.toLowerCase() == "playbook") {
 
-				var popup = new Popup();
-				popup.getIssuePopup(false, currentNode);
+                popup.getIssuePopup(currentNode.id);
                 return;
 			}
+
+            if (node.data.type.toLowerCase() == "research") {
+                $rootScope.$apply(function () {
+                    vm.reserchIssueId = currentNode.id;
+                });
+                popup.getIssuePopup(currentNode.id);
+                return;
+            }
 
             if( node.data.type.toLowerCase() == "foundation" ) {
                 if( $('#viewport').attr("side-bar-toggled") == "true" ) {
@@ -249,32 +324,14 @@ function CanvasCtrl($rootScope, $location, $scope, $sessionStorage, structureSrv
 			
             if (node.data.type.toLowerCase() == "story") {
 
+                getStoryesData(currentNode.key);
+
 				if( clickFromCanvas ) {
 					$rootScope.$apply(function () {
 						vm.title = currentNode.key;
 						vm.descr = currentNode.summary;
                         vm.activeNodeData = currentNode;
                         calculateRequirements( currentNode );
-
-
-
-
-                        $scope.$storage.metrics.openStatus = vm.openStatus;
-                        $scope.$storage.metrics.inProgressStatus = vm.inProgressStatus;
-                        $scope.$storage.metrics.doneStatus = vm.doneStatus;
-                        $scope.$storage.metrics.openStatusHours = vm.openStatusHours;
-                        $scope.$storage.metrics.inProgressStatusHours = vm.inProgressStatusHours;
-                        $scope.$storage.metrics.doneStatusHours = vm.doneStatusHours;
-                        $scope.$storage.metrics.storyPoints = currentNode.storyPoints;
-                        // @todo changed to storage
-                        //vm.structureSrv.metrics.openStatus = vm.openStatus;
-                        //vm.structureSrv.metrics.inProgressStatus = vm.inProgressStatus;
-                        //vm.structureSrv.metrics.doneStatus = vm.doneStatus;
-                        //vm.structureSrv.metrics.openStatusHours = vm.openStatusHours;
-                        //vm.structureSrv.metrics.inProgressStatusHours = vm.inProgressStatusHours;
-                        //vm.structureSrv.metrics.doneStatusHours = vm.doneStatusHours;
-                        //vm.structureSrv.metrics.storyPoints = currentNode.storyPoints;
-
 						self.value += 1;
 					});
 				} else {
@@ -285,6 +342,14 @@ function CanvasCtrl($rootScope, $location, $scope, $sessionStorage, structureSrv
 
                     calculateRequirements(currentNode);
 				}
+
+                $scope.$storage.metrics.openStatus = vm.openStatus;
+                $scope.$storage.metrics.inProgressStatus = vm.inProgressStatus;
+                $scope.$storage.metrics.doneStatus = vm.doneStatus;
+                $scope.$storage.metrics.openStatusHours = vm.openStatusHours;
+                $scope.$storage.metrics.inProgressStatusHours = vm.inProgressStatusHours;
+                $scope.$storage.metrics.doneStatusHours = vm.doneStatusHours;
+                $scope.$storage.metrics.storyPoints = currentNode.storyPoints;
 
                 if ($('#v3').css('display') == 'none') {
             		$('#v1').hide();
@@ -446,11 +511,13 @@ function CanvasCtrl($rootScope, $location, $scope, $sessionStorage, structureSrv
             }
 
 
-            if (particleSystem.getEdgesFrom(node, particleSystem).length == 0) {
-                levelDown(node, particleSystem, false, node.data.weight + 1);
-            }
-            else if (particleSystem.getEdgesTo(node, particleSystem).length == 0) {
-                levelUp(node, particleSystem);
+            if (vm.activeNode == node) {
+                if (particleSystem.getEdgesFrom(node, particleSystem).length == 0) {
+                    levelDown(node, particleSystem, false, node.data.weight + 1);
+                }
+                else if (particleSystem.getEdgesTo(node, particleSystem).length == 0) {
+                    levelUp(node, particleSystem);
+                }
             }
 
             vm.activeNode = node;
@@ -467,6 +534,7 @@ function CanvasCtrl($rootScope, $location, $scope, $sessionStorage, structureSrv
 
         node.data.weight -= 1;
 
+        $('.b-breadcrumbs ul li:last-child').remove();
         if (node.data.type.toLowerCase() == "project") {
             drawFromSSF(node);
             return;
@@ -494,6 +562,7 @@ function CanvasCtrl($rootScope, $location, $scope, $sessionStorage, structureSrv
 
             particleSystem.addEdge(data.key, data.issues[i].key);
         }
+
     }
 
     /**************
@@ -528,8 +597,14 @@ function CanvasCtrl($rootScope, $location, $scope, $sessionStorage, structureSrv
             });
             particleSystem.addEdge(node.name, data.issues[i].key);
 
-            if (recursively)
+            if (recursively) {
                 levelDown(particleSystem.getNode(data.issues[i].key), particleSystem, recursively, weight);
+            }
+        }
+        if (!recursively) {
+            var breadcrumbsImage = selectedObjects[data.issueType.toLowerCase()];
+            var breadcrumbsItem = jQuery('<li/>', {class: 'b-breadcrumbs__item'}).append(breadcrumbsImage);
+            $('.b-breadcrumbs ul').append(breadcrumbsItem);
         }
     }
 
@@ -607,7 +682,6 @@ function CanvasCtrl($rootScope, $location, $scope, $sessionStorage, structureSrv
 
         resizeCanvas();
 
-        var selectedObjects = [];
         var sphereObjects = [];
 
 
@@ -623,40 +697,40 @@ function CanvasCtrl($rootScope, $location, $scope, $sessionStorage, structureSrv
 
             initImg: function() {
 
-                selectedObjects['research'] = loadSphere('assets/img/img-research-sphere-selected.png');
+                selectedObjects['research'] = loadSphere('assets/img/img-research-sphere.png');
                 sphereObjects['research'] = loadSphere('assets/img/img-research-sphere.png');
 
-                selectedObjects['bug'] = loadSphere('assets/img/img-bug-sphere-selected.png');
+                selectedObjects['bug'] = loadSphere('assets/img/img-bug-sphere.png');
                 sphereObjects['bug'] = loadSphere('assets/img/img-bug-sphere.png');
 
-                selectedObjects['task'] = loadSphere('assets/img/img-task-sphere-selected.png');
+                selectedObjects['task'] = loadSphere('assets/img/img-task-sphere.png');
                 sphereObjects['task'] = loadSphere('assets/img/img-task-sphere.png');
 
-                selectedObjects['design'] = loadSphere('assets/img/img-design-sphere-selected.png');
+                selectedObjects['design'] = loadSphere('assets/img/img-design-sphere.png');
                 sphereObjects['design'] = loadSphere('assets/img/img-design-sphere.png');
 
-                selectedObjects['playbook'] = loadSphere('assets/img/img-playbook-sphere-selected.png');
+                selectedObjects['playbook'] = loadSphere('assets/img/img-playbook-sphere.png');
                 sphereObjects['playbook'] = loadSphere('assets/img/img-playbook-sphere.png');
 
-                selectedObjects['requirement'] = loadSphere('assets/img/img-requirement-sphere-selected.png');
+                selectedObjects['requirement'] = loadSphere('assets/img/img-requirement-sphere.png');
                 sphereObjects['requirement'] = loadSphere('assets/img/img-requirement-sphere.png');
 
-                selectedObjects['improvement'] = loadSphere('assets/img/img-requirement-sphere-selected.png');
+                selectedObjects['improvement'] = loadSphere('assets/img/img-requirement-sphere.png');
                 sphereObjects['improvement'] = loadSphere('assets/img/img-requirement-sphere.png');
 
-                selectedObjects['feature'] = loadSphere('assets/img/img-requirement-sphere-selected.png');
+                selectedObjects['feature'] = loadSphere('assets/img/img-requirement-sphere.png');
                 sphereObjects['feature'] = loadSphere('assets/img/img-requirement-sphere.png');
 
-                selectedObjects['story'] = loadSphere('assets/img/img-story-sphere-selected.png');
+                selectedObjects['story'] = loadSphere('assets/img/img-story-sphere.png');
                 sphereObjects['story'] = loadSphere('assets/img/img-story-sphere.png');
 
-                selectedObjects['epic'] = loadSphere('assets/img/img-epic-sphere-selected.png');
+                selectedObjects['epic'] = loadSphere('assets/img/img-epic-sphere.png');
                 sphereObjects['epic'] = loadSphere('assets/img/img-epic-sphere.png');
 
-                selectedObjects['project'] = loadSphere('assets/img/img-project-sphere-selected.png');
+                selectedObjects['project'] = loadSphere('assets/img/img-project-sphere.png');
                 sphereObjects['project'] = loadSphere('assets/img/img-project-sphere.png');
 
-                selectedObjects['foundation'] = loadSphere('assets/img/img-foundation-sphere-selected.png');
+                selectedObjects['foundation'] = loadSphere('assets/img/img-foundation-sphere.png');
                 sphereObjects['foundation'] = loadSphere('assets/img/img-foundation-sphere.png');
 
                 sphereObjects['background'] = loadSphere('assets/img/img-bg-1.jpg');
@@ -831,19 +905,16 @@ function CanvasCtrl($rootScope, $location, $scope, $sessionStorage, structureSrv
 
 
         // @todo enhance
-        setTimeout(function() {
-            var circle = $('.diagram:visible:last');
-
-            var index = $('.diagram').index( circle[0] );
-            circle.hide();
-            var newCircle = $('.diagram')[ (index + 1) % 3 ];
-
-            // @todo doesn't work
-            //newCircle.css('right', '-300px');
-            //newCircle.show();
-            //newCircle.animate({
-            //    right: '+=300px'
-            //});
-        }, 5000 );
+        $('.js-fade').slick({
+            dots: false,
+            speed: 300,
+            autoplaySpeed: 5000,
+            slidesToShow: 1,
+            pauseOnHover: true,
+            arrows: false,
+            autoplay: true,
+            fade: true,
+            adaptiveHeight: true
+        });
     }
 }

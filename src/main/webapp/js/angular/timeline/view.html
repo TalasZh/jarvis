@@ -3,29 +3,56 @@
 	<header class="b-no-info-header">
 		<!--Left-sidebar begin -->
 		<div class="left-nav" id="wrapper-left">
+			<!--Toggle-button-collapse-->
+			<div class="toggle-left">
+				<a id="menu-toggle" href="#"><img src="assets/img/icon-collapse-in.svg" alt="" width="5px"
+																					class="icon-collapse"/></a>
+			</div>
 			<div class="profile">
-				<!--Toggle-button-collapse-->
-				<div class="toggle-left">
-					<a class="si-icons si-icons-default" id="menu-toggle" href="#">
-						<span class="si-icon si-icon-hamburger" data-icon-name="hamburger"></span>
-					</a>
-				</div>
 				<a href="#" class="circle-avatar"><img src="assets/img/img-profile-plane.svg"></a>
-				<span class="show-text"><a href="#" style="margin-top: 10px">PROFILE</a><a href="#">LOG OUT</a></span>
+				<span class="show-text">
+					<a href="#" style="margin-top: 10px">PROFILE</a>
+					<a href="#">LOG OUT</a>
+				</span>
 			</div>
 			<div class="services-buttons">
 				<ul>
-					<li class="active"><a href=""><img src="assets/img/icon-jira.png" alt=""
-						class="icons-service"/><br><span class="show-text">JIRA</span></a>
+					<li>
+						<a href="/#/">
+							<img src="assets/img/icon-home.png" alt="" class="icons-service"/><br>
+							<span class="show-text">HOME</span>
+						</a>
 					</li>
-					<li><a href=""><img src="assets/img/icon-confluence.png" alt="" class="icons-service"/><br><span
-							class="show-text">CONFLUENCE</span></a></li>
-					<li><a href=""><img src="assets/img/icon-stash.png" alt="" class="icons-service"/><br><span
-							class="show-text">STASH</span></a></li>
-					<li><a href=""><img src="assets/img/icon-hipchat.png" alt="" class="icons-service"/><br><span
-							class="show-text">HIPCHAT</span></a></li>
-					<li><a href=""><img src="assets/img/icon-zimbra.png" alt="" class="icons-service"/><br><span
-							class="show-text">ZIBRA</span></a></li>
+					<li class="active">
+						<a href="https://jira.{{ timelineCtrl.baseUrl }}" target="_blank">
+							<img src="assets/img/icon-jira.png" alt="" class="icons-service"/><br>
+							<span class="show-text">JIRA</span>
+						</a>
+					</li>
+					<li>
+						<a href="https://confluence.{{ timelineCtrl.baseUrl }}" target="_blank">
+							<img src="assets/img/icon-confluence.png" alt="" class="icons-service"/><br>
+							<span class="show-text">CONFLUENCE</span>
+						</a>
+					</li>
+					<li>
+						<a href="https://stash.{{ timelineCtrl.baseUrl }}" target="_blank">
+							<img src="assets/img/icon-stash.png" alt="" class="icons-service"/><br>
+							<span class="show-text">STASH</span>
+						</a>
+					</li>
+					<li>
+						<a href="https://hipchat.{{ timelineCtrl.baseUrl }}" target="_blank">
+							<img src="assets/img/icon-hipchat.png" alt="" class="icons-service"/><br>
+							<span class="show-text">HIPCHAT</span>
+						</a>
+					</li>
+					<li>
+						<a href="https://zibra.{{ timelineCtrl.baseUrl }}" target="_blank">
+							<img src="assets/img/icon-zimbra.png" alt="" class="icons-service"/><br>
+							<span class="show-text">ZIBRA</span>
+						</a>
+					</li>
 				</ul>
 			</div>
 		</div>

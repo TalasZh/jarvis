@@ -398,13 +398,17 @@ a.circle-avatar {
     position: relative;
     width: 100%;
     height: 225px;
-    margin-bottom: 25px;
 }
 
 .circle-diagram {
     position: absolute;
     left: 6px;
 	overflow: hidden;
+}
+
+*:focus
+{
+    outline: 0;
 }
 
 .mask-big {
@@ -1249,7 +1253,8 @@ input[type=checkbox] {
 }
 
 .b-highlight-string {
-	background-color: #383831;
+    background-color: rgba(0, 10, 50, 1);
+    color: yellow;
 }
 
 .b-issue-popup {
@@ -1263,13 +1268,14 @@ input[type=checkbox] {
 	margin-left:auto;
 	margin-right:auto;
 	margin-top: -250px;
-	background: rgba(0, 10, 40, 0.5);;
+    background: rgba(0, 10, 40, 0.9);
 	border: 1px solid #00142d;
 	border-top: 3px #0a2341;
 	width: 800px;
 	max-height: 500px;
     overflow-y: auto;
 	box-shadow: 0 0 15px rgba(0,0,0,0.4);
+    z-index: 9999;
 }
 
 .b-issue-popup__close {
@@ -1288,6 +1294,12 @@ input[type=checkbox] {
 
 .b-issue-popup__close:hover {
 	background-color: rgba(0, 64, 161, 0.8);
+}
+
+.b-issue-popup__buttons
+{
+    padding: 25px 0 0 0;
+    text-align: center;
 }
 
 .b-timline-filter__select {
@@ -1310,6 +1322,63 @@ input[type=checkbox] {
 }
 
 .document-lister {
-	opacity: 0.9;
+    opacity: 0.97;
+}
+
+.b-button
+{
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #001937;
+    border: 1px solid #00142d;
+    border-radius: 2px;
+    color: #fff;
+}
+
+.b-button:hover, .b-button:focus
+{
+    text-decoration: none;
+    background-color: #00142d;
+}
+
+.b-breadcrumbs
+{
+    position: fixed;
+    top: 0;
+    left: 50%;
+    height: 40px;
+    width: 152px;
+    margin-left: -75px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+    z-index: 9999;
+    background: rgba(0, 10, 40, 0.9);
+    border: 1px solid #00142d;
+    border-top: none;
+    font-size: 0;
+    line-height: 0;
+    padding: 5px 10px;
+}
+
+.b-breadcrumbs ul
+{
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
+}
+
+.b-breadcrumbs__item
+{
+    display: inline-block;
+    padding: 0 0 0 20px;
+}
+
+.b-breadcrumbs__item:first-child
+{
+    padding-left: 0;
+}
+
+.b-breadcrumbs__item img
+{
+    width: 30px;
+    height: auto;
 }
 

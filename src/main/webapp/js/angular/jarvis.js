@@ -27,7 +27,7 @@ function routesConf($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                 loadPlugin: ['$ocLazyLoad', function ($ocLazyLoad) {
                     return $ocLazyLoad.load([
                         {
-                            files: ['js/arbor/arbor.js', 'js/builder-popup.js']
+                            files: ['js/arbor/arbor.js', 'js/builder-structure-popup.js', 'js/libs/slick.min.js']
                         },
                         {
                             name: 'ui.knob',

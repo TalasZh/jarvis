@@ -2,14 +2,12 @@ package org.safehaus.timeline;
 
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-import javax.annotation.PostConstruct;
-
-import org.safehaus.dao.entities.jira.ChangeCompositeKey;
 import org.safehaus.dao.entities.jira.IssueWorkLog;
 import org.safehaus.dao.entities.jira.JarvisLink;
 import org.safehaus.dao.entities.jira.JiraIssueChangelog;
@@ -19,12 +17,9 @@ import org.safehaus.dao.entities.jira.JiraUser;
 import org.safehaus.dao.entities.sonar.SonarMetricIssue;
 import org.safehaus.dao.entities.stash.StashMetricIssue;
 import org.safehaus.model.Capture;
-import org.safehaus.model.Session;
-import org.safehaus.model.SessionNotFoundException;
 import org.safehaus.service.api.IssueChangelogDao;
 import org.safehaus.service.api.JiraMetricDao;
 import org.safehaus.service.api.ServicePackDao;
-import org.safehaus.service.api.SessionManager;
 import org.safehaus.service.api.SonarMetricService;
 import org.safehaus.service.api.StashMetricService;
 import org.safehaus.timeline.dao.TimelineDao;
@@ -57,7 +52,7 @@ public class TimelineManager
 
     private TimelineDao timelineDaoImpl;
 
-    private SessionManager sessionManager;
+    private Set<String> researchKeys = Sets.newHashSet();
 
     @Autowired
     private SonarMetricService sonarMetricService;
@@ -76,20 +71,20 @@ public class TimelineManager
 
     public TimelineManager( final JiraMetricDao jiraMetricDao, final TimelineDao timelineDaoImpl )
     {
-        logger.error( "Timeline manager initialized" );
+        logger.info( "Timeline manager initialized" );
         this.jiraMetricDao = jiraMetricDao;
         this.timelineDaoImpl = timelineDaoImpl;
+
+        researchKeys.add( "SS-3389" );
+        researchKeys.add( "SS-3376" );
+        researchKeys.add( "KURJUN-38" );
+        researchKeys.add( "KMS-259" );
+        researchKeys.add( "KMS-198" );
+        researchKeys.add( "KMS-152" );
     }
 
 
-    @Autowired
-    public void setSessionManager( final SessionManager sessionManager )
-    {
-        this.sessionManager = sessionManager;
-    }
-
-
-    @PostConstruct
+    //    @PostConstruct
     public void init()
     {
         //        ServiceIdentity jiraIdentity = new ServiceIdentity(  )
@@ -446,7 +441,7 @@ public class TimelineManager
         {
             if ( storyKey != null )
             {
-                String projectKey = storyKey.split( "-" )[0];
+                Set<String> issues = Sets.newHashSet();
 
                 JiraMetricIssue storyIssue = jiraMetricDao.findJiraMetricIssueByKey( storyKey );
 
@@ -456,7 +451,7 @@ public class TimelineManager
                 Long from = Long.valueOf( fromDate );
                 Long to = Long.valueOf( toDate );
 
-                populateEvents( story, storyTimeline, from, to );
+                populateEvents( storyTimeline, new Date( from ), new Date( to ), issues );
 
                 //            story.getIssues().remove( (JiraMetricIssue)story );
                 storyTimeline.getIssues().remove( storyTimeline );
@@ -473,54 +468,79 @@ public class TimelineManager
     /**
      * populating events for story which are pulled from child issues for selected story
      */
-    private void populateEvents( StructuredIssue issue, StoryTimeline storyTimeline, Long fromDate, Long toDate )
+    private void populateEvents( StoryTimeline storyTimeline, Date fromDate, Date toDate, Set<String> issues )
     {
-        JiraMetricIssue jiraMetricIssue = jiraMetricDao.findJiraMetricIssueByKey( issue.getKey() );
-        if ( jiraMetricIssue != null )
+        if ( storyTimeline != null )
         {
-            for ( final JiraIssueChangelog changelog : jiraMetricIssue.getChangelogList() )
+            issues.add( storyTimeline.getIssueKey() );
+            for ( final JiraIssueChangelog changelog : storyTimeline.getChangelogList() )
             {
-                Long eventDate = changelog.getChangeKey().getCreated();
-                if ( fromDate < eventDate && eventDate < toDate )
+                Date eventDate = new Date( changelog.getChangeKey().getCreated() );
+                if ( fromDate.compareTo( eventDate ) == -1 && eventDate.compareTo( toDate ) == -1 )
                 {
                     try
                     {
-                        Session researchSession = sessionManager.getSession( jiraMetricIssue.getIssueKey() );
-                        //TODO temporal workaround to serve session captures
-                        for ( final Capture capture : researchSession.getCaptures() )
+                        if ( researchKeys.contains( storyTimeline.getIssueKey() ) )
                         {
-                            ChangeCompositeKey changeKey =
-                                    new ChangeCompositeKey( capture.getId(), capture.getCreated().getTime() );
+                            //                            List<Capture> annotations = Lists.newArrayList();
+                            for ( final IssueWorkLog issueWorkLog : storyTimeline.getIssueWorkLogs() )
+                            {
+                                String workLogComment = issueWorkLog.getComment();
+                                String uri;
+                                String quote;
+                                String comment;
+                                int uriStart = workLogComment.indexOf( "[" );
+                                int uriEnd = workLogComment.indexOf( "]" );
 
-                            String captureSample =
-                                    String.format( "{\"url\":\"%s\",\"quote\":\"%s\",\"comment\":\"%s\"}",
-                                            capture.getUri(), capture.getQuote(), capture.getText() );
+                                uri = workLogComment.substring( uriStart + 1, uriEnd );
 
-                            JiraIssueChangelog issueChangelog =
-                                    new JiraIssueChangelog( changeKey, jiraMetricIssue.getIssueKey(),
-                                            jiraMetricIssue.getIssueId(), researchSession.getUsername(),
-                                            jiraMetricIssue.getType().getName(), "Research Session",
-                                            "Annotation Created", captureSample, "", "" );
-                            jiraMetricIssue.getChangelogList().add( issueChangelog );
+                                int quoteStart = workLogComment.indexOf( "{quote}" );
+                                int quoteEnd = workLogComment.indexOf( "{quote}", quoteStart + 1 );
+
+                                quote = workLogComment.substring( quoteStart + 7, quoteEnd );
+                                comment = workLogComment.substring( quoteEnd + 7 );
+
+                                Random random = new Random();
+                                long val = ( random.nextInt( 4000 ) + 1 ) + System.currentTimeMillis();
+
+                                Capture capture = new Capture();
+                                capture.setCreated( new Date( issueWorkLog.getCreateDate() ) );
+                                capture.setResearchSession( storyTimeline.getIssueKey() );
+                                capture.setText( comment );
+                                capture.setUri( uri );
+                                capture.setQuote( quote );
+                                capture.setId( val );
+
+                                //                                annotations.add( capture );
+
+                                storyTimeline.getAnnotations().add( capture );
+                            }
                         }
-                    }
-                    catch ( SessionNotFoundException e )
-                    {
-                        logger.error( "No Research Session for issue {}", jiraMetricIssue.getIssueKey() );
                     }
                     catch ( Exception e )
                     {
-                        logger.error( "Couldn't retrieve research session for key " + jiraMetricIssue.getIssueKey(),
-                                e );
+                        logger.error( "Couldn't retrieve research session for key " + storyTimeline.getIssueKey(), e );
                     }
-                    storyTimeline.getIssues().add( jiraMetricIssue );
+                    //                    storyTimeline.getIssues().add( childIssue );
                     break;
                 }
             }
-        }
-        for ( final StructuredIssue structuredIssue : issue.getIssues() )
-        {
-            populateEvents( structuredIssue, storyTimeline, fromDate, toDate );
+            for ( final JarvisLink link : storyTimeline.getIssueLinks() )
+            {
+                if ( link.getDirection() == JarvisLink.Direction.INWARD )
+                {
+                    JiraMetricIssue childIssue =
+                            jiraMetricDao.findJiraMetricIssueByKey( link.getLinkDirection().getIssueKey() );
+                    if ( childIssue != null && !issues.contains( childIssue.getIssueKey() ) )
+                    {
+                        StoryTimeline childTimeline = new StoryTimeline( childIssue );
+
+                        populateEvents( childTimeline, fromDate, toDate, issues );
+
+                        storyTimeline.getIssues().add( childTimeline );
+                    }
+                }
+            }
         }
     }
 

@@ -108,9 +108,9 @@ public class AnalysisService
     private SonarMetricService sonarMetricService;
 
 
-    Set<JiraMetricIssue> jiraMetricIssues;
-    List<StashMetricIssue> stashMetricIssues;
-    List<ConfluenceMetric> confluenceMetrics;
+    Set<JiraMetricIssue> jiraMetricIssues = Sets.newHashSet();
+    List<StashMetricIssue> stashMetricIssues = Lists.newArrayList();
+    List<ConfluenceMetric> confluenceMetrics = Lists.newArrayList();
 
     Date lastGatheredJira = null;
     Date lastGatheredStash = null;
@@ -234,7 +234,7 @@ public class AnalysisService
             try
             {
 //                pullData( jiraCl );
-                //                getJiraMetricIssues( jiraCl );
+                getJiraMetricIssues( jiraCl );
             }
             catch ( Exception ex )
             {
@@ -330,52 +330,40 @@ public class AnalysisService
 
     private void pullData( JiraRestClient jiraCl )
     {
-        Issue jIssue = jiraCl.getIssue( "SS-3296" );
-        JiraMetricIssue issueToAdd = new JiraMetricIssue( jIssue );
+        //        Issue jIssue = jiraCl.getIssue( "SS-3296" );
+        //        JiraMetricIssue issueToAdd = new JiraMetricIssue( jIssue );
+        //
+        //        jiraMetricDao.insertJiraMetricIssue( issueToAdd );
+        //
+        //        jiraMetricIssues.add( issueToAdd );
 
-        jiraMetricIssues.add( issueToAdd );
+        for ( int i = 0; i < OVERALL_RESULT_COUNT; i += MAX_RESULT )
+        {
+            List<Issue> issues = jiraCl.getIssues( "SS", MAX_RESULT, i );
+            //            if ( issues.size() == 0 )
+            //            {
+            //                break;
+            //            }
 
-        //        for ( int i = 0; i < OVERALL_RESULT_COUNT; i += MAX_RESULT )
-        //        {
-        //            List<Issue> issues = jiraCl.getIssues( "SS", MAX_RESULT, i );
-        //
-        //            for ( final Issue issue : issues )
-        //            {
-        //                saveUser( issue.getAssignee() );
-        //                saveUser( issue.getReporter() );
-        //
-        //                log.info( "Preparing issues for jarvis format..." );
-        //                JiraMetricIssue issueToAdd = new JiraMetricIssue( issue );
-        //
-        //                jiraMetricIssues.add( issueToAdd );
-        //                jiraMetricDao.insertJiraMetricIssue( issueToAdd );
-        //                if ( lastGatheredJira != null && issueToAdd.getUpdateDate().after( lastGatheredJira ) )
-        //                {
-        //
-        //                    // New issue, get it into database.
-        //                    log.info( "Complies, ID:" + issueToAdd.getIssueId() + " UpDate:" + issueToAdd
-        //                            .getUpdateDate() );
-        //                    try
-        //                    {
-        //                        //                                kafkaProducer.send( issueToAdd );
-        //                    }
-        //                    catch ( Exception ex )
-        //                    {
-        //                        log.error( "Error while sending message", ex );
-        //                    }
-        //                }
-        //                else
-        //                {
-        //                    // Discard changes because it is already in our database.
-        //                    log.info( "Does not, ID:" + issueToAdd.getIssueId() + " UpDate:" + issueToAdd
-        //                            .getUpdateDate() );
-        //                }
-        //            }
-        //            if ( issues.size() < MAX_RESULT )
-        //            {
-        //                break;
-        //            }
-        //        }
+            for ( final Issue issue : issues )
+            {
+                saveUser( issue.getAssignee() );
+                saveUser( issue.getReporter() );
+
+                log.info( "Preparing issues for jarvis format..." );
+
+                JiraMetricIssue issueToAdd = new JiraMetricIssue( issue );
+
+                log.info( issueToAdd.toString() );
+
+                jiraMetricIssues.add( issueToAdd );
+                jiraMetricDao.insertJiraMetricIssue( issueToAdd );
+            }
+            if ( issues.size() < MAX_RESULT )
+            {
+                break;
+            }
+        }
     }
 
 
@@ -384,9 +372,6 @@ public class AnalysisService
         log.info( "getJiraMetricIssues" );
         List<String> projectKeys = new ArrayList<String>();
         JiraMetricIssueKafkaProducer kafkaProducer = new JiraMetricIssueKafkaProducer();
-
-        jiraMetricIssues = Sets.newHashSet();
-
         // Get all project names to use on getIssues
 
         try

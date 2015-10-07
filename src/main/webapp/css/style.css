@@ -945,7 +945,7 @@ label:before,
     left: 0;
     bottom: 0;
     display: block;
-    background: url("../assets/img/img-fill-angle-before.svg");
+    /*background: url("../assets/img/img-fill-angle-before.svg");*/
     height: 100px;
     width: 16px;
 }
@@ -957,7 +957,7 @@ label:before,
     right: 0;
     bottom: 0;
     display: block;
-    background: url("../assets/img/img-fill-angle-after.svg");
+    /*background: url("../assets/img/img-fill-angle-after.svg");*/
     height: 100px;
     width: 16px;
 }

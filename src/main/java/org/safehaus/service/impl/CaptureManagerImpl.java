@@ -11,9 +11,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service( "captureManager" )
+@Transactional
 public class CaptureManagerImpl extends GenericManagerImpl<Capture, Long> implements CaptureManager
 {
     private static Logger logger = LoggerFactory.getLogger( CaptureManagerImpl.class );
@@ -32,6 +34,13 @@ public class CaptureManagerImpl extends GenericManagerImpl<Capture, Long> implem
     public List<Capture> getCapturesByUsername( final String username )
     {
         return captureDao.getCapturesByUsername( username );
+    }
+
+
+    @Override
+    public List<Capture> getAll()
+    {
+        return captureDao.getAll();
     }
 
 
