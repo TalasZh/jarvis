@@ -82,6 +82,7 @@ public class DaoServiceImpl implements Dao
         catch ( Exception ex )
         {
             LOGGER.error( "Error persisting entity", ex );
+            LOGGER.error( "{}", entity );
             if ( em.getTransaction().isActive() )
             {
                 em.getTransaction().rollback();
