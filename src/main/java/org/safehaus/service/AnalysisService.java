@@ -315,7 +315,6 @@ public class AnalysisService
 
         try
         {
-            updateIssues();
             if ( !ds.getIsSparkStarted() )
             {
                 System.out.println( "Starting Sparkkk Streaming" );
@@ -654,7 +653,7 @@ public class AnalysisService
 
                     if ( change.getLink() != null )
                     {
-                        stashMetricIssue.setUri( change.getLink().getUrl() );
+                        stashMetricIssue.setUri( stashMan.getBaseUrl() + change.getLink().getUrl() );
                     }
 
                     // if the commit is made after lastGathered date put it in the qualified changes.
@@ -677,6 +676,7 @@ public class AnalysisService
     }
 
 
+    //TODO just for test purposes
     private void updateIssues()
     {
         int startPosition = 0;
