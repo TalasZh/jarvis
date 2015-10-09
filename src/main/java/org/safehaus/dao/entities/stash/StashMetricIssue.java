@@ -25,6 +25,7 @@ import com.impetus.kundera.index.IndexCollection;
 
 import static org.safehaus.Constants.DATABASE_SCHEMA;
 
+
 /**
  * Created by neslihan on 08.07.2015.
  */
@@ -72,6 +73,9 @@ public class StashMetricIssue implements Serializable
 
     @Column( name = "commit_message" )
     private String commitMessage;
+
+    @Column( name = "commit_uri" )
+    private String uri;
 
 
     public StashMetricIssue()
@@ -231,6 +235,43 @@ public class StashMetricIssue implements Serializable
     public void setCommitMessage( final String commitMessage )
     {
         this.commitMessage = commitMessage;
+    }
+
+
+    public String getUri()
+    {
+        return uri;
+    }
+
+
+    public void setUri( final String uri )
+    {
+        this.uri = uri;
+    }
+
+
+    @Override
+    public boolean equals( final Object o )
+    {
+        if ( this == o )
+        {
+            return true;
+        }
+        if ( !( o instanceof StashMetricIssue ) )
+        {
+            return false;
+        }
+
+        final StashMetricIssue that = ( StashMetricIssue ) o;
+
+        return !( stashMetricPK != null ? !stashMetricPK.equals( that.stashMetricPK ) : that.stashMetricPK != null );
+    }
+
+
+    @Override
+    public int hashCode()
+    {
+        return stashMetricPK != null ? stashMetricPK.hashCode() : 0;
     }
 
 

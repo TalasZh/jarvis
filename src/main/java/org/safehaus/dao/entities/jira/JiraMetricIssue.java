@@ -126,6 +126,9 @@ public class JiraMetricIssue implements Serializable
     @Column( name = "labels" )
     private Set<String> labels = Sets.newHashSet();
 
+    @ElementCollection
+    @Column( name = "commits" )
+    private Set<String> gitCommits = Sets.newHashSet();
 
     public JiraMetricIssue()
     {
@@ -274,6 +277,18 @@ public class JiraMetricIssue implements Serializable
             }
             this.issueLinks = jarvisIssueLinks;
         }
+    }
+
+
+    public Set<String> getGitCommits()
+    {
+        return gitCommits;
+    }
+
+
+    public void setGitCommits( final Set<String> gitCommits )
+    {
+        this.gitCommits = gitCommits;
     }
 
 
