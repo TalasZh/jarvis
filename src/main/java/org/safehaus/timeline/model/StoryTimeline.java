@@ -6,9 +6,11 @@ import java.util.Set;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.safehaus.dao.entities.jira.JiraMetricIssue;
+import org.safehaus.dao.entities.stash.StashMetricIssue;
 import org.safehaus.model.Capture;
 import org.safehaus.model.Views;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
@@ -25,6 +27,8 @@ public class StoryTimeline extends JiraMetricIssue
 
     private Set<Capture> annotations = Sets.newHashSet();
 
+    private Set<StashMetricIssue> commits = Sets.newHashSet();
+
 
     public StoryTimeline()
     {
@@ -35,7 +39,7 @@ public class StoryTimeline extends JiraMetricIssue
     public StoryTimeline( JiraMetricIssue jiraMetricIssue )
     {
         super();
-        Preconditions.checkNotNull( jiraMetricIssue, "Passed jiraMetricIssue shouldn't be null" );
+        Preconditions.checkNotNull( jiraMetricIssue, "JiraMetricIssue is invalid" );
         setAssigneeName( jiraMetricIssue.getAssigneeName() );
         setChangelogList( jiraMetricIssue.getChangelogList() );
         setCreationDate( jiraMetricIssue.getCreationDate() );
@@ -59,6 +63,7 @@ public class StoryTimeline extends JiraMetricIssue
         setIssueWorkLogs( jiraMetricIssue.getIssueWorkLogs() );
         setLabels( jiraMetricIssue.getLabels() );
         setRemoteLinks( jiraMetricIssue.getRemoteLinks() );
+        setGitCommits( jiraMetricIssue.getGitCommits() );
 
         //        jiraMetricIssue.getAssigneeName();
         //        jiraMetricIssue.getChangelogList();
@@ -83,6 +88,20 @@ public class StoryTimeline extends JiraMetricIssue
         //        jiraMetricIssue.getTimeSpentMinutes();
         //        jiraMetricIssue.getType();
         //        jiraMetricIssue.getUpdateDate();
+    }
+
+
+    @Override
+    @JsonIgnore
+    public Set<String> getGitCommits()
+    {
+        return super.getGitCommits();
+    }
+
+
+    public Set<StashMetricIssue> getCommits()
+    {
+        return commits;
     }
 
 

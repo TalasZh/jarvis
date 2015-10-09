@@ -451,7 +451,15 @@ public class TimelineManager
                 Long from = Long.valueOf( fromDate );
                 Long to = Long.valueOf( toDate );
 
-                populateEvents( storyTimeline, new Date( from ), new Date( to ), issues );
+                for ( final String gitCommit : storyTimeline.getGitCommits() )
+                {
+                    StashMetricIssue stashMetricIssue = stashMetricService.findStashMetricIssueById( gitCommit );
+                    if ( stashMetricIssue != null )
+                    {
+                        storyTimeline.getCommits().add( stashMetricIssue );
+                    }
+                }
+                populateEvents( storyTimeline, storyTimeline, new Date( from ), new Date( to ), issues );
 
                 //            story.getIssues().remove( (JiraMetricIssue)story );
                 storyTimeline.getIssues().remove( storyTimeline );
@@ -468,22 +476,23 @@ public class TimelineManager
     /**
      * populating events for story which are pulled from child issues for selected story
      */
-    private void populateEvents( StoryTimeline storyTimeline, Date fromDate, Date toDate, Set<String> issues )
+    private void populateEvents( StoryTimeline child, StoryTimeline parent, Date fromDate, Date toDate,
+                                 Set<String> issues )
     {
-        if ( storyTimeline != null )
+        if ( child != null )
         {
-            issues.add( storyTimeline.getIssueKey() );
-            for ( final JiraIssueChangelog changelog : storyTimeline.getChangelogList() )
+            issues.add( child.getIssueKey() );
+            for ( final JiraIssueChangelog changelog : child.getChangelogList() )
             {
                 Date eventDate = new Date( changelog.getChangeKey().getCreated() );
                 if ( fromDate.compareTo( eventDate ) == -1 && eventDate.compareTo( toDate ) == -1 )
                 {
                     try
                     {
-                        if ( researchKeys.contains( storyTimeline.getIssueKey() ) )
+                        if ( researchKeys.contains( child.getIssueKey() ) )
                         {
                             //                            List<Capture> annotations = Lists.newArrayList();
-                            for ( final IssueWorkLog issueWorkLog : storyTimeline.getIssueWorkLogs() )
+                            for ( final IssueWorkLog issueWorkLog : child.getIssueWorkLogs() )
                             {
                                 String workLogComment = issueWorkLog.getComment();
                                 String uri;
@@ -505,7 +514,7 @@ public class TimelineManager
 
                                 Capture capture = new Capture();
                                 capture.setCreated( new Date( issueWorkLog.getCreateDate() ) );
-                                capture.setResearchSession( storyTimeline.getIssueKey() );
+                                capture.setResearchSession( child.getIssueKey() );
                                 capture.setText( comment );
                                 capture.setUri( uri );
                                 capture.setQuote( quote );
@@ -513,31 +522,42 @@ public class TimelineManager
 
                                 //                                annotations.add( capture );
 
-                                storyTimeline.getAnnotations().add( capture );
+                                child.getAnnotations().add( capture );
                             }
                         }
                     }
                     catch ( Exception e )
                     {
-                        logger.error( "Couldn't retrieve research session for key " + storyTimeline.getIssueKey(), e );
+                        logger.error( "Couldn't retrieve research session for key " + child.getIssueKey(), e );
                     }
-                    //                    storyTimeline.getIssues().add( childIssue );
                     break;
                 }
             }
-            for ( final JarvisLink link : storyTimeline.getIssueLinks() )
+            for ( final JarvisLink link : child.getIssueLinks() )
             {
                 if ( link.getDirection() == JarvisLink.Direction.INWARD )
                 {
-                    JiraMetricIssue childIssue =
-                            jiraMetricDao.findJiraMetricIssueByKey( link.getLinkDirection().getIssueKey() );
-                    if ( childIssue != null && !issues.contains( childIssue.getIssueKey() ) )
+                    if ( link.getLinkDirection() != null )
                     {
-                        StoryTimeline childTimeline = new StoryTimeline( childIssue );
+                        JiraMetricIssue childIssue =
+                                jiraMetricDao.findJiraMetricIssueByKey( link.getLinkDirection().getIssueKey() );
+                        if ( childIssue != null && !issues.contains( childIssue.getIssueKey() ) )
+                        {
+                            StoryTimeline childTimeline = new StoryTimeline( childIssue );
+                            for ( final String gitCommit : childTimeline.getGitCommits() )
+                            {
+                                StashMetricIssue stashMetricIssue =
+                                        stashMetricService.findStashMetricIssueById( gitCommit );
+                                if ( stashMetricIssue != null )
+                                {
+                                    childTimeline.getCommits().add( stashMetricIssue );
+                                }
+                            }
 
-                        populateEvents( childTimeline, fromDate, toDate, issues );
+                            populateEvents( childTimeline, parent, fromDate, toDate, issues );
 
-                        storyTimeline.getIssues().add( childTimeline );
+                            parent.getIssues().add( childTimeline );
+                        }
                     }
                 }
             }
