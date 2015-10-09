@@ -6,11 +6,9 @@ import java.util.Map;
 
 import javax.jws.WebService;
 
-import org.codehaus.jackson.map.annotate.JsonView;
 import org.safehaus.dao.Dao;
 import org.safehaus.dao.entities.stash.StashMetricIssue;
 import org.safehaus.dao.entities.stash.StashUser;
-import org.safehaus.model.Views;
 import org.safehaus.service.api.StashMetricService;
 import org.safehaus.service.rest.StashMetricsRestService;
 import org.slf4j.Logger;
@@ -42,11 +40,22 @@ public class StashMetricServiceImpl implements StashMetricService, StashMetricsR
 
 
     @Override
-    @JsonView( Views.CompleteView.class )
     public StashMetricIssue findStashMetricIssueById( String id )
     {
         log.info( "Finding StashMetricIssue by id: {}", id );
-        return dao.findById( StashMetricIssue.class, id );
+
+        String parameter = "contentId";
+        String query = String.format( "SELECT c FROM %s c WHERE c.stashMetricPK.contentId = :%s",
+                StashMetricIssue.class.getSimpleName(), parameter );
+        Map<String, Object> params = Maps.newHashMap();
+        params.put( parameter, id );
+
+        List<StashMetricIssue> results = dao.findByQueryWithLimit( StashMetricIssue.class, query, params, 1 );
+        if ( results.size() > 0 )
+        {
+            return results.get( 0 );
+        }
+        return null;
     }
 
 
@@ -108,6 +117,20 @@ public class StashMetricServiceImpl implements StashMetricService, StashMetricsR
             stashMetricIssues = dao.findByQueryWithLimit( StashMetricIssue.class, query, parameters, limit );
         }
         return stashMetricIssues;
+    }
+
+
+    @Override
+    public List<StashMetricIssue> getStashMetricIssues()
+    {
+        return dao.getAll( StashMetricIssue.class );
+    }
+
+
+    @Override
+    public List<StashMetricIssue> getStashMetricIssues( final int limit, final int startPosition )
+    {
+        return dao.getAll( StashMetricIssue.class, limit, startPosition );
     }
 
 

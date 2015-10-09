@@ -8,23 +8,27 @@ import org.safehaus.dao.entities.stash.StashMetricIssue;
 
 public interface StashMetricService
 {
-	void insertStashMetricIssue( StashMetricIssue stashMetricIssue );
+    void insertStashMetricIssue( StashMetricIssue stashMetricIssue );
 
-	StashMetricIssue findStashMetricIssueById( String id );
+    StashMetricIssue findStashMetricIssueById( String id );
 
-	List<StashMetricIssue> findStashMetricIssuesByProjectName( String projectName );
+    List<StashMetricIssue> findStashMetricIssuesByProjectName( String projectName );
 
-	List<StashMetricIssue> getStashMetricsByProjectKey( String projectKey );
+    List<StashMetricIssue> getStashMetricsByProjectKey( String projectKey );
 
-	List<StashMetricIssue> getStashMetricIssuesByAuthor( String authorId );
+    List<StashMetricIssue> getStashMetricIssuesByAuthor( String authorId );
 
-	List<StashMetricIssue> getStashMetricIssuesByUsername( String username, int limit );
+    List<StashMetricIssue> getStashMetricIssuesByUsername( String username, int limit );
 
-	List<StashMetricIssue> getStashMetricIssuesByAuthorTimestamp( String timestamp );
+    List<StashMetricIssue> getStashMetricIssues();
 
-	void updateStashMetricIssue( StashMetricIssue stashMetricIssue );
+    List<StashMetricIssue> getStashMetricIssues( int limit, int startPosition );
 
-	void deleteStashMetricIssue( StashMetricIssue stashMetricIssue );
+    List<StashMetricIssue> getStashMetricIssuesByAuthorTimestamp( String timestamp );
 
-	int batchInsert( List<StashMetricIssue> issues );
+    void updateStashMetricIssue( StashMetricIssue stashMetricIssue );
+
+    void deleteStashMetricIssue( StashMetricIssue stashMetricIssue );
+
+    int batchInsert( List<StashMetricIssue> issues );
 }
