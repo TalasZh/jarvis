@@ -676,25 +676,6 @@ public class AnalysisService
     }
 
 
-    //TODO just for test purposes
-    private void updateIssues()
-    {
-        int startPosition = 0;
-        List<StashMetricIssue> stashMetricIssueList = Lists.newArrayList();
-        do
-        {
-            stashMetricIssueList = stashMetricService.getStashMetricIssues( MAX_RESULT, startPosition );
-            startPosition += MAX_RESULT;
-
-            for ( final StashMetricIssue stashMetricIssue : stashMetricIssueList )
-            {
-                associateCommitToIssue( stashMetricIssue );
-            }
-        }
-        while ( stashMetricIssueList.size() > 0 );
-    }
-
-
     private void associateCommitToIssue( StashMetricIssue stashMetricIssue )
     {
         String commitMsg = stashMetricIssue.getCommitMessage();
