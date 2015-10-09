@@ -23,6 +23,7 @@ public interface StashMetricsRestService
 {
     @GET
     @Path( "{id}" )
+    @JsonView( Views.CompleteView.class )
     public StashMetricIssue findStashMetricIssueById( @PathParam( "id" ) String id );
 
     @GET
