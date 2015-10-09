@@ -778,27 +778,38 @@ public class AnalysisService
         {
             ConfluenceMetric cf = new ConfluenceMetric();
 
-            cf.setAuthorDisplayName( p.getVersion().getBy().getDisplayName() );
-            cf.setAuthorUserKey( p.getVersion().getBy().getUserKey() );
-            cf.setAuthorUsername( p.getVersion().getBy().getUsername() );
-            cf.setBodyLength( p.getBody().getView().getValue().length() );
-            cf.setPageID( Integer.parseInt( p.getId() ) );
-            cf.setTitle( p.getTitle() );
-            cf.setVersionNumber( p.getVersion().getNumber() );
-            cf.setWhen( new DateTime( p.getVersion().getWhen() ).toDate() );
+            log.info("Last gathered confluence: " + lastGatheredConfluence);
+            log.info("Page date: " + new DateTime( p.getVersion().getWhen() ).toDate());
 
-            log.info( "------------------------------------------------" );
-            log.info( "PageID:      " + cf.getPageID() );
-            log.info( "When:        " + cf.getWhen() );
-            log.info( "Number:      " + cf.getVersionNumber() );
-            log.info( "Username:    " + cf.getAuthorUsername() );
-            log.info( "Displayname: " + cf.getAuthorDisplayName() );
-            log.info( "UserKey:     " + cf.getAuthorUserKey() );
-            log.info( "BodyLen:     " + cf.getBodyLength() );
-            log.info( "Title:       " + cf.getTitle() );
+            if(new DateTime( p.getVersion().getWhen() ).toDate().after(lastGatheredConfluence)) {
+                cf.setAuthorDisplayName(p.getVersion().getBy().getDisplayName());
+                cf.setAuthorUserKey(p.getVersion().getBy().getUserKey());
+                cf.setAuthorUsername(p.getVersion().getBy().getUsername());
+                cf.setBodyLength(p.getBody().getView().getValue().length());
+                cf.setPageID(Integer.parseInt(p.getId()));
+                cf.setTitle(p.getTitle());
+                cf.setVersionNumber(p.getVersion().getNumber());
+                cf.setWhen(new DateTime(p.getVersion().getWhen()).toDate());
 
-            confluenceMetrics.add( cf );
+                log.info("------------------------------------------------");
+                log.info("PageID:      " + cf.getPageID());
+                log.info("When:        " + cf.getWhen());
+                log.info("Number:      " + cf.getVersionNumber());
+                log.info("Username:    " + cf.getAuthorUsername());
+                log.info("Displayname: " + cf.getAuthorDisplayName());
+                log.info("UserKey:     " + cf.getAuthorUserKey());
+                log.info("BodyLen:     " + cf.getBodyLength());
+                log.info("Title:       " + cf.getTitle());
+
+                confluenceMetrics.add(cf);
+            }
         }
+
+        if ( confluenceMetrics.size() > 0 )
+        {
+            lastGatheredConfluence = new Date( System.currentTimeMillis() );
+        }
+
         for ( ConfluenceMetric cf : confluenceMetrics )
         {
             confluenceMetricKafkaProducer.send( cf );
