@@ -1,6 +1,8 @@
 package org.safehaus.timeline;
 
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -52,8 +54,6 @@ public class TimelineManager
 
     private TimelineDao timelineDaoImpl;
 
-    private Set<String> researchKeys = Sets.newHashSet();
-
     @Autowired
     private SonarMetricService sonarMetricService;
 
@@ -74,13 +74,6 @@ public class TimelineManager
         logger.info( "Timeline manager initialized" );
         this.jiraMetricDao = jiraMetricDao;
         this.timelineDaoImpl = timelineDaoImpl;
-
-        researchKeys.add( "SS-3389" );
-        researchKeys.add( "SS-3376" );
-        researchKeys.add( "KURJUN-38" );
-        researchKeys.add( "KMS-259" );
-        researchKeys.add( "KMS-198" );
-        researchKeys.add( "KMS-152" );
     }
 
 
@@ -482,57 +475,9 @@ public class TimelineManager
         if ( child != null )
         {
             issues.add( child.getIssueKey() );
-            for ( final JiraIssueChangelog changelog : child.getChangelogList() )
-            {
-                Date eventDate = new Date( changelog.getChangeKey().getCreated() );
-                if ( fromDate.compareTo( eventDate ) == -1 && eventDate.compareTo( toDate ) == -1 )
-                {
-                    try
-                    {
-                        if ( researchKeys.contains( child.getIssueKey() ) )
-                        {
-                            //                            List<Capture> annotations = Lists.newArrayList();
-                            for ( final IssueWorkLog issueWorkLog : child.getIssueWorkLogs() )
-                            {
-                                String workLogComment = issueWorkLog.getComment();
-                                String uri;
-                                String quote;
-                                String comment;
-                                int uriStart = workLogComment.indexOf( "[" );
-                                int uriEnd = workLogComment.indexOf( "]" );
 
-                                uri = workLogComment.substring( uriStart + 1, uriEnd );
+            attachAnnotations( child, fromDate, toDate );
 
-                                int quoteStart = workLogComment.indexOf( "{quote}" );
-                                int quoteEnd = workLogComment.indexOf( "{quote}", quoteStart + 1 );
-
-                                quote = workLogComment.substring( quoteStart + 7, quoteEnd );
-                                comment = workLogComment.substring( quoteEnd + 7 );
-
-                                Random random = new Random();
-                                long val = ( random.nextInt( 4000 ) + 1 ) + System.currentTimeMillis();
-
-                                Capture capture = new Capture();
-                                capture.setCreated( new Date( issueWorkLog.getCreateDate() ) );
-                                capture.setResearchSession( child.getIssueKey() );
-                                capture.setText( comment );
-                                capture.setUri( uri );
-                                capture.setQuote( quote );
-                                capture.setId( val );
-
-                                //                                annotations.add( capture );
-
-                                child.getAnnotations().add( capture );
-                            }
-                        }
-                    }
-                    catch ( Exception e )
-                    {
-                        logger.error( "Couldn't retrieve research session for key " + child.getIssueKey(), e );
-                    }
-                    break;
-                }
-            }
             for ( final JarvisLink link : child.getIssueLinks() )
             {
                 if ( link.getDirection() == JarvisLink.Direction.INWARD )
@@ -560,6 +505,70 @@ public class TimelineManager
                         }
                     }
                 }
+            }
+        }
+    }
+
+
+    private void attachAnnotations( StoryTimeline child, Date fromDate, Date toDate )
+    {
+        for ( final JiraIssueChangelog changelog : child.getChangelogList() )
+        {
+            Date eventDate = new Date( changelog.getChangeKey().getCreated() );
+            if ( fromDate.compareTo( eventDate ) == -1 && eventDate.compareTo( toDate ) == -1 )
+            {
+                try
+                {
+                    for ( final IssueWorkLog issueWorkLog : child.getIssueWorkLogs() )
+                    {
+                        String workLogComment = issueWorkLog.getComment();
+                        String uri;
+                        String quote;
+                        String comment;
+                        int uriStart = workLogComment.indexOf( "[" );
+                        int uriEnd = workLogComment.indexOf( "]" );
+
+                        uri = workLogComment.substring( uriStart + 1, uriEnd );
+
+                        //needed to check url validity
+                        URL url = new URL( uri );
+
+                        int quoteStart = workLogComment.indexOf( "{quote}" );
+                        int quoteEnd = workLogComment.indexOf( "{quote}", quoteStart + 1 );
+
+                        if ( uriEnd + 1 == quoteStart )
+                        {
+                            quote = workLogComment.substring( quoteStart + 7, quoteEnd );
+                            comment = workLogComment.substring( quoteEnd + 7 );
+
+                            Random random = new Random();
+                            long val = ( random.nextInt( 4000 ) + 1 ) + System.currentTimeMillis();
+
+                            Capture capture = new Capture();
+                            capture.setCreated( new Date( issueWorkLog.getCreateDate() ) );
+                            capture.setResearchSession( child.getIssueKey() );
+                            capture.setText( comment );
+                            capture.setUri( uri );
+                            capture.setQuote( quote );
+                            capture.setId( val );
+
+                            child.getAnnotations().add( capture );
+                        }
+                    }
+                }
+                catch ( MalformedURLException ex )
+                {
+                    logger.error( "Invalid url" );
+                }
+                catch ( StringIndexOutOfBoundsException ex )
+                {
+                    logger.error( "Invalid annotation format in work log" );
+                }
+                catch ( Exception e )
+                {
+                    logger.error( "Couldn't retrieve research session for key " + child.getIssueKey(), e );
+                }
+
             }
         }
     }
