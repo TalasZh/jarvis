@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+import javax.annotation.PostConstruct;
+
 import org.safehaus.dao.entities.jira.IssueWorkLog;
 import org.safehaus.dao.entities.jira.JarvisLink;
 import org.safehaus.dao.entities.jira.JiraIssueChangelog;
@@ -37,6 +39,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -74,10 +77,17 @@ public class TimelineManager
         logger.info( "Timeline manager initialized" );
         this.jiraMetricDao = jiraMetricDao;
         this.timelineDaoImpl = timelineDaoImpl;
+
+        //        researchKeys.add( "SS-3389" );
+        //        researchKeys.add( "SS-3376" );
+        //        researchKeys.add( "KURJUN-38" );
+        //        researchKeys.add( "KMS-259" );
+        //        researchKeys.add( "KMS-198" );
+        //        researchKeys.add( "KMS-152" );
     }
 
 
-    //    @PostConstruct
+    @PostConstruct
     public void init()
     {
         //        ServiceIdentity jiraIdentity = new ServiceIdentity(  )
@@ -232,6 +242,7 @@ public class TimelineManager
         for ( final Map.Entry<String, JiraMetricIssue> entry : jiraMetricIssues.entrySet() )
         {
             final JiraMetricIssue jiraMetricIssue = entry.getValue();
+            //TODO remove temporal "requirements_december" condition
             if ( "Epic".equals( jiraMetricIssue.getType().getName() ) && projectKey
                     .equals( jiraMetricIssue.getProjectKey() ) && jiraMetricIssue.getLabels()
                                                                                  .contains( "requirements_december" ) )
@@ -439,7 +450,6 @@ public class TimelineManager
                 JiraMetricIssue storyIssue = jiraMetricDao.findJiraMetricIssueByKey( storyKey );
 
                 storyTimeline = new StoryTimeline( storyIssue );
-                StructuredIssue story = timelineDaoImpl.getStructuredIssueByKey( storyKey );
 
                 Long from = Long.valueOf( fromDate );
                 Long to = Long.valueOf( toDate );
@@ -480,29 +490,26 @@ public class TimelineManager
 
             for ( final JarvisLink link : child.getIssueLinks() )
             {
-                if ( link.getDirection() == JarvisLink.Direction.INWARD )
+                if ( link.getDirection() == JarvisLink.Direction.INWARD && link.getLinkDirection() != null )
                 {
-                    if ( link.getLinkDirection() != null )
+                    JiraMetricIssue childIssue =
+                            jiraMetricDao.findJiraMetricIssueByKey( link.getLinkDirection().getIssueKey() );
+                    if ( childIssue != null && !issues.contains( childIssue.getIssueKey() ) )
                     {
-                        JiraMetricIssue childIssue =
-                                jiraMetricDao.findJiraMetricIssueByKey( link.getLinkDirection().getIssueKey() );
-                        if ( childIssue != null && !issues.contains( childIssue.getIssueKey() ) )
+                        StoryTimeline childTimeline = new StoryTimeline( childIssue );
+                        for ( final String gitCommit : childTimeline.getGitCommits() )
                         {
-                            StoryTimeline childTimeline = new StoryTimeline( childIssue );
-                            for ( final String gitCommit : childTimeline.getGitCommits() )
+                            StashMetricIssue stashMetricIssue =
+                                    stashMetricService.findStashMetricIssueById( gitCommit );
+                            if ( stashMetricIssue != null )
                             {
-                                StashMetricIssue stashMetricIssue =
-                                        stashMetricService.findStashMetricIssueById( gitCommit );
-                                if ( stashMetricIssue != null )
-                                {
-                                    childTimeline.getCommits().add( stashMetricIssue );
-                                }
+                                childTimeline.getCommits().add( stashMetricIssue );
                             }
-
-                            populateEvents( childTimeline, parent, fromDate, toDate, issues );
-
-                            parent.getIssues().add( childTimeline );
                         }
+
+                        populateEvents( childTimeline, parent, fromDate, toDate, issues );
+
+                        parent.getIssues().add( childTimeline );
                     }
                 }
             }
@@ -541,8 +548,22 @@ public class TimelineManager
                             quote = workLogComment.substring( quoteStart + 7, quoteEnd );
                             comment = workLogComment.substring( quoteEnd + 7 );
 
-                            Random random = new Random();
-                            long val = ( random.nextInt( 4000 ) + 1 ) + System.currentTimeMillis();
+                            Long captureId = 1L;
+
+                            if ( !Strings.isNullOrEmpty( quote ) )
+                            {
+                                captureId *= quote.hashCode();
+                            }
+
+                            if ( Strings.isNullOrEmpty( comment ) )
+                            {
+                                captureId *= comment.hashCode();
+                            }
+
+                            if ( !Strings.isNullOrEmpty( uri ) )
+                            {
+                                captureId *= uri.hashCode();
+                            }
 
                             Capture capture = new Capture();
                             capture.setCreated( new Date( issueWorkLog.getCreateDate() ) );
@@ -550,7 +571,7 @@ public class TimelineManager
                             capture.setText( comment );
                             capture.setUri( uri );
                             capture.setQuote( quote );
-                            capture.setId( val );
+                            capture.setId( captureId );
 
                             child.getAnnotations().add( capture );
                         }
@@ -568,7 +589,6 @@ public class TimelineManager
                 {
                     logger.error( "Couldn't retrieve research session for key " + child.getIssueKey(), e );
                 }
-
             }
         }
     }

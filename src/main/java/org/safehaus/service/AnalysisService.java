@@ -235,7 +235,7 @@ public class AnalysisService
             try
             {
                 //                pullData( jiraCl );
-                getJiraMetricIssues( jiraCl );
+                //                getJiraMetricIssues( jiraCl );
             }
             catch ( Exception ex )
             {
@@ -329,6 +329,7 @@ public class AnalysisService
     }
 
 
+    //TODO test method to pull data selectively
     private void pullData( JiraRestClient jiraCl )
     {
         //        Issue jIssue = jiraCl.getIssue( "SS-3296" );
@@ -381,9 +382,7 @@ public class AnalysisService
             log.info( "Printing all projects" );
             for ( net.rcarz.jiraclient.Project project : jiraProjects )
             {
-                //TODO add here versions
                 projectKeys.add( project.getKey() );
-
                 try
                 {
                     net.rcarz.jiraclient.Project projectDetails = jiraCl.getProject( project.getKey() );
@@ -510,7 +509,6 @@ public class AnalysisService
 
         List<String> stashProjectKeys = new ArrayList<String>();
         StashMetricIssueKafkaProducer kafkaProducer = new StashMetricIssueKafkaProducer();
-        //        stashMetricIssues = new ArrayList<>();
 
         // Get all projects
         try
