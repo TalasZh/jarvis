@@ -29,6 +29,7 @@ import org.safehaus.dao.entities.sonar.SonarMetricIssue;
 import org.safehaus.dao.entities.stash.Commit;
 import org.safehaus.dao.entities.stash.StashMetricIssue;
 import org.safehaus.exceptions.JiraClientException;
+import org.safehaus.jira.IssueKeyParser;
 import org.safehaus.jira.JiraRestClient;
 import org.safehaus.persistence.CassandraConnector;
 import org.safehaus.service.api.JiraMetricDao;
@@ -109,7 +110,7 @@ public class AnalysisService
 
 
     Set<JiraMetricIssue> jiraMetricIssues = Sets.newHashSet();
-    List<StashMetricIssue> stashMetricIssues = Lists.newArrayList();
+    //    List<StashMetricIssue> stashMetricIssues = Lists.newArrayList();
     List<ConfluenceMetric> confluenceMetrics = Lists.newArrayList();
 
     Date lastGatheredJira = null;
@@ -233,7 +234,7 @@ public class AnalysisService
         {
             try
             {
-//                pullData( jiraCl );
+                //                pullData( jiraCl );
                 getJiraMetricIssues( jiraCl );
             }
             catch ( Exception ex )
@@ -262,7 +263,7 @@ public class AnalysisService
         {
             try
             {
-                //                getStashMetricIssues( stashMan );
+                getStashMetricIssues( stashMan );
             }
             catch ( Exception ex )
             {
@@ -282,7 +283,7 @@ public class AnalysisService
         }
         if ( sonarManager != null )
         {
-            //            getSonarMetricIssues( sonarManager );
+            getSonarMetricIssues( sonarManager );
         }
 
         //Get Confluence data
@@ -298,7 +299,7 @@ public class AnalysisService
         }
         if ( confluenceManager != null )
         {
-            //            getConfluenceMetric( confluenceManager );
+            getConfluenceMetric( confluenceManager );
         }
 
         // Set time.
@@ -314,6 +315,7 @@ public class AnalysisService
 
         try
         {
+            updateIssues();
             if ( !ds.getIsSparkStarted() )
             {
                 System.out.println( "Starting Sparkkk Streaming" );
@@ -509,7 +511,7 @@ public class AnalysisService
 
         List<String> stashProjectKeys = new ArrayList<String>();
         StashMetricIssueKafkaProducer kafkaProducer = new StashMetricIssueKafkaProducer();
-        stashMetricIssues = new ArrayList<>();
+        //        stashMetricIssues = new ArrayList<>();
 
         // Get all projects
         try
@@ -592,17 +594,17 @@ public class AnalysisService
                 }
             }
         }
-        for ( StashMetricIssue smi : stashMetricIssues )
-        {
-            kafkaProducer.send( smi );
-        }
+        //        for ( StashMetricIssue smi : stashMetricIssues )
+        //        {
+        //            kafkaProducer.send( smi );
+        //        }
 
         //        stashMetricService.batchInsert( stashMetricIssues );
 
-        if ( stashMetricIssues.size() > 0 )
-        {
-            lastGatheredStash = new Date( System.currentTimeMillis() );
-        }
+        //        if ( stashMetricIssues.size() > 0 )
+        //        {
+        //            lastGatheredStash = new Date( System.currentTimeMillis() );
+        //        }
         kafkaProducer.close();
     }
 
@@ -650,20 +652,62 @@ public class AnalysisService
                     stashMetricIssue.setType( change.getType() );
                     stashMetricIssue.setCommitMessage( commit.getMessage() );
 
+                    if ( change.getLink() != null )
+                    {
+                        stashMetricIssue.setUri( change.getLink().getUrl() );
+                    }
+
                     // if the commit is made after lastGathered date put it in the qualified changes.
                     if ( lastGatheredStash != null )
                     {
                         if ( stashMetricIssue.getAuthorTimestamp() > lastGatheredStash.getTime() )
                         {
-                            stashMetricIssues.add( stashMetricIssue );
+                            //                            stashMetricIssues.add( stashMetricIssue );
                         }
                     }
                     stashMetricService.insertStashMetricIssue( stashMetricIssue );
+                    associateCommitToIssue( stashMetricIssue );
                 }
                 if ( changeSet.size() < MAX_RESULT )
                 {
                     break;
                 }
+            }
+        }
+    }
+
+
+    private void updateIssues()
+    {
+        int startPosition = 0;
+        List<StashMetricIssue> stashMetricIssueList = Lists.newArrayList();
+        do
+        {
+            stashMetricIssueList = stashMetricService.getStashMetricIssues( MAX_RESULT, startPosition );
+            startPosition += MAX_RESULT;
+
+            for ( final StashMetricIssue stashMetricIssue : stashMetricIssueList )
+            {
+                associateCommitToIssue( stashMetricIssue );
+            }
+        }
+        while ( stashMetricIssueList.size() > 0 );
+    }
+
+
+    private void associateCommitToIssue( StashMetricIssue stashMetricIssue )
+    {
+        String commitMsg = stashMetricIssue.getCommitMessage();
+        Set<IssueKeyParser> issues = Sets.newHashSet( IssueKeyParser.parseIssueKeys( commitMsg ) );
+        for ( final IssueKeyParser issue : issues )
+        {
+            JiraMetricIssue jiraMetricIssue =
+                    jiraMetricDao.findJiraMetricIssueByKey( issue.getFullyQualifiedIssueKey() );
+
+            if ( jiraMetricIssue != null )
+            {
+                jiraMetricIssue.getGitCommits().add( stashMetricIssue.getId() );
+                jiraMetricDao.updateJiraMetricIssue( jiraMetricIssue );
             }
         }
     }
@@ -689,35 +733,21 @@ public class AnalysisService
                     ViolationStats violationStats = sonarManager.getViolationStats( projectKey );
                     QuantitativeStats quantitativeStats = sonarManager.getQuantitativeStats( projectKey );
 
-                    double successPercent = unitTestStats.getSuccessPercent();
-                    double failures = unitTestStats.getFailures();
-                    double errors = unitTestStats.getErrors();
-                    double testCounts = unitTestStats.getFailures();
-                    double coveragePercent = unitTestStats.getCoveragePercent();
-                    double allIssues = violationStats.getAllIssues();
-                    double blockerIssues = violationStats.getBlockerIssues();
-                    double criticalIssues = violationStats.getCriticalIssues();
-                    double majorIssues = violationStats.getMajorIssues();
-                    double classesCount = quantitativeStats.getClasses();
-                    double functionsCount = quantitativeStats.getFunctions();
-                    double filesCount = quantitativeStats.getFiles();
-                    double linesOfCode = quantitativeStats.getLinesOfCode();
-
                     sonarMetricIssue.setProjectId( projectId );
                     sonarMetricIssue.setProjectName( projectName );
-                    sonarMetricIssue.setSuccessPercent( successPercent );
-                    sonarMetricIssue.setFailures( failures );
-                    sonarMetricIssue.setErrors( errors );
-                    sonarMetricIssue.setTestCount( testCounts );
-                    sonarMetricIssue.setCoveragePercent( coveragePercent );
-                    sonarMetricIssue.setAllIssues( allIssues );
-                    sonarMetricIssue.setBlockerIssues( blockerIssues );
-                    sonarMetricIssue.setCriticalIssues( criticalIssues );
-                    sonarMetricIssue.setClassesCount( classesCount );
-                    sonarMetricIssue.setFunctionsCount( functionsCount );
-                    sonarMetricIssue.setFilesCount( filesCount );
-                    sonarMetricIssue.setMajorIssues( majorIssues );
-                    sonarMetricIssue.setLinesOfCode( linesOfCode );
+                    sonarMetricIssue.setSuccessPercent( unitTestStats.getSuccessPercent() );
+                    sonarMetricIssue.setFailures( unitTestStats.getFailures() );
+                    sonarMetricIssue.setErrors( unitTestStats.getErrors() );
+                    sonarMetricIssue.setTestCount( unitTestStats.getFailures() );
+                    sonarMetricIssue.setCoveragePercent( unitTestStats.getCoveragePercent() );
+                    sonarMetricIssue.setAllIssues( violationStats.getAllIssues() );
+                    sonarMetricIssue.setBlockerIssues( violationStats.getBlockerIssues() );
+                    sonarMetricIssue.setCriticalIssues( violationStats.getCriticalIssues() );
+                    sonarMetricIssue.setClassesCount( quantitativeStats.getClasses() );
+                    sonarMetricIssue.setFunctionsCount( quantitativeStats.getFunctions() );
+                    sonarMetricIssue.setFilesCount( quantitativeStats.getFiles() );
+                    sonarMetricIssue.setMajorIssues( violationStats.getMajorIssues() );
+                    sonarMetricIssue.setLinesOfCode( quantitativeStats.getLinesOfCode() );
 
                     sonarMetricService.insertSonarMetricIssue( sonarMetricIssue );
                 }
