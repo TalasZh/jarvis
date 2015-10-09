@@ -12,6 +12,8 @@ public interface Dao
 {
     <T> List<T> getAll( Class<T> entityClass );
 
+    <T> List<T> getAll( Class<T> entityClass, int limit, int startPosition );
+
     void insert( Object entity );
 
     void merge( Object entity );
@@ -23,6 +25,9 @@ public interface Dao
     <T> List<T> findByQuery( Class<T> entityClass, String query, Map<String, Object> parameters );
 
     <T> List<T> findByQueryWithLimit( Class<T> entityClass, String query, Map<String, Object> parameters, int limit );
+
+    <T> List<T> findByQueryWithChunks( Class<T> entityClass, String query, Map<String, Object> parameters, int limit,
+                                       int startPosition );
 
     List<?> findByQuery( String Query );
 

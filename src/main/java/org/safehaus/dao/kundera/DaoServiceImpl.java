@@ -1,6 +1,7 @@
 package org.safehaus.dao.kundera;
 
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,28 +44,15 @@ public class DaoServiceImpl implements Dao
     @Override
     public <T> List<T> getAll( final Class<T> entityClass )
     {
-        List<T> result = Lists.newArrayList();
+        return getAll( entityClass, 100, 0 );
+    }
 
-        EntityManager em = emf.createEntityManager();
-        try
-        {
-            em.getTransaction().begin();
-            TypedQuery<T> query =
-                    em.createQuery( String.format( "select obj from %s obj", entityClass.getSimpleName() ),
-                            entityClass );
-            result = query.getResultList();
-            em.getTransaction().commit();
-        }
-        catch ( Exception ex )
-        {
-            LOGGER.error( "Error getting all records", ex );
-            if ( em.getTransaction().isActive() )
-            {
-                em.getTransaction().rollback();
-            }
-        }
 
-        return result;
+    @Override
+    public <T> List<T> getAll( final Class<T> entityClass, final int limit, final int startPosition )
+    {
+        String queryString = String.format( "select obj from %s obj", entityClass.getSimpleName() );
+        return findByQueryWithChunks( entityClass, queryString, new HashMap<String, Object>(), limit, startPosition );
     }
 
 
@@ -180,6 +168,15 @@ public class DaoServiceImpl implements Dao
     public <T> List<T> findByQueryWithLimit( final Class<T> entityClass, final String query,
                                              final Map<String, Object> parameters, final int limit )
     {
+        return findByQueryWithChunks( entityClass, query, parameters, limit, 0 );
+    }
+
+
+    @Override
+    public <T> List<T> findByQueryWithChunks( final Class<T> entityClass, final String query,
+                                              final Map<String, Object> parameters, final int limit,
+                                              final int startPosition )
+    {
         EntityManager em = emf.createEntityManager();
         List<T> result = Lists.newArrayList();
         try
@@ -191,6 +188,7 @@ public class DaoServiceImpl implements Dao
             {
                 typedQuery.setParameter( entry.getKey(), entry.getValue() );
             }
+            typedQuery.setFirstResult( startPosition );
             typedQuery.setMaxResults( limit );
             result = typedQuery.getResultList();
             em.getTransaction().commit();
