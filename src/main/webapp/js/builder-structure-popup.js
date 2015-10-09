@@ -2,14 +2,69 @@ var animateNotActive = true;
 var currentMousePos = {x: -1, y: -1};
 
 $(document).mousemove(function (event) {
-    currentMousePos.x = event.pageX;
-    currentMousePos.y = event.pageY;
+	currentMousePos.x = event.pageX;
+	currentMousePos.y = event.pageY;
 });
 
 function closeIssuePopup() {
-    $('.b-issue-popup').fadeOut(300, function () {
-        $('#js-issue-changelog-list').hide();
-    });
+	$('.b-issue-popup').fadeOut(300, function () {
+		$('#js-issue-changelog-list').hide();
+	});		
+}
+
+function highlightTextToTop() {
+	$('.b-request-text').each(function () {
+		var highlightOffsetTop = $(this).find('.b-highlight-string').offset().top;
+		$(this).css('max-height', $(this).parents('.document-lister').height() - 52);
+		var topScroll = highlightOffsetTop - $(this).offset().top;
+		$(this).scrollTop(topScroll);
+	});
+}
+
+var degree;
+var scrollHeight;
+var maxTop;
+var minTop;
+var parentOffset;
+var startPos;
+var mouseButtonDown = false;
+var totalPopups = 5;
+var activePopup = 1;
+
+function initScrollForPopup() {
+	degree = $('.parent-scroll').height() / totalPopups;
+	var newHeight = $('.parent-scroll').height() / totalPopups;
+	$('.js-scroll').height(newHeight);
+	$('.js-scroll').css('line-height', newHeight + 'px');
+	scrollHeight = $('.js-scroll').height();
+	maxTop = $('.parent-scroll').height() - scrollHeight;
+	minTop = 0;
+	parentOffset = $('.parent-scroll').parent().offset().top;
+	setPopupScrollRollerDate();
+	setPopupScrollRollerPosition(activePopup - 1);
+}
+
+function setPopupScrollRollerPosition(newCurrentPopup) {
+	if (!mouseButtonDown) {
+		startPos = (totalPopups - newCurrentPopup) * degree;
+		$('.js-scroll').animate({'top': startPos}, 300);
+	}
+}
+
+function setPopupScrollRollerDate() {
+	var index_highest = 0;
+	var top_doc;
+
+	$('.document-lister').each(function () {
+		var index_current = parseInt($(this).css("zIndex"));
+
+		if (index_current > index_highest) {
+			index_highest = index_current;
+			top_doc = $(this);
+		}
+	});
+
+	$('.js-scroll .b-scroll-helper').html(top_doc.find('.js-task-date').html());
 }
 
 var Popup = function (data, eventListener) {
@@ -41,35 +96,62 @@ Popup.prototype.setData = function (data) {
 Popup.prototype.init = function () {
     var self = this;
 
-    $(document).mouseout(function () {
-        $(document).on('click', function (event) {
-            if ($(event.target).closest('.b-issue-popup').length == 0 && $(event.target).closest('canvas').length == 0) {
-                closeIssuePopup();
-            }
-        });
-    });
+	$(document).mouseout(function () {
+		$(document).on('click', function (event) {
+			if ($(event.target).closest('.b-issue-popup').length == 0 && $(event.target).closest('canvas').length == 0) {
+				closeIssuePopup();
+			}
+		});
+	});
 
-    $(document).on('click', 'button.btn-close', function () {
+	function removeWorkLogPopups() {
         this.Z_INDEX = 10000;
         $('.document-lister').remove();
+		$('.parent-scroll').fadeOut(300);
+	}
+
+	$(document).on('click', 'button.btn-close', function () {
+		removeWorkLogPopups();
     });
 
     $(document).on('click', '.b-issue-popup__close', function (event) {
-        closeIssuePopup();
+		closeIssuePopup();
     });
 
-    $(document).keyup(function (e) {
-        if (e.keyCode == 27) {
-            closeIssuePopup();
-            this.Z_INDEX = 10000;
-            $('.document-lister').remove();
-        }
-    });
+	$(document).keyup(function (e) {
+		if (e.keyCode == 27) {
+			closeIssuePopup();
+			removeWorkLogPopups();
+		}
+	});
 
-    $('.b-issue-popup').on('click', '.js-issue-popup-show-more', function () {
-        $(this).parent().next('#js-issue-changelog-list').slideToggle();
-        return false;
-    });
+	$(document).on('click', '.document-lister', function (event) {
+		if ($(event.target).closest('.btn-close').length > 0) {
+			return;
+		}
+
+		var scrollCounter = 0;
+		var currentIndex = $(this).css("zIndex");
+
+		$('.document-lister').each(function () {
+			var index_current = parseInt($(this).css("zIndex"));
+
+			if (index_current > currentIndex) {
+				scrollCounter++;
+			}
+		});
+
+		if (scrollCounter > 0) {
+			for (var i = scrollCounter; i > 0; i--) {
+				self.scrollResearch(1, true);
+			}
+		}
+	});
+
+	$('.b-issue-popup').on('click', '.js-issue-popup-show-more', function () {
+		$(this).parent().next('#js-issue-changelog-list').slideToggle();
+		return false;
+	});
 
     var elem = document;
     if (elem.addEventListener) {
@@ -85,31 +167,64 @@ Popup.prototype.init = function () {
 
         if ($(e.target).closest('.document-lister').length > 0 && $(e.target).closest('.task-info').length === 0) {
             if (delta > 0) {
-                self.scrollResearch(-1);
+				self.scrollResearch(-1, true);
             } else {
-                self.scrollResearch(1);
+				self.scrollResearch(1, true);
             }
             e.preventDefault ? e.preventDefault() : (e.returnValue = false);
         }
     }
+
+	//reserch scroller
+	$('.js-scroll').mousedown(function () {
+		mouseButtonDown = true;
+	}).mouseup(function () {
+		mouseButtonDown = false;
+	});
+
+	$('.parent-scroll').mouseover(function () {
+		mouseButtonDown = false;
+	});
+
+	$('.parent-scroll').mousemove(function (event) {
+		if (mouseButtonDown == false) return;
+		var relY = event.pageY - parentOffset;
+		var newPosition = relY - (scrollHeight / 2);
+		var nextActive = Math.round(newPosition / degree) + 1;
+		if (activePopup < nextActive) {
+			self.scrollResearch(-1);
+		} else if (activePopup > nextActive) {
+			self.scrollResearch(1);
+		}
+		activePopup = nextActive;
+		if (newPosition >= minTop && newPosition <= maxTop) {
+			$('.js-scroll').css('top', newPosition);
+		}
+	});
+
+	$('[data-toggle="tooltip"]').tooltip();
 };
 
 Popup.prototype.showMinimap = function (id) {
 
-    closeIssuePopup();
+	closeIssuePopup();
     this.audioPopup.play();
     var popupLimit = 4;
 
     var utmost = false;
 
-    this.activeScroll = false;
+	console.log(this.DATA);
+
+	this.activeScroll = false;
     var data = $.grep(this.DATA, function (e) {
         return e.issueId == id;
     });
     data = data[0];
 
     this.selectedData = data;
-    this.activeScroll = true;
+	this.activeScroll = true;
+
+	totalPopups = data.changelogList.length;
 
     for (var i = 0; i < data.changelogList.length && popupLimit > 0; i++) {
         var currentWidthDiff = ( 5 - popupLimit ) * 15;
@@ -119,8 +234,10 @@ Popup.prototype.showMinimap = function (id) {
             this.selected_doc = i;
 
             var popupData = this.getPopupData(i, data, true);
-            this.createPopupWindow(popupData);
 
+			activePopup = totalPopups;
+
+			this.createPopupWindow(popupData);
             utmost = true;
         } else if (utmost && popupLimit-- >= 0) {
 
@@ -133,91 +250,103 @@ Popup.prototype.showMinimap = function (id) {
             this.createPopupWindow(popupData);
         }
     }
+	initScrollForPopup();
+	$('.parent-scroll').fadeIn(300);
 }
 
-Popup.prototype.scrollResearch = function (mvmnt) {
+Popup.prototype.scrollResearch = function (mvmnt, setScrollPosition) {
+	if (setScrollPosition === null || setScrollPosition === undefined) setScrollPosition = false;
     if ($('.document-lister').length == 0) {
         return;
     }
 
-    if (animateNotActive && this.activeScroll) {
-        var index_lowest = 1000000;
-        var index_highest = 0;
-        var top_doc;
-        var bottom_doc;
-        animateNotActive = false;
+	if (animateNotActive && this.activeScroll) {
+		var index_lowest = 1000000;
+		var index_highest = 0;
+		var top_doc;
+		var bottom_doc;
+		animateNotActive = false;
 
-        $('.document-lister').each(function () {
-            var index_current = parseInt($(this).css("zIndex"));
+		$('.document-lister').each(function () {
+			var index_current = parseInt($(this).css("zIndex"));
 
-            if (index_current > index_highest) {
-                index_highest = index_current;
-                top_doc = $(this);
-            }
+			if (index_current > index_highest) {
+				index_highest = index_current;
+				top_doc = $(this);
+			}
 
-            if (index_current < index_lowest) {
-                index_lowest = index_current;
-                bottom_doc = $(this);
-            }
-        });
+			if (index_current < index_lowest) {
+				index_lowest = index_current;
+				bottom_doc = $(this);
+			}
+		});
 
-        if (mvmnt > 0) {
+		if (mvmnt > 0) {
 
-            if (this.selected_doc + 1 == this.selectedData.changelogList.length) {
-                animateNotActive = true;
-                return;
-            }
-            this.selected_doc++;
+			if (this.selected_doc + 1 == this.selectedData.changelogList.length) {
+				animateNotActive = true;
+				return;
+			}
+			this.selected_doc++;
 
-            top_doc.remove();
+			top_doc.remove();
 
-            $('.document-lister').animate({
-                top: '+=' + this.height_diff + 'px',
-                left: '-=' + this.width_diff + 'px',
-                width: '+=' + this.width_diff * 2 + 'px'
-            }, function () {
-                animateNotActive = true;
-            });
+			$('.document-lister').animate({
+				top: '+=' + this.height_diff + 'px',
+				left: '-=' + this.width_diff + 'px',
+				width: '+=' + this.width_diff * 2 + 'px'
+			}, function () {
+				animateNotActive = true;
+			});
 
-            this.Z_INDEX = index_lowest - 1;
+			if (setScrollPosition) {
+				setPopupScrollRollerPosition(activePopup--);
+			}
 
-            if (this.selected_doc + 4 < this.selectedData.changelogList.length) {
+			this.Z_INDEX = index_lowest - 1;
 
-                var popupData = this.getPopupData(this.selected_doc, this.selectedData, false);
-                popupData.width = (this.left * 4 - this.width_diff * 4 * 2);
-                popupData.height = (this.top_offset * 4);
-                popupData.left = (this.left + this.width_diff * 4);
-                popupData.top = (this.top_offset - this.height_diff * 4);
+			if (this.selected_doc + 4 < this.selectedData.changelogList.length) {
 
-                this.createPopupWindow(popupData);
-            }
-        } else {
-            if (this.selected_doc - 1 < 0) {
-                animateNotActive = true;
-                return;
-            }
-            this.selected_doc--;
+				var popupData = this.getPopupData(this.selected_doc, this.selectedData, false);
+				popupData.width = (this.left * 4 - this.width_diff * 4 * 2);
+				popupData.height = (this.top_offset * 4);
+				popupData.left = (this.left + this.width_diff * 4);
+				popupData.top = (this.top_offset - this.height_diff * 4);
 
-            if ($('.document-lister').length >= 5) {
-                bottom_doc.remove();
-            }
+				this.createPopupWindow(popupData);
+			}
+		} else {
+			if (this.selected_doc - 1 < 0) {
+				animateNotActive = true;
+				return;
+			}
+			this.selected_doc--;
 
-            $('.document-lister').animate({
-                top: '-=' + this.height_diff + 'px',
-                left: '+=' + this.width_diff + 'px',
-                width: '-=' + this.width_diff * 2 + 'px'
-            }, function () {
-                animateNotActive = true;
-            });
+			if ($('.document-lister').length >= 5) {
+				bottom_doc.remove();
+			}
 
-            this.Z_INDEX = index_highest + 1;
+			$('.document-lister').animate({
+				top: '-=' + this.height_diff + 'px',
+				left: '+=' + this.width_diff + 'px',
+				width: '-=' + this.width_diff * 2 + 'px'
+			}, function () {
+				animateNotActive = true;
+			});
 
-            var popupData = this.getPopupData(this.selected_doc, this.selectedData, true);
+			if (setScrollPosition) {
+				setPopupScrollRollerPosition(activePopup++);
+			}
 
-            this.createPopupWindow(popupData);
-        }
-        highlightTextToTop();
-    }
+			this.Z_INDEX = index_highest + 1;
+
+			var popupData = this.getPopupData(this.selected_doc, this.selectedData, true);
+
+			this.createPopupWindow(popupData);
+		}
+		highlightTextToTop();
+		setPopupScrollRollerDate();
+	}
 }
 
 Popup.prototype.getPopupData = function (i, fromData, mainPosition) {
@@ -225,15 +354,15 @@ Popup.prototype.getPopupData = function (i, fromData, mainPosition) {
     var dateToDateFormat = new Date(fromData.changelogList[i].changeKey.created);
     var showDate = dateToDateFormat.getDate() + '.' + dateToDateFormat.getMonth() + '.' + dateToDateFormat.getFullYear();
 
-    var popupText = fromData.changelogList[i].toString;
+	var popupText = fromData.changelogList[i].toString;
 
-    if (fromData.changelogList[i].fromString !== undefined) {
-        popupText = fromData.changelogList[i].fromString + ' &rarr; ' + popupText;
-    }
+	if (fromData.changelogList[i].fromString !== undefined) {
+		popupText = fromData.changelogList[i].fromString + ' &rarr; ' + popupText;
+	}
 
-    if (fromData.changelogList[i].field !== undefined) {
-        popupText = 'field: ' + fromData.changelogList[i].field + '<br>' + popupText;
-    }
+	if (fromData.changelogList[i].field !== undefined) {
+		popupText = 'field: ' + fromData.changelogList[i].field + '<br>' + popupText;
+	}	
 
     var popupData = {
         "zIndex": this.Z_INDEX--,
@@ -243,11 +372,11 @@ Popup.prototype.getPopupData = function (i, fromData, mainPosition) {
         "taskId": i
     };
 
-    if (fromData.changelogList[i].field == "Research Session") {
+	if (fromData.changelogList[i].field == "Research Session") {
         popupData.url = fromData.changelogList[i].url;
 
         popupData.quote = fromData.changelogList[i].quote;
-        popupData.taskText = '<a href="javascript:window.open(\'' + fromData.changelogList[i].url + '\',\'research page\',\'width=500,height=400\')" target="_blank">' + fromData.changelogList[i].url + "</a><br>Quote: " + fromData.changelogList[i].quote + "<br>Comments: " + fromData.changelogList[i].comments;
+		popupData.taskText = '<a href="javascript:window.open(\'' + fromData.changelogList[i].url + '\',\'research page\',\'width=500,height=400\')" target="_blank">' + fromData.changelogList[i].url + "</a><br>Quote: " + fromData.changelogList[i].quote + "<br>Comments: " + fromData.changelogList[i].comments;
     }
 
     if (mainPosition) {
@@ -266,7 +395,7 @@ Popup.prototype.createPopupWindow = function (popupData) {
         '<table><tr class="task"><td style="width: 25px"><img src="assets/img/icon-task.svg" alt=""height="25px" style="position: absolute; top: 18px"/></td>' +
         '<td>TASK</td><td style="width: 30px"><img src="assets/img/icon-time.svg" alt=""height="25px" style="position: absolute; top: 18px"/></td>' +
         '<td>DATE</td></tr><tr class="task-name"><td style="width: 25px"></td>' +
-        '<td>%(issueKey)s</td><td style="width: 30px"></td><td>%(taskDate)s</td></tr></table><div class="divider"></div>' +
+		'<td>%(issueKey)s</td><td style="width: 30px"></td><td class="js-task-date">%(taskDate)s</td></tr></table><div class="divider"></div>' +
         '<div class="task-info js-content-for-%(taskId)d">%(taskText)s</div>', popupData);
 
     if (popupData.url) {
@@ -287,81 +416,90 @@ function getHighlightedStringInText(url, searchText, id) {
     return $.getJSON(readabilityUrl).then(function (data) {
         var contentText = data.content.replace(searchText, '<span class="b-highlight-string">' + searchText + '</span>');
         contentText = contentText
-            .replace(/<img[^>]*>/g, "")
-            .replace(/<\s*(\w+).*?>/, '<$1>');
+			.replace(/<img[^>]*>/g, "")
+			.replace(/<\s*(\w+).*?>/, '<$1>');
         var responseContentDiv = $('.js-content-for-' + id);
 
         responseContentDiv.html(responseContentDiv.html() + '<div class="b-request-text">' + contentText + '</div>');
-        responseContentDiv.find('header').remove();
-        responseContentDiv.find('footer').remove();
+		responseContentDiv.find('header').remove();
+		responseContentDiv.find('footer').remove();
         responseContentDiv.css('max-height', responseContentDiv.parent().height() - 52);
 
-        highlightTextToTop();
-    });
-}
-
-function highlightTextToTop() {
-    $('.b-request-text').each(function () {
-        var highlightOffsetTop = $(this).find('.b-highlight-string').offset().top;
-        $(this).css('max-height', $(this).parents('.document-lister').height() - 52);
-        var topScroll = highlightOffsetTop - $(this).offset().top;
-        $(this).scrollTop(topScroll);
+		highlightTextToTop();
     });
 }
 
 Popup.prototype.getIssuePopup = function (issueId) {
     this.audioPopup.play();
 
-    var data = $.grep(this.DATA, function (e) {
-        return e.issueId == issueId;
-    });
-    data = data[0];
+	console.log(issueId);
+	var data = $.grep(this.DATA, function (e) {
+		return e.issueId == issueId;
+	});
+	data = data[0];
+	console.log(data);
 
-    if (data !== undefined) {
-        var popupBlock = $('.b-issue-popup');
-        var currentField = false;
-        for (var key in data) {
-            if (key.indexOf("$") > -1) continue;
-            if (popupBlock.find('#js-issue-' + key).length > 0) {
-                currentField = popupBlock.find('#js-issue-' + key);
-                var text = data[key];
-                if (data[key] === null || data[key].length == 0) {
-                    text = 'none';
-                } else if (key == 'originalEstimateMinutes') {
-                    var hours = Math.floor(data[key] / 60);
-                    var minutes = data[key] % 60;
-                    text = hours + 'h ';
-                    if (minutes > 0) {
-                        text += minutes + 'm';
-                    }
-                }
-                if (currentField.hasClass('js-text-to-span')) {
-                    currentField.find('span').text(text);
-                } else {
-                    currentField.text(text);
-                }
-            }
-        }
+	if (data == undefined) return;
 
-        if (data.changelogList !== undefined) {
-            var changelogList = popupBlock.find('#js-issue-changelog-list');
-            var changelogListHtml = '';
-            for (var i = 0; i < data.changelogList.length; i++) {
-                changelogListHtml += '<div style="margin-top: 12px">' +
-                    '<div style="width: 40px; display: inline-block"><img src="assets/img/icon-11.svg" alt="" height="28px"/></div>' +
-                    '<span style="opacity: 0.6;">' + data.changelogList[i].toString + '</span>' +
-                    '</div>' +
-                    '<div style="margin-top: 25px; padding-bottom: 13px; border-bottom: 1px solid #00142d;">' +
-                    '<div style="width: 40px; display: inline-block"><img src="assets/img/icon-12.svg" alt="" height="28px"/></div>' +
-                    '<span style="opacity: 0.6;">' + data.changelogList[i].field + '</span>' +
-                    '</div>';
-            }
+	var popupBlock = $('.b-issue-popup');
+	var currentField = false;
+	for (var key in data) {
+		if (key.indexOf("$") > -1) continue;
+		if (popupBlock.find('#js-issue-' + key).length > 0) {
+			currentField = popupBlock.find('#js-issue-' + key);
+			var text = data[key];
+			if (data[key] === null || data[key].length == 0) {
+				text = 'none';
+			} else if (key == 'issueKey') {
+				text = createLink(text);
+			} else if (key == 'originalEstimateMinutes') {
+				var hours = Math.floor(data[key] / 60);
+				var minutes = data[key] % 60;
+				text = hours + 'h ';
+				if (minutes > 0) {
+					text += minutes + 'm';
+				}
+			} else if (key == 'issueLinks') {
+				console.log(text);
+				for (var i = 0; i < text.length; i++) {
+					if (text[i].direction == 'OUTWARD') {
+						text = createLink(text[i].linkDirection.issueKey);
+						break;
+					}
+				}
+			} else if (Object.prototype.toString.call(text) === '[object Array]') {
+				text = text.join(', ');
+			}
+			if (currentField.hasClass('js-text-to-span')) {
+				currentField.find('span').html(text);
+			} else {
+				currentField.html(text);
+			}
+		}
+	}
 
-            changelogList.html(changelogListHtml);
-        }
-        if (popupBlock.is(":hidden")) {
-            popupBlock.fadeIn();
-        }
-    }
+	if (data.changelogList !== undefined) {
+		var changelogList = popupBlock.find('#js-issue-changelog-list');
+		var changelogListHtml = '';
+		for (var i = 0; i < data.changelogList.length; i++) {
+			changelogListHtml += '<div style="margin-top: 12px">' +
+				'<div style="width: 40px; display: inline-block"><img src="assets/img/icon-11.svg" alt="" height="28px"/></div>' +
+				'<span style="opacity: 0.6;">' + data.changelogList[i].toString + '</span>' +
+				'</div>' +
+				'<div style="margin-top: 25px; padding-bottom: 13px; border-bottom: 1px solid #00142d;">' +
+				'<div style="width: 40px; display: inline-block"><img src="assets/img/icon-12.svg" alt="" height="28px"/></div>' +
+				'<span style="opacity: 0.6;">' + data.changelogList[i].field + '</span>' +
+				'</div>';
+		}
+
+		changelogList.html(changelogListHtml);
+	}
+	if (popupBlock.is(":hidden")) {
+		popupBlock.fadeIn();
+	}
 };
+
+function createLink(key) {
+	return '<a href="https://jira.subutai.io/browse/' + key + '" target="_blank">' + key + '</a>'
+}
 

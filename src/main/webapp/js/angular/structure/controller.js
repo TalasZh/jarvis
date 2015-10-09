@@ -4,24 +4,26 @@ angular.module('jarvis.structure.ctrl', [
 ])
     .controller('CanvasCtrl', CanvasCtrl);
 
-CanvasCtrl.$inject = ['$rootScope', '$location', '$scope', '$sessionStorage', 'structureSrv'];
+CanvasCtrl.$inject = ['$rootScope', 'structureSrv'];
 
-function CanvasCtrl($rootScope, $location, $scope, $sessionStorage, structureSrv)
+function CanvasCtrl($rootScope, structureSrv)
 {
     var vm = this;
     var DATA = [];
     var currentStory;
-    var popup = new Popup();
-    var selectedObjects = [];
-
+	var popup = new Popup();
+	var selectedObjects = [];
+	
     vm.baseUrl = 'subutai.io';
-    $scope.$storage = $sessionStorage;
-
 
     // data from api
     vm.projects = [];
     vm.activeNode;
     vm.activeNodeData;
+
+	//breadcrumbs
+	vm.breadcrumbsProject = false;
+	vm.breadcrumbsEpic = false;
 
     // hud vars
     vm.title;
@@ -33,7 +35,7 @@ function CanvasCtrl($rootScope, $location, $scope, $sessionStorage, structureSrv
     vm.inProgressStatusHours;
     vm.doneStatusHours;
     vm.storyList;
-    vm.reserchIssueId = 0;
+	vm.reserchIssueId = 0;
 
     vm.issuesSolved = {
         research : 0,
@@ -76,8 +78,8 @@ function CanvasCtrl($rootScope, $location, $scope, $sessionStorage, structureSrv
 
 	//functions
 	vm.simulateClick = simulateClick;
-    vm.toTimeline = toTimeline;
     vm.showReserchPopups = showReserchPopups;
+	vm.breadcrumbsClick = breadcrumbsClick;
 
     // arbor variables
     vm.sys = arbor.ParticleSystem(500, 300, 0.2, false, 20);
@@ -96,7 +98,6 @@ function CanvasCtrl($rootScope, $location, $scope, $sessionStorage, structureSrv
         if( i < length ) {
             var j = structureSrv.getIssues(vm.projects[i].key).success(function (data)
             {
-                console.log( "Inserting", i );
                 vm.projects[i] = data;
                 vm.projects[i].issueType = "Project";
             });
@@ -116,13 +117,25 @@ function CanvasCtrl($rootScope, $location, $scope, $sessionStorage, structureSrv
 		click(vm.sys.getNode(key), vm.sys, false);
 	}
 
-    function toTimeline() {
-        $location.path('/timeline/' + vm.activeNode.data.title);
-    }
+	function showReserchPopups(issueId) {
+		popup.showMinimap(issueId);
+	}
 
-    function showReserchPopups(issueId) {
-        popup.showMinimap(issueId);
-    }
+	//click on story from list
+	function breadcrumbsClick(path, element) {
+		vm.sys.prune();
+		if (path == 'start') {
+			vm.breadcrumbsEpic = false;
+			vm.breadcrumbsProject = false;
+			drawFromSSF();
+		} else {
+			if (element == 'project') {
+				vm.breadcrumbsEpic = false;
+			}
+			drawFrom(path);
+		}
+		//click(vm.sys.getNode(key), vm.sys, false);
+	}
 
     /***************
      * canvas related functions
@@ -164,6 +177,25 @@ function CanvasCtrl($rootScope, $location, $scope, $sessionStorage, structureSrv
         $('#v3').hide();
     }
 
+	function drawFrom(path) {
+		var data = getNodeDataByPath(path);
+		vm.sys.addNode(data.key, {
+			weight: 5,
+			type: data.issueType,
+			title: data.key,
+			path: path
+		});
+		for (var i = 0; i < data.issues.length; i++) {
+			vm.sys.addNode(data.issues[i].key, {
+				weight: 4,
+				type: data.issues[i].issueType,
+				title: data.issues[i].key,
+				path: path + "," + i
+			});
+			vm.sys.addEdge(data.key, data.issues[i].key);
+		}
+	}
+
 
     /**************
      *
@@ -171,55 +203,55 @@ function CanvasCtrl($rootScope, $location, $scope, $sessionStorage, structureSrv
      * returns the data received from api
      */
     function getNodeDataByPath(path) {
-        if (path !== undefined) {
-            var path = path.toString().split(",");
+		if (path !== undefined) {
+			var path = path.toString().split(",");
 
-            var workingDataNode = vm.projects;
-            for (var i = 0; i < path.length; i++) {
-                if (workingDataNode.issues) {
-                    workingDataNode = workingDataNode.issues[path[i]];
-                }
-                else {
-                    workingDataNode = workingDataNode[path[i]];
-                }
-            }
+			var workingDataNode = vm.projects;
+			for (var i = 0; i < path.length; i++) {
+				if (workingDataNode.issues) {
+					workingDataNode = workingDataNode.issues[path[i]];
+				}
+				else {
+					workingDataNode = workingDataNode[path[i]];
+				}
+			}
 
-            return workingDataNode;
-        }
+			return workingDataNode;
+		}
     }
 
-    function getStoryesData(key) {
-        if (currentStory != key) {
-            currentStory = key;
-            DATA = [];
-            structureSrv.getEvents('timeline.json').success(function (data) {
-                var issues = data.issues;
+	function getStoryesData(key) {
+		if (currentStory != key) {
+			currentStory = key;
+			DATA = [];
+			structureSrv.getEvents('timeline.json').success(function (data) {
+				var issues = data.issues;
 
-                if (issues == undefined) return;
+				if (issues == undefined) return;
 
-                for (var i = 0; i < issues.length; i++) {
-                    var result = $.grep(DATA, function (e) {
-                        if (undefined !== e) {
-                            return e.issueId == issues[i].issueId;
-                        }
-                    });
-                    if (result.length > 0) {
-                        mergeEvents(issues[i].issueId, issues[i].changelogList)
-                    }
-                    else {
-                        DATA.push(issues[i]);
-                    }
-                }
+				for (var i = 0; i < issues.length; i++) {
+					var result = $.grep(DATA, function (e) {
+						if (undefined !== e) {
+							return e.issueId == issues[i].issueId;
+						}
+					});
+					if (result.length > 0) {
+						mergeEvents(issues[i].issueId, issues[i].changelogList)
+					}
+					else {
+						DATA.push(issues[i]);
+					}
+				}
 
-                for (var i = 0; i < DATA.length; i++) {
-                    DATA[i].changelogList.sort(function (a, b) {
-                        return a.changeKey.created - b.changeKey.created
-                    });
-                }
-                popup.setData(DATA);
-            });
-        }
-    }
+				for (var i = 0; i < DATA.length; i++) {
+					DATA[i].changelogList.sort(function (a, b) {
+						return a.changeKey.created - b.changeKey.created
+					});
+				}
+				popup.setData(DATA);
+			});
+		}
+	}
 
     function mergeEvents(id, data) {
         for (var i = 0; i < data.length; i++) {
@@ -232,7 +264,7 @@ function CanvasCtrl($rootScope, $location, $scope, $sessionStorage, structureSrv
 
                 for (var j = 0; j < result.changelogList.length; j++) {
 
-                    if (data[i].changelogList[j].changeKey.changeItemId != result.changelogList[j].changeKey.changeItemId) {
+					if (data[i].changelogList[j].changeKey.changeItemId != result.changelogList[j].changeKey.changeItemId) {
                         result.changelogList.push(data[i]);
                     }
                 }
@@ -259,14 +291,6 @@ function CanvasCtrl($rootScope, $location, $scope, $sessionStorage, structureSrv
 
         vm.requirements.opened = Math.round( opened * 100 / ( opened + closed ) );
         vm.requirements.closed = Math.round( closed * 100 / ( opened + closed ) );
-
-
-        delete $scope.$storage.metrics;
-        // @todo changed to storage
-        //vm.structureSrv.metrics = {};
-        $scope.$storage.metrics = {}
-        $scope.$storage.metrics.requirements = vm.requirements;
-        //vm.structureSrv.metrics.requirements = vm.requirements;
     }
 
 
@@ -277,25 +301,26 @@ function CanvasCtrl($rootScope, $location, $scope, $sessionStorage, structureSrv
      */
     function click(node, particleSystem, clickFromCanvas) {
         if (node != null) {
-            $rootScope.$apply(function () {
-                vm.reserchIssueId = 0;
-            });
+			if (clickFromCanvas) {
+				$rootScope.$apply(function () {
+					vm.reserchIssueId = 0;
+				});
+			}
 			var currentNode = getNodeDataByPath(node.data.path);
 
             if (node.data.type.toLowerCase() == "requirement" || node.data.type.toLowerCase() == "design" ||
-                node.data.type.toLowerCase() == "task" || node.data.type.toLowerCase() == "playbook") {
+				node.data.type.toLowerCase() == "task" || node.data.type.toLowerCase() == "playbook" ||
+				node.data.type.toLowerCase() == "research") {
 
-                popup.getIssuePopup(currentNode.id);
+				if (node.data.type.toLowerCase() == "research") {
+					$rootScope.$apply(function () {
+						vm.reserchIssueId = currentNode.id;
+					});
+				}
+
+				popup.getIssuePopup(currentNode.id);
                 return;
 			}
-
-            if (node.data.type.toLowerCase() == "research") {
-                $rootScope.$apply(function () {
-                    vm.reserchIssueId = currentNode.id;
-                });
-                popup.getIssuePopup(currentNode.id);
-                return;
-            }
 
             if( node.data.type.toLowerCase() == "foundation" ) {
                 if( $('#viewport').attr("side-bar-toggled") == "true" ) {
@@ -324,32 +349,20 @@ function CanvasCtrl($rootScope, $location, $scope, $sessionStorage, structureSrv
 			
             if (node.data.type.toLowerCase() == "story") {
 
-                getStoryesData(currentNode.key);
+				getStoryesData(currentNode.key);
+
+				vm.title = currentNode.key;
+				vm.descr = currentNode.summary;
+				vm.activeNodeData = currentNode;
+				calculateRequirements(currentNode);
 
 				if( clickFromCanvas ) {
 					$rootScope.$apply(function () {
-						vm.title = currentNode.key;
-						vm.descr = currentNode.summary;
-                        vm.activeNodeData = currentNode;
-                        calculateRequirements( currentNode );
 						self.value += 1;
 					});
 				} else {
-                    vm.title = node.data.title;
-                    vm.descr = node.data.title;
-                    vm.activeNodeData = currentNode;
 					node.data.selected = true;
-
-                    calculateRequirements(currentNode);
 				}
-
-                $scope.$storage.metrics.openStatus = vm.openStatus;
-                $scope.$storage.metrics.inProgressStatus = vm.inProgressStatus;
-                $scope.$storage.metrics.doneStatus = vm.doneStatus;
-                $scope.$storage.metrics.openStatusHours = vm.openStatusHours;
-                $scope.$storage.metrics.inProgressStatusHours = vm.inProgressStatusHours;
-                $scope.$storage.metrics.doneStatusHours = vm.doneStatusHours;
-                $scope.$storage.metrics.storyPoints = currentNode.storyPoints;
 
                 if ($('#v3').css('display') == 'none') {
             		$('#v1').hide();
@@ -363,51 +376,53 @@ function CanvasCtrl($rootScope, $location, $scope, $sessionStorage, structureSrv
             }
 
             if (node.data.type.toLowerCase() == "epic") {
-                $rootScope.$apply(function () {
-                    vm.title = node.data.title;
-                    vm.descr = currentNode.summary;
-                    vm.activeNodeData = currentNode;
+				vm.title = node.data.title;
+				vm.descr = currentNode.summary;
+				vm.activeNodeData = currentNode;
 
-					vm.storyList = currentNode.issues;
-
-
-                    var total = 0;
-
-                    vm.issuesSolved.task = 0;
-                    vm.issuesSolved.bug = 0;
-                    vm.issuesSolved.research = 0;
+				vm.storyList = currentNode.issues;
 
 
-                    for (var name in currentNode.totalIssuesSolved) {
-                        if( name == "Story" ) {
-                            continue;
-                        }
+				var total = 0;
 
-                        var value = currentNode.totalIssuesSolved[name];
-                        total += value;
+				vm.issuesSolved.task = 0;
+				vm.issuesSolved.bug = 0;
+				vm.issuesSolved.research = 0;
 
-                        // @todo hardcoded need types
-                        if( name == "Task" || name == "New Feature" || name == "Improvement" ) {
-                            vm.issuesSolved.task += value;
-                        }
 
-                        if( name == "Bug" ) {
-                            vm.issuesSolved.bug += value;
-                        }
+				for (var name in currentNode.totalIssuesSolved) {
+					if (name == "Story") {
+						continue;
+					}
 
-                        if( name == "Research" ) {
-                            vm.issuesSolved.research += value;
-                        }
-                    }
+					var value = currentNode.totalIssuesSolved[name];
+					total += value;
 
-                    if( total == 0 ) total = 100;
+					// @todo hardcoded need types
+					if (name == "Task" || name == "New Feature" || name == "Improvement") {
+						vm.issuesSolved.task += value;
+					}
 
-                    vm.issuesSolved.task = Math.round( vm.issuesSolved.task / total * 100, -1 );
-                    vm.issuesSolved.bug = Math.round( vm.issuesSolved.bug / total * 100, -1 );
-                    vm.issuesSolved.research = Math.round( vm.issuesSolved.research / total * 100, -1 );
+					if (name == "Bug") {
+						vm.issuesSolved.bug += value;
+					}
 
-                    self.value += 1;
-                });
+					if (name == "Research") {
+						vm.issuesSolved.research += value;
+					}
+				}
+
+				if (total == 0) total = 100;
+
+				vm.issuesSolved.task = Math.round(vm.issuesSolved.task / total * 100, -1);
+				vm.issuesSolved.bug = Math.round(vm.issuesSolved.bug / total * 100, -1);
+				vm.issuesSolved.research = Math.round(vm.issuesSolved.research / total * 100, -1);
+
+				if (clickFromCanvas) {
+					$rootScope.$apply(function () {
+						self.value += 1;
+					});
+				}
 
                 if ($('#v2').css('display') == 'none') {
 					$('#v1').hide();
@@ -421,75 +436,72 @@ function CanvasCtrl($rootScope, $location, $scope, $sessionStorage, structureSrv
             }
 
             if (node.data.type.toLowerCase() == "project") {
-                $rootScope.$apply(function () {
-                    vm.title = node.data.title;
-                    vm.descr = "NO PROJECT DESCRIPTION!!!!!!!!!!!!!!!!!!!!!";
+				vm.title = node.data.title;
+				vm.descr = "NO PROJECT DESCRIPTION!!!!!!!!!!!!!!!!!!!!!";
 
-                    $scope.$storage.project = currentNode;
-                    // @todo changed to storage
-                    //vm.structureSrv.project = currentNode;
-                    vm.activeNodeData = currentNode;
+				vm.activeNodeData = currentNode;
 
 
-                    if( currentNode.projectStats.coveragePercent >= 80 ) {
-                        vm.borderColor.coverage = "border-green";
-                        vm.knobBigOptions.fgColor = "#00ff6c";
+				if (currentNode.projectStats.coveragePercent >= 80) {
+					vm.borderColor.coverage = "border-green";
+					vm.knobBigOptions.fgColor = "#00ff6c";
 
-                    }
-                    else if( currentNode.projectStats.coveragePercent >= 40 ) {
-                        vm.borderColor.coverage = "border-yellow";
-                        vm.knobBigOptions.fgColor = "#ffff00";
+				}
+				else if (currentNode.projectStats.coveragePercent >= 40) {
+					vm.borderColor.coverage = "border-yellow";
+					vm.knobBigOptions.fgColor = "#ffff00";
 
-                    }
-                    else {
-                        vm.borderColor.coverage = "border-red";
-                        vm.knobBigOptions.fgColor = "#c1272d;";
+				}
+				else {
+					vm.borderColor.coverage = "border-red";
+					vm.knobBigOptions.fgColor = "#c1272d;";
 
-                    }
+				}
 
-                    $('.circle-diagram [knob-options="vm.knobBigOptions"]').trigger(
-                        'configure',
-                        {
-                            "fgColor": vm.knobBigOptions.fgColor
-                        }
-                    );
-
-
-                    if( currentNode.projectStats.successPercent >= 90 ) {
-                        vm.borderColor.test = "border-green";
-                        vm.knobSmallOptions.fgColor = "#00ff6c";
-                    }
-                    else if( currentNode.projectStats.successPercent >= 80 ) {
-                        vm.borderColor.test = "border-yellow";
-                        vm.knobSmallOptions.fgColor = "#ffff00";
-                    }
-                    else {
-                        vm.borderColor.test = "border-red";
-                        vm.knobSmallOptions.fgColor = "#c1272d;";
-                    }
-
-                    $('.circle-diagram [knob-options="vm.knobSmallOptions"]').trigger(
-                        'configure',
-                        {
-                            "fgColor": vm.knobSmallOptions.fgColor
-                        }
-                    );
+				$('.circle-diagram [knob-options="vm.knobBigOptions"]').trigger(
+					'configure',
+					{
+						"fgColor": vm.knobBigOptions.fgColor
+					}
+				);
 
 
-                    if( 0 < currentNode.projectStats.criticalIssues && currentNode.projectStats.criticalIssues < 4 ) {
-                        vm.borderColor.issues = "border-yellow";
-                    }
-                    else if( currentNode.projectStats.criticalIssues > 3 || currentNode.projectStats.blockerIssues > 0 ) {
-                        vm.borderColor.issues = "border-red";
-                    }
-                    else {
-                        vm.borderColor.issues = "border-green";
-                    }
+				if (currentNode.projectStats.successPercent >= 90) {
+					vm.borderColor.test = "border-green";
+					vm.knobSmallOptions.fgColor = "#00ff6c";
+				}
+				else if (currentNode.projectStats.successPercent >= 80) {
+					vm.borderColor.test = "border-yellow";
+					vm.knobSmallOptions.fgColor = "#ffff00";
+				}
+				else {
+					vm.borderColor.test = "border-red";
+					vm.knobSmallOptions.fgColor = "#c1272d;";
+				}
+
+				$('.circle-diagram [knob-options="vm.knobSmallOptions"]').trigger(
+					'configure',
+					{
+						"fgColor": vm.knobSmallOptions.fgColor
+					}
+				);
 
 
-                    self.value += 1;
-                });
+				if (0 < currentNode.projectStats.criticalIssues && currentNode.projectStats.criticalIssues < 4) {
+					vm.borderColor.issues = "border-yellow";
+				}
+				else if (currentNode.projectStats.criticalIssues > 3 || currentNode.projectStats.blockerIssues > 0) {
+					vm.borderColor.issues = "border-red";
+				}
+				else {
+					vm.borderColor.issues = "border-green";
+				}
 
+				if (clickFromCanvas) {
+					$rootScope.$apply(function () {
+						self.value += 1;
+					});
+				}
 
                 if ($('#v1').css('display') == 'none') {
 					$('#v2').hide();
@@ -511,7 +523,7 @@ function CanvasCtrl($rootScope, $location, $scope, $sessionStorage, structureSrv
             }
 
 
-            if (vm.activeNode == node) {
+			if (vm.activeNode == node) {
                 if (particleSystem.getEdgesFrom(node, particleSystem).length == 0) {
                     levelDown(node, particleSystem, false, node.data.weight + 1);
                 }
@@ -530,15 +542,23 @@ function CanvasCtrl($rootScope, $location, $scope, $sessionStorage, structureSrv
      * @param particleSystem
      */
     function levelUp(node, particleSystem) {
+		console.log(node);
         deleteEdges(node, particleSystem, true);
 
         node.data.weight -= 1;
 
-        $('.b-breadcrumbs ul li:last-child').remove();
         if (node.data.type.toLowerCase() == "project") {
+			$rootScope.$apply(function () {
+				vm.breadcrumbsEpic = false;
+				vm.breadcrumbsProject = false;
+			});
             drawFromSSF(node);
             return;
-        }
+		} else if (node.data.type.toLowerCase() == "epic") {
+			$rootScope.$apply(function () {
+				vm.breadcrumbsEpic = false;
+			});
+		}
 
         var idx = node.data.path.toString().lastIndexOf(',');
 
@@ -597,15 +617,22 @@ function CanvasCtrl($rootScope, $location, $scope, $sessionStorage, structureSrv
             });
             particleSystem.addEdge(node.name, data.issues[i].key);
 
-            if (recursively) {
+			if (recursively) {
                 levelDown(particleSystem.getNode(data.issues[i].key), particleSystem, recursively, weight);
-            }
+			}
         }
-        if (!recursively) {
-            var breadcrumbsImage = selectedObjects[data.issueType.toLowerCase()];
-            var breadcrumbsItem = jQuery('<li/>', {class: 'b-breadcrumbs__item'}).append(breadcrumbsImage);
-            $('.b-breadcrumbs ul').append(breadcrumbsItem);
-        }
+		if (!recursively) {
+			if (node.data.type.toLowerCase() == "project") {
+				$rootScope.$apply(function () {
+					vm.breadcrumbsEpic = false;
+					vm.breadcrumbsProject = {"path": node.data.path, "title": node.data.title};
+				});
+			} else if (node.data.type.toLowerCase() == "epic") {
+				$rootScope.$apply(function () {
+					vm.breadcrumbsEpic = {"path": node.data.path, "title": node.data.title};
+				});
+			}
+		}
     }
 
     function deleteEdges(node, particleSystem, directionUp) {
@@ -889,7 +916,7 @@ function CanvasCtrl($rootScope, $location, $scope, $sessionStorage, structureSrv
             $(".wrapper-right").toggleClass("active-right");
             $(".right-nav").toggleClass("active-rnav");
             $(".si-wide").toggleClass("short");
-            $(".ng-isolate-scope").toggleClass("hide");
+			$(".tab-content").toggleClass("hide");
             $(".hide-icon").toggleClass("show");
             $(".icon-collapse-right").toggleClass("hide");
             $(".toggle-right a").toggleClass("toggle-active");
@@ -902,19 +929,17 @@ function CanvasCtrl($rootScope, $location, $scope, $sessionStorage, structureSrv
             $("#viewport").attr('width', parseInt($("#viewport").attr('width')) + val);
         });
 
-
-
         // @todo enhance
-        $('.js-fade').slick({
-            dots: false,
-            speed: 300,
-            autoplaySpeed: 5000,
-            slidesToShow: 1,
-            pauseOnHover: true,
-            arrows: false,
-            autoplay: true,
-            fade: true,
-            adaptiveHeight: true
-        });
+		$('.js-fade').slick({
+			dots: true,
+			speed: 300,
+			autoplaySpeed: 5000,
+			slidesToShow: 1,
+			pauseOnHover: true,
+			arrows: false,
+			autoplay: true,
+			fade: true,
+			adaptiveHeight: true
+		});
     }
 }

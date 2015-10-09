@@ -68,213 +68,146 @@
             </div>
 
             <div class="tab-content">
-                <div>
-                    <h1>Description</h1>
-                    <!--                <accordion close-others="oneAtATime">
-                                        <accordion-group heading="Static Header, initially expanded" is-open="status.isFirstOpen"
-                                                         is-disabled="status.isFirstDisabled">-->
-                    <div class="box">
-                        <div class="description-text">
-                            <div>{{ vm.title }}</div>
-                            {{ vm.descr }}
-                        </div>
-                        <div class="button text-center"><a href="#">MORE</a></div>
+                <div class="box">
+                    Description
+                    <div class="description-text">
+                        {{ vm.title }}
+                        {{ vm.descr }}
                     </div>
                 </div>
-                <!--                    </accordion-group>
-                                </accordion>-->
-                <div>
-                    <h1>Information</h1>
-
-                    <div class="box">
-                        <table>
-                            <tr>
-                                <td style="width: 90px">DEVELOPERS</td>
-                                <td style="padding-left: 15px">LINES OF CODE</td>
-                            </tr>
-                            <tr class="numbers">
-                                <td style="text-decoration: underline; width: 90px">{{
-                                    vm.activeNodeData.users.length }}
-                                </td>
-                                <td style="padding-left: 15px">{{ vm.activeNodeData.projectStats.linesOfCode }}
-                                    <!--@todo-->
-                                    <!--<span style="display: block; font-size: 10px">(+13570)</span>-->
-                                </td>
-                            </tr>
-                        </table>
+                <div class="box developers" style="text-align: left">
+                    <div class="dev"><i class="fa fa-user"></i> {{ vm.activeNodeData.users.length }}
+                    </div>
+                    <div class="loc"><i class="fa fa-bars"></i> {{ vm.activeNodeData.projectStats.linesOfCode }} <a
+                        href="" class="button"></a>
                     </div>
                 </div>
-                <div>
-                    <h1>RELEASING</h1>
-
-                    <div class="box">
-                        <div class="text-center">CURRENT VERSION: 1.4</div>
-                        <div class="versions">
-                            <div class="line"></div>
-                            <div class="bg"><span>1.1</span>
-
-                                <div class="past" alt="28.03"></div>
-                            </div>
-                            <div class="bg"><span>1.2</span>
-
-                                <div class="past"></div>
-                            </div>
-                            <div class="bg"><span>1.3</span>
-
-                                <div class="past"></div>
-                            </div>
-                            <div class="bg"><span>1.4</span>
-
-                                <div class="past"></div>
-                            </div>
-                            <div class="bg"><span>1.5</span>
-
-                                <div class="now"></div>
-                            </div>
-                            <div class="bg"><span>1.6</span></div>
+                <div class="box">
+                    <div class="versions">
+                        <div class="line"></div>
+                        <div class="bg">
+                            <div class="past"></div>
                         </div>
+                        <div class="bg">
+                            <div class="past"></div>
+                        </div>
+                        <div class="bg">
+                            <div class="past"></div>
+                        </div>
+                        <div class="bg">
+                            <div class="past"></div>
+                        </div>
+                        <div class="bg">
+                            <div class="now"></div>
+                        </div>
+                        <div class="bg" style="margin-right: 0"></div>
                     </div>
+                    <div style="margin-top: 10px;">CURRENT VERSION: 1.4</div>
                 </div>
-                <div>
-                    <h1>PROGRESS</h1>
-
-                    <div class="box">
-                        <div class="legend" style="margin-bottom: 30px">
-                            <div class="open">
-                                <div class="marker blue"></div>
-                                OPEN
-                            </div>
-                            <div class="inprogress">
-                                <div class="marker yellow"></div>
-                                IN PROGRESS
-                            </div>
-                            <div class="open">
-                                <div class="marker green"></div>
-                                DONE
-                            </div>
-                        </div>
+                <div class="box">
+                    <div style="margin-bottom: 10px">PROGRESS</div>
+                    <div class="progress-box">
                         <div class="progress">
                             <div ng-if="vm.openStatus > 0" class="progress-bar progress-bar-blue"
                                  style="width: {{vm.openStatus}}%; position: relative">
-                                <span>{{vm.openStatus}}%</span>
-                                <span
-                                    style="position: absolute; top: 10px; left:8px">{{vm.openStatusHours}} h (est.)</span>
+                                <!--<span>{{vm.openStatus}}%</span>
+                                <span style="position: absolute; top: 10px; left:8px">{{vm.openStatusHours}} h (est.)</span>-->
                             </div>
                             <div ng-if="vm.inProgressStatus > 0" class="progress-bar progress-bar-yellow"
                                  style="width: {{vm.inProgressStatus}}%; position: relative">
-                                <span>{{vm.inProgressStatus}}%</span>
-                                <span style="position: absolute; top: 10px; left:8px">{{vm.inProgressStatusHours}} h (est.)</span>
+                                <!--<span>{{vm.inProgressStatus}}%</span>
+                                <span style="position: absolute; top: 10px; left:8px">{{vm.inProgressStatusHours}} h (est.)</span>-->
                             </div>
                             <div ng-if="vm.doneStatus > 0" class="progress-bar progress-bar-green"
                                  style="width: {{vm.doneStatus}}%; position: relative">
-                                <span>{{vm.doneStatus}}%</span>
-                                <span
-                                    style="position: absolute; top: 10px; left:8px">{{vm.doneStatusHours}} h (logged)</span>
+                                <!--<span>{{vm.doneStatus}}%</span>
+                                <span style="position: absolute; top: 10px; left:8px">{{vm.doneStatusHours}} h (logged)</span>-->
                             </div>
-                        </div>
-                        <div class="text-center" style="margin-top: 30px">
-                            STORY POINTS
-                        </div>
-                        <div class="story text-center">
-                            <table>
-                                <tr>
-                                    <td>
-                                        <div class="marker blue"></div>
-                                    </td>
-                                    <td>
-                                        <div class="marker yellow"></div>
-                                    </td>
-                                    <td>
-                                        <div class="marker green"></div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>{{ vm.activeNodeData.storyPoints.open }}</td>
-                                    <td>{{ vm.activeNodeData.storyPoints.inProgress }}</td>
-                                    <td>{{ vm.activeNodeData.storyPoints.done }}</td>
-                                </tr>
-                            </table>
                         </div>
                     </div>
+                    <div class="text-center" style="margin-top: 15px">
+                        STORY POINTS
+                    </div>
+                    <div class="story">
+                        <div class="bg-story border-blue">{{ vm.activeNodeData.storyPoints.open }}</div>
+                        <div class="bg-story border-yellow">{{ vm.activeNodeData.storyPoints.inProgress }}</div>
+                        <div class="bg-story border-green">{{ vm.activeNodeData.storyPoints.done }}</div>
+                    </div>
+                </div>
+                <div class="box">
+                    <div style="margin-bottom: 10px">QUALITY</div>
+                    <div class="slider js-fade">
+                        <div class="diagram">
+                            <div class="circle-diagram">
+                                <div class="mask-big"></div>
+                                <knob knob-data="vm.activeNodeData.projectStats.coveragePercent"
+                                      knob-options="vm.knobBigOptions"></knob>
 
-                    <div>
-                        <h1>QUALITY</h1>
+                                <div class="circle-divider">
+                                    <div class="circle-diagram-small">
+                                        <div class="mask-small"></div>
+                                        <knob knob-data="0" knob-options="vm.knobSmallOptions"></knob>
 
-                        <div class="box slider js-fade">
-
-                            <div class="diagram">
-                                <div class="circle-diagram">
-                                    <div class="mask-big"></div>
-                                    <knob knob-data="vm.activeNodeData.projectStats.coveragePercent"
-                                          knob-options="vm.knobBigOptions"></knob>
-
-                                    <div class="circle-divider">
-                                        <div class="circle-diagram-small">
-                                            <div class="mask-small"></div>
-                                            <knob knob-data="0" knob-options="vm.knobSmallOptions"></knob>
-
-                                            <div class="circle-sonar">
-                                                <div class="circle-unit {{ vm.borderColor.coverage }}">
-                                                    <h1>UNIT TEST<br>
-                                                        COVERAGE<br>
-                                                        <span class="big">{{ vm.activeNodeData.projectStats.coveragePercent }}%</span>
-                                                    </h1>
-                                                </div>
+                                        <div class="circle-sonar">
+                                            <div class="circle-unit {{ vm.borderColor.coverage }}">
+                                                <h1>UNIT TEST<br>
+                                                    COVERAGE<br>
+                                                    <span class="big">{{ vm.activeNodeData.projectStats.coveragePercent }}%</span>
+                                                </h1>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="diagram">
-                                <div class="circle-diagram">
-                                    <div class="mask-big"></div>
-                                    <knob knob-data="0" knob-options="vm.knobBigOptions"></knob>
+                        <div class="diagram">
+                            <div class="circle-diagram">
+                                <div class="mask-big"></div>
+                                <knob knob-data="0" knob-options="vm.knobBigOptions"></knob>
 
-                                    <div class="circle-divider">
-                                        <div class="circle-diagram-small">
-                                            <div class="mask-small"></div>
-                                            <knob knob-data="vm.activeNodeData.projectStats.successPercent"
-                                                  knob-options="vm.knobSmallOptions"></knob>
+                                <div class="circle-divider">
+                                    <div class="circle-diagram-small">
+                                        <div class="mask-small"></div>
+                                        <knob knob-data="vm.activeNodeData.projectStats.successPercent"
+                                              knob-options="vm.knobSmallOptions"></knob>
 
-                                            <div class="circle-sonar">
-                                                <div class="circle-unit {{ vm.borderColor.test }}">
-                                                    <h1>UNIT TEST<br>
-                                                        SUCCESS<br>
-                                                        <span class="big">{{ vm.activeNodeData.projectStats.successPercent }}%</span>
-                                                    </h1>
-                                                </div>
+                                        <div class="circle-sonar">
+                                            <div class="circle-unit {{ vm.borderColor.test }}">
+                                                <h1>UNIT TEST<br>
+                                                    SUCCESS<br>
+                                                    <span class="big">{{ vm.activeNodeData.projectStats.successPercent }}%</span>
+                                                </h1>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
 
-                            <div class="diagram">
-                                <div class="circle-diagram">
-                                    <div class="mask-big"></div>
-                                    <knob knob-data="0" knob-options="vm.knobBigOptions"></knob>
+                        <div class="diagram">
+                            <div class="circle-diagram">
+                                <div class="mask-big"></div>
+                                <knob knob-data="0" knob-options="vm.knobBigOptions"></knob>
 
-                                    <div class="circle-divider">
-                                        <div class="circle-diagram-small">
-                                            <div class="mask-small"></div>
-                                            <knob knob-data="0" knob-options="vm.knobSmallOptions"></knob>
+                                <div class="circle-divider">
+                                    <div class="circle-diagram-small">
+                                        <div class="mask-small"></div>
+                                        <knob knob-data="0" knob-options="vm.knobSmallOptions"></knob>
 
-                                            <div class="circle-sonar">
-                                                <div class="circle-unit {{ vm.borderColor.issues }}">
-                                                    <h1>SONAR<br>
-                                                        ISSUES<br>
-                                                        <span class="small">critical: {{ vm.activeNodeData.projectStats.criticalIssues }}</span><br>
-                                                        <span class="small">blockers: {{ vm.activeNodeData.projectStats.blockerIssues }}</span>
-                                                    </h1>
-                                                </div>
+                                        <div class="circle-sonar">
+                                            <div class="circle-unit {{ vm.borderColor.issues }}">
+                                                <h1>SONAR<br>
+                                                    ISSUES<br>
+                                                    <span class="small">critical: {{ vm.activeNodeData.projectStats.criticalIssues }}</span><br>
+                                                    <span class="small">blockers: {{ vm.activeNodeData.projectStats.blockerIssues }}</span>
+                                                </h1>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -292,247 +225,205 @@
                 </a>
             </div>
 
-            <tabset>
-                <tab heading="Description">
-                    <div class="box">
-                        <div class="description-text">
-                            <div>{{ vm.title }}</div>
-                            {{ vm.descr }}
-                        </div>
-                        <div class="button text-center"><a href="#">MORE</a></div>
+            <div class="tab-content">
+                <div class="box">
+                    Description
+                    <div class="description-text">
+                        {{ vm.title }}
+                        {{ vm.descr }}
                     </div>
-                </tab>
-                <tab heading="HUD">
-                    <div>
-                        <h1>Information</h1>
+                </div>
+                <div class="box developers epic-b" style="text-align: left">
+                    <div class="dev "><i class="fa fa-user"></i> {{ vm.activeNodeData.users.length }}</div>
+                </div>
+                <div class="box dropdown-e"></div>
+                <!--                <div>
+                                    <h1>Information</h1>
 
-                        <div class="box">
-                            <table>
-                                <tr>
-                                    <td style="width: 90px">DEVELOPERS</td>
-                                    <td style="padding-left: 15px; width: 150px">TOTAL ISSUES SOLVED</td>
-                                </tr>
-                                <tr class="numbers">
-                                    <td style="text-decoration: underline; width: 90px">{{
-                                        vm.activeNodeData.users.length }}
-                                    </td>
-                                    <td style="padding-left: 15px; width: 120px">
-                                        <div class="progress">
-                                            <div class="progress-bar progress-bar-blue"
-                                                 style="width: {{ vm.issuesSolved.task }}%"></div>
-                                            <div class="progress-bar progress-bar-green"
-                                                 style="width: {{ vm.issuesSolved.research }}%"></div>
-                                            <div class="progress-bar progress-bar-red"
-                                                 style="width: {{ vm.issuesSolved.bug }}%"></div>
-                                        </div>
-                                        <div class="legend" style="font-size: 12px; font-weight: normal">
-                                            <div class="co-legend" style="width: auto">
-                                                <div class="marker green"></div>
-                                                Research - {{ vm.issuesSolved.research }}%
-                                            </div>
-                                            <div class="co-legend" style="width: auto">
-                                                <div class="marker blue"></div>
-                                                Tasks - {{ vm.issuesSolved.task }}%
-                                            </div>
-                                            <div class="co-legend" style="width: auto">
-                                                <div class="marker red"></div>
-                                                Bugs - {{ vm.issuesSolved.bug }}%
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                    <div>
-                        <h1>PROGRESS</h1>
-
-                        <div class="box">
-                            <div class="legend" style="margin-bottom: 30px">
-                                <div class="open">
-                                    <div class="marker blue"></div>
-                                    OPEN
-                                </div>
-                                <div class="inprogress">
-                                    <div class="marker yellow"></div>
-                                    IN PROGRESS
-                                </div>
-                                <div class="open">
-                                    <div class="marker green"></div>
-                                    DONE
-                                </div>
+                                    <div class="box">
+                                        <table>
+                                            <tr>
+                                                <td style="width: 90px">DEVELOPERS</td>
+                                                <td style="padding-left: 15px; width: 150px">TOTAL ISSUES SOLVED</td>
+                                            </tr>
+                                            <tr class="numbers">
+                                                <td style="text-decoration: underline; width: 90px">{{
+                                                    vm.activeNodeData.users.length }}
+                                                </td>
+                                                <td style="padding-left: 15px; width: 120px">
+                                                    <div class="progress">
+                                                        <div class="progress-bar progress-bar-blue"
+                                                             style="width: {{ vm.issuesSolved.task }}%"></div>
+                                                        <div class="progress-bar progress-bar-green"
+                                                             style="width: {{ vm.issuesSolved.research }}%"></div>
+                                                        <div class="progress-bar progress-bar-red"
+                                                             style="width: {{ vm.issuesSolved.bug }}%"></div>
+                                                    </div>
+                                                    <div class="legend" style="font-size: 12px; font-weight: normal">
+                                                        <div class="co-legend" style="width: auto">
+                                                            <div class="marker green"></div>
+                                                            Research - {{ vm.issuesSolved.research }}%
+                                                        </div>
+                                                        <div class="co-legend" style="width: auto">
+                                                            <div class="marker blue"></div>
+                                                            Tasks - {{ vm.issuesSolved.task }}%
+                                                        </div>
+                                                        <div class="co-legend" style="width: auto">
+                                                            <div class="marker red"></div>
+                                                            Bugs - {{ vm.issuesSolved.bug }}%
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>-->
+                <div class="box">
+                    <div style="margin-bottom: 10px">PROGRESS</div>
+                    <div class="progress-box">
+                        <div class="progress">
+                            <div ng-if="vm.openStatus > 0" class="progress-bar progress-bar-blue"
+                                 style="width: {{vm.openStatus}}%; position: relative">
+                                <!--<span>{{vm.openStatus}}%</span>
+                                <span style="position: absolute; top: 10px; left:8px">{{vm.openStatusHours}} h (est.)</span>-->
                             </div>
-                            <div class="progress">
-                                <div ng-if="vm.openStatus > 0" class="progress-bar progress-bar-blue"
-                                     style="width: {{vm.openStatus}}%; position: relative">
-                                    <span>{{vm.openStatus}}%</span>
-                                    <span style="position: absolute; top: 10px; left:8px">{{vm.openStatusHours}} h (est.)</span>
-                                </div>
-                                <div ng-if="vm.inProgressStatus > 0" class="progress-bar progress-bar-yellow"
-                                     style="width: {{vm.inProgressStatus}}%; position: relative">
-                                    <span>{{vm.inProgressStatus}}%</span>
-                                    <span style="position: absolute; top: 10px; left:8px">{{vm.inProgressStatusHours}} h (est.)</span>
-                                </div>
-                                <div ng-if="vm.doneStatus > 0" class="progress-bar progress-bar-green"
-                                     style="width: {{vm.doneStatus}}%; position: relative">
-                                    <span>{{vm.doneStatus}}%</span>
-                                    <span style="position: absolute; top: 10px; left:8px">{{vm.inProgressStatusHours}} h (logged)</span>
-                                </div>
+                            <div ng-if="vm.inProgressStatus > 0" class="progress-bar progress-bar-yellow"
+                                 style="width: {{vm.inProgressStatus}}%; position: relative">
+                                <!--<span>{{vm.inProgressStatus}}%</span>
+                                <span style="position: absolute; top: 10px; left:8px">{{vm.inProgressStatusHours}} h (est.)</span>-->
                             </div>
-
-                            <div class="text-center" style="margin-top: 30px">
-                                STORY POINTS
-                            </div>
-                            <div class="story text-center">
-                                <table>
-                                    <tr>
-                                        <td>
-                                            <div class="marker blue"></div>
-                                        </td>
-                                        <td>
-                                            <div class="marker yellow"></div>
-                                        </td>
-                                        <td>
-                                            <div class="marker green"></div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>{{ vm.activeNodeData.storyPoints.open }}</td>
-                                        <td>{{ vm.activeNodeData.storyPoints.inProgress }}</td>
-                                        <td>{{ vm.activeNodeData.storyPoints.done }}</td>
-                                    </tr>
-                                </table>
+                            <div ng-if="vm.doneStatus > 0" class="progress-bar progress-bar-green"
+                                 style="width: {{vm.doneStatus}}%; position: relative">
+                                <!--<span>{{vm.doneStatus}}%</span>
+                                <span style="position: absolute; top: 10px; left:8px">{{vm.doneStatusHours}} h (logged)</span>-->
                             </div>
                         </div>
                     </div>
-                    <div nf-if="vm.storyList">
-                        <h1>STORY DETAILS</h1>
-
-                        <div class="box story-details" style="padding-left: 0; padding-right: 0;">
-                            <div class="text-center story-details-title">STORY LIST</div>
-                            <ul>
-                                <li ng-repeat="(key, story) in vm.storyList">
-                                    <a href="#" ng-click="vm.simulateClick(story.key)">{{ story.key }}</a>
-                                </li>
-                            </ul>
-                        </div>
+                    <div class="text-center" style="margin-top: 15px">
+                        STORY POINTS
                     </div>
-                </tab>
-            </tabset>
-        </div>
-        <!--right nav 2-->
-
-        <div class="right-nav wrapper-right" id="v3">
-            <!--Toggle-button-collapse-->
-            <div class="toggle-right">
-                <a class="menu-toggle-right" href="#">
-                    <img src="assets/img/icon-collapse-out.svg" alt="" height="8px" class="icon-collapse-right"/>
-                    <img src="assets/img/icon-collapse-info.svg" alt="" height="8px" class="hide-icon"/>
-                </a>
+                    <div class="story">
+                        <div class="bg-story border-blue">{{ vm.activeNodeData.storyPoints.open }}</div>
+                        <div class="bg-story border-yellow">{{ vm.activeNodeData.storyPoints.inProgress }}</div>
+                        <div class="bg-story border-green">{{ vm.activeNodeData.storyPoints.done }}</div>
+                    </div>
+                </div>
             </div>
+            <!--right nav 2-->
 
-            <tabset>
-                <tab heading="Description">
-                    <div class="box">
-                        <div class="description-text">
-                            <div>{{ vm.title }}</div>
-                            {{ vm.descr }}
-                        </div>
-                    </div>
-                </tab>
-                <tab heading="HUD">
-                    <div class="chart-buttons">
-                        <a href="" style="margin: 5px;">REQUIREMENTS</a>
-                        <a href="" style="margin: 5px;">PLAYBOOK</a>
-                        <a href="" style="margin: 5px;">DESIGN</a>
-                    </div>
-                    <div>
-                        <h1>PROGRESS</h1>
+            <div class="right-nav wrapper-right" id="v3">
+                <!--Toggle-button-collapse-->
+                <div class="toggle-right">
+                    <a class="menu-toggle-right" href="#">
+                        <img src="assets/img/icon-collapse-out.svg" alt="" height="8px" class="icon-collapse-right"/>
+                        <img src="assets/img/icon-collapse-info.svg" alt="" height="8px" class="hide-icon"/>
+                    </a>
+                </div>
 
+                <tabset>
+                    <tab heading="Description">
                         <div class="box">
-                            <div class="legend" style="margin-bottom: 30px">
-                                <div class="open">
-                                    <div class="marker blue"></div>
-                                    OPEN
-                                </div>
-                                <div class="inprogress">
-                                    <div class="marker yellow"></div>
-                                    IN PROGRESS
-                                </div>
-                                <div class="open">
-                                    <div class="marker green"></div>
-                                    DONE
-                                </div>
+                            <div class="description-text">
+                                <div>{{ vm.title }}</div>
+                                {{ vm.descr }}
                             </div>
-                            <div class="progress">
-                                <div ng-if="vm.openStatus > 0" class="progress-bar progress-bar-blue"
-                                     style="width: {{vm.openStatus}}%; position: relative">
-                                    <span>{{vm.openStatus}}%</span>
-                                    <span style="position: absolute; top: 10px; left:8px">{{vm.openStatusHours}} h (est.)</span>
-                                </div>
-                                <div ng-if="vm.inProgressStatus > 0" class="progress-bar progress-bar-yellow"
-                                     style="width: {{vm.inProgressStatus}}%; position: relative">
-                                    <span>{{vm.inProgressStatus}}%</span>
-                                    <span style="position: absolute; top: 10px; left:8px">{{vm.inProgressStatusHours}} h (est.)</span>
-                                </div>
-                                <div ng-if="vm.doneStatus > 0" class="progress-bar progress-bar-green"
-                                     style="width: {{vm.doneStatus}}%; position: relative">
-                                    <span>{{vm.doneStatus}}%</span>
-                                    <span style="position: absolute; top: 10px; left:8px">{{vm.inProgressStatusHours}} h (logged)</span>
-                                </div>
-                            </div>
-                            <div class="text-center" style="margin-top: 30px">
-                                STORY POINTS
-                            </div>
-                            <div class="story text-center">
-                                <table>
-                                    <tr>
-                                        <td>
-                                            <div class="marker blue"></div>
-                                        </td>
-                                        <td>
-                                            <div class="marker yellow"></div>
-                                        </td>
-                                        <td>
-                                            <div class="marker green"></div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>{{ vm.activeNodeData.storyPoints.open }}</td>
-                                        <td>{{ vm.activeNodeData.storyPoints.inProgress }}</td>
-                                        <td>{{ vm.activeNodeData.storyPoints.done }}</td>
-                                    </tr>
-                                </table>
-                            </div>
-                            <div class="requirements text-center">
-                                REQUIREMENTS
-                                <div class="progress" style="margin-top: 25px">
-                                    <div class="progress-bar progress-bar-blue"
-                                         style="width: {{ vm.requirements.opened }}%"><span
-                                        ng-if="vm.requirements.opened > 0">{{ vm.requirements.opened }}%</span>
-                                    </div>
-                                    <div class="progress-bar progress-bar-green"
-                                         style="width: {{ vm.requirements.closed }}%"><span
-                                        ng-if="vm.requirements.closed > 0">{{ vm.requirements.closed }}%</span>
-                                    </div>
-                                </div>
-                                DUE DATE<br>12 Oct 2015
+                            <div class="button text-center"><a href="">MORE</a><br/><a href ng-click="vm.toTimeline()">TIMELINE</a>
                             </div>
                         </div>
-                    </div>
-                </tab>
-            </tabset>
-        </div>
-        <!--right nav 3-->
+                    </tab>
+                    <tab heading="HUD">
+                        <div class="chart-buttons">
+                            <a href="" style="margin: 5px;">REQUIREMENTS</a>
+                            <a href="" style="margin: 5px;">PLAYBOOK</a>
+                            <a href="" style="margin: 5px;">DESIGN</a>
+                        </div>
+                        <div>
+                            <h1>PROGRESS</h1>
 
-        <div class="b-breadcrumbs">
-            <ul>
-                <li class="b-breadcrumbs__item">
-                    <img src="assets/img/img-foundation-sphere.png" alt="SSF"/>
-                </li>
-            </ul>
-        </div>
+                            <div class="box">
+                                <div class="legend" style="margin-bottom: 30px">
+                                    <div class="open">
+                                        <div class="marker blue"></div>
+                                        OPEN
+                                    </div>
+                                    <div class="inprogress">
+                                        <div class="marker yellow"></div>
+                                        IN PROGRESS
+                                    </div>
+                                    <div class="open">
+                                        <div class="marker green"></div>
+                                        DONE
+                                    </div>
+                                </div>
+                                <div class="progress">
+                                    <div ng-if="vm.openStatus > 0" class="progress-bar progress-bar-blue"
+                                         style="width: {{vm.openStatus}}%; position: relative">
+                                        <span>{{vm.openStatus}}%</span>
+                                        <span style="position: absolute; top: 10px; left:8px">{{vm.openStatusHours}} h (est.)</span>
+                                    </div>
+                                    <div ng-if="vm.inProgressStatus > 0" class="progress-bar progress-bar-yellow"
+                                         style="width: {{vm.inProgressStatus}}%; position: relative">
+                                        <span>{{vm.inProgressStatus}}%</span>
+                                        <span style="position: absolute; top: 10px; left:8px">{{vm.inProgressStatusHours}} h (est.)</span>
+                                    </div>
+                                    <div ng-if="vm.doneStatus > 0" class="progress-bar progress-bar-green"
+                                         style="width: {{vm.doneStatus}}%; position: relative">
+                                        <span>{{vm.doneStatus}}%</span>
+                                        <span style="position: absolute; top: 10px; left:8px">{{vm.inProgressStatusHours}} h (logged)</span>
+                                    </div>
+                                </div>
+                                <div class="text-center" style="margin-top: 30px">
+                                    STORY POINTS
+                                </div>
+                                <div class="story text-center">
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <div class="marker blue"></div>
+                                            </td>
+                                            <td>
+                                                <div class="marker yellow"></div>
+                                            </td>
+                                            <td>
+                                                <div class="marker green"></div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>{{ vm.activeNodeData.storyPoints.open }}</td>
+                                            <td>{{ vm.activeNodeData.storyPoints.inProgress }}</td>
+                                            <td>{{ vm.activeNodeData.storyPoints.done }}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="requirements text-center">
+                                    REQUIREMENTS
+                                    <div class="progress" style="margin-top: 25px">
+                                        <div class="progress-bar progress-bar-blue"
+                                             style="width: {{ vm.requirements.opened }}%"><span
+                                            ng-if="vm.requirements.opened > 0">{{ vm.requirements.opened }}%</span>
+                                        </div>
+                                        <div class="progress-bar progress-bar-green"
+                                             style="width: {{ vm.requirements.closed }}%"><span
+                                            ng-if="vm.requirements.closed > 0">{{ vm.requirements.closed }}%</span>
+                                        </div>
+                                    </div>
+                                    DUE DATE<br>12 Oct 2015
+                                </div>
+                            </div>
+                        </div>
+                    </tab>
+                </tabset>
+            </div>
+            <!--right nav 3-->
 
+            <div class="b-breadcrumbs">
+                <ul>
+                    <li class="b-breadcrumbs__item">
+                        <img src="../assets/img/img-foundation-sphere-selected.png" alt="SSF"/>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </header>
 
     <!-- Issue line popup -->
