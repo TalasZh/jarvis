@@ -152,6 +152,10 @@ public class DaoServiceImpl implements Dao
                 em.getTransaction().rollback();
             }
         }
+        finally
+        {
+            em.close();
+        }
         return result;
     }
 
@@ -201,6 +205,10 @@ public class DaoServiceImpl implements Dao
                 em.getTransaction().rollback();
             }
         }
+        finally
+        {
+            em.close();
+        }
         return result;
     }
 
@@ -224,6 +232,10 @@ public class DaoServiceImpl implements Dao
             {
                 em.getTransaction().rollback();
             }
+        }
+        finally
+        {
+            em.close();
         }
         return result;
     }
@@ -249,6 +261,10 @@ public class DaoServiceImpl implements Dao
             {
                 em.getTransaction().rollback();
             }
+        }
+        finally
+        {
+            em.close();
         }
         return result;
     }
@@ -279,6 +295,10 @@ public class DaoServiceImpl implements Dao
                 em.getTransaction().rollback();
             }
         }
+        finally
+        {
+            em.close();
+        }
         return result;
     }
 
@@ -305,6 +325,10 @@ public class DaoServiceImpl implements Dao
             {
                 em.getTransaction().rollback();
             }
+        }
+        finally
+        {
+            em.close();
         }
         return result;
     }
@@ -354,5 +378,59 @@ public class DaoServiceImpl implements Dao
             em.close();
         }
         return totalPersisted;
+    }
+
+
+    @Override
+    public <T> T executeQueryForSingleResult( Class<T> entityClass, final String queryString )
+    {
+        EntityManager em = emf.createEntityManager();
+        T result = null;
+        try
+        {
+            em.getTransaction().begin();
+            Query query = em.createNativeQuery( queryString );
+            result = ( T ) query.getSingleResult();
+            em.getTransaction().commit();
+        }
+        catch ( Exception ex )
+        {
+            LOGGER.error( "Error executing query", ex );
+            if ( em.getTransaction().isActive() )
+            {
+                em.getTransaction().rollback();
+            }
+        }
+        finally
+        {
+            em.close();
+        }
+        return result;
+    }
+
+
+    @Override
+    public void executeQuery( final String queryString )
+    {
+        EntityManager em = emf.createEntityManager();
+        try
+        {
+            em.getTransaction().begin();
+            Query query = em.createNativeQuery( queryString );
+            query.executeUpdate();
+            em.getTransaction().commit();
+        }
+        catch ( Exception ex )
+        {
+            LOGGER.error( "Error executing query", ex );
+            if ( em.getTransaction().isActive() )
+            {
+                em.getTransaction().rollback();
+            }
+        }
+        finally
+        {
+            em.close();
+        }
     }
 }

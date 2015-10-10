@@ -10,8 +10,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-import javax.annotation.PostConstruct;
-
 import org.safehaus.dao.entities.jira.IssueWorkLog;
 import org.safehaus.dao.entities.jira.JarvisLink;
 import org.safehaus.dao.entities.jira.JiraIssueChangelog;
@@ -87,7 +85,7 @@ public class TimelineManager
     }
 
 
-    @PostConstruct
+//    @PostConstruct
     public void init()
     {
         //        ServiceIdentity jiraIdentity = new ServiceIdentity(  )

@@ -44,4 +44,6 @@ public interface JiraMetricDao
     List<JiraMetricIssue> getProjectIssues( String projectKey );
 
     List<IssueWorkLog> getUserWorkLogs( String username, int limit );
+
+    void attachCommit( String issueKey, String commitId );
 }

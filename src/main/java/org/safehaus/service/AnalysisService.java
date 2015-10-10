@@ -235,7 +235,7 @@ public class AnalysisService
             try
             {
                 //                pullData( jiraCl );
-                //                getJiraMetricIssues( jiraCl );
+                //                                getJiraMetricIssues( jiraCl );
             }
             catch ( Exception ex )
             {
@@ -680,14 +680,16 @@ public class AnalysisService
         Set<IssueKeyParser> issues = Sets.newHashSet( IssueKeyParser.parseIssueKeys( commitMsg ) );
         for ( final IssueKeyParser issue : issues )
         {
-            JiraMetricIssue jiraMetricIssue =
-                    jiraMetricDao.findJiraMetricIssueByKey( issue.getFullyQualifiedIssueKey() );
+            //            JiraMetricIssue jiraMetricIssue =
+            //                    jiraMetricDao.findJiraMetricIssueByKey( issue.getFullyQualifiedIssueKey() );
 
-            if ( jiraMetricIssue != null )
-            {
-                jiraMetricIssue.getGitCommits().add( stashMetricIssue.getId() );
-                jiraMetricDao.updateJiraMetricIssue( jiraMetricIssue );
-            }
+            jiraMetricDao.attachCommit( issue.getFullyQualifiedIssueKey(), stashMetricIssue.getId() );
+
+            //            if ( jiraMetricIssue != null )
+            //            {
+            //                jiraMetricIssue.getGitCommits().add( stashMetricIssue.getId() );
+            //                jiraMetricDao.updateJiraMetricIssue( jiraMetricIssue );
+            //            }
         }
     }
 

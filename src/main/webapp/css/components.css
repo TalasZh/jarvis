@@ -1775,3 +1775,8 @@ input[type=checkbox] {
 {
     z-index: 10000;
 }
+
+#uiview > div
+{
+    height: 100%;
+}

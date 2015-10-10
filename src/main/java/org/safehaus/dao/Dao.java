@@ -40,4 +40,8 @@ public interface Dao
                          Object parameterValue2 );
 
     <T> int batchInsert( List<T> entities );
+
+    <T> T executeQueryForSingleResult( Class<T> entityClass, String query );
+
+    void executeQuery( String query );
 }

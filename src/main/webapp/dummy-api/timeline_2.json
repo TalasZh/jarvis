@@ -1,0 +1,4749 @@
+{
+  "issueId": 15837,
+  "issueKey": "SS-3038",
+  "status": "Open",
+  "projectKey": "SS",
+  "summary": "As a users I want to be able to setup an ARM based Subutai Resource Host and create containers on it as they do on the x86_64 platform from ARM based images in snaps.",
+  "description": "Users shall be able to setup an ARM based Subutai Resource Host and create containers on it as they do on the x86_64 platform from ARM based images in snaps. The same capabilities present for x86_64 should also be mirrored on the ARM platform. This means having ARM based snaps available for the image hierarchy in the snap repository. The repository must be able to support multiple architectures in this way.\r\n\r\nThere are many ARM SoC's which have their own kernels so there will not be one single ARM platform to support: there will be many.",
+  "reporterName": "kjoldoshbekova",
+  "assigneeName": "dshihovtsev",
+  "resolution": null,
+  "creationDate": "2015-06-30T18:17:10.000+0600",
+  "updateDate": "2015-10-08T16:54:47.000+0600",
+  "dueDate": "1970-01-01T06:00:00.000+0600",
+  "priority": 3,
+  "originalEstimateMinutes": 4800,
+  "remainingEstimateMinutes": 2400,
+  "timeSpentMinutes": 0,
+  "type": {
+    "id": 7,
+    "name": "Story"
+  },
+  "changelogList": [
+    {
+      "changeKey": {
+        "changeItemId": 45925,
+        "created": 1437455914570
+      },
+      "issueId": 15837,
+      "issueKey": "SS-3038",
+      "author": "Vyacheslav Kim",
+      "type": "jira",
+      "field": "Workflow",
+      "fromString": "Subutai Automation Workflow",
+      "toString": "Jarvis Custom Workflow Merged with Automation",
+      "from": "17937",
+      "to": "18224"
+    },
+    {
+      "changeKey": {
+        "changeItemId": 44296,
+        "created": 1435667275217
+      },
+      "issueId": 15837,
+      "issueKey": "SS-3038",
+      "author": "Abdyldaev Almaz",
+      "type": "jira",
+      "field": "timeoriginalestimate",
+      "fromString": "144000",
+      "toString": "288000",
+      "from": "144000",
+      "to": "288000"
+    },
+    {
+      "changeKey": {
+        "changeItemId": 63658,
+        "created": 1444301641944
+      },
+      "issueId": 15837,
+      "issueKey": "SS-3038",
+      "author": "Dmitry Shihovtsev",
+      "type": "jira",
+      "field": "assignee",
+      "fromString": null,
+      "toString": "Timur Zununbekov",
+      "from": null,
+      "to": "tzununbekov"
+    },
+    {
+      "changeKey": {
+        "changeItemId": 58818,
+        "created": 1443493732156
+      },
+      "issueId": 15837,
+      "issueKey": "SS-3038",
+      "author": "Azamat Nuriddinov",
+      "type": "jira",
+      "field": "Component",
+      "fromString": null,
+      "toString": "SYSNET",
+      "from": null,
+      "to": "11600"
+    },
+    {
+      "changeKey": {
+        "changeItemId": 58816,
+        "created": 1443493702735
+      },
+      "issueId": 15837,
+      "issueKey": "SS-3038",
+      "author": "Azamat Nuriddinov",
+      "type": "jira",
+      "field": "summary",
+      "fromString": "As a developer I want management server to support deployment of OS on ARM devices in a similar way it deploys resource hosts via FAI",
+      "toString": "As a users I want to be able to setup an ARM based Subutai Resource Host and create containers on it as they do on the x86_64 platform from ARM based images in snaps.",
+      "from": null,
+      "to": null
+    },
+    {
+      "changeKey": {
+        "changeItemId": 63406,
+        "created": 1444284848344
+      },
+      "issueId": 15837,
+      "issueKey": "SS-3038",
+      "author": "Azamat Nuriddinov",
+      "type": "jira",
+      "field": "Link",
+      "fromString": null,
+      "toString": "This issue parent of SS-3607",
+      "from": null,
+      "to": "SS-3607"
+    },
+    {
+      "changeKey": {
+        "changeItemId": 60441,
+        "created": 1443648617693
+      },
+      "issueId": 15837,
+      "issueKey": "SS-3038",
+      "author": "Azamat Nuriddinov",
+      "type": "jira",
+      "field": "Link",
+      "fromString": null,
+      "toString": "This issue child of SS-3016",
+      "from": null,
+      "to": "SS-3016"
+    },
+    {
+      "changeKey": {
+        "changeItemId": 63660,
+        "created": 1444301656214
+      },
+      "issueId": 15837,
+      "issueKey": "SS-3038",
+      "author": "Dilshat Aliev",
+      "type": "jira",
+      "field": "Link",
+      "fromString": "This issue parent of SS-3607",
+      "toString": null,
+      "from": "SS-3607",
+      "to": null
+    },
+    {
+      "changeKey": {
+        "changeItemId": 58883,
+        "created": 1443495229745
+      },
+      "issueId": 15837,
+      "issueKey": "SS-3038",
+      "author": "Azamat Nuriddinov",
+      "type": "jira",
+      "field": "assignee",
+      "fromString": "Furkan Bıcak",
+      "toString": null,
+      "from": "bicak.cs",
+      "to": null
+    },
+    {
+      "changeKey": {
+        "changeItemId": 63664,
+        "created": 1444301687277
+      },
+      "issueId": 15837,
+      "issueKey": "SS-3038",
+      "author": "Dmitry Shihovtsev",
+      "type": "jira",
+      "field": "assignee",
+      "fromString": "Timur Zununbekov",
+      "toString": "Dmitry Shihovtsev",
+      "from": "tzununbekov",
+      "to": "dshihovtsev"
+    },
+    {
+      "changeKey": {
+        "changeItemId": 61576,
+        "created": 1443767206207
+      },
+      "issueId": 15837,
+      "issueKey": "SS-3038",
+      "author": "Azamat Nuriddinov",
+      "type": "jira",
+      "field": "Link",
+      "fromString": null,
+      "toString": "This issue parent of SS-3583",
+      "from": null,
+      "to": "SS-3583"
+    },
+    {
+      "changeKey": {
+        "changeItemId": 54217,
+        "created": 1440849672845
+      },
+      "issueId": 15837,
+      "issueKey": "SS-3038",
+      "author": "Azamat Duishenov",
+      "type": "jira",
+      "field": "description",
+      "fromString": "[~aabdyldaev] please fill the content and pay attention to original estimate",
+      "toString": "[~aabdyldaev] please fill the content",
+      "from": null,
+      "to": null
+    },
+    {
+      "changeKey": {
+        "changeItemId": 61537,
+        "created": 1443765110819
+      },
+      "issueId": 15837,
+      "issueKey": "SS-3038",
+      "author": "Azamat Nuriddinov",
+      "type": "jira",
+      "field": "labels",
+      "fromString": "",
+      "toString": "requirements_december",
+      "from": null,
+      "to": null
+    },
+    {
+      "changeKey": {
+        "changeItemId": 44289,
+        "created": 1435666630862
+      },
+      "issueId": 15837,
+      "issueKey": "SS-3038",
+      "author": "Keremet Joldoshbekova",
+      "type": "custom",
+      "field": "Epic Link",
+      "fromString": null,
+      "toString": "SS-3016",
+      "from": null,
+      "to": "15808"
+    },
+    {
+      "changeKey": {
+        "changeItemId": 44291,
+        "created": 1435666631687
+      },
+      "issueId": 15837,
+      "issueKey": "SS-3038",
+      "author": "Keremet Joldoshbekova",
+      "type": "custom",
+      "field": "Rank",
+      "fromString": "",
+      "toString": "Ranked higher",
+      "from": "",
+      "to": ""
+    },
+    {
+      "changeKey": {
+        "changeItemId": 62409,
+        "created": 1443977319584
+      },
+      "issueId": 15837,
+      "issueKey": "SS-3038",
+      "author": "Azamat Duishenov",
+      "type": "jira",
+      "field": "Link",
+      "fromString": null,
+      "toString": "This issue parent of SS-3508",
+      "from": null,
+      "to": "SS-3508"
+    },
+    {
+      "changeKey": {
+        "changeItemId": 62406,
+        "created": 1443977305513
+      },
+      "issueId": 15837,
+      "issueKey": "SS-3038",
+      "author": "Azamat Duishenov",
+      "type": "jira",
+      "field": "Link",
+      "fromString": "This issue is parent task of SS-3508",
+      "toString": null,
+      "from": "SS-3508",
+      "to": null
+    },
+    {
+      "changeKey": {
+        "changeItemId": 58817,
+        "created": 1443493716430
+      },
+      "issueId": 15837,
+      "issueKey": "SS-3038",
+      "author": "Azamat Nuriddinov",
+      "type": "jira",
+      "field": "description",
+      "fromString": "[~aabdyldaev] please fill the content",
+      "toString": "users shall be able to setup an ARM based Subutai Resource Host and create containers on it as they do on the x86_64 platform from ARM based images in snaps. The same capabilities present for x86_64 should also be mirrored on the ARM platform. This means having ARM based snaps available for the image hierarchy in the snap repository. The repository must be able to support multiple architectures in this way.",
+      "from": null,
+      "to": null
+    },
+    {
+      "changeKey": {
+        "changeItemId": 58822,
+        "created": 1443493927856
+      },
+      "issueId": 15837,
+      "issueKey": "SS-3038",
+      "author": "Azamat Nuriddinov",
+      "type": "jira",
+      "field": "Link",
+      "fromString": null,
+      "toString": "This issue is parent task of SS-3508",
+      "from": null,
+      "to": "SS-3508"
+    },
+    {
+      "changeKey": {
+        "changeItemId": 58819,
+        "created": 1443493806139
+      },
+      "issueId": 15837,
+      "issueKey": "SS-3038",
+      "author": "Azamat Nuriddinov",
+      "type": "jira",
+      "field": "description",
+      "fromString": "users shall be able to setup an ARM based Subutai Resource Host and create containers on it as they do on the x86_64 platform from ARM based images in snaps. The same capabilities present for x86_64 should also be mirrored on the ARM platform. This means having ARM based snaps available for the image hierarchy in the snap repository. The repository must be able to support multiple architectures in this way.",
+      "toString": "Users shall be able to setup an ARM based Subutai Resource Host and create containers on it as they do on the x86_64 platform from ARM based images in snaps. The same capabilities present for x86_64 should also be mirrored on the ARM platform. This means having ARM based snaps available for the image hierarchy in the snap repository. The repository must be able to support multiple architectures in this way.\r\n\r\nThere are many ARM SoC's which have their own kernels so there will not be one single ARM platform to support: there will be many.",
+      "from": null,
+      "to": null
+    }
+  ],
+  "issueLinks": [
+    {
+      "linkType": {
+        "id": 10700,
+        "name": "Child",
+        "inward": "parent of",
+        "outward": "child of"
+      },
+      "linkDirection": {
+        "issueKey": "SS-3016",
+        "issueId": 15808
+      },
+      "direction": "OUTWARD",
+      "type": {
+        "id": 6,
+        "name": "Epic"
+      }
+    },
+    {
+      "linkType": {
+        "id": 10700,
+        "name": "Child",
+        "inward": "parent of",
+        "outward": "child of"
+      },
+      "linkDirection": {
+        "issueKey": "SS-3583",
+        "issueId": 17505
+      },
+      "direction": "INWARD",
+      "type": {
+        "id": 10100,
+        "name": "Requirement"
+      }
+    },
+    {
+      "linkType": {
+        "id": 10700,
+        "name": "Child",
+        "inward": "parent of",
+        "outward": "child of"
+      },
+      "linkDirection": {
+        "issueKey": "SS-3508",
+        "issueId": 17393
+      },
+      "direction": "INWARD",
+      "type": {
+        "id": 10100,
+        "name": "Requirement"
+      }
+    }
+  ],
+  "issueWorkLogs": [],
+  "remoteLinks": [],
+  "components": [
+    "resource-host",
+    "SYSNET"
+  ],
+  "labels": [
+    "requirements_december"
+  ],
+  "issues": [
+    {
+      "issueId": 17505,
+      "issueKey": "SS-3583",
+      "status": "Open",
+      "projectKey": "SS",
+      "summary": "The user should clearly be able to differentiate between ARM arch Resource Hosts on the Subutai Management Console.",
+      "description": "to add",
+      "reporterName": "anuriddinov",
+      "assigneeName": null,
+      "resolution": null,
+      "creationDate": "2015-10-02T12:26:24.000+0600",
+      "updateDate": "2015-10-02T12:26:46.000+0600",
+      "dueDate": "1970-01-01T06:00:00.000+0600",
+      "priority": 3,
+      "originalEstimateMinutes": 1,
+      "remainingEstimateMinutes": 1,
+      "timeSpentMinutes": 0,
+      "type": {
+        "id": 10100,
+        "name": "Requirement"
+      },
+      "changelogList": [
+        {
+          "changeKey": {
+            "changeItemId": 61573,
+            "created": 1443767184364
+          },
+          "issueId": 17505,
+          "issueKey": "SS-3583",
+          "author": "Azamat Nuriddinov",
+          "type": "custom",
+          "field": "Epic Link",
+          "fromString": null,
+          "toString": "SS-3016",
+          "from": null,
+          "to": "15808"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 61575,
+            "created": 1443767206204
+          },
+          "issueId": 17505,
+          "issueKey": "SS-3583",
+          "author": "Azamat Nuriddinov",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue child of SS-3038",
+          "from": null,
+          "to": "SS-3038"
+        }
+      ],
+      "issueLinks": [
+        {
+          "linkType": {
+            "id": 10700,
+            "name": "Child",
+            "inward": "parent of",
+            "outward": "child of"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3038",
+            "issueId": 15837
+          },
+          "direction": "OUTWARD",
+          "type": {
+            "id": 7,
+            "name": "Story"
+          }
+        }
+      ],
+      "issueWorkLogs": [],
+      "remoteLinks": [],
+      "components": [
+        "SYSNET"
+      ],
+      "labels": [],
+      "issues": [],
+      "annotations": [],
+      "commits": []
+    },
+    {
+      "issueId": 17795,
+      "issueKey": "SS-3640",
+      "status": "Resolved",
+      "projectKey": "SS",
+      "summary": "Research Snappy Ubuntu OEM package",
+      "description": "Seem like  we need to use Snappy Ubuntu OEM packages for proper migration Subutai on ARM SoC. \r\nWe need to research is it important for us, and how we can use it, what benefits we can get with it. ",
+      "reporterName": "dshihovtsev",
+      "assigneeName": "dshihovtsev",
+      "resolution": "Done",
+      "creationDate": "2015-10-08T12:00:28.000+0600",
+      "updateDate": "2015-10-09T10:19:21.000+0600",
+      "dueDate": "1970-01-01T06:00:00.000+0600",
+      "priority": 3,
+      "originalEstimateMinutes": 240,
+      "remainingEstimateMinutes": 0,
+      "timeSpentMinutes": 246,
+      "type": {
+        "id": 10000,
+        "name": "Research"
+      },
+      "changelogList": [
+        {
+          "changeKey": {
+            "changeItemId": 63397,
+            "created": 1444284238129
+          },
+          "issueId": 17795,
+          "issueKey": "SS-3640",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "status",
+          "fromString": "Open",
+          "toString": "IN_PROGRESS_WITHOUT_BRANCH",
+          "from": "1",
+          "to": "10007"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63488,
+            "created": 1444285773101
+          },
+          "issueId": 17795,
+          "issueKey": "SS-3640",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue child of SS-3611",
+          "from": null,
+          "to": "SS-3611"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 64028,
+            "created": 1444364347252
+          },
+          "issueId": 17795,
+          "issueKey": "SS-3640",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "WorklogId",
+          "fromString": "15999",
+          "toString": null,
+          "from": "15999",
+          "to": null
+        },
+        {
+          "changeKey": {
+            "changeItemId": 64029,
+            "created": 1444364361035
+          },
+          "issueId": 17795,
+          "issueKey": "SS-3640",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "resolution",
+          "fromString": null,
+          "toString": "Done",
+          "from": null,
+          "to": "10000"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63557,
+            "created": 1444295791417
+          },
+          "issueId": 17795,
+          "issueKey": "SS-3640",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "WorklogId",
+          "fromString": "15988",
+          "toString": null,
+          "from": "15988",
+          "to": null
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63393,
+            "created": 1444284028543
+          },
+          "issueId": 17795,
+          "issueKey": "SS-3640",
+          "author": "Dmitry Shihovtsev",
+          "type": "custom",
+          "field": "Epic Link",
+          "fromString": null,
+          "toString": "SS-3016",
+          "from": null,
+          "to": "15808"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63548,
+            "created": 1444294805582
+          },
+          "issueId": 17795,
+          "issueKey": "SS-3640",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "WorklogId",
+          "fromString": "15984",
+          "toString": null,
+          "from": "15984",
+          "to": null
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63550,
+            "created": 1444295383879
+          },
+          "issueId": 17795,
+          "issueKey": "SS-3640",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "WorklogId",
+          "fromString": "15986",
+          "toString": null,
+          "from": "15986",
+          "to": null
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63555,
+            "created": 1444295544989
+          },
+          "issueId": 17795,
+          "issueKey": "SS-3640",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "WorklogId",
+          "fromString": "15987",
+          "toString": null,
+          "from": "15987",
+          "to": null
+        },
+        {
+          "changeKey": {
+            "changeItemId": 64027,
+            "created": 1444364339464
+          },
+          "issueId": 17795,
+          "issueKey": "SS-3640",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "WorklogId",
+          "fromString": "15999",
+          "toString": null,
+          "from": "15999",
+          "to": null
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63606,
+            "created": 1444297976084
+          },
+          "issueId": 17795,
+          "issueKey": "SS-3640",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "WorklogId",
+          "fromString": "15991",
+          "toString": null,
+          "from": "15991",
+          "to": null
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63549,
+            "created": 1444295366156
+          },
+          "issueId": 17795,
+          "issueKey": "SS-3640",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "WorklogId",
+          "fromString": "15985",
+          "toString": null,
+          "from": "15985",
+          "to": null
+        }
+      ],
+      "issueLinks": [
+        {
+          "linkType": {
+            "id": 10700,
+            "name": "Child",
+            "inward": "parent of",
+            "outward": "child of"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3611",
+            "issueId": 17745
+          },
+          "direction": "OUTWARD",
+          "type": {
+            "id": 10201,
+            "name": "Design"
+          }
+        }
+      ],
+      "issueWorkLogs": [
+        {
+          "workLogId": "15985",
+          "comment": "[https://developer.ubuntu.com/en/snappy/guides/oem/]{quote}Branding\nBranding can be set in the form of a slogan and an image. snappy and it’s\nwebdm counterpart will use this information to brand the system accordingly.{quote}We can specify Branding information in our package",
+          "author": "dshihovtsev",
+          "createDate": 1444240800000,
+          "timeSpentSeconds": 60,
+          "updateAuthor": null,
+          "updateDate": 1444240800000
+        },
+        {
+          "workLogId": "15984",
+          "comment": "[https://developer.ubuntu.com/en/snappy/guides/oem/]{quote}The oem snappy package is a snappy package type that is used to setup and\npersonalize the system according to an OEM.\nIt covers a broad range, such as the software stack with its configuration and\nhardware enablement.\nThere can only be one snappy package of type: oem and it can only be\ninstalled during image provision.{quote}We can use Snappy Ubuntu OEM package for initial configuration of our image for ARM SoC.",
+          "author": "dshihovtsev",
+          "createDate": 1444240800000,
+          "timeSpentSeconds": 60,
+          "updateAuthor": null,
+          "updateDate": 1444240800000
+        },
+        {
+          "workLogId": "15987",
+          "comment": "[https://developer.ubuntu.com/en/snappy/guides/oem/]{quote}dtb\nThe default dtb (device tree blob) can be overridden by a key entry point in\nthe package.yaml for the oem.\nIf a dtb is specified during provisioning, it will be selected as the dtb to\nuse for the system. If using an AB partition layout, when an update for the\noem package is installed which updates the dtb, the update will be\ninstalled to the other partition and a reboot will be requested.{quote}We can ship device tree with oem snap. And it could be updated if required.",
+          "author": "dshihovtsev",
+          "createDate": 1444240800000,
+          "timeSpentSeconds": 60,
+          "updateAuthor": null,
+          "updateDate": 1444240800000
+        },
+        {
+          "workLogId": "15986",
+          "comment": "[https://developer.ubuntu.com/en/snappy/guides/oem/]{quote}The oem snap can provide a set of default packages to be installed during either provisioning or first boot. {quote}Seems like we can embed snap packages into image",
+          "author": "dshihovtsev",
+          "createDate": 1444240800000,
+          "timeSpentSeconds": 60,
+          "updateAuthor": null,
+          "updateDate": 1444240800000
+        },
+        {
+          "workLogId": "15988",
+          "comment": "[https://developer.ubuntu.com/en/snappy/guides/oem/]{quote}Bootloaders\r\nSince each system boots differently, assets that are currently provided in flashassets of the device package can be provided in the oem snap instead.{quote}We can include bootloader assets in OEM snap.",
+          "author": "dshihovtsev",
+          "createDate": 1444240800000,
+          "timeSpentSeconds": 60,
+          "updateAuthor": null,
+          "updateDate": 1444240800000
+        },
+        {
+          "workLogId": "15991",
+          "comment": "[https://developer.ubuntu.com/en/snappy/start/]{quote}If you want to build against a local OEM snap, you need developer mode to disable signature verification:{quote}We can use local OEM snap package for building image.",
+          "author": "dshihovtsev",
+          "createDate": 1444240800000,
+          "timeSpentSeconds": 60,
+          "updateAuthor": null,
+          "updateDate": 1444240800000
+        },
+        {
+          "workLogId": "15999",
+          "comment": "Snappy Ubuntu OEM snap package allows us to set all required environment for SoC. We can specify U-Boot environment file, include device tree, set branding information. We will use this package for creating images for SoC.",
+          "author": "dshihovtsev",
+          "createDate": 1444327200000,
+          "timeSpentSeconds": 14400,
+          "updateAuthor": null,
+          "updateDate": 1444327200000
+        }
+      ],
+      "remoteLinks": [],
+      "components": [
+        "SYSNET"
+      ],
+      "labels": [
+        "ARM",
+        "Snappy"
+      ],
+      "issues": [],
+      "annotations": [
+        {
+          "id": -1156473961147696400,
+          "created": "2015-10-08T00:00:00.000+0600",
+          "researchSession": "SS-3640",
+          "uri": "https://developer.ubuntu.com/en/snappy/guides/oem/",
+          "ranges": null,
+          "quote": "dtb\nThe default dtb (device tree blob) can be overridden by a key entry point in\nthe package.yaml for the oem.\nIf a dtb is specified during provisioning, it will be selected as the dtb to\nuse for the system. If using an AB partition layout, when an update for the\noem package is installed which updates the dtb, the update will be\ninstalled to the other partition and a reboot will be requested.",
+          "text": "We can ship device tree with oem snap. And it could be updated if required.",
+          "offlineId": null,
+          "annotator_schema_version": null,
+          "jiraKey": null
+        },
+        {
+          "id": 1983978568782029000,
+          "created": "2015-10-08T00:00:00.000+0600",
+          "researchSession": "SS-3640",
+          "uri": "https://developer.ubuntu.com/en/snappy/guides/oem/",
+          "ranges": null,
+          "quote": "The oem snap can provide a set of default packages to be installed during either provisioning or first boot. ",
+          "text": "Seems like we can embed snap packages into image",
+          "offlineId": null,
+          "annotator_schema_version": null,
+          "jiraKey": null
+        },
+        {
+          "id": 2023557010114569200,
+          "created": "2015-10-08T00:00:00.000+0600",
+          "researchSession": "SS-3640",
+          "uri": "https://developer.ubuntu.com/en/snappy/guides/oem/",
+          "ranges": null,
+          "quote": "Bootloaders\r\nSince each system boots differently, assets that are currently provided in flashassets of the device package can be provided in the oem snap instead.",
+          "text": "We can include bootloader assets in OEM snap.",
+          "offlineId": null,
+          "annotator_schema_version": null,
+          "jiraKey": null
+        },
+        {
+          "id": 1433943223282499000,
+          "created": "2015-10-08T00:00:00.000+0600",
+          "researchSession": "SS-3640",
+          "uri": "https://developer.ubuntu.com/en/snappy/guides/oem/",
+          "ranges": null,
+          "quote": "Branding\nBranding can be set in the form of a slogan and an image. snappy and it’s\nwebdm counterpart will use this information to brand the system accordingly.",
+          "text": "We can specify Branding information in our package",
+          "offlineId": null,
+          "annotator_schema_version": null,
+          "jiraKey": null
+        },
+        {
+          "id": 212603210518874400,
+          "created": "2015-10-08T00:00:00.000+0600",
+          "researchSession": "SS-3640",
+          "uri": "https://developer.ubuntu.com/en/snappy/start/",
+          "ranges": null,
+          "quote": "If you want to build against a local OEM snap, you need developer mode to disable signature verification:",
+          "text": "We can use local OEM snap package for building image.",
+          "offlineId": null,
+          "annotator_schema_version": null,
+          "jiraKey": null
+        },
+        {
+          "id": -3059299403304403000,
+          "created": "2015-10-08T00:00:00.000+0600",
+          "researchSession": "SS-3640",
+          "uri": "https://developer.ubuntu.com/en/snappy/guides/oem/",
+          "ranges": null,
+          "quote": "The oem snappy package is a snappy package type that is used to setup and\npersonalize the system according to an OEM.\nIt covers a broad range, such as the software stack with its configuration and\nhardware enablement.\nThere can only be one snappy package of type: oem and it can only be\ninstalled during image provision.",
+          "text": "We can use Snappy Ubuntu OEM package for initial configuration of our image for ARM SoC.",
+          "offlineId": null,
+          "annotator_schema_version": null,
+          "jiraKey": null
+        }
+      ],
+      "commits": []
+    },
+    {
+      "issueId": 17796,
+      "issueKey": "SS-3641",
+      "status": "Resolved",
+      "projectKey": "SS",
+      "summary": "Prepare CURL for working with Snappy Ubuntu on ARM SoC",
+      "description": "Since we have managed to execute Snappy Ubuntu on ARM SoC, we need to prepare all required packages for migration Subutai RH on this system.\r\nAs a fist package we need to prepare CURL with all required libs and dependencies for working with Snappy Ubuntu on ARM SoC.",
+      "reporterName": "dshihovtsev",
+      "assigneeName": "dshihovtsev",
+      "resolution": "Done",
+      "creationDate": "2015-10-08T12:03:43.000+0600",
+      "updateDate": "2015-10-09T17:02:17.000+0600",
+      "dueDate": "1970-01-01T06:00:00.000+0600",
+      "priority": 3,
+      "originalEstimateMinutes": 240,
+      "remainingEstimateMinutes": 0,
+      "timeSpentMinutes": 240,
+      "type": {
+        "id": 3,
+        "name": "Task"
+      },
+      "changelogList": [
+        {
+          "changeKey": {
+            "changeItemId": 63395,
+            "created": 1444284223535
+          },
+          "issueId": 17796,
+          "issueKey": "SS-3641",
+          "author": "Dmitry Shihovtsev",
+          "type": "custom",
+          "field": "Epic Link",
+          "fromString": null,
+          "toString": "SS-3016",
+          "from": null,
+          "to": "15808"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63486,
+            "created": 1444285762750
+          },
+          "issueId": 17796,
+          "issueKey": "SS-3641",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue child of SS-3611",
+          "from": null,
+          "to": "SS-3611"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 64085,
+            "created": 1444370218131
+          },
+          "issueId": 17796,
+          "issueKey": "SS-3641",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "status",
+          "fromString": "Open",
+          "toString": "IN_PROGRESS_WITHOUT_BRANCH",
+          "from": "1",
+          "to": "10007"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 64323,
+            "created": 1444388528861
+          },
+          "issueId": 17796,
+          "issueKey": "SS-3641",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "WorklogId",
+          "fromString": "16011",
+          "toString": null,
+          "from": "16011",
+          "to": null
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63398,
+            "created": 1444284255445
+          },
+          "issueId": 17796,
+          "issueKey": "SS-3641",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "issuetype",
+          "fromString": "Bug",
+          "toString": "Task",
+          "from": "1",
+          "to": "3"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 64324,
+            "created": 1444388537693
+          },
+          "issueId": 17796,
+          "issueKey": "SS-3641",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "resolution",
+          "fromString": null,
+          "toString": "Done",
+          "from": null,
+          "to": "10000"
+        }
+      ],
+      "issueLinks": [
+        {
+          "linkType": {
+            "id": 10700,
+            "name": "Child",
+            "inward": "parent of",
+            "outward": "child of"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3611",
+            "issueId": 17745
+          },
+          "direction": "OUTWARD",
+          "type": {
+            "id": 10201,
+            "name": "Design"
+          }
+        }
+      ],
+      "issueWorkLogs": [
+        {
+          "workLogId": "16011",
+          "comment": "CURL packages with all required libs for ARM added to repo. Binaries tested and works correctly.",
+          "author": "dshihovtsev",
+          "createDate": 1444327200000,
+          "timeSpentSeconds": 14400,
+          "updateAuthor": null,
+          "updateDate": 1444327200000
+        }
+      ],
+      "remoteLinks": [],
+      "components": [
+        "SYSNET"
+      ],
+      "labels": [
+        "resource_host",
+        "migration",
+        "snappy",
+        "ARM"
+      ],
+      "issues": [],
+      "annotations": [],
+      "commits": []
+    },
+    {
+      "issueId": 17798,
+      "issueKey": "SS-3642",
+      "status": "Resolved",
+      "projectKey": "SS",
+      "summary": "Automate uboot configuration to implement Snappy logic ",
+      "description": "In case to have all Snappy \"magic\" (two loadable system and update rollback) we should have special uboot load command. Currently, we are configuring this command manually but to have solid Snappy on Parallella we should automate it. Find out how we can do it and implement.",
+      "reporterName": "tzununbekov",
+      "assigneeName": "tzununbekov",
+      "resolution": "Done",
+      "creationDate": "2015-10-08T12:28:41.000+0600",
+      "updateDate": "2015-10-08T16:58:54.000+0600",
+      "dueDate": "1970-01-01T06:00:00.000+0600",
+      "priority": 3,
+      "originalEstimateMinutes": 240,
+      "remainingEstimateMinutes": 0,
+      "timeSpentMinutes": 240,
+      "type": {
+        "id": 3,
+        "name": "Task"
+      },
+      "changelogList": [
+        {
+          "changeKey": {
+            "changeItemId": 63517,
+            "created": 1444290258706
+          },
+          "issueId": 17798,
+          "issueKey": "SS-3642",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "status",
+          "fromString": "Open",
+          "toString": "IN_PROGRESS_WITHOUT_BRANCH",
+          "from": "1",
+          "to": "10007"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63484,
+            "created": 1444285760949
+          },
+          "issueId": 17798,
+          "issueKey": "SS-3642",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue child of SS-3611",
+          "from": null,
+          "to": "SS-3611"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63680,
+            "created": 1444301914428
+          },
+          "issueId": 17798,
+          "issueKey": "SS-3642",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "WorklogId",
+          "fromString": "15992",
+          "toString": null,
+          "from": "15992",
+          "to": null
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63688,
+            "created": 1444301934191
+          },
+          "issueId": 17798,
+          "issueKey": "SS-3642",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "resolution",
+          "fromString": null,
+          "toString": "Done",
+          "from": null,
+          "to": "10000"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63476,
+            "created": 1444285721486
+          },
+          "issueId": 17798,
+          "issueKey": "SS-3642",
+          "author": "Timur Zununbekov",
+          "type": "custom",
+          "field": "Epic Link",
+          "fromString": null,
+          "toString": "SS-3016",
+          "from": null,
+          "to": "15808"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63685,
+            "created": 1444301927278
+          },
+          "issueId": 17798,
+          "issueKey": "SS-3642",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "RemoteIssueLink",
+          "fromString": null,
+          "toString": "This issue links to \"Wiki Page (Subutai Confluence)\"",
+          "from": null,
+          "to": "11347"
+        }
+      ],
+      "issueLinks": [
+        {
+          "linkType": {
+            "id": 10700,
+            "name": "Child",
+            "inward": "parent of",
+            "outward": "child of"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3611",
+            "issueId": 17745
+          },
+          "direction": "OUTWARD",
+          "type": {
+            "id": 10201,
+            "name": "Design"
+          }
+        }
+      ],
+      "issueWorkLogs": [
+        {
+          "workLogId": "15992",
+          "comment": "We have passed Snappy Ubuntu logic in file that contains all required environment variables. The only steps to be done manually is load environment from this file. Steps described here: https://confluence.subutai.io/display/SNAP/Snappy+Ubuntu+on+Parallella",
+          "author": "tzununbekov",
+          "createDate": 1444240800000,
+          "timeSpentSeconds": 14400,
+          "updateAuthor": null,
+          "updateDate": 1444240800000
+        }
+      ],
+      "remoteLinks": [
+        {
+          "id": "null-17798",
+          "title": "Wiki Page",
+          "remoteUrl": "https://confluence.subutai.io/pages/viewpage.action?pageId=28770543",
+          "url": "https://jira.subutai.io/rest/api/latest/issue/SS-3642/remotelink/11347"
+        }
+      ],
+      "components": [
+        "SYSNET"
+      ],
+      "labels": [
+        "parallella",
+        "snappy",
+        "arm"
+      ],
+      "issues": [],
+      "annotations": [],
+      "commits": []
+    },
+    {
+      "issueId": 17802,
+      "issueKey": "SS-3645",
+      "status": "Resolved",
+      "projectKey": "SS",
+      "summary": "BTRFS partition issue on Parallella",
+      "description": "Snappy Ubuntu that we use to run on Parallella by default has four primary disk partition - boot, system-a, system-b and writable. Partition table doesn't support more than four primary partitions, so we cannot just create another one, but to run Subutai we should have one extra partition for BTRFS volume. Find the way to create additional partition table in SD card for Snappy Subutai on Parallella",
+      "reporterName": "tzununbekov",
+      "assigneeName": "tzununbekov",
+      "resolution": "Done",
+      "creationDate": "2015-10-08T13:40:45.000+0600",
+      "updateDate": "2015-10-08T18:58:03.000+0600",
+      "dueDate": "1970-01-01T06:00:00.000+0600",
+      "priority": 3,
+      "originalEstimateMinutes": 240,
+      "remainingEstimateMinutes": 0,
+      "timeSpentMinutes": 240,
+      "type": {
+        "id": 3,
+        "name": "Task"
+      },
+      "changelogList": [
+        {
+          "changeKey": {
+            "changeItemId": 63518,
+            "created": 1444290281477
+          },
+          "issueId": 17802,
+          "issueKey": "SS-3645",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue child of SS-3611",
+          "from": null,
+          "to": "SS-3611"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63513,
+            "created": 1444290045694
+          },
+          "issueId": 17802,
+          "issueKey": "SS-3645",
+          "author": "Timur Zununbekov",
+          "type": "custom",
+          "field": "Epic Link",
+          "fromString": null,
+          "toString": "SS-3016",
+          "from": null,
+          "to": "15808"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63936,
+            "created": 1444309075951
+          },
+          "issueId": 17802,
+          "issueKey": "SS-3645",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "WorklogId",
+          "fromString": "15993",
+          "toString": null,
+          "from": "15993",
+          "to": null
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63709,
+            "created": 1444302247979
+          },
+          "issueId": 17802,
+          "issueKey": "SS-3645",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "status",
+          "fromString": "Open",
+          "toString": "IN_PROGRESS_WITHOUT_BRANCH",
+          "from": "1",
+          "to": "10007"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63937,
+            "created": 1444309083284
+          },
+          "issueId": 17802,
+          "issueKey": "SS-3645",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "resolution",
+          "fromString": null,
+          "toString": "Done",
+          "from": null,
+          "to": "10000"
+        }
+      ],
+      "issueLinks": [
+        {
+          "linkType": {
+            "id": 10700,
+            "name": "Child",
+            "inward": "parent of",
+            "outward": "child of"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3611",
+            "issueId": 17745
+          },
+          "direction": "OUTWARD",
+          "type": {
+            "id": 10201,
+            "name": "Design"
+          }
+        }
+      ],
+      "issueWorkLogs": [
+        {
+          "workLogId": "15993",
+          "comment": "After some investigating we found out that we have two possible solutions: convert MBR to GPT or create extended partition on SD. \r\nConverting MBR to GPT probably is not possible without data loss so we have tried to create extended partition in place of writable partition. After tests we got the conclusion - this way fit our requirements and we will use it  ",
+          "author": "tzununbekov",
+          "createDate": 1444240800000,
+          "timeSpentSeconds": 14400,
+          "updateAuthor": null,
+          "updateDate": 1444240800000
+        }
+      ],
+      "remoteLinks": [],
+      "components": [
+        "SYSNET"
+      ],
+      "labels": [
+        "parallella",
+        "snappy",
+        "arm"
+      ],
+      "issues": [],
+      "annotations": [],
+      "commits": []
+    },
+    {
+      "issueId": 17803,
+      "issueKey": "SS-3646",
+      "status": "IN_PROGRESS_WITHOUT_BRANCH",
+      "projectKey": "SS",
+      "summary": "Prepare OVS to run on ARM Resourch Host",
+      "description": "Find the optimal way to port OVS to ARM architecture to make possible run Resource Host on Parallella. Possible solutions - rebuild OVS with ARM architecture support or get ready-to-use ARM packages. ",
+      "reporterName": "tzununbekov",
+      "assigneeName": "tzununbekov",
+      "resolution": null,
+      "creationDate": "2015-10-08T13:44:08.000+0600",
+      "updateDate": "2015-10-08T18:58:13.000+0600",
+      "dueDate": "1970-01-01T06:00:00.000+0600",
+      "priority": 3,
+      "originalEstimateMinutes": 240,
+      "remainingEstimateMinutes": 240,
+      "timeSpentMinutes": 0,
+      "type": {
+        "id": 3,
+        "name": "Task"
+      },
+      "changelogList": [
+        {
+          "changeKey": {
+            "changeItemId": 63515,
+            "created": 1444290248877
+          },
+          "issueId": 17803,
+          "issueKey": "SS-3646",
+          "author": "Timur Zununbekov",
+          "type": "custom",
+          "field": "Epic Link",
+          "fromString": null,
+          "toString": "SS-3016",
+          "from": null,
+          "to": "15808"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63520,
+            "created": 1444290307303
+          },
+          "issueId": 17803,
+          "issueKey": "SS-3646",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue child of SS-3611",
+          "from": null,
+          "to": "SS-3611"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63938,
+            "created": 1444309093859
+          },
+          "issueId": 17803,
+          "issueKey": "SS-3646",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "status",
+          "fromString": "Open",
+          "toString": "IN_PROGRESS_WITHOUT_BRANCH",
+          "from": "1",
+          "to": "10007"
+        }
+      ],
+      "issueLinks": [
+        {
+          "linkType": {
+            "id": 10700,
+            "name": "Child",
+            "inward": "parent of",
+            "outward": "child of"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3611",
+            "issueId": 17745
+          },
+          "direction": "OUTWARD",
+          "type": {
+            "id": 10201,
+            "name": "Design"
+          }
+        }
+      ],
+      "issueWorkLogs": [],
+      "remoteLinks": [],
+      "components": [
+        "SYSNET"
+      ],
+      "labels": [
+        "parallella",
+        "snappy",
+        "arm"
+      ],
+      "issues": [],
+      "annotations": [],
+      "commits": []
+    },
+    {
+      "issueId": 17806,
+      "issueKey": "SS-3648",
+      "status": "Resolved",
+      "projectKey": "SS",
+      "summary": "Prepare OEM snap package for migration Parallella board ",
+      "description": "Since we are preparing our own Snappy Ubuntu image for Parallella board, we need to have correct OEM snap package for this build. \r\nCreate all required files for Parallella OEM snap package, and build it. ",
+      "reporterName": "dshihovtsev",
+      "assigneeName": "dshihovtsev",
+      "resolution": "Done",
+      "creationDate": "2015-10-08T18:20:29.000+0600",
+      "updateDate": "2015-10-09T11:56:09.000+0600",
+      "dueDate": "1970-01-01T06:00:00.000+0600",
+      "priority": 3,
+      "originalEstimateMinutes": 120,
+      "remainingEstimateMinutes": 0,
+      "timeSpentMinutes": 120,
+      "type": {
+        "id": 3,
+        "name": "Task"
+      },
+      "changelogList": [
+        {
+          "changeKey": {
+            "changeItemId": 64082,
+            "created": 1444370169553
+          },
+          "issueId": 17806,
+          "issueKey": "SS-3648",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "resolution",
+          "fromString": null,
+          "toString": "Done",
+          "from": null,
+          "to": "10000"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63926,
+            "created": 1444306965046
+          },
+          "issueId": 17806,
+          "issueKey": "SS-3648",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "status",
+          "fromString": "Open",
+          "toString": "IN_PROGRESS_WITHOUT_BRANCH",
+          "from": "1",
+          "to": "10007"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63924,
+            "created": 1444306956120
+          },
+          "issueId": 17806,
+          "issueKey": "SS-3648",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue child of SS-3611",
+          "from": null,
+          "to": "SS-3611"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63918,
+            "created": 1444306829559
+          },
+          "issueId": 17806,
+          "issueKey": "SS-3648",
+          "author": "Dmitry Shihovtsev",
+          "type": "custom",
+          "field": "Epic Link",
+          "fromString": null,
+          "toString": "SS-3016",
+          "from": null,
+          "to": "15808"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 64081,
+            "created": 1444370161210
+          },
+          "issueId": 17806,
+          "issueKey": "SS-3648",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "WorklogId",
+          "fromString": "16003",
+          "toString": null,
+          "from": "16003",
+          "to": null
+        }
+      ],
+      "issueLinks": [
+        {
+          "linkType": {
+            "id": 10700,
+            "name": "Child",
+            "inward": "parent of",
+            "outward": "child of"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3611",
+            "issueId": 17745
+          },
+          "direction": "OUTWARD",
+          "type": {
+            "id": 10201,
+            "name": "Design"
+          }
+        }
+      ],
+      "issueWorkLogs": [
+        {
+          "workLogId": "16003",
+          "comment": "OEM snap package prepared, and uploaded to \r\nhttps://storage.critical-factor.com/index.php/apps/files/?dir=%2Fsnappy%2Fparallella",
+          "author": "dshihovtsev",
+          "createDate": 1444327200000,
+          "timeSpentSeconds": 7200,
+          "updateAuthor": null,
+          "updateDate": 1444327200000
+        }
+      ],
+      "remoteLinks": [],
+      "components": [
+        "SYSNET"
+      ],
+      "labels": [
+        "parallella",
+        "snappy",
+        "ARM"
+      ],
+      "issues": [],
+      "annotations": [],
+      "commits": []
+    },
+    {
+      "issueId": 17807,
+      "issueKey": "SS-3649",
+      "status": "Resolved",
+      "projectKey": "SS",
+      "summary": "Prepare device tarball for building Snappy Ubuntu for Parallella board",
+      "description": "Since we are preparing our own Snappy Ubuntu image for Parallella board, we need to have correct device.tar.xz with kernel and additional files for this build. \r\nCreate all required files for Parallella device.tar.xz, and build it. ",
+      "reporterName": "dshihovtsev",
+      "assigneeName": "dshihovtsev",
+      "resolution": "Done",
+      "creationDate": "2015-10-08T18:21:54.000+0600",
+      "updateDate": "2015-10-09T11:56:48.000+0600",
+      "dueDate": "1970-01-01T06:00:00.000+0600",
+      "priority": 3,
+      "originalEstimateMinutes": 120,
+      "remainingEstimateMinutes": 0,
+      "timeSpentMinutes": 120,
+      "type": {
+        "id": 3,
+        "name": "Task"
+      },
+      "changelogList": [
+        {
+          "changeKey": {
+            "changeItemId": 63927,
+            "created": 1444306967653
+          },
+          "issueId": 17807,
+          "issueKey": "SS-3649",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "status",
+          "fromString": "Open",
+          "toString": "IN_PROGRESS_WITHOUT_BRANCH",
+          "from": "1",
+          "to": "10007"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63920,
+            "created": 1444306914409
+          },
+          "issueId": 17807,
+          "issueKey": "SS-3649",
+          "author": "Dmitry Shihovtsev",
+          "type": "custom",
+          "field": "Epic Link",
+          "fromString": null,
+          "toString": "SS-3016",
+          "from": null,
+          "to": "15808"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 64084,
+            "created": 1444370208438
+          },
+          "issueId": 17807,
+          "issueKey": "SS-3649",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "resolution",
+          "fromString": null,
+          "toString": "Done",
+          "from": null,
+          "to": "10000"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 64083,
+            "created": 1444370204085
+          },
+          "issueId": 17807,
+          "issueKey": "SS-3649",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "WorklogId",
+          "fromString": "16004",
+          "toString": null,
+          "from": "16004",
+          "to": null
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63922,
+            "created": 1444306949049
+          },
+          "issueId": 17807,
+          "issueKey": "SS-3649",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue child of SS-3611",
+          "from": null,
+          "to": "SS-3611"
+        }
+      ],
+      "issueLinks": [
+        {
+          "linkType": {
+            "id": 10700,
+            "name": "Child",
+            "inward": "parent of",
+            "outward": "child of"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3611",
+            "issueId": 17745
+          },
+          "direction": "OUTWARD",
+          "type": {
+            "id": 10201,
+            "name": "Design"
+          }
+        }
+      ],
+      "issueWorkLogs": [
+        {
+          "workLogId": "16004",
+          "comment": "device tarball prepared, and uploaded to \r\nhttps://storage.critical-factor.com/index.php/apps/files/?dir=%2Fsnappy%2Fparallella",
+          "author": "dshihovtsev",
+          "createDate": 1444327200000,
+          "timeSpentSeconds": 7200,
+          "updateAuthor": null,
+          "updateDate": 1444327200000
+        }
+      ],
+      "remoteLinks": [],
+      "components": [
+        "SYSNET"
+      ],
+      "labels": [
+        "parallella",
+        "snappy",
+        "ARM"
+      ],
+      "issues": [],
+      "annotations": [],
+      "commits": []
+    },
+    {
+      "issueId": 17744,
+      "issueKey": "SS-3610",
+      "status": "Resolved",
+      "projectKey": "SS",
+      "summary": "Try to migrate Snappy on Parallella board",
+      "description": "Since we are planning to support ARM architecture, we need to investigate ability to run Snappy Ubuntu on Parallella board. \r\nAll Snappy Ubuntu functionality must be supported by this installation.",
+      "reporterName": "dshihovtsev",
+      "assigneeName": "dshihovtsev",
+      "resolution": "Done",
+      "creationDate": "2015-10-05T16:21:28.000+0600",
+      "updateDate": "2015-10-08T11:21:51.000+0600",
+      "dueDate": "1970-01-01T06:00:00.000+0600",
+      "priority": 3,
+      "originalEstimateMinutes": 240,
+      "remainingEstimateMinutes": 0,
+      "timeSpentMinutes": 240,
+      "type": {
+        "id": 3,
+        "name": "Task"
+      },
+      "changelogList": [
+        {
+          "changeKey": {
+            "changeItemId": 63327,
+            "created": 1444281711626
+          },
+          "issueId": 17744,
+          "issueKey": "SS-3610",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "resolution",
+          "fromString": null,
+          "toString": "Done",
+          "from": null,
+          "to": "10000"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62886,
+            "created": 1444041048642
+          },
+          "issueId": 17744,
+          "issueKey": "SS-3610",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue is cloned by SS-3616",
+          "from": null,
+          "to": "SS-3616"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63326,
+            "created": 1444281705202
+          },
+          "issueId": 17744,
+          "issueKey": "SS-3610",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "WorklogId",
+          "fromString": "15969",
+          "toString": null,
+          "from": "15969",
+          "to": null
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62850,
+            "created": 1444040488534
+          },
+          "issueId": 17744,
+          "issueKey": "SS-3610",
+          "author": "Dmitry Shihovtsev",
+          "type": "custom",
+          "field": "Epic Link",
+          "fromString": null,
+          "toString": "SS-3016",
+          "from": null,
+          "to": "15808"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63065,
+            "created": 1444111903181
+          },
+          "issueId": 17744,
+          "issueKey": "SS-3610",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "status",
+          "fromString": "Open",
+          "toString": "IN_PROGRESS_WITHOUT_BRANCH",
+          "from": "1",
+          "to": "10007"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62858,
+            "created": 1444040688253
+          },
+          "issueId": 17744,
+          "issueKey": "SS-3610",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue child of SS-3611",
+          "from": null,
+          "to": "SS-3611"
+        }
+      ],
+      "issueLinks": [
+        {
+          "linkType": {
+            "id": 10700,
+            "name": "Child",
+            "inward": "parent of",
+            "outward": "child of"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3611",
+            "issueId": 17745
+          },
+          "direction": "OUTWARD",
+          "type": {
+            "id": 10201,
+            "name": "Design"
+          }
+        },
+        {
+          "linkType": {
+            "id": 10001,
+            "name": "Cloners",
+            "inward": "is cloned by",
+            "outward": "clones"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3616",
+            "issueId": 17750
+          },
+          "direction": "INWARD",
+          "type": {
+            "id": 3,
+            "name": "Task"
+          }
+        }
+      ],
+      "issueWorkLogs": [
+        {
+          "workLogId": "15969",
+          "comment": "We have build kernel for Parallella board. Downloaded Snappy rootfs. Made configuration for U-Boot loader to load all components. As a result now we have executed Snappy Ubuntu on Parallella board. Now we just need to prepare auto-configurable bootlaoder to speed up deploy process, and get all Snappy Ubuntu features. ",
+          "author": "dshihovtsev",
+          "createDate": 1444240800000,
+          "timeSpentSeconds": 14400,
+          "updateAuthor": null,
+          "updateDate": 1444240800000
+        }
+      ],
+      "remoteLinks": [],
+      "components": [
+        "SYSNET"
+      ],
+      "labels": [
+        "parallella",
+        "snappy",
+        "arm"
+      ],
+      "issues": [],
+      "annotations": [],
+      "commits": []
+    },
+    {
+      "issueId": 17809,
+      "issueKey": "SS-3651",
+      "status": "Resolved",
+      "projectKey": "SS",
+      "summary": "Build Snappy ubuntu .img file for Parallella",
+      "description": "Since we've managed to create our own oem snap package and device.tar.gz we can build our .img file to make loadable SD cards for Parallella. Generate .img file that we will use to run Snappy Ubuntu on Parallella",
+      "reporterName": "tzununbekov",
+      "assigneeName": "tzununbekov",
+      "resolution": "Done",
+      "creationDate": "2015-10-09T12:02:21.000+0600",
+      "updateDate": "2015-10-09T12:06:01.000+0600",
+      "dueDate": "1970-01-01T06:00:00.000+0600",
+      "priority": 3,
+      "originalEstimateMinutes": 120,
+      "remainingEstimateMinutes": 0,
+      "timeSpentMinutes": 120,
+      "type": {
+        "id": 3,
+        "name": "Task"
+      },
+      "changelogList": [
+        {
+          "changeKey": {
+            "changeItemId": 64097,
+            "created": 1444370761836
+          },
+          "issueId": 17809,
+          "issueKey": "SS-3651",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "resolution",
+          "fromString": null,
+          "toString": "Done",
+          "from": null,
+          "to": "10000"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 64088,
+            "created": 1444370581882
+          },
+          "issueId": 17809,
+          "issueKey": "SS-3651",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue child of SS-3611",
+          "from": null,
+          "to": "SS-3611"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 64096,
+            "created": 1444370751781
+          },
+          "issueId": 17809,
+          "issueKey": "SS-3651",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "status",
+          "fromString": "Open",
+          "toString": "IN_PROGRESS_WITHOUT_BRANCH",
+          "from": "1",
+          "to": "10007"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 64086,
+            "created": 1444370541814
+          },
+          "issueId": 17809,
+          "issueKey": "SS-3651",
+          "author": "Timur Zununbekov",
+          "type": "custom",
+          "field": "Epic Link",
+          "fromString": null,
+          "toString": "SS-3016",
+          "from": null,
+          "to": "15808"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 64093,
+            "created": 1444370718420
+          },
+          "issueId": 17809,
+          "issueKey": "SS-3651",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "WorklogId",
+          "fromString": "16007",
+          "toString": null,
+          "from": "16007",
+          "to": null
+        }
+      ],
+      "issueLinks": [
+        {
+          "linkType": {
+            "id": 10700,
+            "name": "Child",
+            "inward": "parent of",
+            "outward": "child of"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3611",
+            "issueId": 17745
+          },
+          "direction": "OUTWARD",
+          "type": {
+            "id": 10201,
+            "name": "Design"
+          }
+        }
+      ],
+      "issueWorkLogs": [
+        {
+          "workLogId": "16007",
+          "comment": ".img file was created, tested and uploaded to storage:\r\nhttps://storage.critical-factor.com/index.php/s/lu18hytkxzb4dd0",
+          "author": "tzununbekov",
+          "createDate": 1444327200000,
+          "timeSpentSeconds": 7200,
+          "updateAuthor": null,
+          "updateDate": 1444327200000
+        }
+      ],
+      "remoteLinks": [],
+      "components": [
+        "SYSNET"
+      ],
+      "labels": [
+        "parallella",
+        "snappy",
+        "arm"
+      ],
+      "issues": [],
+      "annotations": [],
+      "commits": []
+    },
+    {
+      "issueId": 17745,
+      "issueKey": "SS-3611",
+      "status": "Open",
+      "projectKey": "SS",
+      "summary": "Prepare design for running Subutai Resource Host on ARM",
+      "description": "We need to prepare design for running Subutai Resource host on ARM architecture.",
+      "reporterName": "dshihovtsev",
+      "assigneeName": "dshihovtsev",
+      "resolution": null,
+      "creationDate": "2015-10-05T16:24:00.000+0600",
+      "updateDate": "2015-10-09T12:03:01.000+0600",
+      "dueDate": "1970-01-01T06:00:00.000+0600",
+      "priority": 3,
+      "originalEstimateMinutes": 240,
+      "remainingEstimateMinutes": 240,
+      "timeSpentMinutes": 0,
+      "type": {
+        "id": 10201,
+        "name": "Design"
+      },
+      "changelogList": [
+        {
+          "changeKey": {
+            "changeItemId": 63487,
+            "created": 1444285762753
+          },
+          "issueId": 17745,
+          "issueKey": "SS-3611",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue parent of SS-3641",
+          "from": null,
+          "to": "SS-3641"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62888,
+            "created": 1444041048701
+          },
+          "issueId": 17745,
+          "issueKey": "SS-3611",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue parent of SS-3616",
+          "from": null,
+          "to": "SS-3616"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62901,
+            "created": 1444041163988
+          },
+          "issueId": 17745,
+          "issueKey": "SS-3611",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue parent of SS-3613",
+          "from": null,
+          "to": "SS-3613"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62852,
+            "created": 1444040640221
+          },
+          "issueId": 17745,
+          "issueKey": "SS-3611",
+          "author": "Dmitry Shihovtsev",
+          "type": "custom",
+          "field": "Epic Link",
+          "fromString": null,
+          "toString": "SS-3016",
+          "from": null,
+          "to": "15808"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62899,
+            "created": 1444041130506
+          },
+          "issueId": 17745,
+          "issueKey": "SS-3611",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue parent of SS-3618",
+          "from": null,
+          "to": "SS-3618"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63485,
+            "created": 1444285760953
+          },
+          "issueId": 17745,
+          "issueKey": "SS-3611",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue parent of SS-3642",
+          "from": null,
+          "to": "SS-3642"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62869,
+            "created": 1444040802968
+          },
+          "issueId": 17745,
+          "issueKey": "SS-3611",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue child of SS-3508",
+          "from": null,
+          "to": "SS-3508"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62881,
+            "created": 1444041034667
+          },
+          "issueId": 17745,
+          "issueKey": "SS-3611",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue parent of SS-3615",
+          "from": null,
+          "to": "SS-3615"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62875,
+            "created": 1444041021190
+          },
+          "issueId": 17745,
+          "issueKey": "SS-3611",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue parent of SS-3614",
+          "from": null,
+          "to": "SS-3614"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62860,
+            "created": 1444040711854
+          },
+          "issueId": 17745,
+          "issueKey": "SS-3611",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "Link",
+          "fromString": "This issue is parent task of SS-3612",
+          "toString": null,
+          "from": "SS-3612",
+          "to": null
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62863,
+            "created": 1444040723855
+          },
+          "issueId": 17745,
+          "issueKey": "SS-3611",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue parent of SS-3612",
+          "from": null,
+          "to": "SS-3612"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 64089,
+            "created": 1444370581887
+          },
+          "issueId": 17745,
+          "issueKey": "SS-3611",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue parent of SS-3651",
+          "from": null,
+          "to": "SS-3651"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63519,
+            "created": 1444290281480
+          },
+          "issueId": 17745,
+          "issueKey": "SS-3611",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue parent of SS-3645",
+          "from": null,
+          "to": "SS-3645"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63404,
+            "created": 1444284507875
+          },
+          "issueId": 17745,
+          "issueKey": "SS-3611",
+          "author": "Azamat Nuriddinov",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue parent of SS-3617",
+          "from": null,
+          "to": "SS-3617"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63925,
+            "created": 1444306956123
+          },
+          "issueId": 17745,
+          "issueKey": "SS-3611",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue parent of SS-3648",
+          "from": null,
+          "to": "SS-3648"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63923,
+            "created": 1444306949052
+          },
+          "issueId": 17745,
+          "issueKey": "SS-3611",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue parent of SS-3649",
+          "from": null,
+          "to": "SS-3649"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63521,
+            "created": 1444290307309
+          },
+          "issueId": 17745,
+          "issueKey": "SS-3611",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue parent of SS-3646",
+          "from": null,
+          "to": "SS-3646"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62856,
+            "created": 1444040686379
+          },
+          "issueId": 17745,
+          "issueKey": "SS-3611",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue is parent task of SS-3612",
+          "from": null,
+          "to": "SS-3612"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63489,
+            "created": 1444285773104
+          },
+          "issueId": 17745,
+          "issueKey": "SS-3611",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue parent of SS-3640",
+          "from": null,
+          "to": "SS-3640"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62859,
+            "created": 1444040688256
+          },
+          "issueId": 17745,
+          "issueKey": "SS-3611",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue parent of SS-3610",
+          "from": null,
+          "to": "SS-3610"
+        }
+      ],
+      "issueLinks": [
+        {
+          "linkType": {
+            "id": 10700,
+            "name": "Child",
+            "inward": "parent of",
+            "outward": "child of"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3649",
+            "issueId": 17807
+          },
+          "direction": "INWARD",
+          "type": {
+            "id": 3,
+            "name": "Task"
+          }
+        },
+        {
+          "linkType": {
+            "id": 10700,
+            "name": "Child",
+            "inward": "parent of",
+            "outward": "child of"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3641",
+            "issueId": 17796
+          },
+          "direction": "INWARD",
+          "type": {
+            "id": 3,
+            "name": "Task"
+          }
+        },
+        {
+          "linkType": {
+            "id": 10700,
+            "name": "Child",
+            "inward": "parent of",
+            "outward": "child of"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3613",
+            "issueId": 17747
+          },
+          "direction": "INWARD",
+          "type": {
+            "id": 10000,
+            "name": "Research"
+          }
+        },
+        {
+          "linkType": {
+            "id": 10700,
+            "name": "Child",
+            "inward": "parent of",
+            "outward": "child of"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3617",
+            "issueId": 17751
+          },
+          "direction": "INWARD",
+          "type": {
+            "id": 10000,
+            "name": "Research"
+          }
+        },
+        {
+          "linkType": {
+            "id": 10700,
+            "name": "Child",
+            "inward": "parent of",
+            "outward": "child of"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3614",
+            "issueId": 17748
+          },
+          "direction": "INWARD",
+          "type": {
+            "id": 3,
+            "name": "Task"
+          }
+        },
+        {
+          "linkType": {
+            "id": 10700,
+            "name": "Child",
+            "inward": "parent of",
+            "outward": "child of"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3651",
+            "issueId": 17809
+          },
+          "direction": "INWARD",
+          "type": {
+            "id": 3,
+            "name": "Task"
+          }
+        },
+        {
+          "linkType": {
+            "id": 10700,
+            "name": "Child",
+            "inward": "parent of",
+            "outward": "child of"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3642",
+            "issueId": 17798
+          },
+          "direction": "INWARD",
+          "type": {
+            "id": 3,
+            "name": "Task"
+          }
+        },
+        {
+          "linkType": {
+            "id": 10700,
+            "name": "Child",
+            "inward": "parent of",
+            "outward": "child of"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3610",
+            "issueId": 17744
+          },
+          "direction": "INWARD",
+          "type": {
+            "id": 3,
+            "name": "Task"
+          }
+        },
+        {
+          "linkType": {
+            "id": 10700,
+            "name": "Child",
+            "inward": "parent of",
+            "outward": "child of"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3640",
+            "issueId": 17795
+          },
+          "direction": "INWARD",
+          "type": {
+            "id": 10000,
+            "name": "Research"
+          }
+        },
+        {
+          "linkType": {
+            "id": 10700,
+            "name": "Child",
+            "inward": "parent of",
+            "outward": "child of"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3646",
+            "issueId": 17803
+          },
+          "direction": "INWARD",
+          "type": {
+            "id": 3,
+            "name": "Task"
+          }
+        },
+        {
+          "linkType": {
+            "id": 10700,
+            "name": "Child",
+            "inward": "parent of",
+            "outward": "child of"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3612",
+            "issueId": 17746
+          },
+          "direction": "INWARD",
+          "type": {
+            "id": 10000,
+            "name": "Research"
+          }
+        },
+        {
+          "linkType": {
+            "id": 10700,
+            "name": "Child",
+            "inward": "parent of",
+            "outward": "child of"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3618",
+            "issueId": 17752
+          },
+          "direction": "INWARD",
+          "type": {
+            "id": 10000,
+            "name": "Research"
+          }
+        },
+        {
+          "linkType": {
+            "id": 10700,
+            "name": "Child",
+            "inward": "parent of",
+            "outward": "child of"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3508",
+            "issueId": 17393
+          },
+          "direction": "OUTWARD",
+          "type": {
+            "id": 10100,
+            "name": "Requirement"
+          }
+        },
+        {
+          "linkType": {
+            "id": 10700,
+            "name": "Child",
+            "inward": "parent of",
+            "outward": "child of"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3648",
+            "issueId": 17806
+          },
+          "direction": "INWARD",
+          "type": {
+            "id": 3,
+            "name": "Task"
+          }
+        },
+        {
+          "linkType": {
+            "id": 10700,
+            "name": "Child",
+            "inward": "parent of",
+            "outward": "child of"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3616",
+            "issueId": 17750
+          },
+          "direction": "INWARD",
+          "type": {
+            "id": 3,
+            "name": "Task"
+          }
+        },
+        {
+          "linkType": {
+            "id": 10700,
+            "name": "Child",
+            "inward": "parent of",
+            "outward": "child of"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3645",
+            "issueId": 17802
+          },
+          "direction": "INWARD",
+          "type": {
+            "id": 3,
+            "name": "Task"
+          }
+        },
+        {
+          "linkType": {
+            "id": 10700,
+            "name": "Child",
+            "inward": "parent of",
+            "outward": "child of"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3615",
+            "issueId": 17749
+          },
+          "direction": "INWARD",
+          "type": {
+            "id": 3,
+            "name": "Task"
+          }
+        }
+      ],
+      "issueWorkLogs": [],
+      "remoteLinks": [],
+      "components": [
+        "SYSNET"
+      ],
+      "labels": [
+        "snappy",
+        "arm"
+      ],
+      "issues": [],
+      "annotations": [],
+      "commits": []
+    },
+    {
+      "issueId": 17393,
+      "issueKey": "SS-3508",
+      "status": "Open",
+      "projectKey": "SS",
+      "summary": "Support Parallella/ODROID/Beagle Bone/Raspberry v2",
+      "description": "At least one of these is mandatory, they are ordered by priority.\r\n\r\n*NOTE*: The Beagle Bone is already supported by Snappy so I think it might be very easy.\r\n*NOTE*: Some NoSQL databases have issues on ARM 32-bit platforms so there will not be support for them like MongoDB which requires a 64-bit address space. No need to create snaps for their images.",
+      "reporterName": "anuriddinov",
+      "assigneeName": null,
+      "resolution": null,
+      "creationDate": "2015-09-29T08:31:17.000+0600",
+      "updateDate": "2015-10-08T16:54:31.000+0600",
+      "dueDate": "1970-01-01T06:00:00.000+0600",
+      "priority": 3,
+      "originalEstimateMinutes": 1,
+      "remainingEstimateMinutes": 1,
+      "timeSpentMinutes": 0,
+      "type": {
+        "id": 10100,
+        "name": "Requirement"
+      },
+      "changelogList": [
+        {
+          "changeKey": {
+            "changeItemId": 58823,
+            "created": 1443493927859
+          },
+          "issueId": 17393,
+          "issueKey": "SS-3508",
+          "author": "Azamat Nuriddinov",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue is subtask of SS-3038",
+          "from": null,
+          "to": "SS-3038"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 58820,
+            "created": 1443493877825
+          },
+          "issueId": 17393,
+          "issueKey": "SS-3508",
+          "author": "Azamat Nuriddinov",
+          "type": "custom",
+          "field": "Epic Link",
+          "fromString": null,
+          "toString": "SS-3016",
+          "from": null,
+          "to": "15808"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62407,
+            "created": 1443977305519
+          },
+          "issueId": 17393,
+          "issueKey": "SS-3508",
+          "author": "Azamat Duishenov",
+          "type": "jira",
+          "field": "Link",
+          "fromString": "This issue is subtask of SS-3038",
+          "toString": null,
+          "from": "SS-3038",
+          "to": null
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62870,
+            "created": 1444040802970
+          },
+          "issueId": 17393,
+          "issueKey": "SS-3508",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue parent of SS-3611",
+          "from": null,
+          "to": "SS-3611"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63662,
+            "created": 1444301671915
+          },
+          "issueId": 17393,
+          "issueKey": "SS-3508",
+          "author": "Dilshat Aliev",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue parent of SS-3607",
+          "from": null,
+          "to": "SS-3607"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 61492,
+            "created": 1443698074543
+          },
+          "issueId": 17393,
+          "issueKey": "SS-3508",
+          "author": "Azamat Nuriddinov",
+          "type": "jira",
+          "field": "summary",
+          "fromString": "Support Parallella/ODROID/Beagle Bone",
+          "toString": "Support Parallella/ODROID/Beagle Bone/Raspberry v2",
+          "from": null,
+          "to": null
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62408,
+            "created": 1443977319580
+          },
+          "issueId": 17393,
+          "issueKey": "SS-3508",
+          "author": "Azamat Duishenov",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue child of SS-3038",
+          "from": null,
+          "to": "SS-3038"
+        }
+      ],
+      "issueLinks": [
+        {
+          "linkType": {
+            "id": 10700,
+            "name": "Child",
+            "inward": "parent of",
+            "outward": "child of"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3607",
+            "issueId": 17719
+          },
+          "direction": "INWARD",
+          "type": {
+            "id": 3,
+            "name": "Task"
+          }
+        },
+        {
+          "linkType": {
+            "id": 10700,
+            "name": "Child",
+            "inward": "parent of",
+            "outward": "child of"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3038",
+            "issueId": 15837
+          },
+          "direction": "OUTWARD",
+          "type": {
+            "id": 7,
+            "name": "Story"
+          }
+        },
+        {
+          "linkType": {
+            "id": 10700,
+            "name": "Child",
+            "inward": "parent of",
+            "outward": "child of"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3611",
+            "issueId": 17745
+          },
+          "direction": "INWARD",
+          "type": {
+            "id": 10201,
+            "name": "Design"
+          }
+        }
+      ],
+      "issueWorkLogs": [],
+      "remoteLinks": [],
+      "components": [
+        "SYSNET"
+      ],
+      "labels": [],
+      "issues": [],
+      "annotations": [],
+      "commits": []
+    },
+    {
+      "issueId": 17746,
+      "issueKey": "SS-3612",
+      "status": "Resolved",
+      "projectKey": "SS",
+      "summary": "Research Snappy Ubuntu on ARM",
+      "description": "According to plan of IoT preparation for Subutai we should research the Snappy Ubuntu opportunity to run on ARM based hardware",
+      "reporterName": "tzununbekov",
+      "assigneeName": "tzununbekov",
+      "resolution": "Done",
+      "creationDate": "2015-10-05T16:24:14.000+0600",
+      "updateDate": "2015-10-08T11:07:24.000+0600",
+      "dueDate": "1970-01-01T06:00:00.000+0600",
+      "priority": 3,
+      "originalEstimateMinutes": 240,
+      "remainingEstimateMinutes": 0,
+      "timeSpentMinutes": 240,
+      "type": {
+        "id": 10000,
+        "name": "Research"
+      },
+      "changelogList": [
+        {
+          "changeKey": {
+            "changeItemId": 63313,
+            "created": 1444280534217
+          },
+          "issueId": 17746,
+          "issueKey": "SS-3612",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "WorklogId",
+          "fromString": "15964",
+          "toString": null,
+          "from": "15964",
+          "to": null
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63319,
+            "created": 1444280844721
+          },
+          "issueId": 17746,
+          "issueKey": "SS-3612",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "resolution",
+          "fromString": null,
+          "toString": "Done",
+          "from": null,
+          "to": "10000"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62854,
+            "created": 1444040654726
+          },
+          "issueId": 17746,
+          "issueKey": "SS-3612",
+          "author": "Timur Zununbekov",
+          "type": "custom",
+          "field": "Epic Link",
+          "fromString": null,
+          "toString": "SS-3016",
+          "from": null,
+          "to": "15808"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63312,
+            "created": 1444280395224
+          },
+          "issueId": 17746,
+          "issueKey": "SS-3612",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "WorklogId",
+          "fromString": "15963",
+          "toString": null,
+          "from": "15963",
+          "to": null
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63311,
+            "created": 1444280297075
+          },
+          "issueId": 17746,
+          "issueKey": "SS-3612",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "WorklogId",
+          "fromString": "15962",
+          "toString": null,
+          "from": "15962",
+          "to": null
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62867,
+            "created": 1444040790896
+          },
+          "issueId": 17746,
+          "issueKey": "SS-3612",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue is cloned by SS-3613",
+          "from": null,
+          "to": "SS-3613"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62861,
+            "created": 1444040711858
+          },
+          "issueId": 17746,
+          "issueKey": "SS-3612",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "Link",
+          "fromString": "This issue is subtask of SS-3611",
+          "toString": null,
+          "from": "SS-3611",
+          "to": null
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63318,
+            "created": 1444280833860
+          },
+          "issueId": 17746,
+          "issueKey": "SS-3612",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "WorklogId",
+          "fromString": "15968",
+          "toString": null,
+          "from": "15968",
+          "to": null
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62862,
+            "created": 1444040723852
+          },
+          "issueId": 17746,
+          "issueKey": "SS-3612",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue child of SS-3611",
+          "from": null,
+          "to": "SS-3611"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63294,
+            "created": 1444279535027
+          },
+          "issueId": 17746,
+          "issueKey": "SS-3612",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "WorklogId",
+          "fromString": "15960",
+          "toString": null,
+          "from": "15960",
+          "to": null
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63314,
+            "created": 1444280604057
+          },
+          "issueId": 17746,
+          "issueKey": "SS-3612",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "WorklogId",
+          "fromString": "15965",
+          "toString": null,
+          "from": "15965",
+          "to": null
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62857,
+            "created": 1444040686382
+          },
+          "issueId": 17746,
+          "issueKey": "SS-3612",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue is subtask of SS-3611",
+          "from": null,
+          "to": "SS-3611"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62904,
+            "created": 1444041228145
+          },
+          "issueId": 17746,
+          "issueKey": "SS-3612",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "status",
+          "fromString": "Open",
+          "toString": "IN_PROGRESS_WITHOUT_BRANCH",
+          "from": "1",
+          "to": "10007"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63317,
+            "created": 1444280703363
+          },
+          "issueId": 17746,
+          "issueKey": "SS-3612",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "WorklogId",
+          "fromString": "15967",
+          "toString": null,
+          "from": "15967",
+          "to": null
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63293,
+            "created": 1444279418290
+          },
+          "issueId": 17746,
+          "issueKey": "SS-3612",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "WorklogId",
+          "fromString": "15959",
+          "toString": null,
+          "from": "15959",
+          "to": null
+        }
+      ],
+      "issueLinks": [
+        {
+          "linkType": {
+            "id": 10001,
+            "name": "Cloners",
+            "inward": "is cloned by",
+            "outward": "clones"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3613",
+            "issueId": 17747
+          },
+          "direction": "INWARD",
+          "type": {
+            "id": 10000,
+            "name": "Research"
+          }
+        },
+        {
+          "linkType": {
+            "id": 10700,
+            "name": "Child",
+            "inward": "parent of",
+            "outward": "child of"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3611",
+            "issueId": 17745
+          },
+          "direction": "OUTWARD",
+          "type": {
+            "id": 10201,
+            "name": "Design"
+          }
+        }
+      ],
+      "issueWorkLogs": [
+        {
+          "workLogId": "15968",
+          "comment": "According to the information from links above, we can port Snappy Ubuntu to Parallella. Going to try run it with BB's rootfs and Parallella's kernel.",
+          "author": "tzununbekov",
+          "createDate": 1444240800000,
+          "timeSpentSeconds": 12960,
+          "updateAuthor": null,
+          "updateDate": 1444240800000
+        },
+        {
+          "workLogId": "15967",
+          "comment": "http://kernel.ubuntu.com/git/ppisati/ubuntu-vivid.git/tree/arch/arm/configs/snappy?h=snappy_packaging\r\n\r\n{quote}Mode\tName\tSize\t\r\n-rw-r--r--\tgeneric.config\t1273\tlogplain\r\n-rw-r--r--\tlxc.config\t        399\t        logplain\r\n-rw-r--r--\tsecurity.config\t565\t        logplain\r\n-rw-r--r--\tsnappy.config\t408\t        logplain\r\n-rw-r--r--\tsystemd.config\t731\t        logplain{quote}\r\n\r\nKernel configs to enable Snappy support. Need to compare with Parallella kernel config",
+          "author": "tzununbekov",
+          "createDate": 1444240800000,
+          "timeSpentSeconds": 60,
+          "updateAuthor": null,
+          "updateDate": 1444240800000
+        },
+        {
+          "workLogId": "15959",
+          "comment": "[https://ograblog.wordpress.com/2015/01/25/porting-ubuntu-snappy-to-a-yet-unsupported-armhf-board/]{quote}By default the whole u-boot logic in a snappy system gets read and executed from a file called snappy-system.txt living in the /boot partition of your install{quote}Seems like we should configure Parallella environment to load custom OS instead of using file on mmc",
+          "author": "tzununbekov",
+          "createDate": 1444240800000,
+          "timeSpentSeconds": 60,
+          "updateAuthor": null,
+          "updateDate": 1444240800000
+        },
+        {
+          "workLogId": "15963",
+          "comment": "https://ograblog.wordpress.com/2015/01/25/porting-ubuntu-snappy-to-a-yet-unsupported-armhf-board/\r\n\r\n{quote}Now lets take a closer look at snappy_boot in snappy-system.txt, the command that contains all the magic{quote}\r\n\r\nHere it is. Nothing especial in porting Snappy to different SoC's.. Just need to find out current system bootload arguments and change them with Snappy's one",
+          "author": "tzununbekov",
+          "createDate": 1444240800000,
+          "timeSpentSeconds": 300,
+          "updateAuthor": null,
+          "updateDate": 1444240800000
+        },
+        {
+          "workLogId": "15962",
+          "comment": "https://ograblog.wordpress.com/2015/01/25/porting-ubuntu-snappy-to-a-yet-unsupported-armhf-board/\r\n{quote}It contains four variables we can not change that tell our snappy how to boot, these are snappy_cmdline, snappy_ab, snappy_stamp and snappy_mode. It also puts the logic for booting a snappy system into the snappy_boot variable{quote}\r\n\r\nLooks like everything that we need in Snappy is implemented by changing these four variables",
+          "author": "tzununbekov",
+          "createDate": 1444240800000,
+          "timeSpentSeconds": 600,
+          "updateAuthor": null,
+          "updateDate": 1444240800000
+        },
+        {
+          "workLogId": "15964",
+          "comment": "https://ograblog.wordpress.com/2015/01/25/porting-ubuntu-snappy-to-a-yet-unsupported-armhf-board/\r\n\r\n{quote}Building kernel and initrd files to boot Snappy on the NinjaSphere{quote}\r\n\r\nAll the other steps for NinjaSphere can be adapted to Parallella by changing rootfs to BeagleBone's one and kernel with our own custom Parallella kernel",
+          "author": "tzununbekov",
+          "createDate": 1444240800000,
+          "timeSpentSeconds": 300,
+          "updateAuthor": null,
+          "updateDate": 1444240800000
+        },
+        {
+          "workLogId": "15965",
+          "comment": "http://kernel.ubuntu.com/git/ppisati/ubuntu-vivid.git/log/?h=snappy_packaging\r\n\r\ngot link to Snappy repository from Ubuntu developers. Lot's of interesting thing to dig",
+          "author": "tzununbekov",
+          "createDate": 1444240800000,
+          "timeSpentSeconds": 60,
+          "updateAuthor": null,
+          "updateDate": 1444240800000
+        },
+        {
+          "workLogId": "15960",
+          "comment": "[https://ograblog.wordpress.com/2015/01/25/porting-ubuntu-snappy-to-a-yet-unsupported-armhf-board/]{quote}It is also very likely that the commands in your snappy-system.txt are to new for your installed u-boot (or are simply not enabled in its build configuration) so we might need to override them with equivalent functions your bootloader actually supports (i.e. fatload vs load or bootm vs bootz).{quote}Parallella's uboot doesn't support some of new command from Snappy configuration so we should rewrite some of them",
+          "author": "tzununbekov",
+          "createDate": 1444240800000,
+          "timeSpentSeconds": 60,
+          "updateAuthor": null,
+          "updateDate": 1444240800000
+        }
+      ],
+      "remoteLinks": [],
+      "components": [
+        "SYSNET"
+      ],
+      "labels": [
+        "snappy",
+        "ARM"
+      ],
+      "issues": [],
+      "annotations": [],
+      "commits": []
+    },
+    {
+      "issueId": 17747,
+      "issueKey": "SS-3613",
+      "status": "Resolved",
+      "projectKey": "SS",
+      "summary": "Research Snappy Ubuntu on ARM",
+      "description": "According to plan of IoT preparation for Subutai we should research the Snappy Ubuntu opportunity to run on ARM based hardware",
+      "reporterName": "tzununbekov",
+      "assigneeName": "dshihovtsev",
+      "resolution": "Done",
+      "creationDate": "2015-10-05T16:26:30.000+0600",
+      "updateDate": "2015-10-08T10:38:02.000+0600",
+      "dueDate": "1970-01-01T06:00:00.000+0600",
+      "priority": 3,
+      "originalEstimateMinutes": 240,
+      "remainingEstimateMinutes": 0,
+      "timeSpentMinutes": 244,
+      "type": {
+        "id": 10000,
+        "name": "Research"
+      },
+      "changelogList": [
+        {
+          "changeKey": {
+            "changeItemId": 63283,
+            "created": 1444278450718
+          },
+          "issueId": 17747,
+          "issueKey": "SS-3613",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "WorklogId",
+          "fromString": "15953",
+          "toString": null,
+          "from": "15953",
+          "to": null
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63287,
+            "created": 1444279067630
+          },
+          "issueId": 17747,
+          "issueKey": "SS-3613",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "WorklogId",
+          "fromString": "15956",
+          "toString": null,
+          "from": "15956",
+          "to": null
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62906,
+            "created": 1444041238655
+          },
+          "issueId": 17747,
+          "issueKey": "SS-3613",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "status",
+          "fromString": "Open",
+          "toString": "IN_PROGRESS_WITHOUT_BRANCH",
+          "from": "1",
+          "to": "10007"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63285,
+            "created": 1444278697676
+          },
+          "issueId": 17747,
+          "issueKey": "SS-3613",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "WorklogId",
+          "fromString": "15954",
+          "toString": null,
+          "from": "15954",
+          "to": null
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63284,
+            "created": 1444278658620
+          },
+          "issueId": 17747,
+          "issueKey": "SS-3613",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "WorklogId",
+          "fromString": "15954",
+          "toString": null,
+          "from": "15954",
+          "to": null
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62900,
+            "created": 1444041163983
+          },
+          "issueId": 17747,
+          "issueKey": "SS-3613",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue child of SS-3611",
+          "from": null,
+          "to": "SS-3611"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62868,
+            "created": 1444040799824
+          },
+          "issueId": 17747,
+          "issueKey": "SS-3613",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "assignee",
+          "fromString": "Timur Zununbekov",
+          "toString": "Dmitry Shihovtsev",
+          "from": "tzununbekov",
+          "to": "dshihovtsev"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62866,
+            "created": 1444040790893
+          },
+          "issueId": 17747,
+          "issueKey": "SS-3613",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue clones SS-3612",
+          "from": null,
+          "to": "SS-3612"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63281,
+            "created": 1444278265777
+          },
+          "issueId": 17747,
+          "issueKey": "SS-3613",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "WorklogId",
+          "fromString": "15951",
+          "toString": null,
+          "from": "15951",
+          "to": null
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62864,
+            "created": 1444040790673
+          },
+          "issueId": 17747,
+          "issueKey": "SS-3613",
+          "author": "Timur Zununbekov",
+          "type": "custom",
+          "field": "Epic Link",
+          "fromString": null,
+          "toString": "SS-3016",
+          "from": null,
+          "to": "15808"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63282,
+            "created": 1444278318196
+          },
+          "issueId": 17747,
+          "issueKey": "SS-3613",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "WorklogId",
+          "fromString": "15952",
+          "toString": null,
+          "from": "15952",
+          "to": null
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63288,
+            "created": 1444279082498
+          },
+          "issueId": 17747,
+          "issueKey": "SS-3613",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "resolution",
+          "fromString": null,
+          "toString": "Done",
+          "from": null,
+          "to": "10000"
+        }
+      ],
+      "issueLinks": [
+        {
+          "linkType": {
+            "id": 10001,
+            "name": "Cloners",
+            "inward": "is cloned by",
+            "outward": "clones"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3612",
+            "issueId": 17746
+          },
+          "direction": "OUTWARD",
+          "type": {
+            "id": 10000,
+            "name": "Research"
+          }
+        },
+        {
+          "linkType": {
+            "id": 10700,
+            "name": "Child",
+            "inward": "parent of",
+            "outward": "child of"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3611",
+            "issueId": 17745
+          },
+          "direction": "OUTWARD",
+          "type": {
+            "id": 10201,
+            "name": "Design"
+          }
+        }
+      ],
+      "issueWorkLogs": [
+        {
+          "workLogId": "15953",
+          "comment": "[https://developer.ubuntu.com/en/snappy/guides/porting/]{quote}your bootloader logic must pick the kernel, initrd and dtb from the a/ directory on your system-boot partition.{quote}We can use own kernel adopted to any device with snappy.",
+          "author": "dshihovtsev",
+          "createDate": 1444240800000,
+          "timeSpentSeconds": 60,
+          "updateAuthor": null,
+          "updateDate": 1444240800000
+        },
+        {
+          "workLogId": "15956",
+          "comment": "Seems like Snappy Ubuntu could be installed on a wide range of ARM SoC. We can use own kernel if required to use any device specific mechanisms. ",
+          "author": "dshihovtsev",
+          "createDate": 1444240800000,
+          "timeSpentSeconds": 14400,
+          "updateAuthor": null,
+          "updateDate": 1444240800000
+        },
+        {
+          "workLogId": "15951",
+          "comment": "[https://developer.ubuntu.com/en/snappy/guides/porting/]{quote}download the device tarball of our beaglebone reference build used for 15.04 release.{quote}We need to download beaglebone image to use it as rootfs",
+          "author": "dshihovtsev",
+          "createDate": 1444240800000,
+          "timeSpentSeconds": 60,
+          "updateAuthor": null,
+          "updateDate": 1444240800000
+        },
+        {
+          "workLogId": "15954",
+          "comment": "[https://developer.ubuntu.com/en/snappy/guides/porting/]{quote}“System A/B” is a Snappy feature to have two sets of root filesystems and boot files (typically kernel, initrd and optionally fdt/device tree), hence “A/B”. When an update breaks the system preventing it from boot to a healthy state, snappy will automatically fall back to the previously use system. Read this section to achieve this setup with Snappy and U-Boot.{quote}And we need to reconfigure uboot to fit snappy logic.",
+          "author": "dshihovtsev",
+          "createDate": 1444240800000,
+          "timeSpentSeconds": 60,
+          "updateAuthor": null,
+          "updateDate": 1444240800000
+        },
+        {
+          "workLogId": "15952",
+          "comment": "[https://developer.ubuntu.com/en/snappy/guides/porting/]{quote}$ sudo dd if=my-snappy.img of=/dev/sdX bs=32M{quote}Write it to flash drive",
+          "author": "dshihovtsev",
+          "createDate": 1444240800000,
+          "timeSpentSeconds": 60,
+          "updateAuthor": null,
+          "updateDate": 1444240800000
+        }
+      ],
+      "remoteLinks": [],
+      "components": [
+        "SYSNET"
+      ],
+      "labels": [
+        "snappy",
+        "ARM"
+      ],
+      "issues": [],
+      "annotations": [
+        {
+          "id": 39008190515374520,
+          "created": "2015-10-08T00:00:00.000+0600",
+          "researchSession": "SS-3613",
+          "uri": "https://developer.ubuntu.com/en/snappy/guides/porting/",
+          "ranges": null,
+          "quote": "your bootloader logic must pick the kernel, initrd and dtb from the a/ directory on your system-boot partition.",
+          "text": "We can use own kernel adopted to any device with snappy.",
+          "offlineId": null,
+          "annotator_schema_version": null,
+          "jiraKey": null
+        }
+      ],
+      "commits": []
+    },
+    {
+      "issueId": 17748,
+      "issueKey": "SS-3614",
+      "status": "Resolved",
+      "projectKey": "SS",
+      "summary": "Install Ubuntu on Parallella board",
+      "description": "To be prepared for migration Snappy on Parallella, we need to install Ubuntu on Parallella board to understand main principals of its' work. ",
+      "reporterName": "dshihovtsev",
+      "assigneeName": "dshihovtsev",
+      "resolution": "Done",
+      "creationDate": "2015-10-05T16:29:01.000+0600",
+      "updateDate": "2015-10-08T11:04:37.000+0600",
+      "dueDate": "1970-01-01T06:00:00.000+0600",
+      "priority": 3,
+      "originalEstimateMinutes": 240,
+      "remainingEstimateMinutes": 0,
+      "timeSpentMinutes": 240,
+      "type": {
+        "id": 3,
+        "name": "Task"
+      },
+      "changelogList": [
+        {
+          "changeKey": {
+            "changeItemId": 62871,
+            "created": 1444040941591
+          },
+          "issueId": 17748,
+          "issueKey": "SS-3614",
+          "author": "Dmitry Shihovtsev",
+          "type": "custom",
+          "field": "Epic Link",
+          "fromString": null,
+          "toString": "SS-3016",
+          "from": null,
+          "to": "15808"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62879,
+            "created": 1444041034604
+          },
+          "issueId": 17748,
+          "issueKey": "SS-3614",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue is cloned by SS-3615",
+          "from": null,
+          "to": "SS-3615"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63059,
+            "created": 1444105841824
+          },
+          "issueId": 17748,
+          "issueKey": "SS-3614",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "status",
+          "fromString": "Open",
+          "toString": "IN_PROGRESS_WITHOUT_BRANCH",
+          "from": "1",
+          "to": "10007"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63315,
+            "created": 1444280624907
+          },
+          "issueId": 17748,
+          "issueKey": "SS-3614",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "WorklogId",
+          "fromString": "15966",
+          "toString": null,
+          "from": "15966",
+          "to": null
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62874,
+            "created": 1444041021187
+          },
+          "issueId": 17748,
+          "issueKey": "SS-3614",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue child of SS-3611",
+          "from": null,
+          "to": "SS-3611"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62873,
+            "created": 1444040975910
+          },
+          "issueId": 17748,
+          "issueKey": "SS-3614",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "issuetype",
+          "fromString": "Design",
+          "toString": "Task",
+          "from": "10201",
+          "to": "3"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63316,
+            "created": 1444280677882
+          },
+          "issueId": 17748,
+          "issueKey": "SS-3614",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "resolution",
+          "fromString": null,
+          "toString": "Done",
+          "from": null,
+          "to": "10000"
+        }
+      ],
+      "issueLinks": [
+        {
+          "linkType": {
+            "id": 10001,
+            "name": "Cloners",
+            "inward": "is cloned by",
+            "outward": "clones"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3615",
+            "issueId": 17749
+          },
+          "direction": "INWARD",
+          "type": {
+            "id": 3,
+            "name": "Task"
+          }
+        },
+        {
+          "linkType": {
+            "id": 10700,
+            "name": "Child",
+            "inward": "parent of",
+            "outward": "child of"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3611",
+            "issueId": 17745
+          },
+          "direction": "OUTWARD",
+          "type": {
+            "id": 10201,
+            "name": "Design"
+          }
+        }
+      ],
+      "issueWorkLogs": [
+        {
+          "workLogId": "15966",
+          "comment": "Following official guide for installation Ubuntu on Parallella board we can easily install it, and start. \r\nhttps://www.parallella.org/quick-start/\r\nSerial port allows to control boot process and allow to prevent unknown errors during boot. \r\n\r\nUbuntu was successfully installed on Parallella board.",
+          "author": "dshihovtsev",
+          "createDate": 1444240800000,
+          "timeSpentSeconds": 14400,
+          "updateAuthor": null,
+          "updateDate": 1444240800000
+        }
+      ],
+      "remoteLinks": [],
+      "components": [
+        "SYSNET"
+      ],
+      "labels": [
+        "snappy",
+        "arm"
+      ],
+      "issues": [],
+      "annotations": [],
+      "commits": []
+    },
+    {
+      "issueId": 17749,
+      "issueKey": "SS-3615",
+      "status": "Resolved",
+      "projectKey": "SS",
+      "summary": "Install Ubuntu on Parallella board",
+      "description": "To be prepared for migration Snappy on Parallella, we need to install Ubuntu on Parallella board to understand main principals of its' work. ",
+      "reporterName": "dshihovtsev",
+      "assigneeName": "tzununbekov",
+      "resolution": "Done",
+      "creationDate": "2015-10-05T16:30:34.000+0600",
+      "updateDate": "2015-10-08T11:57:55.000+0600",
+      "dueDate": "1970-01-01T06:00:00.000+0600",
+      "priority": 3,
+      "originalEstimateMinutes": 240,
+      "remainingEstimateMinutes": 0,
+      "timeSpentMinutes": 240,
+      "type": {
+        "id": 3,
+        "name": "Task"
+      },
+      "changelogList": [
+        {
+          "changeKey": {
+            "changeItemId": 62880,
+            "created": 1444041034664
+          },
+          "issueId": 17749,
+          "issueKey": "SS-3615",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue child of SS-3611",
+          "from": null,
+          "to": "SS-3611"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63392,
+            "created": 1444283875312
+          },
+          "issueId": 17749,
+          "issueKey": "SS-3615",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "resolution",
+          "fromString": null,
+          "toString": "Done",
+          "from": null,
+          "to": "10000"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62876,
+            "created": 1444041034333
+          },
+          "issueId": 17749,
+          "issueKey": "SS-3615",
+          "author": "Dmitry Shihovtsev",
+          "type": "custom",
+          "field": "Epic Link",
+          "fromString": null,
+          "toString": "SS-3016",
+          "from": null,
+          "to": "15808"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63289,
+            "created": 1444279316699
+          },
+          "issueId": 17749,
+          "issueKey": "SS-3615",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "status",
+          "fromString": "Open",
+          "toString": "IN_PROGRESS_WITHOUT_BRANCH",
+          "from": "1",
+          "to": "10007"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62878,
+            "created": 1444041034601
+          },
+          "issueId": 17749,
+          "issueKey": "SS-3615",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue clones SS-3614",
+          "from": null,
+          "to": "SS-3614"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62882,
+            "created": 1444041042624
+          },
+          "issueId": 17749,
+          "issueKey": "SS-3615",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "assignee",
+          "fromString": "Dmitry Shihovtsev",
+          "toString": "Timur Zununbekov",
+          "from": "dshihovtsev",
+          "to": "tzununbekov"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63391,
+            "created": 1444283868081
+          },
+          "issueId": 17749,
+          "issueKey": "SS-3615",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "WorklogId",
+          "fromString": "15978",
+          "toString": null,
+          "from": "15978",
+          "to": null
+        }
+      ],
+      "issueLinks": [
+        {
+          "linkType": {
+            "id": 10001,
+            "name": "Cloners",
+            "inward": "is cloned by",
+            "outward": "clones"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3614",
+            "issueId": 17748
+          },
+          "direction": "OUTWARD",
+          "type": {
+            "id": 3,
+            "name": "Task"
+          }
+        },
+        {
+          "linkType": {
+            "id": 10700,
+            "name": "Child",
+            "inward": "parent of",
+            "outward": "child of"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3611",
+            "issueId": 17745
+          },
+          "direction": "OUTWARD",
+          "type": {
+            "id": 10201,
+            "name": "Design"
+          }
+        }
+      ],
+      "issueWorkLogs": [
+        {
+          "workLogId": "15978",
+          "comment": "Using the information that we gather during research we have managed to install and run Ubuntu on Parallella. Now we are switching to Snappy Ubuntu porting to Parallella",
+          "author": "tzununbekov",
+          "createDate": 1444240800000,
+          "timeSpentSeconds": 14400,
+          "updateAuthor": null,
+          "updateDate": 1444240800000
+        }
+      ],
+      "remoteLinks": [],
+      "components": [
+        "SYSNET"
+      ],
+      "labels": [
+        "snappy",
+        "arm"
+      ],
+      "issues": [],
+      "annotations": [],
+      "commits": []
+    },
+    {
+      "issueId": 17750,
+      "issueKey": "SS-3616",
+      "status": "Resolved",
+      "projectKey": "SS",
+      "summary": "Try to migrate Snappy on Parallella board",
+      "description": "Since we are planning to support ARM architecture, we need to investigate ability to run Snappy Ubuntu on Parallella board. \r\nAll Snappy Ubuntu functionality must be supported by this installation.",
+      "reporterName": "dshihovtsev",
+      "assigneeName": "tzununbekov",
+      "resolution": "Done",
+      "creationDate": "2015-10-05T16:30:48.000+0600",
+      "updateDate": "2015-10-08T12:04:53.000+0600",
+      "dueDate": "1970-01-01T06:00:00.000+0600",
+      "priority": 3,
+      "originalEstimateMinutes": 240,
+      "remainingEstimateMinutes": 0,
+      "timeSpentMinutes": 240,
+      "type": {
+        "id": 3,
+        "name": "Task"
+      },
+      "changelogList": [
+        {
+          "changeKey": {
+            "changeItemId": 62885,
+            "created": 1444041048639
+          },
+          "issueId": 17750,
+          "issueKey": "SS-3616",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue clones SS-3610",
+          "from": null,
+          "to": "SS-3610"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63290,
+            "created": 1444279318544
+          },
+          "issueId": 17750,
+          "issueKey": "SS-3616",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "status",
+          "fromString": "Open",
+          "toString": "IN_PROGRESS_WITHOUT_BRANCH",
+          "from": "1",
+          "to": "10007"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62889,
+            "created": 1444041054368
+          },
+          "issueId": 17750,
+          "issueKey": "SS-3616",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "assignee",
+          "fromString": "Dmitry Shihovtsev",
+          "toString": "Timur Zununbekov",
+          "from": "dshihovtsev",
+          "to": "tzununbekov"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63672,
+            "created": 1444301794021
+          },
+          "issueId": 17750,
+          "issueKey": "SS-3616",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "RemoteIssueLink",
+          "fromString": null,
+          "toString": "This issue links to \"Wiki Page (Subutai Confluence)\"",
+          "from": null,
+          "to": "11346"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63400,
+            "created": 1444284293613
+          },
+          "issueId": 17750,
+          "issueKey": "SS-3616",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "resolution",
+          "fromString": null,
+          "toString": "Done",
+          "from": null,
+          "to": "10000"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62887,
+            "created": 1444041048698
+          },
+          "issueId": 17750,
+          "issueKey": "SS-3616",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue child of SS-3611",
+          "from": null,
+          "to": "SS-3611"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62883,
+            "created": 1444041048364
+          },
+          "issueId": 17750,
+          "issueKey": "SS-3616",
+          "author": "Dmitry Shihovtsev",
+          "type": "custom",
+          "field": "Epic Link",
+          "fromString": null,
+          "toString": "SS-3016",
+          "from": null,
+          "to": "15808"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63399,
+            "created": 1444284286548
+          },
+          "issueId": 17750,
+          "issueKey": "SS-3616",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "WorklogId",
+          "fromString": "15979",
+          "toString": null,
+          "from": "15979",
+          "to": null
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62890,
+            "created": 1444041061748
+          },
+          "issueId": 17750,
+          "issueKey": "SS-3616",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "summary",
+          "fromString": "CLONE - Try to migrate Snappy on Parallella board",
+          "toString": "Try to migrate Snappy on Parallella board",
+          "from": null,
+          "to": null
+        }
+      ],
+      "issueLinks": [
+        {
+          "linkType": {
+            "id": 10001,
+            "name": "Cloners",
+            "inward": "is cloned by",
+            "outward": "clones"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3610",
+            "issueId": 17744
+          },
+          "direction": "OUTWARD",
+          "type": {
+            "id": 3,
+            "name": "Task"
+          }
+        },
+        {
+          "linkType": {
+            "id": 10700,
+            "name": "Child",
+            "inward": "parent of",
+            "outward": "child of"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3611",
+            "issueId": 17745
+          },
+          "direction": "OUTWARD",
+          "type": {
+            "id": 10201,
+            "name": "Design"
+          }
+        }
+      ],
+      "issueWorkLogs": [
+        {
+          "workLogId": "15979",
+          "comment": "As a result of research we have found out that any Ubuntu-like system can be ported to Parallella board or any other board with uboot loader. Firstly, we have managed to run our custom kernel with Snappy's rootfs but main Snappy's features was missing. After some discussion with Canonical developers team we made the conclusion that we don't have correct uboot environment and init ram disk. Finally, we found correct configuration for all parts of Snappy kernel and rootfs, rebuild kernel and now we have Snappy Ubuntu on Parallella.",
+          "author": "tzununbekov",
+          "createDate": 1444240800000,
+          "timeSpentSeconds": 14400,
+          "updateAuthor": null,
+          "updateDate": 1444240800000
+        }
+      ],
+      "remoteLinks": [
+        {
+          "id": "null-17750",
+          "title": "Wiki Page",
+          "remoteUrl": "https://confluence.subutai.io/pages/viewpage.action?pageId=28770543",
+          "url": "https://jira.subutai.io/rest/api/latest/issue/SS-3616/remotelink/11346"
+        }
+      ],
+      "components": [
+        "SYSNET"
+      ],
+      "labels": [
+        "parallella",
+        "snappy",
+        "arm"
+      ],
+      "issues": [],
+      "annotations": [],
+      "commits": []
+    },
+    {
+      "issueId": 17719,
+      "issueKey": "SS-3607",
+      "status": "Open",
+      "projectKey": "SS",
+      "summary": "Coordinate works on ARM support feature",
+      "description": "In the course of implementing requirements for the next release, we need to coordinate works on ARM based RH support feature. We need to review and test the following hw boards:\r\n# Parallela\r\n# Odroid\r\n# Raspberry v2\r\n# Beagle Bone\r\nIf needed we shoud buy necessary hw and run tests. The ultimate goal is to be able to use at least one of the boards above as a Subutai Resource Host. To verify this we should be able at least to:\r\n* Install Ubuntu or Ubuntu Snappy on the board\r\n* Run Subutai go-agent\r\n* Clone a container from a big data product template such as Hadoop as a part of an environment\r\n* Setup networking and N2N\r\n\r\nIf these steps are done then we can conclude that the board can be used as a RH.",
+      "reporterName": "dilshat.aliev",
+      "assigneeName": "dilshat.aliev",
+      "resolution": null,
+      "creationDate": "2015-10-05T11:21:07.000+0600",
+      "updateDate": "2015-10-08T16:54:31.000+0600",
+      "dueDate": "2015-10-31T00:00:00.000+0600",
+      "priority": 3,
+      "originalEstimateMinutes": 960,
+      "remainingEstimateMinutes": 960,
+      "timeSpentMinutes": 0,
+      "type": {
+        "id": 3,
+        "name": "Task"
+      },
+      "changelogList": [
+        {
+          "changeKey": {
+            "changeItemId": 62585,
+            "created": 1444022467811
+          },
+          "issueId": 17719,
+          "issueKey": "SS-3607",
+          "author": "Dilshat Aliev",
+          "type": "custom",
+          "field": "Epic Link",
+          "fromString": null,
+          "toString": "SS-3016",
+          "from": null,
+          "to": "15808"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63659,
+            "created": 1444301656211
+          },
+          "issueId": 17719,
+          "issueKey": "SS-3607",
+          "author": "Dilshat Aliev",
+          "type": "jira",
+          "field": "Link",
+          "fromString": "This issue child of SS-3038",
+          "toString": null,
+          "from": "SS-3038",
+          "to": null
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62587,
+            "created": 1444022468774
+          },
+          "issueId": 17719,
+          "issueKey": "SS-3607",
+          "author": "Dilshat Aliev",
+          "type": "custom",
+          "field": "Rank",
+          "fromString": "",
+          "toString": "Ranked higher",
+          "from": "",
+          "to": ""
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63661,
+            "created": 1444301671912
+          },
+          "issueId": 17719,
+          "issueKey": "SS-3607",
+          "author": "Dilshat Aliev",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue child of SS-3508",
+          "from": null,
+          "to": "SS-3508"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63405,
+            "created": 1444284848336
+          },
+          "issueId": 17719,
+          "issueKey": "SS-3607",
+          "author": "Azamat Nuriddinov",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue child of SS-3038",
+          "from": null,
+          "to": "SS-3038"
+        }
+      ],
+      "issueLinks": [
+        {
+          "linkType": {
+            "id": 10700,
+            "name": "Child",
+            "inward": "parent of",
+            "outward": "child of"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3508",
+            "issueId": 17393
+          },
+          "direction": "OUTWARD",
+          "type": {
+            "id": 10100,
+            "name": "Requirement"
+          }
+        }
+      ],
+      "issueWorkLogs": [],
+      "remoteLinks": [],
+      "components": [
+        "management-console"
+      ],
+      "labels": [],
+      "issues": [],
+      "annotations": [],
+      "commits": []
+    },
+    {
+      "issueId": 17751,
+      "issueKey": "SS-3617",
+      "status": "Resolved",
+      "projectKey": "SS",
+      "summary": "Research Ubuntu installation on Parallella ",
+      "description": "According to plan of IoT preparation for Subutai we should know how to configure and install Ubuntu on Parallella boards",
+      "reporterName": "tzununbekov",
+      "assigneeName": "tzununbekov",
+      "resolution": "Done",
+      "creationDate": "2015-10-05T16:31:06.000+0600",
+      "updateDate": "2015-10-08T12:08:27.000+0600",
+      "dueDate": "1970-01-01T06:00:00.000+0600",
+      "priority": 3,
+      "originalEstimateMinutes": 240,
+      "remainingEstimateMinutes": 0,
+      "timeSpentMinutes": 240,
+      "type": {
+        "id": 10000,
+        "name": "Research"
+      },
+      "changelogList": [
+        {
+          "changeKey": {
+            "changeItemId": 63368,
+            "created": 1444283449313
+          },
+          "issueId": 17751,
+          "issueKey": "SS-3617",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "WorklogId",
+          "fromString": "15975",
+          "toString": null,
+          "from": "15975",
+          "to": null
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63365,
+            "created": 1444283379685
+          },
+          "issueId": 17751,
+          "issueKey": "SS-3617",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "WorklogId",
+          "fromString": "15973",
+          "toString": null,
+          "from": "15973",
+          "to": null
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62891,
+            "created": 1444041066225
+          },
+          "issueId": 17751,
+          "issueKey": "SS-3617",
+          "author": "Timur Zununbekov",
+          "type": "custom",
+          "field": "Epic Link",
+          "fromString": null,
+          "toString": "SS-3016",
+          "from": null,
+          "to": "15808"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63403,
+            "created": 1444284507872
+          },
+          "issueId": 17751,
+          "issueKey": "SS-3617",
+          "author": "Azamat Nuriddinov",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue child of SS-3611",
+          "from": null,
+          "to": "SS-3611"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62896,
+            "created": 1444041084818
+          },
+          "issueId": 17751,
+          "issueKey": "SS-3617",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue is cloned by SS-3618",
+          "from": null,
+          "to": "SS-3618"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62905,
+            "created": 1444041233054
+          },
+          "issueId": 17751,
+          "issueKey": "SS-3617",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "status",
+          "fromString": "Open",
+          "toString": "IN_PROGRESS_WITHOUT_BRANCH",
+          "from": "1",
+          "to": "10007"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63401,
+            "created": 1444284500737
+          },
+          "issueId": 17751,
+          "issueKey": "SS-3617",
+          "author": "Azamat Nuriddinov",
+          "type": "jira",
+          "field": "Link",
+          "fromString": "This issue child of SS-3016",
+          "toString": null,
+          "from": "SS-3016",
+          "to": null
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62902,
+            "created": 1444041185287
+          },
+          "issueId": 17751,
+          "issueKey": "SS-3617",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue child of SS-3016",
+          "from": null,
+          "to": "SS-3016"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63380,
+            "created": 1444283615710
+          },
+          "issueId": 17751,
+          "issueKey": "SS-3617",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "resolution",
+          "fromString": null,
+          "toString": "Done",
+          "from": null,
+          "to": "10000"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63379,
+            "created": 1444283607213
+          },
+          "issueId": 17751,
+          "issueKey": "SS-3617",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "WorklogId",
+          "fromString": "15977",
+          "toString": null,
+          "from": "15977",
+          "to": null
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63328,
+            "created": 1444282043488
+          },
+          "issueId": 17751,
+          "issueKey": "SS-3617",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "WorklogId",
+          "fromString": "15970",
+          "toString": null,
+          "from": "15970",
+          "to": null
+        }
+      ],
+      "issueLinks": [
+        {
+          "linkType": {
+            "id": 10700,
+            "name": "Child",
+            "inward": "parent of",
+            "outward": "child of"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3611",
+            "issueId": 17745
+          },
+          "direction": "OUTWARD",
+          "type": {
+            "id": 10201,
+            "name": "Design"
+          }
+        },
+        {
+          "linkType": {
+            "id": 10001,
+            "name": "Cloners",
+            "inward": "is cloned by",
+            "outward": "clones"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3618",
+            "issueId": 17752
+          },
+          "direction": "INWARD",
+          "type": {
+            "id": 10000,
+            "name": "Research"
+          }
+        }
+      ],
+      "issueWorkLogs": [
+        {
+          "workLogId": "15973",
+          "comment": "https://www.parallella.org/create-sdcard/\r\n\r\nStep-by-step guide for Ubuntu on Parallella installation",
+          "author": "tzununbekov",
+          "createDate": 1444240800000,
+          "timeSpentSeconds": 600,
+          "updateAuthor": null,
+          "updateDate": 1444240800000
+        },
+        {
+          "workLogId": "15977",
+          "comment": "Seems like we have enough information about running Ubuntu on Parallella. In case of lack of information we can count on hardware team support.",
+          "author": "tzununbekov",
+          "createDate": 1444240800000,
+          "timeSpentSeconds": 12300,
+          "updateAuthor": null,
+          "updateDate": 1444240800000
+        },
+        {
+          "workLogId": "15975",
+          "comment": "https://confluence.critical-factor.com/display/TULPAR/Linux+Kernel+on+Parallella\r\n\r\nLinux kernel for Parallella compilation instruction from Tulpar",
+          "author": "tzununbekov",
+          "createDate": 1444240800000,
+          "timeSpentSeconds": 1200,
+          "updateAuthor": null,
+          "updateDate": 1444240800000
+        },
+        {
+          "workLogId": "15970",
+          "comment": "https://www.parallella.org/2013/05/11/the-parallella-board-now-runs-ubuntu/\r\n\r\nHere is official page that says that Ubuntu is ported to Parallella",
+          "author": "tzununbekov",
+          "createDate": 1444240800000,
+          "timeSpentSeconds": 300,
+          "updateAuthor": null,
+          "updateDate": 1444240800000
+        }
+      ],
+      "remoteLinks": [],
+      "components": [
+        "SYSNET"
+      ],
+      "labels": [
+        "snappy",
+        "ARM"
+      ],
+      "issues": [],
+      "annotations": [],
+      "commits": []
+    },
+    {
+      "issueId": 17752,
+      "issueKey": "SS-3618",
+      "status": "Resolved",
+      "projectKey": "SS",
+      "summary": "Research Ubuntu installation on Parallella ",
+      "description": "According to plan of IoT preparation for Subutai we should know how to configure and install Ubuntu on Parallella boards",
+      "reporterName": "tzununbekov",
+      "assigneeName": "dshihovtsev",
+      "resolution": "Done",
+      "creationDate": "2015-10-05T16:31:24.000+0600",
+      "updateDate": "2015-10-08T10:56:15.000+0600",
+      "dueDate": "1970-01-01T06:00:00.000+0600",
+      "priority": 3,
+      "originalEstimateMinutes": 240,
+      "remainingEstimateMinutes": 0,
+      "timeSpentMinutes": 242,
+      "type": {
+        "id": 10000,
+        "name": "Research"
+      },
+      "changelogList": [
+        {
+          "changeKey": {
+            "changeItemId": 63292,
+            "created": 1444279398949
+          },
+          "issueId": 17752,
+          "issueKey": "SS-3618",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "WorklogId",
+          "fromString": "15958",
+          "toString": null,
+          "from": "15958",
+          "to": null
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62893,
+            "created": 1444041084602
+          },
+          "issueId": 17752,
+          "issueKey": "SS-3618",
+          "author": "Timur Zununbekov",
+          "type": "custom",
+          "field": "Epic Link",
+          "fromString": null,
+          "toString": "SS-3016",
+          "from": null,
+          "to": "15808"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62897,
+            "created": 1444041093804
+          },
+          "issueId": 17752,
+          "issueKey": "SS-3618",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "assignee",
+          "fromString": "Timur Zununbekov",
+          "toString": "Dmitry Shihovtsev",
+          "from": "tzununbekov",
+          "to": "dshihovtsev"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63306,
+            "created": 1444280175561
+          },
+          "issueId": 17752,
+          "issueKey": "SS-3618",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "resolution",
+          "fromString": null,
+          "toString": "Done",
+          "from": null,
+          "to": "10000"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62898,
+            "created": 1444041130503
+          },
+          "issueId": 17752,
+          "issueKey": "SS-3618",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue child of SS-3611",
+          "from": null,
+          "to": "SS-3611"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62895,
+            "created": 1444041084814
+          },
+          "issueId": 17752,
+          "issueKey": "SS-3618",
+          "author": "Timur Zununbekov",
+          "type": "jira",
+          "field": "Link",
+          "fromString": null,
+          "toString": "This issue clones SS-3617",
+          "from": null,
+          "to": "SS-3617"
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63303,
+            "created": 1444280165007
+          },
+          "issueId": 17752,
+          "issueKey": "SS-3618",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "WorklogId",
+          "fromString": "15961",
+          "toString": null,
+          "from": "15961",
+          "to": null
+        },
+        {
+          "changeKey": {
+            "changeItemId": 63291,
+            "created": 1444279327331
+          },
+          "issueId": 17752,
+          "issueKey": "SS-3618",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "WorklogId",
+          "fromString": "15957",
+          "toString": null,
+          "from": "15957",
+          "to": null
+        },
+        {
+          "changeKey": {
+            "changeItemId": 62907,
+            "created": 1444041244584
+          },
+          "issueId": 17752,
+          "issueKey": "SS-3618",
+          "author": "Dmitry Shihovtsev",
+          "type": "jira",
+          "field": "status",
+          "fromString": "Open",
+          "toString": "IN_PROGRESS_WITHOUT_BRANCH",
+          "from": "1",
+          "to": "10007"
+        }
+      ],
+      "issueLinks": [
+        {
+          "linkType": {
+            "id": 10001,
+            "name": "Cloners",
+            "inward": "is cloned by",
+            "outward": "clones"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3617",
+            "issueId": 17751
+          },
+          "direction": "OUTWARD",
+          "type": {
+            "id": 10000,
+            "name": "Research"
+          }
+        },
+        {
+          "linkType": {
+            "id": 10700,
+            "name": "Child",
+            "inward": "parent of",
+            "outward": "child of"
+          },
+          "linkDirection": {
+            "issueKey": "SS-3611",
+            "issueId": 17745
+          },
+          "direction": "OUTWARD",
+          "type": {
+            "id": 10201,
+            "name": "Design"
+          }
+        }
+      ],
+      "issueWorkLogs": [
+        {
+          "workLogId": "15957",
+          "comment": "[https://www.parallella.org/quick-start/]{quote}1. Ensure that you have the required accessories\n\nA high quality 2000mA rated 5V DC power supply with 5.5mm OD / 2.1mm ID center positive polarity plug.\nA micro HDMI to HDMI cable.\nA USB male Micro-B to female Standard-A cable.\nAn ethernet cable\nA fan (highly recommended!){quote}Prerequirements",
+          "author": "dshihovtsev",
+          "createDate": 1444240800000,
+          "timeSpentSeconds": 60,
+          "updateAuthor": null,
+          "updateDate": 1444240800000
+        },
+        {
+          "workLogId": "15961",
+          "comment": "After preparing flash drive, we can load system with standard configuration. \r\n\r\nParallella board can be loaded with prepared Ubuntu distributive. It easily to install it following official documentation.",
+          "author": "dshihovtsev",
+          "createDate": 1444240800000,
+          "timeSpentSeconds": 14400,
+          "updateAuthor": null,
+          "updateDate": 1444240800000
+        },
+        {
+          "workLogId": "15958",
+          "comment": "[http://www.parallella.org/create-sdcard/]{quote}These headless Ubuntu distributions represent the latest official releases of the firmware and is recommended for anyone using the Parallella for software development and research.{quote}Write flash drive with headless Ubuntu image",
+          "author": "dshihovtsev",
+          "createDate": 1444240800000,
+          "timeSpentSeconds": 60,
+          "updateAuthor": null,
+          "updateDate": 1444240800000
+        }
+      ],
+      "remoteLinks": [],
+      "components": [
+        "SYSNET"
+      ],
+      "labels": [
+        "snappy",
+        "ARM"
+      ],
+      "issues": [],
+      "annotations": [
+        {
+          "id": 424098046058408770,
+          "created": "2015-10-08T00:00:00.000+0600",
+          "researchSession": "SS-3618",
+          "uri": "https://www.parallella.org/quick-start/",
+          "ranges": null,
+          "quote": "1. Ensure that you have the required accessories\n\nA high quality 2000mA rated 5V DC power supply with 5.5mm OD / 2.1mm ID center positive polarity plug.\nA micro HDMI to HDMI cable.\nA USB male Micro-B to female Standard-A cable.\nAn ethernet cable\nA fan (highly recommended!)",
+          "text": "Prerequirements",
+          "offlineId": null,
+          "annotator_schema_version": null,
+          "jiraKey": null
+        }
+      ],
+      "commits": []
+    }
+  ],
+  "annotations": [],
+  "commits": []
+}

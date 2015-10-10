@@ -443,7 +443,7 @@ public class ConfluenceManagerImpl implements ConfluenceManager
         }
         catch ( RestException e )
         {
-            throw new ConfluenceManagerException( e.getMessage() );
+            throw new ConfluenceManagerException( e );
         }
     }
 

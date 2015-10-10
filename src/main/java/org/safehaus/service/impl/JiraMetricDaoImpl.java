@@ -1,6 +1,8 @@
 package org.safehaus.service.impl;
 
 
+import java.math.BigInteger;
+import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +20,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import org.apache.cassandra.thrift.Column;
+
+import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 
 
@@ -273,6 +278,47 @@ public class JiraMetricDaoImpl implements JiraMetricDao, JiraMetricsRestService
         params.put( parameter, username );
 
         return dao.findByQueryWithLimit( IssueWorkLog.class, query, params, limit );
+    }
+
+
+    @Override
+    public void attachCommit( final String issueKey, final String commitId )
+    {
+        //TODO Instead of getting JiraMetricIssue and after updating its property, it is better to directly add
+        // commit id to specific issue
+        String query = String.format( "SELECT issue_id FROM jira_metric_issue where issue_key = '%s'", issueKey );
+        //        String query = String.format( "SELECT j.issueId FROM JiraMetricIssue j where j.issueKey = '%s'",
+        // issueKey );
+
+        Object issueId = dao.executeQueryForSingleResult( Object.class, query );
+
+        if ( issueId != null )
+        {
+            Column column = ( Column ) issueId;
+            String value = convertToString( column.value );
+            if ( !Strings.isNullOrEmpty( value ) )
+            {
+                query = String.format( "UPDATE jira_metric_issue SET commits = commits + {'%s'} WHERE issue_id = %s",
+                        commitId, value );
+                dao.executeQuery( query );
+            }
+        }
+    }
+
+
+    // used for converting byte array from string to Long value
+    private String convertToString( ByteBuffer buffer )
+    {
+        byte[] bytes = new byte[buffer.remaining()];
+        buffer.get( bytes );
+        try
+        {
+            return new BigInteger( bytes ).toString();
+        }
+        catch ( Exception e )
+        {
+            return "";
+        }
     }
 
 
