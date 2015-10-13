@@ -9,7 +9,7 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 /**
  * Created by talas on 10/13/15.
  */
-public class DataBulkInsert extends QuartzJobBean
+public class BulkInsertJob extends QuartzJobBean
 {
     private JiraPool jiraPool;
 

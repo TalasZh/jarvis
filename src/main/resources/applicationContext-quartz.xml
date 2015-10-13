@@ -62,10 +62,11 @@
 
 
     <bean name="analysisJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
-        <property name="jobClass" value="org.safehaus.service.AnalysisServiceQuartzJob" />
+        <property name="jobClass" value="org.safehaus.service.BulkInsertJob" />
         <property name="jobDataAsMap">
             <map>
-                <entry key="analysisService" value-ref="analysisService" />
+                <!--<entry key="analysisService" value-ref="analysisService" />-->
+                <entry key="jiraPool" value-ref="jiraPool" />
             </map>
         </property>
     </bean>
