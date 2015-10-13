@@ -36,5 +36,5 @@ function structureSrv($http) {
             withCredentials: true,
             headers: {'Content-Type': 'application/json'}
         });
-    }
+    }	
 }

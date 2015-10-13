@@ -284,11 +284,7 @@ public class JiraMetricDaoImpl implements JiraMetricDao, JiraMetricsRestService
     @Override
     public void attachCommit( final String issueKey, final String commitId )
     {
-        //TODO Instead of getting JiraMetricIssue and after updating its property, it is better to directly add
-        // commit id to specific issue
         String query = String.format( "SELECT issue_id FROM jira_metric_issue where issue_key = '%s'", issueKey );
-        //        String query = String.format( "SELECT j.issueId FROM JiraMetricIssue j where j.issueKey = '%s'",
-        // issueKey );
 
         Object issueId = dao.executeQueryForSingleResult( Object.class, query );
 

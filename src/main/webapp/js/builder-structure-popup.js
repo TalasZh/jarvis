@@ -8,16 +8,19 @@ $(document).mousemove(function (event) {
 
 function closeIssuePopup() {
 	$('.b-issue-popup').fadeOut(300, function () {
-		$('#js-issue-changelog-list').hide();
+		$('.b-issue-popup__info').hide();
 	});		
 }
 
 function highlightTextToTop() {
 	$('.b-request-text').each(function () {
-		var highlightOffsetTop = $(this).find('.b-highlight-string').offset().top;
 		$(this).css('max-height', $(this).parents('.document-lister').height() - 52);
-		var topScroll = highlightOffsetTop - $(this).offset().top;
-		$(this).scrollTop(topScroll);
+		var findedString = $(this).find('.b-highlight-string');
+		if (findedString.length > 0) {
+			var highlightOffsetTop = $(this).find('.b-highlight-string').offset().top;
+			var topScroll = highlightOffsetTop - $(this).offset().top;
+			$(this).scrollTop(topScroll);
+		}
 	});
 }
 
@@ -41,12 +44,12 @@ function initScrollForPopup() {
 	minTop = 0;
 	parentOffset = $('.parent-scroll').parent().offset().top;
 	setPopupScrollRollerDate();
-	setPopupScrollRollerPosition(activePopup - 1);
+	setPopupScrollRollerPosition();
 }
 
-function setPopupScrollRollerPosition(newCurrentPopup) {
+function setPopupScrollRollerPosition() {
 	if (!mouseButtonDown) {
-		startPos = (totalPopups - newCurrentPopup) * degree;
+		startPos = (totalPopups - activePopup) * degree;
 		$('.js-scroll').animate({'top': startPos}, 300);
 	}
 }
@@ -64,7 +67,7 @@ function setPopupScrollRollerDate() {
 		}
 	});
 
-	$('.js-scroll .b-scroll-helper').html(top_doc.find('.js-task-date').html());
+	$('.js-scroll .b-scroll-helper').html(top_doc.find('.js-task-date').html());	
 }
 
 var Popup = function (data, eventListener) {
@@ -83,6 +86,31 @@ var Popup = function (data, eventListener) {
     this.top_offset = parseInt(this.SCREEN_HEIGHT / 6);
     this.width_diff = 15;
     this.height_diff = 30;
+
+	this.issueTypes = {
+		"Task": "task.png",
+		"Design": "design.png",
+		"Research": "research.png",
+		"Requirement": "requirments.png",
+		"Story": "task.png",
+		"Bug": "bug.png",
+		"Improvement": "Improvement.png",
+		"Playbook": "playbook.png",
+		"New Feature": "new-features.png"
+	};
+
+	this.issueStatus = {
+		"Resolved": "resolved.png",
+		"Unresolved": "unresolved.png"
+	};
+
+	this.issuePriority = {
+		1: {"img": "blocker.png", "title": "Blocker"},
+		2: {"img": "critical.png", "title": "Critical"},
+		3: {"img": "major.png", "title": "Major"},
+		4: {"img": "minor.png", "title": "Minor"},
+		5: {"img": "trivial.png", "title": "Trivial"}
+	};
 
     this.audioPopup = new Audio('assets/audio/Popup.wav');
 
@@ -125,6 +153,15 @@ Popup.prototype.init = function () {
 		}
 	});
 
+	$('.b-issue-popup').on('click', '.b-issue-popup-accordion__title', function () {
+		if ($(this).hasClass('b-issue-popup-accordion__title_open')) {
+			$(this).removeClass('b-issue-popup-accordion__title_open');
+		} else {
+			$(this).addClass('b-issue-popup-accordion__title_open');
+		}
+		$(this).next('.b-issue-popup-accordion__body').slideToggle();
+	});
+
 	$(document).on('click', '.document-lister', function (event) {
 		if ($(event.target).closest('.btn-close').length > 0) {
 			return;
@@ -149,7 +186,13 @@ Popup.prototype.init = function () {
 	});
 
 	$('.b-issue-popup').on('click', '.js-issue-popup-show-more', function () {
-		$(this).parent().next('#js-issue-changelog-list').slideToggle();
+		$('.b-issue-popup__info').slideUp(300);
+		if ($($(this).attr('href')).hasClass('js-opened')) {
+			$($(this).attr('href')).removeClass('js-opened');
+		} else {
+			$('.b-issue-popup__info').removeClass('js-opened');
+			$($(this).attr('href')).addClass('js-opened').slideToggle(300);
+		}
 		return false;
 	});
 
@@ -191,6 +234,7 @@ Popup.prototype.init = function () {
 		var relY = event.pageY - parentOffset;
 		var newPosition = relY - (scrollHeight / 2);
 		var nextActive = Math.round(newPosition / degree) + 1;
+		console.log(activePopup);
 		if (activePopup < nextActive) {
 			self.scrollResearch(-1);
 		} else if (activePopup > nextActive) {
@@ -202,7 +246,9 @@ Popup.prototype.init = function () {
 		}
 	});
 
-	$('[data-toggle="tooltip"]').tooltip();
+	$('.b-issue-popup').tooltip({
+		selector: '.js-dynamic-tooltip'
+	});
 };
 
 Popup.prototype.showMinimap = function (id) {
@@ -213,8 +259,6 @@ Popup.prototype.showMinimap = function (id) {
 
     var utmost = false;
 
-	console.log(this.DATA);
-
 	this.activeScroll = false;
     var data = $.grep(this.DATA, function (e) {
         return e.issueId == id;
@@ -224,9 +268,9 @@ Popup.prototype.showMinimap = function (id) {
     this.selectedData = data;
 	this.activeScroll = true;
 
-	totalPopups = data.changelogList.length;
+	totalPopups = data.annotations.length;
 
-    for (var i = 0; i < data.changelogList.length && popupLimit > 0; i++) {
+	for (var i = 0; i < data.annotations.length && popupLimit > 0; i++) {
         var currentWidthDiff = ( 5 - popupLimit ) * 15;
         var currentHeightDiff = ( 5 - popupLimit ) * 30;
 
@@ -234,8 +278,6 @@ Popup.prototype.showMinimap = function (id) {
             this.selected_doc = i;
 
             var popupData = this.getPopupData(i, data, true);
-
-			activePopup = totalPopups;
 
 			this.createPopupWindow(popupData);
             utmost = true;
@@ -283,7 +325,7 @@ Popup.prototype.scrollResearch = function (mvmnt, setScrollPosition) {
 
 		if (mvmnt > 0) {
 
-			if (this.selected_doc + 1 == this.selectedData.changelogList.length) {
+			if (this.selected_doc + 1 == this.selectedData.annotations.length) {
 				animateNotActive = true;
 				return;
 			}
@@ -300,12 +342,13 @@ Popup.prototype.scrollResearch = function (mvmnt, setScrollPosition) {
 			});
 
 			if (setScrollPosition) {
-				setPopupScrollRollerPosition(activePopup--);
+				activePopup = activePopup + 1;
+				setPopupScrollRollerPosition();
 			}
 
 			this.Z_INDEX = index_lowest - 1;
 
-			if (this.selected_doc + 4 < this.selectedData.changelogList.length) {
+			if (this.selected_doc + 4 < this.selectedData.annotations.length) {
 
 				var popupData = this.getPopupData(this.selected_doc, this.selectedData, false);
 				popupData.width = (this.left * 4 - this.width_diff * 4 * 2);
@@ -335,8 +378,9 @@ Popup.prototype.scrollResearch = function (mvmnt, setScrollPosition) {
 			});
 
 			if (setScrollPosition) {
-				setPopupScrollRollerPosition(activePopup++);
-			}
+				activePopup = activePopup - 1;
+				setPopupScrollRollerPosition();
+			}			
 
 			this.Z_INDEX = index_highest + 1;
 
@@ -351,33 +395,23 @@ Popup.prototype.scrollResearch = function (mvmnt, setScrollPosition) {
 
 Popup.prototype.getPopupData = function (i, fromData, mainPosition) {
 
-    var dateToDateFormat = new Date(fromData.changelogList[i].changeKey.created);
-    var showDate = dateToDateFormat.getDate() + '.' + dateToDateFormat.getMonth() + '.' + dateToDateFormat.getFullYear();
+	console.log(fromData.annotations[i].created);
+	var showDate = getDateInFormat(fromData.annotations[i].created, 'DD.MM.YYYY');
 
-	var popupText = fromData.changelogList[i].toString;
-
-	if (fromData.changelogList[i].fromString !== undefined) {
-		popupText = fromData.changelogList[i].fromString + ' &rarr; ' + popupText;
-	}
-
-	if (fromData.changelogList[i].field !== undefined) {
-		popupText = 'field: ' + fromData.changelogList[i].field + '<br>' + popupText;
-	}	
+	var popupText = fromData.annotations[i].text;
+	var quote = fromData.annotations[i].quote.replace(/(\r\n|\n|\r)/gm, "");
 
     var popupData = {
         "zIndex": this.Z_INDEX--,
         "issueKey": fromData.issueKey,
         "taskDate": showDate,
         "taskText": popupText,
-        "taskId": i
+		"taskId": i,
+		"url": fromData.annotations[i].uri,
+		"quote": quote
     };
 
-	if (fromData.changelogList[i].field == "Research Session") {
-        popupData.url = fromData.changelogList[i].url;
-
-        popupData.quote = fromData.changelogList[i].quote;
-		popupData.taskText = '<a href="javascript:window.open(\'' + fromData.changelogList[i].url + '\',\'research page\',\'width=500,height=400\')" target="_blank">' + fromData.changelogList[i].url + "</a><br>Quote: " + fromData.changelogList[i].quote + "<br>Comments: " + fromData.changelogList[i].comments;
-    }
+	popupData.taskText = '<a href="javascript:window.open(\'' + fromData.annotations[i].uri + '\',\'research page\',\'width=500,height=400\')" target="_blank">' + fromData.annotations[i].uri + "</a><br>Quote: " + fromData.annotations[i].quote + "<br>Comments: " + fromData.annotations[i].text;
 
     if (mainPosition) {
         popupData.width = (this.left * 4);
@@ -414,10 +448,12 @@ Popup.prototype.createPopupWindow = function (popupData) {
 function getHighlightedStringInText(url, searchText, id) {
     var readabilityUrl = 'https://www.readability.com/api/content/v1/parser?url=' + url + '&token=0626cdbea9b15ece0ad7d9ee4af00c7a6fd13b40&callback=?'
     return $.getJSON(readabilityUrl).then(function (data) {
-        var contentText = data.content.replace(searchText, '<span class="b-highlight-string">' + searchText + '</span>');
-        contentText = contentText
+		var contentText = data.content
 			.replace(/<img[^>]*>/g, "")
-			.replace(/<\s*(\w+).*?>/, '<$1>');
+			.replace(/class=\"(.*?)\"/g, '')
+			.replace(/id=\"(.*?)\"/g, '');
+		//console.log(contentText.split(/(\s*<\/?[a-zA-Z]>)/g));
+		contentText = contentText.replace(searchText, '<span class="b-highlight-string">' + searchText + '</span>');
         var responseContentDiv = $('.js-content-for-' + id);
 
         responseContentDiv.html(responseContentDiv.html() + '<div class="b-request-text">' + contentText + '</div>');
@@ -432,14 +468,20 @@ function getHighlightedStringInText(url, searchText, id) {
 Popup.prototype.getIssuePopup = function (issueId) {
     this.audioPopup.play();
 
-	console.log(issueId);
 	var data = $.grep(this.DATA, function (e) {
 		return e.issueId == issueId;
 	});
 	data = data[0];
+
 	console.log(data);
 
 	if (data == undefined) return;
+
+	if (data.annotations.length == 0) {
+		$('.js-research-button').hide();
+	} else {
+		$('.js-research-button').show();
+	}
 
 	var popupBlock = $('.b-issue-popup');
 	var currentField = false;
@@ -449,18 +491,52 @@ Popup.prototype.getIssuePopup = function (issueId) {
 			currentField = popupBlock.find('#js-issue-' + key);
 			var text = data[key];
 			if (data[key] === null || data[key].length == 0) {
+
 				text = 'none';
+
 			} else if (key == 'issueKey') {
+
 				text = createLink(text);
+
+			} else if (key == 'type') {
+
+				console.log(text.name);
+				var img = this.issueTypes[text.name];
+				var title = text.name;
+
+			} else if (key == 'priority') {
+
+				var img = this.issuePriority[text].img;
+				var title = this.issuePriority[text].title;
+
+			} else if (key == 'status') {
+
+				if (text == 'Resolved') {
+					var img = this.issueStatus[text];
+					var title = text;
+				} else {
+					var img = this.issueStatus['Unresolved'];
+					var title = 'Unresolved';
+				}
+
+			} else if (key == 'creationDate') {
+
+				text = getDateInFormat(text, 'DD.MM.YYYY');
+
+			} else if (key == 'timeSpentMinutes') {
+
+				text = text + ' minutes';			
+
 			} else if (key == 'originalEstimateMinutes') {
+
 				var hours = Math.floor(data[key] / 60);
 				var minutes = data[key] % 60;
 				text = hours + 'h ';
 				if (minutes > 0) {
 					text += minutes + 'm';
 				}
+
 			} else if (key == 'issueLinks') {
-				console.log(text);
 				for (var i = 0; i < text.length; i++) {
 					if (text[i].direction == 'OUTWARD') {
 						text = createLink(text[i].linkDirection.issueKey);
@@ -470,36 +546,103 @@ Popup.prototype.getIssuePopup = function (issueId) {
 			} else if (Object.prototype.toString.call(text) === '[object Array]') {
 				text = text.join(', ');
 			}
+
 			if (currentField.hasClass('js-text-to-span')) {
 				currentField.find('span').html(text);
+			} else if (currentField.hasClass('js-text-to-img')) {
+				currentField.attr('src', 'assets/icons/' + img);
+				currentField.tooltip('hide')
+					.attr('data-original-title', title)
+					.tooltip('fixTitle');
 			} else {
 				currentField.html(text);
 			}
 		}
 	}
 
-	if (data.changelogList !== undefined) {
-		var changelogList = popupBlock.find('#js-issue-changelog-list');
-		var changelogListHtml = '';
-		for (var i = 0; i < data.changelogList.length; i++) {
-			changelogListHtml += '<div style="margin-top: 12px">' +
-				'<div style="width: 40px; display: inline-block"><img src="assets/img/icon-11.svg" alt="" height="28px"/></div>' +
-				'<span style="opacity: 0.6;">' + data.changelogList[i].toString + '</span>' +
-				'</div>' +
-				'<div style="margin-top: 25px; padding-bottom: 13px; border-bottom: 1px solid #00142d;">' +
-				'<div style="width: 40px; display: inline-block"><img src="assets/img/icon-12.svg" alt="" height="28px"/></div>' +
-				'<span style="opacity: 0.6;">' + data.changelogList[i].field + '</span>' +
+	if (data.issueWorkLogs !== undefined) {
+		var workLogsList = popupBlock.find('.b-issue-popup-work-log');
+		var workLogsListHtml = '';
+		for (var i = 0; i < data.issueWorkLogs.length; i++) {
+			var workLogDate = getDateInFormat(data.issueWorkLogs[i].createDate);
+			workLogsListHtml += '<div class="b-issue-popup-work-log__item">' +
+				'<p>' + workLogDate + '</p>' +
+				'<p><a href="#">Time Spent: ' + Math.round(data.issueWorkLogs[i].timeSpentSeconds / 3600) + ' hours</a></p>' +
+				'<p>' + data.issueWorkLogs[i].comment + '</p>' +
 				'</div>';
 		}
 
-		changelogList.html(changelogListHtml);
+		workLogsList.html(workLogsListHtml);
 	}
+
+	if (data.changelogList !== undefined) {
+		var changeLogList = popupBlock.find('#js-issue-popup-activity-table');
+		var changeLogListHtml = '';
+		for (var i = 0; i < data.changelogList.length; i++) {
+			var changeLogDate = getDateInFormat(data.changelogList[i].changeKey.created);
+			var changeLogText = data.changelogList[i].author + ' made changes to ' + data.changelogList[i].field
+			var changeLogType = 'Deleted';
+
+			if (data.changelogList[i].fromString != null) {
+				changeLogType = data.changelogList[i].fromString;
+			} else if (data.changelogList[i].toString != null) {
+				changeLogType = data.changelogList[i].toString;
+			}
+
+			changeLogListHtml += '<tr>' +
+				'<td>' + changeLogDate + '</td>' +
+				'<td> | </td>' +
+				'<td>' + changeLogText + '</td>' +
+				'<td> ' + changeLogType + '</td>' +
+				'</tr>';
+		}
+
+		changeLogList.html(changeLogListHtml);
+	}
+
+	if (data.issueLinks !== undefined) {
+		var issueLinksList = popupBlock.find('#js-issue-popup-issue-links');
+		var issueLinksListHtml = '';
+		for (var i = 0; i < data.issueLinks.length; i++) {
+			var issueLinksListText = data.issueLinks[i].linkType[data.issueLinks[i].direction.toLowerCase()] +
+				' ' + data.issueLinks[i].linkDirection.issueKey;
+			issueLinksListHtml += '<p>' + issueLinksListText + '</p>';
+		}
+
+		issueLinksList.html(issueLinksListHtml);
+	}
+
+	if (data.commits !== undefined) {
+		var commitsList = popupBlock.find('#js-issue-popup-commits');
+		var commitsListHtml = '';
+		for (var i = 0; i < data.commits.length; i++) {
+			var commitsDate = getDateInFormat(data.commits[i].authorTimestamp);
+			commitsListHtml += '<p class="b-date">' + commitsDate + '</p>' +
+				'<p>' + data.commits[i].commitMessage + '</p>';
+		}
+
+		commitsList.html(commitsListHtml);
+	}
+
 	if (popupBlock.is(":hidden")) {
 		popupBlock.fadeIn();
 	}
 };
 
+var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+function getDateInFormat(date, mask) {
+	if (mask === undefined || mask === null) mask = 'DD.MM.YYYY HH:mm';
+	var dateToJsFormar = moment(date);
+	/*var formatedDate = dateToJsFormar.getDate() + 
+	 '/' + this.monthNames[dateToJsFormar.getMonth()] +
+	 '/' + dateToJsFormar.getFullYear() +
+	 ' ' + dateToJsFormar.getHours() +
+	 ':' + dateToJsFormar.getMinutes();	*/
+	return dateToJsFormar.format(mask);
+}
+
 function createLink(key) {
-	return '<a href="https://jira.subutai.io/browse/' + key + '" target="_blank">' + key + '</a>'
+	return '<a href="https://jira.subutai.io/browse/' + key + '" target="_blank">' + key + '</a>';
 }
 

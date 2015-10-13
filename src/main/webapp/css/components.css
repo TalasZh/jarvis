@@ -1304,21 +1304,21 @@ input[type=checkbox] {
 }
 
 .b-issue-popup {
-    padding: 20px;
+    padding: 12px 12px;
     font-size: 12px;
     position: absolute;
     left: 0;
     right: 0;
-    top: 50%;
+    top: 100px;
     display: none;
     margin-left: auto;
     margin-right: auto;
-    margin-top: -250px;
     background: #001937;
     /*border-top: 3px #0a2341;*/
-    width: 800px;
-    max-height: 500px;
+    width: 600px;
+    max-height: 85%;
     overflow-y: auto;
+    overflow-x: visible;
     box-shadow: 0 0 5px rgba(0, 0, 0, .5);
     z-index: 9999;
 }
@@ -1326,8 +1326,9 @@ input[type=checkbox] {
 .b-issue-popup__block
 {
     background-color: #0a2341;
-    margin-bottom: 10px;
-    padding: 10px 20px;
+    margin-bottom: 6px;
+    padding: 12px 12px;
+    font-size: 13px;
 }
 
 .b-issue-popup a
@@ -1342,16 +1343,207 @@ input[type=checkbox] {
 
 .b-issue-popup__close {
     position: absolute;
-    top: 5px;
-    right: 10px;
-    width: 20px;
-    height: 20px;
+    top: 12px;
+    right: 14px;
+    width: 30px;
+    height: 30px;
     border-radius: 50px;
     background-image: url("../assets/img/button-close.svg");
-    background-size: 10px 10px;
+    background-size: 14px 14px;
     background-position: 50% 50%;
     background-repeat: no-repeat;
     cursor: pointer;
+}
+
+.b-issue-popup__white-icon
+{
+    width: 31px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.b-issue-popup__white-icon img
+{
+    width: 21px;
+    height: 21px;
+}
+
+.b-issue-popup__info
+{
+    display: none;
+}
+
+.b-issue-popup__top-icon
+{
+    width: 19px;
+    height: 19px;
+    margin: 0 20px 0 0;
+    display: inline-block;
+    font-size: 0;
+    line-height: 0;
+}
+
+.b-issue-popup__top-icon:last-child
+{
+    margin-right: 0;
+}
+
+.b-issue-popup__top-icon img
+{
+    width: 100%;
+    height: 100%;
+}
+
+.b-issue-popup__top-icon-helper
+{
+    padding-left: 56px;
+}
+
+.b-issue-popup__activity
+{
+    background-color: #0a2341;
+    padding: 15px;
+}
+
+.b-issue-popup-activity
+{
+    background-color: #001937;
+    height: 140px;
+    overflow-y: auto;
+    padding: 0 20px;
+}
+
+.b-issue-popup__work-log
+{
+    background-color: #0a2341;
+    padding: 15px;
+}
+
+.b-issue-popup-work-log
+{
+    background-color: #001937;
+    height: 140px;
+    overflow-y: auto;
+    padding: 0 20px;
+}
+
+.b-issue-popup-work-log__item
+{
+    border-bottom: 1px solid #808c9b;
+    padding: 10px 0 5px;
+}
+
+.b-issue-popup-work-log__item:last-child
+{
+    border: none;
+}
+
+.b-issue-popup-work-log__item p
+{
+    font-size: 13px;
+    padding: 0 0 5px 0;
+    text-align: left;
+    margin: 0 0 0 0;
+}
+
+.b-issue-popup-activity table
+{
+    margin: 0 0 0 0;
+    width: 100%;
+    padding: 0 0 0 0;
+}
+
+.b-issue-popup-activity td
+{
+    padding: 7px 35px 7px 0;
+    font-size: 12px;
+    text-align: left;
+    border-bottom: 1px solid #808c9b;
+}
+
+.b-issue-popup-activity td:last-child
+{
+    padding-right: 0;
+}
+
+.b-issue-popup__accordion
+{
+    margin: 0 0 6px 0;
+}
+
+.b-issue-popup__accordion:last-child
+{
+    margin-bottom: 0;
+}
+
+.b-issue-popup-accordion
+{
+    background-color: #0a2341;
+    padding: 11px 18px 10px;
+}
+
+.b-issue-popup-accordion__title
+{
+    padding: 0 0 0 15px;
+    line-height: 13px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.b-issue-popup-accordion__arrow
+{
+    width: 9px;
+    height: 9px;
+    overflow: hidden;
+    display: inline-block;
+    background-image: url(../assets/img/arrow_right.png);
+    background-position: 0 0;
+    background-size: 5px 9px;
+    background-repeat: no-repeat;
+    margin-left: 11px;
+    transition: all 0.25s;
+}
+
+.b-issue-popup-accordion__title_open
+{
+    padding-bottom: 8px;
+}
+
+.b-issue-popup-accordion__title_open .b-issue-popup-accordion__arrow
+{
+    transform: rotate(90deg);
+}
+
+.b-issue-popup-accordion__body
+{
+    height: 90px;
+    display: none;
+    overflow-y: auto;
+    text-align: left;
+    background-color: #001937;
+    padding: 5px 17px;
+    font-size: 13px;
+}
+
+.b-issue-popup-accordion__body p
+{
+    font-size: 13px;
+    padding: 0 0 3px 0;
+    text-align: left;
+    border-bottom: 1px solid #808c9b;
+}
+
+.b-issue-popup-accordion__body .b-date
+{
+    border: none;
+    margin-bottom: 0;
+    padding-bottom: 5px;
+}
+
+.b-issue-popup-accordion__body p:last-child
+{
+    padding-bottom: 0;
+    border: none;
 }
 
 .b-issue-popup__close:hover {
@@ -1360,7 +1552,7 @@ input[type=checkbox] {
 
 .b-issue-popup__buttons
 {
-    padding: 10px 0 0 0;
+    padding: 15px 0;
     text-align: center;
 }
 
@@ -1446,6 +1638,17 @@ input[type=checkbox] {
     background-color: #00142d;
 }
 
+.b-button_green
+{
+    background-color: #477c2f !important;
+    border: 1px solid #386634 !important;
+}
+
+.b-button_green:hover
+{
+    background-color: #3f6d2a !important;
+}
+
 .b-breadcrumbs
 {
     position: fixed;
@@ -1501,7 +1704,7 @@ input[type=checkbox] {
     cursor: pointer;
 }
 
-.expander
+.expander, #uiview-expander > div
 {
     height: 100%;
 }
@@ -1573,7 +1776,7 @@ input[type=checkbox] {
 .developers .loc
 {
     position: relative;
-    min-width: 61%;
+    min-width: 141px;
     display: inline-block;
     text-align: center;
 }
@@ -1589,7 +1792,6 @@ input[type=checkbox] {
     padding-right: 0;
     padding-left: 0;
 }
-
 .developers .loc a:hover,
 .developers .loc a:active
 {
@@ -1773,10 +1975,11 @@ input[type=checkbox] {
 
 #projectInfoPopup
 {
-    z-index: 10000;
+    z-index: 100;
 }
 
-#uiview > div
+.highlight
 {
-    height: 100%;
+    background-color: #FFFF88;
 }
+

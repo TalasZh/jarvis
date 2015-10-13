@@ -235,7 +235,7 @@ public class AnalysisService
             try
             {
                 //                pullData( jiraCl );
-                //                                getJiraMetricIssues( jiraCl );
+                //                getJiraMetricIssues( jiraCl );
             }
             catch ( Exception ex )
             {
@@ -680,16 +680,7 @@ public class AnalysisService
         Set<IssueKeyParser> issues = Sets.newHashSet( IssueKeyParser.parseIssueKeys( commitMsg ) );
         for ( final IssueKeyParser issue : issues )
         {
-            //            JiraMetricIssue jiraMetricIssue =
-            //                    jiraMetricDao.findJiraMetricIssueByKey( issue.getFullyQualifiedIssueKey() );
-
             jiraMetricDao.attachCommit( issue.getFullyQualifiedIssueKey(), stashMetricIssue.getId() );
-
-            //            if ( jiraMetricIssue != null )
-            //            {
-            //                jiraMetricIssue.getGitCommits().add( stashMetricIssue.getId() );
-            //                jiraMetricDao.updateJiraMetricIssue( jiraMetricIssue );
-            //            }
         }
     }
 
@@ -778,30 +769,31 @@ public class AnalysisService
         {
             ConfluenceMetric cf = new ConfluenceMetric();
 
-            log.info("Last gathered confluence: " + lastGatheredConfluence);
-            log.info("Page date: " + new DateTime( p.getVersion().getWhen() ).toDate());
+            log.info( "Last gathered confluence: " + lastGatheredConfluence );
+            log.info( "Page date: " + new DateTime( p.getVersion().getWhen() ).toDate() );
 
-            if(new DateTime( p.getVersion().getWhen() ).toDate().after(lastGatheredConfluence)) {
-                cf.setAuthorDisplayName(p.getVersion().getBy().getDisplayName());
-                cf.setAuthorUserKey(p.getVersion().getBy().getUserKey());
-                cf.setAuthorUsername(p.getVersion().getBy().getUsername());
-                cf.setBodyLength(p.getBody().getView().getValue().length());
-                cf.setPageID(Integer.parseInt(p.getId()));
-                cf.setTitle(p.getTitle());
-                cf.setVersionNumber(p.getVersion().getNumber());
-                cf.setWhen(new DateTime(p.getVersion().getWhen()).toDate());
+            if ( new DateTime( p.getVersion().getWhen() ).toDate().after( lastGatheredConfluence ) )
+            {
+                cf.setAuthorDisplayName( p.getVersion().getBy().getDisplayName() );
+                cf.setAuthorUserKey( p.getVersion().getBy().getUserKey() );
+                cf.setAuthorUsername( p.getVersion().getBy().getUsername() );
+                cf.setBodyLength( p.getBody().getView().getValue().length() );
+                cf.setPageID( Integer.parseInt( p.getId() ) );
+                cf.setTitle( p.getTitle() );
+                cf.setVersionNumber( p.getVersion().getNumber() );
+                cf.setWhen( new DateTime( p.getVersion().getWhen() ).toDate() );
 
-                log.info("------------------------------------------------");
-                log.info("PageID:      " + cf.getPageID());
-                log.info("When:        " + cf.getWhen());
-                log.info("Number:      " + cf.getVersionNumber());
-                log.info("Username:    " + cf.getAuthorUsername());
-                log.info("Displayname: " + cf.getAuthorDisplayName());
-                log.info("UserKey:     " + cf.getAuthorUserKey());
-                log.info("BodyLen:     " + cf.getBodyLength());
-                log.info("Title:       " + cf.getTitle());
+                log.info( "------------------------------------------------" );
+                log.info( "PageID:      " + cf.getPageID() );
+                log.info( "When:        " + cf.getWhen() );
+                log.info( "Number:      " + cf.getVersionNumber() );
+                log.info( "Username:    " + cf.getAuthorUsername() );
+                log.info( "Displayname: " + cf.getAuthorDisplayName() );
+                log.info( "UserKey:     " + cf.getAuthorUserKey() );
+                log.info( "BodyLen:     " + cf.getBodyLength() );
+                log.info( "Title:       " + cf.getTitle() );
 
-                confluenceMetrics.add(cf);
+                confluenceMetrics.add( cf );
             }
         }
 
