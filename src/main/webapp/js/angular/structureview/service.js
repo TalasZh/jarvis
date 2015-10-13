@@ -6,12 +6,12 @@ angular.module('jarvis.structure.srv', [])
 structureSrv.$inject = ['$http'];
 
 function structureSrv($http) {
-    var PROJECT_API = "https://jarvis.subutai.io/services/api/timeline/project.json";
+    var PROJECT_API ="https://jarvis.subutai.io/services/api/timeline/project.json";
     var STRUCTURE_API = "https://jarvis.subutai.io/services/api/timeline/project/";
     var EVENT_API = "https://jarvis.subutai.io/services/api/timeline/story/";
-    //var PROJECT_API = "dummy-api/P.json";
-    //var STRUCTURE_API = "dummy-api/";
-    //var EVENT_API = 'dummy-api/';
+	//var PROJECT_API = "dummy-api/P.json";
+	//var STRUCTURE_API = "dummy-api/";
+	//var EVENT_API = 'dummy-api/';
 
     var structureSrv = {
         getProjects: getProjects,
@@ -31,10 +31,8 @@ function structureSrv($http) {
         return $http.get(STRUCTURE_API + key, {withCredentials: true, headers: {'Content-Type': 'application/json'}});
     }
 
-    function getEvents(key) {
-        return $http.get(EVENT_API + key + '?from=1359655200000&to=1454263200000', {
-            withCredentials: true,
-            headers: {'Content-Type': 'application/json'}
-        });
+    function getEvents( key )
+    {
+        return $http.get(EVENT_API + key + '?from=1359655200000&to=1454263200000', {withCredentials: true, headers: {'Content-Type': 'application/json'}});
     }	
 }

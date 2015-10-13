@@ -20,7 +20,7 @@
     <div class="row text-center">
       <div class="col-lg-offset-4 col-lg-4 col-md-offset-4 col-md-4 col-sm-12 col-xs-12 fixed-size">
         <div class="logo"></div>
-        <div class="welcome">New way of project management in Open Source</div>
+        <div class="welcome">Login page</div>
         <div class="form text-left">
           <form method="post" id="loginForm" action="<c:url value='/j_security_check'/>"
                 onsubmit="saveUsername(this);return validateForm(this)" autocomplete="off">
@@ -52,13 +52,6 @@
 
             <div class="login text-center"><button type="submit" class="btn btn-default" name="login">LOGIN</button></div>
 
-            <div class="signup text-center">
-              <p>
-                <fmt:message key="login.signup">
-                  <fmt:param><c:url value="/signup"/></fmt:param>
-                </fmt:message>
-              </p>
-            </div>
           </form>
         </div>
       </div>

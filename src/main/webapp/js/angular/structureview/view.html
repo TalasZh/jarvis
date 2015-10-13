@@ -1,146 +1,145 @@
 <div ng-controller="CanvasCtrl as vm" class="expander">
-	<header class="b-no-info-header">
-		<!--Left-sidebar begin -->
+    <header class="b-no-info-header">
+        <!--Left-sidebar begin -->
 
-		<div class="left-nav" id="wrapper-left">
-			<!--Toggle-button-collapse-->
-			<div class="toggle-left">
-				<a id="menu-toggle" href="#"><img src="assets/img/icon-collapse-in.svg" alt="" width="5px"
-																					class="icon-collapse"/></a>
-			</div>
-			<div class="profile">
-				<a href="#" class="circle-avatar"><img src="assets/img/img-profile-plane.svg"></a>
+        <div class="left-nav" id="wrapper-left">
+            <!--Toggle-button-collapse-->
+            <div class="toggle-left">
+                <a id="menu-toggle" href="#"><img src="assets/img/icon-collapse-in.svg" alt="" width="5px"
+                                                  class="icon-collapse"/></a>
+            </div>
+            <div class="profile">
+                <a href="#" class="circle-avatar"><img src="assets/img/img-profile-plane.svg"></a>
 				<span class="show-text">
 					<a href="#" style="margin-top: 10px">PROFILE</a>
 					<a href="#">LOG OUT</a>
 				</span>
             </div>
-			<div class="services-buttons">
-				<ul>
-					<li>
-						<a href="#">
-							<img src="assets/img/icon-home.png" alt="" class="icons-service"/><br>
-							<span class="show-text">HOME</span>
-						</a>
-					</li>
-					<li class="active">
-						<a ng-click="vm.jiraNavClick()">
-							<img src="assets/img/icon-jira.png" alt="" class="icons-service"/><br>
-							<span class="show-text">JIRA</span>
-						</a>
-					</li>
-					<li>
-						<a ng-click="vm.cfNavClick()">
-							<img src="assets/img/icon-confluence.png" alt="" class="icons-service"/><br>
-							<span class="show-text">CONFLUENCE</span>
-						</a>
-					</li>
-					<li>
-						<a ng-href="https://stash.{{ vm.baseUrl }}" target="_blank">
-							<img src="assets/img/icon-stash.png" alt="" class="icons-service"/><br>
-							<span class="show-text">STASH</span>
-						</a>
-					</li>
-					<li>
-						<a ng-href="https://hipchat.{{ vm.baseUrl }}" target="_blank">
-							<img src="assets/img/icon-hipchat.png" alt="" class="icons-service"/><br>
-							<span class="show-text">HIPCHAT</span>
-						</a>
-					</li>
-				</ul>
+            <div class="services-buttons">
+                <ul>
+                    <li>
+                        <a href="#">
+                            <img src="assets/img/icon-home.png" alt="" class="icons-service"/><br>
+                            <span class="show-text">HOME</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a ng-click="vm.jiraNavClick()">
+                            <img src="assets/img/icon-jira.png" alt="" class="icons-service"/><br>
+                            <span class="show-text">JIRA</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a ng-click="vm.cfNavClick()">
+                            <img src="assets/img/icon-confluence.png" alt="" class="icons-service"/><br>
+                            <span class="show-text">CONFLUENCE</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a ng-href="https://stash.{{ vm.baseUrl }}" target="_blank">
+                            <img src="assets/img/icon-stash.png" alt="" class="icons-service"/><br>
+                            <span class="show-text">STASH</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a ng-href="https://hipchat.{{ vm.baseUrl }}" target="_blank">
+                            <img src="assets/img/icon-hipchat.png" alt="" class="icons-service"/><br>
+                            <span class="show-text">HIPCHAT</span>
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
 
 
-		<div class="right-nav wrapper-right" id="v1">
-			<!--Toggle-button-collapse-->
-			<div class="toggle-right">
-				<a class="menu-toggle-right" href="#">
-					<img src="assets/img/icon-collapse-out.svg" alt="" height="8px" class="icon-collapse-right"/>
-					<img src="assets/img/icon-collapse-info.svg" alt="" height="8px" class="hide-icon"/>
-				</a>
+        <div class="right-nav wrapper-right" id="v1">
+            <!--Toggle-button-collapse-->
+            <div class="toggle-right">
+                <a class="menu-toggle-right" href="#">
+                    <img src="assets/img/icon-collapse-out.svg" alt="" height="8px" class="icon-collapse-right"/>
+                    <img src="assets/img/icon-collapse-info.svg" alt="" height="8px" class="hide-icon"/>
+                </a>
             </div>
 
-			<div class="tab-content">
+            <div class="tab-content">
 
 				<div class="box">
-					Description
-					<div class="description-text">
-						{{ vm.title }}
-						{{ vm.descr }}
-					</div>
-				</div>
-
-				<div class="box developers" style="text-align: left">
-					<div class="dev" tooltip="DEVELOPERS"><i class="fa fa-user"></i> {{ vm.activeNodeData.users.length }}
-					</div>
-					<div class="loc" tooltip="LINES OF CODE"><i class="fa fa-bars"></i> {{
-						vm.activeNodeData.projectStats.linesOfCode }} <a
-								href="" class="button"></a>
-					</div>
-				</div>
-
-				<div class="box">
-					<div class="versions">
-						<div class="line"></div>
-						<div class="bg">
-							<div class="past" tooltip-html-unsafe="VER. 1.0<br>(12 SEP 2015)"></div>
-						</div>
-						<div class="bg">
-							<div class="past" tooltip-html-unsafe="VER. 1.1<br>(12 SEP 2015)"></div>
-						</div>
-						<div class="bg">
-							<div class="past" tooltip-html-unsafe="VER. 1.2<br>(12 SEP 2015)"></div>
-						</div>
-						<div class="bg">
-							<div class="past" tooltip-html-unsafe="VER. 1.3<br>(12 SEP 2015)"></div>
-						</div>
-						<div class="bg">
-							<div class="now" tooltip-html-unsafe="VER. 1.4<br>(12 SEP 2015)"></div>
-						</div>
-						<div class="bg" style="margin-right: 0"></div>
+                    Description
+                    <div class="description-text">
+                        {{ vm.title }}
+                        {{ vm.descr }}
                     </div>
-					<div style="margin-top: 10px;">CURRENT VERSION: 1.4</div>
                 </div>
 
-				<div class="box">
-					<div style="margin-bottom: 10px">PROGRESS</div>
-					<div class="progress-box">
-						<div class="progress">
-							<div ng-if="vm.openStatus > 0" class="progress-bar progress-bar-blue"
-									 style="width: {{vm.openStatus}}%; position: relative"
-									 tooltip-html-unsafe="<b>OPEN:</b><br> {{vm.openStatusHours}} h (est.) ({{vm.openStatus}}%)">
-								<!--<span>{{vm.openStatus}}%</span>
-                <span style="position: absolute; top: 10px; left:8px">{{vm.openStatusHours}} h (est.)</span>-->
-							</div>
-							<div ng-if="vm.inProgressStatus > 0" class="progress-bar progress-bar-yellow"
-									 style="width: {{vm.inProgressStatus}}%; position: relative"
-									 tooltip-html-unsafe="<b>IN PROGRESS:</b><br> {{vm.inProgressStatusHours}} h (est.) ({{vm.inProgressStatus}}%)">
-								<!--<span>{{vm.inProgressStatus}}%</span>
-                <span style="position: absolute; top: 10px; left:8px">{{vm.inProgressStatusHours}} h (est.)</span>-->
-							</div>
-							<div ng-if="vm.doneStatus > 0" class="progress-bar progress-bar-green"
-									 style="width: {{vm.doneStatus}}%; position: relative"
-									 tooltip-html-unsafe="<b>DONE:</b><br> {{vm.doneStatusHours}} h (est.) ({{vm.doneStatus}}%)">
-								<!--<span>{{vm.doneStatus}}%</span>
-                <span style="position: absolute; top: 10px; left:8px">{{vm.doneStatusHours}} h (logged)</span>-->
-							</div>
-						</div>
+                <div class="box developers" style="text-align: left">
+                    <div class="dev" tooltip="DEVELOPERS"><i class="fa fa-user"></i> {{ vm.activeNodeData.users.length }}
                     </div>
-					<div class="text-center" style="margin-top: 15px">
-						STORY POINTS
-					</div>
-					<div class="story">
+                    <div class="loc" tooltip="LINES OF CODE"><i class="fa fa-bars"></i> {{ vm.activeNodeData.projectStats.linesOfCode }} <a
+                            href="" class="button"></a>
+                    </div>
+                </div>
+
+                <div class="box">
+                    <div class="versions">
+                        <div class="line"></div>
+						<div class="bg">
+                            <div class="past" tooltip-html-unsafe="VER. 1.0<br>(12 SEP 2015)"></div>
+                        </div>
+                        <div class="bg">
+                            <div class="past" tooltip-html-unsafe="VER. 1.1<br>(12 SEP 2015)"></div>
+                        </div>
+                        <div class="bg">
+                            <div class="past" tooltip-html-unsafe="VER. 1.2<br>(12 SEP 2015)"></div>
+                        </div>
+                        <div class="bg">
+                            <div class="past" tooltip-html-unsafe="VER. 1.3<br>(12 SEP 2015)"></div>
+                        </div>
+                        <div class="bg">
+                            <div class="now" tooltip-html-unsafe="VER. 1.4<br>(12 SEP 2015)"></div>
+                        </div>
+                        <div class="bg" style="margin-right: 0"></div>
+                    </div>
+                    <div style="margin-top: 10px;">CURRENT VERSION: 1.4</div>
+                </div>
+
+                <div class="box">
+                    <div style="margin-bottom: 10px">PROGRESS</div>
+                    <div class="progress-box">
+                        <div class="progress">
+                            <div ng-if="vm.openStatus > 0" class="progress-bar progress-bar-blue"
+                                 style="width: {{vm.openStatus}}%; position: relative"
+								 tooltip-html-unsafe="<b>OPEN:</b><br> {{vm.openStatusHours}} h (est.) ({{vm.openStatus}}%)">
+                                <!--<span>{{vm.openStatus}}%</span>
+                                <span style="position: absolute; top: 10px; left:8px">{{vm.openStatusHours}} h (est.)</span>-->
+                            </div>
+                            <div ng-if="vm.inProgressStatus > 0" class="progress-bar progress-bar-yellow"
+                                 style="width: {{vm.inProgressStatus}}%; position: relative"
+								 tooltip-html-unsafe="<b>IN PROGRESS:</b><br> {{vm.inProgressStatusHours}} h (est.) ({{vm.inProgressStatus}}%)">
+                                <!--<span>{{vm.inProgressStatus}}%</span>
+                                <span style="position: absolute; top: 10px; left:8px">{{vm.inProgressStatusHours}} h (est.)</span>-->
+                            </div>
+                            <div ng-if="vm.doneStatus > 0" class="progress-bar progress-bar-green"
+                                 style="width: {{vm.doneStatus}}%; position: relative"
+								 tooltip-html-unsafe="<b>DONE:</b><br> {{vm.doneStatusHours}} h (est.) ({{vm.doneStatus}}%)">
+                                <!--<span>{{vm.doneStatus}}%</span>
+                                <span style="position: absolute; top: 10px; left:8px">{{vm.doneStatusHours}} h (logged)</span>-->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center" style="margin-top: 15px">
+                        STORY POINTS
+                    </div>
+                    <div class="story">
 						<div class="bg-story border-blue" tooltip="OPEN" data-html="true">
 							{{ vm.activeNodeData.storyPoints.open }}
 						</div>
-						<div class="bg-story border-yellow" tooltip="IN PROGRESS">
+                        <div class="bg-story border-yellow" tooltip="IN PROGRESS">
 							{{ vm.activeNodeData.storyPoints.inProgress }}
 						</div>
-						<div class="bg-story border-green" tooltip="DONE">
+                        <div class="bg-story border-green" tooltip="DONE">
 							{{ vm.activeNodeData.storyPoints.done }}
 						</div>
-					</div>
+                    </div>
                 </div>
 
 				<div class="box">
@@ -150,7 +149,7 @@
 							<div class="circle-diagram">
 								<div class="mask-big"></div>
 								<knob knob-data="vm.activeNodeData.projectStats.coveragePercent"
-											knob-options="vm.knobBigOptions"></knob>
+									  knob-options="vm.knobBigOptions"></knob>
 
 								<div class="circle-divider">
 									<div class="circle-diagram-small">
@@ -179,7 +178,7 @@
 									<div class="circle-diagram-small">
 										<div class="mask-small"></div>
 										<knob knob-data="vm.activeNodeData.projectStats.successPercent"
-													knob-options="vm.knobSmallOptions"></knob>
+											  knob-options="vm.knobSmallOptions"></knob>
 
 										<div class="circle-sonar">
 											<div class="circle-unit {{ vm.borderColor.test }}">
@@ -222,114 +221,114 @@
 				</div>
             </div>
         </div>
-		<!--right nav 1-->
+        <!--right nav 1-->
 
-		<div class="right-nav wrapper-right" id="v2">
-			<!--Toggle-button-collapse-->
-			<div class="toggle-right">
-				<a class="menu-toggle-right" href="#">
-					<img src="assets/img/icon-collapse-out.svg" alt="" height="8px" class="icon-collapse-right"/>
-					<img src="assets/img/icon-collapse-info.svg" alt="" height="8px" class="hide-icon"/>
-				</a>
+        <div class="right-nav wrapper-right" id="v2">
+            <!--Toggle-button-collapse-->
+            <div class="toggle-right">
+                <a class="menu-toggle-right" href="#">
+                    <img src="assets/img/icon-collapse-out.svg" alt="" height="8px" class="icon-collapse-right"/>
+                    <img src="assets/img/icon-collapse-info.svg" alt="" height="8px" class="hide-icon"/>
+                </a>
             </div>
 
-			<div class="tab-content">
+            <div class="tab-content">
 				<div class="box">
-					Description
-					<div class="description-text">
-						{{ vm.title }}
-						{{ vm.descr }}
-					</div>
-				</div>
+                    Description
+                    <div class="description-text">
+                        {{ vm.title }}
+                        {{ vm.descr }}
+                    </div>
+                </div>
 
 				<div class="box developers" style="text-align: left">
-					<div class="dev" tooltip="DEVELOPERS">
+                    <div class="dev" tooltip="DEVELOPERS">
 						<i class="fa fa-user"></i> {{ vm.activeNodeData.users.length }}
-					</div>
-					<div class="loc">
+                    </div>
+                    <div class="loc">
 						<select name="members" class="b-timline-filter__select" style="width: 125px;">
 							<option value="">List of stories</option>
 							<option ng-repeat="(key, story) in vm.storyList" value="{{ key }}">
 								{{ story.key }}
 							</option>
 						</select>
-					</div>
-				</div>
+                    </div>
+                </div>
 
 				<div class="box">
-					<div style="margin-bottom: 10px">TOTAL ISSUES SOLVED</div>
-					<div class="progress-box">
-						<div class="progress">
-							<div ng-if="vm.issuesSolved.task > 0" class="progress-bar progress-bar-blue"
-									 style="width: {{ vm.issuesSolved.task }}%;"
-									 tooltip-html-unsafe="OPEN: {{ vm.issuesSolved.task }}%">
-							</div>
+                    <div style="margin-bottom: 10px">TOTAL ISSUES SOLVED</div>
+                    <div class="progress-box">
+                        <div class="progress">
+                            <div ng-if="vm.issuesSolved.task > 0" class="progress-bar progress-bar-blue"
+                                 style="width: {{ vm.issuesSolved.task }}%;"
+								 tooltip-html-unsafe="OPEN: {{ vm.issuesSolved.task }}%">
+                            </div>
 							<div ng-show="vm.issuesSolved.research > 0" class="progress-bar progress-bar-green"
-									 style="width: {{ vm.issuesSolved.research }}%"
-									 tooltip-html-unsafe="SOLVED: {{ vm.issuesSolved.research }}%">
-							</div>
-							<div ng-if="vm.issuesSolved.bug > 0" class="progress-bar progress-bar-red"
-									 style="width: {{ vm.issuesSolved.bug }}%"
-									 tooltip-html-unsafe="BUGS {{ vm.issuesSolved.bug }}%">
-							</div>
-						</div>
-					</div>
-				</div>
+								 style="width: {{ vm.issuesSolved.research }}%"
+								 tooltip-html-unsafe="SOLVED: {{ vm.issuesSolved.research }}%">
+							 </div>
+                            <div ng-if="vm.issuesSolved.bug > 0" class="progress-bar progress-bar-red"
+                                 style="width: {{ vm.issuesSolved.bug }}%"
+								 tooltip-html-unsafe="BUGS {{ vm.issuesSolved.bug }}%">
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
 				<div class="box">
-					<div style="margin-bottom: 10px">PROGRESS</div>
-					<div class="progress-box">
-						<div class="progress">
-							<div ng-if="vm.openStatus > 0" class="progress-bar progress-bar-blue"
-									 style="width: {{vm.openStatus}}%; position: relative"
-									 tooltip-html-unsafe="<b>OPEN:</b><br> {{vm.openStatusHours}} h (est.) ({{vm.openStatus}}%)">
-							</div>
-							<div ng-if="vm.inProgressStatus > 0" class="progress-bar progress-bar-yellow"
-									 style="width: {{vm.inProgressStatus}}%; position: relative"
-									 tooltip-html-unsafe="<b>IN PROGRESS:</b><br> {{vm.inProgressStatusHours}} h (est.) ({{vm.inProgressStatus}}%)">
-							</div>
-							<div ng-if="vm.doneStatus > 0" class="progress-bar progress-bar-green"
-									 style="width: {{vm.doneStatus}}%; position: relative"
-									 tooltip-html-unsafe="<b>DONE:</b><br> {{vm.doneStatusHours}} h (est.) ({{vm.doneStatus}}%)">
-							</div>
-						</div>
-					</div>
-					<div class="text-center" style="margin-top: 15px">
-						STORY POINTS
-					</div>
-					<div class="story">
+                    <div style="margin-bottom: 10px">PROGRESS</div>
+                    <div class="progress-box">
+                        <div class="progress">
+                            <div ng-if="vm.openStatus > 0" class="progress-bar progress-bar-blue"
+                                 style="width: {{vm.openStatus}}%; position: relative"
+								 tooltip-html-unsafe="<b>OPEN:</b><br> {{vm.openStatusHours}} h (est.) ({{vm.openStatus}}%)">
+                            </div>
+                            <div ng-if="vm.inProgressStatus > 0" class="progress-bar progress-bar-yellow"
+                                 style="width: {{vm.inProgressStatus}}%; position: relative"
+								 tooltip-html-unsafe="<b>IN PROGRESS:</b><br> {{vm.inProgressStatusHours}} h (est.) ({{vm.inProgressStatus}}%)">
+                            </div>
+                            <div ng-if="vm.doneStatus > 0" class="progress-bar progress-bar-green"
+                                 style="width: {{vm.doneStatus}}%; position: relative"
+								 tooltip-html-unsafe="<b>DONE:</b><br> {{vm.doneStatusHours}} h (est.) ({{vm.doneStatus}}%)">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center" style="margin-top: 15px">
+                        STORY POINTS
+                    </div>
+                    <div class="story">
 						<div class="bg-story border-blue" tooltip="OPEN" data-html="true">
 							{{ vm.activeNodeData.storyPoints.open }}
 						</div>
-						<div class="bg-story border-yellow" tooltip="IN PROGRESS">
+                        <div class="bg-story border-yellow" tooltip="IN PROGRESS">
 							{{ vm.activeNodeData.storyPoints.inProgress }}
 						</div>
-						<div class="bg-story border-green" tooltip="DONE">
+                        <div class="bg-story border-green" tooltip="DONE">
 							{{ vm.activeNodeData.storyPoints.done }}
 						</div>
-					</div>
-				</div>
+                    </div>
+                </div>
 			</div>
         </div>
-		<!--right nav 2-->
+        <!--right nav 2-->
 
-		<div class="right-nav wrapper-right" id="v3">
-			<!--Toggle-button-collapse-->
-			<div class="toggle-right">
-				<a class="menu-toggle-right" href="#">
-					<img src="assets/img/icon-collapse-out.svg" alt="" height="8px" class="icon-collapse-right"/>
-					<img src="assets/img/icon-collapse-info.svg" alt="" height="8px" class="hide-icon"/>
-				</a>
+        <div class="right-nav wrapper-right" id="v3">
+            <!--Toggle-button-collapse-->
+            <div class="toggle-right">
+                <a class="menu-toggle-right" href="#">
+                    <img src="assets/img/icon-collapse-out.svg" alt="" height="8px" class="icon-collapse-right"/>
+                    <img src="assets/img/icon-collapse-info.svg" alt="" height="8px" class="hide-icon"/>
+                </a>
             </div>
 
-			<div class="tab-content">
+            <div class="tab-content">
 				<div class="box">
-					Description
-					<div class="description-text">
-						{{ vm.title }}
-						{{ vm.descr }}
-					</div>
-				</div>
+                    Description
+                    <div class="description-text">
+                        {{ vm.title }}
+                        {{ vm.descr }}
+                    </div>
+                </div>
 
 				<div class="chart-buttons">
 					<a href="#" class="b-buttons b-buttons__requirements b-buttons__icon" tooltip="REQUIREMENT"></a>
@@ -338,71 +337,65 @@
 				</div>
 
 				<div class="box">
-					<div style="margin-bottom: 10px">PROGRESS</div>
-					<div class="progress-box">
-						<div class="progress">
-							<div ng-if="vm.openStatus > 0" class="progress-bar progress-bar-blue"
-									 style="width: {{vm.openStatus}}%; position: relative"
-									 tooltip-html-unsafe="<b>OPEN:</b><br> {{vm.openStatusHours}} h (est.) ({{vm.openStatus}}%)">
-							</div>
-							<div ng-if="vm.inProgressStatus > 0" class="progress-bar progress-bar-yellow"
-									 style="width: {{vm.inProgressStatus}}%; position: relative"
-									 tooltip-html-unsafe="<b>IN PROGRESS:</b><br> {{vm.inProgressStatusHours}} h (est.) ({{vm.inProgressStatus}}%)">
-							</div>
-							<div ng-if="vm.doneStatus > 0" class="progress-bar progress-bar-green"
-									 style="width: {{vm.doneStatus}}%; position: relative"
-									 tooltip-html-unsafe="<b>DONE:</b><br> {{vm.doneStatusHours}} h (est.) ({{vm.doneStatus}}%)">
-							</div>
-						</div>
-					</div>
-					<div class="text-center" style="margin-top: 15px">
-						STORY POINTS
-					</div>
-					<div class="story">
+                    <div style="margin-bottom: 10px">PROGRESS</div>
+                    <div class="progress-box">
+                        <div class="progress">
+                            <div ng-if="vm.openStatus > 0" class="progress-bar progress-bar-blue"
+                                 style="width: {{vm.openStatus}}%; position: relative"
+								 tooltip-html-unsafe="<b>OPEN:</b><br> {{vm.openStatusHours}} h (est.) ({{vm.openStatus}}%)">
+                            </div>
+                            <div ng-if="vm.inProgressStatus > 0" class="progress-bar progress-bar-yellow"
+                                 style="width: {{vm.inProgressStatus}}%; position: relative"
+								 tooltip-html-unsafe="<b>IN PROGRESS:</b><br> {{vm.inProgressStatusHours}} h (est.) ({{vm.inProgressStatus}}%)">
+                            </div>
+                            <div ng-if="vm.doneStatus > 0" class="progress-bar progress-bar-green"
+                                 style="width: {{vm.doneStatus}}%; position: relative"
+								 tooltip-html-unsafe="<b>DONE:</b><br> {{vm.doneStatusHours}} h (est.) ({{vm.doneStatus}}%)">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center" style="margin-top: 15px">
+                        STORY POINTS
+                    </div>
+                    <div class="story">
 						<div class="bg-story bg-story_no-border">
-							{{ vm.activeNodeData.storyPoints.open + vm.activeNodeData.storyPoints.inProgress +
-							vm.activeNodeData.storyPoints.done }}
+							{{ vm.activeNodeData.storyPoints.open + vm.activeNodeData.storyPoints.inProgress + vm.activeNodeData.storyPoints.done }}
 						</div>
-					</div>
-				</div>
+                    </div>
+                </div>
 
 				<div class="box">
-					<div style="margin-bottom: 10px">REQUIREMENTS</div>
+                    <div style="margin-bottom: 10px">REQUIREMENTS</div>
 					<div class="progress">
 						<div ng-if="vm.requirements.opened.percent > 0" class="progress-bar progress-bar-blue"
-								 style="width: {{ vm.requirements.opened.percent }}%"
-								 tooltip="OPEN: {{ vm.requirements.opened.count }}">
+							 style="width: {{ vm.requirements.opened.percent }}%"
+							 tooltip="OPEN: {{ vm.requirements.opened.count }}">
 						</div>
 						<div ng-if="vm.requirements.closed.percent > 0" class="progress-bar progress-bar-green"
-								 style="width: {{ vm.requirements.closed.percent }}%"
-								 tooltip="CLOSED: {{ vm.requirements.closed.count }}">
+							 style="width: {{ vm.requirements.closed.percent }}%"
+							 tooltip="CLOSED: {{ vm.requirements.closed.count }}">
 						</div>
 					</div>
 					<div class="b-button" tooltip="DUE DATES">12 Oct 2015</div>
-				</div>
+                </div>
 			</div>
         </div>
-		<!--right nav 3-->
+        <!--right nav 3-->
 
-		<div class="b-breadcrumbs">
-			<ul>
-				<li class="b-breadcrumbs__item" ng-click="vm.breadcrumbsClick('start', 'foundation')">
-					<img src="assets/img/foundation-breadcrumbs.png" alt="SSF" tooltip="SSF Foundation"
-							 tooltip-placement="bottom">
-				</li>
-				<li class="b-breadcrumbs__item" ng-show="vm.breadcrumbsProject !== false"
-						ng-click="vm.breadcrumbsClick(vm.breadcrumbsProject.path, 'project')">
+        <div class="b-breadcrumbs">
+            <ul>
+                <li class="b-breadcrumbs__item" ng-click="vm.breadcrumbsClick('start', 'foundation')">
+                    <img src="assets/img/foundation-breadcrumbs.png" alt="SSF" tooltip="SSF Foundation" tooltip-placement="bottom">
+                </li>
+				<li class="b-breadcrumbs__item" ng-show="vm.breadcrumbsProject !== false" ng-click="vm.breadcrumbsClick(vm.breadcrumbsProject.path, 'project')">
 					<div class="b-breadcrumbs__line"></div>
-					<img src="assets/img/project-breadcrumbs.png" alt="Project"
-							 tooltip="Project: {{ vm.breadcrumbsProject.title }}" tooltip-placement="bottom">
+					<img src="assets/img/project-breadcrumbs.png" alt="Project" tooltip="Project: {{ vm.breadcrumbsProject.title }}" tooltip-placement="bottom">
 				</li>
-				<li class="b-breadcrumbs__item" ng-show="vm.breadcrumbsEpic !== false"
-						ng-click="vm.breadcrumbsClick(vm.breadcrumbsEpic.path, 'epic')">
+				<li class="b-breadcrumbs__item" ng-show="vm.breadcrumbsEpic !== false" ng-click="vm.breadcrumbsClick(vm.breadcrumbsEpic.path, 'epic')">
 					<div class="b-breadcrumbs__line"></div>
-					<img src="assets/img/epic-breadcrumbs.png" alt="Epic" tooltip="Epic: {{ vm.breadcrumbsEpic.title }}"
-							 tooltip-placement="bottom">
+					<img src="assets/img/epic-breadcrumbs.png" alt="Epic" tooltip="Epic: {{ vm.breadcrumbsEpic.title }}" tooltip-placement="bottom">
 				</li>
-			</ul>
+            </ul>
         </div>
 
 		<div class="js-test-block">
@@ -413,19 +406,19 @@
 			</div>
 		</div>
 
-	</header>
+    </header>
 
-	<!-- Issue line popup -->
-	<div class="b-issue-popup">
-		<div class="b-issue-popup__close"></div>
+    <!-- Issue line popup -->
+    <div class="b-issue-popup">
+        <div class="b-issue-popup__close"></div>
 
 		<div class="b-issue-popup__block">
 			<table>
 				<tr>
 					<td style="width: 31px">
 						<img src="assets/img/icon-task.svg" alt="" height="28px"
-								 data-toggle="tooltip" title="" data-placement="bottom"
-								 class="js-text-to-img js-dynamic-tooltip" id="js-issue-type"/>
+						data-toggle="tooltip" title="" data-placement="bottom"
+						class="js-text-to-img js-dynamic-tooltip" id="js-issue-type"/>
 					</td>
 					<td style="font-size: 12px">
 						<span id="js-issue-issueKey"></span><br>
@@ -435,16 +428,16 @@
 						<div class="b-issue-popup__top-icon-helper">
 							<div class="b-issue-popup__top-icon">
 								<img src="assets/icons/blocker.png" alt=""
-										 data-toggle="tooltip" title="" data-placement="bottom"
-										 class="js-text-to-img js-dynamic-tooltip" id="js-issue-priority">
+								data-toggle="tooltip" title="" data-placement="bottom"
+								class="js-text-to-img js-dynamic-tooltip" id="js-issue-priority">
 							</div>
 							<div class="b-issue-popup__top-icon">
 								<img src="assets/icons/in-progress.png" alt="">
 							</div>
 							<div class="b-issue-popup__top-icon">
 								<img src="assets/icons/unresolved.png" alt=""
-										 data-toggle="tooltip" title="" data-placement="bottom"
-										 class="js-text-to-img js-dynamic-tooltip" id="js-issue-status">
+								data-toggle="tooltip" title="" data-placement="bottom"
+								class="js-text-to-img js-dynamic-tooltip" id="js-issue-status">
 							</div>
 						</div>
 					</td>
@@ -464,16 +457,16 @@
 				<div style="width: 45%; display: inline-block" id="js-issue-assigneeName" class="js-text-to-span">
 					<div class="b-issue-popup__white-icon">
 						<img src="assets/icons/assignee.png" alt=""
-								 data-toggle="tooltip" title="Assignee" data-placement="bottom"
-								 class="js-dynamic-tooltip">
+						data-toggle="tooltip" title="Assignee" data-placement="bottom"
+						class="js-dynamic-tooltip">
 					</div>
 					<span></span>
 				</div>
 				<div style="width: 45%; display: inline-block" id="js-issue-components" class="js-text-to-span">
 					<div class="b-issue-popup__white-icon">
 						<img src="assets/icons/components.png" alt=""
-								 data-toggle="tooltip" title="Components" data-placement="bottom"
-								 class="js-dynamic-tooltip"/>
+						data-toggle="tooltip" title="Components" data-placement="bottom"
+						class="js-dynamic-tooltip"/>
 					</div>
 					<span></span>
 				</div>
@@ -482,16 +475,16 @@
 				<div style="width: 45%; display: inline-block" id="js-issue-reporterName" class="js-text-to-span">
 					<div class="b-issue-popup__white-icon">
 						<img src="assets/icons/reportee.png" alt=""
-								 data-toggle="tooltip" title="Reportee" data-placement="bottom"
-								 class="js-dynamic-tooltip"/>
+						data-toggle="tooltip" title="Reportee" data-placement="bottom"
+						class="js-dynamic-tooltip"/>
 					</div>
 					<span></span>
 				</div>
 				<div style="width: 45%; display: inline-block" id="js-issue-labels" class="js-text-to-span">
 					<div class="b-issue-popup__white-icon">
 						<img src="assets/icons/label.png" alt=""
-								 data-toggle="tooltip" title="Labels" data-placement="bottom"
-								 class="js-dynamic-tooltip"/>
+						data-toggle="tooltip" title="Labels" data-placement="bottom"
+						class="js-dynamic-tooltip"/>
 					</div>
 					<span></span>
 				</div>
@@ -500,16 +493,16 @@
 				<div style="width: 45%; display: inline-block" id="js-issue-timeSpentMinutes" class="js-text-to-span">
 					<div class="b-issue-popup__white-icon">
 						<img src="assets/icons/time-spent.png" alt=""
-								 data-toggle="tooltip" title="Time Spent" data-placement="bottom"
-								 class="js-dynamic-tooltip"/>
+						data-toggle="tooltip" title="Time Spent" data-placement="bottom"
+						class="js-dynamic-tooltip"/>
 					</div>
 					<span></span>
 				</div>
 				<div style="width: 45%; display: inline-block" id="js-issue-issueLinks" class="js-text-to-span">
 					<div class="b-issue-popup__white-icon">
 						<img src="assets/icons/epic-link.png" alt=""
-								 data-toggle="tooltip" title="Epic Link" data-placement="bottom"
-								 class="js-dynamic-tooltip">
+						data-toggle="tooltip" title="Epic Link" data-placement="bottom"
+						class="js-dynamic-tooltip">
 					</div>
 					<span></span>
 				</div>
@@ -518,22 +511,22 @@
 				<div style="width: 45%; display: inline-block" id="js-issue-creationDate" class="js-text-to-span">
 					<div class="b-issue-popup__white-icon">
 						<img src="assets/icons/created-date.png" alt=""
-								 data-toggle="tooltip" title="Created Date" data-placement="bottom"
-								 class="js-dynamic-tooltip">
+						data-toggle="tooltip" title="Created Date" data-placement="bottom"
+						class="js-dynamic-tooltip">
 					</div>
 					<span></span>
 				</div>
 			</div>
 		</div>
 
-		<div class="b-issue-popup__buttons">
-			<a class="b-button js-issue-popup-show-more" href="#js-issue-info-activity">Activity</a>
-			<a class="b-button js-issue-popup-show-more" href="#js-issue-info-work-log">Work Log</a>
-			<a class="b-button js-issue-popup-show-more" href="#js-issue-info-more">More</a>
-			<a ng-show="vm.reserchIssueId > 0" href="#" class="b-button b-button_green js-research-button"
-				 ng-click="vm.showReserchPopups(vm.reserchIssueId)">
-				Reserch
-			</a>
+        <div class="b-issue-popup__buttons">
+            <a class="b-button js-issue-popup-show-more" href="#js-issue-info-activity">Activity</a>
+            <a class="b-button js-issue-popup-show-more" href="#js-issue-info-work-log">Work Log</a>
+            <a class="b-button js-issue-popup-show-more" href="#js-issue-info-more">More</a>
+            <a ng-show="vm.reserchIssueId > 0" href="#" class="b-button b-button_green js-research-button"
+               ng-click="vm.showReserchPopups(vm.reserchIssueId)">
+                Reserch
+            </a>
         </div>
 
 		<div class="b-issue-popup__info" id="js-issue-info-activity">
@@ -609,14 +602,11 @@
 			-->
 		</div>
     </div>
-	<!-- END Issue line popup -->
+    <!-- END Issue line popup -->
 
-	<div id="projectInfoPopup" class="popup-tree"></div>
-	<div id="structureView" style="width: 100%; height: 100%"></div>
-	<a ng-click="vm.showProgressClick()" style="position: absolute; top:25px; left: 150px; cursor: pointer">Show
-		progress</a>
-	<a ng-click="vm.showDevelopersClick()" style="position: absolute; top:40px; left: 150px; cursor: pointer">Show
-		developers</a>
-	<a ng-click="vm.showStoryPointsClick()" style="position: absolute; top:55px; left: 150px; cursor: pointer">Show story
-		points</a>
+    <div id="projectInfoPopup" class="popup-tree"></div>
+    <div id="structureView" style="width: 100%; height: 100%"></div>
+		<a ng-click="vm.showProgressClick()" style="position: absolute; top:25px; left: 150px; cursor: pointer">Show progress</a>
+		<a ng-click="vm.showDevelopersClick()" style="position: absolute; top:40px; left: 150px; cursor: pointer">Show developers</a>
+		<a ng-click="vm.showStoryPointsClick()" style="position: absolute; top:55px; left: 150px; cursor: pointer">Show story points</a>
 </div>

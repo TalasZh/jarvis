@@ -1,11 +1,13 @@
 'use strict';
 
-angular.module('jarvis.structure.ctrl', [])
+angular.module('jarvis.structure.ctrl', [
+])
     .controller('CanvasCtrl', CanvasCtrl);
 
 CanvasCtrl.$inject = ['$rootScope', '$location', 'structureSrv'];
 
-function CanvasCtrl($rootScope, $location, structureSrv) {
+function CanvasCtrl($rootScope, $location, structureSrv)
+{
     var vm = this;
 	var nodes = new vis.DataSet([]);
 	var edges = new vis.DataSet([]);
@@ -24,7 +26,7 @@ function CanvasCtrl($rootScope, $location, structureSrv) {
 		locale: 'en',
 		clickToUse: false,
 		nodes: {
-			size: 5,
+			size : 5,
 			shape: 'image',
 			font: {
 				face: 'Lato',
@@ -34,20 +36,16 @@ function CanvasCtrl($rootScope, $location, structureSrv) {
 
 		},
 		edges: {
-			color: {
+			color : {
 				color: '#fff',
 				opacity: 0.5
 			},
-			hoverWidth: function (width) {
-				return width + 1;
-			},
-			selectionWidth: function (width) {
-				return width;
-			},
+			hoverWidth: function (width) {return width+1;},
+			selectionWidth : function (width) {return width;},
 		},
 		physics: {
 			enabled: true,
-			repulsion: {
+			repulsion:{
 				nodeDistance: 200,
 				centralGravity: 0.01,
 				springConstant: 0.5,
@@ -59,9 +57,9 @@ function CanvasCtrl($rootScope, $location, structureSrv) {
 			solver: 'repulsion',
 			timestep: 0.5,
 			stabilization: {
-				enabled: true,
-				iterations: 1000,
-				updateInterval: 25,
+				enabled:true,
+				iterations:1000,
+				updateInterval:25,
 				onlyDynamicEdges: false,
 				fit: true
 			}
@@ -113,7 +111,7 @@ function CanvasCtrl($rootScope, $location, structureSrv) {
     var timelineData = [];
     var currentStory;
 
-	vm.baseUrl = 'subutai.io';
+    vm.baseUrl = 'subutai.io';
 	vm.jiraUrl = "https://jira.";
 
     // data from api
@@ -137,20 +135,20 @@ function CanvasCtrl($rootScope, $location, structureSrv) {
 	vm.reserchIssueId = 0;
 
     vm.issuesSolved = {
-		research: 0,
-		task: 0,
-		bug: 0
+        research : 0,
+        task : 0,
+        bug : 0
     };
 
     vm.requirements = {
-		opened: 0,
-		closed: 0
+        opened : 0,
+        closed : 0
     };
 
     vm.borderColor = {
-		coverage: "border-green",
-		test: "border-green",
-		issues: "border-green"
+        coverage : "border-green",
+        test : "border-green",
+        issues : "border-green"
     };
 
 
@@ -191,21 +189,21 @@ function CanvasCtrl($rootScope, $location, structureSrv) {
         vm.projects = data;
     });
 
-	promise.then(function () {
-		recursivePromises(0, vm.projects.length);
+    promise.then(function() {
+        recursivePromises( 0, vm.projects.length );
     });
 
-	function recursivePromises(i, length) {
-		if (i < length) {
-			var j = structureSrv.getIssues(vm.projects[i].key).success(function (data)
-				//var j = structureSrv.getIssues('AS.json').success(function (data)
-			{
+    function recursivePromises( i, length ) {
+        if( i < length ) {
+            var j = structureSrv.getIssues(vm.projects[i].key).success(function (data)
+            //var j = structureSrv.getIssues('AS.json').success(function (data)
+            {
                 vm.projects[i] = data;
                 vm.projects[i].issueType = "Project";
             });
 
-			j.then(function () {
-				recursivePromises(i + 1, length);
+            j.then( function() {
+                recursivePromises( i + 1, length );
             });
         }
         else {
@@ -227,12 +225,12 @@ function CanvasCtrl($rootScope, $location, structureSrv) {
 		nodes.remove(nodes.getIds());
 		edges.remove(edges.getIds());
 
-		if (path == 'start') {
+		if(path == 'start') {
 			vm.breadcrumbsEpic = false;
 			vm.breadcrumbsProject = false;
 			drawFromSSF();
 		} else {
-			if (element == 'project') {
+		   	if(element == 'project') {
 				vm.breadcrumbsEpic = false;
 			}
 			drawFrom(path);
@@ -259,26 +257,26 @@ function CanvasCtrl($rootScope, $location, structureSrv) {
 	}
 
 	function jiraNavClick() {
-		if (selectedNode == null) window.location = 'https://jira.' + vm.baseUrl;
-		if (nodes.get(selectedNode).data.type.toLowerCase() == 'foundation' ||
-			nodes.get(selectedNode).data.type.toLowerCase() == 'project')
+		if( selectedNode == null ) window.location = 'https://jira.' + vm.baseUrl;
+		if( nodes.get( selectedNode).data.type.toLowerCase() == 'foundation' ||
+				nodes.get( selectedNode).data.type.toLowerCase() == 'project' )
 			window.location = 'https://jira.' + vm.baseUrl;
 
-		var data = getNodeDataByPath(nodes.get(selectedNode).data.path);
+		var data = getNodeDataByPath( nodes.get( selectedNode).data.path );
 
 		window.location = 'https://jira.' + vm.baseUrl + "/browse/" + data.key;
 	}
 
 	function cfNavClick() {
 
-		if (selectedNode == null) window.location = "https://confluence." + vm.baseUrl;
-		if (nodes.get(selectedNode).data.type.toLowerCase() == 'foundation' ||
-			nodes.get(selectedNode).data.type.toLowerCase() == 'project')
+		if( selectedNode == null ) window.location = "https://confluence." + vm.baseUrl;
+		if( nodes.get( selectedNode).data.type.toLowerCase() == 'foundation' ||
+				nodes.get( selectedNode).data.type.toLowerCase() == 'project' )
 			window.location = "https://confluence." + vm.baseUrl;
 
-		var data = getNodeDataByPath(nodes.get(selectedNode).data.path);
+		var data = getNodeDataByPath( nodes.get( selectedNode).data.path );
 
-		if (data.remoteLinks || data.remoteLinks.length == 0) window.location = "https://confluence." + vm.baseUrl;
+		if( data.remoteLinks || data.remoteLinks.length == 0 ) window.location = "https://confluence." + vm.baseUrl;
 
 		window.location = data.remoteLinks[0].remoteUrl;
 	}
@@ -294,29 +292,20 @@ function CanvasCtrl($rootScope, $location, structureSrv) {
      * creates a base structure
      */
 	var firstInit = true;
+    function drawFromSSF()
+	{
+		nodes.add({ id: 'ssf', label: 'SSF Foundation', image: "assets/img/img-foundation-sphere.png", size : sizes["foundation"], data: {type:"foundation"}});
 
-	function drawFromSSF() {
-		nodes.add({
-			id: 'ssf',
-			label: 'SSF Foundation',
-			image: "assets/img/img-foundation-sphere.png",
-			size: sizes["foundation"],
-			data: {type: "foundation"}
-		});
+        for (var i = 0; i < vm.projects.length; i++)
+		{
+			nodes.add({ id: vm.projects[i].key, image: "assets/img/img-" + vm.projects[i].issueType.toLowerCase().replace(/\s/gi, '') + "-sphere.png",
+				label: vm.projects[i].key, size : sizes[vm.projects[i].issueType.toLowerCase()], data: { type:vm.projects[i].issueType, path: i} });
 
-		for (var i = 0; i < vm.projects.length; i++) {
-			nodes.add({
-				id: vm.projects[i].key,
-				image: "assets/img/img-" + vm.projects[i].issueType.toLowerCase().replace(/\s/gi, '') + "-sphere.png",
-				label: vm.projects[i].key,
-				size: sizes[vm.projects[i].issueType.toLowerCase()],
-				data: {type: vm.projects[i].issueType, path: i}
-			});
-
-			edges.add({from: 'ssf', to: vm.projects[i].key});
+			edges.add({ from: 'ssf', to: vm.projects[i].key });
         }
 
-		if (firstInit) {
+		if( firstInit )
+		{
 			network = new vis.Network(container, drawingData, options);
 			initCanvasEvents();
 			firstInit = false;
@@ -327,16 +316,13 @@ function CanvasCtrl($rootScope, $location, structureSrv) {
     function drawFrom(path, node, recursively) {
         var data = getNodeDataByPath(path);
 
-		if (node == undefined || node == null) {
-			nodes.add({
-				id: data.key,
-				label: data.key,
+		if( node == undefined || node == null ) {
+			nodes.add( { id: data.key, label: data.key,
 				size: sizes[data.issueType.toLowerCase()],
-				image: "assets/img/img-" + data.issueType.toLowerCase().replace(/\s/gi, '') + "-sphere.png",
-				data: {type: data.issueType, path: path}
-			});
+				image: "assets/img/img-" + data.issueType.toLowerCase().replace(/\s/gi, '') + "-sphere.png", data:
+				{ type: data.issueType, path: path }});
 		}
-		else if (node.data.type == "Story") {
+		else if( node.data.type == "Story" ) {
 			recursively = true;
 			modifier = 0;
 		}
@@ -345,38 +331,24 @@ function CanvasCtrl($rootScope, $location, structureSrv) {
         for (var i = 0; i < data.issues.length; i++) {
 			var newPath = path + "," + i;
 
-			nodes.add({
-				id: data.issues[i].key,
-				label: data.issues[i].key,
+			nodes.add( { id: data.issues[i].key, label: data.issues[i].key,
 				size: sizes[data.issues[i].issueType.toLowerCase()],
-				image: "assets/img/img-" + data.issues[i].issueType.toLowerCase().replace(/\s/gi, '') + "-sphere.png",
-				data: {type: data.issues[i].issueType, path: newPath}
-			});
+				image: "assets/img/img-" + data.issues[i].issueType.toLowerCase().replace(/\s/gi, '') + "-sphere.png", data:
+				{ type: data.issues[i].issueType, path: newPath } } );
 
 
-			if (recursively) {
-				if (node.data.type == "Requirement" || node.data.type == "Story")
-					edges.add({
-						from: data.key,
-						to: data.issues[i].key,
-						color: {color: color[data.issues[i].issueType.toLowerCase()]}
-					});
+			if( recursively )
+			{
+				if( node.data.type == "Requirement" || node.data.type == "Story" )
+					edges.add({from: data.key, to: data.issues[i].key, color: {color: color[data.issues[i].issueType.toLowerCase()]}});
 				else
-					edges.add({
-						from: data.key,
-						to: data.issues[i].key,
-						color: {color: color[data.issues[i].issueType.toLowerCase()]},
-						length: 150 * ( Math.floor(modifier++ / 12) + 1 )
-					});
+					edges.add({from: data.key, to: data.issues[i].key, color: {color: color[data.issues[i].issueType.toLowerCase()]}, length: 150 * ( Math.floor(modifier++ / 12) + 1 )});
 
-				drawFrom(newPath, nodes.get(data.issues[i].key), true);
+				drawFrom(newPath, nodes.get( data.issues[i].key ), true);
 			}
-			else {
-				edges.add({
-					from: data.key,
-					to: data.issues[i].key,
-					color: {color: color[data.issues[i].issueType.toLowerCase()]}
-				});
+			else
+			{
+				edges.add({from: data.key, to: data.issues[i].key, color: {color: color[data.issues[i].issueType.toLowerCase()]}});
 			}
         }
 
@@ -390,7 +362,7 @@ function CanvasCtrl($rootScope, $location, structureSrv) {
      * returns the data received from api
      */
     function getNodeDataByPath(path) {
-		if (path !== undefined) {
+		if(path !== undefined){
 			var path = path.toString().split(",");
 
 			var workingDataNode = vm.projects;
@@ -409,11 +381,11 @@ function CanvasCtrl($rootScope, $location, structureSrv) {
 
 	//getStoryData("AS");
 	function getStoryData(key) {
-		if (currentStory != key) {
+		if(currentStory != key){
 			currentStory = key;
 			timelineData = [];
 			structureSrv.getEvents(key).success(function (data) {
-				//structureSrv.getEvents(key).success(function (data) {
+			//structureSrv.getEvents(key).success(function (data) {
 				var issues = data.issues;
 
 				if (issues == undefined) return;
@@ -422,16 +394,10 @@ function CanvasCtrl($rootScope, $location, structureSrv) {
 					timelineData.push(issues[i]);
 				}
 
-				for (var i = 0; i < timelineData.length; i++) {
-					timelineData[i].changelogList.sort(function (a, b) {
-						return b.changeKey.created - a.changeKey.created
-					});
-					timelineData[i].annotations.sort(function (a, b) {
-						return new Date(a.created) - new Date(b.created)
-					});
-					timelineData[i].issueWorkLogs.sort(function (a, b) {
-						return b.createDate - a.createDate
-					});
+				for( var i = 0; i < timelineData.length; i++ ) {
+					timelineData[i].changelogList.sort(function(a, b){return b.changeKey.created - a.changeKey.created});
+					timelineData[i].annotations.sort(function(a, b){return new Date( a.created ) - new Date( b.created )});
+					timelineData[i].issueWorkLogs.sort(function(a, b){return b.createDate - a.createDate});
 				}
 
 				popup.setData(timelineData);
@@ -439,13 +405,15 @@ function CanvasCtrl($rootScope, $location, structureSrv) {
 		}
 	}
 
-	function calculateRequirements(currentNode) {
+    function calculateRequirements(currentNode)
+    {
         var opened = 0;
         var closed = 0;
 
-		for (var i = 0; i < currentNode.issues.length; i++) {
-			if (currentNode.issues[i].issueType == "Requirement") {
-				if (currentNode.issues[i].status == "Open") {
+        for( var i = 0; i < currentNode.issues.length; i++ )
+        {
+            if( currentNode.issues[i].issueType == "Requirement" ) {
+                if( currentNode.issues[i].status == "Open" ) {
                     opened++;
                 }
                 else {
@@ -454,8 +422,8 @@ function CanvasCtrl($rootScope, $location, structureSrv) {
             }
         }
 
-		vm.requirements.opened = {"percent": Math.round(opened * 100 / ( opened + closed )), "count": opened};
-		vm.requirements.closed = {"percent": Math.round(closed * 100 / ( opened + closed )), "count": closed};
+        vm.requirements.opened = {"percent": Math.round( opened * 100 / ( opened + closed ) ), "count": opened};
+        vm.requirements.closed = {"percent": Math.round( closed * 100 / ( opened + closed ) ), "count": closed};
     }
 
 
@@ -470,7 +438,7 @@ function CanvasCtrl($rootScope, $location, structureSrv) {
 		var currentNode = getNodeDataByPath(node.data.path);
 		vm.activeNodeData = currentNode;
 
-		if (node.data.type.toLowerCase() == "foundation") {
+		if( node.data.type.toLowerCase() == "foundation" ) {
 			$('#v1').hide();
 			return;
 		}
@@ -494,15 +462,15 @@ function CanvasCtrl($rootScope, $location, structureSrv) {
 			return;
 		}
 
-		if (currentNode.openStatus !== undefined) {
+		if(currentNode.openStatus !== undefined){
 			var openStatus = currentNode.openStatus.originalEstimate;
 			var inProgressStatus = currentNode.inProgressStatus.remainingRestimate;
 			var doneStatus = currentNode.doneStatus.timeSpent;
 			var progressPersent = (openStatus + inProgressStatus + doneStatus) / 100;
 
-			vm.openStatus = Math.round(openStatus / progressPersent, -1);
-			vm.inProgressStatus = Math.round(inProgressStatus / progressPersent, -1);
-			vm.doneStatus = Math.round(doneStatus / progressPersent, -1);
+			vm.openStatus = Math.round( openStatus / progressPersent, -1 );
+			vm.inProgressStatus = Math.round( inProgressStatus / progressPersent, -1 );
+			vm.doneStatus = Math.round( doneStatus / progressPersent, -1 );
 
 			vm.openStatusHours = (openStatus / 3600).toFixed(1);
 			vm.inProgressStatusHours = (inProgressStatus / 3600).toFixed(1);
@@ -513,9 +481,9 @@ function CanvasCtrl($rootScope, $location, structureSrv) {
 
 			vm.title = currentNode.key;
 			vm.descr = currentNode.summary;
-			calculateRequirements(currentNode);
+			calculateRequirements( currentNode );
 
-			if (clickFromCanvas) {
+			if( clickFromCanvas ) {
 				$rootScope.$apply(function () {
 					self.value += 1;
 				});
@@ -549,7 +517,7 @@ function CanvasCtrl($rootScope, $location, structureSrv) {
 
 
 			for (var name in currentNode.totalIssuesSolved) {
-				if (name == "Story") {
+				if( name == "Story" ) {
 					continue;
 				}
 
@@ -557,26 +525,26 @@ function CanvasCtrl($rootScope, $location, structureSrv) {
 				total += value;
 
 				// @todo hardcoded need types
-				if (name == "Task" || name == "New Feature" || name == "Improvement") {
+				if( name == "Task" || name == "New Feature" || name == "Improvement" ) {
 					vm.issuesSolved.task += value;
 				}
 
-				if (name == "Bug") {
+				if( name == "Bug" ) {
 					vm.issuesSolved.bug += value;
 				}
 
-				if (name == "Research") {
+				if( name == "Research" ) {
 					vm.issuesSolved.research += value;
 				}
 			}
 
-			if (total == 0) total = 100;
+			if( total == 0 ) total = 100;
 
-			vm.issuesSolved.task = Math.round(vm.issuesSolved.task / total, -1);
-			vm.issuesSolved.bug = Math.round(vm.issuesSolved.bug / total, -1);
-			vm.issuesSolved.research = Math.round(vm.issuesSolved.research / total, -1);
+			vm.issuesSolved.task = Math.round( vm.issuesSolved.task / total, -1 );
+			vm.issuesSolved.bug = Math.round( vm.issuesSolved.bug / total, -1 );
+			vm.issuesSolved.research = Math.round( vm.issuesSolved.research / total, -1 );
 
-			if (clickFromCanvas) {
+			if( clickFromCanvas ) {
 				$rootScope.$apply(function () {
 					self.value += 1;
 				});
@@ -597,12 +565,12 @@ function CanvasCtrl($rootScope, $location, structureSrv) {
 			vm.title = node.data.title;
 			vm.descr = "NO PROJECT DESCRIPTION!!!!!!!!!!!!!!!!!!!!!";
 
-			if (currentNode.projectStats.coveragePercent >= 80) {
+			if( currentNode.projectStats.coveragePercent >= 80 ) {
 				vm.borderColor.coverage = "border-green";
 				vm.knobBigOptions.fgColor = "#00ff6c";
 
 			}
-			else if (currentNode.projectStats.coveragePercent >= 40) {
+			else if( currentNode.projectStats.coveragePercent >= 40 ) {
 				vm.borderColor.coverage = "border-yellow";
 				vm.knobBigOptions.fgColor = "#ffff00";
 
@@ -621,11 +589,11 @@ function CanvasCtrl($rootScope, $location, structureSrv) {
 			);
 
 
-			if (currentNode.projectStats.successPercent >= 90) {
+			if( currentNode.projectStats.successPercent >= 90 ) {
 				vm.borderColor.test = "border-green";
 				vm.knobSmallOptions.fgColor = "#00ff6c";
 			}
-			else if (currentNode.projectStats.successPercent >= 80) {
+			else if( currentNode.projectStats.successPercent >= 80 ) {
 				vm.borderColor.test = "border-yellow";
 				vm.knobSmallOptions.fgColor = "#ffff00";
 			}
@@ -642,17 +610,17 @@ function CanvasCtrl($rootScope, $location, structureSrv) {
 			);
 
 
-			if (0 < currentNode.projectStats.criticalIssues && currentNode.projectStats.criticalIssues < 4) {
+			if( 0 < currentNode.projectStats.criticalIssues && currentNode.projectStats.criticalIssues < 4 ) {
 				vm.borderColor.issues = "border-yellow";
 			}
-			else if (currentNode.projectStats.criticalIssues > 3 || currentNode.projectStats.blockerIssues > 0) {
+			else if( currentNode.projectStats.criticalIssues > 3 || currentNode.projectStats.blockerIssues > 0 ) {
 				vm.borderColor.issues = "border-red";
 			}
 			else {
 				vm.borderColor.issues = "border-green";
 			}
 
-			if (clickFromCanvas) {
+			if( clickFromCanvas ) {
 				$rootScope.$apply(function () {
 					self.value += 1;
 				});
@@ -675,15 +643,15 @@ function CanvasCtrl($rootScope, $location, structureSrv) {
 		var superX = 0;
 		var superY = 0;
 
-		$('#structureView canvas').mousemove(function (e) {
-			var x = e.offsetX == undefined ? e.layerX : e.offsetX;
-			var y = e.offsetY == undefined ? e.layerY : e.offsetY;
+		$('#structureView canvas').mousemove(function(e){
+			var x = e.offsetX==undefined?e.layerX:e.offsetX;
+			var y = e.offsetY==undefined?e.layerY:e.offsetY;
 
-			if (!hovered) {
+			if( !hovered ) {
 				superX = x;
 				superY = y;
 			}
-			else if (Math.abs(superX - x) > 70 || Math.abs(superY - y) > 70) {
+			else if( Math.abs( superX - x ) > 70 || Math.abs( superY - y ) > 70 ) {
 				$('#projectInfoPopup').css('display', 'none');
 				hovered = false;
 			}
@@ -693,16 +661,19 @@ function CanvasCtrl($rootScope, $location, structureSrv) {
 			$('#projectInfoPopup').css('top', (y - 30) + "px");
 		});
 
-		network.on("hoverNode", function (e) {
+		network.on("hoverNode", function(e)
+		{
 			var node = nodes.get(e.node);
 
-			if (node.data.type == "foundation") {
+			if( node.data.type == "foundation" )
+			{
 				$('#projectInfoPopup').text("SSF Foundation");
 			}
 
 			$('#projectInfoPopup').text(node.data.type.toUpperCase() + " " + node.id.toUpperCase());
 
-			if (node.data.type == "project" || node.data.type == "epic") {
+			if( node.data.type == "project" || node.data.type == "epic" )
+			{
 
 			}
 
@@ -710,23 +681,27 @@ function CanvasCtrl($rootScope, $location, structureSrv) {
 			$('#projectInfoPopup').css('display', 'block');
 		});
 
-		network.on("click", function (e) {
+		network.on("click", function(e)
+		{
 			selectedNode = e.nodes[0];
 
-			if (selectedNode == null) return;
+			if( selectedNode == null ) return;
 
 			var selectedNodeData = nodes.get(selectedNode);
 			click(selectedNodeData, true);
 		});
 
-		network.on("doubleClick", function (e) {
+		network.on("doubleClick", function(e)
+		{
 			selectedNode = e.nodes[0];
-			if (selectedNode == null) return;
+			if( selectedNode == null ) return;
 
 			var ids = nodes.getIds();
 
-			for (var i = 0; i < ids.length; i++) {
-				if (selectedNode != ids[i]) {
+			for( var i = 0; i < ids.length; i++ )
+			{
+				if( selectedNode != ids[i] )
+				{
 					nodes.remove(ids[i]);
 				}
 			}
@@ -737,15 +712,19 @@ function CanvasCtrl($rootScope, $location, structureSrv) {
 
 
 			var skipDrawing = false;
-			$rootScope.$apply(function () {
-				if (selectedNodeData.data.type == "Project") {
-					vm.breadcrumbsProject = {path: selectedNodeData.data.path, title: selectedNodeData.label};
+			$rootScope.$apply(function()
+			{
+				if( selectedNodeData.data.type == "Project" )
+				{
+					vm.breadcrumbsProject = { path: selectedNodeData.data.path, title: selectedNodeData.label };
 					vm.breadcrumbsEpic = false;
 				}
-				else if (selectedNodeData.data.type == "Epic") {
-					vm.breadcrumbsEpic = {path: selectedNodeData.data.path, title: selectedNodeData.label};
+				else if( selectedNodeData.data.type == "Epic" )
+				{
+					vm.breadcrumbsEpic = { path: selectedNodeData.data.path, title: selectedNodeData.label };
 				}
-				else if (selectedNodeData.data.type == "Story") {
+				else if( selectedNodeData.data.type == "Story" )
+				{
 					console.log(selectedNode, selectedNodeData);
 					getStoryData(selectedNodeData.id);
 				}
@@ -754,8 +733,8 @@ function CanvasCtrl($rootScope, $location, structureSrv) {
 				}
 			});
 
-			if (!skipDrawing)
-				drawFrom(selectedNodeData.data.path, selectedNodeData);
+			if( !skipDrawing )
+				drawFrom( selectedNodeData.data.path, selectedNodeData );
 		});
 
 		network.on("beforeDrawing", function (ctx) {
@@ -764,10 +743,11 @@ function CanvasCtrl($rootScope, $location, structureSrv) {
 			var nodePosition = network.getPositions(objIds);
 
 
-			if (nodePosition == undefined || nodePosition == null)
+			if( nodePosition == undefined || nodePosition == null )
 				return;
 
-			for (var i = 0; i < objIds.length; i++) {
+			for( var i = 0; i < objIds.length; i++)
+			{
 				drawProgress(ctx, nodePosition[objIds[i]], nodes.get(objIds[i]).size + 5, nodes.get(objIds[i]));
 				printDevelopers(ctx, nodePosition[objIds[i]], nodes.get(objIds[i]).size + 5, nodes.get(objIds[i]));
 				printStoryPoints(ctx, nodePosition[objIds[i]], nodes.get(objIds[i]).size + 5, nodes.get(objIds[i]))
@@ -776,7 +756,7 @@ function CanvasCtrl($rootScope, $location, structureSrv) {
 
 			nodePosition = network.getPositions(selectedNode)[selectedNode];
 
-			if (nodePosition == undefined || nodePosition == null)
+			if( nodePosition == undefined || nodePosition == null )
 				return;
 
 			highlightNode(ctx, nodePosition, nodes.get(selectedNode).size + 20);
@@ -787,7 +767,7 @@ function CanvasCtrl($rootScope, $location, structureSrv) {
 			ctx.shadowColor = "#FFF";
 			ctx.shadowBlur = 5;
 
-			ctx.globalAlpha = 0.8;
+			ctx.globalAlpha=0.8;
 			ctx.strokeStyle = "#FFF";
 			ctx.lineWidth = 1;
 
@@ -796,15 +776,15 @@ function CanvasCtrl($rootScope, $location, structureSrv) {
 			ctx.stroke();
 
 			ctx.beginPath();
-			ctx.arc(nodePosition.x, nodePosition.y, size, -Math.PI / 2 - (Math.PI / 4 - Math.PI / 8), -Math.PI / 2 - (Math.PI / 4 + Math.PI / 8), true);
+			ctx.arc(nodePosition.x, nodePosition.y, size, -Math.PI / 2 -(Math.PI / 4 - Math.PI / 8), -Math.PI / 2 -(Math.PI / 4 + Math.PI / 8), true);
 			ctx.stroke();
 
 			ctx.beginPath();
-			ctx.arc(nodePosition.x, nodePosition.y, size, -Math.PI - (Math.PI / 4 - Math.PI / 8), -Math.PI - (Math.PI / 4 + Math.PI / 8), true);
+			ctx.arc(nodePosition.x, nodePosition.y, size, -Math.PI -(Math.PI / 4 - Math.PI / 8), -Math.PI -(Math.PI / 4 + Math.PI / 8), true);
 			ctx.stroke();
 
 			ctx.beginPath();
-			ctx.arc(nodePosition.x, nodePosition.y, size, -Math.PI * 3 / 2 - (Math.PI / 4 - Math.PI / 8), -Math.PI * 3 / 2 - (Math.PI / 4 + Math.PI / 8), true);
+			ctx.arc(nodePosition.x, nodePosition.y, size, -Math.PI * 3 / 2 -(Math.PI / 4 - Math.PI / 8), -Math.PI * 3 / 2 -(Math.PI / 4 + Math.PI / 8), true);
 			ctx.stroke();
 			ctx.closePath();
 
@@ -813,32 +793,36 @@ function CanvasCtrl($rootScope, $location, structureSrv) {
 
 		function drawProgress(ctx, nodePosition, size, obj) {
 
-			if (!vm.showIssueProgress) return;
+			if( !vm.showIssueProgress ) return;
 			var currentNode;
 			var openStatus;
 			var inProgressStatus;
 			var doneStatus;
 			var progressPersent;
-			if (obj.data.type == "Project" || obj.data.type == "Epic" || obj.data.type == "Story") {
-				currentNode = getNodeDataByPath(obj.data.path);
+			if( obj.data.type == "Project" || obj.data.type == "Epic" || obj.data.type == "Story" )
+			{
+				currentNode = getNodeDataByPath( obj.data.path );
 				openStatus = currentNode.openStatus.originalEstimate;
 				inProgressStatus = currentNode.inProgressStatus.remainingRestimate;
 				doneStatus = currentNode.doneStatus.timeSpent;
 				progressPersent = (openStatus + inProgressStatus + doneStatus) / 100;
 
-				openStatus = Math.round(openStatus / progressPersent, -1) / 100;
-				inProgressStatus = Math.round(inProgressStatus / progressPersent, -1) / 100;
+				openStatus = Math.round( openStatus / progressPersent, -1 ) / 100;
+				inProgressStatus = Math.round( inProgressStatus / progressPersent, -1 ) / 100;
 				//doneStatus = Math.round( doneStatus / progressPersent, -1 );
 			}
-			else if (obj.data.type == "Task" || obj.data.type == "Bug" || obj.data.type == "Improvement" || obj.data.type == "New Feature") {
-				currentNode = getNodeDataByPath(obj.data.path);
+			else if( obj.data.type == "Task" || obj.data.type == "Bug" || obj.data.type == "Improvement" || obj.data.type == "New Feature" )
+			{
+				currentNode = getNodeDataByPath( obj.data.path );
 
 				inProgressStatus = 0;
 				openStatus = 0;
-				if (currentNode.status == "Resolved") {
+				if( currentNode.status == "Resolved" )
+				{
 					doneStatus = 100;
 				}
-				else {
+				else
+				{
 					openStatus = 100;
 				}
 			}
@@ -869,43 +853,48 @@ function CanvasCtrl($rootScope, $location, structureSrv) {
 			ctx.restore();
 		}
 
-		function drawDevelopers() {
+		function drawDevelopers()
+		{
 
 		}
 
-		function drawStoryPoints() {
+		function drawStoryPoints()
+		{
 
 		}
 
-		function drawBlockers() {
+		function drawBlockers()
+		{
 
 		}
 
-		function printStoryPoints(ctx, nodePosition, size, obj) {
-			if (!vm.showStoryPoints) return;
+		function printStoryPoints(ctx, nodePosition, size, obj)
+		{
+			if( !vm.showStoryPoints ) return;
 
 			var sp = getNodeDataByPath(obj.data.path);
 
-			if (sp == undefined || sp == null) return;
+			if( sp == undefined || sp == null ) return;
 
-			var res = parseInt(sp.storyPoints.inProgress) + parseInt(sp.storyPoints.done) + parseInt(sp.storyPoints.open);
+			var res = parseInt( sp.storyPoints.inProgress ) + parseInt( sp.storyPoints.done ) + parseInt( sp.storyPoints.open );
 
 			ctx.save();
 			ctx.beginPath();
 
 			ctx.font = "12px Lato";
 			ctx.fillStyle = "#FFF";
-			ctx.fillText("SP:" + res, nodePosition.x - size - 10, nodePosition.y - size - (vm.showIssueProgress ? 10 : 0) - (vm.showDevelopers ? 20 : 0));
+			ctx.fillText("SP:" + res, nodePosition.x - size  - 10, nodePosition.y - size - (vm.showIssueProgress ? 10 : 0) - (vm.showDevelopers ? 20 : 0));
 
 			ctx.closePath();
 			ctx.restore();
 		}
 
-		function printDevelopers(ctx, nodePosition, size, obj) {
-			if (!vm.showDevelopers) return;
+		function printDevelopers(ctx, nodePosition, size, obj)
+		{
+			if( !vm.showDevelopers ) return;
 			var text = getNodeDataByPath(obj.data.path)
 
-			if (text == undefined || text == null) return;
+			if( text == undefined || text == null ) return;
 
 			text = text.users.length;
 
@@ -914,7 +903,7 @@ function CanvasCtrl($rootScope, $location, structureSrv) {
 
 			ctx.font = "12px Lato";
 			ctx.fillStyle = "#FFF";
-			ctx.fillText(text + " devs", nodePosition.x - size - 10, nodePosition.y - size - (vm.showIssueProgress ? 10 : 0));
+			ctx.fillText(text + " devs", nodePosition.x - size  - 10, nodePosition.y - size - (vm.showIssueProgress ? 10 : 0));
 
 			ctx.closePath();
 			ctx.restore();
