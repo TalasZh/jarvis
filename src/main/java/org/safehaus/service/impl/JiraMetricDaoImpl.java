@@ -96,7 +96,7 @@ public class JiraMetricDaoImpl implements JiraMetricDao, JiraMetricsRestService
 
 
     @Override
-    public JiraMetricIssue findJiraMetricIssueById( Long id )
+    public JiraMetricIssue getJiraMetricIssueById( Long id )
     {
         log.info( "Finding JiraMetricIssue with id {}", id );
         return dao.findById( JiraMetricIssue.class, id );
@@ -104,7 +104,7 @@ public class JiraMetricDaoImpl implements JiraMetricDao, JiraMetricsRestService
 
 
     @Override
-    public JiraMetricIssue findJiraMetricIssueByKey( final String issueKey )
+    public JiraMetricIssue getJiraMetricIssueByKey( final String issueKey )
     {
         String parameter = "issueKey";
         String query =

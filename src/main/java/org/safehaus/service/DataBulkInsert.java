@@ -7,9 +7,9 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 
 
 /**
- * Created by tzhamakeev on 5/14/15.
+ * Created by talas on 10/13/15.
  */
-public class JiraQuartzJob extends QuartzJobBean
+public class DataBulkInsert extends QuartzJobBean
 {
     private JiraPool jiraPool;
 
@@ -23,6 +23,6 @@ public class JiraQuartzJob extends QuartzJobBean
     @Override
     protected void executeInternal( final JobExecutionContext jobExecutionContext ) throws JobExecutionException
     {
-        jiraPool.pullRecentUpdates();
+        jiraPool.getJiraIssues();
     }
 }

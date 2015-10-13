@@ -27,7 +27,7 @@ import com.google.common.base.Strings;
 import com.google.gson.reflect.TypeToken;
 
 
-public class StashManagerImpl implements StashManager
+public class StashClientImpl implements StashClient
 {
     private final String baseUrl;
 
@@ -43,7 +43,7 @@ public class StashManagerImpl implements StashManager
      *
      * @param baseUrl - base url of Stash e.g. stash.my-company.com
      */
-    public StashManagerImpl( final String baseUrl )
+    public StashClientImpl( final String baseUrl )
     {
         Preconditions.checkArgument( !Strings.isNullOrEmpty( baseUrl ) );
 
@@ -58,7 +58,7 @@ public class StashManagerImpl implements StashManager
      * @param username - username of user
      * @param password - password of user
      */
-    public StashManagerImpl( final String baseUrl, final String username, final String password )
+    public StashClientImpl( final String baseUrl, final String username, final String password )
     {
         Preconditions.checkArgument( !Strings.isNullOrEmpty( baseUrl ) );
         Preconditions.checkArgument( !Strings.isNullOrEmpty( username ) );

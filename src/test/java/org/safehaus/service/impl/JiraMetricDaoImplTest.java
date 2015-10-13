@@ -48,7 +48,7 @@ public class JiraMetricDaoImplTest
 
 		Mockito.when( dao.findById( JiraMetricIssue.class, -2L ) ).thenReturn( jiraMetricIssue );
 
-		JiraMetricIssue newIssue = jiraMetricDao.findJiraMetricIssueById( -2L );
+		JiraMetricIssue newIssue = jiraMetricDao.getJiraMetricIssueById( -2L );
 
 		Assert.assertNotNull( newIssue );
 		Assert.assertEquals( (long) newIssue.getIssueId(), -2L );

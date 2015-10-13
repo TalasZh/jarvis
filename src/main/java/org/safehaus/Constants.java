@@ -91,4 +91,8 @@ public final class Constants {
     public static final Long BATCH_SIZE = 5000L;
 
     public static final String DATABASE_SCHEMA = "jarvis@cassandra-pu";
+
+    public static final int MAX_RESULTS = 50;
+
+    public static final int OVERALL_RESULT_COUNT = 5000000;
 }

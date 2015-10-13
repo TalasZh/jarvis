@@ -41,7 +41,7 @@ import org.safehaus.sonar.model.QuantitativeStats;
 import org.safehaus.sonar.model.UnitTestStats;
 import org.safehaus.sonar.model.ViolationStats;
 import org.safehaus.stash.client.Page;
-import org.safehaus.stash.client.StashManager;
+import org.safehaus.stash.client.StashClient;
 import org.safehaus.stash.client.StashManagerException;
 import org.safehaus.stash.model.Change;
 import org.safehaus.stash.model.Project;
@@ -61,6 +61,9 @@ import net.rcarz.jiraclient.Issue;
 import net.rcarz.jiraclient.User;
 import net.rcarz.jiraclient.Version;
 
+import static org.safehaus.Constants.MAX_RESULTS;
+import static org.safehaus.Constants.OVERALL_RESULT_COUNT;
+
 
 /**
  * Created by kisik on 30.06.2015.
@@ -68,8 +71,6 @@ import net.rcarz.jiraclient.Version;
 public class AnalysisService
 {
     private final Log log = LogFactory.getLog( AnalysisService.class );
-    private static final int MAX_RESULT = 50;
-    private static final int OVERALL_RESULT_COUNT = 5000000;
     //    private static final int OVERALL_RESULT_COUNT = 50;
 
 
@@ -249,7 +250,7 @@ public class AnalysisService
 
 
         // Get Stash Data
-        StashManager stashMan = null;
+        StashClient stashMan = null;
         try
         {
             stashMan = stashConnector.stashConnect();
@@ -339,9 +340,9 @@ public class AnalysisService
         //
         //        jiraMetricIssues.add( issueToAdd );
 
-        for ( int i = 0; i < OVERALL_RESULT_COUNT; i += MAX_RESULT )
+        for ( int i = 0; i < OVERALL_RESULT_COUNT; i += MAX_RESULTS )
         {
-            List<Issue> issues = jiraCl.getIssues( "SS", MAX_RESULT, i );
+            List<Issue> issues = jiraCl.getIssues( "SS", MAX_RESULTS, i );
             //            if ( issues.size() == 0 )
             //            {
             //                break;
@@ -361,7 +362,7 @@ public class AnalysisService
                 jiraMetricIssues.add( issueToAdd );
                 jiraMetricDao.insertJiraMetricIssue( issueToAdd );
             }
-            if ( issues.size() < MAX_RESULT )
+            if ( issues.size() < MAX_RESULTS )
             {
                 break;
             }
@@ -418,9 +419,9 @@ public class AnalysisService
             log.info( "Printing issues" );
             for ( String projectKey : projectKeys )
             {
-                for ( int i = 0; i < OVERALL_RESULT_COUNT; i += MAX_RESULT )
+                for ( int i = 0; i < OVERALL_RESULT_COUNT; i += MAX_RESULTS )
                 {
-                    List<Issue> issues = jiraCl.getIssues( projectKey, MAX_RESULT, i );
+                    List<Issue> issues = jiraCl.getIssues( projectKey, MAX_RESULTS, i );
 
                     for ( final Issue issue : issues )
                     {
@@ -454,7 +455,7 @@ public class AnalysisService
                                     .getUpdateDate() );
                         }
                     }
-                    if ( issues.size() < MAX_RESULT )
+                    if ( issues.size() < MAX_RESULTS )
                     {
                         break;
                     }
@@ -504,7 +505,7 @@ public class AnalysisService
     }
 
 
-    private void getStashMetricIssues( StashManager stashMan )
+    private void getStashMetricIssues( StashClient stashMan )
     {
 
         List<String> stashProjectKeys = new ArrayList<String>();
@@ -564,12 +565,12 @@ public class AnalysisService
 
         for ( int i = 0; i < projectKeyNameSlugTriples.size(); i++ )
         {
-            for ( int j = 0; j < OVERALL_RESULT_COUNT; j += MAX_RESULT )
+            for ( int j = 0; j < OVERALL_RESULT_COUNT; j += MAX_RESULTS )
             {
                 try
                 {
                     commitPage = stashMan.getCommits( projectKeyNameSlugTriples.get( i ).getL(),
-                            projectKeyNameSlugTriples.get( i ).getR(), MAX_RESULT, j );
+                            projectKeyNameSlugTriples.get( i ).getR(), MAX_RESULTS, j );
                 }
                 catch ( StashManagerException e )
                 {
@@ -585,7 +586,7 @@ public class AnalysisService
                 }
 
                 collectCommitChanges( stashMan, commitSet, projectKeyNameSlugTriples, i );
-                if ( commitSet.size() < MAX_RESULT )
+                if ( commitSet.size() < MAX_RESULTS )
                 {
                     break;
                 }
@@ -606,20 +607,20 @@ public class AnalysisService
     }
 
 
-    private void collectCommitChanges( final StashManager stashMan, final Set<Commit> commitSet,
+    private void collectCommitChanges( final StashClient stashMan, final Set<Commit> commitSet,
                                        final List<Triple<String, String, String>> projectKeyNameSlugTriples,
                                        final int index )
     {
         Set<Change> changeSet = new HashSet<>();
         for ( Commit commit : commitSet )
         {
-            for ( int i = 0; i < OVERALL_RESULT_COUNT; i += MAX_RESULT )
+            for ( int i = 0; i < OVERALL_RESULT_COUNT; i += MAX_RESULTS )
             {
                 Page<Change> commitChanges = null;
                 try
                 {
                     commitChanges = stashMan.getCommitChanges( projectKeyNameSlugTriples.get( index ).getL(),
-                            projectKeyNameSlugTriples.get( index ).getR(), commit.getId(), MAX_RESULT, i );
+                            projectKeyNameSlugTriples.get( index ).getR(), commit.getId(), MAX_RESULTS, i );
                 }
                 catch ( StashManagerException e )
                 {
@@ -665,7 +666,7 @@ public class AnalysisService
                     stashMetricService.insertStashMetricIssue( stashMetricIssue );
                     associateCommitToIssue( stashMetricIssue );
                 }
-                if ( changeSet.size() < MAX_RESULT )
+                if ( changeSet.size() < MAX_RESULTS )
                 {
                     break;
                 }

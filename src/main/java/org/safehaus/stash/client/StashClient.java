@@ -31,7 +31,7 @@ import org.safehaus.stash.model.Repository;
  * .com/static/rest/stash/3.10.0/stash-rest.html#paging-params">Stash
  * Paged Api</a>
  */
-public interface StashManager
+public interface StashClient
 {
     public Page<Project> getProjects( int limit, int start ) throws StashManagerException;
 

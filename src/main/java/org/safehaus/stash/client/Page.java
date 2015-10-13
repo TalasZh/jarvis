@@ -4,6 +4,7 @@ package org.safehaus.stash.client;
 import java.util.Set;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Sets;
 
 
 /**
@@ -15,7 +16,7 @@ public class Page<T>
     private int limit;
     private boolean isLastPage;
     private int start;
-    private Set<T> values;
+    private Set<T> values = Sets.newHashSet();
 
 
     public int getSize()

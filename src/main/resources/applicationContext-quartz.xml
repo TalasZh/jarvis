@@ -9,6 +9,12 @@
         <!--<property name="issueManager" ref="issueManager"/>-->
     </bean>
 
+    <bean name="jiraPool" class="org.safehaus.service.JiraPool">
+    </bean>
+
+    <bean name="stashPool" class="org.safehaus.service.StashPool">
+    </bean>
+
     <!-- Jira job -->
     <bean name="jiraJob"
           class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
@@ -17,17 +23,17 @@
 
         <property name="jobDataAsMap">
             <map>
-                <entry key="jiraTask" value-ref="jiraTask" />
+                <entry key="jiraPool" value-ref="jiraPool" />
             </map>
         </property>
     </bean>
 
-    <!-- Cron Trigger, run every 10 seconds -->
+    <!-- Cron Trigger, run every 10 minutes -->
     <bean id="cronTrigger"
           class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 
         <property name="jobDetail" ref="jiraJob" />
-        <property name="cronExpression" value="0/30 * * * * ?" />
+        <property name="cronExpression" value="* */10 * * * ?" />
 
     </bean>
 

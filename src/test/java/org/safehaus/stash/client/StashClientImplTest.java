@@ -39,12 +39,12 @@ import static org.mockito.Mockito.spy;
 
 
 @RunWith( MockitoJUnitRunner.class )
-public class StashManagerImplTest
+public class StashClientImplTest
 {
     @Mock
     RestUtil restUtil;
 
-    StashManagerImpl stashManager;
+    StashClientImpl stashManager;
 
 
     @Before
@@ -53,7 +53,7 @@ public class StashManagerImplTest
         //for integration test set the context to valid crowd.token_key
         JarvisContextHolder
                 .setContext( new JarvisContext( "", new Cookie( "crowd.token_key", "c5EKHJvcroxWheWeaA5m9g00" ) ) );
-        stashManager = spy( new StashManagerImpl( TestUtil.STASH_URL ) );
+        stashManager = spy( new StashClientImpl( TestUtil.STASH_URL ) );
     }
 
 

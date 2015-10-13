@@ -19,9 +19,9 @@ public interface JiraMetricDao
 
     void insertJiraMetricIssue( JiraMetricIssue jiraMetricIssue );
 
-    JiraMetricIssue findJiraMetricIssueById( Long id );
+    JiraMetricIssue getJiraMetricIssueById( Long id );
 
-    JiraMetricIssue findJiraMetricIssueByKey( String issueKey );
+    JiraMetricIssue getJiraMetricIssueByKey( String issueKey );
 
     List<JiraMetricIssue> findJiraMetricIssuesByAssigneeName( String assigneeName );
 

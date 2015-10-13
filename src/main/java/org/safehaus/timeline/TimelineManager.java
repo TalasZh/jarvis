@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+import javax.annotation.PostConstruct;
+
 import org.safehaus.dao.entities.jira.IssueWorkLog;
 import org.safehaus.dao.entities.jira.JarvisLink;
 import org.safehaus.dao.entities.jira.JiraIssueChangelog;
@@ -85,7 +87,7 @@ public class TimelineManager
     }
 
 
-//    @PostConstruct
+    @PostConstruct
     public void init()
     {
         //        ServiceIdentity jiraIdentity = new ServiceIdentity(  )
@@ -242,9 +244,15 @@ public class TimelineManager
             final JiraMetricIssue jiraMetricIssue = entry.getValue();
             //TODO remove temporal "requirements_december" condition
             if ( "Epic".equals( jiraMetricIssue.getType().getName() ) && projectKey
-                    .equals( jiraMetricIssue.getProjectKey() ) && jiraMetricIssue.getLabels()
-                                                                                 .contains( "requirements_december" ) )
+                    .equals( jiraMetricIssue.getProjectKey() ) )
             {
+                if ( "SS".equals( projectKey ) )
+                {
+                    if ( jiraMetricIssue.getLabels().contains( "requirements_december" ) )
+                    {
+                        break;
+                    }
+                }
                 StructuredIssue epic = new StructuredIssue( jiraMetricIssue.getIssueKey(), jiraMetricIssue.getIssueId(),
                         jiraMetricIssue.getType().getName(), jiraMetricIssue.getSummary(),
                         jiraMetricIssue.getReporterName(), jiraMetricIssue.getReporterName(),
@@ -445,7 +453,7 @@ public class TimelineManager
             {
                 Set<String> issues = Sets.newHashSet();
 
-                JiraMetricIssue storyIssue = jiraMetricDao.findJiraMetricIssueByKey( storyKey );
+                JiraMetricIssue storyIssue = jiraMetricDao.getJiraMetricIssueByKey( storyKey );
 
                 storyTimeline = new StoryTimeline( storyIssue );
 
@@ -491,7 +499,7 @@ public class TimelineManager
                 if ( link.getDirection() == JarvisLink.Direction.INWARD && link.getLinkDirection() != null )
                 {
                     JiraMetricIssue childIssue =
-                            jiraMetricDao.findJiraMetricIssueByKey( link.getLinkDirection().getIssueKey() );
+                            jiraMetricDao.getJiraMetricIssueByKey( link.getLinkDirection().getIssueKey() );
                     if ( childIssue != null && !issues.contains( childIssue.getIssueKey() ) )
                     {
                         StoryTimeline childTimeline = new StoryTimeline( childIssue );

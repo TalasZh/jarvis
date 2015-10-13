@@ -9,6 +9,11 @@ import org.safehaus.util.JarvisContextHolder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import net.rcarz.jiraclient.BasicCredentials;
+import net.rcarz.jiraclient.ICredentials;
+import net.rcarz.jiraclient.JiraClient;
+import net.rcarz.jiraclient.JiraException;
+
 
 /**
  * Created by kisik on 29.07.2015.
@@ -51,8 +56,23 @@ public class JiraConnectorImpl implements JiraConnector
                 log.info( "JarvisContextHolder is null." );
                 throw new JiraClientException( "Jira Client is null." );
             }
-
         }
         return jiraRestClient;
+    }
+
+
+    @Override
+    public JiraClient getJiraClient() throws JiraClientException
+    {
+        ICredentials authenticationHandler = new BasicCredentials( jiraUserName, jiraPass );
+        try
+        {
+            return new JiraClient( jiraURL, authenticationHandler );
+        }
+        catch ( JiraException e )
+        {
+            log.error( "Error connecting to JIRA", e );
+        }
+        return null;
     }
 }
