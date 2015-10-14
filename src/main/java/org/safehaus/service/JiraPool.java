@@ -2,6 +2,7 @@ package org.safehaus.service;
 
 
 import java.util.List;
+import java.util.Set;
 
 import org.safehaus.analysis.service.JiraConnector;
 import org.safehaus.dao.entities.jira.JiraMetricIssue;
@@ -16,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 import net.rcarz.jiraclient.Issue;
 import net.rcarz.jiraclient.JiraClient;
@@ -123,12 +125,20 @@ public class JiraPool
         }
 
         String jql = "created >= -10m OR updated >= -10m";
-        searchJira( jql, jiraClient );
+        Set<String> projectKeys = searchJira( jql, jiraClient );
+        for ( final String projectKey : projectKeys )
+        {
+            timelineManager.rebuildProjectStructure( projectKey );
+        }
     }
 
 
-    private void searchJira( String jql, JiraClient jiraClient )
+    /**
+     * returns list of project keys from pulled issues
+     */
+    private Set<String> searchJira( String jql, JiraClient jiraClient )
     {
+        Set<String> projectKeys = Sets.newHashSet();
         Integer startIndex = 0;
         Integer total = 0;
 
@@ -144,7 +154,7 @@ public class JiraPool
 
         if ( searchResult == null )
         {
-            return;
+            return projectKeys;
         }
 
         total = searchResult.total + MAX_RESULTS;
@@ -163,6 +173,7 @@ public class JiraPool
 
                 if ( issue.getProject() != null && jiraMetricDao.getProject( issue.getProject().getKey() ) == null )
                 {
+                    projectKeys.add( issue.getProject().getKey() );
                     try
                     {
                         getProjectDetails( jiraClient, issue.getProject() );
@@ -184,6 +195,7 @@ public class JiraPool
                 logger.error( "Error pulling JIRA issues", e );
             }
         }
+        return projectKeys;
     }
 
 

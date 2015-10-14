@@ -99,85 +99,98 @@ public class TimelineManager
             List<JiraProject> jiraProjects = jiraMetricDao.getProjects();
             for ( final JiraProject jiraProject : jiraProjects )
             {
-                StructuredProject project =
-                        new StructuredProject( jiraProject.getProjectId(), jiraProject.getName(), jiraProject.getKey(),
-                                jiraProject.getDescription(), jiraProject.getProjectVersions() );
-
-                project.setDoneStatus( new ProgressStatus() );
-                project.setInProgressStatus( new ProgressStatus() );
-                project.setOpenStatus( new ProgressStatus() );
-
-                //TODO replace with more precise project services association
-                if ( "SS".equals( jiraProject.getKey() ) )
-                {
-                    SonarMetricIssue sonarMetricIssue = sonarMetricService.findSonarMetricIssueByProjectId( "5855" );
-                    if ( sonarMetricIssue != null )
-                    {
-                        ProjectStats projectStats = new ProjectStats( sonarMetricIssue );
-                        project.setProjectStats( projectStats );
-                    }
-                }
-                else if ( "GFIG".equals( jiraProject.getKey() ) )
-                {
-                    SonarMetricIssue sonarMetricIssue = sonarMetricService.findSonarMetricIssueByProjectId( "2999" );
-                    if ( sonarMetricIssue != null )
-                    {
-                        ProjectStats projectStats = new ProjectStats( sonarMetricIssue );
-                        project.setProjectStats( projectStats );
-                    }
-                }
-                else if ( "JETTYJAM".equals( jiraProject.getKey() ) )
-                {
-                    SonarMetricIssue sonarMetricIssue = sonarMetricService.findSonarMetricIssueByProjectId( "3040" );
-                    if ( sonarMetricIssue != null )
-                    {
-                        ProjectStats projectStats = new ProjectStats( sonarMetricIssue );
-                        project.setProjectStats( projectStats );
-                    }
-                }
-
-                Map<String, JiraMetricIssue> jiraMetricIssues = getJiraProjectIssues( jiraProject.getKey() );
-
-                Set<StructuredIssue> structuredEpics = getProjectEpics( jiraProject.getKey(), jiraMetricIssues );
-                project.setEpicsCount( structuredEpics.size() );
-
-                for ( final StructuredIssue structuredEpic : structuredEpics )
-                {
-                    sumUpEstimates( structuredEpic, project );
-                    String statusKey;
-                    switch ( structuredEpic.getStatus() )
-                    {
-                        case "Open":
-                            statusKey = "Open";
-                            break;
-                        case "Closed":
-                        case "Resolved":
-                        case "Done":
-                            statusKey = "Done";
-                            break;
-                        default:
-                            statusKey = "In Progress";
-                            break;
-                    }
-                    Long count = project.getEpicCompletion().get( statusKey );
-                    if ( count == null )
-                    {
-                        count = 0L;
-                    }
-                    count++;
-                    project.getEpicCompletion().put( statusKey, count );
-                }
-
-                project.setIssues( structuredEpics );
-                structuredProjects.put( jiraProject.getKey(), project );
-
-                timelineDaoImpl.updateProject( project );
+                buildProjectStructure( jiraProject );
             }
         }
         catch ( Exception ex )
         {
             logger.error( "Error initializing timelineManager", ex );
         }
+    }
+
+
+    public void rebuildProjectStructure( String projectKey )
+    {
+        buildProjectStructure( jiraMetricDao.getProject( projectKey ) );
+    }
+
+
+    private void buildProjectStructure( JiraProject jiraProject )
+    {
+        logger.info( "Building project structure." );
+        StructuredProject project =
+                new StructuredProject( jiraProject.getProjectId(), jiraProject.getName(), jiraProject.getKey(),
+                        jiraProject.getDescription(), jiraProject.getProjectVersions() );
+
+        project.setDoneStatus( new ProgressStatus() );
+        project.setInProgressStatus( new ProgressStatus() );
+        project.setOpenStatus( new ProgressStatus() );
+
+        //TODO replace with more precise project services association
+        if ( "SS".equals( jiraProject.getKey() ) )
+        {
+            SonarMetricIssue sonarMetricIssue = sonarMetricService.findSonarMetricIssueByProjectId( "5855" );
+            if ( sonarMetricIssue != null )
+            {
+                ProjectStats projectStats = new ProjectStats( sonarMetricIssue );
+                project.setProjectStats( projectStats );
+            }
+        }
+        else if ( "GFIG".equals( jiraProject.getKey() ) )
+        {
+            SonarMetricIssue sonarMetricIssue = sonarMetricService.findSonarMetricIssueByProjectId( "2999" );
+            if ( sonarMetricIssue != null )
+            {
+                ProjectStats projectStats = new ProjectStats( sonarMetricIssue );
+                project.setProjectStats( projectStats );
+            }
+        }
+        else if ( "JETTYJAM".equals( jiraProject.getKey() ) )
+        {
+            SonarMetricIssue sonarMetricIssue = sonarMetricService.findSonarMetricIssueByProjectId( "3040" );
+            if ( sonarMetricIssue != null )
+            {
+                ProjectStats projectStats = new ProjectStats( sonarMetricIssue );
+                project.setProjectStats( projectStats );
+            }
+        }
+
+        Map<String, JiraMetricIssue> jiraMetricIssues = getJiraProjectIssues( jiraProject.getKey() );
+
+        Set<StructuredIssue> structuredEpics = getProjectEpics( jiraProject.getKey(), jiraMetricIssues );
+        project.setEpicsCount( structuredEpics.size() );
+
+        for ( final StructuredIssue structuredEpic : structuredEpics )
+        {
+            sumUpEstimates( structuredEpic, project );
+            String statusKey;
+            switch ( structuredEpic.getStatus() )
+            {
+                case "Open":
+                    statusKey = "Open";
+                    break;
+                case "Closed":
+                case "Resolved":
+                case "Done":
+                    statusKey = "Done";
+                    break;
+                default:
+                    statusKey = "In Progress";
+                    break;
+            }
+            Long count = project.getEpicCompletion().get( statusKey );
+            if ( count == null )
+            {
+                count = 0L;
+            }
+            count++;
+            project.getEpicCompletion().put( statusKey, count );
+        }
+
+        project.setIssues( structuredEpics );
+        structuredProjects.put( jiraProject.getKey(), project );
+
+        timelineDaoImpl.updateProject( project );
     }
 
 
@@ -246,12 +259,9 @@ public class TimelineManager
             if ( "Epic".equals( jiraMetricIssue.getType().getName() ) && projectKey
                     .equals( jiraMetricIssue.getProjectKey() ) )
             {
-                if ( "SS".equals( projectKey ) )
+                if ( "SS".equals( projectKey ) && !jiraMetricIssue.getLabels().contains( "requirements_december" ) )
                 {
-                    if ( jiraMetricIssue.getLabels().contains( "requirements_december" ) )
-                    {
-                        break;
-                    }
+                    continue;
                 }
                 StructuredIssue epic = new StructuredIssue( jiraMetricIssue.getIssueKey(), jiraMetricIssue.getIssueId(),
                         jiraMetricIssue.getType().getName(), jiraMetricIssue.getSummary(),
