@@ -4,15 +4,13 @@ package org.safehaus.analysis.service;
 import org.safehaus.exceptions.JiraClientException;
 import org.safehaus.jira.JiraRestClient;
 import org.safehaus.model.JarvisContext;
+import org.safehaus.model.JiraContext;
 import org.safehaus.util.JarvisContextHolder;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import net.rcarz.jiraclient.BasicCredentials;
-import net.rcarz.jiraclient.ICredentials;
 import net.rcarz.jiraclient.JiraClient;
-import net.rcarz.jiraclient.JiraException;
 
 
 /**
@@ -64,15 +62,36 @@ public class JiraConnectorImpl implements JiraConnector
     @Override
     public JiraClient getJiraClient() throws JiraClientException
     {
-        ICredentials authenticationHandler = new BasicCredentials( jiraUserName, jiraPass );
-        try
+        JiraClient jiraRestClient;
+        if ( JarvisContextHolder.getJiraContext() != null
+                && JarvisContextHolder.getJiraContext().getJiraClient() != null )
         {
-            return new JiraClient( jiraURL, authenticationHandler );
+            jiraRestClient = JarvisContextHolder.getJiraContext().getJiraClient();
         }
-        catch ( JiraException e )
+        else
         {
-            log.error( "Error connecting to JIRA", e );
+            JarvisContextHolder.setJiraContext( new JiraContext( jiraURL, jiraUserName, jiraPass ) );
+            if ( JarvisContextHolder.getJiraContext() != null
+                    && JarvisContextHolder.getJiraContext().getJiraClient() != null )
+            {
+                jiraRestClient = JarvisContextHolder.getJiraContext().getJiraClient();
+            }
+            else
+            {
+                log.info( "JarvisContextHolder is null." );
+                throw new JiraClientException( "Jira Client is null." );
+            }
         }
-        return null;
+        return jiraRestClient;
+    }
+
+
+    public void destroy()
+    {
+        if ( JarvisContextHolder.getJiraContext() != null )
+        {
+            JarvisContextHolder.getJiraContext().destroy();
+            JarvisContextHolder.setJiraContext( null );
+        }
     }
 }

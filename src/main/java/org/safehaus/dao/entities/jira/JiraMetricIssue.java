@@ -46,7 +46,7 @@ import static org.safehaus.Constants.DATABASE_SCHEMA;
 @Table( name = "jira_metric_issue", schema = DATABASE_SCHEMA )
 @IndexCollection( columns = {
         @Index( name = "issueId" ), @Index( name = "issueKey" ), @Index( name = "assigneeName" ),
-        @Index( name = "projectKey" ), @Index( name = "status" )
+        @Index( name = "projectKey" ), @Index( name = "status" ), @Index( name = "typeName" )
 } )
 public class JiraMetricIssue implements Serializable
 {
@@ -102,6 +102,12 @@ public class JiraMetricIssue implements Serializable
     @Embedded
     private JarvisIssueType type;
 
+    @Column( name = "type_id" )
+    private Long typeId;
+
+    @Column( name = "type_name" )
+    private String typeName;
+
     @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER )
     @JoinColumn( name = "changelog_id" )
     private List<JiraIssueChangelog> changelogList = Lists.newArrayList();
@@ -129,6 +135,7 @@ public class JiraMetricIssue implements Serializable
     @ElementCollection
     @Column( name = "commits" )
     private Set<String> gitCommits = Sets.newHashSet();
+
 
     public JiraMetricIssue()
     {
@@ -179,6 +186,8 @@ public class JiraMetricIssue implements Serializable
         {
             IssueType jiraIssueType = issue.getIssueType();
             this.type = new JarvisIssueType( Long.valueOf( jiraIssueType.getId() ), jiraIssueType.getName() );
+            this.typeId = Long.valueOf( jiraIssueType.getId() );
+            this.typeName = jiraIssueType.getName();
         }
         if ( issue.getChangeLog() != null )
         {
@@ -277,6 +286,30 @@ public class JiraMetricIssue implements Serializable
             }
             this.issueLinks = jarvisIssueLinks;
         }
+    }
+
+
+    public Long getTypeId()
+    {
+        return typeId;
+    }
+
+
+    public void setTypeId( final Long typeId )
+    {
+        this.typeId = typeId;
+    }
+
+
+    public String getTypeName()
+    {
+        return typeName;
+    }
+
+
+    public void setTypeName( final String typeName )
+    {
+        this.typeName = typeName;
     }
 
 

@@ -155,9 +155,7 @@ public class TimelineManager
             }
         }
 
-        Map<String, JiraMetricIssue> jiraMetricIssues = getJiraProjectIssues( jiraProject.getKey() );
-
-        Set<StructuredIssue> structuredEpics = getProjectEpics( jiraProject.getKey(), jiraMetricIssues );
+        Set<StructuredIssue> structuredEpics = getProjectEpics( jiraProject.getKey() );
         project.setEpicsCount( structuredEpics.size() );
 
         for ( final StructuredIssue structuredEpic : structuredEpics )
@@ -236,7 +234,7 @@ public class TimelineManager
     {
         Map<String, JiraMetricIssue> jiraMetricIssues = Maps.newHashMap();
 
-        List<JiraMetricIssue> issues = jiraMetricDao.getProjectIssues( projectKey );
+        List<JiraMetricIssue> issues = jiraMetricDao.getIssuesByTypeForProject( projectKey, "Epic" );
         for ( final JiraMetricIssue issue : issues )
         {
             jiraMetricIssues.put( issue.getIssueKey(), issue );
@@ -248,38 +246,35 @@ public class TimelineManager
     /**
      * Gets all epics for project
      */
-    private Set<StructuredIssue> getProjectEpics( String projectKey,
-                                                  final Map<String, JiraMetricIssue> jiraMetricIssues )
+    private Set<StructuredIssue> getProjectEpics( String projectKey )
     {
         Set<StructuredIssue> epics = Sets.newHashSet();
-        for ( final Map.Entry<String, JiraMetricIssue> entry : jiraMetricIssues.entrySet() )
+        List<JiraMetricIssue> epicIssues = jiraMetricDao.getIssuesByTypeForProject( projectKey, "Epic" );
+
+        for ( final JiraMetricIssue epicIssue : epicIssues )
         {
-            final JiraMetricIssue jiraMetricIssue = entry.getValue();
             //TODO remove temporal "requirements_december" condition
-            if ( "Epic".equals( jiraMetricIssue.getType().getName() ) && projectKey
-                    .equals( jiraMetricIssue.getProjectKey() ) )
+            if ( "Epic".equals( epicIssue.getType().getName() ) && projectKey.equals( epicIssue.getProjectKey() ) )
             {
-                if ( "SS".equals( projectKey ) && !jiraMetricIssue.getLabels().contains( "requirements_december" ) )
+                if ( "SS".equals( projectKey ) && !epicIssue.getLabels().contains( "requirements_december" ) )
                 {
                     continue;
                 }
-                StructuredIssue epic = new StructuredIssue( jiraMetricIssue.getIssueKey(), jiraMetricIssue.getIssueId(),
-                        jiraMetricIssue.getType().getName(), jiraMetricIssue.getSummary(),
-                        jiraMetricIssue.getReporterName(), jiraMetricIssue.getReporterName(),
-                        jiraMetricIssue.getAssigneeName(), jiraMetricIssue.getUpdateDate().getTime(),
-                        jiraMetricIssue.getCreationDate().getTime(), jiraMetricIssue.getStatus(),
-                        jiraMetricIssue.getProjectKey(), jiraMetricIssue.getDueDate().toString(),
-                        jiraMetricIssue.getRemoteLinks(), jiraMetricIssue.getComponents(), jiraMetricIssue.getLabels(),
-                        jiraMetricIssue.getDescription(), jiraMetricIssue.getOriginalEstimateMinutes(),
-                        jiraMetricIssue.getIssueWorkLogs() );
+                StructuredIssue epic = new StructuredIssue( epicIssue.getIssueKey(), epicIssue.getIssueId(),
+                        epicIssue.getType().getName(), epicIssue.getSummary(), epicIssue.getReporterName(),
+                        epicIssue.getReporterName(), epicIssue.getAssigneeName(), epicIssue.getUpdateDate().getTime(),
+                        epicIssue.getCreationDate().getTime(), epicIssue.getStatus(), epicIssue.getProjectKey(),
+                        epicIssue.getDueDate().toString(), epicIssue.getRemoteLinks(), epicIssue.getComponents(),
+                        epicIssue.getLabels(), epicIssue.getDescription(), epicIssue.getOriginalEstimateMinutes(),
+                        epicIssue.getIssueWorkLogs() );
 
-                assignIssueEstimate( epic, jiraMetricIssue );
+                assignIssueEstimate( epic, epicIssue );
 
-                List<String> epicStories = getChildIssues( jiraMetricIssue );
+                List<String> epicStories = getChildIssues( epicIssue );
                 Set<String> issueKeys = Sets.newHashSet();
                 for ( final String story : epicStories )
                 {
-                    buildStructureIssue( story, epic, jiraMetricIssues, issueKeys );
+                    buildStructureIssue( story, epic, issueKeys );
                 }
 
                 epics.add( epic );
@@ -613,10 +608,9 @@ public class TimelineManager
     /**
      * Constructs dependency tree view for target issue
      */
-    private void buildStructureIssue( String issueKey, StructuredIssue structuredParent,
-                                      final Map<String, JiraMetricIssue> jiraMetricIssues, final Set<String> issueKeys )
+    private void buildStructureIssue( String issueKey, StructuredIssue structuredParent, final Set<String> issueKeys )
     {
-        JiraMetricIssue issue = jiraMetricIssues.get( issueKey );
+        JiraMetricIssue issue = jiraMetricDao.getJiraMetricIssueByKey( issueKey );
         if ( issue != null && !issueKeys.contains( issueKey ) )
         {
             issueKeys.add( issueKey );
@@ -636,7 +630,7 @@ public class TimelineManager
             List<String> linkedIssues = getChildIssues( issue );
             for ( final String linkedIssue : linkedIssues )
             {
-                buildStructureIssue( linkedIssue, structuredIssue, jiraMetricIssues, issueKeys );
+                buildStructureIssue( linkedIssue, structuredIssue, issueKeys );
             }
 
             // Sum up overall progress for parent issue overall progress

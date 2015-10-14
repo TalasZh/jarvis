@@ -269,6 +269,22 @@ public class JiraMetricDaoImpl implements JiraMetricDao, JiraMetricsRestService
 
 
     @Override
+    public List<JiraMetricIssue> getIssuesByTypeForProject( final String projectKey, final String typeName )
+    {
+        String parameter = "typeName";
+        String parameter2 = "projectKey";
+        String query =
+                String.format( "select issue from %1$s issue where issue.typeName = :%2$s and issue.projectKey = :%3$s",
+                        JiraMetricIssue.class.getSimpleName(), parameter, parameter2 );
+
+        Map<String, Object> params = Maps.newHashMap();
+        params.put( parameter, typeName );
+        params.put( parameter2, projectKey );
+        return dao.findByQueryWithLimit( JiraMetricIssue.class, query, params, 10000 );
+    }
+
+
+    @Override
     public List<IssueWorkLog> getUserWorkLogs( final String username, int limit )
     {
         String parameter = "author";

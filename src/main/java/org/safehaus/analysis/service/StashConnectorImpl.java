@@ -17,8 +17,6 @@ public class StashConnectorImpl implements StashConnector
 {
     private static final Log log = LogFactory.getLog( StashConnectorImpl.class );
 
-    private StashClient stashClient;
-
     private String stashURL;
     private String stashUserName;
     private String stashPass;
@@ -35,7 +33,7 @@ public class StashConnectorImpl implements StashConnector
     public StashClient stashConnect() throws StashManagerException
     {
         log.info( "stashConnect()" );
-        stashClient = null;
+        StashClient stashClient = null;
 
         if ( JarvisContextHolder.getStashContext() != null
                 && JarvisContextHolder.getStashContext().getStashClient() != null )

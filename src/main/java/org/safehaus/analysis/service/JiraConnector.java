@@ -13,4 +13,6 @@ public interface JiraConnector {
     JiraRestClient jiraConnect() throws JiraClientException;
 
     JiraClient getJiraClient() throws JiraClientException;
+
+    void destroy();
 }

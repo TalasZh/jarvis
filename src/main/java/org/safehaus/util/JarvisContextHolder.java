@@ -2,6 +2,7 @@ package org.safehaus.util;
 
 
 import org.safehaus.model.JarvisContext;
+import org.safehaus.model.JiraContext;
 import org.safehaus.model.StashContext;
 
 
@@ -12,16 +13,18 @@ public class JarvisContextHolder
 {
     private static final ThreadLocal<JarvisContext> threadLocalScope = new ThreadLocal<>();
 
+    private static final ThreadLocal<JiraContext> jiraContextThreadLocal = new ThreadLocal<>();
+
     private static final ThreadLocal<StashContext> stashContextThreadLocal = new ThreadLocal<>();
 
 
-    public final static JarvisContext getContext()
+    public static JarvisContext getContext()
     {
         return threadLocalScope.get();
     }
 
 
-    public final static void setContext( JarvisContext securityContext )
+    public static void setContext( JarvisContext securityContext )
     {
         threadLocalScope.set( securityContext );
     }
@@ -36,5 +39,17 @@ public class JarvisContextHolder
     public static void setStashContext( StashContext stashContext )
     {
         stashContextThreadLocal.set( stashContext );
+    }
+
+
+    public static JiraContext getJiraContext()
+    {
+        return jiraContextThreadLocal.get();
+    }
+
+
+    public static void setJiraContext( JiraContext stashContext )
+    {
+        jiraContextThreadLocal.set( stashContext );
     }
 }

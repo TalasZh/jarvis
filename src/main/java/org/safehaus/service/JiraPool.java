@@ -130,6 +130,11 @@ public class JiraPool
         {
             timelineManager.rebuildProjectStructure( projectKey );
         }
+
+        if ( jiraClient != null )
+        {
+            jiraConnector.destroy();
+        }
     }
 
 
@@ -216,6 +221,11 @@ public class JiraPool
         searchJira( jql, jiraClient );
         timelineManager.init();
         stashPool.getStashCommits();
+
+        if ( jiraClient != null )
+        {
+            jiraConnector.destroy();
+        }
     }
 
 
