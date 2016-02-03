@@ -1,0 +1,13 @@
+.fixed-panel {
+    /*min-height: 150px;*/
+    /*max-height: 150px;*/
+    /*overflow-y: scroll;*/
+}
+
+.voffset2 {
+    margin-top: 10px;
+}
+
+.annotation-comment {
+    word-wrap: break-word;
+}

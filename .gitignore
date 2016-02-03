@@ -1,6 +1,9 @@
 #*.xpi
 vagrant/.vagrant
 .idea
+.vagrant
+*.swp
+.idea
 
 ##Node.gitignore
 # Logs

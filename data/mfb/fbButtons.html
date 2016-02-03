@@ -1,0 +1,36 @@
+<ul id="jarvis-menu" class="mfb-component--br mfb-slidein-spring" data-mfb-toggle="hover"
+    data-mfb-label="Main Controller">
+  <li class="mfb-component__wrap">
+    <a class="mfb-component__button--main">
+      <i class="mfb-component__main-icon--resting jarvis-add"></i>
+      <i class="mfb-component__main-icon--active jarvis-close"></i>
+    </a>
+    <ul class="mfb-component__list">
+      <li>
+        <a id="btn-jarvis-annotation-control" data-mfb-label="View annotations" class="mfb-component__button--child">
+          <i class="mfb-component__child-icon jarvis-create"></i>
+        </a>
+      </li>
+
+      <li class="jarvis-toggle-research-list">
+        <a id="btn-jarvis-list-researches" data-mfb-label="Start new research" class="mfb-component__button--child">
+          <i class="mfb-component__child-icon jarvis-view-list" data-jarvis-session-status="start"></i> <!--pause, start-->
+        </a>
+
+        <div id="jarvis-research-list-ctrl" class="jarvis-research-list" data-jarvis-list-state="collapse">
+          <input id="searchResearchIssues" type="text" class="form-control" placeholder="Search issues">
+
+          <div>
+            <dl class="list">
+            </dl>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<!--<script src="resource://jarvis-addon/data/mfb/mfb.js" type="application/x-javascript"></script>-->
+<!--<link rel="stylesheet" href="resource://jpm-test/data/mfb/index.css">-->
+<!--<link rel="stylesheet" href="resource://jpm-test/data/mfb/mfb.css">-->
+<!--<link rel="stylesheet" href="resource://jpm-test/data/mfb/custom.css">-->

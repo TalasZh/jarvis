@@ -1,0 +1,107 @@
+.jarvis-create:before, .jarvis-view-list:before
+{
+    /*font-size: 36px;*/
+    /*text-align: center;*/
+    /*line-height: 56px;*/
+    /*position: absolute;*/
+    font-size: 36px;
+    text-align: center;
+    line-height: 56px;
+    width: 100%;
+}
+
+.mfb-component__list li
+{
+    z-index: 32;
+}
+
+.jarvis-add:before
+{
+    content: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAH0lEQVQ4y2NgGAUw8B8IRjXgUoQLUEfDaDyQqmF4AwADqmeZrHJtnQAAAABJRU5ErkJggg==") !important;
+}
+
+.jarvis-close:before
+{
+    content: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAdklEQVQ4y+WTuQ3AIBAEaQKK8NN/BEUArmccgGyj43MMIZo5TqtFqbUPJxYtbg2OvS44IJQKhguwdUETSiXjXr77KhGICRjihWKm8Dw3KXP4Z5VZ/Lfw7B5kyD1cy5C7uAx5iJcht6vhRTUi4OrC0Szftvi/vAFNdbZ2Dp661QAAAABJRU5ErkJggg==") !important;
+}
+
+.jarvis-create:before
+{
+    /*List icon*/
+    content: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAHElEQVQ4y2NgGMngPxQgWOhg8GsY9fSop4cfAACILH6QhD3TxgAAAABJRU5ErkJggg==") !important;
+    /*Pencil icon / Edit*/
+    /*content: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAbElEQVQ4y2NgGHrgv/f/L//7SVH+4z8ITCZWQ8V/GOgnxvRYIFkD1fCWGMf8/R8H1fLtvyt+5V5Qt0O0VBCrHKIllpBjkJUT4RhPSpR/H1jlHpQpdyMUlKQpB2ogTTmShu//3YlLxqQpH1wAAKOW8ZUUAHC/AAAAAElFTkSuQmCC") !important;*/
+}
+
+.jarvis-view-list[data-jarvis-session-status="start"]:before
+{
+    /*Power icon*/
+    /*content: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAA2UlEQVQ4y9XSMU4CQRQAULYwbKJ4DA0JkSMQC4OVjWcxEfEwKCQYzkGId0A6QVqXZrV5NpqwOzOdhf5y8t+f+fN/o/FfAn4fODeIAfd6sfS2Ald14BrvTkPwjIksAJknLOrpl3h1GH1Sywb9KhjjJtW0AR6rYIV2EnSwqoIPHCRBE58haCZBjjJ8Uic5oS6WYdO3STDEKPzWtaNo+rEtLmKDm/4Mbu88M8M8tho7TLVq1WconMSXb4c3d87kcl1DWxTR5fu+ZaEe82j1PdT34EWptDQKWv2L8QWlK/Ex3LPkLgAAAABJRU5ErkJggg==") !important;*/
+
+    /*Search icon*/
+    content: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAvklEQVQ4Ec3BO4rCYBgAwA/NOf6gZ1jZRlDwVoreI4W9+DiS0VJTGytlthMCyZLSmYjvZuGk8lY5msf/ZLaaCll0s8XDUjKQW6lRRBcLPPzEh4kas2jnhGU0WOMQ7VRI0WCEW7TzxiAaDPGKdirk0WCMe7RzxCoabLCPduaoTeLDryem0UWB2trI0NjGE7voJlNo2uEqj25mDm5e7vamEa64yKMvuQtKKfqSK1FK0ZdcibMUfUlKZyn6k6T4Xn//4NdJ9ptTNwAAAABJRU5ErkJggg==") !important;
+
+    /*List icon*/
+    /*content: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAHElEQVQ4y2NgGMngPxQgWOhg8GsY9fSop4cfAACILH6QhD3TxgAAAABJRU5ErkJggg==") !important;*/
+
+    /*Play button*/
+    /*content: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAZElEQVQ4y+3SMRGDUBAE0E9DiYAoCBqiAhWJC1ARXMTE94AD+rQ0PDRsQQXbv5nbmy3lTil+Hhng76NJAFR9BthM2gTA4pUBdrMuAbAaTgS7b3JSVHozJm+tnsk03sk00vFdIQd836pPRlQhUgAAAABJRU5ErkJggg==") !important;*/
+}
+
+.jarvis-view-list[data-jarvis-session-status="pause"]:before
+{
+    content: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAGklEQVQ4y2NgGOngPxTg4o9qGNUweDSMFAAAoBjfIaG1J28AAAAASUVORK5CYII=") !important;
+}
+
+.jarvis-research-list
+{
+    list-style-type: none;
+
+    width: 179px;
+    top: 27px;
+    right: -240px;
+    position: fixed;
+
+    white-space: nowrap;
+
+    background: rgba(65, 151, 244, 0.9);
+
+    border-radius: 12px;
+
+    z-index: 30;
+
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+#searchResearchIssues
+{
+    width: 100%;
+}
+
+.jarvis-research-list div
+{
+    min-height: 150px;
+    max-height: 150px;
+    /*width: 100px;*/
+    overflow-y: scroll;
+
+    overflow-x: hidden;
+}
+
+.mfb-component--bl.mfb-slidein-spring .jarvis-research-list,
+.mfb-component--br.mfb-slidein-spring .jarvis-research-list
+{
+    opacity: 0;
+    transition: all 0.5s;
+    transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.mfb-component--br.mfb-slidein-spring[data-mfb-toggle="hover"]:hover .jarvis-toggle-research-list:hover [data-jarvis-list-state="expand"],
+.mfb-component--br.mfb-slidein-spring[data-mfb-state="open"] .jarvis-toggle-research-list:hover [data-jarvis-list-state="expand"]
+{
+    opacity: 1;
+    transition-delay: 0.05s;
+    -webkit-transform: translate(-200px, 0px);
+    transform: translate(-300px, 0px);
+}
