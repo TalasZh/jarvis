@@ -1,0 +1,26 @@
+{
+  "title": "Jira Api Wrapper Module",
+  "name": "jira-module",
+  "version": "0.0.1",
+  "description": "Jira Api wrapper module",
+  "main": "index.js",
+  "author": {
+    "name": "Jarvis Team"
+  },
+  "engines": {
+    "firefox": ">=38.0a1",
+    "fennec": ">=38.0a1"
+  },
+  "license": "MIT",
+  "readme": "#Jira Api Wrapper Module\nJira Api wrapper module",
+  "readmeFilename": "README.md",
+  "_id": "jira-module@0.0.1",
+  "scripts": {},
+  "_shasum": "6da8fc663f8aed336b895b79924cfd79ea98ff33",
+  "_from": "lib/jira-module",
+  "_resolved": "file:lib/jira-module",
+  "repository": {
+    "type": "git",
+    "url": "http://tjoldoshbekov@stash.safehaus.org/scm/jar/main.git"
+  }
+}

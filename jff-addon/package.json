@@ -1,0 +1,39 @@
+{
+  "title": "Jarvis Annotator",
+  "name": "jarvis-addon",
+  "version": "0.0.12",
+  "description": "A Jarvis add-on for managing annotations",
+  "main": "index.js",
+  "author": "Tooling",
+  "engines": {
+    "firefox": ">=38.0a1",
+    "fennec": ">=38.0a1"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "jira-module": "file:data/jira-module",
+    "mediator-api": "file:data/mediator-api"
+  },
+  "preferences": [
+    {
+      "description": "JIRA address",
+      "type": "string",
+      "name": "jiraHost",
+      "value": "https://jira.subutai.io",
+      "title": "JIRA address"
+    },
+    {
+      "description": "JARVIS host address",
+      "type": "string",
+      "name": "jarvisHost",
+      "value": "https://jarvis.subutai.io",
+      "title": "JARVIS host address"
+    },
+    {
+      "label": "Apply",
+      "type": "control",
+      "name": "applyChanges",
+      "title": "Apply changes"
+    }
+  ]
+}
