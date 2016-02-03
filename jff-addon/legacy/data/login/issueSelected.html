@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="stylesheet" href="../bootstrap-3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="login.css">
+    <script src="../jquery-2.1.3.min.js"></script>
+    <script src="../bootstrap-3.3.4/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="col-lg-2 col-centered">
+    <div class="form-group">
+        <legend id="issueNumber"></legend>
+
+        <p><b> Summary : </b> <span class="pull-right" id="summary"></span></p>
+
+        <p><b> Link : </b> <a class="pull-right" id="issueLink" href="#"></a></p>
+
+        <p><b> Status : </b> <span class="pull-right" id="status"></span></p>
+
+        <p><b> Type : </b> <span class="pull-right" id="type"></span></p>
+
+        <p><b> Priority : </b> <span class="pull-right" id="priority"></span></p>
+
+        <div>
+            <input type="button" class="btn btn-primary btn-sm" id="startStop" value="Start">
+            <input type="button" class="btn btn-primary btn-sm" id="pauseResume" value="Pause">
+            <input type="button" class="btn btn-primary btn-sm" id="backButton" value="Back">
+            <input type="button" class="btn btn-default btn-sm" id="annotator" value="Annotator">
+        </div>
+    </div>
+</div>
+</body>
+</html>

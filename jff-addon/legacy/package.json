@@ -1,0 +1,47 @@
+{
+  "preferences": [
+    {
+      "description": "Service root address",
+      "type": "string",
+      "name": "mediatorHost",
+      "value": "https://jarvis.subutai.io/jarvis-1.0-SNAPSHOT",
+      "title": "Service root address"
+    },
+    {
+      "description": "Jira address",
+      "type": "string",
+      "name": "jiraHost",
+      "value": "https://jira.subutai.io",
+      "title": "JIRA address"
+    },
+    {
+      "label": "Apply",
+      "type": "control",
+      "name": "applyChanges",
+      "title": "Apply changes"
+    }
+  ],
+  "title": "Jarvis Annotator",
+  "name": "jarvis-annotator",
+  "version": "0.0.1",
+  "description": "A basic jarvis annotator",
+  "main": "index.js",
+  "author": "safehaus",
+  "engines": {
+    "firefox": ">=37.0.2",
+    "fennec": ">=37.0.2"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "cookie-manager": "file:lib/cookie-manager",
+    "jira-module": "file:lib/jira-module",
+    "mediator-api": "file:lib/mediator-api"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://tjoldoshbekov@stash.safehaus.org/scm/jar/main.git"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.0"
+  }
+}

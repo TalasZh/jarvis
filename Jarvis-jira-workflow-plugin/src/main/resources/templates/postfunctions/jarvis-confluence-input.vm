@@ -1,0 +1,14 @@
+<tr>
+  <td class="fieldLabelArea">
+    Confluence URL:
+  </td>
+  <td nowrap>
+    <input name="confluenceUrl" id="confluenceUrl" value="$confluenceUrlField"/>
+  </td>
+  <td class="fieldLabelArea">
+    Confluence Project Space Key:
+  </td>
+  <td nowrap>
+    <input name="projectKeySpace" id="projectKeySpace" value="$projectKeySpaceField"/>
+  </td>
+</tr>
