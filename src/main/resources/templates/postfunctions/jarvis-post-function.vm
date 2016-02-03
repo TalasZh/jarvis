@@ -1,0 +1,1 @@
+Assigns Issue to User from Approving Group(if approving group does not exist, leaves current assignee as is)
