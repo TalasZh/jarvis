@@ -12,6 +12,7 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 public class BulkInsertJob extends QuartzJobBean
 {
     private JiraPool jiraPool;
+    private ConfluencePool confluencePool;
 
 
     public void setJiraPool( JiraPool jiraPool )
@@ -20,9 +21,16 @@ public class BulkInsertJob extends QuartzJobBean
     }
 
 
+    public void setConfluencePool( final ConfluencePool confluencePool )
+    {
+        this.confluencePool = confluencePool;
+    }
+
+
     @Override
     protected void executeInternal( final JobExecutionContext jobExecutionContext ) throws JobExecutionException
     {
         jiraPool.getJiraIssues();
+        confluencePool.getConfluenceMetric();
     }
 }

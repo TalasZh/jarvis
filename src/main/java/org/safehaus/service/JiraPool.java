@@ -48,6 +48,9 @@ public class JiraPool
     @Autowired
     private StashPool stashPool;
 
+    @Autowired
+    private SonarPool sonarPool;
+
 
     public List<String> getJiraProjectKeys()
     {
@@ -220,6 +223,7 @@ public class JiraPool
         String jql = "";
         searchJira( jql, jiraClient );
         timelineManager.init();
+        sonarPool.getSonarMetrics();
         stashPool.getStashCommits();
 
         if ( jiraClient != null )

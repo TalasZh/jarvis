@@ -3,10 +3,10 @@ package org.safehaus.analysis.service;
 
 import org.safehaus.confluence.client.ConfluenceManager;
 import org.safehaus.confluence.client.ConfluenceManagerException;
-import org.safehaus.confluence.client.ConfluenceManagerImpl;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.safehaus.model.ConfluenceContext;
+import org.safehaus.util.JarvisContextHolder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -14,8 +14,8 @@ import org.apache.commons.logging.LogFactory;
  */
 public class ConfluenceConnectorImpl implements ConfluenceConnector
 {
+    private static final Logger logger = LoggerFactory.getLogger( ConfluenceConnectorImpl.class );
 
-    private static final Log log = LogFactory.getLog( ConfluenceConnectorImpl.class );
     private String confluenceURL;
     private String confluenceUsername;
     private String confluencePass;
@@ -32,9 +32,26 @@ public class ConfluenceConnectorImpl implements ConfluenceConnector
     @Override
     public ConfluenceManager confluenceConnect() throws ConfluenceManagerException
     {
-        log.info( "confluenceConnect()" );
-        ConfluenceManagerImpl confluenceManager =
-                new ConfluenceManagerImpl( confluenceURL, confluenceUsername, confluencePass );
-        return confluenceManager;
+        logger.info( "sonarConnect()" );
+
+        ConfluenceManager sonarManager = null;
+
+        if ( JarvisContextHolder.getConfluenceContext() != null
+                && JarvisContextHolder.getConfluenceContext().getConfluenceManager() != null )
+        {
+            sonarManager = JarvisContextHolder.getConfluenceContext().getConfluenceManager();
+        }
+        else
+        {
+            JarvisContextHolder
+                    .setConfluenceContext( new ConfluenceContext( confluenceURL, confluenceUsername, confluencePass ) );
+            if ( JarvisContextHolder.getConfluenceContext() != null
+                    && JarvisContextHolder.getConfluenceContext().getConfluenceManager() != null )
+            {
+                sonarManager = JarvisContextHolder.getConfluenceContext().getConfluenceManager();
+            }
+        }
+
+        return sonarManager;
     }
 }

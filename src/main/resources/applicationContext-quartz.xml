@@ -3,90 +3,107 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
        default-lazy-init="true">
 
-    <!-- Jira task -->
-    <bean name="jiraTask" class="org.safehaus.service.JiraTask">
-        <!--<property name="projectManager" ref="projectManager"/>-->
-        <!--<property name="issueManager" ref="issueManager"/>-->
-    </bean>
+  <!-- Jira task -->
+  <bean name="jiraTask" class="org.safehaus.service.JiraTask">
+    <!--<property name="projectManager" ref="projectManager"/>-->
+    <!--<property name="issueManager" ref="issueManager"/>-->
+  </bean>
 
-    <bean name="jiraPool" class="org.safehaus.service.JiraPool">
-    </bean>
+  <bean name="jiraPool" class="org.safehaus.service.JiraPool">
+  </bean>
 
-    <bean name="stashPool" class="org.safehaus.service.StashPool">
-    </bean>
+  <bean name="stashPool" class="org.safehaus.service.StashPool">
+  </bean>
 
-    <!-- Jira job -->
-    <bean name="jiraJob"
-          class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+  <bean name="sonarPool" class="org.safehaus.service.SonarPool">
+  </bean>
 
-        <property name="jobClass" value="org.safehaus.service.JiraQuartzJob" />
+  <bean name="confluencePool" class="org.safehaus.service.ConfluencePool">
+  </bean>
 
-        <property name="jobDataAsMap">
-            <map>
-                <entry key="jiraPool" value-ref="jiraPool" />
-            </map>
-        </property>
-    </bean>
+  <!-- Jira job -->
+  <bean name="jiraJob"
+        class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
 
-    <!-- Cron Trigger, run every 10 minutes -->
-    <bean id="cronTrigger"
-          class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+    <property name="jobClass" value="org.safehaus.service.JiraQuartzJob" />
 
-        <property name="jobDetail" ref="jiraJob" />
-        <property name="cronExpression" value="* */10 * * * ?" />
+    <property name="jobDataAsMap">
+      <map>
+        <entry key="jiraPool" value-ref="jiraPool" />
+      </map>
+    </property>
+  </bean>
 
-    </bean>
+  <!-- Cron Trigger, run every 10 minutes -->
+  <bean id="cronTrigger"
+        class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 
-    <!-- Scheduler -->
-    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
-        <property name="jobDetails">
-            <list>
-                <ref bean="jiraJob" />
-            </list>
-        </property>
+    <property name="jobDetail" ref="jiraJob" />
+    <property name="cronExpression" value="* */10 * * * ?" />
 
-        <property name="triggers">
-            <list>
-                <ref bean="cronTrigger" />
-            </list>
-        </property>
-    </bean>
+  </bean>
 
+  <!-- Scheduler -->
+  <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+    <property name="jobDetails">
+      <list>
+        <ref bean="jiraJob" />
+      </list>
+    </property>
 
-    <bean name="analysisService" class="org.safehaus.service.AnalysisService">
-        <constructor-arg value="${reset.jira}" />
-        <constructor-arg value="${reset.stash}" />
-        <constructor-arg value="${reset.sonar}" />
-        <constructor-arg value="${reset.confluence}" />
-    </bean>
+    <property name="triggers">
+      <list>
+        <ref bean="cronTrigger" />
+      </list>
+    </property>
 
+    <property name="quartzProperties">
+      <props>
+        <prop key="org.quartz.threadPool.threadCount">3</prop>
+      </props>
+    </property>
+  </bean>
 
-    <bean name="analysisJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
-        <property name="jobClass" value="org.safehaus.service.BulkInsertJob" />
-        <property name="jobDataAsMap">
-            <map>
-                <!--<entry key="analysisService" value-ref="analysisService" />-->
-                <entry key="jiraPool" value-ref="jiraPool" />
-            </map>
-        </property>
-    </bean>
+  <bean name="analysisService" class="org.safehaus.service.AnalysisService">
+    <constructor-arg value="${reset.jira}" />
+    <constructor-arg value="${reset.stash}" />
+    <constructor-arg value="${reset.sonar}" />
+    <constructor-arg value="${reset.confluence}" />
+  </bean>
 
-    <bean id="cronTrigger2" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-        <property name="jobDetail" ref="analysisJob" />
-        <property name="cronExpression" value="* 32 13 * * ?" />
-    </bean>
+  <bean name="analysisJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+    <property name="jobClass" value="org.safehaus.service.BulkInsertJob" />
+    <property name="jobDataAsMap">
+      <map>
+        <!--<entry key="analysisService" value-ref="analysisService" />-->
+        <entry key="jiraPool" value-ref="jiraPool" />
+        <entry key="confluencePool" value-ref="confluencePool" />
+      </map>
+    </property>
+  </bean>
 
-    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
-        <property name="jobDetails">
-            <list>
-                <ref bean="analysisJob" />
-            </list>
-        </property>
-        <!---->
-        <property name="triggers">
-            <list>
-                <ref bean="cronTrigger2" />
-            </list>
-        </property>
-    </bean>
+  <bean id="cronTrigger2" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+    <property name="jobDetail" ref="analysisJob" />
+    <property name="cronExpression" value="* 28 20 * * ?" />
+  </bean>
+
+  <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+    <property name="jobDetails">
+      <list>
+        <ref bean="analysisJob" />
+      </list>
+    </property>
+    <!---->
+    <property name="triggers">
+      <list>
+        <ref bean="cronTrigger2" />
+      </list>
+    </property>
+
+    <property name="quartzProperties">
+      <props>
+        <prop key="org.quartz.threadPool.threadCount">3</prop>
+      </props>
+    </property>
+  </bean>
 </beans>

@@ -1,8 +1,10 @@
 package org.safehaus.util;
 
 
+import org.safehaus.model.ConfluenceContext;
 import org.safehaus.model.JarvisContext;
 import org.safehaus.model.JiraContext;
+import org.safehaus.model.SonarContext;
 import org.safehaus.model.StashContext;
 
 
@@ -16,6 +18,10 @@ public class JarvisContextHolder
     private static final ThreadLocal<JiraContext> jiraContextThreadLocal = new ThreadLocal<>();
 
     private static final ThreadLocal<StashContext> stashContextThreadLocal = new ThreadLocal<>();
+
+    private static final ThreadLocal<SonarContext> sonarContextThreadLocal = new ThreadLocal<>();
+
+    private static final ThreadLocal<ConfluenceContext> confluenceContextThreadLocal = new ThreadLocal<>();
 
 
     public static JarvisContext getContext()
@@ -51,5 +57,29 @@ public class JarvisContextHolder
     public static void setJiraContext( JiraContext stashContext )
     {
         jiraContextThreadLocal.set( stashContext );
+    }
+
+
+    public static SonarContext getSonarContext()
+    {
+        return sonarContextThreadLocal.get();
+    }
+
+
+    public static void setSonarContext( SonarContext sonarContext )
+    {
+        sonarContextThreadLocal.set( sonarContext );
+    }
+
+
+    public static ConfluenceContext getConfluenceContext()
+    {
+        return confluenceContextThreadLocal.get();
+    }
+
+
+    public static void setConfluenceContext( ConfluenceContext confluenceContext )
+    {
+        confluenceContextThreadLocal.set( confluenceContext );
     }
 }

@@ -32,9 +32,19 @@ public class StashContext
     {
         if ( stashClient == null )
         {
-            logger.info( "Crearting new StashClient for {}", stashUrl );
+            logger.info( "Creating new StashClient for {}", stashUrl );
             stashClient = new StashClientImpl( stashUrl, username, password );
         }
         return stashClient;
+    }
+
+
+    public void destroy()
+    {
+        if ( stashClient != null )
+        {
+            logger.info( "Destroying stash client" );
+            stashClient = null;
+        }
     }
 }
